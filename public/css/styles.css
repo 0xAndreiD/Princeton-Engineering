@@ -1,0 +1,133 @@
+.companyLogo{
+    width: 180px;
+    height: 150px;
+    margin-bottom: 10px;
+}
+.companyText{
+    color: #000;
+    font-size: 20px;
+}
+html, body {
+    background-color: #fff;
+    color: #636b6f;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 200;
+    height: 100vh;
+    margin: 0;
+}
+
+.full-height {
+    height: 100vh;
+}
+
+.flex-center {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.position-ref {
+    position: relative;
+}
+
+.top-right {
+    position: absolute;
+    right: 10px;
+    top: 18px;
+}
+
+.content {
+    text-align: center;
+}
+
+.title {
+    font-size: 84px;
+}
+
+.links > a {
+    color: #636b6f;
+    padding: 0 25px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: .1rem;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+.m-b-md {
+    margin-bottom: 30px;
+}
+
+/* Style of the rfd multiple input tab */
+.rfdContainer{
+	margin: 10px 30px;
+}
+
+.rfdTab {
+	overflow: hidden;
+	border: 1px solid #ccc;
+	background-color: #f1f1f1;
+}
+
+/* Style the buttons inside the tab */
+.rfdTab button {
+	background-color: inherit;
+	float: left;
+	border: none;
+	outline: none;
+	cursor: pointer;
+	padding: 14px 16px;
+	transition: 0.3s;
+	font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+.rfdTab button:hover {
+	background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.rfdTab button.active {
+	background-color: #ccc;
+}
+
+/* Style the tab content */
+.rfdTabContent {
+	display: none;
+	padding: 6px 12px;
+	border: 1px solid #ccc;
+	border-top: none;
+	-webkit-animation: fadeEffect 0.6s;
+  	animation: fadeEffect 0.6s;
+}
+
+/* Fade in tabs */
+@-webkit-keyframes fadeEffect {
+	from {opacity: 0;}
+	to {opacity: 1;}
+}
+
+@keyframes fadeEffect {
+	from {opacity: 0;}
+	to {opacity: 1;}
+}
+
+.rfdTypeSelect {
+	cursor: pointer;
+}
+
+.fcDisabled{
+	opacity: 0.4;
+	pointer-events: none;
+}
+
+.rfdTypePane{
+    margin: 20px 0px 0px 80px;
+}
+
+.trussInputPane{
+    display: none;
+    margin-top: 30px;
+    -webkit-animation: fadeEffect 0.6s;
+  	animation: fadeEffect 0.6s;
+}

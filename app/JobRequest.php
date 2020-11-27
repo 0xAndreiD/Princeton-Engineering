@@ -1,0 +1,24 @@
+<?php
+
+namespace App;
+
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+
+class JobRequest extends Authenticatable
+{
+    use Notifiable;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'id', 'companyName', 'companyId', 'userId', 'clientProjectName', 'clientProjectNumber', 'requestFile', 'available', 'projectState', 'analysisType', 'createdTime', 'submittedTime', 'timesDownloaded', 'timesEmailed', 'timesComputed'
+    ];
+
+    protected $table = 'job_request';
+
+    public $timestamps = false;
+}
