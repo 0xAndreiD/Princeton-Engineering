@@ -29,7 +29,7 @@ function fcChangeType( conditionId, type ){
 }
 
 // ---------- Canvas Code -------------
-var grid_size = [25, 25, 25, 25, 25, 25, 25, 25 , 25, 25];
+var grid_size = [25, 25, 25, 25, 25, 25, 25, 25 , 25, 25, 25];
 var x_axis_starting_point = new Array(11); x_axis_starting_point.fill({ number: 1, suffix: '' });
 var y_axis_starting_point = new Array(11); y_axis_starting_point.fill({ number: 1, suffix: '' });
 
@@ -1131,10 +1131,10 @@ var updatePlanes = function( condId ) {
     if (U33 == true) { PQ33 = [Math.cos(W45)*O33, 0]; globalFloorPoints[condId].push(PQ33); }
 
     var O34 = O33 + parseFloat($(`#inputform-${condId} #txt-floor-segment5-length`).val());
-    if (U34 == true) { PQ34 = [Math.cos(W45)*O34, 0]; globalFloorPoints.push(PQ34); }
+    if (U34 == true) { PQ34 = [Math.cos(W45)*O34, 0]; globalFloorPoints[condId].push(PQ34); }
 
     var O35 = O34 + parseFloat($(`#inputform-${condId} #txt-floor-segment6-length`).val());
-    if (U35 == true) { PQ35 = [Math.cos(W45)*O35, 0]; globalFloorPoints.push(PQ35); }
+    if (U35 == true) { PQ35 = [Math.cos(W45)*O35, 0]; globalFloorPoints[condId].push(PQ35); }
 
     // create roof lines
     var lineIndex = 1;
@@ -1226,7 +1226,7 @@ var updateTrussAndComments = function(condId, keepStatus) {
         if (keepStatus == false) {
             $(`#inputform-${condId} #diag-2-` + (index+1)).prop( "checked", true );
         }
-        $(`#inputform-${condId} #td-diag-2-` + (index+1)).html(roofPlane + floorPlane + globalDiagnoals1 + index+1);
+        $(`#inputform-${condId} #td-diag-2-` + (index+1)).html(roofPlane + floorPlane + globalDiagnoals1[condId] + index+1);
         $(`#inputform-${condId} #td-diag-2-` + (index+1)).removeClass('w400-blue-bdr').addClass('w400-bdr');
         $(`#inputform-${condId} #td-diag-2-` + (index+1) + '-type').removeClass('w400-blue-bdr').addClass('w400-green-bdr');
         $(`#inputform-${condId} #td-diag-2-` + (index+1) + "-type *").attr('disabled', false);
@@ -1718,8 +1718,8 @@ $(document).ready(function() {
             if (preloaded_data.length == 0)
                 keepStatus = false;
 
-            updateNumberSegment1(i, $(`inputform-${i} #option-number-segments1`).children("option:selected").val(), keepStatus);
-            updateNumberSegment2(i, $(`inputform-${i} #option-number-segments2`).children("option:selected").val(), keepStatus);
+            updateNumberSegment1(i, $(`#inputform-${i} #option-number-segments1`).children("option:selected").val(), keepStatus);
+            updateNumberSegment2(i, $(`#inputform-${i} #option-number-segments2`).children("option:selected").val(), keepStatus);
 
             // GetCPU();
         }
