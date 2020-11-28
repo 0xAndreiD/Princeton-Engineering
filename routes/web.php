@@ -24,6 +24,11 @@ Route::get('/rsinput', 'GeneralController@rsinput')->name('rsinput');
 Route::post('/getUserData', 'GeneralController@getUserData')->name('getUserData');
 Route::post('/submitInput', 'GeneralController@submitInput')->name('submitInput');
 
+// Manage Users
+Route::get('/userList', 'GeneralController@rsinput')->name('userList');
+Route::post('/getUserData', 'GeneralController@getUserData')->name('getUserData');
+Route::post('/submitInput', 'GeneralController@submitInput')->name('submitInput');
+
 // Project List Page
 Route::get('/projectlist', 'GeneralController@projectList')->name('projectlist');
 Route::get('/requestFile', 'GeneralController@requestFile')->name('requestFile');
