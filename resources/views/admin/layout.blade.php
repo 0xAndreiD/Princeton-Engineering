@@ -105,7 +105,7 @@
                         </li>
                         <li class="nav-main-heading">Users &amp; Companies</li>
                         <li class="nav-main-item">
-                            <a class="nav-main-link" href="#">
+                            <a class="nav-main-link" href="{{ route('userList') }}">
                                 <i class="nav-main-link-icon fa fa-user"></i>
                                 <span class="nav-main-link-name">Manage Users</span>
                             </a>
@@ -257,5 +257,6 @@
 
         <!-- Page JS Helpers (jQuery Sparkline plugin) -->
         <script>jQuery(function(){ Dashmix.helpers('sparkline'); });</script>
+        
     </body>
 </html>

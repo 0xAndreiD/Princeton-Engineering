@@ -33,6 +33,8 @@
         <link rel="stylesheet" id="css-theme" href="{{ asset('css/themes/xeco.min.css') }}">
         <link rel="stylesheet" id="css-main" href="{{ asset('css/styles.css') }}">
         <link rel="stylesheet" id="css-main" href="{{ asset('css/spreadsheet.css') }}">
+
+        <link rel="stylesheet" href="{{ asset('js/plugins/datatables/dataTables.bootstrap4.css') }}">
         <!-- END Stylesheets -->
 
         <script src="{{ asset('js/jquery.min.js') }}"></script>
@@ -105,7 +107,7 @@
                         </li>
                         <li class="nav-main-heading">Users &amp; Companies</li>
                         <li class="nav-main-item">
-                            <a class="nav-main-link" href="#">
+                            <a class="nav-main-link" href="{{ route('userList') }}">
                                 <i class="nav-main-link-icon fa fa-user"></i>
                                 <span class="nav-main-link-name">Manage Users</span>
                             </a>
@@ -253,9 +255,39 @@
         <script src="{{ asset('js/dashmix.app.min.js') }}"></script>
 
         <!-- Page JS Plugins -->
-        <script src="{{ asset('js/plugins/jquery.sparkline.min.js') }}"></script>
+        
+        <script src="{{ asset('js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+        <script src="{{ asset('js/plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
+        <script src="{{ asset('js/plugins/datatables/buttons/dataTables.buttons.min.js')}}"></script>
+        <script src="{{ asset('js/plugins/datatables/buttons/buttons.print.min.js') }}"></script>
+        <script src="{{ asset('js/plugins/datatables/buttons/buttons.html5.min.js') }}"></script>
+        <script src="{{ asset('js/plugins/datatables/buttons/buttons.flash.min.js') }}"></script>
+        <script src="{{ asset('js/plugins/datatables/buttons/buttons.colVis.min.js') }}"></script>
+        <!-- <script src="{{ asset('js/pages/be_tables_datatables.min.js') }}"></script> -->
 
+        <script src="{{ asset('js/plugins/jquery.sparkline.min.js') }}"></script>
         <!-- Page JS Helpers (jQuery Sparkline plugin) -->
         <script>jQuery(function(){ Dashmix.helpers('sparkline'); });</script>
+
+        <script>
+            $(document).ready(function () {
+                $('#users').DataTable({
+                    "processing": true,
+                    "serverSide": true,
+                    "ajax":{
+                            "url": "{{ url('getUserData') }}",
+                            "dataType": "json",
+                            "type": "POST",
+                            "data":{ _token: "{{csrf_token()}}"}
+                        },
+                    "columns": [
+                        { "data": "id" },
+                        { "data": "username" },
+                        { "data": "email" },
+                        { "data": "actions", "orderable": false }
+                    ]	 
+                });
+            });
+        </script>
     </body>
 </html>
