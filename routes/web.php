@@ -27,6 +27,7 @@ Route::post('/submitInput', 'GeneralController@submitInput')->name('submitInput'
 // Manage Users
 Route::get('/userList', 'UserController@index')->name('userList');
 Route::post('/getUserData', 'UserController@getUserData')->name('getUserData');
+Route::get('/userEdit', 'UserController@edit')->name('userEdit');
 
 Route::post('/submitInput', 'GeneralController@submitInput')->name('submitInput');
 

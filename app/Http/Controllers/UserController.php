@@ -34,7 +34,7 @@ class UserController extends Controller
     }
 
     /**
-     * Get the same company member data
+     * Get the All User Data
      *
      * @return JSON
      */
@@ -83,8 +83,8 @@ class UserController extends Controller
         {
             foreach ($users as $user)
             {
-                $show =  route('user.show',$user->id);
-                $edit =  route('user.edit',$user->id);
+                $show =  route('userEdit', $user->id);
+                // $edit =  route('user.edit',$user->id);
 
                 $nestedData['id'] = $user->id;
                 $nestedData['username'] = $user->username;
@@ -93,8 +93,8 @@ class UserController extends Controller
                 // $nestedData['created_at'] = date('j M Y h:i a',strtotime($user->created_at));
                 $nestedData['actions'] = "
                 <p class='text-center'>
-                    &emsp;<a href='#' title='SHOW' >SHOW<span class='glyphicon glyphicon-list'></span></a>
-                    &emsp;<a href='#' title='EDIT' >EDIT<span class='glyphicon glyphicon-edit'></span></a>
+                    &emsp;<a href='{$show}' title='EDIT'><i class='fa fa-pencil-alt'></i></a>
+                    &emsp;<a href='#' title='DEL'><i class='fa fa-times'></i></a>
                 </p>";
                 // $nestedData['actions'] = "&emsp;<a href='{$show}' title='SHOW' ><span class='glyphicon glyphicon-list'></span></a>
                 //                         &emsp;<a href='{$edit}' title='EDIT' ><span class='glyphicon glyphicon-edit'></span></a>";
@@ -112,5 +112,13 @@ class UserController extends Controller
 
         echo json_encode($json_data);
     }
-
+    /**
+     * User Edit View
+     *
+     * @return JSON
+     */
+    function edit(Request $request){
+        $id = $request->input('id');
+        return view('user.edit');
+    }
 }
