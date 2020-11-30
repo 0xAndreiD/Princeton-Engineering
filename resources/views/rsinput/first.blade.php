@@ -151,7 +151,7 @@ www.Princeton-Engineering.com; tel: 908-507-5500
         <td><div style="overflow:hidden"></div></td>
         <td class="iw400-right-bdr">User ID</td>
         <td class="w400-yellow-bdr">
-            <select id="option-user-id" tabindex="3">
+            <select id="option-user-id" tabindex="3" disabled>
                 @foreach ($companyMembers as $member)
                     @if ($member['id'] == Auth::user()->id)
                         <option data-companyid="{{ $member['usernumber'] }}" data-userid="{{ $member['id'] }}" selected>

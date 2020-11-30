@@ -43,7 +43,7 @@
         </tr>
         <tr class="h13">
             <td><div style="overflow:hidden"></td>
-            <td class="iw400-bdr" style="vertical-align : middle" rowspan="11">Roof Data Input</td>
+            <td class="iw400-bdr" style="vertical-align : middle" rowspan="11" id="label-A-1">Roof Data Input</td>
             <td class="w400-bdr">A-1</td>
             <td class="iw400-right-bdr">Framing Condition Number</td>
             <td class="iw400-bdr"></td>
@@ -95,28 +95,28 @@
             </td>
             <td><div style="overflow:hidden"></td>
         </tr>
-        <tr class="h13">
+        <tr class="h13 class-truss-hide">
             <td><div style="overflow:hidden"></td>
-            <td class="w400-bdr class-truss-hide">A-7</td>
-            <td class="iw400-right-bdr class-truss-hide">Roof Slope</td>
-            <td class="iw400-bdr class-truss-hide">deg</td>
-            <td class="w400-yellow-bdr class-truss-hide"><input type="text" class="txt-center-align class-truss-hide" id="a-7-1"  tabindex="31" value="33.00"></input></td>
-            <td><div style="overflow:hidden"></td>
-        </tr>
-        <tr class="h13">
-            <td><div style="overflow:hidden"></td>
-            <td class="w400-bdr class-truss-hide">A-8</td>
-            <td class="iw400-right-bdr class-truss-hide">Diagonal Rafter Length from Plate to Ridge</td>
-            <td class="iw400-bdr class-truss-hide">ft</td>
-            <td class="w400-yellow-bdr class-truss-hide"><input type="text" class="txt-center-align class-truss-hide" id="a-8-1"  tabindex="32" value="13.42"></input></td>
+            <td class="w400-bdr">A-7</td>
+            <td class="iw400-right-bdr">Roof Slope</td>
+            <td class="iw400-bdr">deg</td>
+            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="a-7-1"  tabindex="31" value="33.00"></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
-        <tr class="h13">
+        <tr class="h13 class-truss-hide">
             <td><div style="overflow:hidden"></td>
-            <td class="w400-bdr class-truss-hide">A-9</td>
-            <td class="iw400-right-bdr class-truss-hide" id="label-A-9">Rise from Rafter Plate to Top Ridge</td>
-            <td class="iw400-bdr class-truss-hide">ft</td>
-            <td class="w400-yellow-bdr class-truss-hide"><input type="text" class="txt-center-align class-truss-hide" id="a-9-1"  tabindex="33" value="0.00"></input></td>
+            <td class="w400-bdr">A-8</td>
+            <td class="iw400-right-bdr">Diagonal Rafter Length from Plate to Ridge</td>
+            <td class="iw400-bdr">ft</td>
+            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="a-8-1"  tabindex="32" value="13.42"></input></td>
+            <td><div style="overflow:hidden"></td>
+        </tr>
+        <tr class="h13 class-truss-hide">
+            <td><div style="overflow:hidden"></td>
+            <td class="w400-bdr">A-9</td>
+            <td class="iw400-right-bdr" id="label-A-9">Rise from Rafter Plate to Top Ridge</td>
+            <td class="iw400-bdr">ft</td>
+            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="a-9-1"  tabindex="33" value="0.00"></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
         <tr class="h13">
@@ -130,30 +130,31 @@
         <tr class="h13">
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">A-11</td>
-            <td class="iw400-right-bdr">Diagonal Overhang Length past Rafter Plate</td>
+            <td class="iw400-right-bdr" id="label-A-11">Diagonal Overhang Length past Rafter Plate</td>
             <td class="iw400-bdr">ft</td>
             <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="a-11-1"  tabindex="35" value="0.83"></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
-        <tr class="h13">
+        <tr class="h13 class-truss-hide">
             <td><div style="overflow:hidden"></td>
-            <td class="iw400-bdr" style="vertical-align : middle;" rowspan="4">Rafter Data Input</td>
-            <td class="w400-bdr class-truss-hide">B-1</td>
-            <td class="iw400-right-bdr class-truss-hide">Mem width **</td>
-            <td class="iw400-bdr class-truss-hide">in</td>
-            <td class="w400-yellow-bdr class-truss-hide"><input type="text" class="txt-center-align class-truss-hide" id="b-1-1"  tabindex="36" value="1.50"></input></td>
+            <td class="iw400-bdr" style="vertical-align : middle;" rowspan="4" id="label-B-1">Rafter Data Input</td>
+            <td class="w400-bdr">B-1</td>
+            <td class="iw400-right-bdr">Rafter width **</td>
+            <td class="iw400-bdr">in</td>
+            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="b-1-1"  tabindex="36" value="1.50"></input></td>
+            <td><div style="overflow:hidden"></td>
+        </tr>
+        <tr class="h13 class-truss-hide">
+            <td><div style="overflow:hidden"></td>
+            <td class="w400-bdr">B-2</td>
+            <td class="iw400-right-bdr">Rafter Height **</td>
+            <td class="iw400-bdr">in</td>
+            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="b-2-1"  tabindex="37" value="5.50"></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
         <tr class="h13">
             <td><div style="overflow:hidden"></td>
-            <td class="w400-bdr class-truss-hide">B-2</td>
-            <td class="iw400-right-bdr class-truss-hide">Mem Hgt **</td>
-            <td class="iw400-bdr class-truss-hide">in</td>
-            <td class="w400-yellow-bdr class-truss-hide"><input type="text" class="txt-center-align class-truss-hide" id="b-2-1"  tabindex="37" value="5.50"></input></td>
-            <td><div style="overflow:hidden"></td>
-        </tr>
-        <tr class="h13">
-            <td><div style="overflow:hidden"></td>
+            <td class="iw400-bdr" style="vertical-align : middle; display: none;" rowspan="2" id="title-B-3">Truss Data Input</td>
             <td class="w400-bdr">B-3</td>
             <td class="iw400-right-bdr" id="label-B-3">Joist Spacing - Center to Center</td>
             <td class="iw400-bdr">in</td>
@@ -163,7 +164,7 @@
         <tr class="h13">
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">B-4</td>
-            <td class="iw400-right-bdr">Rafter Material</td>
+            <td class="iw400-right-bdr" id="label-B-4">Rafter Material</td>
             <td class="iw400-bdr">select</td>
             <td class="w400-green-bdr">
                 <select id="b-4-1">
@@ -175,29 +176,29 @@
             </td>
             <td><div style="overflow:hidden"></td>
         </tr>
-        <tr class="h13">
+        <tr class="h13 class-truss-hide">
             <td><div style="overflow:hidden"></td>
-            <td class="iw400-bdr class-truss-hide" style="vertical-align : middle;" rowspan="3">Collar Tie Information</td>
-            <td class="w400-bdr class-truss-hide">C-1</td>
-            <td class="iw400-right-bdr class-truss-hide">Collar Tie Description</td>
-            <td class="iw400-bdr class-truss-hide">text</td>
-            <td class="w400-yellow-bdr class-truss-hide"><input type="text" class="txt-center-align class-truss-hide" id="c-1-1"  tabindex="39" value="2x6 collar tie"></input></td>
-            <td><div style="overflow:hidden"></td>
-        </tr>
-        <tr class="h13">
-            <td><div style="overflow:hidden"></td>
-            <td class="w400-bdr class-truss-hide">C-2</td>
-            <td class="iw400-right-bdr class-truss-hide">Dist. from Top of Collar Tie to Attic Deck</td>
-            <td class="iw400-bdr class-truss-hide">ft</td>
-            <td class="w400-yellow-bdr class-truss-hide"><input type="text" class="txt-center-align class-truss-hide" id="c-2-1"  tabindex="40" value="6.08"></input></td>
+            <td class="iw400-bdr" style="vertical-align : middle;" rowspan="3">Collar Tie Information</td>
+            <td class="w400-bdr">C-1</td>
+            <td class="iw400-right-bdr">Collar Tie Description</td>
+            <td class="iw400-bdr">text</td>
+            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="c-1-1"  tabindex="39" value="2x6 collar tie"></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
-        <tr class="h13">
+        <tr class="h13 class-truss-hide">
             <td><div style="overflow:hidden"></td>
-            <td class="w400-bdr class-truss-hide">C-3</td>
-            <td class="iw400-right-bdr class-truss-hide">Tie Spacing - Center to Center</td>
-            <td class="iw400-bdr class-truss-hide">in</td>
-            <td class="w400-yellow-bdr class-truss-hide"><input type="text" class="txt-center-align class-truss-hide" id="c-3-1"  tabindex="41" value="32.00"></input></td>
+            <td class="w400-bdr">C-2</td>
+            <td class="iw400-right-bdr">Dist. from Top of Collar Tie to Attic Deck</td>
+            <td class="iw400-bdr">ft</td>
+            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="c-2-1"  tabindex="40" value="6.08"></input></td>
+            <td><div style="overflow:hidden"></td>
+        </tr>
+        <tr class="h13 class-truss-hide">
+            <td><div style="overflow:hidden"></td>
+            <td class="w400-bdr">C-3</td>
+            <td class="iw400-right-bdr">Tie Spacing - Center to Center</td>
+            <td class="iw400-bdr">in</td>
+            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="c-3-1"  tabindex="41" value="32.00"></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
         <tr class="h13">
@@ -259,7 +260,7 @@
             <td class="w400-bdr">F-1</td>
             <td class="iw400-right-bdr" id="label-F-1">Maximum # Modules along Rafter</td>
             <td class="iw400-bdr"></td>
-            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="f-1-1" tabindex="47" value="2"></input></td>
+            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="f-1-1" tabindex="47" value="2" onchange="maxModuleNumChange({{ $conditionId }})"></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
         <tr class="h13">
@@ -271,16 +272,16 @@
             <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="g-1-1" tabindex="48" value="1"></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
-        <tr class="h13">
+        <tr class="h13" id="Module-1">
             <td><div style="overflow:hidden"></td>
-            <td class="iw400-bdr" style="vertical-align : middle;" rowspan="8">Rotate Module Orientation</td>
+            <td class="iw400-bdr" style="vertical-align : middle;" rowspan="2" id="Module-Left-Text">Rotate Module Orientation</td>
             <td class="w400-bdr">H-1</td>
             <td class="iw400-right-bdr">Module 1</td>
             <td class="iw400-bdr"></td>
             <td class="w400-yellow-bdr"><input type="checkbox" id="h-1-1" tabindex="49"></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
-        <tr class="h13">
+        <tr class="h13" id="Module-2">
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">H-2</td>
             <td class="iw400-right-bdr">Module 2</td>
@@ -288,7 +289,7 @@
             <td class="w400-yellow-bdr"><input type="checkbox" id="h-2-1" tabindex="50"></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
-        <tr class="h13">
+        <tr class="h13" id="Module-3" style="display: none;">
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">H-3</td>
             <td class="iw400-right-bdr">Module 3</td>
@@ -296,7 +297,7 @@
             <td class="w400-yellow-bdr"><input type="checkbox" id="h-3-1" tabindex="51"></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
-        <tr class="h13">
+        <tr class="h13" id="Module-4" style="display: none;">
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">H-4</td>
             <td class="iw400-right-bdr">Module 4</td>
@@ -304,7 +305,7 @@
             <td class="w400-yellow-bdr"><input type="checkbox" id="h-4-1" tabindex="52"></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
-        <tr class="h13">
+        <tr class="h13" id="Module-5" style="display: none;">
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">H-5</td>
             <td class="iw400-right-bdr">Module 5</td>
@@ -312,7 +313,7 @@
             <td class="w400-yellow-bdr"><input type="checkbox" id="h-5-1" tabindex="53"></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
-        <tr class="h13">
+        <tr class="h13" id="Module-6" style="display: none;">
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">H-6</td>
             <td class="iw400-right-bdr">Module 6</td>
@@ -320,7 +321,7 @@
             <td class="w400-yellow-bdr"><input type="checkbox" id="h-6-1" tabindex="54"></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
-        <tr class="h13">
+        <tr class="h13" id="Module-7" style="display: none;">
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">H-7</td>
             <td class="iw400-right-bdr">Module 7</td>
@@ -328,12 +329,44 @@
             <td class="w400-yellow-bdr"><input type="checkbox" id="h-7-1" tabindex="55"></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
-        <tr class="h13">
+        <tr class="h13" id="Module-8" style="display: none;">
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">H-8</td>
             <td class="iw400-right-bdr">Module 8</td>
             <td class="iw400-bdr"></td>
             <td class="w400-yellow-bdr"><input type="checkbox" id="h-8-1" tabindex="55"></input></td>
+            <td><div style="overflow:hidden"></td>
+        </tr>
+        <tr class="h13" id="Module-9" style="display: none;">
+            <td><div style="overflow:hidden"></td>
+            <td class="w400-bdr">H-9</td>
+            <td class="iw400-right-bdr">Module 9</td>
+            <td class="iw400-bdr"></td>
+            <td class="w400-yellow-bdr"><input type="checkbox" id="h-9-1" tabindex="55"></input></td>
+            <td><div style="overflow:hidden"></td>
+        </tr>
+        <tr class="h13" id="Module-10" style="display: none;">
+            <td><div style="overflow:hidden"></td>
+            <td class="w400-bdr">H-10</td>
+            <td class="iw400-right-bdr">Module 10</td>
+            <td class="iw400-bdr"></td>
+            <td class="w400-yellow-bdr"><input type="checkbox" id="h-10-1" tabindex="55"></input></td>
+            <td><div style="overflow:hidden"></td>
+        </tr>
+        <tr class="h13" id="Module-11" style="display: none;">
+            <td><div style="overflow:hidden"></td>
+            <td class="w400-bdr">H-11</td>
+            <td class="iw400-right-bdr">Module 11</td>
+            <td class="iw400-bdr"></td>
+            <td class="w400-yellow-bdr"><input type="checkbox" id="h-11-1" tabindex="55"></input></td>
+            <td><div style="overflow:hidden"></td>
+        </tr>
+        <tr class="h13" id="Module-12" style="display: none;">
+            <td><div style="overflow:hidden"></td>
+            <td class="w400-bdr">H-12</td>
+            <td class="iw400-right-bdr">Module 12</td>
+            <td class="iw400-bdr"></td>
+            <td class="w400-yellow-bdr"><input type="checkbox" id="h-12-1" tabindex="55"></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
         <tr class="h13">

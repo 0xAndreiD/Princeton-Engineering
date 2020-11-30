@@ -29,33 +29,54 @@ document.getElementById("defaultOpen").click();
 function fcChangeType( conditionId, type ){
     if( type == 1 )
     {
+        $(`#inputform-${conditionId} #label-A-1`).attr('rowspan', 8);
+        $(`#inputform-${conditionId} #label-B-1`)[0].style.display = "none";
+        $(`#inputform-${conditionId} #title-B-3`)[0].style.display = "table-cell";
         var elements = $(`#inputform-${conditionId} .class-truss-hide`);
         for(let i = 0; i < elements.length; i ++)
         {
-            elements[i].disabled = true;
-            elements[i].style.background = '#95b3d7';
-            elements[i].style.color = 'rgb(84, 84, 84)';
+            elements[i].style.display = 'none';
         }
         $(`#inputform-${conditionId} #label-A-9`)[0].innerHTML = 'Rise from Truss Plate to Top Ridge';
         $(`#inputform-${conditionId} #label-A-10`)[0].innerHTML = 'Horiz Len from Outside of Truss Plate to Ridge';
+        $(`#inputform-${conditionId} #label-A-11`)[0].innerHTML = 'Diagonal Overhang Length past Truss Plate';
         $(`#inputform-${conditionId} #label-B-3`)[0].innerHTML = 'Truss Spacing - Center to Center';
+        $(`#inputform-${conditionId} #label-B-4`)[0].innerHTML = 'Truss Material';
         $(`#inputform-${conditionId} #label-F-1`)[0].innerHTML = 'Maximum # Modules along Truss';
         document.getElementById(`trussInput-${conditionId}`).style.display = "block";
     }    
     else
     {
+        $(`#inputform-${conditionId} #label-A-1`).attr('rowspan', 11);
+        $(`#inputform-${conditionId} #label-B-1`)[0].style.display = "table-cell";
+        $(`#inputform-${conditionId} #title-B-3`)[0].style.display = "none";
         var elements = $(`#inputform-${conditionId} .class-truss-hide`);
         for(let i = 0; i < elements.length; i ++)
         {
-            elements[i].disabled = false;
-            elements[i].style.background = '#ffffff';
-            elements[i].style.color = 'black';
+            elements[i].style.display = 'table-row';
         }
         $(`#inputform-${conditionId} #label-A-9`)[0].innerHTML = 'Rise from Rafter Plate to Top Ridge';
         $(`#inputform-${conditionId} #label-A-10`)[0].innerHTML = 'Horiz Len from Outside of Rafter Plate to Ridge';
+        $(`#inputform-${conditionId} #label-A-11`)[0].innerHTML = 'Diagonal Overhang Length past Rafter Plate';
         $(`#inputform-${conditionId} #label-B-3`)[0].innerHTML = 'Joist Spacing - Center to Center';
+        $(`#inputform-${conditionId} #label-B-4`)[0].innerHTML = 'Rafter Material';
         $(`#inputform-${conditionId} #label-F-1`)[0].innerHTML = 'Maximum # Modules along Rafter';
         document.getElementById(`trussInput-${conditionId}`).style.display = "none";
+    }
+}
+
+function maxModuleNumChange( conditionId ){
+    var moduleNum = $(`#inputform-${conditionId} #f-1-1`).val();
+    console.log(moduleNum);
+    let i;
+    $(`#inputform-${conditionId} #Module-Left-Text`).attr('rowspan', Math.min(moduleNum, 12));
+    for(i = 1; i <= 12 && i <= moduleNum; i ++)
+    {
+        $(`#inputform-${conditionId} #Module-${i}`)[0].style.display = "table-row";
+    }
+    for(; i <= 12; i ++)
+    {
+        $(`#inputform-${conditionId} #Module-${i}`)[0].style.display = "none";
     }
 }
 

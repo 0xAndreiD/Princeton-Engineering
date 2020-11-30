@@ -168,11 +168,11 @@ class GeneralController extends Controller
         $data['ProjectInfo']['State'] = $input['option-state'];
         $data['ProjectInfo']['Zip'] = $input['txt-zip'];
         
-        //Personal
-        $data['Personal'] = array();
-        $data['Personal']['Name'] = $input['txt-name-of-field-personnel'];
-        $data['Personal']['DateOfFieldVisit'] = $input['date-of-field-visit'];
-        $data['Personal']['DateOfPlanSet'] = $input['date-of-plan-set'];
+        //Personnel
+        $data['Personnel'] = array();
+        $data['Personnel']['Name'] = $input['txt-name-of-field-personnel'];
+        $data['Personnel']['DateOfFieldVisit'] = $input['date-of-field-visit'];
+        $data['Personnel']['DateOfPlanSet'] = $input['date-of-plan-set'];
 
         //BuildingAge
         $data['BuildingAge'] = $input['txt-building-age'];
@@ -195,14 +195,14 @@ class GeneralController extends Controller
             $caseData = array();
             $caseData['LC_Number'] = $number;
             $caseData['TrussFlag'] = filter_var($caseInput['TrussFlag'], FILTER_VALIDATE_BOOLEAN);
-            $caseData['RoofDataInput'] = array("A1" => $number, "A2" => number_format(floatval($caseInput['a-2-1']), 2), "A3" => number_format(floatval($caseInput['a-3-1']), 2), "A4" => number_format(floatval($caseInput['a-4-1']), 2), "A5" => $caseInput['a-5-1'], "A6" => $caseInput['a-6-1'], "A7" => number_format(floatval($caseInput['a-7-1']), 2), "A8" => number_format(floatval($caseInput['a-8-1']), 2), "A9" => number_format(floatval($caseInput['a-9-1']), 2), "A10" => number_format(floatval($caseInput['a-10-1']), 2), "A11" => number_format(floatval($caseInput['a-11-1']), 2));
-            $caseData['RafterDataInput'] = array("B1" => number_format(floatval($caseInput['b-1-1']), 2), "B2" => number_format(floatval($caseInput['b-2-1']), 2), "B3" => number_format(floatval($caseInput['b-3-1']), 2), "B4" => $caseInput['b-4-1']);
-            $caseData['CollarTieInformation'] = array("C1" => $caseInput['c-1-1'], "C2" => number_format(floatval($caseInput['c-2-1']), 2), "C3" => number_format(floatval($caseInput['c-3-1']), 2));
+            $caseData['RoofDataInput'] = array("A1" => $number, "A2" => number_format(floatval($caseInput['a-2-1']), 2), "A3" => number_format(floatval($caseInput['a-3-1']), 2), "A4" => number_format(floatval($caseInput['a-4-1']), 2), "A5" => $caseInput['a-5-1'], "A6" => $caseInput['a-6-1'], "A7" => number_format(floatval( isset($caseInput['a-7-1']) ? $caseInput['a-7-1'] : 0 ), 2), "A8" => number_format(floatval(isset($caseInput['a-8-1']) ? $caseInput['a-8-1'] : 0), 2), "A9" => number_format(floatval(isset($caseInput['a-9-1']) ? $caseInput['a-9-1'] : 0), 2), "A10" => number_format(floatval($caseInput['a-10-1']), 2), "A11" => number_format(floatval($caseInput['a-11-1']), 2));
+            $caseData['RafterDataInput'] = array("B1" => number_format(floatval(isset($caseInput['b-1-1']) ? $caseInput['b-1-1'] : 0), 2), "B2" => number_format(floatval(isset($caseInput['b-2-1']) ? $caseInput['b-2-1'] : 0), 2), "B3" => number_format(floatval($caseInput['b-3-1']), 2), "B4" => $caseInput['b-4-1']);
+            $caseData['CollarTieInformation'] = array("C1" => isset($caseInput['c-1-1']) ? $caseInput['c-1-1'] : "", "C2" => number_format(floatval(isset($caseInput['c-2-1']) ? $caseInput['c-2-1'] : 0), 2), "C3" => number_format(floatval(isset($caseInput['c-3-1']) ? $caseInput['c-3-1'] : 0), 2));
             $caseData['RoofDeckSurface'] = array("D1" => number_format(floatval($caseInput['d-1-1']), 2), "D2" => $caseInput['d-2-1'], "D3" => number_format(floatval($caseInput['d-3-1']), 2));
             $caseData['Location'] = array("E1" => number_format(floatval($caseInput['e-1-1']), 2), "E2" => number_format(floatval($caseInput['e-2-1']), 2));
             $caseData['NumberOfModules'] = array("F1" => number_format(floatval($caseInput['f-1-1']), 2));
             $caseData['NSGap'] = array("G1" => number_format(floatval($caseInput['g-1-1']), 2));
-            $caseData['RotateModuleOrientation'] = array("H1" => filter_var($caseInput['h-1-1'], FILTER_VALIDATE_BOOLEAN), "H2" => filter_var($caseInput['h-2-1'], FILTER_VALIDATE_BOOLEAN), "H3" => filter_var($caseInput['h-3-1'], FILTER_VALIDATE_BOOLEAN), "H4" => filter_var($caseInput['h-4-1'], FILTER_VALIDATE_BOOLEAN), "H5" => filter_var($caseInput['h-5-1'], FILTER_VALIDATE_BOOLEAN), "H6" => filter_var($caseInput['h-6-1'], FILTER_VALIDATE_BOOLEAN), "H7" => filter_var($caseInput['h-7-1'], FILTER_VALIDATE_BOOLEAN), "H8" => filter_var($caseInput['h-8-1'], FILTER_VALIDATE_BOOLEAN));
+            $caseData['RotateModuleOrientation'] = array("H1" => filter_var($caseInput['h-1-1'], FILTER_VALIDATE_BOOLEAN), "H2" => filter_var($caseInput['h-2-1'], FILTER_VALIDATE_BOOLEAN), "H3" => filter_var($caseInput['h-3-1'], FILTER_VALIDATE_BOOLEAN), "H4" => filter_var($caseInput['h-4-1'], FILTER_VALIDATE_BOOLEAN), "H5" => filter_var($caseInput['h-5-1'], FILTER_VALIDATE_BOOLEAN), "H6" => filter_var($caseInput['h-6-1'], FILTER_VALIDATE_BOOLEAN), "H7" => filter_var($caseInput['h-7-1'], FILTER_VALIDATE_BOOLEAN), "H8" => filter_var($caseInput['h-8-1'], FILTER_VALIDATE_BOOLEAN), "H9" => filter_var($caseInput['h-9-1'], FILTER_VALIDATE_BOOLEAN), "H10" => filter_var($caseInput['h-10-1'], FILTER_VALIDATE_BOOLEAN), "H11" => filter_var($caseInput['h-11-1'], FILTER_VALIDATE_BOOLEAN), "H12" => filter_var($caseInput['h-12-1'], FILTER_VALIDATE_BOOLEAN));
             $caseData['Notes'] = array("I1" => $caseInput['i-1-1'] ? $caseInput['i-1-1'] : "");
 
             $caseData['TrussDataInput'] = array();
