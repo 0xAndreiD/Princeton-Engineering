@@ -12,9 +12,9 @@
                 <h2 class="h5 text-white-75 mb-0">
                     Panel Status
                 </h2>
-                <span class="badge badge-success mt-2">
+                <!-- <span class="badge badge-success mt-2">
                     <i class="fa fa-spinner fa-spin mr-1"></i> Running
-                </span>
+                </span> -->
             </div>
         </div>
     </div>

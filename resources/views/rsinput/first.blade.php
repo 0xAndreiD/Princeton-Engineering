@@ -1,6 +1,6 @@
 <!-- header section -->
 <form id="inputform-first">
-<table id="rs02_header" cellspacing="0" cellpadding="0" style="border-spacing:0;">
+<!-- <table id="rs02_header" cellspacing="0" cellpadding="0" style="border-spacing:0;">
     <colgroup>
         <col width="80">
         <col width="600">
@@ -18,16 +18,23 @@
         </tr>
         <tr class="h13">
             <td><div style="overflow:hidden"></td>
-            <td class="w700" >Princeton Engineering</td>
+            <td class="w700" ><div style="overflow:hidden"></td>
             <td ><div style="overflow:hidden"></td>
             <td class="iw400" >Multiple Framing Data Input</td>
             <td><div style="overflow:hidden"></td>
         </tr>
         <tr class="h16"> 
             <td><div style="overflow:hidden"></td>
-            <td class="w700">Data Input form for roof structural analysis for Residential Solar Projects</td>
+            <td class="w700" style="font-size: 20px;">iRoof™ Structural Analysis Data Input Pages</td>
             <td ><div style="overflow:hidden"></td>
             <td class="iw400">Rev 2.0.3</td>
+            <td><div style="overflow:hidden"></td>
+        </tr>
+        <tr class="h16"> 
+            <td><div style="overflow:hidden"></td>
+            <td class="w700" >Common Data Entry Page</td>
+            <td ><div style="overflow:hidden"></td>
+            <td class="iw400"><div style="overflow:hidden"></td>
             <td><div style="overflow:hidden"></td>
         </tr>
         <tr class="h13">
@@ -68,7 +75,7 @@ www.Princeton-Engineering.com; tel: 908-507-5500
             <td><div style="overflow:hidden"></div></td>
         </tr>
     </tbody>
-</table>
+</table> -->
 
 <!-- sample static color cell section -->
 <table id="sample-static-color-table" cellspacing="0" cellpadding="0" style="border-spacing:0;" >    
@@ -144,7 +151,7 @@ www.Princeton-Engineering.com; tel: 908-507-5500
         <td><div style="overflow:hidden"></div></td>
         <td class="iw400-right-bdr">User ID</td>
         <td class="w400-yellow-bdr">
-            <select id="option-user-id" tabindex="3" disabled>
+            <select id="option-user-id" tabindex="3">
                 @foreach ($companyMembers as $member)
                     @if ($member['id'] == Auth::user()->id)
                         <option data-companyid="{{ $member['usernumber'] }}" data-userid="{{ $member['id'] }}" selected>
@@ -220,7 +227,7 @@ www.Princeton-Engineering.com; tel: 908-507-5500
         <td><div style="overflow:hidden"></div></td>
         <td class="iw400-right-bdr">City</td>
         <td class="w400-yellow-bdr"><input type="text" id="txt-city" tabindex="9" value="Somerville"></input></td>
-        <td class="iw400" id="txt-city-comment" colspan="2">Good Massechusetts town name</td>
+        <td class="iw400" id="txt-city-comment" colspan="2" style="text-align: left;">Good Massachusetts town name</td>
     </tr>
     <tr class="h13">
         <td><div style="overflow:hidden"></div></td>
@@ -242,6 +249,45 @@ www.Princeton-Engineering.com; tel: 908-507-5500
 </tbody> 
 </table>
 
+<!-- Number Conditions table section -->
+<table id="number-conditions-info-table" cellspacing="0" cellpadding="0" style="border-spacing:0;" >    
+    <colgroup>
+        <col width="80">
+        <col width="160">
+        <col width="160">
+        <col width="160">
+        <col width="80">
+    </colgroup>
+<tbody>
+    <tr class="h13">
+        <td><div style="overflow:hidden"></td>
+        <td><div style="overflow:hidden"></td>
+        <td><div style="overflow:hidden"></td>
+        <td><div style="overflow:hidden"></td>
+        <td><div style="overflow:hidden"></td>
+    </tr>
+    <tr class="h13">
+        <td><div style="overflow:hidden"></div></td>
+        <td class="iw400-right-bdr"># of Framing Conditions</td>
+        <td class="w400-green-bdr">
+            <select id="option-number-of-conditions" tabindex="24">
+                <option data-value="n:1" selected="">1</option>
+                <option data-value="n:2">2</option>
+                <option data-value="n:3">3</option>
+                <option data-value="n:4">4</option>
+                <option data-value="n:5">5</option>
+                <option data-value="n:6">6</option>
+                <option data-value="n:7">7</option>
+                <option data-value="n:8">8</option>
+                <option data-value="n:9">9</option>
+                <option data-value="n:10">10</option>
+            </select>
+        </td>
+        <td><div style="overflow:hidden"></div></td>
+        <td><div style="overflow:hidden"></div></td>
+    </tr>
+</tbody>
+</table>
 
 <!-- Personal Information table section -->
 <table id="personal-info-table" cellspacing="0" cellpadding="0" style="border-spacing:0;" >    
@@ -397,46 +443,6 @@ www.Princeton-Engineering.com; tel: 908-507-5500
         <td class="w400-bdr" id="option-railsupport-option1"></td>
         <td class="w400-bdr" id="option-railsupport-option2"></td>
     </tr>
-</tbody>
-</table>
-
-<!-- Number Conditions table section -->
-<table id="number-conditions-info-table" cellspacing="0" cellpadding="0" style="border-spacing:0;" >    
-    <colgroup>
-        <col width="80">
-        <col width="160">
-        <col width="160">
-        <col width="160">
-        <col width="80">
-    </colgroup>
-<tbody>
-    <tr class="h13">
-        <td><div style="overflow:hidden"></td>
-        <td><div style="overflow:hidden"></td>
-        <td><div style="overflow:hidden"></td>
-        <td><div style="overflow:hidden"></td>
-        <td><div style="overflow:hidden"></td>
-    </tr>
-    <tr class="h13">
-        <td><div style="overflow:hidden"></div></td>
-        <td class="iw400-right-bdr">Number of Conditions</td>
-        <td class="w400-green-bdr">
-            <select id="option-number-of-conditions" tabindex="24">
-                <option data-value="n:1" selected="">1</option>
-                <option data-value="n:2">2</option>
-                <option data-value="n:3">3</option>
-                <option data-value="n:4">4</option>
-                <option data-value="n:5">5</option>
-                <option data-value="n:6">6</option>
-                <option data-value="n:7">7</option>
-                <option data-value="n:8">8</option>
-                <option data-value="n:9">9</option>
-                <option data-value="n:10">10</option>
-            </select>
-        </td>
-        <td><div style="overflow:hidden"></div></td>
-        <td><div style="overflow:hidden"></div></td>
-    </tr>
     <tr class="h13">
         <td><div style="overflow:hidden"></div></td>
         <td style="padding: 10px;">
@@ -452,4 +458,5 @@ www.Princeton-Engineering.com; tel: 908-507-5500
     </tr>
 </tbody>
 </table>
+
 </form>

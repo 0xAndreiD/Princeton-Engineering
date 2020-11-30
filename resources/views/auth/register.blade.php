@@ -62,13 +62,13 @@
                                         </div>
                                         <div class="form-group">
                                             <div class="custom-control custom-checkbox custom-control-primary">
-                                                <input type="checkbox" class="custom-control-input" id="signup-terms" name="signup-terms">
-                                                <label class="custom-control-label" for="signup-terms">I agree to Terms &amp; Conditions</label>
+                                                <input type="checkbox" class="custom-control-input" id="signup-terms" name="signup-terms" onchange="clickTerms()">
+                                                <label class="custom-control-label" for="signup-terms" style="cursor: pointer;">I agree to Terms &amp; Conditions</label>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <button type="submit" class="btn btn-block btn-hero-lg btn-hero-success">
+                                        <button type="submit" class="btn btn-block btn-hero-lg btn-hero-success" id="signup-btn" disabled>
                                             <i class="fa fa-fw fa-plus mr-1"></i> Sign Up
                                         </button>
                                         <p class="mt-3 mb-0 d-lg-flex justify-content-lg-between">
@@ -110,8 +110,19 @@
                     </div>
                 </div>
                 <div class="block-content">
+                    <h5>1. Terms & conditions</h5>
                     <p>Dolor posuere proin blandit accumsan senectus netus nullam curae, ornare laoreet adipiscing luctus mauris adipiscing pretium eget fermentum, tristique lobortis est ut metus lobortis tortor tincidunt himenaeos habitant quis dictumst proin odio sagittis purus mi, nec taciti vestibulum quis in sit varius lorem sit metus mi.</p>
-                    <p>Dolor posuere proin blandit accumsan senectus netus nullam curae, ornare laoreet adipiscing luctus mauris adipiscing pretium eget fermentum, tristique lobortis est ut metus lobortis tortor tincidunt himenaeos habitant quis dictumst proin odio sagittis purus mi, nec taciti vestibulum quis in sit varius lorem sit metus mi.</p>
+                    <h5>2. Copyright</h5>
+                    <p>Copyright © 2020 Richard Pantel.
+All Rights Reserved.<span>&nbsp; </span>No parts of this
+data input form or related calculation reports may be copied in format,
+content or intent, or reproduced in any form or by any electronic or mechanical
+means, including information storage and retrieval systems, without
+permission in writing from the author.<span>&nbsp;
+</span>Further, dis-assembly or reverse engineering of this data input form
+or related calculation reports is strictly prohibited. The author's contact
+information is: RPantel@Princeton-Engineering.com, web-site:
+www.Princeton-Engineering.com; tel: 908-507-5500</p>
                 </div>
                 <div class="block-content block-content-full text-right bg-light">
                     <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal">Done</button>
@@ -120,4 +131,14 @@
         </div>
     </div>
 </div>
+
+<script>
+function clickTerms(){
+    if( document.getElementById('signup-terms').checked == true )
+        document.getElementById('signup-btn').disabled = false;
+    else
+        document.getElementById('signup-btn').disabled = true;
+}
+</script>
+
 @endsection

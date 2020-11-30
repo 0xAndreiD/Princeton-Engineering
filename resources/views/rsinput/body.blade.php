@@ -6,10 +6,10 @@
         <div class="content content-full content-top">
             <div class="pt-5 pb-4 text-center">
                 <h1 class="h2 font-w700 mb-2 text-white">
-                    Multiple Framing Data Input Form
+                    iRoof™ Structural Analysis Data Input Pages
                 </h1>
-                <h2 class="h5 text-white-75 mb-0">
-                    Please Input your data
+                <h2 class="h5 text-white-75 mb-0" id="subPageTitle">
+                    Site and Equipment Data Input
                 </h2>
             </div>
         </div>
@@ -18,7 +18,7 @@
 
 <div class="rfdContainer">
     <div class="rfdTab">
-        <button class="tablinks" onclick="openRfdTab(event, 'tab_first')" id="defaultOpen">Common Data</button>
+        <button class="tablinks" onclick="openRfdTab(event, 'tab_first')" id="defaultOpen">Common Data Entry</button>
         <button class="tablinks" onclick="openRfdTab(event, 'fc-1')" style="display: block;" id="fcTab-1">FC 1</button>
         <button class="tablinks" onclick="openRfdTab(event, 'fc-2')" style="display: none;" id="fcTab-2">FC 2</button>
         <button class="tablinks" onclick="openRfdTab(event, 'fc-3')" style="display: none;" id="fcTab-3">FC 3</button>

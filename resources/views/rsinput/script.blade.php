@@ -14,7 +14,12 @@ function openRfdTab(evt, tabName) {
   document.getElementById(tabName).style.display = "block";
   evt.currentTarget.className += " active";
   if( tabName != "tab_first" )
+  {
     window.conditionId = parseInt(tabName.slice(3));
+    document.getElementById('subPageTitle').innerHTML = 'Framing Data Input';
+  }
+  else
+    document.getElementById('subPageTitle').innerHTML = 'Site and Equipment Data Input';
   console.log('Tab No:', window.conditionId);
 }
 
@@ -23,9 +28,35 @@ document.getElementById("defaultOpen").click();
 
 function fcChangeType( conditionId, type ){
     if( type == 1 )
+    {
+        var elements = $(`#inputform-${conditionId} .class-truss-hide`);
+        for(let i = 0; i < elements.length; i ++)
+        {
+            elements[i].disabled = true;
+            elements[i].style.background = '#95b3d7';
+            elements[i].style.color = 'rgb(84, 84, 84)';
+        }
+        $(`#inputform-${conditionId} #label-A-9`)[0].innerHTML = 'Rise from Truss Plate to Top Ridge';
+        $(`#inputform-${conditionId} #label-A-10`)[0].innerHTML = 'Horiz Len from Outside of Truss Plate to Ridge';
+        $(`#inputform-${conditionId} #label-B-3`)[0].innerHTML = 'Truss Spacing - Center to Center';
+        $(`#inputform-${conditionId} #label-F-1`)[0].innerHTML = 'Maximum # Modules along Truss';
         document.getElementById(`trussInput-${conditionId}`).style.display = "block";
+    }    
     else
+    {
+        var elements = $(`#inputform-${conditionId} .class-truss-hide`);
+        for(let i = 0; i < elements.length; i ++)
+        {
+            elements[i].disabled = false;
+            elements[i].style.background = '#ffffff';
+            elements[i].style.color = 'black';
+        }
+        $(`#inputform-${conditionId} #label-A-9`)[0].innerHTML = 'Rise from Rafter Plate to Top Ridge';
+        $(`#inputform-${conditionId} #label-A-10`)[0].innerHTML = 'Horiz Len from Outside of Rafter Plate to Ridge';
+        $(`#inputform-${conditionId} #label-B-3`)[0].innerHTML = 'Joist Spacing - Center to Center';
+        $(`#inputform-${conditionId} #label-F-1`)[0].innerHTML = 'Maximum # Modules along Rafter';
         document.getElementById(`trussInput-${conditionId}`).style.display = "none";
+    }
 }
 
 // ---------- Canvas Code -------------
@@ -258,7 +289,7 @@ var drawGraph = function( condId ) {
     // draw di­agonals lines 
     var index = 0;
     for (var key in globalDiagnoal1Lines[condId]) {
-        var bAllow = $(`#inputform-${condId} #diag-1-` + (index+1)).is(":checked");
+        var bAllow = !($(`#inputform-${condId} #diag-1-` + (index+1)).is(":checked"));
         if (bAllow == true) {
             drawLine(condId, globalDiagnoal1Lines[condId][key][0], globalDiagnoal1Lines[condId][key][1], "M"+label_index);
         }
@@ -269,7 +300,7 @@ var drawGraph = function( condId ) {
 
     index = 0;
     for (var key in globalDiagnoal2Lines[condId]) {
-        var bAllow = $(`#inputform-${condId} #diag-2-` + (index+1)).is(":checked");
+        var bAllow = !($(`#inputform-${condId} #diag-2-` + (index+1)).is(":checked"));
         if (bAllow == true) {
             drawLine(condId, globalDiagnoal2Lines[condId][key][0], globalDiagnoal2Lines[condId][key][1], "M"+label_index);
         }
@@ -862,7 +893,7 @@ var detectCorrectTownForMA = function() {
         }
 
         $('#txt-city-comment').html(err_message);
-        $('#txt-city-comment').css('color', 'red');
+        $('#txt-city-comment').css('color', '#FFC7CE');
     }
     else {
         $('#txt-city-comment').html("");
@@ -894,17 +925,17 @@ var isEmptyInputBox = function() {
             return;
         }
 
-        $(this).css('background-color', 'pink');
+        $(this).css('background-color', '#FFC7CE');
         isEmpty = true;
     });
 
     // check empty date boxes
     if ($('#date-of-field-visit').val() == "") {
-        $('#date-of-field-visit').css('background-color', 'pink');
+        $('#date-of-field-visit').css('background-color', '#FFC7CE');
         isEmpty = true;
     }
     if ($('#date-of-plan-set').val() == "") {
-        $('#date-of-plan-set').css('background-color', 'pink');
+        $('#date-of-plan-set').css('background-color', '#FFC7CE');
         isEmpty = true;
     }
 
@@ -1206,7 +1237,7 @@ var updateTrussAndComments = function(condId, keepStatus) {
     // Diagnoals 
     for (index = 0; index < globalDiagnoals1[condId]; index++) {
         if (keepStatus == false) {
-            $(`#inputform-${condId} #diag-1-` + (index+1)).prop( "checked", true );
+            $(`#inputform-${condId} #diag-1-` + (index+1)).prop( "checked", false );
         }
         $(`#inputform-${condId} #td-diag-1-` + (index+1)).html(roofPlane + floorPlane + index+1);
         $(`#inputform-${condId} #td-diag-1-` + (index+1)).removeClass('w400-blue-bdr').addClass('w400-bdr');
@@ -1224,7 +1255,7 @@ var updateTrussAndComments = function(condId, keepStatus) {
     }
     for (index = 0; index < globalDiagnoals2[condId]; index++) {
         if (keepStatus == false) {
-            $(`#inputform-${condId} #diag-2-` + (index+1)).prop( "checked", true );
+            $(`#inputform-${condId} #diag-2-` + (index+1)).prop( "checked", false );
         }
         $(`#inputform-${condId} #td-diag-2-` + (index+1)).html(roofPlane + floorPlane + globalDiagnoals1[condId] + index+1);
         $(`#inputform-${condId} #td-diag-2-` + (index+1)).removeClass('w400-blue-bdr').addClass('w400-bdr');
@@ -1275,11 +1306,11 @@ var updateNumberSegment1 = function (condId, roofPlane, keepStatus = true) {
     }
     else if (lengthRoofPlane.toFixed(2) < totalLength.toFixed(2)) {
         $(`#inputform-${condId} #td-checksum-of-segment1`).html("Segments add to greater than total length");
-        $(`#inputform-${condId} #td-checksum-of-segment1`).css('background-color', '#FF0000');
+        $(`#inputform-${condId} #td-checksum-of-segment1`).css('background-color', '#FFC7CE');
     }
     else {
         $(`#inputform-${condId} #td-checksum-of-segment1`).html("Segments add to less than total length");
-        $(`#inputform-${condId} #td-checksum-of-segment1`).css('background-color', '#FF0000');
+        $(`#inputform-${condId} #td-checksum-of-segment1`).css('background-color', '#FFC7CE');
     }
 
     updateTrussAndComments(condId, keepStatus);
@@ -1312,11 +1343,11 @@ var updateNumberSegment2 = function (condId, floorPlane, keepStatus = true) {
     }
     else if (lengthFloorPlane.toFixed(2) < totalLength.toFixed(2)) {
         $(`#inputform-${condId} #td-checksum-of-segment2`).html("Segments add to greater than total length");
-        $(`#inputform-${condId} #td-checksum-of-segment2`).css('background-color', '#FF0000');
+        $(`#inputform-${condId} #td-checksum-of-segment2`).css('background-color', '#FFC7CE');
     }
     else {
         $(`#inputform-${condId} #td-checksum-of-segment2`).html("Segments add to less than total length");
-        $(`#inputform-${condId} #td-checksum-of-segment2`).css('background-color', '#FF0000');
+        $(`#inputform-${condId} #td-checksum-of-segment2`).css('background-color', '#FFC7CE');
     }
 
     updateTrussAndComments(condId, keepStatus);
@@ -1650,8 +1681,7 @@ $(document).ready(function() {
                         title: "Success",
                         text: message,
                         icon: "success",
-                        buttons: { cancel: "Cancel", confirm: "Yes" },
-                        dangerMode: true
+                        buttons: { confirm: "Yes", cancel: "No" }
                     })
                     .then(( confirm ) => {
                         if ( confirm ) {
