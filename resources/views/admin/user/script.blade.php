@@ -66,16 +66,19 @@ function updateUser() {
     data.password = $('input#password').val();
     data.companyid = $('select#company').val();
     data.usernumber = $('input#usernumber').val();
-    data.membership = $('input#membership').val();
+    data.userrole = $('input#userrole').val();
 
     if (data.id == 0) { // Create user
         if (data.password == ''){
-            $('input#').focus();
+            $('input#password').focus();
             return;
         }
         $.post("updateUser", {data: data}, function(result){
-            if (result){
+            if (result == true){
                 toast.fire('Created!', 'User has been created.', 'success');
+            } else if (result == "exist") {
+                toast.fire('Error!', 'User already exists with the same name', 'error');
+                return;
             }
             $('#modal-block-normal').modal('toggle');
             $('#users').DataTable().ajax.reload();
@@ -89,8 +92,6 @@ function updateUser() {
             $('#users').DataTable().ajax.reload();
         });
     }
-
-    
 }
 
 function showEditUser(obj, id) {

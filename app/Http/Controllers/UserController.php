@@ -45,8 +45,8 @@ class UserController extends Controller
             1 =>'username',
             2 =>'email',
             3 =>'companyname',
-            4 =>'usernumber',
-            5 =>'membershipid'
+            4 =>'userrole',
+            5 =>'usernumber'
         );
         $totalData = User::count();
         $totalFiltered = $totalData; 
@@ -68,8 +68,8 @@ class UserController extends Controller
                         'users.username as username',
                         'users.email as email',
                         'company_info.company_name as companyname',
-                        'users.usernumber as usernumber',
-                        'users.membershipid as membershipid'
+                        'users.userrole as userrole',
+                        'users.usernumber as usernumber'
                     )
                 );
         }
@@ -88,8 +88,8 @@ class UserController extends Controller
                                 'users.username as username',
                                 'users.email as email',
                                 'company_info.company_name as companyname',
-                                'users.usernumber as usernumber',
-                                'users.membershipid as membershipid'
+                                'users.userrole as userrole',
+                                'users.usernumber as usernumber'
                             )
                         );
 
@@ -111,24 +111,24 @@ class UserController extends Controller
                 $nestedData['email'] = $user->email;
                 $nestedData['companyname'] = $user->companyname;
                 $nestedData['usernumber'] = $user->usernumber;
-
-                if ($user->usernumber)
-                    $nestedData['usernumber'] = "
-                        <span class='badge badge-danger'> Admin </span>
-                    ";
-                else
-                    $nestedData['usernumber'] = "
-                        <span class='badge badge-info'> General </span>
-                    ";
                 
-                if ($user->membershipid)
-                    $nestedData['membershipid'] = "
-                        <span class='badge badge-danger'> Admin </span>
-                    ";
-                else
-                    $nestedData['membershipid'] = "
-                        <span class='badge badge-info'> General </span>
-                    ";
+                switch ($user->userrole){
+                    case 2:
+                        $nestedData['userrole'] = "
+                            <span class='badge badge-danger'> Admin </span>
+                        ";
+                        break;
+                    case 1:
+                        $nestedData['userrole'] = "
+                            <span class='badge badge-primary'> Client </span>
+                        ";
+                        break;
+                    case 0:
+                        $nestedData['userrole'] = "
+                            <span class='badge badge-info'> User </span>
+                        ";
+                        break;
+                }
 
                 $nestedData['actions'] = "
                 <p class='text-center'>
@@ -162,14 +162,21 @@ class UserController extends Controller
     function updateUser(Request $request){
         $data = $request->input('data');
         if ($data['id'] == 0){
+            $isExist = User::where('username', $data['name'])->get()->first();
+            if ($isExist) {
+                echo "exist";
+                return;
+            }
+
             $res = new User;
             $res->username = $data['name'];
             $res->email = $data['email'];
             $res->password = Hash::make($data['password']);
-            $res->userrole = 0;
+            //$res->userrole = 0;
             $res->companyid = $data['companyid'];
+            $res->userrole = $data['userrole'];
             $res->usernumber = $data['usernumber'];
-            $res->membershipid = $data['membership'];
+            $res->membershipid = 0;
             $res->membershiprole = 0;
             $res->created_at = date('Y-m-d h:i:s',strtotime(now()));
             $res->save();
@@ -180,8 +187,8 @@ class UserController extends Controller
             $res->email = $data['email'];
             if ($data['password']) $res->password = Hash::make($data['password']);
             $res->companyid = $data['companyid'];
+            $res->userrole = $data['userrole'];
             $res->usernumber = $data['usernumber'];
-            $res->membershipid = $data['membership'];
             $res->updated_at = date('Y-m-d h:i:s',strtotime(now()));
             $res->save();
             echo true;
