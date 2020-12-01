@@ -33,6 +33,12 @@
         <link rel="stylesheet" id="css-theme" href="{{ asset('css/themes/xeco.min.css') }}">
         <link rel="stylesheet" id="css-main" href="{{ asset('css/styles.css') }}">
         <link rel="stylesheet" id="css-main" href="{{ asset('css/spreadsheet.css') }}">
+        
+
+        <link rel="stylesheet" href="{{ asset('js/plugins/sweetalert2/sweetalert2.min.css') }}" >
+        <link rel="stylesheet" href="{{ asset('js/plugins/datatables/dataTables.bootstrap4.css') }}">
+        <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.1.7/css/fixedHeader.bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.6/css/responsive.bootstrap.min.css">
         <!-- END Stylesheets -->
 
         <script src="{{ asset('js/jquery.min.js') }}"></script>
@@ -251,6 +257,24 @@
 
         <script src="{{ asset('js/dashmix.core.min.js') }}"></script>
         <script src="{{ asset('js/dashmix.app.min.js') }}"></script>
+
+        <!-- Modal JS Plugins -->
+        <script src="{{ asset('js/plugins/es6-promise/es6-promise.auto.min.js') }}"></script>
+        <script src="{{ asset('js/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
+        <script src="{{ asset('js/pages/be_comp_dialogs.min.js') }}"></script>
+        
+        <!-- Page JS Plugins -->
+        <script src="{{ asset('js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+        <script src="{{ asset('js/plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
+        <script src="{{ asset('js/plugins/datatables/buttons/dataTables.buttons.min.js')}}"></script>
+        <script src="{{ asset('js/plugins/datatables/buttons/buttons.print.min.js') }}"></script>
+        <script src="{{ asset('js/plugins/datatables/buttons/buttons.html5.min.js') }}"></script>
+        <script src="{{ asset('js/plugins/datatables/buttons/buttons.flash.min.js') }}"></script>
+        <script src="{{ asset('js/plugins/datatables/buttons/buttons.colVis.min.js') }}"></script>
+        <script src="https://cdn.datatables.net/fixedheader/3.1.7/js/dataTables.fixedHeader.min.js"></script>
+        <script src="https://cdn.datatables.net/responsive/2.2.6/js/dataTables.responsive.min.js"></script>
+        <script src="https://cdn.datatables.net/responsive/2.2.6/js/responsive.bootstrap.min.js"></script>
+        <script src="{{ asset('js/plugins/jquery.sparkline.min.js') }}"></script>
 
         <!-- Page JS Plugins -->
         <script src="{{ asset('js/plugins/jquery.sparkline.min.js') }}"></script>

@@ -21,13 +21,16 @@ Route::get('/home', 'GeneralController@index')->name('home');
 
 // RS Input Page
 Route::get('/rsinput', 'GeneralController@rsinput')->name('rsinput');
-Route::post('/getUserData', 'GeneralController@getUserData')->name('getUserData');
+//Route::post('/getUserData', 'GeneralController@getUserData')->name('getUserData');
 Route::post('/submitInput', 'GeneralController@submitInput')->name('submitInput');
 
 // Manage Users
 Route::get('/userList', 'UserController@index')->name('userList');
 Route::post('/getUserData', 'UserController@getUserData')->name('getUserData');
-Route::get('/userEdit', 'UserController@edit')->name('userEdit');
+Route::post('/getUser', 'UserController@getUser')->name('getUser');
+Route::post('/updateUser', 'UserController@updateUser')->name('updateUser');
+
+Route::post('/delUser', 'UserController@delete')->name('delUser');
 
 Route::post('/submitInput', 'GeneralController@submitInput')->name('submitInput');
 
