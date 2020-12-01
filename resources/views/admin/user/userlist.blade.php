@@ -40,8 +40,8 @@
                             <th style="width:15%">Name</th>
                             <th style="width:20%;">Email</th>
                             <th style="width:10%;">Company</th>
-                            <th style="width:20%;">User Number</th>
-                            <th style="width:20%;">Membership</th>
+                            <th style="width:20%;">UserRole</th>
+                            <th style="width:20%;">UserNumber</th>
                             <!-- <th class="text-center" style="width: 15%;">Verified</th>
                             <th class="d-none d-md-table-cell" style="width: 10%;">Role</th>
                             <th class="d-none d-md-table-cell" style="width: 10%;">Company</th>
@@ -107,16 +107,21 @@
                             </div>
                             <div class="row push">
                                 <div class="col-12">
-                                    <label for="usernumber">User Number (1: Administrator)</label>
-                                    <input type="text" class="form-control" id="usernumber" name="usernumber" placeholder="Type Your User Number">
+                                    <label for="userrole">User Role</label>
+                                    <select class="form-control" id="userrole" name="userrole">
+                                            <option value="2"><span class='badge badge-danger'> Admin </span></option>
+                                            <option value="1"><span class='badge badge-primary'> Client </span></option>
+                                            <option value="0"><span class='badge badge-info'> User </span></option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="row push">
                                 <div class="col-12">
-                                    <label for="membership">Membership(0: General,1: allowed by Admin)</label>
-                                    <input type="text" class="form-control" id="membership" name="membership" placeholder="Type Your Membership">
+                                    <label for="usernumber">User Number</label>
+                                    <input type="text" class="form-control" id="usernumber" name="usernumber" placeholder="Type Your User Number">
                                 </div>
                             </div>
+                            
                         </div>
                         <div class="block-content block-content-full text-right bg-light">
                             <button type="button" class="btn btn-sm btn-light" data-dismiss="modal">Close</button>
@@ -146,8 +151,8 @@
                         { "data": "username" },
                         { "data": "email" },
                         { "data": "companyname" },
+                        { "data": "userrole" },
                         { "data": "usernumber" },
-                        { "data": "membershipid" },
                         { "data": "actions", "orderable": false }
                     ]	 
                 });
