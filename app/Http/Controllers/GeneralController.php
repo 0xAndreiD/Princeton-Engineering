@@ -109,10 +109,11 @@ class GeneralController extends Controller
 
         $filename = ($company ? sprintf("%06d", $company['company_number']) : "000000") . "-" . sprintf("%04d", Auth::user()->id) . "-" . $current_time . ".json";
         try {
+            $company = Company::where('id', Auth::user()->companyid)->first();
             $data = $this->inputToJson($request['data'], $request['caseCount']);
             Storage::disk('local')->put($filename, json_encode($data));
             JobRequest::create([
-                'companyName' => $request['data']['txt-company-name'],
+                'companyName' => $company['company_name'],
                 'companyId' => Auth::user()->companyid,
                 'userId' => Auth::user()->usernumber,
                 'clientProjectName' => $request['data']['txt-project-name'],
@@ -151,13 +152,15 @@ class GeneralController extends Controller
         $data['ProgramData']['Description'] = "Data Input form for roof structural analysis for Residential Solar Projects";
         $data['ProgramData']['Copyright'] = "Copyright © 2020 Richard Pantel. All Rights Reserved  No parts of this data input form or related calculation reports may be copied in format, content or intent, or reproduced in any form or by any electronic or mechanical means, including information storage and retrieval systems, without permission in writing from the author.  Further, dis-assembly or reverse engineering of this data input form or related calculation reports is strictly prohibited. The author's contact information is: RPantel@Princeton-Engineering.com, web-site: www.Princeton-Engineering.com; tel: 908-507-5500";
 
+        $company = Company::where('id', Auth::user()->companyid)->first();
+        
         //CompanyInfo
         $data['CompanyInfo'] = array();
-        $data['CompanyInfo']['Name'] = $input['txt-company-name'];
-        $data['CompanyInfo']['Number'] = $input['txt-company-number'];
-        $data['CompanyInfo']['UserId'] = $input['option-user-id'];
-        $data['CompanyInfo']['Username'] = $input['txt-user-name'];
-        $data['CompanyInfo']['UserEmail'] = $input['txt-user-email'];
+        $data['CompanyInfo']['Name'] = $company['company_name'];
+        $data['CompanyInfo']['Number'] = $company['company_number'];
+        $data['CompanyInfo']['UserId'] = $company['company_number'] . "." . Auth::user()->usernumber;
+        $data['CompanyInfo']['Username'] = Auth::user()->username;
+        $data['CompanyInfo']['UserEmail'] = Auth::user()->email;
 
         //ProjectInfo
         $data['ProjectInfo'] = array();
@@ -223,20 +226,20 @@ class GeneralController extends Controller
             if( isset($caseInput['txt-floor-segment6-length']) ) $caseData['TrussDataInput']['FloorPlane']['LengthOfSegment6'] = number_format(floatval($caseInput['txt-roof-segment6-length']), 2);
 
             $caseData['Diagonal1'] = array();
-            if( isset($caseInput['option-diagonals-mem1-1-type']) ) array_push( $caseData['Diagonal1'], array("include" => $caseInput['diag-1-1'] == 'on' ? true : false, "memType" => $caseInput['option-diagonals-mem1-1-type'], "memId" => intval($caseInput['td-diag-1-1'])) );
-            if( isset($caseInput['option-diagonals-mem1-2-type']) ) array_push( $caseData['Diagonal1'], array("include" => $caseInput['diag-1-2'] == 'on' ? true : false, "memType" => $caseInput['option-diagonals-mem1-2-type'], "memId" => intval($caseInput['td-diag-1-2'])) );
-            if( isset($caseInput['option-diagonals-mem1-3-type']) ) array_push( $caseData['Diagonal1'], array("include" => $caseInput['diag-1-3'] == 'on' ? true : false, "memType" => $caseInput['option-diagonals-mem1-3-type'], "memId" => intval($caseInput['td-diag-1-3'])) );
-            if( isset($caseInput['option-diagonals-mem1-4-type']) ) array_push( $caseData['Diagonal1'], array("include" => $caseInput['diag-1-4'] == 'on' ? true : false, "memType" => $caseInput['option-diagonals-mem1-4-type'], "memId" => intval($caseInput['td-diag-1-4'])) );
-            if( isset($caseInput['option-diagonals-mem1-5-type']) ) array_push( $caseData['Diagonal1'], array("include" => $caseInput['diag-1-5'] == 'on' ? true : false, "memType" => $caseInput['option-diagonals-mem1-5-type'], "memId" => intval($caseInput['td-diag-1-5'])) );
-            if( isset($caseInput['option-diagonals-mem1-6-type']) ) array_push( $caseData['Diagonal1'], array("include" => $caseInput['diag-1-6'] == 'on' ? true : false, "memType" => $caseInput['option-diagonals-mem1-6-type'], "memId" => intval($caseInput['td-diag-1-6'])) );
+            if( isset($caseInput['option-diagonals-mem1-1-type']) ) array_push( $caseData['Diagonal1'], array("include" => $caseInput['diag-1-1'] == 'on' ? false : true, "memType" => $caseInput['option-diagonals-mem1-1-type'], "memId" => intval($caseInput['td-diag-1-1'])) );
+            if( isset($caseInput['option-diagonals-mem1-2-type']) ) array_push( $caseData['Diagonal1'], array("include" => $caseInput['diag-1-2'] == 'on' ? false : true, "memType" => $caseInput['option-diagonals-mem1-2-type'], "memId" => intval($caseInput['td-diag-1-2'])) );
+            if( isset($caseInput['option-diagonals-mem1-3-type']) ) array_push( $caseData['Diagonal1'], array("include" => $caseInput['diag-1-3'] == 'on' ? false : true, "memType" => $caseInput['option-diagonals-mem1-3-type'], "memId" => intval($caseInput['td-diag-1-3'])) );
+            if( isset($caseInput['option-diagonals-mem1-4-type']) ) array_push( $caseData['Diagonal1'], array("include" => $caseInput['diag-1-4'] == 'on' ? false : true, "memType" => $caseInput['option-diagonals-mem1-4-type'], "memId" => intval($caseInput['td-diag-1-4'])) );
+            if( isset($caseInput['option-diagonals-mem1-5-type']) ) array_push( $caseData['Diagonal1'], array("include" => $caseInput['diag-1-5'] == 'on' ? false : true, "memType" => $caseInput['option-diagonals-mem1-5-type'], "memId" => intval($caseInput['td-diag-1-5'])) );
+            if( isset($caseInput['option-diagonals-mem1-6-type']) ) array_push( $caseData['Diagonal1'], array("include" => $caseInput['diag-1-6'] == 'on' ? false : true, "memType" => $caseInput['option-diagonals-mem1-6-type'], "memId" => intval($caseInput['td-diag-1-6'])) );
 
             $caseData['Diagonal2'] = array();
-            if( isset($caseInput['option-diagonals-mem1-1-type']) ) array_push( $caseData['Diagonal2'], array("include" => $caseInput['diag-2-1'] == 'on' ? true : false, "reverse" => $caseInput['diag-2-reverse-1'] == 'on' ? true : false, "memType" => $caseInput['option-diagonals-mem2-1-type'], "memId" => intval($caseInput['td-diag-2-1'])) );
-            if( isset($caseInput['option-diagonals-mem1-2-type']) ) array_push( $caseData['Diagonal2'], array("include" => $caseInput['diag-2-2'] == 'on' ? true : false, "reverse" => $caseInput['diag-2-reverse-2'] == 'on' ? true : false, "memType" => $caseInput['option-diagonals-mem2-1-type'], "memId" => intval($caseInput['td-diag-2-2'])) );
-            if( isset($caseInput['option-diagonals-mem1-3-type']) ) array_push( $caseData['Diagonal2'], array("include" => $caseInput['diag-2-3'] == 'on' ? true : false, "reverse" => $caseInput['diag-2-reverse-3'] == 'on' ? true : false, "memType" => $caseInput['option-diagonals-mem2-1-type'], "memId" => intval($caseInput['td-diag-2-3'])) );
-            if( isset($caseInput['option-diagonals-mem1-4-type']) ) array_push( $caseData['Diagonal2'], array("include" => $caseInput['diag-2-4'] == 'on' ? true : false, "reverse" => $caseInput['diag-2-reverse-4'] == 'on' ? true : false, "memType" => $caseInput['option-diagonals-mem2-1-type'], "memId" => intval($caseInput['td-diag-2-4'])) );
-            if( isset($caseInput['option-diagonals-mem1-5-type']) ) array_push( $caseData['Diagonal2'], array("include" => $caseInput['diag-2-5'] == 'on' ? true : false, "reverse" => $caseInput['diag-2-reverse-5'] == 'on' ? true : false, "memType" => $caseInput['option-diagonals-mem2-1-type'], "memId" => intval($caseInput['td-diag-2-5'])) );
-            if( isset($caseInput['option-diagonals-mem1-6-type']) ) array_push( $caseData['Diagonal2'], array("include" => $caseInput['diag-2-6'] == 'on' ? true : false, "reverse" => $caseInput['diag-2-reverse-6'] == 'on' ? true : false, "memType" => $caseInput['option-diagonals-mem2-1-type'], "memId" => intval($caseInput['td-diag-2-6'])) );
+            if( isset($caseInput['option-diagonals-mem1-1-type']) ) array_push( $caseData['Diagonal2'], array("include" => $caseInput['diag-2-1'] == 'on' ? false : true, "reverse" => $caseInput['diag-2-reverse-1'] == 'on' ? true : false, "memType" => $caseInput['option-diagonals-mem2-1-type'], "memId" => intval($caseInput['td-diag-2-1'])) );
+            if( isset($caseInput['option-diagonals-mem1-2-type']) ) array_push( $caseData['Diagonal2'], array("include" => $caseInput['diag-2-2'] == 'on' ? false : true, "reverse" => $caseInput['diag-2-reverse-2'] == 'on' ? true : false, "memType" => $caseInput['option-diagonals-mem2-1-type'], "memId" => intval($caseInput['td-diag-2-2'])) );
+            if( isset($caseInput['option-diagonals-mem1-3-type']) ) array_push( $caseData['Diagonal2'], array("include" => $caseInput['diag-2-3'] == 'on' ? false : true, "reverse" => $caseInput['diag-2-reverse-3'] == 'on' ? true : false, "memType" => $caseInput['option-diagonals-mem2-1-type'], "memId" => intval($caseInput['td-diag-2-3'])) );
+            if( isset($caseInput['option-diagonals-mem1-4-type']) ) array_push( $caseData['Diagonal2'], array("include" => $caseInput['diag-2-4'] == 'on' ? false : true, "reverse" => $caseInput['diag-2-reverse-4'] == 'on' ? true : false, "memType" => $caseInput['option-diagonals-mem2-1-type'], "memId" => intval($caseInput['td-diag-2-4'])) );
+            if( isset($caseInput['option-diagonals-mem1-5-type']) ) array_push( $caseData['Diagonal2'], array("include" => $caseInput['diag-2-5'] == 'on' ? false : true, "reverse" => $caseInput['diag-2-reverse-5'] == 'on' ? true : false, "memType" => $caseInput['option-diagonals-mem2-1-type'], "memId" => intval($caseInput['td-diag-2-5'])) );
+            if( isset($caseInput['option-diagonals-mem1-6-type']) ) array_push( $caseData['Diagonal2'], array("include" => $caseInput['diag-2-6'] == 'on' ? false : true, "reverse" => $caseInput['diag-2-reverse-6'] == 'on' ? true : false, "memType" => $caseInput['option-diagonals-mem2-1-type'], "memId" => intval($caseInput['td-diag-2-6'])) );
 
             array_push($data['LoadingCase'], $caseData);
             $number ++;

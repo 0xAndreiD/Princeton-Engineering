@@ -81,6 +81,7 @@ www.Princeton-Engineering.com; tel: 908-507-5500
 <table id="sample-static-color-table" cellspacing="0" cellpadding="0" style="border-spacing:0;" >    
     <colgroup>
         <col width="80">
+        <col width="480">
         <col width="160">
         <col width="70">
         <col width="300">
@@ -93,22 +94,24 @@ www.Princeton-Engineering.com; tel: 908-507-5500
         <td><div style="overflow:hidden"></td>
         <td><div style="overflow:hidden"></td>
         <td><div style="overflow:hidden"></td>
+        <td><div style="overflow:hidden"></td>
     </tr>
     <tr class="h13">
         <td><div style="overflow:hidden"></div></td>
+        <td><h6 style="margin: 0;">Click on the FC tab(s) above to enter framing condition data.</h6></td>
         <td class="iw400-left-bdr">Data input types</td>
         <td class="w400-yellow-bdr"><div style="overflow:hidden"></div></td>
         <td class="iw400" style="text-align:left !important;">Any user input accepted</td>
         <td><div style="overflow:hidden"></div></td>
     </tr>
     <tr class="h13">
-        <td colspan="2"><div style="overflow:hidden"></div></td>
+        <td colspan="3"><div style="overflow:hidden"></div></td>
         <td class="w400-green-bdr"><div style="overflow:hidden"></div></td>
         <td class="iw400" style="text-align:left !important;">Restricted, pull down values only accepted</td>
         <td><div style="overflow:hidden"></div></td>
     </tr>
     <tr class="h13">
-        <td colspan="2"><div style="overflow:hidden"></div></td>
+        <td colspan="3"><div style="overflow:hidden"></div></td>
         <td class="w400-blue-bdr" class="h13"><div style="overflow:hidden"></div></td>
         <td class="iw400" style="text-align:left !important;">Inactive cell</td>
         <td ><div style="overflow:hidden"></div></td>
@@ -117,7 +120,7 @@ www.Princeton-Engineering.com; tel: 908-507-5500
 </table>
 
 <!-- company information table section -->
-<table id="company-info-table" cellspacing="0" cellpadding="0" style="border-spacing:0;" >    
+<!-- <table id="company-info-table" cellspacing="0" cellpadding="0" style="border-spacing:0;" >    
     <colgroup>
         <col width="80">
         <col width="160">
@@ -183,7 +186,7 @@ www.Princeton-Engineering.com; tel: 908-507-5500
         <td><div style="overflow:hidden"></div></td>
     </tr>
 </tbody> 
-</table>
+</table> -->
 
 <!-- Project information table section -->
 <table id="project-info-table" cellspacing="0" cellpadding="0" style="border-spacing:0;" >    

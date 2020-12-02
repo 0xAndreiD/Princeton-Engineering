@@ -111,7 +111,7 @@ for( let i = 1; i <= 10; i ++ )
 var drawBaseLine = function( condId ) {
     // erase
     // ctx.clearRect( 0, grid_size, canvas_width, - canvas_height);
-    ctx[condId].clearRect( 0, grid_size[condId], canvas_width[condId], - canvas_height[condId]);
+    ctx[condId].clearRect( 0, grid_size[condId], canvas_width[condId] + 100, - canvas_height[condId] - 100);
     
     // Draw grid lines along X-axis
     for(var i = 0; i <= num_lines_x[condId]; i += 2) {
@@ -270,7 +270,7 @@ var adjustDrawingPanel = function( condId ) {
     x_axis_distance_grid_lines[condId] = num_lines_x[condId] - 1;
 }
 
-var drawLine = function(condId, start, end, label) {
+var drawLine = function(condId, start, end, label, rotateMethod = 0) {
     
     ctx[condId].beginPath();
     ctx[condId].lineWidth = 2;
@@ -278,14 +278,60 @@ var drawLine = function(condId, start, end, label) {
     ctx[condId].moveTo(start[0] * grid_size[condId], - start[1] * grid_size[condId]);
     ctx[condId].lineTo(end[0] * grid_size[condId], - end[1] * grid_size[condId]);
     ctx[condId].stroke();
+    //ctx[condId].closePath();
 
     // start, end points
-    ctx[condId].fillRect(start[0] * grid_size[condId] - 3, - start[1] * grid_size[condId] -3, 6, 6);
-    ctx[condId].fillRect(end[0] * grid_size[condId] -3 , - end[1] * grid_size[condId] -3, 6, 6);
+    ctx[condId].beginPath();
+    ctx[condId].fillStyle = "#0000FF";
+    ctx[condId].arc(start[0] * grid_size[condId], - start[1] * grid_size[condId], 4, 0, Math.PI * 2);
+    ctx[condId].fill();
+
+    ctx[condId].beginPath();
+    ctx[condId].fillStyle = "#0000FF";
+    ctx[condId].arc(end[0] * grid_size[condId], - end[1] * grid_size[condId], 4, 0, Math.PI * 2);
+    ctx[condId].fill();
+
+    ctx[condId].fillStyle = "#FF0000";
+    ctx[condId].translate((start[0] + end[0]) * grid_size[condId] / 2, - (start[1] + end[1]) * grid_size[condId] / 2);
+    ctx[condId].rotate(Math.atan((start[0] - end[0]) / (start[1] - end[1])));
+    ctx[condId].fillRect(-4, -4, 8, 8);
+    ctx[condId].rotate(-Math.atan((start[0] - end[0]) / (start[1] - end[1])));
+    ctx[condId].translate(- (start[0] + end[0]) * grid_size[condId] / 2, (start[1] + end[1]) * grid_size[condId] / 2);
+    
+    //ctx[condId].fillRect(start[0] * grid_size[condId] - 3, - start[1] * grid_size[condId] -3, 6, 6);
+    //ctx[condId].fillRect(end[0] * grid_size[condId] -3 , - end[1] * grid_size[condId] -3, 6, 6);
 
     // label txt
-    ctx[condId].font = "10px Arial";
-    ctx[condId].fillText(label, (start[0] + end[0]) * grid_size[condId] / 2 - 10, - (start[1] + end[1]) * grid_size[condId] / 2 - 10);
+    ctx[condId].fillStyle = "#000000";
+    ctx[condId].font = "12px Arial";
+    ctx[condId]['font-weight'] = 'bold';
+    ctx[condId].translate((start[0] + end[0]) * grid_size[condId] / 2 - 4, - (start[1] + end[1]) * grid_size[condId] / 2 - 4);
+    let rotateDegree;
+    let xx, yy;
+    if(rotateMethod == 1)
+    {
+        rotateDegree = Math.atan((start[0] - end[0]) / (start[1] - end[1])) - Math.PI / 2;
+        xx = -8; yy = -2;
+    }
+    else if(rotateMethod == 2) 
+    {
+        rotateDegree = Math.atan((start[0] - end[0]) / (start[1] - end[1])) + Math.PI / 2;
+        xx = -4; yy = -5;
+    }
+    else if(start[0] < end[0])
+    {
+        rotateDegree = Math.atan((start[0] - end[0]) / (start[1] - end[1])) + Math.PI / 2;
+        xx = -4; yy = -10;
+    }
+    else
+    {
+        rotateDegree = Math.atan((start[0] - end[0]) / (start[1] - end[1])) - Math.PI / 2;
+        xx = -12; yy = -5;
+    }    
+    ctx[condId].rotate(rotateDegree);
+    ctx[condId].fillText(label, xx, yy);
+    ctx[condId].rotate(-rotateDegree);
+    ctx[condId].translate(- (start[0] + end[0]) * grid_size[condId] / 2 + 4, (start[1] + end[1]) * grid_size[condId] / 2 + 4);
 }
 
 var drawGraph = function( condId ) {
@@ -297,13 +343,13 @@ var drawGraph = function( condId ) {
 
     // draw roof plane
     for (var key in globalRoofLines[condId]) {
-        drawLine(condId, globalRoofLines[condId][key][0], globalRoofLines[condId][key][1], "M"+label_index);
+        drawLine(condId, globalRoofLines[condId][key][0], globalRoofLines[condId][key][1], "M"+label_index, 1);
         label_index++;
     }
 
     // draw floor plane
     for (var key in globalFloorLines[condId]) {
-        drawLine(condId, globalFloorLines[condId][key][0], globalFloorLines[condId][key][1], "M"+label_index);
+        drawLine(condId, globalFloorLines[condId][key][0], globalFloorLines[condId][key][1], "M"+label_index, 2);
         label_index++;
     }
 
@@ -323,7 +369,11 @@ var drawGraph = function( condId ) {
     for (var key in globalDiagnoal2Lines[condId]) {
         var bAllow = !($(`#inputform-${condId} #diag-2-` + (index+1)).is(":checked"));
         if (bAllow == true) {
-            drawLine(condId, globalDiagnoal2Lines[condId][key][0], globalDiagnoal2Lines[condId][key][1], "M"+label_index);
+            var bReverse = ($(`#inputform-${condId} #diag-2-reverse-` + (index+1)).is(":checked"));
+            if(bReverse && globalDiagnoal2ReverseLines[condId][key])
+                drawLine(condId, globalDiagnoal2ReverseLines[condId][key][0], globalDiagnoal2ReverseLines[condId][key][1], "M"+label_index);
+            else
+                drawLine(condId, globalDiagnoal2Lines[condId][key][0], globalDiagnoal2Lines[condId][key][1], "M"+label_index);
         }
         label_index++;
         
@@ -902,7 +952,7 @@ var detectCorrectTownForMA = function() {
     var state_name = selected.getAttribute('data-value');
 
     err_message = "No Town name match in MA CMR780.  Correct Town name.";
-    good_message = "Good Massechusetts town name";
+    good_message = "Good Massachusetts town name";
 
     if (state_name == 'MA') {
         for (index= 0; index <availableMATowns.length ; index++) {
@@ -1058,6 +1108,7 @@ var globalRoofLines = new Array(11); globalRoofLines.fill({});
 var globalFloorLines = new Array(11); globalFloorLines.fill({});
 var globalDiagnoal1Lines = new Array(11); globalDiagnoal1Lines.fill({});
 var globalDiagnoal2Lines = new Array(11); globalDiagnoal2Lines.fill({});
+var globalDiagnoal2ReverseLines = new Array(11); globalDiagnoal2ReverseLines.fill({});
 
 var globalRoofSlopeDegree = new Array(11); globalRoofSlopeDegree.fill(true); 
 
@@ -1212,10 +1263,23 @@ var updatePlanes = function( condId ) {
 
     // create di­agonal2 lines
     globalDiagnoal2Lines[condId] = [];
+    globalDiagnoal2ReverseLines[condId] = [];
     for (index = 0; index < globalDiagnoals2[condId]; index++) {
         globalDiagnoal2Lines[condId][lineIndex] = [globalRoofPoints[condId][index + 2], globalFloorPoints[condId][index + 1]];
+        if(index + 2 < globalFloorPoints[condId].length)
+            globalDiagnoal2ReverseLines[condId][lineIndex] = [globalRoofPoints[condId][index + 1], globalFloorPoints[condId][index + 2]];
         lineIndex++;
     }
+
+    // create di­agonal2 lines
+    // globalDiagnoal2ReverseLines[condId] = [];
+    // for (index = 0; index < globalDiagnoals2[condId]; index++) {
+    //     if(index + 2 < globalFloorPoints[condId].length)
+    //     {
+    //         globalDiagnoal2ReverseLines[condId][lineIndex] = [globalRoofPoints[condId][index + 1], globalFloorPoints[condId][index + 2]];
+    //         lineIndex++;
+    //     }
+    // }
 
     // draw graphs
     drawGraph(condId);
@@ -1618,39 +1682,41 @@ $(document).ready(function() {
         $(this).css('background-color', 'transparent');
     });
 
-    //var i = 0;
-    // for(i = 1; i <= 10; i ++)
-    // {
-    $(`#option-roof-slope`).on('change', function() {
-        updateRoofSlopeAnotherField(window.conditionId);
-    });
-    $(`#txt-roof-degree`).change(function(){
-        $(this).val(parseFloat($(this).val()).toFixed(2));
-        updateRoofSlopeAnotherField(window.conditionId);
-    });
-    $(`#option-number-segments1`).on('change', function() {
-        updateNumberSegment1(window.conditionId, $(this).children("option:selected").val());
-    });
-    $(`#txt-length-of-roof-plane, #txt-roof-segment1-length, #txt-roof-segment2-length, #txt-roof-segment3-length, #txt-roof-segment4-length, #txt-roof-segment5-length, #txt-roof-segment6-length`)
-    .change(function(){
-        $(this).val(parseFloat($(this).val()).toFixed(2));
-        updateNumberSegment1(window.conditionId, $(`#inputform-${window.conditionId} #option-number-segments1`).children("option:selected").val());
-    });
-    $(`#option-number-segments2`).on('change', function() {
-        updateNumberSegment2(window.conditionId, $(this).children("option:selected").val());
-    });
-    $(`#txt-length-of-floor-plane, #txt-floor-segment1-length, #txt-floor-segment2-length, #txt-floor-segment3-length, #txt-floor-segment4-length, #txt-floor-segment5-length, #txt-floor-segment6-length`)
-    .change(function(){
-        $(this).val(parseFloat($(this).val()).toFixed(2));
-        updateNumberSegment2(window.conditionId, $(`#inputform-${window.conditionId} #option-number-segments2`).children("option:selected").val());
-    });
-    $(`#option-roof-member-type`).on('change', function() {
-        updateRoofMemberType(window.conditionId, $(this).children("option:selected").val());
-    });
-    $(`#option-floor-member-type`).on('change', function() {
-        updateFloorMemberType(window.conditionId, $(this).children("option:selected").val());
-    });
-    $(`#diag-1-1, #diag-1-2, #diag-1-3, #diag-1-4, #diag-1-5, #diag-1-6, #diag-2-1, #diag-2-2, #diag-2-3, #diag-2-4, #diag-2-5, #diag-2-6`)
+    var i = 0;
+    for(i = 1; i <= 10; i ++)
+    {
+        $(`#inputform-${i} #option-roof-slope`).on('change', function() {
+            updateRoofSlopeAnotherField(window.conditionId);
+        });
+        $(`#inputform-${i} #txt-roof-degree`).change(function(){
+            $(this).val(parseFloat($(this).val()).toFixed(2));
+            console.log(window.conditionId, parseFloat($(this).val()));
+            updateRoofSlopeAnotherField(window.conditionId);
+        });
+        $(`#inputform-${i} #option-number-segments1`).on('change', function() {
+            updateNumberSegment1(window.conditionId, $(this).children("option:selected").val());
+        });
+        $(`#inputform-${i} #txt-length-of-roof-plane, #inputform-${i} #txt-roof-segment1-length, #inputform-${i} #txt-roof-segment2-length, #inputform-${i} #txt-roof-segment3-length, #inputform-${i} #txt-roof-segment4-length, #inputform-${i} #txt-roof-segment5-length, #inputform-${i} #txt-roof-segment6-length`)
+        .change(function(){
+            $(this).val(parseFloat($(this).val()).toFixed(2));
+            updateNumberSegment1(window.conditionId, $(`#inputform-${window.conditionId} #option-number-segments1`).children("option:selected").val());
+        });
+        $(`#inputform-${i} #option-number-segments2`).on('change', function() {
+            updateNumberSegment2(window.conditionId, $(this).children("option:selected").val());
+        });
+        $(`#inputform-${i} #txt-length-of-floor-plane, #inputform-${i} #txt-floor-segment1-length, #inputform-${i} #txt-floor-segment2-length, #inputform-${i} #txt-floor-segment3-length, #inputform-${i} #txt-floor-segment4-length, #inputform-${i} #txt-floor-segment5-length, #inputform-${i} #txt-floor-segment6-length`)
+        .change(function(){
+            $(this).val(parseFloat($(this).val()).toFixed(2));
+            updateNumberSegment2(window.conditionId, $(`#inputform-${window.conditionId} #option-number-segments2`).children("option:selected").val());
+        });
+        $(`#inputform-${i} #option-roof-member-type`).on('change', function() {
+            updateRoofMemberType(window.conditionId, $(this).children("option:selected").val());
+        });
+        $(`#inputform-${i} #option-floor-member-type`).on('change', function() {
+            updateFloorMemberType(window.conditionId, $(this).children("option:selected").val());
+        });
+    }
+    $(`#diag-1-1, #diag-1-2, #diag-1-3, #diag-1-4, #diag-1-5, #diag-1-6, #diag-2-1, #diag-2-2, #diag-2-3, #diag-2-4, #diag-2-5, #diag-2-6, #diag-2-reverse-1, #diag-2-reverse-2, #diag-2-reverse-3, #diag-2-reverse-4, #diag-2-reverse-5, #diag-2-reverse-6`)
     .click( function(){
         drawGraph(window.conditionId);
     });

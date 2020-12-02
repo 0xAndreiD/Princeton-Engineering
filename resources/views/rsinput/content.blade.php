@@ -260,7 +260,22 @@
             <td class="w400-bdr">F-1</td>
             <td class="iw400-right-bdr" id="label-F-1">Maximum # Modules along Rafter</td>
             <td class="iw400-bdr"></td>
-            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="f-1-1" tabindex="47" value="2" onchange="maxModuleNumChange({{ $conditionId }})"></input></td>
+            <td class="w400-yellow-bdr">
+                <select id="f-1-1" tabindex="47" onchange="maxModuleNumChange({{ $conditionId }})">
+                    <option data-value="1">1</option>
+                    <option data-value="2" selected="">2</option>
+                    <option data-value="3">3</option>
+                    <option data-value="4">4</option>
+                    <option data-value="5">5</option>
+                    <option data-value="6">6</option>
+                    <option data-value="7">7</option>
+                    <option data-value="8">8</option>
+                    <option data-value="9">9</option>
+                    <option data-value="10">10</option>
+                    <option data-value="11">11</option>
+                    <option data-value="12">12</option>
+                </select>
+            </td>
             <td><div style="overflow:hidden"></td>
         </tr>
         <tr class="h13">
