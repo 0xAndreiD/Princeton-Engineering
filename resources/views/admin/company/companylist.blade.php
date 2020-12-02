@@ -117,7 +117,7 @@
                             </div>
                             <div class="row push">
                                 <div class="col-12">
-                                    <label for="usernumber">User Number (1: Administrator)</label>
+                                    <label for="usernumber">User Number</label>
                                     <input type="text" class="form-control" id="usernumber" name="usernumber" placeholder="Type Your User Number">
                                 </div>
                             </div>
