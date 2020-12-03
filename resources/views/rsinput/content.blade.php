@@ -893,11 +893,12 @@
                 <td><div style="overflow:hidden"></td>
                 <td><div style="overflow:hidden"></td>
             </tr>
-            <tr class="h13">
+            <!-- <tr class="h13">
                 <td class="iw400" colspan="11" style="text-align:left;">Loading includes member self weight and roofing materials  w loading = wind on exposed areas</td>
-            </tr>
-            <td colspan="11" rowspan="19">
-                <canvas class="px-4" id="canvas-{{ $conditionId }}" style="z-index:2; background:aliceblue" width="800px" height="400px"></canvas>
+            </tr> -->
+            <td colspan="11" rowspan="19" style="position: relative;">
+                <canvas class="px-4" id="canvas-{{ $conditionId }}" style="z-index:2; background:aliceblue" width="900px" height="500px"></canvas>
+                <div class="axisCheckBox"><input type="checkbox" id="s-1-1" tabindex="106" ><label for="s-1-1">Show axis</label></div>
             </td>
             </tbody>
         </table>
