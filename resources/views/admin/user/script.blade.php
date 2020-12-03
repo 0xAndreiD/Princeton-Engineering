@@ -114,8 +114,8 @@ function showAddUser() {
     $('input#name').val('');
     $('input#email').val('');
     $('select#company').val(1);
+    $('select#userrole').val(0);
     $('input#usernumber').val('');
-    $('input#membership').val('');
     $('button#updateButton').html('Add');
 }
 </script>

@@ -1,6 +1,6 @@
 <script>
 
-function delUser(obj, id) {
+function delCompany(obj, id) {
     let toast = Swal.mixin({
         buttonsStyling: false,
         customClass: {
@@ -11,7 +11,7 @@ function delUser(obj, id) {
     });
     toast.fire({
         title: 'Are you sure?',
-        text: 'You will not be able to recover this user!',
+        text: 'You will not be able to recover this company!',
         icon: 'warning',
         showCancelButton: true,
         customClass: {
@@ -29,20 +29,26 @@ function delUser(obj, id) {
         }
     }).then(result => {
         if (result.value) {
-            $.post("delUser", {data: id}, function(result){
+            $.post("delCompany", {data: id}, function(result){
                 if (result){
                     $(obj).parents("tr").remove().draw;
-                    toast.fire('Deleted!', 'User has been deleted.', 'success');
+                    toast.fire('Deleted!', 'Company has been deleted.', 'success');
                 }
             });
 
         } else if (result.dismiss === 'cancel') {
-            toast.fire('Cancelled', 'User is safe :)', 'error');
+            toast.fire('Cancelled', 'Company is safe :)', 'error');
         }
     });
 }
 
-function updateUser() {
+function mySubmitFunction(e) {
+  e.preventDefault();
+  updateCompany();
+  return false;
+}
+
+function updateCompany() {
     let toast = Swal.mixin({
         buttonsStyling: false,
         customClass: {
@@ -52,70 +58,59 @@ function updateUser() {
         }
     });
     var data = {};
-    data.id = $('input#userid').val();
+    data.id = $('input#id').val();
     data.name = $('input#name').val();
-    if (data.name == ''){
-        $('input#name').focus();
-        return;
-    }
+    data.number = $('input#number').val();
+    data.telno = $('input#telno').val();
+    data.address = $('input#address').val();
     data.email = $('input#email').val();
-    if (!ValidateEmail(data.email)){
-        $('input#email').focus();
-        return;
-    }
-    data.password = $('input#password').val();
-    data.companyid = $('select#company').val();
-    data.usernumber = $('input#usernumber').val();
-    data.userrole = $('input#userrole').val();
+    data.website = $('input#website').val();
 
-    if (data.id == 0) { // Create user
-        if (data.password == ''){
-            $('input#password').focus();
-            return;
-        }
-        $.post("updateUser", {data: data}, function(result){
+    if (data.id == 0) { // Create company
+        $.post("updateCompany", {data: data}, function(result){
             if (result == true){
-                toast.fire('Created!', 'User has been created.', 'success');
+                toast.fire('Created!', 'Company has been created.', 'success');
             } else if (result == "exist") {
-                toast.fire('Error!', 'User already exists with the same name', 'error');
+                toast.fire('Error!', 'Company already exists with the same name', 'error');
                 return;
             }
             $('#modal-block-normal').modal('toggle');
-            $('#users').DataTable().ajax.reload();
+            $('#companys').DataTable().ajax.reload();
         });
-    } else { // Update User
-        $.post("updateUser", {data: data}, function(result){
+    } else { // Update company
+        $.post("updateCompany", {data: data}, function(result){
             if (result){
-                toast.fire('Updated!', 'User has been updated.', 'success');
+                toast.fire('Updated!', 'Company has been updated.', 'success');
             }
             $('#modal-block-normal').modal('toggle');
-            $('#users').DataTable().ajax.reload();
+            $('#companys').DataTable().ajax.reload();
         });
     }
 }
 
-function showEditUser(obj, id) {
-    $.post("getUser", {data: id}, function(result){
+function showEditCompany(obj, id) {
+    $.post("getCompany", {data: id}, function(result){
         if (result){
-            $('input#userid').val(result.id);
-            $('input#name').val(result.username);
-            $('input#email').val(result.email);
-            $('select#company').val(result.companyid);
-            $('input#usernumber').val(result.usernumber);
-            $('input#membership').val(result.membershipid);
-            $('input#membership').val(result.membershipid);
+            $('input#id').val(result.id);
+            $('input#number').val(result.company_number);
+            $('input#name').val(result.company_name);
+            $('input#telno').val(result.company_telno);
+            $('input#address').val(result.company_address);
+            $('input#email').val(result.company_email);
+            $('input#website').val(result.company_website);
             $('button#updateButton').html('Update');
         }
     });
 }
 
-function showAddUser() {
-    $('input#userid').val(0);
+function showAddCompany() {
+    $('input#id').val(0);
+    $('input#number').val('');
     $('input#name').val('');
     $('input#email').val('');
-    $('select#company').val(1);
-    $('input#usernumber').val('');
-    $('input#membership').val('');
+    $('input#telno').val('');
+    $('input#address').val('');
+    $('input#website').val('');
     $('button#updateButton').html('Add');
 }
 </script>

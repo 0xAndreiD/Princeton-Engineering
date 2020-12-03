@@ -33,9 +33,9 @@ Route::post('/delUser', 'UserController@delete')->name('delUser');
 
 // Manage Companies
 Route::get('/companyList', 'CompanyController@index')->name('companyList');
-Route::post('/getCompanyData', 'CompanyController@getUserData')->name('getCompanyData');
-Route::post('/getCompany', 'CompanyController@getUser')->name('getCompany');
-Route::post('/updateCompany', 'CompanyController@updateUser')->name('updateCompany');
+Route::post('/getCompanyData', 'CompanyController@getCompanyData')->name('getCompanyData');
+Route::post('/getCompany', 'CompanyController@getCompany')->name('getCompany');
+Route::post('/updateCompany', 'CompanyController@updateCompany')->name('updateCompany');
 Route::post('/delCompany', 'CompanyController@delete')->name('delCompany');
 
 Route::post('/submitInput', 'GeneralController@submitInput')->name('submitInput');

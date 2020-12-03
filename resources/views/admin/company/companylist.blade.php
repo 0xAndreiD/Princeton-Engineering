@@ -8,7 +8,7 @@
         <div class="content content-full content-top">
             <div class="pt-5 pb-4 text-center">
                 <h1 class="h2 font-w700 mb-2 text-white">
-                    User Management Panel
+                    Company Management Panel
                 </h1>
                 <h2 class="h5 text-white-75 mb-0">
                     Panel Status
@@ -22,36 +22,28 @@
 <div class="content" style="text-align:left">
     <div class="block block-rounded block-bordered">
         <div class="block-header block-header-default">
-            <h3 class="block-title">User List</h3>
+            <h3 class="block-title">Company List</h3>
             <div class="block-options">
                 <button type="button" class="btn-block-option" 
                     data-toggle='modal' data-target='#modal-block-normal'
-                    onclick="showAddUser()">
-                    <i class="fa fa-plus"></i> Add User
+                    onclick="showAddCompany()">
+                    <i class="fa fa-plus"></i> Add Comany
                 </button>
             </div>
         </div>
         <div class="block-content block-content-full">
             <div class="table-responsive">
-                <table id="users" class="table table-bordered table-striped table-vcenter text-center" style="width:100%;">
+                <table id="companys" class="table table-bordered table-striped table-vcenter text-center" style="width:100%;">
                     <thead>
                         <tr>
                             <th class="text-center" style="width: 50px;">ID</th>
                             <th style="width:15%">Name</th>
-                            <th style="width:20%;">Email</th>
-                            <th style="width:10%;">Company</th>
-                            <th style="width:20%;">UserRole</th>
-                            <th style="width:20%;">UserNumber</th>
-                            <!-- <th class="text-center" style="width: 15%;">Verified</th>
-                            <th class="d-none d-md-table-cell" style="width: 10%;">Role</th>
-                            <th class="d-none d-md-table-cell" style="width: 10%;">Company</th>
-                            <th class="d-none d-md-table-cell" style="width: 10%;">Number</th>
-                            <th class="d-none d-sm-table-cell" style="width: 10%;">Membership</th>
-                            <th class="d-none d-sm-table-cell" style="width: 15%;">MemberRole</th>
-                            <th class="d-none d-sm-table-cell" style="width: 15%;">Created Time</th>
-                            <th class="d-none d-sm-table-cell" style="width: 15%;">Updated Time</th>
-                            <th class="d-none d-sm-table-cell" style="width: 15%;">Registered</th> -->
-                            <th style="width: 100px;">Action</th>
+                            <th style="width:10%;">Number</th>
+                            <th style="width:10%;">Tel No</th>
+                            <th style="width:20%;">Address</th>
+                            <th style="width:10%;">Email</th>
+                            <th style="width:15%;">Website</th>
+                            <th style="width:150px;">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -66,68 +58,53 @@
         <div class="modal" id="modal-block-normal" tabindex="-1" role="dialog" aria-labelledby="modal-block-normal" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                    <div class="block block-themed block-transparent mb-0">
-                        <div class="block-header bg-primary-dark">
-                            <h3 class="block-title">Modal Title</h3>
-                            <div class="block-options">
-                                <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
-                                    <i class="fa fa-fw fa-times"></i>
-                                </button>
+                    <form class="js-validation" onsubmit="mySubmitFunction(event)" method="POST">
+                        <div class="block block-themed block-transparent mb-0">
+                            <div class="block-header bg-primary-dark">
+                                <h3 class="block-title">Company Info</h3>
+                                <div class="block-options">
+                                    <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                                        <i class="fa fa-fw fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="block-content">
+                                <div class="row items-push">
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <label for="number">Number <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="number" name="digits" placeholder="Enter A Number..">
+                                            <input type="hidden" class="form-control" id="id" name="id">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="name">Name <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="name" name="name" placeholder="Enter A Name..">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="telno">Tel No <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="telno" name="telno" placeholder="212-999-0000">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="address">Address <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="address" name="address" placeholder="Your Address..">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="email">Email <span class="text-danger">*</span></label>
+                                            <input type="email" class="form-control" id="email" name="email" placeholder="Your A Valid Email..">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="website">Website <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="website" name="website" placeholder="http://example.com">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="block-content block-content-full text-right bg-light">
+                                <button type="button" class="btn btn-sm btn-light" data-dismiss="modal">Close</button>
+                                <button id="updateButton" type="submit" class="btn btn-sm btn-primary">Update</button>
                             </div>
                         </div>
-                        <div class="block-content">
-                            <div class="row push">
-                                <div class="col-12">
-                                    <label for="name">Name</label>
-                                    <input type="text" class="form-control" id="name" name="name" placeholder="Type Your Name">
-                                    <input type="hidden" class="form-control" id="userid" name="userid">
-                                </div>
-                            </div>
-                            <div class="row push">
-                                <div class="col-12">
-                                    <label for="email">Email</label>
-                                    <input type="text" class="form-control" id="email" name="email" placeholder="Type Your Email">
-                                </div>
-                            </div>
-                            <div class="row push">
-                                <div class="col-12">
-                                    <label for="password">Password</label>
-                                    <input type="password" class="form-control" id="password" name="password">
-                                </div>
-                            </div>
-                            <div class="row push">
-                                <div class="col-12">
-                                    <label for="company">Company</label>
-                                    <select class="form-control" id="company" name="company">
-                                        @foreach ($companyList as $company)
-                                            <option value="{{$company->id}}">{{ $company->company_name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="row push">
-                                <div class="col-12">
-                                    <label for="userrole">User Role</label>
-                                    <select class="form-control" id="userrole" name="userrole">
-                                            <option value="2"><span class='badge badge-danger'> Admin </span></option>
-                                            <option value="1"><span class='badge badge-primary'> Client </span></option>
-                                            <option value="0"><span class='badge badge-info'> User </span></option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="row push">
-                                <div class="col-12">
-                                    <label for="usernumber">User Number</label>
-                                    <input type="text" class="form-control" id="usernumber" name="usernumber" placeholder="Type Your User Number">
-                                </div>
-                            </div>
-                            
-                        </div>
-                        <div class="block-content block-content-full text-right bg-light">
-                            <button type="button" class="btn btn-sm btn-light" data-dismiss="modal">Close</button>
-                            <button id="updateButton" type="button" class="btn btn-sm btn-primary" onclick="updateUser()">Update</button>
-                        </div>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -136,23 +113,24 @@
 
         <script>
             $(document).ready(function () {
-                $('#users').DataTable({
+                $('#companys').DataTable({
                     "processing": true,
                     "serverSide": true,
                     "responsive": true,
                     "ajax":{
-                            "url": "{{ url('getUserData') }}",
+                            "url": "{{ url('getCompanyData') }}",
                             "dataType": "json",
                             "type": "POST",
                             "data":{ _token: "{{csrf_token()}}"}
                         },
                     "columns": [
                         { "data": "id" },
-                        { "data": "username" },
+                        { "data": "name" },
+                        { "data": "number" },
+                        { "data": "telno" },
+                        { "data": "address" },
                         { "data": "email" },
-                        { "data": "companyname" },
-                        { "data": "userrole" },
-                        { "data": "usernumber" },
+                        { "data": "website" },
                         { "data": "actions", "orderable": false }
                     ]	 
                 });
@@ -163,5 +141,7 @@
                 });
             });
         </script>
-        @include('admin.user.script')
+
+        
+        @include('admin.company.script')
 @endsection
