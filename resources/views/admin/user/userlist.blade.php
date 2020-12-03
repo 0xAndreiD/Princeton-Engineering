@@ -66,68 +66,62 @@
         <div class="modal" id="modal-block-normal" tabindex="-1" role="dialog" aria-labelledby="modal-block-normal" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                    <div class="block block-themed block-transparent mb-0">
-                        <div class="block-header bg-primary-dark">
-                            <h3 class="block-title">User Info</h3>
-                            <div class="block-options">
-                                <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
-                                    <i class="fa fa-fw fa-times"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="block-content">
-                            <div class="row push">
-                                <div class="col-12">
-                                    <label for="name">Name</label>
-                                    <input type="text" class="form-control" id="name" name="name" placeholder="Type Your Name">
-                                    <input type="hidden" class="form-control" id="userid" name="userid">
+                    <form class="js-validation" onsubmit="mySubmitFunction(event)" method="POST">
+                        <div class="block block-themed block-transparent mb-0">
+                            <div class="block-header bg-primary-dark">
+                                <h3 class="block-title">User Info</h3>
+                                <div class="block-options">
+                                    <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                                        <i class="fa fa-fw fa-times"></i>
+                                    </button>
                                 </div>
                             </div>
-                            <div class="row push">
-                                <div class="col-12">
-                                    <label for="email">Email</label>
-                                    <input type="text" class="form-control" id="email" name="email" placeholder="Type Your Email">
-                                </div>
-                            </div>
-                            <div class="row push">
-                                <div class="col-12">
-                                    <label for="password">Password</label>
-                                    <input type="password" class="form-control" id="password" name="password">
-                                </div>
-                            </div>
-                            <div class="row push">
-                                <div class="col-12">
-                                    <label for="company">Company</label>
-                                    <select class="form-control" id="company" name="company">
-                                        @foreach ($companyList as $company)
-                                            <option value="{{$company->id}}">{{ $company->company_name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="row push">
-                                <div class="col-12">
-                                    <label for="userrole">User Role</label>
-                                    <select class="form-control" id="userrole" name="userrole">
-                                            <option value="2"><span class='badge badge-danger'> Admin </span></option>
-                                            <option value="1"><span class='badge badge-primary'> Client </span></option>
-                                            <option value="0"><span class='badge badge-info'> User </span></option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="row push">
-                                <div class="col-12">
-                                    <label for="usernumber">User Number (1: Administrator)</label>
-                                    <input type="text" class="form-control" id="usernumber" name="usernumber" placeholder="Type Your User Number">
+                            <div class="block-content">
+                                <div class="row items-push">
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <label for="name">Name <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="name" name="name" placeholder="Enter A Name..">
+                                            <input type="hidden" class="form-control" id="userid" name="userid">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="email">Email <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="email" name="email" placeholder="Type Your Email">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="password">Password <span class="text-danger">*</span></label>
+                                            <input type="password" class="form-control" id="password" name="password">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="company">Company <span class="text-danger">*</span></label><br/>
+                                            <select class="js-select2 form-control" id="company" name="company">
+                                                @foreach ($companyList as $company)
+                                                    <option value="{{$company->id}}">{{ $company->company_name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="userrole">User Role <span class="text-danger">*</span></label><br/>
+                                            <select class="js-select2 form-control" id="userrole" name="userrole">
+                                                <option value="2"><span class='badge badge-danger'> Admin </span></option>
+                                                <option value="1"><span class='badge badge-primary'> Client </span></option>
+                                                <option value="0"><span class='badge badge-info'> User </span></option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="userrole">User Number (1: Administrator) <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="usernumber" name="usernumber" placeholder="Type Your User Number">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             
+                            <div class="block-content block-content-full text-right bg-light">
+                                <button type="button" class="btn btn-sm btn-light" data-dismiss="modal">Close</button>
+                                <button id="updateButton" type="submit" class="btn btn-sm btn-primary">Update</button>
+                            </div>
                         </div>
-                        <div class="block-content block-content-full text-right bg-light">
-                            <button type="button" class="btn btn-sm btn-light" data-dismiss="modal">Close</button>
-                            <button id="updateButton" type="button" class="btn btn-sm btn-primary" onclick="updateUser()">Update</button>
-                        </div>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>

@@ -1,5 +1,13 @@
 <script>
 
+
+function mySubmitFunction(e) {
+  e.preventDefault();
+  updateUser();
+  return false;
+}
+
+
 function delUser(obj, id) {
     let toast = Swal.mixin({
         buttonsStyling: false,
@@ -66,7 +74,7 @@ function updateUser() {
     data.password = $('input#password').val();
     data.companyid = $('select#company').val();
     data.usernumber = $('input#usernumber').val();
-    data.userrole = $('input#userrole').val();
+    data.userrole = $('select#userrole').val();
 
     if (data.id == 0) { // Create user
         if (data.password == ''){

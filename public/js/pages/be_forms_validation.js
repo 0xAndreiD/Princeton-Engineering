@@ -65,6 +65,10 @@ class pageFormsValidation {
                     required: true,
                     number: true
                 },
+                'usernumber': {
+                    required: true,
+                    number: true
+                },
                 'range': {
                     required: true,
                     range: [1, 5]
@@ -72,13 +76,16 @@ class pageFormsValidation {
                 'terms': {
                     required: true
                 },
-                'select2': {
+                'company': {
                     required: true
                 },
                 'select2-multiple': {
                     required: true,
                     minlength: 2
-                }
+                },
+                'userrole': {
+                    required: true
+                },
             },
             messages: {
                 'name': {
@@ -95,7 +102,8 @@ class pageFormsValidation {
                     minlength: 'Your password must be at least 5 characters long',
                     equalTo: 'Please enter the same password as above'
                 },
-                'select2': 'Please select a value!',
+                'company': 'Please select a company!',
+                'userrole': 'Please select a role!',
                 'select2-multiple': 'Please select at least 2 values!',
                 'suggestions': 'What can we do to become better?',
                 'address': 'Please enter your address!',
@@ -103,6 +111,7 @@ class pageFormsValidation {
                 'currency': 'Please enter a price!',
                 'website': 'Please enter your website!',
                 'telno': 'Please enter a US phone!',
+                'usernumber': 'Please enter only digits!',
                 'digits': 'Please enter only digits!',
                 'number': 'Please enter a number!',
                 'range': 'Please enter a number between 1 and 5!',
