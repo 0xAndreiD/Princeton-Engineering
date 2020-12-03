@@ -30,11 +30,13 @@
         <!-- Stylesheets -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,400i,600,700">
         <link rel="stylesheet" id="css-main" href="{{ asset('css/dashmix.css') }}">
+        
         <link rel="stylesheet" id="css-theme" href="{{ asset('css/themes/xeco.min.css') }}">
         <link rel="stylesheet" id="css-main" href="{{ asset('css/styles.css') }}">
         <link rel="stylesheet" id="css-main" href="{{ asset('css/spreadsheet.css') }}">
         
-
+        <link rel="stylesheet" href="{{ asset('js/plugins/select2/css/select2.min.css') }}">
+        
         <link rel="stylesheet" href="{{ asset('js/plugins/sweetalert2/sweetalert2.min.css') }}" >
         <link rel="stylesheet" href="{{ asset('js/plugins/datatables/dataTables.bootstrap4.css') }}">
         <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.1.7/css/fixedHeader.bootstrap.min.css">
@@ -117,7 +119,7 @@
                             </a>
                         </li>
                         <li class="nav-main-item">
-                            <a class="nav-main-link" href="#">
+                            <a class="nav-main-link" href="{{ route('companyList') }}">
                                 <i class="nav-main-link-icon fa fa-users"></i>
                                 <span class="nav-main-link-name">Manage Companies</span>
                             </a>
@@ -290,7 +292,7 @@
                 </div>
             </div>
         </div>
-
+        
         <script src="{{ asset('js/dashmix.core.min.js') }}"></script>
         <script src="{{ asset('js/dashmix.app.min.js') }}"></script>
 
@@ -298,7 +300,7 @@
         <script src="{{ asset('js/plugins/es6-promise/es6-promise.auto.min.js') }}"></script>
         <script src="{{ asset('js/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
         <script src="{{ asset('js/pages/be_comp_dialogs.min.js') }}"></script>
-        
+
         <!-- Page JS Plugins -->
         <script src="{{ asset('js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
         <script src="{{ asset('js/plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
@@ -310,13 +312,18 @@
         <script src="https://cdn.datatables.net/fixedheader/3.1.7/js/dataTables.fixedHeader.min.js"></script>
         <script src="https://cdn.datatables.net/responsive/2.2.6/js/dataTables.responsive.min.js"></script>
         <script src="https://cdn.datatables.net/responsive/2.2.6/js/responsive.bootstrap.min.js"></script>
-        <script src="{{ asset('js/plugins/jquery.sparkline.min.js') }}"></script>
 
         <!-- Page JS Plugins -->
         <script src="{{ asset('js/plugins/jquery.sparkline.min.js') }}"></script>
-
+        <script src="{{ asset('js/plugins/select2/js/select2.full.min.js') }}"></script>
+        
         <!-- Page JS Helpers (jQuery Sparkline plugin) -->
         <script>jQuery(function(){ Dashmix.helpers('sparkline'); });</script>
-        
+
+        <script>jQuery(function(){ Dashmix.helpers('select2'); });</script>
+        <script src="{{ asset('/js/plugins/jquery-validation/jquery.validate.min.js') }}"></script>
+        <script src="{{ asset('/js/plugins/jquery-validation/additional-methods.js') }}"></script>
+
+        <script src="{{ asset('js/pages/be_forms_validation.js') }}"></script>
     </body>
 </html>

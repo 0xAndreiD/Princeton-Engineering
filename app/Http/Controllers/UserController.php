@@ -172,7 +172,7 @@ class UserController extends Controller
             $res->username = $data['name'];
             $res->email = $data['email'];
             $res->password = Hash::make($data['password']);
-            //$res->userrole = 0;
+            $res->userrole = 0;
             $res->companyid = $data['companyid'];
             $res->userrole = $data['userrole'];
             $res->usernumber = $data['usernumber'];
