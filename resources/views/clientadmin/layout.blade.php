@@ -30,9 +30,17 @@
         <!-- Stylesheets -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,400i,600,700">
         <link rel="stylesheet" id="css-main" href="{{ asset('css/dashmix.css') }}">
+        
         <link rel="stylesheet" id="css-theme" href="{{ asset('css/themes/xeco.min.css') }}">
         <link rel="stylesheet" id="css-main" href="{{ asset('css/styles.css') }}">
         <link rel="stylesheet" id="css-main" href="{{ asset('css/spreadsheet.css') }}">
+        
+        <link rel="stylesheet" href="{{ asset('js/plugins/select2/css/select2.min.css') }}">
+        
+        <link rel="stylesheet" href="{{ asset('js/plugins/sweetalert2/sweetalert2.min.css') }}" >
+        <link rel="stylesheet" href="{{ asset('js/plugins/datatables/dataTables.bootstrap4.css') }}">
+        <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.1.7/css/fixedHeader.bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.6/css/responsive.bootstrap.min.css">
         <!-- END Stylesheets -->
 
         <script src="{{ asset('js/jquery.min.js') }}"></script>
@@ -105,13 +113,13 @@
                         </li>
                         <li class="nav-main-heading">Users &amp; Companies</li>
                         <li class="nav-main-item">
-                            <a class="nav-main-link" href="#">
+                            <a class="nav-main-link" href="{{ route('userList') }}">
                                 <i class="nav-main-link-icon fa fa-user"></i>
                                 <span class="nav-main-link-name">Manage Users</span>
                             </a>
                         </li>
                         <li class="nav-main-item">
-                            <a class="nav-main-link" href="#">
+                            <a class="nav-main-link" href="{{ route('companyList') }}">
                                 <i class="nav-main-link-icon fa fa-users"></i>
                                 <span class="nav-main-link-name">Manage Companies</span>
                             </a>
@@ -131,7 +139,7 @@
                         </li>
                         <li class="nav-main-heading">Administrator Tools</li>
                         <li class="nav-main-item">
-                            <a class="nav-main-link" href="#">
+                            <a class="nav-main-link" href="{{ route('companyProfile') }}">
                                 <i class="nav-main-link-icon fa fa-users"></i>
                                 <span class="nav-main-link-name">Company Profile</span>
                             </a>
@@ -184,14 +192,21 @@
                     <!-- Right Section -->
                     <div>
                         <!-- Home Link -->
-                        <div class="dropdown d-inline-block">
+                        <div class="d-inline-block">
                             <a type="button" class="btn btn-dual" href="{{ route('home') }}" >
                                 <span class="d-none d-sm-inline ml-1">Home</span>
                             </a>
                         </div>
                         <!-- END Home Link -->
+                        <!-- Term Link -->
+                        <div class="d-inline-block">
+                            <a type="button" class="btn btn-dual" href="#" data-toggle="modal" data-target="#modal-terms">
+                                Read Terms
+                            </a>
+                        </div>
+                        <!-- END Terms Link -->
                         <!-- Signout Form -->
-                        <div class="dropdown d-inline-block">
+                        <div class="d-inline-block">
                             <a class="btn btn-dual" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                 <span class="d-none d-sm-inline ml-1">Signout</span>
                             </a>
@@ -201,13 +216,6 @@
                             </form>
                         </div>
                         <!-- END Signout Form -->
-
-                        <!-- Toggle Side Overlay -->
-                        <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
-                        <button type="button" class="btn btn-dual" >
-                            <i class="fa fa-fw fa-cogs"></i>
-                        </button>
-                        <!-- END Toggle Side Overlay -->
                     </div>
                     <!-- END Right Section -->
                 </div>
@@ -237,10 +245,10 @@
                 <div class="content py-0">
                     <div class="row font-size-sm">
                         <div class="col-sm-6 order-sm-2 mb-1 mb-sm-0 text-center text-sm-right">
-                            Crafted with <i class="fa fa-heart text-danger"></i> by <a class="font-w600" href="#" target="_blank">OliveSoft</a>
+                            Crafted with <i class="fa fa-heart text-danger"></i> by <a class="font-w600" href="#" target="_blank">.</a>
                         </div>
                         <div class="col-sm-6 order-sm-1 text-center text-sm-left">
-                            <a class="font-w600" href="#" target="_blank">Princeton Engineering</a> &copy; <span data-toggle="year-copy"></span>
+                            <a class="font-w600" href="#" target="_blank">Copyright © 2020 Richard Pantel. All Rights Reserved</span>
                         </div>
                     </div>
                 </div>
@@ -249,13 +257,73 @@
         </div>
         <!-- END Page Container -->
 
+        <!-- Terms Modal -->
+        <div class="modal fade" id="modal-terms" tabindex="-1" role="dialog" aria-labelledby="modal-terms" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="block block-themed block-transparent mb-0">
+                        <div class="block-header bg-primary-dark">
+                            <h3 class="block-title">Terms &amp; Conditions</h3>
+                            <div class="block-options">
+                                <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                                    <i class="fa fa-fw fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="block-content">
+                            <h5>1. Terms & conditions</h5>
+                            <p>Dolor posuere proin blandit accumsan senectus netus nullam curae, ornare laoreet adipiscing luctus mauris adipiscing pretium eget fermentum, tristique lobortis est ut metus lobortis tortor tincidunt himenaeos habitant quis dictumst proin odio sagittis purus mi, nec taciti vestibulum quis in sit varius lorem sit metus mi.</p>
+                            <h5>2. Copyright</h5>
+                            <p>Copyright © 2020 Richard Pantel.
+        All Rights Reserved.<span>&nbsp; </span>No parts of this
+        data input form or related calculation reports may be copied in format,
+        content or intent, or reproduced in any form or by any electronic or mechanical
+        means, including information storage and retrieval systems, without
+        permission in writing from the author.<span>&nbsp;
+        </span>Further, dis-assembly or reverse engineering of this data input form
+        or related calculation reports is strictly prohibited. The author's contact
+        information is: RPantel@Princeton-Engineering.com, web-site:
+        www.Princeton-Engineering.com; tel: 908-507-5500</p>
+                        </div>
+                        <div class="block-content block-content-full text-right bg-light">
+                            <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal">Done</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         <script src="{{ asset('js/dashmix.core.min.js') }}"></script>
         <script src="{{ asset('js/dashmix.app.min.js') }}"></script>
 
+        <!-- Modal JS Plugins -->
+        <script src="{{ asset('js/plugins/es6-promise/es6-promise.auto.min.js') }}"></script>
+        <script src="{{ asset('js/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
+        <script src="{{ asset('js/pages/be_comp_dialogs.min.js') }}"></script>
+
+        <!-- Page JS Plugins -->
+        <script src="{{ asset('js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+        <script src="{{ asset('js/plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
+        <script src="{{ asset('js/plugins/datatables/buttons/dataTables.buttons.min.js')}}"></script>
+        <script src="{{ asset('js/plugins/datatables/buttons/buttons.print.min.js') }}"></script>
+        <script src="{{ asset('js/plugins/datatables/buttons/buttons.html5.min.js') }}"></script>
+        <script src="{{ asset('js/plugins/datatables/buttons/buttons.flash.min.js') }}"></script>
+        <script src="{{ asset('js/plugins/datatables/buttons/buttons.colVis.min.js') }}"></script>
+        <script src="https://cdn.datatables.net/fixedheader/3.1.7/js/dataTables.fixedHeader.min.js"></script>
+        <script src="https://cdn.datatables.net/responsive/2.2.6/js/dataTables.responsive.min.js"></script>
+        <script src="https://cdn.datatables.net/responsive/2.2.6/js/responsive.bootstrap.min.js"></script>
+
         <!-- Page JS Plugins -->
         <script src="{{ asset('js/plugins/jquery.sparkline.min.js') }}"></script>
-
+        <script src="{{ asset('js/plugins/select2/js/select2.full.min.js') }}"></script>
+        
         <!-- Page JS Helpers (jQuery Sparkline plugin) -->
         <script>jQuery(function(){ Dashmix.helpers('sparkline'); });</script>
+
+        <script>jQuery(function(){ Dashmix.helpers('select2'); });</script>
+        <script src="{{ asset('/js/plugins/jquery-validation/jquery.validate.min.js') }}"></script>
+        <script src="{{ asset('/js/plugins/jquery-validation/additional-methods.js') }}"></script>
+
+        <script src="{{ asset('js/pages/be_forms_validation.js') }}"></script>
     </body>
 </html>
