@@ -139,7 +139,7 @@
                         </li>
                         <li class="nav-main-heading">Administrator Tools</li>
                         <li class="nav-main-item">
-                            <a class="nav-main-link" href="#">
+                            <a class="nav-main-link" href="{{ route('companyProfile') }}">
                                 <i class="nav-main-link-icon fa fa-users"></i>
                                 <span class="nav-main-link-name">Company Profile</span>
                             </a>

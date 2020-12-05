@@ -38,6 +38,9 @@ Route::post('/getCompany', 'CompanyController@getCompany')->name('getCompany');
 Route::post('/updateCompany', 'CompanyController@updateCompany')->name('updateCompany');
 Route::post('/delCompany', 'CompanyController@delete')->name('delCompany');
 
+// Company Profile
+Route::get('/companyProfile', 'CompanyController@companyProfile')->name('companyProfile');
+
 Route::post('/submitInput', 'GeneralController@submitInput')->name('submitInput');
 
 // Project List Page
