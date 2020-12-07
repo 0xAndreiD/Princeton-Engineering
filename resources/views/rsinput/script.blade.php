@@ -104,7 +104,7 @@ for( let i = 1; i <= 10; i ++ )
     num_lines_y[i] = Math.floor(canvas_width[i] / grid_size[i]);
     x_axis_distance_grid_lines[i] = num_lines_x[i] - 1;
     y_axis_distance_grid_lines[i] = 0;
-    show_axis[i] = true;
+    show_axis[i] = false;
     
     // Translate to the new origin. Now Y-axis of the canvas is opposite to the Y-axis of the graph. So the y-coordinate of each element will be negative of the actual
     ctx[i].translate(y_axis_distance_grid_lines[i] * grid_size[i], x_axis_distance_grid_lines[i] * grid_size[i]);
