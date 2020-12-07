@@ -201,6 +201,23 @@ class CompanyController extends Controller
     function getCompany(Request $request){
         $id = $request->input('data');
         $company = Company::where('id', $id)->first();
+        
         return response()->json($company);
+    }
+
+
+    /**
+     * Get Company Profile By ID
+     *
+     * @return JSON
+     */
+    function companyProfile(Request $request){
+        $userObject = Auth::user();
+        $companyID = $userObject->companyid;
+
+        $company = Company::where('id', $companyID)->first();
+        return view('clientadmin.companyProfile.companyprofile')->with('company', $company);
+
+        // return response()->json($company);
     }
 }
