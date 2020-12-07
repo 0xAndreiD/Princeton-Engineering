@@ -422,8 +422,8 @@ var drawGraph = function( condId ) {
     // Draw solar rectangles
     var e3 = e2 - e1;
     var moduleDepth = 1.17 / 12;
-    var moduleWidth = 39.13 / 12;
-    var moduleHeight = 65.04 / 12;
+    var moduleWidth = parseFloat($("#pv-module-width").val()) / 12;
+    var moduleHeight = parseFloat($("#pv-module-length").val()) / 12;
     var moduleGap = parseFloat($(`#inputform-${condId} #g-1-1`).val()) / 12;
 
     var startPoint = [- Math.sin(Math.PI / 2 - angleRadian) * e3 * grid_size[condId] -10 * Math.sin(angleRadian), Math.cos(Math.PI / 2 - angleRadian) * e3 * grid_size[condId] - 10];
@@ -601,8 +601,11 @@ var availablePVModules =
         echo '[';
         echo '"'. $module['module'] .'",';
         echo '"'. $module['submodule'] .'",';
-        echo '"'. $module['option1'] .'",';
-        echo '"'. $module['option2'] .'"';
+        echo '"'. $module['rating'] .'",';
+        echo '"'. $module['length'] .'",';
+        echo '"'. $module['width'] .'",';
+        echo '"'. $module['depth'] .'",';
+        echo '"'. $module['weight'] .'"';
         echo '],';
     }
     echo ']';
@@ -685,26 +688,15 @@ var getPVModuleSubTypes = function(mainType) {
     return subTypes;
 }
 
-var option1PVModule = function(mainType, subType) {
+var optionPVModule = function(mainType, subType, idx) {
     for (index = 0; index < availablePVModules.length; index++) {
         if ((availablePVModules[index][0] == mainType) 
             && (availablePVModules[index][1] == subType)) {
-            return availablePVModules[index][2];
+            return availablePVModules[index][idx];
         }
     }
 
     return "N/A";
-}
-
-var option2PVModule = function(mainType, subType) {
-    for (index = 0; index < availablePVModules.length; index++) {
-        if ((availablePVModules[index][0] == mainType) 
-            && (availablePVModules[index][1] == subType)) {
-            return availablePVModules[index][3];
-        }
-    }
-
-    return "";
 }
 
 var updatePVSubmoduleField = function(mainType, subType="") {
@@ -731,8 +723,10 @@ var updatePVSubmoduleField = function(mainType, subType="") {
         subType = subTypes[0]; 
     }
 
-    $('#option-module-option1').html(option1PVModule(mainType, subType));
-    $('#option-module-option2').html(option2PVModule(mainType, subType));
+    $('#option-module-option1').html(optionPVModule(mainType, subType, 2));
+    
+    $('#pv-module-length').val(optionPVModule(mainType, subType, 3));
+    $('#pv-module-width').val(optionPVModule(mainType, subType, 4));
 }
 
 var getPVInvertorTypes = function() {
@@ -1729,10 +1723,14 @@ $(document).ready(function() {
     });
     $('#option-module-type').on('change', function() {
         updatePVSubmoduleField($(this).children("option:selected").val());
+        for(let i = 1; i <= 10; i ++)
+            drawGraph(i);
     });
     $('#option-module-subtype').on('change', function() {
         updatePVSubmoduleField( $('#option-module-type').children("option:selected").val(), 
                                 $(this).children("option:selected").val());
+        for(let i = 1; i <= 10; i ++)
+            drawGraph(i);
     });
     $('#option-inverter-type').on('change', function() {
         updatePVInvertorSubField($(this).children("option:selected").val());
@@ -1847,7 +1845,7 @@ $(document).ready(function() {
         e.stopPropagation(); 
 
         if (isEmptyInputBox() == true) { 
-            swal({ title: "Warning", text: "Please fill blank fields.", icon: "warning", buttons: { confirm: "OK" } });
+            swal.fire({ title: "Warning", text: "Please fill blank fields.", icon: "warning", confirmButtonText: `OK` });
             return; 
         }
 
@@ -1867,32 +1865,34 @@ $(document).ready(function() {
                     if (status == 'Data Check') {
                         message = 'Input Data sent for review. An email will be sent to you summarizing the data input and notifying you of any problems.\nGo back to home page?';
                     }
-                    swal({
+                    swal.fire({
                         title: "Success",
                         text: message,
                         icon: "success",
-                        buttons: { confirm: "Yes", cancel: "No" }
+                        showCancelButton: true,
+                        confirmButtonText: `Yes`,
+                        cancelButtonText: `No`,
                     })
-                    .then(( confirm ) => {
-                        if ( confirm ) {
+                    .then(( result ) => {
+                        if ( result.value ) {
                             window.location = "{{ route('home') }}";
                         } 
                     });
                 } else {
                     // error handling
-                    swal({ title: "Error",
+                    swal.fire({ title: "Error",
                         text: "Error happened while processing. Please try again later.",
                         icon: "error",
-                        buttons: { confirm: "OK" } });
+                        confirmButtonText: `OK` });
                 }
             },
             error: function(xhr, status, error) {
                 res = JSON.parse(xhr.responseText);
                 message = res.message;
-                swal({ title: "Error",
+                swal.fire({ title: "Error",
                         text: message == "" ? "Error happened while processing. Please try again later." : message,
                         icon: "error",
-                        buttons: { confirm: "OK" } });
+                        confirmButtonText: `OK` });
             }
         });
         

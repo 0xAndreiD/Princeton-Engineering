@@ -44,7 +44,6 @@
         <!-- END Stylesheets -->
 
         <script src="{{ asset('js/jquery.min.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('js/sweetalert.min.js') }}" ></script>
     </head>
     <body>
         <div id="page-container" class="sidebar-o sidebar-dark enable-page-overlay side-scroll page-header-fixed page-header-dark page-header-glass main-content-narrow">
