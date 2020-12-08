@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
 
-        <title>Princeton Engineering</title>
+        <title>Super Admin Panel</title>
 
         <meta name="description" content="Princeton Engineering">
         <meta name="author" content="pixelcave">
