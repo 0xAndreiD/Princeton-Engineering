@@ -2119,14 +2119,14 @@ $(document).ready(function() {
             stick_show_axis[window.conditionId] = !stick_show_axis[window.conditionId];
             drawStickGraph(window.conditionId);
         });
-        $(`#inputform-${i} #a-6-1, #inputform-${i} #e-1-1, #inputform-${i} #e-2-1, #inputform-${i} #g-1-1`).on('change', function() {
+        $(`#inputform-${i} #a-6-1, #inputform-${i} #g-1-1`).on('change', function() {
             drawTrussGraph(window.conditionId);
         });
-        $(`#inputform-${i} #f-1-1`).on('change', function() {
+        $(`#inputform-${i} #f-1-1, #inputform-${i} #e-1-1, #inputform-${i} #e-2-1`).on('change', function() {
             drawTrussGraph(window.conditionId);
             drawStickGraph(window.conditionId);
         });
-        $(`#inputform-${i} #a-7-1, #inputform-${i} #a-9-1, #inputform-${i} #C-2-1, #inputform-${i} #C-4-1`).on('change', function() {
+        $(`#inputform-${i} #a-7-1, #inputform-${i} #a-9-1, #inputform-${i} #c-2-1, #inputform-${i} #c-4-1`).on('change', function() {
             drawStickGraph(window.conditionId);
         });
     }
