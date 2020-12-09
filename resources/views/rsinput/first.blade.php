@@ -402,7 +402,9 @@ www.Princeton-Engineering.com; tel: 908-507-5500
             </select>
         </td>
         <td class="w400-bdr" id="option-module-option1"></td>
-        <td class="w400-bdr" id="option-module-option2"></td>
+        <td class="w400-bdr" id="option-module-option2">watts</td>
+        <input class="w400-bdr" id="pv-module-length" hidden>
+        <input class="w400-bdr" id="pv-module-width" hidden>
     </tr>
     <tr class="h13">
         <td><div style="overflow:hidden"></div></td>
