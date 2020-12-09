@@ -11,10 +11,6 @@ $(document).ready(function(){
             required: true,
             email: true
         },
-        'website': {
-            required: true,
-            url: true
-        },
         'telno': {
             required: true,
             phoneUS: true
@@ -34,7 +30,6 @@ $(document).ready(function(){
             minlength: 'Your name must consist of at least 3 characters'
         },
         'email': 'Please enter a valid email address',
-        'website': 'Please enter your website!',
         'telno': 'Please enter a US phone!',
         'digits': 'Please enter only digits!',
         'number': 'Please enter a number!',
