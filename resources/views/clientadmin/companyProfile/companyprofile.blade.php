@@ -22,10 +22,10 @@
 <div class="content" style="text-align:left">
     <div class="block block-rounded block-bordered">
         <div class="block-content block-content-full">
-            <form class="js-validation" onsubmit="mySubmitFunction(event)" method="POST">
+            <form class="" onsubmit="return false;" method="POST" id="profileForm">
                 <div class="block block-themed block-transparent mb-0">
                     <div class="block-header bg-primary-dark">
-                        <h3 class="block-title">Company Info</h3>
+                        <h3 class="block-title">Company Profile</h3>
                     </div>
                     <div class="block-content">
                         <div class="row items-push">

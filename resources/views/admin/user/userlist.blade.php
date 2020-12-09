@@ -66,7 +66,7 @@
         <div class="modal" id="modal-block-normal" tabindex="-1" role="dialog" aria-labelledby="modal-block-normal" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                    <form class="js-validation" onsubmit="mySubmitFunction(event)" method="POST">
+                    <form class="js-validation" onsubmit="return false;" method="POST" id="profileForm">
                         <div class="block block-themed block-transparent mb-0">
                             <div class="block-header bg-primary-dark">
                                 <h3 class="block-title">User Info</h3>

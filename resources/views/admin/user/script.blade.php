@@ -1,12 +1,42 @@
 <script>
 
-
-function mySubmitFunction(e) {
-  e.preventDefault();
-  updateUser();
-  return false;
-}
-
+$(document).ready(function(){
+    Dashmix.helpers('validation');
+    var validateObj = $('#profileForm').validate({rules: {
+        'name': {
+            required: true,
+            minlength: 3
+        },
+        'email': {
+            required: true,
+            email: true
+        },
+        'usernumber': {
+            required: true,
+            number: true
+        },
+        'password': {
+            required: true,
+            minlength: 5
+        },
+    },
+    messages: {
+        'name': {
+            required: 'Please enter a name',
+            minlength: 'Your name must consist of at least 3 characters'
+        },
+        'email': 'Please enter a valid email address',
+        'usernumber': 'Please enter a number!',
+        'password': {
+            required: 'Please provide a password',
+            minlength: 'Your password must be at least 5 characters long'
+        },
+    },
+    submitHandler: function(){
+        updateUser();
+    }
+    });
+})
 
 function delUser(obj, id) {
     let toast = Swal.mixin({
@@ -62,15 +92,7 @@ function updateUser() {
     var data = {};
     data.id = $('input#userid').val();
     data.name = $('input#name').val();
-    if (data.name == ''){
-        $('input#name').focus();
-        return;
-    }
     data.email = $('input#email').val();
-    if (!ValidateEmail(data.email)){
-        $('input#email').focus();
-        return;
-    }
     data.password = $('input#password').val();
     data.companyid = $('select#company').val();
     data.usernumber = $('input#usernumber').val();
