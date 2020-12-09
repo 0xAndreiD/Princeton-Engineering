@@ -363,10 +363,16 @@ var drawTrussGraph = function( condId ) {
     }
 
     // draw floor plane
+    let floorWidth = 0;
     for (var key in globalFloorLines[condId]) {
         drawLine(condId, globalFloorLines[condId][key][0], globalFloorLines[condId][key][1], "M"+label_index, 2);
+        floorWidth += Math.abs(globalFloorLines[condId][key][0][0] - globalFloorLines[condId][key][1][0]);
         label_index++;
     }
+    ctx[condId].beginPath();
+    ctx[condId].font = '16px Arial';
+    ctx[condId].textAlign = 'middle';
+    ctx[condId].fillText("Floor", floorWidth * grid_size[condId] / 2 - 20, 30);
 
     // draw di­agonals lines 
     var index = 0;
@@ -418,6 +424,11 @@ var drawTrussGraph = function( condId ) {
     ctx[condId].moveTo(0, 0);
     ctx[condId].lineTo(0, 100);
     ctx[condId].stroke();
+
+    ctx[condId].beginPath();
+    ctx[condId].font = '16px Arial';
+    ctx[condId].textAlign = 'middle';
+    ctx[condId].fillText("Wall", 10, 60);
 
     // Draw solar rectangles
     var e3 = e2 - e1;
@@ -1823,6 +1834,10 @@ var drawStickGraph = function( condId ) {
     stick_ctx[condId].lineTo(0, 100);
     stick_ctx[condId].stroke();
 
+    stick_ctx[condId].font = '16px Arial';
+    stick_ctx[condId].textAlign = 'end';
+    stick_ctx[condId].fillText("Wall", 40, 60);
+
     // Draw Roof
     var roofHeight = parseFloat($(`#inputform-${condId} #a-9-1`).val());
 
@@ -1840,6 +1855,10 @@ var drawStickGraph = function( condId ) {
     stick_ctx[condId].moveTo(0, 0);
     stick_ctx[condId].lineTo(roofHeight * (1 / Math.tan(angleRadian))  * stick_grid_size[condId], 0);
     stick_ctx[condId].stroke();
+
+    stick_ctx[condId].font = '16px Arial';
+    stick_ctx[condId].textAlign = 'end';
+    stick_ctx[condId].fillText("Floor", roofHeight * (1 / Math.tan(angleRadian))  * stick_grid_size[condId] / 2, 30);
 
     // Draw Knee Wall
     var kneeWallHeight = parseFloat($(`#inputform-${condId} #c-4-1`).val());

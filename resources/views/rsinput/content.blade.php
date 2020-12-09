@@ -178,7 +178,7 @@
         </tr>
         <tr class="h13 class-truss-hide">
             <td><div style="overflow:hidden"></td>
-            <td class="iw400-bdr" style="vertical-align : middle;" rowspan="4">Collar Tie Information</td>
+            <td class="iw400-bdr" style="vertical-align : middle;" rowspan="4">Collar Tie / Knee Wall Information</td>
             <td class="w400-bdr">C-1</td>
             <td class="iw400-right-bdr">Collar Tie Description</td>
             <td class="iw400-bdr">text</td>
@@ -204,7 +204,7 @@
         <tr class="h13 class-truss-hide">
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">C-4</td>
-            <td class="iw400-right-bdr">Collar Tie / Knee Wall</td>
+            <td class="iw400-right-bdr">Knee Wall Height</td>
             <td class="iw400-bdr">ft</td>
             <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="c-4-1"  tabindex="41" value="2.00"></input></td>
             <td><div style="overflow:hidden"></td>
@@ -227,6 +227,8 @@
                 <select id="d-2-1" tabindex="43">
                     <option data-value="Standard" selected="">Standard</option>
                     <option data-value="Architecture">Architecture</option>
+                    <option data-value="Metal Deck">Metal Deck</option>
+                    <option data-value="Roof Tile">Roof Tile</option>
                 </select>
             </td>
             <td><div style="overflow:hidden"></td>
