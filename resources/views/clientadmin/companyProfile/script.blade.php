@@ -1,10 +1,49 @@
 <script>
 
-function mySubmitFunction(e) {
-  e.preventDefault();
-  updateCompany();
-  return false;
-}
+$(document).ready(function(){
+    Dashmix.helpers('validation');
+    var validateObj = $('#profileForm').validate({rules: {
+        'name': {
+            required: true,
+            minlength: 3
+        },
+        'email': {
+            required: true,
+            email: true
+        },
+        'website': {
+            required: true,
+            url: true
+        },
+        'telno': {
+            required: true,
+            phoneUS: true
+        },
+        'digits': {
+            required: true,
+            digits: true
+        },
+        'number': {
+            required: true,
+            number: true
+        },
+    },
+    messages: {
+        'name': {
+            required: 'Please enter a name',
+            minlength: 'Your name must consist of at least 3 characters'
+        },
+        'email': 'Please enter a valid email address',
+        'website': 'Please enter your website!',
+        'telno': 'Please enter a US phone!',
+        'digits': 'Please enter only digits!',
+        'number': 'Please enter a number!',
+    },
+    submitHandler: function(){
+        updateCompany();
+    }
+    });
+})
 
 function updateCompany() {
     let toast = Swal.mixin({

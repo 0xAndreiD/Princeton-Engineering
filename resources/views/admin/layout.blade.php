@@ -45,6 +45,9 @@
 
         <script src="{{ asset('js/jquery.min.js') }}"></script>
         <script type="text/javascript" src="{{ asset('js/sweetalert.min.js') }}" ></script>
+        
+        <script src="{{ asset('js/dashmix.core.min.js') }}"></script>
+        <script src="{{ asset('js/dashmix.app.min.js') }}"></script>
     </head>
     <body>
         <div id="page-container" class="sidebar-o sidebar-dark enable-page-overlay side-scroll page-header-fixed page-header-dark page-header-glass main-content-narrow">
@@ -293,8 +296,7 @@
             </div>
         </div>
         
-        <script src="{{ asset('js/dashmix.core.min.js') }}"></script>
-        <script src="{{ asset('js/dashmix.app.min.js') }}"></script>
+        
 
         <!-- Modal JS Plugins -->
         <script src="{{ asset('js/plugins/es6-promise/es6-promise.auto.min.js') }}"></script>

@@ -125,16 +125,16 @@ class CompanyController extends Controller
                 ";
 
                 $nestedData['actions'] = "
-                <p class='text-center'>
-                    <button type='button' class='btn btn-primary push' 
+                <div class='text-center'>
+                    <button type='button' class='btn btn-primary' 
                         onclick='showEditCompany(this,{$nestedData['id']})'
                         data-toggle='modal' data-target='#modal-block-normal'>
                         <i class='fa fa-pencil-alt'></i>
                     </button>
-                    <button type='button' class='js-swal-confirm btn btn-danger push' onclick='delCompany(this,{$nestedData['id']})'>
+                    <button type='button' class='js-swal-confirm btn btn-danger' onclick='delCompany(this,{$nestedData['id']})'>
                         <i class='fa fa-trash'></i>
                     </button>
-                </p>";
+                </div>";
                 $data[] = $nestedData;
             }
         }

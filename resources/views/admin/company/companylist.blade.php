@@ -37,11 +37,11 @@
                     <thead>
                         <tr>
                             <th class="text-center" style="width: 50px;">ID</th>
-                            <th style="width:15%">Name</th>
-                            <th style="width:10%;">Number</th>
+                            <th style="width:10%">Name</th>
+                            <th style="width:8%;">Number</th>
                             <th style="width:10%;">Tel No</th>
-                            <th style="width:20%;">Address</th>
-                            <th style="width:10%;">Email</th>
+                            <th style="width:15%;">Address</th>
+                            <th style="width:15%;">Email</th>
                             <th style="width:15%;">Website</th>
                             <th style="width:150px;">Action</th>
                         </tr>
@@ -58,7 +58,7 @@
         <div class="modal" id="modal-block-normal" tabindex="-1" role="dialog" aria-labelledby="modal-block-normal" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                    <form class="js-validation" onsubmit="mySubmitFunction(event)" method="POST">
+                    <form class="js-validation" onsubmit="return false;" method="POST" id="profileForm">
                         <div class="block block-themed block-transparent mb-0">
                             <div class="block-header bg-primary-dark">
                                 <h3 class="block-title">Company Info</h3>
