@@ -93,6 +93,7 @@ var num_lines_x = new Array(11);
 var num_lines_y = new Array(11);
 var x_axis_distance_grid_lines = new Array(11);
 var y_axis_distance_grid_lines = new Array(11);
+var show_axis = new Array(11);
 for( let i = 1; i <= 10; i ++ )
 {
     canvas[i] = document.getElementById(`canvas-${i}`);
@@ -103,6 +104,7 @@ for( let i = 1; i <= 10; i ++ )
     num_lines_y[i] = Math.floor(canvas_width[i] / grid_size[i]);
     x_axis_distance_grid_lines[i] = num_lines_x[i] - 1;
     y_axis_distance_grid_lines[i] = 0;
+    show_axis[i] = false;
     
     // Translate to the new origin. Now Y-axis of the canvas is opposite to the Y-axis of the graph. So the y-coordinate of each element will be negative of the actual
     ctx[i].translate(y_axis_distance_grid_lines[i] * grid_size[i], x_axis_distance_grid_lines[i] * grid_size[i]);
@@ -112,122 +114,130 @@ var drawBaseLine = function( condId ) {
     // erase
     // ctx.clearRect( 0, grid_size, canvas_width, - canvas_height);
     ctx[condId].clearRect( 0, grid_size[condId], canvas_width[condId] + 100, - canvas_height[condId] - 100);
+
+    var angleRadian = degreeToRadian( parseFloat($(`#inputform-${condId} #txt-roof-degree`).val()) );
+    var e2 = parseFloat($(`#inputform-${condId} #e-2-1`).val());
+    var overhang = Math.max(100, Math.floor(e2 * grid_size[condId] * Math.sin(Math.PI / 2 - angleRadian )));
+
+    ctx[condId].translate(overhang, -100);
     
-    // Draw grid lines along X-axis
-    for(var i = 0; i <= num_lines_x[condId]; i += 2) {
-        ctx[condId].beginPath();
-        ctx[condId].lineWidth = 1;
-        
-        // If line represents X-axis draw in different color
-        if(i == 0/*x_axis_distance_grid_lines*/) 
+    if( show_axis[condId] )
+    {
+        // Draw grid lines along X-axis
+        for(var i = 0; i <= num_lines_x[condId]; i += 2) {
+            ctx[condId].beginPath();
+            ctx[condId].lineWidth = 1;
+            
+            // If line represents X-axis draw in different color
+            if(i == 0/*x_axis_distance_grid_lines*/) 
+                ctx[condId].strokeStyle = "#000000";
+            else
+                ctx[condId].strokeStyle = "#e9e9e9";
+            
+            if(i == num_lines_x[condId]) {
+                ctx[condId].moveTo(0, grid_size[condId] * i);
+                ctx[condId].lineTo(canvas_width[condId], grid_size[condId] * i);
+            }
+            else {
+                ctx[condId].moveTo(0, -grid_size[condId] * i + 0.5);
+                ctx[condId].lineTo(canvas_width[condId], -grid_size[condId] * i + 0.5);
+            }
+            ctx[condId].stroke();
+        }
+
+        // Draw grid lines along Y-axis
+        for(i = 0; i <= num_lines_y[condId]; i += 2) {
+            ctx[condId].beginPath();
+            ctx[condId].lineWidth = 1;
+            
+            // If line represents X-axis draw in different color
+            if(i == y_axis_distance_grid_lines[condId]) 
+                ctx[condId].strokeStyle = "#000000";
+            else
+                ctx[condId].strokeStyle = "#e9e9e9";
+            
+            if(i == num_lines_y[condId]) {
+                ctx[condId].moveTo(grid_size[condId] * i, 0);
+                ctx[condId].lineTo(grid_size[condId] * i, -canvas_height[condId]);
+            }
+            else {
+                ctx[condId].moveTo(grid_size[condId] * i + 0.5, 0);
+                ctx[condId].lineTo(grid_size[condId] * i + 0.5, -canvas_height[condId]);
+            }
+            ctx[condId].stroke();
+        }
+
+
+        // Ticks marks along the positive X-axis
+        for(i = 2; i < (num_lines_y[condId] - y_axis_distance_grid_lines[condId]); i += 2) {
+            ctx[condId].beginPath();
+            ctx[condId].lineWidth = 1;
             ctx[condId].strokeStyle = "#000000";
-        else
-            ctx[condId].strokeStyle = "#e9e9e9";
-        
-        if(i == num_lines_x[condId]) {
-            ctx[condId].moveTo(0, grid_size[condId] * i);
-            ctx[condId].lineTo(canvas_width[condId], grid_size[condId] * i);
-        }
-        else {
-            ctx[condId].moveTo(0, -grid_size[condId] * i + 0.5);
-            ctx[condId].lineTo(canvas_width[condId], -grid_size[condId] * i + 0.5);
-        }
-        ctx[condId].stroke();
-    }
 
-    // Draw grid lines along Y-axis
-    for(i = 0; i <= num_lines_y[condId]; i += 2) {
-        ctx[condId].beginPath();
-        ctx[condId].lineWidth = 1;
-        
-        // If line represents X-axis draw in different color
-        if(i == y_axis_distance_grid_lines[condId]) 
+            // Draw a tick mark 6px long (-3 to 3)
+            ctx[condId].moveTo(grid_size[condId] * i + 0.5, -3);
+            ctx[condId].lineTo(grid_size[condId] * i + 0.5, 3);
+            ctx[condId].stroke();
+
+            // Text value at that point
+            ctx[condId].font = '9px Arial';
+            ctx[condId].textAlign = 'start';
+            ctx[condId].fillText(x_axis_starting_point[condId].number * i + x_axis_starting_point[condId].suffix, grid_size[condId] * i - 2, 15);
+        }
+
+        // Ticks marks along the negative X-axis
+        for(i = 2; i < y_axis_distance_grid_lines[condId]; i += 2) {
+            ctx[condId].beginPath();
+            ctx[condId].lineWidth = 1;
             ctx[condId].strokeStyle = "#000000";
-        else
-            ctx[condId].strokeStyle = "#e9e9e9";
-        
-        if(i == num_lines_y[condId]) {
-            ctx[condId].moveTo(grid_size[condId] * i, 0);
-            ctx[condId].lineTo(grid_size[condId] * i, -canvas_height[condId]);
+
+            // Draw a tick mark 6px long (-3 to 3)
+            ctx[condId].moveTo(-grid_size[condId] * i + 0.5, -3);
+            ctx[condId].lineTo(-grid_size[condId] * i + 0.5, 3);
+            ctx[condId].stroke();
+
+            // Text value at that point
+            ctx[condId].font = '9px Arial';
+            ctx[condId].textAlign = 'end';
+            ctx[condId].fillText(-x_axis_starting_point[condId].number * i + x_axis_starting_point[condId].suffix, -grid_size[condId] * i + 3, 15);
         }
-        else {
-            ctx[condId].moveTo(grid_size[condId] * i + 0.5, 0);
-            ctx[condId].lineTo(grid_size[condId] * i + 0.5, -canvas_height[condId]);
+
+        // Ticks marks along the positive Y-axis
+        // Positive Y-axis of graph is negative Y-axis of the canvas
+        for(i = 2; i < (num_lines_x[condId] - x_axis_distance_grid_lines[condId]); i += 2) {
+            ctx[condId].beginPath();
+            ctx[condId].lineWidth = 1;
+            ctx[condId].strokeStyle = "#000000";
+
+            // Draw a tick mark 6px long (-3 to 3)
+            ctx[condId].moveTo(-3, grid_size[condId] * i + 0.5);
+            ctx[condId].lineTo(3, grid_size[condId] * i + 0.5);
+            ctx[condId].stroke();
+
+            // Text value at that point
+            ctx[condId].font = '9px Arial';
+            ctx[condId].textAlign = 'start';
+            ctx[condId].fillText(-y_axis_starting_point[condId].number * i + y_axis_starting_point[condId].suffix, 8, grid_size[condId] * i + 3);
         }
-        ctx[condId].stroke();
+
+        // Ticks marks along the negative Y-axis
+        // Negative Y-axis of graph is positive Y-axis of the canvas
+        for(i = 2; i < x_axis_distance_grid_lines[condId]; i += 2) {
+            ctx[condId].beginPath();
+            ctx[condId].lineWidth = 1;
+            ctx[condId].strokeStyle = "#000000";
+
+            // Draw a tick mark 6px long (-3 to 3)
+            ctx[condId].moveTo(-3, -grid_size[condId] * i + 0.5);
+            ctx[condId].lineTo(3, -grid_size[condId] * i + 0.5);
+            ctx[condId].stroke();
+
+            // Text value at that point
+            ctx[condId].font = '9px Arial';
+            ctx[condId].textAlign = 'start';
+            ctx[condId].fillText(y_axis_starting_point[condId].number * i + y_axis_starting_point[condId].suffix, 8, -grid_size[condId] * i + 3);
+        }
     }
-
-
-    // Ticks marks along the positive X-axis
-    for(i = 2; i < (num_lines_y[condId] - y_axis_distance_grid_lines[condId]); i += 2) {
-        ctx[condId].beginPath();
-        ctx[condId].lineWidth = 1;
-        ctx[condId].strokeStyle = "#000000";
-
-        // Draw a tick mark 6px long (-3 to 3)
-        ctx[condId].moveTo(grid_size[condId] * i + 0.5, -3);
-        ctx[condId].lineTo(grid_size[condId] * i + 0.5, 3);
-        ctx[condId].stroke();
-
-        // Text value at that point
-        ctx[condId].font = '9px Arial';
-        ctx[condId].textAlign = 'start';
-        ctx[condId].fillText(x_axis_starting_point[condId].number * i + x_axis_starting_point[condId].suffix, grid_size[condId] * i - 2, 15);
-    }
-
-    // Ticks marks along the negative X-axis
-    for(i = 2; i < y_axis_distance_grid_lines[condId]; i += 2) {
-        ctx[condId].beginPath();
-        ctx[condId].lineWidth = 1;
-        ctx[condId].strokeStyle = "#000000";
-
-        // Draw a tick mark 6px long (-3 to 3)
-        ctx[condId].moveTo(-grid_size[condId] * i + 0.5, -3);
-        ctx[condId].lineTo(-grid_size[condId] * i + 0.5, 3);
-        ctx[condId].stroke();
-
-        // Text value at that point
-        ctx[condId].font = '9px Arial';
-        ctx[condId].textAlign = 'end';
-        ctx[condId].fillText(-x_axis_starting_point[condId].number * i + x_axis_starting_point[condId].suffix, -grid_size[condId] * i + 3, 15);
-    }
-
-    // Ticks marks along the positive Y-axis
-    // Positive Y-axis of graph is negative Y-axis of the canvas
-    for(i = 2; i < (num_lines_x[condId] - x_axis_distance_grid_lines[condId]); i += 2) {
-        ctx[condId].beginPath();
-        ctx[condId].lineWidth = 1;
-        ctx[condId].strokeStyle = "#000000";
-
-        // Draw a tick mark 6px long (-3 to 3)
-        ctx[condId].moveTo(-3, grid_size[condId] * i + 0.5);
-        ctx[condId].lineTo(3, grid_size[condId] * i + 0.5);
-        ctx[condId].stroke();
-
-        // Text value at that point
-        ctx[condId].font = '9px Arial';
-        ctx[condId].textAlign = 'start';
-        ctx[condId].fillText(-y_axis_starting_point[condId].number * i + y_axis_starting_point[condId].suffix, 8, grid_size[condId] * i + 3);
-    }
-
-    // Ticks marks along the negative Y-axis
-    // Negative Y-axis of graph is positive Y-axis of the canvas
-    for(i = 2; i < x_axis_distance_grid_lines[condId]; i += 2) {
-        ctx[condId].beginPath();
-        ctx[condId].lineWidth = 1;
-        ctx[condId].strokeStyle = "#000000";
-
-        // Draw a tick mark 6px long (-3 to 3)
-        ctx[condId].moveTo(-3, -grid_size[condId] * i + 0.5);
-        ctx[condId].lineTo(3, -grid_size[condId] * i + 0.5);
-        ctx[condId].stroke();
-
-        // Text value at that point
-        ctx[condId].font = '9px Arial';
-        ctx[condId].textAlign = 'start';
-        ctx[condId].fillText(y_axis_starting_point[condId].number * i + y_axis_starting_point[condId].suffix, 8, -grid_size[condId] * i + 3);
-    }
-
 }
 
 var adjustDrawingPanel = function( condId ) {
@@ -251,8 +261,10 @@ var adjustDrawingPanel = function( condId ) {
     // console.log("topXpoint : " + topXPoint);
     // console.log("topYpoint : " + topYPoint);
 
-    var xx = Math.floor(canvas_width[condId] / topXPoint);
-    var yy = Math.floor((canvas_height[condId] - 50) / topYPoint);  // for height adjustment
+    var e2 = parseFloat($(`#inputform-${condId} #e-2-1`).val());
+
+    var xx = Math.floor((canvas_width[condId] - Math.max(100, Math.floor(e2 * grid_size[condId] * Math.sin(Math.PI / 2 - degreeToRadian(parseFloat($(`#inputform-${condId} #txt-roof-degree`).val())) )))) / topXPoint);
+    var yy = Math.floor((canvas_height[condId] - 150) / topYPoint);  // for height adjustment
 
     // if (xx > yy) { 
     //     if (grid_size > yy) { grid_size = yy; }
@@ -268,6 +280,10 @@ var adjustDrawingPanel = function( condId ) {
     num_lines_x[condId] = Math.floor(canvas_height[condId] / grid_size[condId]);
     num_lines_y[condId] = Math.floor(canvas_width[condId] / grid_size[condId]);
     x_axis_distance_grid_lines[condId] = num_lines_x[condId] - 1;
+}
+
+var getDistance = function(start, end) {
+    return Math.sqrt((start[0] - end[0]) * (start[0] - end[0]) + (start[1] - end[1]) * (start[1] - end[1]));
 }
 
 var drawLine = function(condId, start, end, label, rotateMethod = 0) {
@@ -311,7 +327,7 @@ var drawLine = function(condId, start, end, label, rotateMethod = 0) {
     if(rotateMethod == 1)
     {
         rotateDegree = Math.atan((start[0] - end[0]) / (start[1] - end[1])) - Math.PI / 2;
-        xx = -8; yy = -2;
+        xx = -8; yy = 22;
     }
     else if(rotateMethod == 2) 
     {
@@ -334,8 +350,7 @@ var drawLine = function(condId, start, end, label, rotateMethod = 0) {
     ctx[condId].translate(- (start[0] + end[0]) * grid_size[condId] / 2 + 4, (start[1] + end[1]) * grid_size[condId] / 2 + 4);
 }
 
-var drawGraph = function( condId ) {
-
+var drawTrussGraph = function( condId ) {
     adjustDrawingPanel(condId);
     drawBaseLine(condId);
 
@@ -379,6 +394,83 @@ var drawGraph = function( condId ) {
         
         index++;
     }
+
+    // Draw Overhang
+    var angle = parseFloat($(`#inputform-${condId} #txt-roof-degree`).val());
+    var angleRadian = degreeToRadian(angle);
+    
+    var e2 = parseFloat($(`#inputform-${condId} #e-2-1`).val());
+    var e1 = parseFloat($(`#inputform-${condId} #e-1-1`).val());
+
+    var overhang = Math.max(100, Math.floor(e2 * grid_size[condId] * Math.sin(Math.PI / 2 - angleRadian )));
+
+    ctx[condId].beginPath();
+    ctx[condId].lineWidth = 2;
+    ctx[condId].strokeStyle = "#0000FF";
+    ctx[condId].moveTo(0, 0);
+    ctx[condId].lineTo( - Math.sin(Math.PI / 2 - angleRadian) * e2 * grid_size[condId], Math.cos(Math.PI / 2 - angleRadian) * e2 * grid_size[condId]);
+    ctx[condId].stroke();
+
+    // Draw Wall
+    ctx[condId].beginPath();
+    ctx[condId].lineWidth = 2;
+    ctx[condId].strokeStyle = "#0000FF";
+    ctx[condId].moveTo(0, 0);
+    ctx[condId].lineTo(0, 100);
+    ctx[condId].stroke();
+
+    // Draw solar rectangles
+    var e3 = e2 - e1;
+    var moduleDepth = 1.17 / 12;
+    var moduleWidth = parseFloat($("#pv-module-width").val()) / 12;
+    var moduleHeight = parseFloat($("#pv-module-length").val()) / 12;
+    var moduleGap = parseFloat($(`#inputform-${condId} #g-1-1`).val()) / 12;
+
+    var startPoint = [- Math.sin(Math.PI / 2 - angleRadian) * e3 * grid_size[condId] -10 * Math.sin(angleRadian), Math.cos(Math.PI / 2 - angleRadian) * e3 * grid_size[condId] - 10];
+    ctx[condId].translate(startPoint[0], startPoint[1]);
+    ctx[condId].rotate(- angleRadian);
+    ctx[condId].beginPath();
+    ctx[condId].lineWidth = 2;
+    ctx[condId].strokeStyle = "#000000";
+
+    var totalRoofLength = 0;
+    for (var key in globalRoofLines[condId]) {
+        totalRoofLength += getDistance(globalRoofLines[condId][key][0], globalRoofLines[condId][key][1]);
+    }
+    totalRoofLength += e3;
+    var maxModuleCount = parseInt($(`#inputform-${condId} #f-1-1`).val());
+    
+    let i = 1;
+    let moduleLengthSum = 0;
+    let moduleStartX = 0;
+    var orientation = false;
+    
+    if($(`#inputform-${conditionId} #a-6-1`).val() == "Portrait")
+        orientation = true;
+    if($(`#inputform-${conditionId} #h-1-1`)[0].checked)
+        orientation = !orientation;
+    moduleLengthSum += (moduleGap + (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)));
+
+    do
+    {
+        ctx[condId].strokeRect(moduleStartX * grid_size[condId], 0, (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)) * grid_size[condId], moduleDepth * grid_size[condId]);
+        moduleStartX += (moduleGap + (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)));
+        
+        orientation = false;
+        if($(`#inputform-${conditionId} #a-6-1`).val() == "Portrait")
+            orientation = true;
+        if($(`#inputform-${conditionId} #h-${i + 1}-1`)[0].checked)
+            orientation = !orientation;
+
+        i ++;
+        moduleLengthSum += (moduleGap + (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)));
+    } while( i <= maxModuleCount && moduleLengthSum <= totalRoofLength )
+    
+
+    ctx[condId].rotate(angleRadian);
+    ctx[condId].translate(- startPoint[0], - startPoint[1]);
+
+    ctx[condId].translate(-overhang, 100);
 }
 
 </script>
@@ -509,8 +601,11 @@ var availablePVModules =
         echo '[';
         echo '"'. $module['module'] .'",';
         echo '"'. $module['submodule'] .'",';
-        echo '"'. $module['option1'] .'",';
-        echo '"'. $module['option2'] .'"';
+        echo '"'. $module['rating'] .'",';
+        echo '"'. $module['length'] .'",';
+        echo '"'. $module['width'] .'",';
+        echo '"'. $module['depth'] .'",';
+        echo '"'. $module['weight'] .'"';
         echo '],';
     }
     echo ']';
@@ -593,26 +688,15 @@ var getPVModuleSubTypes = function(mainType) {
     return subTypes;
 }
 
-var option1PVModule = function(mainType, subType) {
+var optionPVModule = function(mainType, subType, idx) {
     for (index = 0; index < availablePVModules.length; index++) {
         if ((availablePVModules[index][0] == mainType) 
             && (availablePVModules[index][1] == subType)) {
-            return availablePVModules[index][2];
+            return availablePVModules[index][idx];
         }
     }
 
     return "N/A";
-}
-
-var option2PVModule = function(mainType, subType) {
-    for (index = 0; index < availablePVModules.length; index++) {
-        if ((availablePVModules[index][0] == mainType) 
-            && (availablePVModules[index][1] == subType)) {
-            return availablePVModules[index][3];
-        }
-    }
-
-    return "";
 }
 
 var updatePVSubmoduleField = function(mainType, subType="") {
@@ -639,8 +723,10 @@ var updatePVSubmoduleField = function(mainType, subType="") {
         subType = subTypes[0]; 
     }
 
-    $('#option-module-option1').html(option1PVModule(mainType, subType));
-    $('#option-module-option2').html(option2PVModule(mainType, subType));
+    $('#option-module-option1').html(optionPVModule(mainType, subType, 2));
+    
+    $('#pv-module-length').val(optionPVModule(mainType, subType, 3));
+    $('#pv-module-width').val(optionPVModule(mainType, subType, 4));
 }
 
 var getPVInvertorTypes = function() {
@@ -1282,7 +1368,7 @@ var updatePlanes = function( condId ) {
     // }
 
     // draw graphs
-    drawGraph(condId);
+    drawTrussGraph(condId);
 }
 
 // ----- Truss segement & comments functions --------------
@@ -1517,6 +1603,312 @@ var updateTotalMPCount = function(condId, totalFramingConditions) {
     loadCurrentMP(condId, currentMP);
 }
 
+var stick_grid_size = [45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45];
+var stick_x_axis_starting_point = new Array(11); stick_x_axis_starting_point.fill({ number: 1, suffix: '' });
+var stick_y_axis_starting_point = new Array(11); stick_y_axis_starting_point.fill({ number: 1, suffix: '' });
+
+var stick_canvas = new Array(11);
+var stick_ctx = new Array(11);
+var stick_canvas_width = new Array(11);
+var stick_canvas_height = new Array(11);
+var stick_num_lines_x = new Array(11);
+var stick_num_lines_y = new Array(11);
+var stick_x_axis_distance_grid_lines = new Array(11);
+var stick_y_axis_distance_grid_lines = new Array(11);
+var stick_show_axis = new Array(11);
+for( let i = 1; i <= 10; i ++ )
+{
+    stick_canvas[i] = document.getElementById(`stick-canvas-${i}`);
+    stick_ctx[i] = stick_canvas[i].getContext("2d");
+    stick_canvas_width[i] = stick_canvas[i].width;
+    stick_canvas_height[i] = stick_canvas[i].height;
+    stick_num_lines_x[i] = Math.floor(stick_canvas_height[i] / stick_grid_size[i]);
+    stick_num_lines_y[i] = Math.floor(stick_canvas_width[i] / stick_grid_size[i]);
+    stick_x_axis_distance_grid_lines[i] = stick_num_lines_x[i] - 1;
+    stick_y_axis_distance_grid_lines[i] = 0;
+    stick_show_axis[i] = false;
+    
+    // Translate to the new origin. Now Y-axis of the canvas is opposite to the Y-axis of the graph. So the y-coordinate of each element will be negative of the actual
+    stick_ctx[i].translate(stick_y_axis_distance_grid_lines[i] * stick_grid_size[i], stick_x_axis_distance_grid_lines[i] * stick_grid_size[i]);
+}
+
+var drawStickBaseLine = function( condId ) {
+    // erase
+    // ctx.clearRect( 0, grid_size, canvas_width, - canvas_height);
+    stick_ctx[condId].clearRect( 0, 100, stick_canvas_width[condId] + 100, - stick_canvas_height[condId] - 100);
+
+    var angleRadian = degreeToRadian( parseFloat($(`#inputform-${condId} #a-7-1`).val()) );
+    var e2 = parseFloat($(`#inputform-${condId} #e-2-1`).val());
+    var overhang = Math.max(100, Math.floor(e2 * stick_grid_size[condId] * Math.sin(Math.PI / 2 - angleRadian )));
+
+    stick_ctx[condId].translate(overhang, -100);
+    
+    if( stick_show_axis[condId] )
+    {
+        // Draw grid lines along X-axis
+        for(var i = 0; i <= stick_num_lines_x[condId]; i += 2) {
+            stick_ctx[condId].beginPath();
+            stick_ctx[condId].lineWidth = 1;
+            
+            // If line represents X-axis draw in different color
+            if(i == 0/*x_axis_distance_grid_lines*/) 
+                stick_ctx[condId].strokeStyle = "#000000";
+            else
+                stick_ctx[condId].strokeStyle = "#e9e9e9";
+            
+            if(i == stick_num_lines_x[condId]) {
+                stick_ctx[condId].moveTo(0, stick_grid_size[condId] * i);
+                stick_ctx[condId].lineTo(stick_canvas_width[condId], stick_grid_size[condId] * i);
+            }
+            else {
+                stick_ctx[condId].moveTo(0, -stick_grid_size[condId] * i + 0.5);
+                stick_ctx[condId].lineTo(stick_canvas_width[condId], -stick_grid_size[condId] * i + 0.5);
+            }
+            stick_ctx[condId].stroke();
+        }
+
+        // Draw grid lines along Y-axis
+        for(i = 0; i <= stick_num_lines_y[condId]; i += 2) {
+            stick_ctx[condId].beginPath();
+            stick_ctx[condId].lineWidth = 1;
+            
+            // If line represents X-axis draw in different color
+            if(i == stick_y_axis_distance_grid_lines[condId]) 
+                stick_ctx[condId].strokeStyle = "#000000";
+            else
+                stick_ctx[condId].strokeStyle = "#e9e9e9";
+            
+            if(i == stick_num_lines_y[condId]) {
+                stick_ctx[condId].moveTo(stick_grid_size[condId] * i, 0);
+                stick_ctx[condId].lineTo(stick_grid_size[condId] * i, -stick_canvas_height[condId]);
+            }
+            else {
+                stick_ctx[condId].moveTo(stick_grid_size[condId] * i + 0.5, 0);
+                stick_ctx[condId].lineTo(stick_grid_size[condId] * i + 0.5, -stick_canvas_height[condId]);
+            }
+            stick_ctx[condId].stroke();
+        }
+
+
+        // Ticks marks along the positive X-axis
+        for(i = 2; i < (stick_num_lines_y[condId] - stick_y_axis_distance_grid_lines[condId]); i += 2) {
+            stick_ctx[condId].beginPath();
+            stick_ctx[condId].lineWidth = 1;
+            stick_ctx[condId].strokeStyle = "#000000";
+
+            // Draw a tick mark 6px long (-3 to 3)
+            stick_ctx[condId].moveTo(stick_grid_size[condId] * i + 0.5, -3);
+            stick_ctx[condId].lineTo(stick_grid_size[condId] * i + 0.5, 3);
+            stick_ctx[condId].stroke();
+
+            // Text value at that point
+            stick_ctx[condId].font = '9px Arial';
+            stick_ctx[condId].textAlign = 'start';
+            stick_ctx[condId].fillText(stick_x_axis_starting_point[condId].number * i + stick_x_axis_starting_point[condId].suffix, stick_grid_size[condId] * i - 2, 15);
+        }
+
+        // Ticks marks along the negative X-axis
+        for(i = 2; i < stick_y_axis_distance_grid_lines[condId]; i += 2) {
+            stick_ctx[condId].beginPath();
+            stick_ctx[condId].lineWidth = 1;
+            stick_ctx[condId].strokeStyle = "#000000";
+
+            // Draw a tick mark 6px long (-3 to 3)
+            stick_ctx[condId].moveTo(-stick_grid_size[condId] * i + 0.5, -3);
+            stick_ctx[condId].lineTo(-stick_grid_size[condId] * i + 0.5, 3);
+            stick_ctx[condId].stroke();
+
+            // Text value at that point
+            stick_ctx[condId].font = '9px Arial';
+            stick_ctx[condId].textAlign = 'end';
+            stick_ctx[condId].fillText(-stick_x_axis_starting_point[condId].number * i + stick_x_axis_starting_point[condId].suffix, -stick_grid_size[condId] * i + 3, 15);
+        }
+
+        // Ticks marks along the positive Y-axis
+        // Positive Y-axis of graph is negative Y-axis of the canvas
+        for(i = 2; i < (stick_num_lines_x[condId] - stick_x_axis_distance_grid_lines[condId]); i += 2) {
+            stick_ctx[condId].beginPath();
+            stick_ctx[condId].lineWidth = 1;
+            stick_ctx[condId].strokeStyle = "#000000";
+
+            // Draw a tick mark 6px long (-3 to 3)
+            stick_ctx[condId].moveTo(-3, stick_grid_size[condId] * i + 0.5);
+            stick_ctx[condId].lineTo(3, stick_grid_size[condId] * i + 0.5);
+            stick_ctx[condId].stroke();
+
+            // Text value at that point
+            stick_ctx[condId].font = '9px Arial';
+            stick_ctx[condId].textAlign = 'start';
+            stick_ctx[condId].fillText(-stick_y_axis_starting_point[condId].number * i + stick_y_axis_starting_point[condId].suffix, 8, stick_grid_size[condId] * i + 3);
+        }
+
+        // Ticks marks along the negative Y-axis
+        // Negative Y-axis of graph is positive Y-axis of the canvas
+        for(i = 2; i < stick_x_axis_distance_grid_lines[condId]; i += 2) {
+            stick_ctx[condId].beginPath();
+            stick_ctx[condId].lineWidth = 1;
+            stick_ctx[condId].strokeStyle = "#000000";
+
+            // Draw a tick mark 6px long (-3 to 3)
+            stick_ctx[condId].moveTo(-3, -stick_grid_size[condId] * i + 0.5);
+            stick_ctx[condId].lineTo(3, -stick_grid_size[condId] * i + 0.5);
+            stick_ctx[condId].stroke();
+
+            // Text value at that point
+            stick_ctx[condId].font = '9px Arial';
+            stick_ctx[condId].textAlign = 'start';
+            stick_ctx[condId].fillText(stick_y_axis_starting_point[condId].number * i + stick_y_axis_starting_point[condId].suffix, 8, -stick_grid_size[condId] * i + 3);
+        }
+    }
+}
+
+var adjustStickDrawingPanel = function( condId ) {
+    var topYPoint = 0, topXPoint = 0;
+
+    var angleRadian = degreeToRadian( parseFloat($(`#inputform-${condId} #a-7-1`).val()) );
+    topYPoint = parseFloat($(`#inputform-${condId} #a-9-1`).val());
+    topXPoint = (1.0 / Math.tan(angleRadian)) * topYPoint;
+ 
+    // console.log("topXpoint : " + topXPoint);
+    // console.log("topYpoint : " + topYPoint);
+
+    var e2 = parseFloat($(`#inputform-${condId} #e-2-1`).val());
+
+    var xx = Math.floor((stick_canvas_width[condId] - Math.max(100, Math.floor(e2 * stick_grid_size[condId] * Math.sin(Math.PI / 2 - degreeToRadian(parseFloat($(`#inputform-${condId} #txt-roof-degree`).val())) )))) / topXPoint);
+    var yy = Math.floor((stick_canvas_height[condId] - 150) / topYPoint);  // for height adjustment
+
+    // if (xx > yy) { 
+    //     if (grid_size > yy) { grid_size = yy; }
+    // }
+    // else { 
+    //     if (grid_size > xx) { grid_size = xx; }
+    // }
+
+    if (xx > yy) { stick_grid_size[condId] = yy; }
+    else { stick_grid_size[condId] = xx; }
+
+    // adjust grid_size        
+    stick_num_lines_x[condId] = Math.floor(stick_canvas_height[condId] / stick_grid_size[condId]);
+    stick_num_lines_y[condId] = Math.floor(stick_canvas_width[condId] / stick_grid_size[condId]);
+    stick_x_axis_distance_grid_lines[condId] = stick_num_lines_x[condId] - 1;
+}
+
+var drawStickGraph = function( condId ) {
+    adjustStickDrawingPanel(condId);
+    drawStickBaseLine(condId);
+
+    var label_index = 1;
+
+    // Draw Overhang
+    var angle = parseFloat($(`#inputform-${condId} #a-7-1`).val());
+    var angleRadian = degreeToRadian(angle);
+    
+    var e2 = parseFloat($(`#inputform-${condId} #e-2-1`).val());
+    var e1 = parseFloat($(`#inputform-${condId} #e-1-1`).val());
+
+    var overhang = Math.max(100, Math.floor(e2 * stick_grid_size[condId] * Math.sin(Math.PI / 2 - angleRadian )));
+
+    stick_ctx[condId].beginPath();
+    stick_ctx[condId].lineWidth = 2;
+    stick_ctx[condId].strokeStyle = "#0000FF";
+    stick_ctx[condId].moveTo(0, 0);
+    stick_ctx[condId].lineTo( - Math.sin(Math.PI / 2 - angleRadian) * e2 * stick_grid_size[condId], Math.cos(Math.PI / 2 - angleRadian) * e2 * stick_grid_size[condId]);
+    stick_ctx[condId].stroke();
+
+    // Draw Wall
+    stick_ctx[condId].beginPath();
+    stick_ctx[condId].lineWidth = 2;
+    stick_ctx[condId].strokeStyle = "#0000FF";
+    stick_ctx[condId].moveTo(0, 0);
+    stick_ctx[condId].lineTo(0, 100);
+    stick_ctx[condId].stroke();
+
+    // Draw Roof
+    var roofHeight = parseFloat($(`#inputform-${condId} #a-9-1`).val());
+
+    stick_ctx[condId].beginPath();
+    stick_ctx[condId].lineWidth = 2;
+    stick_ctx[condId].strokeStyle = "#0000FF";
+    stick_ctx[condId].moveTo(0, 0);
+    stick_ctx[condId].lineTo(roofHeight * (1 / Math.tan(angleRadian))  * stick_grid_size[condId], - roofHeight * stick_grid_size[condId]);
+    stick_ctx[condId].stroke();
+
+    // Draw Floor
+    stick_ctx[condId].beginPath();
+    stick_ctx[condId].lineWidth = 2;
+    stick_ctx[condId].strokeStyle = "#0000FF";
+    stick_ctx[condId].moveTo(0, 0);
+    stick_ctx[condId].lineTo(roofHeight * (1 / Math.tan(angleRadian))  * stick_grid_size[condId], 0);
+    stick_ctx[condId].stroke();
+
+    // Draw Knee Wall
+    var kneeWallHeight = parseFloat($(`#inputform-${condId} #c-4-1`).val());
+
+    stick_ctx[condId].beginPath();
+    stick_ctx[condId].lineWidth = 2;
+    stick_ctx[condId].strokeStyle = "#0000FF";
+    stick_ctx[condId].moveTo(kneeWallHeight * (1 / Math.tan(angleRadian))  * stick_grid_size[condId], 0);
+    stick_ctx[condId].lineTo(kneeWallHeight * (1 / Math.tan(angleRadian))  * stick_grid_size[condId], - kneeWallHeight * stick_grid_size[condId]);
+    stick_ctx[condId].stroke();
+
+    // Draw Collar Tie
+    var collarTieHeight = parseFloat($(`#inputform-${condId} #c-2-1`).val());
+    stick_ctx[condId].beginPath();
+    stick_ctx[condId].lineWidth = 2;
+    stick_ctx[condId].strokeStyle = "#0000FF";
+    stick_ctx[condId].moveTo(collarTieHeight * (1 / Math.tan(angleRadian))  * stick_grid_size[condId], - collarTieHeight * stick_grid_size[condId]);
+    stick_ctx[condId].lineTo(roofHeight * (1 / Math.tan(angleRadian))  * stick_grid_size[condId], - collarTieHeight * stick_grid_size[condId]);
+    stick_ctx[condId].stroke();
+
+    // Draw solar rectangles
+    var e3 = e2 - e1;
+    var moduleDepth = 1.17 / 12;
+    var moduleWidth = parseFloat($("#pv-module-width").val()) / 12;
+    var moduleHeight = parseFloat($("#pv-module-length").val()) / 12;
+    var moduleGap = parseFloat($(`#inputform-${condId} #g-1-1`).val()) / 12;
+
+    var startPoint = [- Math.sin(Math.PI / 2 - angleRadian) * e3 * stick_grid_size[condId] -10 * Math.sin(angleRadian), Math.cos(Math.PI / 2 - angleRadian) * e3 * stick_grid_size[condId] - 10];
+    stick_ctx[condId].translate(startPoint[0], startPoint[1]);
+    stick_ctx[condId].rotate(- angleRadian);
+    stick_ctx[condId].beginPath();
+    stick_ctx[condId].lineWidth = 2;
+    stick_ctx[condId].strokeStyle = "#000000";
+
+    totalRoofLength = parseFloat($(`#inputform-${condId} #a-9-1`).val()) / Math.sin(angleRadian);
+    var maxModuleCount = parseInt($(`#inputform-${condId} #f-1-1`).val());
+    
+    let i = 1;
+    let moduleLengthSum = 0;
+    let moduleStartX = 0;
+    var orientation = false;
+    
+    if($(`#inputform-${conditionId} #a-6-1`).val() == "Portrait")
+        orientation = true;
+    if($(`#inputform-${conditionId} #h-1-1`)[0].checked)
+        orientation = !orientation;
+    moduleLengthSum += (moduleGap + (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)));
+
+    do
+    {
+        stick_ctx[condId].strokeRect(moduleStartX * stick_grid_size[condId], 0, (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)) * stick_grid_size[condId], moduleDepth * stick_grid_size[condId]);
+        moduleStartX += (moduleGap + (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)));
+        
+        orientation = false;
+        if($(`#inputform-${conditionId} #a-6-1`).val() == "Portrait")
+            orientation = true;
+        if($(`#inputform-${conditionId} #h-${i + 1}-1`)[0].checked)
+            orientation = !orientation;
+
+        i ++;
+        moduleLengthSum += (moduleGap + (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)));
+    } while( i <= maxModuleCount && moduleLengthSum <= totalRoofLength )
+    
+
+    stick_ctx[condId].rotate(angleRadian);
+    stick_ctx[condId].translate(- startPoint[0], - startPoint[1]);
+
+    stick_ctx[condId].translate(-overhang, 100);
+}
 
 $(document).ready(function() {
     $.ajaxSetup({
@@ -1637,10 +2029,14 @@ $(document).ready(function() {
     });
     $('#option-module-type').on('change', function() {
         updatePVSubmoduleField($(this).children("option:selected").val());
+        for(let i = 1; i <= 10; i ++)
+            drawTrussGraph(i);
     });
     $('#option-module-subtype').on('change', function() {
         updatePVSubmoduleField( $('#option-module-type').children("option:selected").val(), 
                                 $(this).children("option:selected").val());
+        for(let i = 1; i <= 10; i ++)
+            drawTrussGraph(i);
     });
     $('#option-inverter-type').on('change', function() {
         updatePVInvertorSubField($(this).children("option:selected").val());
@@ -1715,10 +2111,32 @@ $(document).ready(function() {
         $(`#inputform-${i} #option-floor-member-type`).on('change', function() {
             updateFloorMemberType(window.conditionId, $(this).children("option:selected").val());
         });
+        $(`#inputform-${i} #truss-axis`).on('change', function() {
+            show_axis[window.conditionId] = !show_axis[window.conditionId];
+            drawTrussGraph(window.conditionId);
+        });
+        $(`#inputform-${i} #stick-axis`).on('change', function() {
+            stick_show_axis[window.conditionId] = !stick_show_axis[window.conditionId];
+            drawStickGraph(window.conditionId);
+        });
+        $(`#inputform-${i} #a-6-1, #inputform-${i} #g-1-1`).on('change', function() {
+            drawTrussGraph(window.conditionId);
+        });
+        $(`#inputform-${i} #f-1-1, #inputform-${i} #e-1-1, #inputform-${i} #e-2-1`).on('change', function() {
+            drawTrussGraph(window.conditionId);
+            drawStickGraph(window.conditionId);
+        });
+        $(`#inputform-${i} #a-7-1, #inputform-${i} #a-9-1, #inputform-${i} #c-2-1, #inputform-${i} #c-4-1`).on('change', function() {
+            drawStickGraph(window.conditionId);
+        });
     }
+    $(`#h-1-1, #h-2-1, #h-3-1, #h-4-1, #h-5-1, #h-6-1, #h-7-1, #h-8-1, #h-9-1, #h-10-1, #h-11-1, #h-12-1`)
+    .click( function() {
+        drawTrussGraph(window.conditionId);
+    });
     $(`#diag-1-1, #diag-1-2, #diag-1-3, #diag-1-4, #diag-1-5, #diag-1-6, #diag-2-1, #diag-2-2, #diag-2-3, #diag-2-4, #diag-2-5, #diag-2-6, #diag-2-reverse-1, #diag-2-reverse-2, #diag-2-reverse-3, #diag-2-reverse-4, #diag-2-reverse-5, #diag-2-reverse-6`)
     .click( function(){
-        drawGraph(window.conditionId);
+        drawTrussGraph(window.conditionId);
     });
 
     // Framing condition related function
@@ -1744,7 +2162,7 @@ $(document).ready(function() {
         e.stopPropagation(); 
 
         if (isEmptyInputBox() == true) { 
-            swal({ title: "Warning", text: "Please fill blank fields.", icon: "warning", buttons: { confirm: "OK" } });
+            swal.fire({ title: "Warning", text: "Please fill blank fields.", icon: "warning", confirmButtonText: `OK` });
             return; 
         }
 
@@ -1764,32 +2182,34 @@ $(document).ready(function() {
                     if (status == 'Data Check') {
                         message = 'Input Data sent for review. An email will be sent to you summarizing the data input and notifying you of any problems.\nGo back to home page?';
                     }
-                    swal({
+                    swal.fire({
                         title: "Success",
                         text: message,
                         icon: "success",
-                        buttons: { confirm: "Yes", cancel: "No" }
+                        showCancelButton: true,
+                        confirmButtonText: `Yes`,
+                        cancelButtonText: `No`,
                     })
-                    .then(( confirm ) => {
-                        if ( confirm ) {
+                    .then(( result ) => {
+                        if ( result.value ) {
                             window.location = "{{ route('home') }}";
                         } 
                     });
                 } else {
                     // error handling
-                    swal({ title: "Error",
+                    swal.fire({ title: "Error",
                         text: "Error happened while processing. Please try again later.",
                         icon: "error",
-                        buttons: { confirm: "OK" } });
+                        confirmButtonText: `OK` });
                 }
             },
             error: function(xhr, status, error) {
                 res = JSON.parse(xhr.responseText);
                 message = res.message;
-                swal({ title: "Error",
+                swal.fire({ title: "Error",
                         text: message == "" ? "Error happened while processing. Please try again later." : message,
                         icon: "error",
-                        buttons: { confirm: "OK" } });
+                        confirmButtonText: `OK` });
             }
         });
         
@@ -1830,6 +2250,10 @@ $(document).ready(function() {
         for(i = 1; i <= 10; i ++)
         {
             drawBaseLine(i);
+            ctx[i].translate(-100, 100);
+
+            drawStickGraph(i);
+            //stick_ctx[i].translate(-100, 100);
 
             keepStatus = true;
             if (preloaded_data.length == 0)

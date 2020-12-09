@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
 
-        <title>Princeton Engineering</title>
+        <title>Super Admin Panel</title>
 
         <meta name="description" content="Princeton Engineering">
         <meta name="author" content="pixelcave">
@@ -45,7 +45,7 @@
 
         <script src="{{ asset('js/jquery.min.js') }}"></script>
         <script type="text/javascript" src="{{ asset('js/sweetalert.min.js') }}" ></script>
-        
+       
         <script src="{{ asset('js/dashmix.core.min.js') }}"></script>
         <script src="{{ asset('js/dashmix.app.min.js') }}"></script>
     </head>
@@ -248,7 +248,7 @@
                 <div class="content py-0">
                     <div class="row font-size-sm">
                         <div class="col-sm-6 order-sm-2 mb-1 mb-sm-0 text-center text-sm-right">
-                            Crafted with <i class="fa fa-heart text-danger"></i> by <a class="font-w600" href="#" target="_blank">.</a>
+                            .
                         </div>
                         <div class="col-sm-6 order-sm-1 text-center text-sm-left">
                             <a class="font-w600" href="#" target="_blank">Copyright © 2020 Richard Pantel. All Rights Reserved</span>

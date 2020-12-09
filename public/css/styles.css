@@ -131,3 +131,20 @@ html, body {
     -webkit-animation: fadeEffect 0.6s;
   	animation: fadeEffect 0.6s;
 }
+
+.axisCheckBox {
+    position: absolute;
+    left: 20px;
+    top: 10px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.axisCheckBox input{
+    margin-right: 5px;
+}
+
+.axisCheckBox label{
+    margin: 0px;
+}

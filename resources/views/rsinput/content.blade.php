@@ -116,7 +116,7 @@
             <td class="w400-bdr">A-9</td>
             <td class="iw400-right-bdr" id="label-A-9">Rise from Rafter Plate to Top Ridge</td>
             <td class="iw400-bdr">ft</td>
-            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="a-9-1"  tabindex="33" value="0.00"></input></td>
+            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="a-9-1"  tabindex="33" value="5.00"></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
         <tr class="h13">
@@ -178,7 +178,7 @@
         </tr>
         <tr class="h13 class-truss-hide">
             <td><div style="overflow:hidden"></td>
-            <td class="iw400-bdr" style="vertical-align : middle;" rowspan="3">Collar Tie Information</td>
+            <td class="iw400-bdr" style="vertical-align : middle;" rowspan="4">Collar Tie Information</td>
             <td class="w400-bdr">C-1</td>
             <td class="iw400-right-bdr">Collar Tie Description</td>
             <td class="iw400-bdr">text</td>
@@ -190,7 +190,7 @@
             <td class="w400-bdr">C-2</td>
             <td class="iw400-right-bdr">Dist. from Top of Collar Tie to Attic Deck</td>
             <td class="iw400-bdr">ft</td>
-            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="c-2-1"  tabindex="40" value="6.08"></input></td>
+            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="c-2-1"  tabindex="40" value="3.08"></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
         <tr class="h13 class-truss-hide">
@@ -199,6 +199,14 @@
             <td class="iw400-right-bdr">Tie Spacing - Center to Center</td>
             <td class="iw400-bdr">in</td>
             <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="c-3-1"  tabindex="41" value="32.00"></input></td>
+            <td><div style="overflow:hidden"></td>
+        </tr>
+        <tr class="h13 class-truss-hide">
+            <td><div style="overflow:hidden"></td>
+            <td class="w400-bdr">C-4</td>
+            <td class="iw400-right-bdr">Collar Tie / Knee Wall</td>
+            <td class="iw400-bdr">ft</td>
+            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="c-4-1"  tabindex="41" value="2.00"></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
         <tr class="h13">
@@ -393,7 +401,13 @@
             <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="i-1-1" tabindex="56"></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
-
+        <tr class="class-truss-hide">
+            <td><div style="overflow:hidden"></td>
+            <td colspan="11" rowspan="19" style="position: relative;" class="iw400-bdr">
+                <canvas class="px-4" id="stick-canvas-{{ $conditionId }}" style="z-index:2; background:aliceblue" width="900px" height="500px"></canvas>
+                <div class="axisCheckBox"><input type="checkbox" id="stick-axis" tabindex="106"><label for="stick-axis">Show axis</label></div>
+            </td>
+        </tr>
     </tbody>
     </table>
 
@@ -893,11 +907,12 @@
                 <td><div style="overflow:hidden"></td>
                 <td><div style="overflow:hidden"></td>
             </tr>
-            <tr class="h13">
+            <!-- <tr class="h13">
                 <td class="iw400" colspan="11" style="text-align:left;">Loading includes member self weight and roofing materials  w loading = wind on exposed areas</td>
-            </tr>
-            <td colspan="11" rowspan="19">
-                <canvas class="px-4" id="canvas-{{ $conditionId }}" style="z-index:2; background:aliceblue" width="800px" height="400px"></canvas>
+            </tr> -->
+            <td colspan="11" rowspan="19" style="position: relative;">
+                <canvas class="px-4" id="canvas-{{ $conditionId }}" style="z-index:2; background:aliceblue" width="900px" height="500px"></canvas>
+                <div class="axisCheckBox"><input type="checkbox" id="truss-axis" tabindex="106"><label for="truss-axis">Show axis</label></div>
             </td>
             </tbody>
         </table>
