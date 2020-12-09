@@ -28,8 +28,8 @@
             <div class="content-header">
                 <!-- Company Text -->
                 <div class="companyText">
-                    <a class="link-fx font-size-lg text-black" href="/">
-                            Princeton Engineering
+                    <a class="link-fx font-size-lg text-black" href="http://www.princeton-engineering.com/">
+                        Princeton Engineering Home Page
                     </a>
                 </div>
                 <!-- END Company Text -->
