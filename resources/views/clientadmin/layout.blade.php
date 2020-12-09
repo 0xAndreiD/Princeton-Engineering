@@ -301,6 +301,11 @@
         <script src="{{ asset('js/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
         <script src="{{ asset('js/pages/be_comp_dialogs.min.js') }}"></script>
 
+        <!-- Modal JS Plugins -->
+        <script src="{{ asset('js/plugins/es6-promise/es6-promise.auto.min.js') }}"></script>
+        <script src="{{ asset('js/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
+        <script src="{{ asset('js/pages/be_comp_dialogs.min.js') }}"></script>
+
         <!-- Page JS Plugins -->
         <script src="{{ asset('js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
         <script src="{{ asset('js/plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
