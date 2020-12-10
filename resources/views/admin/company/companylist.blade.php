@@ -36,14 +36,14 @@
                 <table id="companys" class="table table-bordered table-striped table-vcenter text-center" style="width:100%;">
                     <thead>
                         <tr>
-                            <th class="text-center" style="width: 50px;">ID</th>
-                            <th style="width:10%">Name</th>
-                            <th style="width:8%;">Number</th>
+                            <th class="text-center" style="width: 5%;">ID</th>
+                            <th style="width:20%">Name</th>
+                            <th style="width:5%;">Number</th>
                             <th style="width:10%;">Tel No</th>
-                            <th style="width:15%;">Address</th>
+                            <th style="width:20%;">Address</th>
                             <th style="width:15%;">Email</th>
-                            <th style="width:15%;">Website</th>
-                            <th style="width:150px;">Action</th>
+                            <th style="width:10%;">Website</th>
+                            <th style="min-width:150px;">Action</th>
                         </tr>
                     </thead>
                     <tbody>

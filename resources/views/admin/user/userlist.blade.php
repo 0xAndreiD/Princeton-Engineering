@@ -36,12 +36,12 @@
                 <table id="users" class="table table-bordered table-striped table-vcenter text-center" style="width:100%;">
                     <thead>
                         <tr>
-                            <th class="text-center" style="width: 50px;">ID</th>
-                            <th style="width:15%">Name</th>
+                            <th class="text-center" style="width: 5%;">ID</th>
+                            <th style="width:20%">Name</th>
                             <th style="width:20%;">Email</th>
-                            <th style="width:10%;">Company</th>
-                            <th style="width:20%;">UserRole</th>
-                            <th style="width:20%;">UserNumber</th>
+                            <th style="width:30%;">Company</th>
+                            <th style="width:5%;">UserRole</th>
+                            <th style="width:5%;">UserNumber</th>
                             <!-- <th class="text-center" style="width: 15%;">Verified</th>
                             <th class="d-none d-md-table-cell" style="width: 10%;">Role</th>
                             <th class="d-none d-md-table-cell" style="width: 10%;">Company</th>
@@ -51,7 +51,7 @@
                             <th class="d-none d-sm-table-cell" style="width: 15%;">Created Time</th>
                             <th class="d-none d-sm-table-cell" style="width: 15%;">Updated Time</th>
                             <th class="d-none d-sm-table-cell" style="width: 15%;">Registered</th> -->
-                            <th style="width: 100px;">Action</th>
+                            <th style="min-width: 150px;">Action</th>
                         </tr>
                     </thead>
                     <tbody>
