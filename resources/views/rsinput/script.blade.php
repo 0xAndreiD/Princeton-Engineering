@@ -372,7 +372,7 @@ var drawTrussGraph = function( condId ) {
     ctx[condId].beginPath();
     ctx[condId].font = '16px Arial';
     ctx[condId].textAlign = 'middle';
-    ctx[condId].fillText("Floor", floorWidth * grid_size[condId] / 2 - 20, 30);
+    ctx[condId].fillText("Attic Floor", floorWidth * grid_size[condId] / 2, 30);
 
     // draw di­agonals lines 
     var index = 0;
@@ -428,7 +428,9 @@ var drawTrussGraph = function( condId ) {
     ctx[condId].beginPath();
     ctx[condId].font = '16px Arial';
     ctx[condId].textAlign = 'middle';
-    ctx[condId].fillText("Wall", 10, 60);
+    ctx[condId].rotate(- Math.PI / 2);
+    ctx[condId].fillText("Wall", - 60, 20);
+    ctx[condId].rotate(Math.PI / 2);
 
     // Draw solar rectangles
     var e3 = e2 - e1;
@@ -452,7 +454,7 @@ var drawTrussGraph = function( condId ) {
     var maxModuleCount = parseInt($(`#inputform-${condId} #f-1-1`).val());
     
     let i = 1;
-    let moduleLengthSum = 0;
+    //let moduleLengthSum = 0;
     let moduleStartX = 0;
     var orientation = false;
     
@@ -460,9 +462,9 @@ var drawTrussGraph = function( condId ) {
         orientation = true;
     if($(`#inputform-${conditionId} #h-1-1`)[0].checked)
         orientation = !orientation;
-    moduleLengthSum += (moduleGap + (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)));
+    //moduleLengthSum += (moduleGap + (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)));
 
-    do
+    while(i <= maxModuleCount)
     {
         ctx[condId].strokeRect(moduleStartX * grid_size[condId], 0, (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)) * grid_size[condId], moduleDepth * grid_size[condId]);
         moduleStartX += (moduleGap + (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)));
@@ -474,8 +476,9 @@ var drawTrussGraph = function( condId ) {
             orientation = !orientation;
 
         i ++;
-        moduleLengthSum += (moduleGap + (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)));
-    } while( i <= maxModuleCount && moduleLengthSum <= totalRoofLength )
+        //moduleLengthSum += (moduleGap + (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)));
+    }
+    //} while( i <= maxModuleCount && moduleLengthSum <= totalRoofLength )
     
 
     ctx[condId].rotate(angleRadian);
@@ -1061,11 +1064,13 @@ var detectCorrectTownForMA = function() {
         }
 
         $('#txt-city-comment').html(err_message);
-        $('#txt-city-comment').css('color', '#FFC7CE');
+        $('#txt-city-comment').css('color', '#FF0000');
+        $('#txt-city-comment').css('font-weight', 'bold');
     }
     else {
         $('#txt-city-comment').html("");
         $('#txt-city-comment').css('color', 'black');
+        $('#txt-city-comment').css('font-weight', 'normal');
     }
 }
 
@@ -1836,7 +1841,9 @@ var drawStickGraph = function( condId ) {
 
     stick_ctx[condId].font = '16px Arial';
     stick_ctx[condId].textAlign = 'end';
-    stick_ctx[condId].fillText("Wall", 40, 60);
+    stick_ctx[condId].rotate(- Math.PI / 2);
+    stick_ctx[condId].fillText("Wall", -40, 20);
+    stick_ctx[condId].rotate(Math.PI / 2);
 
     // Draw Roof
     var roofHeight = parseFloat($(`#inputform-${condId} #a-9-1`).val());
@@ -1857,8 +1864,8 @@ var drawStickGraph = function( condId ) {
     stick_ctx[condId].stroke();
 
     stick_ctx[condId].font = '16px Arial';
-    stick_ctx[condId].textAlign = 'end';
-    stick_ctx[condId].fillText("Floor", roofHeight * (1 / Math.tan(angleRadian))  * stick_grid_size[condId] / 2, 30);
+    stick_ctx[condId].textAlign = 'start';
+    stick_ctx[condId].fillText("Attic Floor", roofHeight * (1 / Math.tan(angleRadian))  * stick_grid_size[condId] / 2, 30);
 
     // Draw Knee Wall
     var kneeWallHeight = parseFloat($(`#inputform-${condId} #c-4-1`).val());
@@ -1893,11 +1900,11 @@ var drawStickGraph = function( condId ) {
     stick_ctx[condId].lineWidth = 2;
     stick_ctx[condId].strokeStyle = "#000000";
 
-    totalRoofLength = parseFloat($(`#inputform-${condId} #a-9-1`).val()) / Math.sin(angleRadian);
+    //totalRoofLength = parseFloat($(`#inputform-${condId} #a-9-1`).val()) / Math.sin(angleRadian);
     var maxModuleCount = parseInt($(`#inputform-${condId} #f-1-1`).val());
     
     let i = 1;
-    let moduleLengthSum = 0;
+    //let moduleLengthSum = 0;
     let moduleStartX = 0;
     var orientation = false;
     
@@ -1905,9 +1912,9 @@ var drawStickGraph = function( condId ) {
         orientation = true;
     if($(`#inputform-${conditionId} #h-1-1`)[0].checked)
         orientation = !orientation;
-    moduleLengthSum += (moduleGap + (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)));
+    //moduleLengthSum += (moduleGap + (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)));
 
-    do
+    while(i <= maxModuleCount)
     {
         stick_ctx[condId].strokeRect(moduleStartX * stick_grid_size[condId], 0, (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)) * stick_grid_size[condId], moduleDepth * stick_grid_size[condId]);
         moduleStartX += (moduleGap + (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)));
@@ -1919,8 +1926,9 @@ var drawStickGraph = function( condId ) {
             orientation = !orientation;
 
         i ++;
-        moduleLengthSum += (moduleGap + (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)));
-    } while( i <= maxModuleCount && moduleLengthSum <= totalRoofLength )
+        //moduleLengthSum += (moduleGap + (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)));
+    }
+    //} while( i <= maxModuleCount && moduleLengthSum <= totalRoofLength )
     
 
     stick_ctx[condId].rotate(angleRadian);
@@ -2151,6 +2159,7 @@ $(document).ready(function() {
     }
     $(`#h-1-1, #h-2-1, #h-3-1, #h-4-1, #h-5-1, #h-6-1, #h-7-1, #h-8-1, #h-9-1, #h-10-1, #h-11-1, #h-12-1`)
     .click( function() {
+        drawStickGraph(window.conditionId);
         drawTrussGraph(window.conditionId);
     });
     $(`#diag-1-1, #diag-1-2, #diag-1-3, #diag-1-4, #diag-1-5, #diag-1-6, #diag-2-1, #diag-2-2, #diag-2-3, #diag-2-4, #diag-2-5, #diag-2-6, #diag-2-reverse-1, #diag-2-reverse-2, #diag-2-reverse-3, #diag-2-reverse-4, #diag-2-reverse-5, #diag-2-reverse-6`)
