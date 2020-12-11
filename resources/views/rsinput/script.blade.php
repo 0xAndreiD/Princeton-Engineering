@@ -116,8 +116,8 @@ var drawBaseLine = function( condId ) {
     ctx[condId].clearRect( 0, grid_size[condId], canvas_width[condId] + 100, - canvas_height[condId] - 100);
 
     var angleRadian = degreeToRadian( parseFloat($(`#inputform-${condId} #txt-roof-degree`).val()) );
-    var e2 = parseFloat($(`#inputform-${condId} #e-2-1`).val());
-    var overhang = Math.max(100, Math.floor(e2 * grid_size[condId] * Math.sin(Math.PI / 2 - angleRadian )));
+    var overhangLength = parseFloat($(`#inputform-${condId} #a-11-1`).val());
+    var overhang = Math.max(100, Math.floor(overhangLength * grid_size[condId] * Math.sin(Math.PI / 2 - angleRadian )));
 
     ctx[condId].translate(overhang, -100);
     
@@ -261,9 +261,9 @@ var adjustDrawingPanel = function( condId ) {
     // console.log("topXpoint : " + topXPoint);
     // console.log("topYpoint : " + topYPoint);
 
-    var e2 = parseFloat($(`#inputform-${condId} #e-2-1`).val());
+    var overhangLength = parseFloat($(`#inputform-${condId} #a-11-1`).val());
 
-    var xx = Math.floor((canvas_width[condId] - Math.max(100, Math.floor(e2 * grid_size[condId] * Math.sin(Math.PI / 2 - degreeToRadian(parseFloat($(`#inputform-${condId} #txt-roof-degree`).val())) )))) / topXPoint);
+    var xx = Math.floor((canvas_width[condId] - Math.max(100, Math.floor(overhangLength * grid_size[condId] * Math.sin(Math.PI / 2 - degreeToRadian(parseFloat($(`#inputform-${condId} #txt-roof-degree`).val())) )))) / topXPoint);
     var yy = Math.floor((canvas_height[condId] - 150) / topYPoint);  // for height adjustment
 
     // if (xx > yy) { 
@@ -405,16 +405,16 @@ var drawTrussGraph = function( condId ) {
     var angle = parseFloat($(`#inputform-${condId} #txt-roof-degree`).val());
     var angleRadian = degreeToRadian(angle);
     
-    var e2 = parseFloat($(`#inputform-${condId} #e-2-1`).val());
-    var e1 = parseFloat($(`#inputform-${condId} #e-1-1`).val());
+    var overhangLength = parseFloat($(`#inputform-${condId} #a-11-1`).val());
+    var uphillDist = parseFloat($(`#inputform-${condId} #e-1-1`).val());
 
-    var overhang = Math.max(100, Math.floor(e2 * grid_size[condId] * Math.sin(Math.PI / 2 - angleRadian )));
+    var overhang = Math.max(100, Math.floor(overhangLength * grid_size[condId] * Math.sin(Math.PI / 2 - angleRadian )));
 
     ctx[condId].beginPath();
     ctx[condId].lineWidth = 2;
     ctx[condId].strokeStyle = "#0000FF";
     ctx[condId].moveTo(0, 0);
-    ctx[condId].lineTo( - Math.sin(Math.PI / 2 - angleRadian) * e2 * grid_size[condId], Math.cos(Math.PI / 2 - angleRadian) * e2 * grid_size[condId]);
+    ctx[condId].lineTo( - Math.sin(Math.PI / 2 - angleRadian) * overhangLength * grid_size[condId], Math.cos(Math.PI / 2 - angleRadian) * overhangLength * grid_size[condId]);
     ctx[condId].stroke();
 
     // Draw Wall
@@ -433,13 +433,13 @@ var drawTrussGraph = function( condId ) {
     ctx[condId].rotate(Math.PI / 2);
 
     // Draw solar rectangles
-    var e3 = e2 - e1;
+    var startModule = overhangLength - uphillDist;
     var moduleDepth = 1.17 / 12;
     var moduleWidth = parseFloat($("#pv-module-width").val()) / 12;
     var moduleHeight = parseFloat($("#pv-module-length").val()) / 12;
     var moduleGap = parseFloat($(`#inputform-${condId} #g-1-1`).val()) / 12;
 
-    var startPoint = [- Math.sin(Math.PI / 2 - angleRadian) * e3 * grid_size[condId] -10 * Math.sin(angleRadian), Math.cos(Math.PI / 2 - angleRadian) * e3 * grid_size[condId] - 10];
+    var startPoint = [- Math.sin(Math.PI / 2 - angleRadian) * startModule * grid_size[condId] -10 * Math.sin(angleRadian), Math.cos(Math.PI / 2 - angleRadian) * startModule * grid_size[condId] - 10];
     ctx[condId].translate(startPoint[0], startPoint[1]);
     ctx[condId].rotate(- angleRadian);
     ctx[condId].beginPath();
@@ -450,7 +450,7 @@ var drawTrussGraph = function( condId ) {
     for (var key in globalRoofLines[condId]) {
         totalRoofLength += getDistance(globalRoofLines[condId][key][0], globalRoofLines[condId][key][1]);
     }
-    totalRoofLength += e3;
+    totalRoofLength += startModule;
     var maxModuleCount = parseInt($(`#inputform-${condId} #f-1-1`).val());
     
     let i = 1;
@@ -1654,8 +1654,8 @@ var drawStickBaseLine = function( condId ) {
     stick_ctx[condId].clearRect( 0, 100, stick_canvas_width[condId] + 100, - stick_canvas_height[condId] - 100);
 
     var angleRadian = degreeToRadian( parseFloat($(`#inputform-${condId} #a-7-1`).val()) );
-    var e2 = parseFloat($(`#inputform-${condId} #e-2-1`).val());
-    var overhang = Math.max(100, Math.floor(e2 * stick_grid_size[condId] * Math.sin(Math.PI / 2 - angleRadian )));
+    var overhangLength = parseFloat($(`#inputform-${condId} #a-11-1`).val());
+    var overhang = Math.max(100, Math.floor(overhangLength * stick_grid_size[condId] * Math.sin(Math.PI / 2 - angleRadian )));
 
     stick_ctx[condId].translate(overhang, -100);
     
@@ -1788,9 +1788,9 @@ var adjustStickDrawingPanel = function( condId ) {
     // console.log("topXpoint : " + topXPoint);
     // console.log("topYpoint : " + topYPoint);
 
-    var e2 = parseFloat($(`#inputform-${condId} #e-2-1`).val());
+    var overhangLenth = parseFloat($(`#inputform-${condId} #a-11-1`).val());
 
-    var xx = Math.floor((stick_canvas_width[condId] - Math.max(100, Math.floor(e2 * stick_grid_size[condId] * Math.sin(Math.PI / 2 - degreeToRadian(parseFloat($(`#inputform-${condId} #txt-roof-degree`).val())) )))) / topXPoint);
+    var xx = Math.floor((stick_canvas_width[condId] - Math.max(100, Math.floor(overhangLenth * stick_grid_size[condId] * Math.sin(Math.PI / 2 - degreeToRadian(parseFloat($(`#inputform-${condId} #txt-roof-degree`).val())) )))) / topXPoint);
     var yy = Math.floor((stick_canvas_height[condId] - 150) / topYPoint);  // for height adjustment
 
     // if (xx > yy) { 
@@ -1819,16 +1819,16 @@ var drawStickGraph = function( condId ) {
     var angle = parseFloat($(`#inputform-${condId} #a-7-1`).val());
     var angleRadian = degreeToRadian(angle);
     
-    var e2 = parseFloat($(`#inputform-${condId} #e-2-1`).val());
-    var e1 = parseFloat($(`#inputform-${condId} #e-1-1`).val());
+    var overhangLength = parseFloat($(`#inputform-${condId} #a-11-1`).val());
+    var uphillDist = parseFloat($(`#inputform-${condId} #e-1-1`).val());
 
-    var overhang = Math.max(100, Math.floor(e2 * stick_grid_size[condId] * Math.sin(Math.PI / 2 - angleRadian )));
+    var overhang = Math.max(100, Math.floor(overhangLength * stick_grid_size[condId] * Math.sin(Math.PI / 2 - angleRadian )));
 
     stick_ctx[condId].beginPath();
     stick_ctx[condId].lineWidth = 2;
     stick_ctx[condId].strokeStyle = "#0000FF";
     stick_ctx[condId].moveTo(0, 0);
-    stick_ctx[condId].lineTo( - Math.sin(Math.PI / 2 - angleRadian) * e2 * stick_grid_size[condId], Math.cos(Math.PI / 2 - angleRadian) * e2 * stick_grid_size[condId]);
+    stick_ctx[condId].lineTo( - Math.sin(Math.PI / 2 - angleRadian) * overhangLength * stick_grid_size[condId], Math.cos(Math.PI / 2 - angleRadian) * overhangLength * stick_grid_size[condId]);
     stick_ctx[condId].stroke();
 
     // Draw Wall
@@ -1887,13 +1887,13 @@ var drawStickGraph = function( condId ) {
     stick_ctx[condId].stroke();
 
     // Draw solar rectangles
-    var e3 = e2 - e1;
+    var startModule = overhangLength - uphillDist;
     var moduleDepth = 1.17 / 12;
     var moduleWidth = parseFloat($("#pv-module-width").val()) / 12;
     var moduleHeight = parseFloat($("#pv-module-length").val()) / 12;
     var moduleGap = parseFloat($(`#inputform-${condId} #g-1-1`).val()) / 12;
 
-    var startPoint = [- Math.sin(Math.PI / 2 - angleRadian) * e3 * stick_grid_size[condId] -10 * Math.sin(angleRadian), Math.cos(Math.PI / 2 - angleRadian) * e3 * stick_grid_size[condId] - 10];
+    var startPoint = [- Math.sin(Math.PI / 2 - angleRadian) * startModule * stick_grid_size[condId] -10 * Math.sin(angleRadian), Math.cos(Math.PI / 2 - angleRadian) * startModule * stick_grid_size[condId] - 10];
     stick_ctx[condId].translate(startPoint[0], startPoint[1]);
     stick_ctx[condId].rotate(- angleRadian);
     stick_ctx[condId].beginPath();
@@ -2149,7 +2149,7 @@ $(document).ready(function() {
         $(`#inputform-${i} #a-6-1, #inputform-${i} #g-1-1`).on('change', function() {
             drawTrussGraph(window.conditionId);
         });
-        $(`#inputform-${i} #f-1-1, #inputform-${i} #e-1-1, #inputform-${i} #e-2-1`).on('change', function() {
+        $(`#inputform-${i} #f-1-1, #inputform-${i} #a-11-1, #inputform-${i} #e-2-1`).on('change', function() {
             drawTrussGraph(window.conditionId);
             drawStickGraph(window.conditionId);
         });
