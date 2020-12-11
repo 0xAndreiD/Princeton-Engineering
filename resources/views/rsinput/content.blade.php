@@ -109,7 +109,7 @@
             <td class="iw400-right-bdr">Diagonal Rafter Length from Plate to Ridge</td>
             <td class="iw400-bdr">ft</td>
             <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="a-8-1"  tabindex="32" value="13.42"></input></td>
-            <td><div style="overflow:hidden"></td>
+            <td class="w400-bdr" id="tc-8-1" style="pointer-events: none;"><input type="text" class="txt-center-align" id="ac-8-1"></td>
         </tr>
         <tr class="h13 class-truss-hide">
             <td><div style="overflow:hidden"></td>
@@ -117,7 +117,7 @@
             <td class="iw400-right-bdr" id="label-A-9">Rise from Rafter Plate to Top Ridge</td>
             <td class="iw400-bdr">ft</td>
             <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="a-9-1"  tabindex="33" value="5.00"></input></td>
-            <td><div style="overflow:hidden"></td>
+            <td class="w400-bdr" id="tc-9-1" style="pointer-events: none;"><input type="text" class="txt-center-align" id="ac-9-1"></td>
         </tr>
         <tr class="h13">
             <td><div style="overflow:hidden"></td>
@@ -125,7 +125,7 @@
             <td class="iw400-right-bdr" id="label-A-10">Horiz Len from Outside of Rafter Plate to Ridge</td>
             <td class="iw400-bdr">ft</td>
             <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="a-10-1"  tabindex="34" value="11.25"></input></td>
-            <td><div style="overflow:hidden"></td>
+            <td class="w400-bdr class-truss-hide" id="tc-10-1" style="pointer-events: none;"><input type="text" class="txt-center-align" style="display: table-cell;" id="ac-10-1"></td>
         </tr>
         <tr class="h13">
             <td><div style="overflow:hidden"></td>

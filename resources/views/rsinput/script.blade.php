@@ -67,7 +67,6 @@ function fcChangeType( conditionId, type ){
 
 function maxModuleNumChange( conditionId ){
     var moduleNum = $(`#inputform-${conditionId} #f-1-1`).val();
-    console.log(moduleNum);
     let i;
     $(`#inputform-${conditionId} #Module-Left-Text`).attr('rowspan', Math.min(moduleNum, 12));
     for(i = 1; i <= 12 && i <= moduleNum; i ++)
@@ -464,9 +463,15 @@ var drawTrussGraph = function( condId ) {
         orientation = !orientation;
     //moduleLengthSum += (moduleGap + (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)));
 
+    ctx[condId].fillStyle = '#FF0000';
     while(i <= maxModuleCount)
     {
         ctx[condId].strokeRect(moduleStartX * grid_size[condId], 0, (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)) * grid_size[condId], moduleDepth * grid_size[condId]);
+        // Left Support
+        ctx[condId].fillRect(moduleStartX * grid_size[condId] + 10, moduleDepth * grid_size[condId], 10, 11 - moduleDepth * grid_size[condId]);
+        // Right Support
+        ctx[condId].fillRect(moduleStartX * grid_size[condId] + (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)) * grid_size[condId] - 20, moduleDepth * grid_size[condId], 10, 11 - moduleDepth * grid_size[condId]);
+
         moduleStartX += (moduleGap + (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)));
         
         orientation = false;
@@ -1632,6 +1637,8 @@ var stick_num_lines_y = new Array(11);
 var stick_x_axis_distance_grid_lines = new Array(11);
 var stick_y_axis_distance_grid_lines = new Array(11);
 var stick_show_axis = new Array(11);
+var stick_right_input = new Array(11);
+
 for( let i = 1; i <= 10; i ++ )
 {
     stick_canvas[i] = document.getElementById(`stick-canvas-${i}`);
@@ -1643,6 +1650,7 @@ for( let i = 1; i <= 10; i ++ )
     stick_x_axis_distance_grid_lines[i] = stick_num_lines_x[i] - 1;
     stick_y_axis_distance_grid_lines[i] = 0;
     stick_show_axis[i] = false;
+    stick_right_input[i] = 'height';
     
     // Translate to the new origin. Now Y-axis of the canvas is opposite to the Y-axis of the graph. So the y-coordinate of each element will be negative of the actual
     stick_ctx[i].translate(stick_y_axis_distance_grid_lines[i] * stick_grid_size[i], stick_x_axis_distance_grid_lines[i] * stick_grid_size[i]);
@@ -1782,7 +1790,14 @@ var adjustStickDrawingPanel = function( condId ) {
     var topYPoint = 0, topXPoint = 0;
 
     var angleRadian = degreeToRadian( parseFloat($(`#inputform-${condId} #a-7-1`).val()) );
-    topYPoint = parseFloat($(`#inputform-${condId} #a-9-1`).val());
+    var roofHeight;
+    if(stick_right_input[condId] == 'height')
+        roofHeight = parseFloat($(`#inputform-${condId} #a-9-1`).val());
+    else if(stick_right_input[condId] == 'diagnol')
+        roofHeight = parseFloat($(`#inputform-${condId} #a-8-1`).val()) * Math.sin(angleRadian);
+    else if(stick_right_input[condId] == 'length')
+        roofHeight = parseFloat($(`#inputform-${condId} #a-10-1`).val()) * Math.tan(angleRadian);
+    topYPoint = roofHeight;
     topXPoint = (1.0 / Math.tan(angleRadian)) * topYPoint;
  
     // console.log("topXpoint : " + topXPoint);
@@ -1841,12 +1856,19 @@ var drawStickGraph = function( condId ) {
 
     stick_ctx[condId].font = '16px Arial';
     stick_ctx[condId].textAlign = 'end';
+    stick_ctx[condId].fillStyle = "#000000";
     stick_ctx[condId].rotate(- Math.PI / 2);
     stick_ctx[condId].fillText("Wall", -40, 20);
     stick_ctx[condId].rotate(Math.PI / 2);
 
     // Draw Roof
-    var roofHeight = parseFloat($(`#inputform-${condId} #a-9-1`).val());
+    var roofHeight;
+    if(stick_right_input[condId] == 'height')
+        roofHeight = parseFloat($(`#inputform-${condId} #a-9-1`).val());
+    else if(stick_right_input[condId] == 'diagnol')
+        roofHeight = parseFloat($(`#inputform-${condId} #a-8-1`).val()) * Math.sin(angleRadian);
+    else if(stick_right_input[condId] == 'length')
+        roofHeight = parseFloat($(`#inputform-${condId} #a-10-1`).val()) * Math.tan(angleRadian);
 
     stick_ctx[condId].beginPath();
     stick_ctx[condId].lineWidth = 2;
@@ -1914,9 +1936,15 @@ var drawStickGraph = function( condId ) {
         orientation = !orientation;
     //moduleLengthSum += (moduleGap + (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)));
 
+    stick_ctx[condId].fillStyle = "#FF0000";
     while(i <= maxModuleCount)
     {
+        stick_ctx[condId].strokeStyle = "#000000";
         stick_ctx[condId].strokeRect(moduleStartX * stick_grid_size[condId], 0, (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)) * stick_grid_size[condId], moduleDepth * stick_grid_size[condId]);
+        // Left Support
+        stick_ctx[condId].fillRect(moduleStartX * stick_grid_size[condId] + 10, moduleDepth * stick_grid_size[condId], 10, 11 - moduleDepth * stick_grid_size[condId]);
+        // Right Support
+        stick_ctx[condId].fillRect(moduleStartX * stick_grid_size[condId] + (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)) * stick_grid_size[condId] - 20, moduleDepth * stick_grid_size[condId], 10, 11 - moduleDepth * stick_grid_size[condId]);
         moduleStartX += (moduleGap + (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)));
         
         orientation = false;
@@ -2113,7 +2141,6 @@ $(document).ready(function() {
         });
         $(`#inputform-${i} #txt-roof-degree`).change(function(){
             $(this).val(parseFloat($(this).val()).toFixed(2));
-            console.log(window.conditionId, parseFloat($(this).val()));
             updateRoofSlopeAnotherField(window.conditionId);
         });
         $(`#inputform-${i} #option-number-segments1`).on('change', function() {
@@ -2148,12 +2175,29 @@ $(document).ready(function() {
         });
         $(`#inputform-${i} #a-6-1, #inputform-${i} #g-1-1`).on('change', function() {
             drawTrussGraph(window.conditionId);
+            drawStickGraph(window.conditionId);
         });
-        $(`#inputform-${i} #f-1-1, #inputform-${i} #a-11-1, #inputform-${i} #e-2-1`).on('change', function() {
+        $(`#inputform-${i} #f-1-1, #inputform-${i} #a-11-1, #inputform-${i} #e-1-1`).on('change', function() {
             drawTrussGraph(window.conditionId);
             drawStickGraph(window.conditionId);
         });
-        $(`#inputform-${i} #a-7-1, #inputform-${i} #a-9-1, #inputform-${i} #c-2-1, #inputform-${i} #c-4-1`).on('change', function() {
+        $(`#inputform-${i} #c-2-1, #inputform-${i} #c-4-1`).on('change', function() {
+            drawStickGraph(window.conditionId);
+        });
+        $(`#inputform-${i} #a-7-1`).on('change', function() {
+            checkRoofInput(window.conditionId, stick_right_input[window.conditionId]);
+            drawStickGraph(window.conditionId);
+        });
+        $(`#inputform-${i} #a-8-1`).on('change', function() {
+            checkRoofInput(window.conditionId, 'diagnol');
+            drawStickGraph(window.conditionId);
+        });
+        $(`#inputform-${i} #a-9-1`).on('change', function() {
+            checkRoofInput(window.conditionId, 'height');
+            drawStickGraph(window.conditionId);
+        });
+        $(`#inputform-${i} #a-10-1`).on('change', function() {
+            checkRoofInput(window.conditionId, 'length');
             drawStickGraph(window.conditionId);
         });
     }
@@ -2268,6 +2312,76 @@ $(document).ready(function() {
         console.log(result.cpu.architecture);   // "amd64"        
     }
 
+    function checkRoofInput(condId, base) {
+        var angleRadian = degreeToRadian($(`#inputform-${condId} #a-7-1`).val());
+        if(base == 'height')
+        {
+            stick_right_input[condId] = 'height';
+            var height = $(`#inputform-${condId} #a-9-1`).val();
+            $(`#inputform-${condId} #tc-9-1`).css('background', 'transparent');
+
+            var rightDiagnol = (height / Math.sin(angleRadian)).toFixed(2);
+            if(rightDiagnol != parseFloat($(`#inputform-${condId} #a-8-1`).val()).toFixed(2))
+                $(`#inputform-${condId} #tc-8-1`).css('background', '#FFC7CE');
+            else
+                $(`#inputform-${condId} #tc-8-1`).css('background', 'transparent');
+
+            var rightLength = (height / Math.tan(angleRadian)).toFixed(2);
+            if(rightLength != parseFloat($(`#inputform-${condId} #a-10-1`).val()).toFixed(2))
+                $(`#inputform-${condId} #tc-10-1`).css('background', '#FFC7CE');
+            else
+                $(`#inputform-${condId} #tc-10-1`).css('background', 'transparent');
+
+            $(`#inputform-${condId} #ac-8-1`).val(rightDiagnol);
+            $(`#inputform-${condId} #ac-9-1`).val(height);
+            $(`#inputform-${condId} #ac-10-1`).val(rightLength);
+        }
+        else if(base == 'length')
+        {
+            stick_right_input[condId] = 'length';
+            var length = $(`#inputform-${condId} #a-10-1`).val();
+            $(`#inputform-${condId} #tc-10-1`).css('background', 'transparent');
+
+            var rightDiagnol = (length / Math.cos(angleRadian)).toFixed(2);
+            if(rightDiagnol != parseFloat($(`#inputform-${condId} #a-8-1`).val()).toFixed(2))
+                $(`#inputform-${condId} #tc-8-1`).css('background', '#FFC7CE');
+            else
+                $(`#inputform-${condId} #tc-8-1`).css('background', 'transparent');
+
+            var rightHeight = (length * Math.tan(angleRadian)).toFixed(2);
+            if(rightHeight != parseFloat($(`#inputform-${condId} #a-9-1`).val()).toFixed(2))
+                $(`#inputform-${condId} #tc-9-1`).css('background', '#FFC7CE');
+            else
+                $(`#inputform-${condId} #tc-9-1`).css('background', 'transparent');
+
+            $(`#inputform-${condId} #ac-8-1`).val(rightDiagnol);
+            $(`#inputform-${condId} #ac-9-1`).val(rightHeight);
+            $(`#inputform-${condId} #ac-10-1`).val(length);
+        }
+        else if(base == 'diagnol')
+        {
+            stick_right_input[condId] = 'diagnol';
+            var diagnol = $(`#inputform-${condId} #a-8-1`).val();
+            $(`#inputform-${condId} #tc-8-1`).css('background', 'transparent');
+
+            var rightHeight = (diagnol * Math.sin(angleRadian)).toFixed(2);
+            if(rightHeight != parseFloat($(`#inputform-${condId} #a-9-1`).val()).toFixed(2))
+                $(`#inputform-${condId} #tc-9-1`).css('background', '#FFC7CE');
+            else
+                $(`#inputform-${condId} #tc-9-1`).css('background', 'transparent');
+
+            var rightWidth = (diagnol * Math.cos(angleRadian)).toFixed(2);
+            if(rightWidth != parseFloat($(`#inputform-${condId} #a-10-1`).val()).toFixed(2))
+                $(`#inputform-${condId} #tc-10-1`).css('background', '#FFC7CE');
+            else
+                $(`#inputform-${condId} #tc-10-1`).css('background', 'transparent');
+
+            $(`#inputform-${condId} #ac-8-1`).val(diagnol);
+            $(`#inputform-${condId} #ac-9-1`).val(rightHeight);
+            $(`#inputform-${condId} #ac-10-1`).val(rightWidth);
+        }
+    }
+
     // initialize function
     var initializeSpreadSheet = function() {
         loadPreloadedData();
@@ -2290,6 +2404,7 @@ $(document).ready(function() {
             updateNumberSegment1(i, $(`#inputform-${i} #option-number-segments1`).children("option:selected").val(), keepStatus);
             updateNumberSegment2(i, $(`#inputform-${i} #option-number-segments2`).children("option:selected").val(), keepStatus);
 
+            checkRoofInput(i, 'height');
             // GetCPU();
         }
     }
