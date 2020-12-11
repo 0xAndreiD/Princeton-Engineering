@@ -64,9 +64,9 @@
                                                     <i class="fa fa-exclamation-triangle text-muted mr-1"></i> Forgot password
                                                 </a>
                                             @endif
-                                            <a class="btn btn-sm btn-light d-block d-lg-inline-block mb-1" href="{{ route('register') }}">
+                                            <!-- <a class="btn btn-sm btn-light d-block d-lg-inline-block mb-1" href="register">
                                                 <i class="fa fa-plus text-muted mr-1"></i> Register
-                                            </a>
+                                            </a> -->
                                         </p>
                                     </div>
                                 </form>

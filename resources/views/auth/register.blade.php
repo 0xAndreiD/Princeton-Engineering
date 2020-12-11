@@ -26,7 +26,7 @@
                         <!-- For more info and examples you can check out https://github.com/jzaefferer/jquery-validation -->
                         <div class="row no-gutters justify-content-center">
                             <div class="col-sm-8 col-xl-6">
-                                <form class="js-validation-signup" action="{{ route('register') }}" method="POST">
+                                <form class="js-validation-signup" action="register" method="POST">
                                     @csrf
 
                                     <div class="py-3">

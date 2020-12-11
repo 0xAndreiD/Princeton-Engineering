@@ -49,11 +49,11 @@
                         </a>
                     </div>
                     <!-- Register Link -->
-                    <div class="d-inline-block">
-                        <a href="{{ route('register') }}" class="btn btn-dual" >
+                    <!-- <div class="d-inline-block">
+                        <a href="register" class="btn btn-dual" >
                             <span class="d-none d-sm-inline-block">Register</span>
                         </a>
-                    </div>
+                    </div> -->
                     @else
                     <!-- Welcome Link -->
                     <div class="dropdown d-inline-block">
