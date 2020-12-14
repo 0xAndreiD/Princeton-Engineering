@@ -20,6 +20,8 @@
             <col width="320">
             <col width="70">
             <col width="100">
+            <col width="100">
+            <col width="80">
             <col width="80">
         </colgroup>
     <tbody>
@@ -95,37 +97,45 @@
             </td>
             <td><div style="overflow:hidden"></td>
         </tr>
-        <tr class="h13 class-truss-hide">
+        <tr class="h13 class-truss-hide" id="tr-7-1">
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">A-7</td>
             <td class="iw400-right-bdr">Roof Slope</td>
             <td class="iw400-bdr">deg</td>
             <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="a-7-1"  tabindex="31" value="33.00"></input></td>
-            <td><div style="overflow:hidden"></td>
+            <td class="w400-bdr">A-7 calc'ed</td>
+            <td class="w400-bdr" id="tc-7-1" style="pointer-events: none;"><input type="text" class="txt-center-align" id="ac-7-1" value="33.00"></td>
+            <td class="w400-bdr"><input type="checkbox" id="aa-7-1" checked></input></td>
         </tr>
-        <tr class="h13 class-truss-hide">
+        <tr class="h13 class-truss-hide fcDisabled" id="tr-8-1">
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">A-8</td>
             <td class="iw400-right-bdr">Diagonal Rafter Length from Plate to Ridge</td>
             <td class="iw400-bdr">ft</td>
             <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="a-8-1"  tabindex="32" value="13.42"></input></td>
+            <td class="w400-bdr" >A-8 calc'ed</td>
             <td class="w400-bdr" id="tc-8-1" style="pointer-events: none;"><input type="text" class="txt-center-align" id="ac-8-1"></td>
+            <td class="w400-bdr"><input type="checkbox" id="aa-8-1"></input></td>
         </tr>
-        <tr class="h13 class-truss-hide">
+        <tr class="h13 class-truss-hide" id="tr-9-1">
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">A-9</td>
             <td class="iw400-right-bdr" id="label-A-9">Rise from Rafter Plate to Top Ridge</td>
             <td class="iw400-bdr">ft</td>
             <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="a-9-1"  tabindex="33" value="5.00"></input></td>
+            <td class="w400-bdr">A-9 calc'ed</td>
             <td class="w400-bdr" id="tc-9-1" style="pointer-events: none;"><input type="text" class="txt-center-align" id="ac-9-1"></td>
+            <td class="w400-bdr"><input type="checkbox" id="aa-9-1" checked></input></td>
         </tr>
-        <tr class="h13">
+        <tr class="h13 fcDisabled class-truss-hide" id="tr-10-1">
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">A-10</td>
             <td class="iw400-right-bdr" id="label-A-10">Horiz Len from Outside of Rafter Plate to Ridge</td>
             <td class="iw400-bdr">ft</td>
             <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="a-10-1"  tabindex="34" value="11.25"></input></td>
-            <td class="w400-bdr class-truss-hide" id="tc-10-1" style="pointer-events: none;"><input type="text" class="txt-center-align" style="display: table-cell;" id="ac-10-1"></td>
+            <td class="w400-bdr">A-10 calc'ed</td>
+            <td class="w400-bdr" id="tc-10-1" style="pointer-events: none; display: table-cell !important;"><input type="text" class="txt-center-align" id="ac-10-1"></td>
+            <td class="w400-bdr"><input type="checkbox" id="aa-10-1"></input></td>
         </tr>
         <tr class="h13">
             <td><div style="overflow:hidden"></td>
