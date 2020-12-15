@@ -1122,12 +1122,28 @@ var updateNumberOfConditions = function(conditions) {
     }
 }
 
-var ignorable = ['c-4-1'];
+var ignorable = ['c-1-1', 'c-2-1', 'c-3-1', 'c-4-1'];
 
 var isEmptyInputBox = function() {
 
     // check empty input text boxes
     var isEmpty = false;
+
+    // check C1~C3 according to C2 value
+    var caseCount = $("#option-number-of-conditions").val();
+    for(let i = 1; i <= caseCount; i ++)
+    {
+        if($(`#inputform-${i} #c-2-1`).val() != "" && ($(`#inputform-${i} #c-1-1`).val() == ""))
+        {
+            isEmpty = true;
+            $(`#inputform-${i} #c-1-1`).css('background-color', '#FFC7CE');
+        }    
+        if($(`#inputform-${i} #c-2-1`).val() != "" && ($(`#inputform-${i} #c-3-1`).val() == ""))
+        {
+            isEmpty = true;
+            $(`#inputform-${i} #c-3-1`).css('background-color', '#FFC7CE');
+        }
+    }
 
     var empty_textboxes = $('input:text:enabled').filter(function() { return this.value === ""; });
     empty_textboxes.each(function() { 
@@ -1980,7 +1996,7 @@ var drawStickGraph = function( condId ) {
     stick_ctx[condId].setLineDash([25, 0]);
 
     // Draw Knee Wall
-    var kneeWallHeight = parseFloat($(`#inputform-${condId} #c-4-1`).val());
+    var kneeWallHeight = $(`#inputform-${condId} #c-4-1`).val() == "" ? 0 : parseFloat($(`#inputform-${condId} #c-4-1`).val());
 
     if( kneeWallHeight <= roofHeight )
     {
@@ -1996,7 +2012,8 @@ var drawStickGraph = function( condId ) {
         $(`#inputform-${condId} #c-4-warn`).css('display', 'block');
 
     // Draw Collar Tie
-    var collarTieHeight = parseFloat($(`#inputform-${condId} #c-2-1`).val());
+    var collarTieHeight = $(`#inputform-${condId} #c-2-1`).val() == "" ? 0 : parseFloat($(`#inputform-${condId} #c-2-1`).val());
+    console.log(collarTieHeight, roofHeight);
     if( collarTieHeight <= roofHeight )
     {
         $(`#inputform-${condId} #c-2-warn`).css('display', 'none');
