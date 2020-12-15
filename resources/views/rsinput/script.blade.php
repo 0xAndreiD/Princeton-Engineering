@@ -1116,6 +1116,8 @@ var updateNumberOfConditions = function(conditions) {
     }
 }
 
+var ignorable = ['c-4-1'];
+
 var isEmptyInputBox = function() {
 
     // check empty input text boxes
@@ -1124,7 +1126,7 @@ var isEmptyInputBox = function() {
     var empty_textboxes = $('input:text:enabled').filter(function() { return this.value === ""; });
     empty_textboxes.each(function() { 
         // skip note 
-        if ($(this).attr('id').includes("i-1-")) {
+        if ($(this).attr('id').includes("i-1-") || ignorable.indexOf($(this).attr('id')) > -1) {
             return;
         }
 
