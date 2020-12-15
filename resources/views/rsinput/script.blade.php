@@ -1968,6 +1968,17 @@ var drawStickGraph = function( condId ) {
     else
         stick_ctx[condId].fillText("Attic Floor", stick_canvas_width[condId] / 2, 30);
 
+    // Draw dashed line
+    stick_ctx[condId].beginPath();
+    stick_ctx[condId].lineWidth = 2;
+    stick_ctx[condId].strokeStyle = "#0000FF";
+    stick_ctx[condId].setLineDash([25, 25]);
+    stick_ctx[condId].moveTo(angleRadian != 0 ? roofHeight * (1 / Math.tan(angleRadian))  * stick_grid_size[condId] : 0, 0);
+    stick_ctx[condId].lineTo(angleRadian != 0 ? roofHeight * (1 / Math.tan(angleRadian))  * stick_grid_size[condId] : 0, - roofHeight * stick_grid_size[condId]);
+
+    stick_ctx[condId].stroke();
+    stick_ctx[condId].setLineDash([25, 0]);
+
     // Draw Knee Wall
     var kneeWallHeight = parseFloat($(`#inputform-${condId} #c-4-1`).val());
 
