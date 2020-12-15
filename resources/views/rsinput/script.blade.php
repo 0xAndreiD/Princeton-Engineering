@@ -478,7 +478,7 @@ var drawTrussGraph = function( condId ) {
     var moduleHeight = parseFloat($("#pv-module-length").val()) / 12;
     var moduleGap = parseFloat($(`#inputform-${condId} #g-1-1`).val()) / 12;
 
-    var startPoint = [- Math.sin(Math.PI / 2 - angleRadian) * startModule * grid_size[condId] -10 * Math.sin(angleRadian), Math.cos(Math.PI / 2 - angleRadian) * startModule * grid_size[condId] - 10];
+    var startPoint = [- Math.sin(Math.PI / 2 - angleRadian) * startModule * grid_size[condId] - grid_size[condId] / 4 * Math.sin(angleRadian), Math.cos(Math.PI / 2 - angleRadian) * startModule * grid_size[condId] - grid_size[condId] / 4];
     ctx[condId].translate(startPoint[0], startPoint[1]);
     ctx[condId].rotate(- angleRadian);
     ctx[condId].beginPath();
@@ -508,9 +508,9 @@ var drawTrussGraph = function( condId ) {
         
         ctx[condId].strokeRect(moduleStartX * grid_size[condId], 0, (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)) * grid_size[condId], moduleDepth * grid_size[condId]);
         // Left Support
-        ctx[condId].fillRect(moduleStartX * grid_size[condId] + supportStart * grid_size[condId] - 1, moduleDepth * grid_size[condId], grid_size[condId] / 4, 11 - moduleDepth * grid_size[condId]);
+        ctx[condId].fillRect(moduleStartX * grid_size[condId] + supportStart * grid_size[condId] - 1, moduleDepth * grid_size[condId], grid_size[condId] / 12, grid_size[condId] / 4 + 1 - moduleDepth * grid_size[condId]);
         // Right Support
-        ctx[condId].fillRect(moduleStartX * grid_size[condId] + (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)) * grid_size[condId] - (supportStart + 1 / 4) * grid_size[condId] + 1, moduleDepth * grid_size[condId], grid_size[condId] / 4, 11 - moduleDepth * grid_size[condId]);
+        ctx[condId].fillRect(moduleStartX * grid_size[condId] + (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)) * grid_size[condId] - (supportStart + 1 / 12) * grid_size[condId] + 1, moduleDepth * grid_size[condId], grid_size[condId] / 12, grid_size[condId] / 4 + 1 - moduleDepth * grid_size[condId]);
 
         moduleStartX += (moduleGap + (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)));
     }
@@ -1997,7 +1997,7 @@ var drawStickGraph = function( condId ) {
     var moduleHeight = parseFloat($("#pv-module-length").val()) / 12;
     var moduleGap = parseFloat($(`#inputform-${condId} #g-1-1`).val()) / 12;
 
-    var startPoint = [- Math.sin(Math.PI / 2 - angleRadian) * startModule * stick_grid_size[condId] -10 * Math.sin(angleRadian), Math.cos(Math.PI / 2 - angleRadian) * startModule * stick_grid_size[condId] - 10];
+    var startPoint = [- Math.sin(Math.PI / 2 - angleRadian) * startModule * stick_grid_size[condId] - stick_grid_size[condId] / 4 * Math.sin(angleRadian), Math.cos(Math.PI / 2 - angleRadian) * startModule * stick_grid_size[condId] - stick_grid_size[condId] / 4];
     stick_ctx[condId].translate(startPoint[0], startPoint[1]);
     stick_ctx[condId].rotate(- angleRadian);
     stick_ctx[condId].beginPath();
@@ -2024,9 +2024,9 @@ var drawStickGraph = function( condId ) {
         stick_ctx[condId].strokeStyle = "#000000";
         stick_ctx[condId].strokeRect(moduleStartX * stick_grid_size[condId], 0, (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)) * stick_grid_size[condId], moduleDepth * stick_grid_size[condId]);
         // Left Support
-        stick_ctx[condId].fillRect(moduleStartX * stick_grid_size[condId] + supportStart * stick_grid_size[condId] - 1, moduleDepth * stick_grid_size[condId], stick_grid_size[condId] / 4, 11 - moduleDepth * stick_grid_size[condId]);
+        stick_ctx[condId].fillRect(moduleStartX * stick_grid_size[condId] + supportStart * stick_grid_size[condId] - 1, moduleDepth * stick_grid_size[condId], stick_grid_size[condId] / 12, stick_grid_size[condId] / 4 + 1 - moduleDepth * stick_grid_size[condId]);
         // Right Support
-        stick_ctx[condId].fillRect(moduleStartX * stick_grid_size[condId] + (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)) * stick_grid_size[condId] - stick_grid_size[condId] * (1 / 4 + supportStart) + 1, moduleDepth * stick_grid_size[condId], stick_grid_size[condId] / 4, 11 - moduleDepth * stick_grid_size[condId]);
+        stick_ctx[condId].fillRect(moduleStartX * stick_grid_size[condId] + (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)) * stick_grid_size[condId] - stick_grid_size[condId] * (1 / 12 + supportStart) + 1, moduleDepth * stick_grid_size[condId], stick_grid_size[condId] / 12, stick_grid_size[condId] / 4 + 1 - moduleDepth * stick_grid_size[condId]);
         moduleStartX += (moduleGap + (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)));
     }
     
