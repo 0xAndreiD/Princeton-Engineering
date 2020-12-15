@@ -1122,7 +1122,7 @@ var updateNumberOfConditions = function(conditions) {
     }
 }
 
-var ignorable = ['c-1-1', 'c-2-1', 'c-3-1', 'c-4-1'];
+var ignorable = ['ac-7-1', 'ac-8-1', 'ac-9-1', 'ac-10-1', 'c-1-1', 'c-2-1', 'c-3-1', 'c-4-1'];
 
 var isEmptyInputBox = function() {
 
@@ -2470,6 +2470,11 @@ $(document).ready(function() {
 
             $(`#inputform-${condId} #a-8-1`).val(rightDiagnol);
             $(`#inputform-${condId} #a-10-1`).val(rightLength);
+
+            $(`#inputform-${condId} #ac-7-1`).val($(`#inputform-${condId} #a-7-1`).val());
+            $(`#inputform-${condId} #ac-8-1`).val($(`#inputform-${condId} #a-8-1`).val());
+            $(`#inputform-${condId} #ac-9-1`).val($(`#inputform-${condId} #a-9-1`).val());
+            $(`#inputform-${condId} #ac-10-1`).val($(`#inputform-${condId} #a-10-1`).val());
         }
         else if(stick_right_input[condId] == 'length' && $(`#inputform-${condId} #a-10-1`).val() != "")
         {
@@ -2484,6 +2489,11 @@ $(document).ready(function() {
             
             $(`#inputform-${condId} #a-8-1`).val(rightDiagnol);
             $(`#inputform-${condId} #a-9-1`).val(rightHeight);
+
+            $(`#inputform-${condId} #ac-7-1`).val($(`#inputform-${condId} #a-7-1`).val());
+            $(`#inputform-${condId} #ac-8-1`).val($(`#inputform-${condId} #a-8-1`).val());
+            $(`#inputform-${condId} #ac-9-1`).val($(`#inputform-${condId} #a-9-1`).val());
+            $(`#inputform-${condId} #ac-10-1`).val($(`#inputform-${condId} #a-10-1`).val());
         }
         else if(stick_right_input[condId] == 'diagnol' && $(`#inputform-${condId} #a-8-1`).val() != "")
         {
@@ -2498,6 +2508,11 @@ $(document).ready(function() {
 
             $(`#inputform-${condId} #a-9-1`).val(rightHeight);
             $(`#inputform-${condId} #a-10-1`).val(rightWidth);
+
+            $(`#inputform-${condId} #ac-7-1`).val($(`#inputform-${condId} #a-7-1`).val());
+            $(`#inputform-${condId} #ac-8-1`).val($(`#inputform-${condId} #a-8-1`).val());
+            $(`#inputform-${condId} #ac-9-1`).val($(`#inputform-${condId} #a-9-1`).val());
+            $(`#inputform-${condId} #ac-10-1`).val($(`#inputform-${condId} #a-10-1`).val());
         }
         else if(stick_right_input[condId] == 'diagnolheight' && $(`#inputform-${condId} #a-8-1`).val() != "" && $(`#inputform-${condId} #a-9-1`).val() != "")
         {
@@ -2514,6 +2529,11 @@ $(document).ready(function() {
             
             $(`#inputform-${condId} #a-7-1`).val(rightAngleDegree);
             $(`#inputform-${condId} #a-10-1`).val(rightLength);
+
+            $(`#inputform-${condId} #ac-7-1`).val($(`#inputform-${condId} #a-7-1`).val());
+            $(`#inputform-${condId} #ac-8-1`).val($(`#inputform-${condId} #a-8-1`).val());
+            $(`#inputform-${condId} #ac-9-1`).val($(`#inputform-${condId} #a-9-1`).val());
+            $(`#inputform-${condId} #ac-10-1`).val($(`#inputform-${condId} #a-10-1`).val());
         }
         else if(stick_right_input[condId] == 'diagnollength' && $(`#inputform-${condId} #a-8-1`).val() != "" && $(`#inputform-${condId} #a-10-1`).val() != "")
         {
@@ -2530,6 +2550,11 @@ $(document).ready(function() {
             
             $(`#inputform-${condId} #a-7-1`).val(rightAngleDegree);
             $(`#inputform-${condId} #a-9-1`).val(rightHeight);
+
+            $(`#inputform-${condId} #ac-7-1`).val($(`#inputform-${condId} #a-7-1`).val());
+            $(`#inputform-${condId} #ac-8-1`).val($(`#inputform-${condId} #a-8-1`).val());
+            $(`#inputform-${condId} #ac-9-1`).val($(`#inputform-${condId} #a-9-1`).val());
+            $(`#inputform-${condId} #ac-10-1`).val($(`#inputform-${condId} #a-10-1`).val());
         }
         else if(stick_right_input[condId] == 'heightlength' && $(`#inputform-${condId} #a-9-1`).val() != "" && $(`#inputform-${condId} #a-10-1`).val() != "")
         {
@@ -2546,6 +2571,11 @@ $(document).ready(function() {
 
             $(`#inputform-${condId} #a-7-1`).val(rightAngleDegree);
             $(`#inputform-${condId} #a-8-1`).val(rightDiagnol);
+
+            $(`#inputform-${condId} #ac-7-1`).val($(`#inputform-${condId} #a-7-1`).val());
+            $(`#inputform-${condId} #ac-8-1`).val($(`#inputform-${condId} #a-8-1`).val());
+            $(`#inputform-${condId} #ac-9-1`).val($(`#inputform-${condId} #a-9-1`).val());
+            $(`#inputform-${condId} #ac-10-1`).val($(`#inputform-${condId} #a-10-1`).val());
         }
     }
 

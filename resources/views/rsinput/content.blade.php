@@ -102,8 +102,8 @@
             <td class="iw400-bdr">deg</td>
             <td id="value-7-1" class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="a-7-1"  tabindex="31" value="33.00"></input></td>
             <td id="calced-7-1" class="calcedCell"></td>
-            <!-- <td class="w400-bdr" id="tc-7-1" style="pointer-events: none;"><input type="text" class="txt-center-align" id="ac-7-1" value="33.00"></td>
-            <td class="w400-bdr"><input type="checkbox" id="aa-7-1" checked></input></td> -->
+            <input type="text" class="txt-center-align" id="ac-7-1" value="" hidden>
+            <!-- <td class="w400-bdr"><input type="checkbox" id="aa-7-1" checked></input></td> -->
         </tr>
         <tr class="h13 class-truss-hide" id="tr-8-1">
             <td><div style="overflow:hidden"></td>
@@ -112,6 +112,7 @@
             <td class="iw400-bdr">ft</td>
             <td id="value-8-1" class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="a-8-1"  tabindex="32" value="13.42"></input></td>
             <td id="calced-8-1" class="calcedCell"></td>
+            <input type="text" class="txt-center-align" id="ac-8-1" value="" hidden>
             <!-- <td class="w400-bdr" id="tc-8-1" style="pointer-events: none;"><input type="text" class="txt-center-align" id="ac-8-1"></td>
             <td class="w400-bdr"><input type="checkbox" id="aa-8-1"></input></td> -->
         </tr>
@@ -122,6 +123,7 @@
             <td class="iw400-bdr">ft</td>
             <td id="value-9-1" class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="a-9-1"  tabindex="33" value="5.00"></input></td>
             <td id="calced-9-1" class="calcedCell"></td>
+            <input type="text" class="txt-center-align" id="ac-9-1" value="" hidden>
             <!-- <td class="w400-bdr" id="tc-9-1" style="pointer-events: none;"><input type="text" class="txt-center-align" id="ac-9-1"></td>
             <td class="w400-bdr"><input type="checkbox" id="aa-9-1" checked></input></td> -->
         </tr>
@@ -132,6 +134,7 @@
             <td class="iw400-bdr">ft</td>
             <td id="value-10-1" class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="a-10-1"  tabindex="34" value="11.25"></input></td>
             <td id="calced-10-1" class="calcedCell"></td>
+            <input type="text" class="txt-center-align" id="ac-10-1" value="" hidden>
             <!-- <td class="w400-bdr" id="tc-10-1" style="pointer-events: none; display: table-cell !important;"><input type="text" class="txt-center-align" id="ac-10-1"></td>
             <td class="w400-bdr"><input type="checkbox" id="aa-10-1"></input></td> -->
         </tr>
