@@ -2523,8 +2523,8 @@ $(document).ready(function() {
             var rightLength = (diagnol * Math.cos(rightAngle)).toFixed(2);
 
             $(`#inputform-${condId} #value-7-1`).css('background', '#95b3d7'); $(`#inputform-${condId} #calced-7-1`)[0].innerHTML = "calculated value";
-            $(`#inputform-${condId} #value-8-1`).css('background', 'transparent'); $(`#inputform-${condId} #calced-8-1`)[0].innerHTML = "";
-            $(`#inputform-${condId} #value-9-1`).css('background', 'transparent'); $(`#inputform-${condId} #calced-9-1`)[0].innerHTML = "";
+            $(`#inputform-${condId} #value-8-1`).css('background', '#ffc'); $(`#inputform-${condId} #calced-8-1`)[0].innerHTML = "";
+            $(`#inputform-${condId} #value-9-1`).css('background', '#ffc'); $(`#inputform-${condId} #calced-9-1`)[0].innerHTML = "";
             $(`#inputform-${condId} #value-10-1`).css('background', '#95b3d7'); $(`#inputform-${condId} #calced-10-1`)[0].innerHTML = "calculated value";
             
             $(`#inputform-${condId} #a-7-1`).val(rightAngleDegree);
@@ -2544,9 +2544,9 @@ $(document).ready(function() {
             var rightHeight = (diagnol * Math.sin(rightAngle)).toFixed(2);
 
             $(`#inputform-${condId} #value-7-1`).css('background', '#95b3d7'); $(`#inputform-${condId} #calced-7-1`)[0].innerHTML = "calculated value";
-            $(`#inputform-${condId} #value-8-1`).css('background', 'transparent'); $(`#inputform-${condId} #calced-8-1`)[0].innerHTML = "";
+            $(`#inputform-${condId} #value-8-1`).css('background', '#ffc'); $(`#inputform-${condId} #calced-8-1`)[0].innerHTML = "";
             $(`#inputform-${condId} #value-9-1`).css('background', '#95b3d7'); $(`#inputform-${condId} #calced-9-1`)[0].innerHTML = "calculated value";
-            $(`#inputform-${condId} #value-10-1`).css('background', 'transparent'); $(`#inputform-${condId} #calced-10-1`)[0].innerHTML = "";
+            $(`#inputform-${condId} #value-10-1`).css('background', '#ffc'); $(`#inputform-${condId} #calced-10-1`)[0].innerHTML = "";
             
             $(`#inputform-${condId} #a-7-1`).val(rightAngleDegree);
             $(`#inputform-${condId} #a-9-1`).val(rightHeight);
@@ -2566,8 +2566,8 @@ $(document).ready(function() {
 
             $(`#inputform-${condId} #value-7-1`).css('background', '#95b3d7'); $(`#inputform-${condId} #calced-7-1`)[0].innerHTML = "calculated value";
             $(`#inputform-${condId} #value-8-1`).css('background', '#95b3d7'); $(`#inputform-${condId} #calced-8-1`)[0].innerHTML = "calculated value";
-            $(`#inputform-${condId} #value-9-1`).css('background', 'transparent'); $(`#inputform-${condId} #calced-9-1`)[0].innerHTML = "";
-            $(`#inputform-${condId} #value-10-1`).css('background', 'transparent'); $(`#inputform-${condId} #calced-10-1`)[0].innerHTML = "";
+            $(`#inputform-${condId} #value-9-1`).css('background', '#ffc'); $(`#inputform-${condId} #calced-9-1`)[0].innerHTML = "";
+            $(`#inputform-${condId} #value-10-1`).css('background', '#ffc'); $(`#inputform-${condId} #calced-10-1`)[0].innerHTML = "";
 
             $(`#inputform-${condId} #a-7-1`).val(rightAngleDegree);
             $(`#inputform-${condId} #a-8-1`).val(rightDiagnol);
