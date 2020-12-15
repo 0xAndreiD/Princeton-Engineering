@@ -29,7 +29,7 @@ document.getElementById("defaultOpen").click();
 function fcChangeType( conditionId, type ){
     if( type == 1 )
     {
-        $(`#inputform-${conditionId} #label-A-1`).attr('rowspan', 8);
+        $(`#inputform-${conditionId} #label-A-1`).attr('rowspan', 7);
         $(`#inputform-${conditionId} #label-B-1`)[0].style.display = "none";
         $(`#inputform-${conditionId} #title-B-3`)[0].style.display = "table-cell";
         var elements = $(`#inputform-${conditionId} .class-truss-hide`);
@@ -472,7 +472,7 @@ var drawTrussGraph = function( condId ) {
     var moduleHeight = parseFloat($("#pv-module-length").val()) / 12;
     var moduleGap = parseFloat($(`#inputform-${condId} #g-1-1`).val()) / 12;
 
-    var startPoint = [- Math.sin(Math.PI / 2 - angleRadian) * startModule * grid_size[condId] -13 * Math.sin(angleRadian), Math.cos(Math.PI / 2 - angleRadian) * startModule * grid_size[condId] - 13];
+    var startPoint = [- Math.sin(Math.PI / 2 - angleRadian) * startModule * grid_size[condId] -10 * Math.sin(angleRadian), Math.cos(Math.PI / 2 - angleRadian) * startModule * grid_size[condId] - 10];
     ctx[condId].translate(startPoint[0], startPoint[1]);
     ctx[condId].rotate(- angleRadian);
     ctx[condId].beginPath();
@@ -486,14 +486,12 @@ var drawTrussGraph = function( condId ) {
     totalRoofLength += startModule;
     var moduleCount = parseInt($(`#inputform-${condId} #f-1-1`).val());
     
-    //let i = 1;
-    //let moduleLengthSum = 0;
     let moduleStartX = 0;
     var orientation = false;
 
     var supportStart = parseFloat($(`#inputform-${conditionId} #e-2-1`).val()) - parseFloat($(`#inputform-${conditionId} #e-1-1`).val());
 
-    ctx[condId].fillStyle = '#A52A2A';
+    ctx[condId].fillStyle = '#000';
     for(let i = 1; i <= moduleCount; i ++)
     {
         orientation = false;
@@ -504,12 +502,11 @@ var drawTrussGraph = function( condId ) {
         
         ctx[condId].strokeRect(moduleStartX * grid_size[condId], 0, (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)) * grid_size[condId], moduleDepth * grid_size[condId]);
         // Left Support
-        ctx[condId].fillRect(moduleStartX * grid_size[condId] + supportStart * grid_size[condId] - 1, moduleDepth * grid_size[condId], grid_size[condId] / 12, 14 - moduleDepth * grid_size[condId]);
+        ctx[condId].fillRect(moduleStartX * grid_size[condId] + supportStart * grid_size[condId] - 1, moduleDepth * grid_size[condId], grid_size[condId] / 4, 11 - moduleDepth * grid_size[condId]);
         // Right Support
-        ctx[condId].fillRect(moduleStartX * grid_size[condId] + (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)) * grid_size[condId] - (supportStart + 1 / 12) * grid_size[condId] + 1, moduleDepth * grid_size[condId], grid_size[condId] / 12, 11 - moduleDepth * grid_size[condId]);
+        ctx[condId].fillRect(moduleStartX * grid_size[condId] + (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)) * grid_size[condId] - (supportStart + 1 / 4) * grid_size[condId] + 1, moduleDepth * grid_size[condId], grid_size[condId] / 4, 11 - moduleDepth * grid_size[condId]);
 
         moduleStartX += (moduleGap + (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)));
-        //moduleLengthSum += (moduleGap + (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)));
     }
     
     ctx[condId].rotate(angleRadian);
@@ -1666,6 +1663,7 @@ var stick_x_axis_distance_grid_lines = new Array(11);
 var stick_y_axis_distance_grid_lines = new Array(11);
 var stick_show_axis = new Array(11);
 var stick_right_input = new Array(11);
+var stick_input_changed = new Array();
 
 for( let i = 1; i <= 10; i ++ )
 {
@@ -1678,7 +1676,8 @@ for( let i = 1; i <= 10; i ++ )
     stick_x_axis_distance_grid_lines[i] = stick_num_lines_x[i] - 1;
     stick_y_axis_distance_grid_lines[i] = 0;
     stick_show_axis[i] = false;
-    stick_right_input[i] = 'height';
+    stick_right_input[i] = '';
+    stick_input_changed[i] = [];
     
     // Translate to the new origin. Now Y-axis of the canvas is opposite to the Y-axis of the graph. So the y-coordinate of each element will be negative of the actual
     stick_ctx[i].translate(stick_y_axis_distance_grid_lines[i] * stick_grid_size[i], stick_x_axis_distance_grid_lines[i] * stick_grid_size[i]);
@@ -1824,12 +1823,12 @@ var adjustStickDrawingPanel = function( condId ) {
 
     var angleRadian = degreeToRadian( parseFloat($(`#inputform-${condId} #a-7-1`).val()) );
     var roofHeight;
-    if(stick_right_input[condId] == 'height')
+    //if(stick_right_input[condId] == 'height')
         roofHeight = parseFloat($(`#inputform-${condId} #a-9-1`).val());
-    else if(stick_right_input[condId] == 'diagnol')
-        roofHeight = parseFloat($(`#inputform-${condId} #a-8-1`).val()) * Math.sin(angleRadian);
-    else if(stick_right_input[condId] == 'length')
-        roofHeight = parseFloat($(`#inputform-${condId} #a-10-1`).val()) * Math.tan(angleRadian);
+    // else if(stick_right_input[condId] == 'diagnol')
+    //     roofHeight = parseFloat($(`#inputform-${condId} #a-8-1`).val()) * Math.sin(angleRadian);
+    // else if(stick_right_input[condId] == 'length')
+    //     roofHeight = parseFloat($(`#inputform-${condId} #a-10-1`).val()) * Math.tan(angleRadian);
     
     var overhangX = parseFloat($(`#inputform-${condId} #a-11-1`).val()) * Math.sin(Math.PI / 2 - angleRadian);
     var overhangY = parseFloat($(`#inputform-${condId} #a-11-1`).val()) * Math.sin(angleRadian );
@@ -1878,6 +1877,8 @@ var adjustStickDrawingPanel = function( condId ) {
 }
 
 var drawStickGraph = function( condId ) {
+    if($(`#inputform-${condId} #a-7-1`).val() == "") // angle should not be empty
+        return;
     adjustStickDrawingPanel(condId);
     drawStickBaseLine(condId);
 
@@ -1913,13 +1914,13 @@ var drawStickGraph = function( condId ) {
     stick_ctx[condId].rotate(Math.PI / 2);
 
     // Draw Roof
-    var roofHeight;
-    if(stick_right_input[condId] == 'height')
+    //var roofHeight;
+    //if(stick_right_input[condId] == 'height')
         roofHeight = parseFloat($(`#inputform-${condId} #a-9-1`).val());
-    else if(stick_right_input[condId] == 'diagnol')
-        roofHeight = parseFloat($(`#inputform-${condId} #a-8-1`).val()) * Math.sin(angleRadian);
-    else if(stick_right_input[condId] == 'length')
-        roofHeight = parseFloat($(`#inputform-${condId} #a-10-1`).val()) * Math.tan(angleRadian);
+    //else if(stick_right_input[condId] == 'diagnol')
+        //roofHeight = parseFloat($(`#inputform-${condId} #a-8-1`).val()) * Math.sin(angleRadian);
+    //else if(stick_right_input[condId] == 'length')
+        //roofHeight = parseFloat($(`#inputform-${condId} #a-10-1`).val()) * Math.tan(angleRadian);
 
     if( angleRadian != 0 ){ // Draw Roof when angle is not 0
         stick_ctx[condId].beginPath();
@@ -1997,7 +1998,7 @@ var drawStickGraph = function( condId ) {
     
     var supportStart = parseFloat($(`#inputform-${conditionId} #e-2-1`).val()) - parseFloat($(`#inputform-${conditionId} #e-1-1`).val());
 
-    stick_ctx[condId].fillStyle = "#FF0000";
+    stick_ctx[condId].fillStyle = "#000";
     for(let i = 1; i <= moduleCount; i ++)
     {
         orientation = false;
@@ -2009,16 +2010,12 @@ var drawStickGraph = function( condId ) {
         stick_ctx[condId].strokeStyle = "#000000";
         stick_ctx[condId].strokeRect(moduleStartX * stick_grid_size[condId], 0, (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)) * stick_grid_size[condId], moduleDepth * stick_grid_size[condId]);
         // Left Support
-        stick_ctx[condId].fillRect(moduleStartX * stick_grid_size[condId] + supportStart * stick_grid_size[condId] - 1, moduleDepth * stick_grid_size[condId], stick_grid_size[condId] / 12, 11 - moduleDepth * stick_grid_size[condId]);
+        stick_ctx[condId].fillRect(moduleStartX * stick_grid_size[condId] + supportStart * stick_grid_size[condId] - 1, moduleDepth * stick_grid_size[condId], stick_grid_size[condId] / 4, 11 - moduleDepth * stick_grid_size[condId]);
         // Right Support
-        stick_ctx[condId].fillRect(moduleStartX * stick_grid_size[condId] + (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)) * stick_grid_size[condId] - stick_grid_size[condId] * (1 / 12 + supportStart) + 1, moduleDepth * stick_grid_size[condId], stick_grid_size[condId] / 12, 11 - moduleDepth * stick_grid_size[condId]);
+        stick_ctx[condId].fillRect(moduleStartX * stick_grid_size[condId] + (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)) * stick_grid_size[condId] - stick_grid_size[condId] * (1 / 4 + supportStart) + 1, moduleDepth * stick_grid_size[condId], stick_grid_size[condId] / 4, 11 - moduleDepth * stick_grid_size[condId]);
         moduleStartX += (moduleGap + (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)));
-        
-        //moduleLengthSum += (moduleGap + (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)));
     }
-    //} while( i <= moduleCount && moduleLengthSum <= totalRoofLength )
     
-
     stick_ctx[condId].rotate(angleRadian);
     stick_ctx[condId].translate(- startPoint[0], - startPoint[1]);
 
@@ -2246,10 +2243,27 @@ $(document).ready(function() {
         $(`#inputform-${i} #c-2-1, #inputform-${i} #c-4-1`).on('change', function() {
             drawStickGraph(window.conditionId);
         });
-        $(`#inputform-${i} #aa-7-1, #inputform-${i} #aa-8-1, #inputform-${i} #aa-9-1, #inputform-${i} #aa-10-1`).on('change', function() {
-            roofInputMode(window.conditionId);
+        $(`#inputform-${i} #a-7-1`).on('change', function() {
+            if(this.value == "") { stick_input_changed[window.conditionId] = stick_input_changed[window.conditionId].filter(e => e != 'angle'); return; }
+            roofInputMode(window.conditionId, 'angle');
+            checkRoofInput(window.conditionId);
+            drawStickGraph(window.conditionId);
         });
-        $(`#inputform-${i} #a-7-1, #inputform-${i} #a-8-1, #inputform-${i} #a-9-1, #inputform-${i} #a-10-1`).on('change', function() {
+        $(`#inputform-${i} #a-8-1`).on('change', function() {
+            if(this.value == "") { stick_input_changed[window.conditionId] = stick_input_changed[window.conditionId].filter(e => e != 'diagnol'); return; }
+            roofInputMode(window.conditionId, 'diagnol');
+            checkRoofInput(window.conditionId);
+            drawStickGraph(window.conditionId);
+        });
+        $(`#inputform-${i} #a-9-1`).on('change', function() {
+            if(this.value == "") { stick_input_changed[window.conditionId] = stick_input_changed[window.conditionId].filter(e => e != 'height'); return; }
+            roofInputMode(window.conditionId, 'height');
+            checkRoofInput(window.conditionId);
+            drawStickGraph(window.conditionId);
+        });
+        $(`#inputform-${i} #a-10-1`).on('change', function() {
+            if(this.value == "") { stick_input_changed[window.conditionId] = stick_input_changed[window.conditionId].filter(e => e != 'length'); return; }
+            roofInputMode(window.conditionId, 'length');
             checkRoofInput(window.conditionId);
             drawStickGraph(window.conditionId);
         });
@@ -2366,38 +2380,27 @@ $(document).ready(function() {
     }
 
     // Set the correct calc method of A-7 to A-10
-    function roofInputMode(condId) {
-        let checkedCount = 0;
-        for(let i = 7; i <= 10; i ++)
-            if($(`#inputform-${condId} #aa-${i}-1`)[0].checked)
-                checkedCount ++;
-        if( checkedCount >= 2 )
+    function roofInputMode(condId, changed) {
+        if( stick_input_changed[condId].indexOf(changed) == -1 )
+            stick_input_changed[condId].push(changed);
+        if( stick_input_changed[condId].length >= 3 )
+            stick_input_changed[condId].splice(0, 1);
+        if( stick_input_changed[condId].length >= 2 )
         {
-            for(let i = 7; i <= 10; i ++)
-                if(!$(`#inputform-${condId} #aa-${i}-1`)[0].checked)
-                    $(`#inputform-${condId} #tr-${i}-1`).addClass("fcDisabled");
-                else
-                    $(`#inputform-${condId} #tr-${i}-1`).removeClass("fcDisabled");
-            if($(`#inputform-${condId} #aa-7-1`)[0].checked && $(`#inputform-${condId} #aa-8-1`)[0].checked)
+            if(stick_input_changed[condId].indexOf('angle') > -1 && stick_input_changed[condId].indexOf('diagnol') > -1)
                 stick_right_input[condId] = 'diagnol';
-            else if($(`#inputform-${condId} #aa-7-1`)[0].checked && $(`#inputform-${condId} #aa-9-1`)[0].checked)
+            else if(stick_input_changed[condId].indexOf('angle') > -1 && stick_input_changed[condId].indexOf('height') > -1)
                 stick_right_input[condId] = 'height';
-            else if($(`#inputform-${condId} #aa-7-1`)[0].checked && $(`#inputform-${condId} #aa-10-1`)[0].checked)
+            else if(stick_input_changed[condId].indexOf('angle') > -1 && stick_input_changed[condId].indexOf('length') > -1)
                 stick_right_input[condId] = 'length';
-            else if($(`#inputform-${condId} #aa-8-1`)[0].checked && $(`#inputform-${condId} #aa-9-1`)[0].checked)
+            else if(stick_input_changed[condId].indexOf('diagnol') > -1 && stick_input_changed[condId].indexOf('height') > -1)
                 stick_right_input[condId] = 'diagnolheight';
-            else if($(`#inputform-${condId} #aa-8-1`)[0].checked && $(`#inputform-${condId} #aa-10-1`)[0].checked)
+            else if(stick_input_changed[condId].indexOf('diagnol') > -1 && stick_input_changed[condId].indexOf('length') > -1)
                 stick_right_input[condId] = 'diagnollength';
-            else if($(`#inputform-${condId} #aa-9-1`)[0].checked && $(`#inputform-${condId} #aa-10-1`)[0].checked)
+            else if(stick_input_changed[condId].indexOf('height') > -1 && stick_input_changed[condId].indexOf('length') > -1)
                 stick_right_input[condId] = 'heightlength';
         }
-        else
-        {
-            for(let i = 7; i <= 10; i ++)
-                if(!$(`#inputform-${condId} #aa-${i}-1`)[0].checked)
-                    $(`#inputform-${condId} #tr-${i}-1`).removeClass("fcDisabled");
-        }
-
+        console.log(stick_right_input[condId]);
     }
 
     // Calculate correct values
@@ -2406,137 +2409,92 @@ $(document).ready(function() {
         if(stick_right_input[condId] == 'height' && $(`#inputform-${condId} #a-9-1`).val() != "")
         {
             var height = parseFloat($(`#inputform-${condId} #a-9-1`).val());
-            $(`#inputform-${condId} #tc-7-1`).css('background', 'transparent');
-            $(`#inputform-${condId} #tc-9-1`).css('background', 'transparent');
-
             var rightDiagnol = (height / Math.sin(angleRadian)).toFixed(2);
-            if(rightDiagnol != parseFloat($(`#inputform-${condId} #a-8-1`).val()).toFixed(2))
-                $(`#inputform-${condId} #tc-8-1`).css('background', '#FFC7CE');
-            else
-                $(`#inputform-${condId} #tc-8-1`).css('background', 'transparent');
-
             var rightLength = (height / Math.tan(angleRadian)).toFixed(2);
-            if(rightLength != parseFloat($(`#inputform-${condId} #a-10-1`).val()).toFixed(2))
-                $(`#inputform-${condId} #tc-10-1`).css('background', '#FFC7CE');
-            else
-                $(`#inputform-${condId} #tc-10-1`).css('background', 'transparent');
 
-            $(`#inputform-${condId} #ac-8-1`).val(rightDiagnol);
-            $(`#inputform-${condId} #ac-9-1`).val(height);
-            $(`#inputform-${condId} #ac-10-1`).val(rightLength);
+            $(`#inputform-${condId} #value-7-1`).css('background', 'transparent'); $(`#inputform-${condId} #calced-7-1`)[0].innerHTML = "";
+            $(`#inputform-${condId} #value-8-1`).css('background', '#95b3d7'); $(`#inputform-${condId} #calced-8-1`)[0].innerHTML = "calc'ed";
+            $(`#inputform-${condId} #value-9-1`).css('background', 'transparent'); $(`#inputform-${condId} #calced-9-1`)[0].innerHTML = "";
+            $(`#inputform-${condId} #value-10-1`).css('background', '#95b3d7'); $(`#inputform-${condId} #calced-10-1`)[0].innerHTML = "calc'ed";
+
+            $(`#inputform-${condId} #a-8-1`).val(rightDiagnol);
+            $(`#inputform-${condId} #a-10-1`).val(rightLength);
         }
         else if(stick_right_input[condId] == 'length' && $(`#inputform-${condId} #a-10-1`).val() != "")
         {
             var length = parseFloat($(`#inputform-${condId} #a-10-1`).val());
-            $(`#inputform-${condId} #tc-7-1`).css('background', 'transparent');
-            $(`#inputform-${condId} #tc-10-1`).css('background', 'transparent');
-
             var rightDiagnol = (length / Math.cos(angleRadian)).toFixed(2);
-            if(rightDiagnol != parseFloat($(`#inputform-${condId} #a-8-1`).val()).toFixed(2))
-                $(`#inputform-${condId} #tc-8-1`).css('background', '#FFC7CE');
-            else
-                $(`#inputform-${condId} #tc-8-1`).css('background', 'transparent');
-
             var rightHeight = (length * Math.tan(angleRadian)).toFixed(2);
-            if(rightHeight != parseFloat($(`#inputform-${condId} #a-9-1`).val()).toFixed(2))
-                $(`#inputform-${condId} #tc-9-1`).css('background', '#FFC7CE');
-            else
-                $(`#inputform-${condId} #tc-9-1`).css('background', 'transparent');
 
-            $(`#inputform-${condId} #ac-8-1`).val(rightDiagnol);
-            $(`#inputform-${condId} #ac-9-1`).val(rightHeight);
-            $(`#inputform-${condId} #ac-10-1`).val(length);
+            $(`#inputform-${condId} #value-7-1`).css('background', 'transparent'); $(`#inputform-${condId} #calced-7-1`)[0].innerHTML = "";
+            $(`#inputform-${condId} #value-8-1`).css('background', '#95b3d7'); $(`#inputform-${condId} #calced-8-1`)[0].innerHTML = "calc'ed";
+            $(`#inputform-${condId} #value-9-1`).css('background', '#95b3d7'); $(`#inputform-${condId} #calced-9-1`)[0].innerHTML = "calc'ed";
+            $(`#inputform-${condId} #value-10-1`).css('background', '#transparent'); $(`#inputform-${condId} #calced-10-1`)[0].innerHTML = "";
+            
+            $(`#inputform-${condId} #a-8-1`).val(rightDiagnol);
+            $(`#inputform-${condId} #a-9-1`).val(rightHeight);
         }
         else if(stick_right_input[condId] == 'diagnol' && $(`#inputform-${condId} #a-8-1`).val() != "")
         {
             var diagnol = parseFloat($(`#inputform-${condId} #a-8-1`).val());
-            $(`#inputform-${condId} #tc-7-1`).css('background', 'transparent');
-            $(`#inputform-${condId} #tc-8-1`).css('background', 'transparent');
-
             var rightHeight = (diagnol * Math.sin(angleRadian)).toFixed(2);
-            if(rightHeight != parseFloat($(`#inputform-${condId} #a-9-1`).val()).toFixed(2))
-                $(`#inputform-${condId} #tc-9-1`).css('background', '#FFC7CE');
-            else
-                $(`#inputform-${condId} #tc-9-1`).css('background', 'transparent');
-
             var rightWidth = (diagnol * Math.cos(angleRadian)).toFixed(2);
-            if(rightWidth != parseFloat($(`#inputform-${condId} #a-10-1`).val()).toFixed(2))
-                $(`#inputform-${condId} #tc-10-1`).css('background', '#FFC7CE');
-            else
-                $(`#inputform-${condId} #tc-10-1`).css('background', 'transparent');
 
-            $(`#inputform-${condId} #ac-8-1`).val(diagnol);
-            $(`#inputform-${condId} #ac-9-1`).val(rightHeight);
-            $(`#inputform-${condId} #ac-10-1`).val(rightWidth);
+            $(`#inputform-${condId} #value-7-1`).css('background', 'transparent'); $(`#inputform-${condId} #calced-7-1`)[0].innerHTML = "";
+            $(`#inputform-${condId} #value-8-1`).css('background', 'transparent'); $(`#inputform-${condId} #calced-8-1`)[0].innerHTML = "";
+            $(`#inputform-${condId} #value-9-1`).css('background', '#95b3d7'); $(`#inputform-${condId} #calced-9-1`)[0].innerHTML = "calc'ed";
+            $(`#inputform-${condId} #value-10-1`).css('background', '#95b3d7'); $(`#inputform-${condId} #calced-10-1`)[0].innerHTML = "calc'ed";
+
+            $(`#inputform-${condId} #a-9-1`).val(rightHeight);
+            $(`#inputform-${condId} #a-10-1`).val(rightWidth);
         }
         else if(stick_right_input[condId] == 'diagnolheight' && $(`#inputform-${condId} #a-8-1`).val() != "" && $(`#inputform-${condId} #a-9-1`).val() != "")
         {
             var diagnol = parseFloat($(`#inputform-${condId} #a-8-1`).val());
             var height = parseFloat($(`#inputform-${condId} #a-9-1`).val());
-            $(`#inputform-${condId} #tc-8-1`).css('background', 'transparent');
-            $(`#inputform-${condId} #tc-9-1`).css('background', 'transparent');
-
             var rightAngle = Math.asin(height / diagnol);
             var rightAngleDegree = radianToDegree(rightAngle).toFixed(2);
-            if(rightAngleDegree != parseFloat($(`#inputform-${condId} #a-7-1`).val()).toFixed(2))
-                $(`#inputform-${condId} #tc-7-1`).css('background', '#FFC7CE');
-            else
-                $(`#inputform-${condId} #tc-7-1`).css('background', 'transparent');
-
             var rightLength = (diagnol * Math.cos(rightAngle)).toFixed(2);
-            if(rightLength != parseFloat($(`#inputform-${condId} #a-10-1`).val()).toFixed(2))
-                $(`#inputform-${condId} #tc-10-1`).css('background', '#FFC7CE');
-            else
-                $(`#inputform-${condId} #tc-10-1`).css('background', 'transparent');
 
-            $(`#inputform-${condId} #ac-7-1`).val(rightAngleDegree);
-            $(`#inputform-${condId} #ac-10-1`).val(rightLength);
+            $(`#inputform-${condId} #value-7-1`).css('background', '#95b3d7'); $(`#inputform-${condId} #calced-7-1`)[0].innerHTML = "calc'ed";
+            $(`#inputform-${condId} #value-8-1`).css('background', 'transparent'); $(`#inputform-${condId} #calced-8-1`)[0].innerHTML = "";
+            $(`#inputform-${condId} #value-9-1`).css('background', 'transparent'); $(`#inputform-${condId} #calced-9-1`)[0].innerHTML = "";
+            $(`#inputform-${condId} #value-10-1`).css('background', '#95b3d7'); $(`#inputform-${condId} #calced-10-1`)[0].innerHTML = "calc'ed";
+            
+            $(`#inputform-${condId} #a-7-1`).val(rightAngleDegree);
+            $(`#inputform-${condId} #a-10-1`).val(rightLength);
         }
         else if(stick_right_input[condId] == 'diagnollength' && $(`#inputform-${condId} #a-8-1`).val() != "" && $(`#inputform-${condId} #a-10-1`).val() != "")
         {
             var diagnol = parseFloat($(`#inputform-${condId} #a-8-1`).val());
             var length = parseFloat($(`#inputform-${condId} #a-10-1`).val());
-            $(`#inputform-${condId} #tc-8-1`).css('background', 'transparent');
-            $(`#inputform-${condId} #tc-10-1`).css('background', 'transparent');
-
             var rightAngle = Math.acos(length / diagnol);
             var rightAngleDegree = radianToDegree(rightAngle).toFixed(2);
-            if(rightAngleDegree != parseFloat($(`#inputform-${condId} #a-7-1`).val()).toFixed(2))
-                $(`#inputform-${condId} #tc-7-1`).css('background', '#FFC7CE');
-            else
-                $(`#inputform-${condId} #tc-7-1`).css('background', 'transparent');
-
             var rightHeight = (diagnol * Math.sin(rightAngle)).toFixed(2);
-            if(rightHeight != parseFloat($(`#inputform-${condId} #a-9-1`).val()).toFixed(2))
-                $(`#inputform-${condId} #tc-9-1`).css('background', '#FFC7CE');
-            else
-                $(`#inputform-${condId} #tc-9-1`).css('background', 'transparent');
 
-            $(`#inputform-${condId} #ac-7-1`).val(rightAngleDegree);
-            $(`#inputform-${condId} #ac-9-1`).val(rightHeight);
+            $(`#inputform-${condId} #value-7-1`).css('background', '#95b3d7'); $(`#inputform-${condId} #calced-7-1`)[0].innerHTML = "calc'ed";
+            $(`#inputform-${condId} #value-8-1`).css('background', 'transparent'); $(`#inputform-${condId} #calced-8-1`)[0].innerHTML = "";
+            $(`#inputform-${condId} #value-9-1`).css('background', '#95b3d7'); $(`#inputform-${condId} #calced-9-1`)[0].innerHTML = "calc'ed";
+            $(`#inputform-${condId} #value-10-1`).css('background', 'transparent'); $(`#inputform-${condId} #calced-10-1`)[0].innerHTML = "";
+            
+            $(`#inputform-${condId} #a-7-1`).val(rightAngleDegree);
+            $(`#inputform-${condId} #a-9-1`).val(rightHeight);
         }
         else if(stick_right_input[condId] == 'heightlength' && $(`#inputform-${condId} #a-9-1`).val() != "" && $(`#inputform-${condId} #a-10-1`).val() != "")
         {
             var height = parseFloat($(`#inputform-${condId} #a-8-1`).val());
             var length = parseFloat($(`#inputform-${condId} #a-10-1`).val());
-            $(`#inputform-${condId} #tc-8-1`).css('background', 'transparent');
-            $(`#inputform-${condId} #tc-10-1`).css('background', 'transparent');
-
             var rightAngle = Math.atan(height / length);
             var rightAngleDegree = radianToDegree(rightAngle).toFixed(2);
-            if(rightAngleDegree != parseFloat($(`#inputform-${condId} #a-7-1`).val()).toFixed(2))
-                $(`#inputform-${condId} #tc-7-1`).css('background', '#FFC7CE');
-            else
-                $(`#inputform-${condId} #tc-7-1`).css('background', 'transparent');
-
             var rightDiagnol = (height / Math.sin(rightAngle)).toFixed(2);
-            if(rightDiagnol != parseFloat($(`#inputform-${condId} #a-8-1`).val()).toFixed(2))
-                $(`#inputform-${condId} #tc-8-1`).css('background', '#FFC7CE');
-            else
-                $(`#inputform-${condId} #tc-8-1`).css('background', 'transparent');
 
-            $(`#inputform-${condId} #ac-7-1`).val(rightAngleDegree);
-            $(`#inputform-${condId} #ac-10-1`).val(rightDiagnol);
+            $(`#inputform-${condId} #value-7-1`).css('background', '#95b3d7'); $(`#inputform-${condId} #calced-7-1`)[0].innerHTML = "calc'ed";
+            $(`#inputform-${condId} #value-8-1`).css('background', '#95b3d7'); $(`#inputform-${condId} #calced-8-1`)[0].innerHTML = "calc'ed";
+            $(`#inputform-${condId} #value-9-1`).css('background', 'transparent'); $(`#inputform-${condId} #calced-9-1`)[0].innerHTML = "";
+            $(`#inputform-${condId} #value-10-1`).css('background', 'transparent'); $(`#inputform-${condId} #calced-10-1`)[0].innerHTML = "";
+
+            $(`#inputform-${condId} #a-7-1`).val(rightAngleDegree);
+            $(`#inputform-${condId} #a-8-1`).val(rightDiagnol);
         }
     }
 
