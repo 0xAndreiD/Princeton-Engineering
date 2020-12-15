@@ -417,6 +417,7 @@
             <td colspan="11" rowspan="19" style="position: relative;" class="iw400-bdr">
                 <canvas class="px-4" id="stick-canvas-{{ $conditionId }}" style="z-index:2; background:aliceblue" width="900px" height="500px"></canvas>
                 <div class="axisCheckBox"><input type="checkbox" id="stick-axis" tabindex="106"><label for="stick-axis">Show axis</label></div>
+                <div class="alertModuleFlow" id="stick-module-alert">Modules are longer than roof</div>
             </td>
         </tr>
     </tbody>
@@ -921,9 +922,10 @@
             <!-- <tr class="h13">
                 <td class="iw400" colspan="11" style="text-align:left;">Loading includes member self weight and roofing materials  w loading = wind on exposed areas</td>
             </tr> -->
-            <td colspan="11" rowspan="19" style="position: relative;">
+            <td colspan="11" rowspan="19" style="position: relative;" class="iw400-bdr">
                 <canvas class="px-4" id="canvas-{{ $conditionId }}" style="z-index:2; background:aliceblue" width="900px" height="500px"></canvas>
                 <div class="axisCheckBox"><input type="checkbox" id="truss-axis" tabindex="106"><label for="truss-axis">Show axis</label></div>
+                <div class="alertModuleFlow" id="truss-module-alert">Modules are longer than roof</div>
             </td>
             </tbody>
         </table>

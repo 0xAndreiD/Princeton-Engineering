@@ -148,3 +148,12 @@ html, body {
 .axisCheckBox label{
     margin: 0px;
 }
+
+.alertModuleFlow{
+    display: none;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    color: red;
+    font-size: 14px;
+}

@@ -293,6 +293,12 @@ var adjustDrawingPanel = function( condId ) {
         moduleLengthSum += (moduleGap + (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)));
     }
 
+    // Show alert when module length is longer
+    if(topXPoint < moduleLengthSum * Math.cos(angleRadian) || topYPoint < moduleLengthSum * Math.sin(angleRadian))
+        $(`#inputform-${condId} #truss-module-alert`).css('display', 'block');
+    else
+        $(`#inputform-${condId} #truss-module-alert`).css('display', 'none');
+
     topXPoint = Math.max(topXPoint, moduleLengthSum * Math.cos(angleRadian));
     topYPoint = Math.max(topYPoint, moduleLengthSum * Math.sin(angleRadian));
     
@@ -1852,7 +1858,13 @@ var adjustStickDrawingPanel = function( condId ) {
         
         moduleLengthSum += (moduleGap + (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)));
     }
-    
+
+    // Show alert when module length is longer
+    if( roofHeight + overhangY < Math.sin(angleRadian) * moduleLengthSum || (angleRadian != 0 && (1.0 / Math.tan(angleRadian)) * (roofHeight + overhangY) + overhangX < Math.cos(angleRadian) * moduleLengthSum))
+        $(`#inputform-${condId} #stick-module-alert`).css('display', 'block');
+    else
+        $(`#inputform-${condId} #stick-module-alert`).css('display', 'none');
+
     topYPoint = Math.max(roofHeight + overhangY, Math.sin(angleRadian) * moduleLengthSum);
     topXPoint = Math.max(angleRadian != 0 ? (1.0 / Math.tan(angleRadian)) * (roofHeight + overhangY) + overhangX : 0, Math.sin(Math.PI / 2 - angleRadian) * moduleLengthSum);
  
