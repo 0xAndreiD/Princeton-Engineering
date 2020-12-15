@@ -157,3 +157,9 @@ html, body {
     color: red;
     font-size: 14px;
 }
+
+.calcedCell{
+    font-family: Arial,sans-serif;
+    font-size: 10.00pt;
+    color: black;
+}
