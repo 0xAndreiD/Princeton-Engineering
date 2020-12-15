@@ -20,8 +20,7 @@
             <col width="320">
             <col width="70">
             <col width="100">
-            <col width="100">
-            <col width="80">
+            <col width="250">
         </colgroup>
     <tbody>
         <tr class="h13">
@@ -200,7 +199,7 @@
             <td class="iw400-right-bdr">Dist. from Top of Collar Tie to Attic Deck</td>
             <td class="iw400-bdr">ft</td>
             <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="c-2-1"  tabindex="40" value="3.08"></input></td>
-            <td><div style="overflow:hidden"></td>
+            <td><div id="c-2-warn" class="warnCell">Warning - Height above high end of rafter</td>
         </tr>
         <tr class="h13 class-truss-hide">
             <td><div style="overflow:hidden"></td>
@@ -216,7 +215,7 @@
             <td class="iw400-right-bdr">Knee Wall Height</td>
             <td class="iw400-bdr">ft</td>
             <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="c-4-1"  tabindex="41" value="2.00"></input></td>
-            <td><div style="overflow:hidden"></td>
+            <td><div id="c-4-warn" class="warnCell">Warning - Height above high end of rafter</td>
         </tr>
         <tr class="h13">
             <td><div style="overflow:hidden"></td>

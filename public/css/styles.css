@@ -162,4 +162,16 @@ html, body {
     font-family: Arial,sans-serif;
     font-size: 10.00pt;
     color: black;
+    padding-left: 4px;
+    font-style: italic;
+}
+
+.warnCell{
+    display: none;
+    font-family: Arial,sans-serif;
+    font-size: 10.00pt;
+    font-style: italic;
+    font-weight: 400;
+    padding-left: 4px;
+    color: red;
 }

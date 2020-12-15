@@ -1944,6 +1944,14 @@ var drawStickGraph = function( condId ) {
         stick_ctx[condId].lineTo(roofHeight * (1 / Math.tan(angleRadian))  * stick_grid_size[condId], - roofHeight * stick_grid_size[condId]);
         stick_ctx[condId].stroke();
     }
+    else{
+        stick_ctx[condId].beginPath();
+        stick_ctx[condId].lineWidth = 2;
+        stick_ctx[condId].strokeStyle = "#0000FF";
+        stick_ctx[condId].moveTo(0, 0);
+        stick_ctx[condId].lineTo(stick_canvas_width[condId], 0);
+        stick_ctx[condId].stroke();
+    }
 
     // Draw Floor
     stick_ctx[condId].beginPath();
@@ -1961,10 +1969,11 @@ var drawStickGraph = function( condId ) {
         stick_ctx[condId].fillText("Attic Floor", stick_canvas_width[condId] / 2, 30);
 
     // Draw Knee Wall
-    if( angleRadian != 0 )
-    {
-        var kneeWallHeight = parseFloat($(`#inputform-${condId} #c-4-1`).val());
+    var kneeWallHeight = parseFloat($(`#inputform-${condId} #c-4-1`).val());
 
+    if( kneeWallHeight <= roofHeight )
+    {
+        $(`#inputform-${condId} #c-4-warn`).css('display', 'none');
         stick_ctx[condId].beginPath();
         stick_ctx[condId].lineWidth = 2;
         stick_ctx[condId].strokeStyle = "#0000FF";
@@ -1972,23 +1981,23 @@ var drawStickGraph = function( condId ) {
         stick_ctx[condId].lineTo(kneeWallHeight * (1 / Math.tan(angleRadian))  * stick_grid_size[condId], - kneeWallHeight * stick_grid_size[condId]);
         stick_ctx[condId].stroke();
     }
-    else{
-        stick_ctx[condId].beginPath();
-        stick_ctx[condId].lineWidth = 2;
-        stick_ctx[condId].strokeStyle = "#0000FF";
-        stick_ctx[condId].moveTo(0, 0);
-        stick_ctx[condId].lineTo(stick_canvas_width[condId], 0);
-        stick_ctx[condId].stroke();
-    }
+    else
+        $(`#inputform-${condId} #c-4-warn`).css('display', 'block');
 
     // Draw Collar Tie
     var collarTieHeight = parseFloat($(`#inputform-${condId} #c-2-1`).val());
-    stick_ctx[condId].beginPath();
-    stick_ctx[condId].lineWidth = 2;
-    stick_ctx[condId].strokeStyle = "#0000FF";
-    stick_ctx[condId].moveTo(angleRadian != 0 ? collarTieHeight * (1 / Math.tan(angleRadian))  * stick_grid_size[condId] : 0, - collarTieHeight * stick_grid_size[condId]);
-    stick_ctx[condId].lineTo(angleRadian != 0 ? roofHeight * (1 / Math.tan(angleRadian))  * stick_grid_size[condId] : 0, - collarTieHeight * stick_grid_size[condId]);
-    stick_ctx[condId].stroke();
+    if( collarTieHeight <= roofHeight )
+    {
+        $(`#inputform-${condId} #c-2-warn`).css('display', 'none');
+        stick_ctx[condId].beginPath();
+        stick_ctx[condId].lineWidth = 2;
+        stick_ctx[condId].strokeStyle = "#0000FF";
+        stick_ctx[condId].moveTo(angleRadian != 0 ? collarTieHeight * (1 / Math.tan(angleRadian))  * stick_grid_size[condId] : 0, - collarTieHeight * stick_grid_size[condId]);
+        stick_ctx[condId].lineTo(angleRadian != 0 ? roofHeight * (1 / Math.tan(angleRadian))  * stick_grid_size[condId] : 0, - collarTieHeight * stick_grid_size[condId]);
+        stick_ctx[condId].stroke();
+    }
+    else
+        $(`#inputform-${condId} #c-2-warn`).css('display', 'block');
 
     // Draw solar rectangles
     var startModule = overhangLength - uphillDist;
