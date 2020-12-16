@@ -296,7 +296,7 @@ class GeneralController extends Controller
             );
         }
         
-        $totalData = JobRequest::count();
+        $totalData = $handler->count();
         $totalFiltered = $totalData; 
 
         $limit = $request->input('length');
