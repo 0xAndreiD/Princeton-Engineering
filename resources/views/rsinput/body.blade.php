@@ -29,6 +29,7 @@
         <button class="tablinks" onclick="openRfdTab(event, 'fc-8')" style="display: none;" id="fcTab-8">FC 8</button>
         <button class="tablinks" onclick="openRfdTab(event, 'fc-9')" style="display: none;" id="fcTab-9">FC 9</button>
         <button class="tablinks" onclick="openRfdTab(event, 'fc-10')" style="display: none;" id="fcTab-10">FC 10</button>
+        <button class="tablinks" onclick="openRfdTab(event, 'tab_override')" id="overrideTab">Overrides</button>
     </div>
 
     <div id="tab_first" class="rfdTabContent">
@@ -43,6 +44,9 @@
         @include('rsinput.content')
     </div>
     @endfor
+    <div id="tab_override" class="rfdTabContent">
+        @include('rsinput.override')
+    </div>
 </div>
 
 @include('rsinput.script')

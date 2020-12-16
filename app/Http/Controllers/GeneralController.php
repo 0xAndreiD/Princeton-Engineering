@@ -252,6 +252,14 @@ class GeneralController extends Controller
             $number ++;
         }
 
+        //Overrides
+        $data['Wind'] = number_format(floatval($input['wind-speed']), 1);
+        $data['WindCheckbox'] = $input['wind-speed-override'] == "true" ? true : false;
+        $data['Snow'] = number_format(floatval($input['ground-snow']), 1);
+        $data['SnowCheckbox'] = $input['ground-snow-override'] == "true" ? true : false;
+
+        $data['Units'] = $input['override-unit'];
+
         return $data;
     }
 

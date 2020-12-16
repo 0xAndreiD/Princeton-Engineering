@@ -13,13 +13,17 @@ function openRfdTab(evt, tabName) {
   }
   document.getElementById(tabName).style.display = "block";
   evt.currentTarget.className += " active";
-  if( tabName != "tab_first" )
+  
+  if( tabName == "tab_first" )
+    document.getElementById('subPageTitle').innerHTML = 'Site and Equipment Data Input';
+  else if( tabName == "tab_override" )
+    document.getElementById('subPageTitle').innerHTML = 'Custom Program Data Overrides';
+  else 
   {
     window.conditionId = parseInt(tabName.slice(3));
     document.getElementById('subPageTitle').innerHTML = 'Framing Data Input';
   }
-  else
-    document.getElementById('subPageTitle').innerHTML = 'Site and Equipment Data Input';
+  
   console.log('Tab No:', window.conditionId);
 }
 
@@ -1244,6 +1248,12 @@ var getData = function(caseCount = 10) {
         alldata['caseInputs'].push(data);
     }
 
+    alldata['wind-speed'] = $('#wind-speed').val();
+    alldata['wind-speed-override'] = $('#wind-speed-override')[0].checked;
+    alldata['ground-snow'] = $('#ground-snow').val();
+    alldata['ground-snow-override'] = $('#ground-snow-override')[0].checked;
+    alldata['override-unit'] = $('#override-unit').val();
+
     return alldata;
 }
 
@@ -2013,7 +2023,6 @@ var drawStickGraph = function( condId ) {
 
     // Draw Collar Tie
     var collarTieHeight = $(`#inputform-${condId} #c-2-1`).val() == "" ? 0 : parseFloat($(`#inputform-${condId} #c-2-1`).val());
-    console.log(collarTieHeight, roofHeight);
     if( collarTieHeight <= roofHeight )
     {
         $(`#inputform-${condId} #c-2-warn`).css('display', 'none');
