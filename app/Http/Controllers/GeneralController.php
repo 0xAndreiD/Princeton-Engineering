@@ -112,13 +112,13 @@ class GeneralController extends Controller
             $company = Company::where('id', Auth::user()->companyid)->first();
             $data = $this->inputToJson($request['data'], $request['caseCount']);
             Storage::disk('local')->put($filename, json_encode($data));
-            $available = 0;
+            $planStatus = 0;
             if($request['status'] == 'Saved')
-                $available = 1;
+                $planStatus = 1;
             else if($request['status'] == 'Data Check')
-                $available = 2;
+                $planStatus = 2;
             else if($request['status'] == 'Submitted')
-                $available = 3;
+                $planStatus = 3;
             JobRequest::create([
                 'companyName' => $company['company_name'],
                 'companyId' => Auth::user()->companyid,
@@ -126,7 +126,7 @@ class GeneralController extends Controller
                 'clientProjectName' => $request['data']['txt-project-name'],
                 'clientProjectNumber' => $request['data']['txt-project-number'],
                 'requestFile' => $filename,
-                'available' => $available,
+                'planStatus' => $planStatus,
                 'projectState' => 0,
                 'analysisType' => 0,
                 'createdTime' => gmdate("Y-m-d\TH:i:s", $current_time),
@@ -261,15 +261,194 @@ class GeneralController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function projectList(){
-        $projects = array();
+        return view('general.projectlist');
+    }
+
+    public function getProjectList(Request $request){
         if(Auth::user()->userrole == 2)
-            $projects = JobRequest::all();
-        else if(Auth::user()->userrole == 1)
-            $projects = JobRequest::where('companyId', Auth::user()->companyid)->all();
+        {
+            $handler = new JobRequest;
+            $columns = array( 
+                0 =>'id', 
+                1 =>'companyId',
+                2 =>'userId',
+                3 =>'clientProjectName',
+                4 =>'clientProjectNumber',
+                5 =>'requestFile',
+                6 =>'createdTime',
+                7 =>'submittedTime',
+                8 =>'planStatus',
+                9 =>'projectState'
+            );
+        }
         else
-            $projects = JobRequest::where('companyId', Auth::user()->companyid)->where('userId', Auth::user()->usernumber)->all();
+        {
+            $handler = JobRequest::where('companyId', Auth::user()->companyid);
+            $columns = array( 
+                0 =>'id', 
+                1 =>'userId',
+                2 =>'clientProjectName',
+                3 =>'clientProjectNumber',
+                4 =>'createdTime',
+                5 =>'submittedTime',
+                6 =>'planStatus',
+                7 =>'projectState'
+            );
+        }
         
-        return view('general.projectlist')->with('projects', $projects);
+        $totalData = JobRequest::count();
+        $totalFiltered = $totalData; 
+
+        $limit = $request->input('length');
+        $start = $request->input('start');
+        $order = $columns[$request->input('order.0.column')];
+        $dir = $request->input('order.0.dir');
+
+        if(empty($request->input('search.value')))
+        {            
+            $jobs = $handler->offset($start)
+                ->leftjoin('company_info', "company_info.id", "=", "job_request.companyId")
+                ->leftjoin('users', function($join){
+                    $join->on('job_request.companyId', '=', 'users.companyid');
+                    $join->on('job_request.userId', '=', 'users.usernumber');
+                })
+                ->limit($limit)
+                ->orderBy($order,$dir)
+                ->get(
+                    array(
+                        'job_request.id as id',
+                        'company_info.company_name as companyname',
+                        'users.username as username',
+                        'job_request.clientProjectName as projectname',
+                        'job_request.clientProjectNumber as projectnumber',
+                        'job_request.requestFile as requestfile',
+                        'job_request.createdTime as createdtime',
+                        'job_request.submittedTime as submittedtime',
+                        'job_request.planStatus as planstatus',
+                        'job_request.projectState as projectstate',
+                    )
+                );
+        }
+        else {
+            $search = $request->input('search.value'); 
+            $jobs =  $handler->where('job_request.id','LIKE',"%{$search}%")
+                        ->leftjoin('company_info', "company_info.id", "=", "job_request.companyId")
+                        ->leftjoin('users', function($join){
+                            $join->on('job_request.companyId', '=', 'users.companyid');
+                            $join->on('job_request.userId', '=', 'users.usernumber');
+                        })
+                        ->orWhere('company_info.company_name', 'LIKE',"%{$search}%")
+                        ->orWhere('users.username', 'LIKE',"%{$search}%")
+                        ->orWhere('job_request.clientProjectName', 'LIKE',"%{$search}%")
+                        ->orWhere('job_request.clientProjectNumber', 'LIKE',"%{$search}%")
+                        ->orWhere('job_request.createdTime', 'LIKE',"%{$search}%")
+                        ->orWhere('job_request.submittedTime', 'LIKE',"%{$search}%")
+                        ->offset($start)
+                        ->limit($limit)
+                        ->orderBy($order,$dir)
+                        ->get(
+                            array(
+                                'job_request.id as id',
+                                'company_info.company_name as companyname',
+                                'users.username as username',
+                                'job_request.clientProjectName as projectname',
+                                'job_request.clientProjectNumber as projectnumber',
+                                'job_request.requestFile as requestfile',
+                                'job_request.createdTime as createdtime',
+                                'job_request.submittedTime as submittedtime',
+                                'job_request.planStatus as planstatus',
+                                'job_request.projectState as projectstate',
+                            )
+                        );
+
+            $totalFiltered = $handler->where('job_request.id','LIKE',"%{$search}%")
+                        ->leftjoin('company_info', "company_info.id", "=", "job_request.companyId")
+                        ->leftjoin('users', "users.id", "=", "job_request.userId")
+                        ->orWhere('company_info.company_name', 'LIKE',"%{$search}%")
+                        ->orWhere('users.username', 'LIKE',"%{$search}%")
+                        ->orWhere('job_request.clientProjectName', 'LIKE',"%{$search}%")
+                        ->orWhere('job_request.clientProjectNumber', 'LIKE',"%{$search}%")
+                        ->orWhere('job_request.createdTime', 'LIKE',"%{$search}%")
+                        ->orWhere('job_request.submittedTime', 'LIKE',"%{$search}%")
+                        ->count();
+        }
+
+        $data = array();
+
+        if(!empty($jobs))
+        {
+            foreach ($jobs as $job)
+            {
+                $nestedData['id'] = $job->id;
+                if(Auth::user()->userrole == 2)
+                {
+                    $nestedData['companyname'] = $job->companyname;
+                    $nestedData['requestfile'] = $job->requestfile;
+                }
+                $nestedData['username'] = $job->username;
+                $nestedData['projectname'] = $job->projectname;
+                $nestedData['projectnumber'] = $job->projectnumber;
+                $nestedData['createdtime'] = $job->createdtime;
+                $nestedData['submittedtime'] = $job->submittedtime;
+                
+                switch ($job->planstatus){
+                    case 0:
+                        $nestedData['planstatus'] = "<span class='badge badge-danger'> None </span>"; break;
+                    case 1:
+                        $nestedData['planstatus'] = "<span class='badge badge-primary'> Saved </span>"; break;
+                    case 2:
+                        $nestedData['planstatus'] = "<span class='badge badge-info'> Check Requested </span>"; break;
+                    case 3:
+                        $nestedData['planstatus'] = "<span class='badge badge-warning'> Reviewed </span>"; break;
+                    case 4:
+                        $nestedData['planstatus'] = "<span class='badge badge-warning'> Submitted </span>"; break;
+                    case 5:
+                        $nestedData['planstatus'] = "<span class='badge badge-warning'> Report Prepared </span>"; break;
+                    case 6:
+                        $nestedData['planstatus'] = "<span class='badge badge-warning'> Link Sent </span>"; break;
+                    case 7:
+                        $nestedData['planstatus'] = "<span class='badge badge-warning'> Completed </span>"; break;
+                }
+
+                switch ($job->projectstate){
+                    case 0:
+                        $nestedData['projectstate'] = "<span class='badge badge-danger'> No action </span>"; break;
+                    case 1:
+                        $nestedData['projectstate'] = "<span class='badge badge-primary'> Plans uploaded to portal </span>"; break;
+                    case 2:
+                        $nestedData['projectstate'] = "<span class='badge badge-info'> Plans reviewed </span>"; break;
+                    case 3:
+                        $nestedData['projectstate'] = "<span class='badge badge-warning'> Comments issued </span>"; break;
+                    case 4:
+                        $nestedData['projectstate'] = "<span class='badge badge-warning'> Updated plans uploaded to portal </span>"; break;
+                    case 5:
+                        $nestedData['projectstate'] = "<span class='badge badge-warning'> Revised comments issued </span>"; break;
+                    case 6:
+                        $nestedData['projectstate'] = "<span class='badge badge-warning'> Final plans uploaded to portal </span>"; break;
+                    case 7:
+                        $nestedData['projectstate'] = "<span class='badge badge-warning'> PE sealed plans link sent </span>"; break;
+                }
+
+                $nestedData['actions'] = "
+                <div class='text-center'>
+                    <button type='button' class='btn btn-primary' 
+                        onclick='showEditUser(this,{$nestedData['id']})'
+                        data-toggle='modal' data-target='#modal-block-normal'>
+                        <i class='fa fa-pencil-alt'></i>
+                    </button>" . 
+                    (Auth::user()->userrole == 2 ? "<button type='button' class='js-swal-confirm btn btn-danger' onclick='delJob(this,{$nestedData['id']})'>
+                        <i class='fa fa-trash'></i>
+                    </button>" : "") . "</div>";
+                $data[] = $nestedData;
+            }
+        }
+        $json_data = array(
+            "draw"            => intval($request->input('draw')),  
+            "recordsTotal"    => intval($totalData),  
+            "recordsFiltered" => intval($totalFiltered), 
+            "data"            => $data   
+            );
+        echo json_encode($json_data);
     }
 
     /**

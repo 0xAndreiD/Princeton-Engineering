@@ -17,50 +17,107 @@
     </div>
 </div>
 
-<div class="content">
-    <!-- Dynamic Table Full -->
+<!-- Dynamic Table Full -->
+<div class="content" style="text-align:left">
     <div class="block block-rounded block-bordered">
-        <div class="block-content block-content-full">
-            <!-- DataTables init on table by adding .js-dataTable-full class, functionality is initialized in js/pages/be_tables_datatables.min.js which was auto compiled from _es6/pages/be_tables_datatables.js -->
-            <table class="table table-bordered table-striped table-vcenter js-dataTable-full">
-                <thead>
-                    <tr>
-                        <th class="text-center" style="width: 30px;">ID</th>
-                        <th style = "width: 15%">Project Name</th>
-                        <th style="width: 15%;">Project Number</th>
-                        <th style="width: 30%;">File Name</th>
-                        <th style="width: 10%;">Created Time</th>
-                        <th style="width: 10%;">Submitted Time</th>
-                        <th style="width: 10%;">Status</th>
-                        <th style="width: 10%;">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($projects as $project)
-                    <tr>
-                        <td class="text-center">{{$project['id']}}</td>
-                        <td >{{ $project['clientProjectName'] }}</td>
-                        <td >{{ $project['clientProjectNumber'] }}</td>
-                        <td > <a href="{{ route('requestFile') . '?jobId=' . $project['id'] }}"> {{ $project['requestFile'] }} </a> </td>
-                        <td >{{ $project['createdTime'] }}</td>
-                        <td >{{ $project['submittedTime'] }}</td>
-                        <td ><span class="badge badge-info"> {{ $project['available'] }} </span> </td>
-                        <td class="text-center">
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-sm btn-primary" data-toggle="tooltip" title="Edit">
-                                    <i class="fa fa-pencil-alt"></i>
-                                </button>
-                                <button type="button" class="btn btn-sm btn-primary" data-toggle="tooltip" title="Delete">
-                                    <i class="fa fa-times"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
+        <div class="block-header block-header-default">
+            <h3 class="block-title">Project List</h3>
+            <div class="block-options">
+                <a type="button" class="btn-block-option" 
+                    data-toggle='modal' data-target='#modal-block-normal'
+                    href="{{ route('rsinput') }}">
+                    <i class="fa fa-plus"></i> Add Project
+                </a>
+            </div>
         </div>
-    <div>
+        <div class="block-content block-content-full">
+            <div class="table-responsive">
+                <table id="users" class="table table-bordered table-striped table-vcenter text-center" style="width:100%;">
+                    <thead>
+                        <tr>
+                            @if(Auth::user()->userrole == 2)
+                            <th class="text-center" style="width: 10%;">ID</th>
+                            <th style="width:10%">Company Name</th>
+                            <th style="width:10%;">User</th>
+                            <th style="width:15%;">Project Name</th>
+                            <th style="width:10%;">Project Number</th>
+                            <th style="width:5%;">File Name</th>
+                            <th style="width:10%;">Created Time</th>
+                            <th style="width:10%;">Submitted Time</th>
+                            <th style="width:5%;">Plan Status</th>
+                            <th style="width:5%;">Project Status</th>
+                            <th style="min-width: 150px;">Action</th>
+                            @else
+                            <th class="text-center" style="width: 10%;">ID</th>
+                            <th style="width:15%;">User</th>
+                            <th style="width:20%;">Project Name</th>
+                            <th style="width:10%;">Project Number</th>
+                            <th style="width:10%;">Created Time</th>
+                            <th style="width:10%;">Submitted Time</th>
+                            <th style="width:5%;">Plan Status</th>
+                            <th style="width:10%;">Project Status</th>
+                            <th style="min-width: 70px;">Action</th>
+                            @endif
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
+
+<script src="{{ asset('js/pages/common.js') }}"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#users').DataTable({
+            "processing": true,
+            "serverSide": true,
+            "responsive": true,
+            "ajax":{
+                    "url": "{{ url('getProjectList') }}",
+                    "dataType": "json",
+                    "type": "POST",
+                    "data":{ _token: "{{csrf_token()}}"}
+                },
+            "columns": [
+                @if(Auth::user()->userrole == 2)
+                { "data": "id" },
+                { "data": "companyname" },
+                { "data": "username" },
+                { "data": "projectname" },
+                { "data": "projectnumber" },
+                { "data": "requestfile" },
+                { "data": "createdtime" },
+                { "data": "submittedtime" },
+                { "data": "planstatus" },
+                { "data": "projectstate" },
+                { "data": "actions", "orderable": false }
+                @else
+                { "data": "id" },
+                { "data": "username" },
+                { "data": "projectname" },
+                { "data": "projectnumber" },
+                { "data": "createdtime" },
+                { "data": "submittedtime" },
+                { "data": "planstatus" },
+                { "data": "projectstate" },
+                { "data": "actions", "orderable": false }
+                @endif
+            ]	 
+        });
+
+        $.ajaxSetup({
+            headers:
+            { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
+        });
+    });
+</script>
+
+@if (Auth::user()->userrole == 2)
+    @include('general.projectscript')
+@endif
 
 @endsection
