@@ -112,6 +112,13 @@ class GeneralController extends Controller
             $company = Company::where('id', Auth::user()->companyid)->first();
             $data = $this->inputToJson($request['data'], $request['caseCount']);
             Storage::disk('local')->put($filename, json_encode($data));
+            $available = 0;
+            if($request['status'] == 'Saved')
+                $available = 1;
+            else if($request['status'] == 'Data Check')
+                $available = 2;
+            else if($request['status'] == 'Submitted')
+                $available = 3;
             JobRequest::create([
                 'companyName' => $company['company_name'],
                 'companyId' => Auth::user()->companyid,
@@ -119,7 +126,7 @@ class GeneralController extends Controller
                 'clientProjectName' => $request['data']['txt-project-name'],
                 'clientProjectNumber' => $request['data']['txt-project-number'],
                 'requestFile' => $filename,
-                'available' => $request['status'],
+                'available' => $available,
                 'projectState' => 0,
                 'analysisType' => 0,
                 'createdTime' => gmdate("Y-m-d\TH:i:s", $current_time),
