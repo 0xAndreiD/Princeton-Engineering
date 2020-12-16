@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
 
-        <title>Princeton Engineering</title>
+        <title>Client Admin Panel</title>
 
         <meta name="description" content="Princeton Engineering">
         <meta name="author" content="pixelcave">
@@ -45,7 +45,7 @@
 
         <script src="{{ asset('js/jquery.min.js') }}"></script>
         <script type="text/javascript" src="{{ asset('js/sweetalert.min.js') }}" ></script>
-
+       
         <script src="{{ asset('js/dashmix.core.min.js') }}"></script>
         <script src="{{ asset('js/dashmix.app.min.js') }}"></script>
     </head>
@@ -94,7 +94,7 @@
                     <a class="font-w600 text-dual" href="javascript:void(0)">
                         @ {{ Auth::user()->username }}
                     </a>
-                    <span class="badge badge-pill badge-danger">Admin</span>
+                    <span class="badge badge-pill badge-danger">Client Admin</span>
                 </div>
                 <!-- END User Info -->
 
@@ -114,17 +114,11 @@
                                 <span class="nav-main-link-name">Data Input</span>
                             </a>
                         </li>
-                        <li class="nav-main-heading">Users &amp; Companies</li>
+                        <li class="nav-main-heading">Users</li>
                         <li class="nav-main-item">
                             <a class="nav-main-link" href="{{ route('userList') }}">
                                 <i class="nav-main-link-icon fa fa-user"></i>
                                 <span class="nav-main-link-name">Manage Users</span>
-                            </a>
-                        </li>
-                        <li class="nav-main-item">
-                            <a class="nav-main-link" href="{{ route('companyList') }}">
-                                <i class="nav-main-link-icon fa fa-users"></i>
-                                <span class="nav-main-link-name">Manage Companies</span>
                             </a>
                         </li>
                         <li class="nav-main-heading">Projects</li>
@@ -134,13 +128,7 @@
                                 <span class="nav-main-link-name">Project list</span>
                             </a>
                         </li>
-                        <li class="nav-main-item">
-                            <a class="nav-main-link" href="#">
-                                <i class="nav-main-link-icon fa fa-lock"></i>
-                                <span class="nav-main-link-name">Manage Project Data File</span>
-                            </a>
-                        </li>
-                        <li class="nav-main-heading">Administrator Tools</li>
+                        <li class="nav-main-heading">Company Tools</li>
                         <li class="nav-main-item">
                             <a class="nav-main-link" href="{{ route('companyProfile') }}">
                                 <i class="nav-main-link-icon fa fa-users"></i>
@@ -151,12 +139,6 @@
                             <a class="nav-main-link" href="#">
                                 <i class="nav-main-link-icon fa fa-users"></i>
                                 <span class="nav-main-link-name">Company Info</span>
-                            </a>
-                        </li>
-                        <li class="nav-main-item">
-                            <a class="nav-main-link" href="#">
-                                <i class="nav-main-link-icon fa fa-users"></i>
-                                <span class="nav-main-link-name">Users Info</span>
                             </a>
                         </li>
                         <li class="nav-main-item">
@@ -248,7 +230,7 @@
                 <div class="content py-0">
                     <div class="row font-size-sm">
                         <div class="col-sm-6 order-sm-2 mb-1 mb-sm-0 text-center text-sm-right">
-                            Crafted with <i class="fa fa-heart text-danger"></i> by <a class="font-w600" href="#" target="_blank">.</a>
+                            .
                         </div>
                         <div class="col-sm-6 order-sm-1 text-center text-sm-left">
                             <a class="font-w600" href="#" target="_blank">Copyright © 2020 Richard Pantel. All Rights Reserved</span>
@@ -295,11 +277,8 @@
                 </div>
             </div>
         </div>
-
-        <!-- Modal JS Plugins -->
-        <script src="{{ asset('js/plugins/es6-promise/es6-promise.auto.min.js') }}"></script>
-        <script src="{{ asset('js/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
-        <script src="{{ asset('js/pages/be_comp_dialogs.min.js') }}"></script>
+        
+        
 
         <!-- Modal JS Plugins -->
         <script src="{{ asset('js/plugins/es6-promise/es6-promise.auto.min.js') }}"></script>

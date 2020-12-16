@@ -30,8 +30,13 @@ class UserController extends Controller
      */
     public function index()
     {
-        $companyList = Company::get();
-        return view('admin.user.userlist',compact('companyList'));
+        $companyList = Company::all();
+        if(Auth::user()->userrole == 2)
+            return view('admin.user.userlist',compact('companyList'));
+        else if(Auth::user()->userrole == 1)
+            return view('clientadmin.user.userlist');
+        else
+            return redirect('home');
     }
 
     /**
@@ -40,15 +45,31 @@ class UserController extends Controller
      * @return JSON
      */
     public function getUserData(Request $request){
-        $columns = array( 
-            0 =>'id', 
-            1 =>'username',
-            2 =>'email',
-            3 =>'companyname',
-            4 =>'userrole',
-            5 =>'usernumber'
-        );
-        $totalData = User::count();
+        if(Auth::user()->userrole == 2)
+        {
+            $columns = array( 
+                0 =>'id', 
+                1 =>'username',
+                2 =>'email',
+                3 =>'companyname',
+                4 =>'userrole',
+                5 =>'usernumber'
+            );
+            $handler = new User;
+        }
+        else if(Auth::user()->userrole == 1)
+        {
+            $columns = array( 
+                0 =>'id', 
+                1 =>'username',
+                2 =>'email',
+                3 =>'companyname',
+                4 =>'userrole',
+                5 =>'usernumber'
+            );
+            $handler = User::where('companyid', Auth::user()->companyid);
+        }
+        $totalData = $handler->count();
         $totalFiltered = $totalData; 
 
         $limit = $request->input('length');
@@ -58,7 +79,7 @@ class UserController extends Controller
 
         if(empty($request->input('search.value')))
         {            
-            $users = User::offset($start)
+            $users = $handler->offset($start)
                 ->leftjoin('company_info', "company_info.id", "=", "users.companyid")
                 ->limit($limit)
                 ->orderBy($order,$dir)
@@ -75,7 +96,7 @@ class UserController extends Controller
         }
         else {
             $search = $request->input('search.value'); 
-            $users =  User::where('users.id','LIKE',"%{$search}%")
+            $users =  $handler->where('users.id','LIKE',"%{$search}%")
                         ->leftjoin('company_info', "company_info.id", "=", "users.companyid")
                         ->orWhere('users.username', 'LIKE',"%{$search}%")
                         ->orWhere('users.email', 'LIKE',"%{$search}%")
@@ -93,7 +114,7 @@ class UserController extends Controller
                             )
                         );
 
-            $totalFiltered = User::where('users.id','LIKE',"%{$search}%")
+            $totalFiltered = $handler->where('users.id','LIKE',"%{$search}%")
                         ->leftjoin('company_info', "company_info.id", "=", "users.companyid")
                         ->orWhere('users.username', 'LIKE',"%{$search}%")
                         ->orWhere('users.email', 'LIKE',"%{$search}%")
@@ -173,7 +194,7 @@ class UserController extends Controller
             $res->email = $data['email'];
             $res->password = Hash::make($data['password']);
             $res->userrole = 0;
-            $res->companyid = $data['companyid'];
+            $res->companyid = isset($data['companyid']) ? $data['companyid'] : Auth::user()->companyid;
             $res->userrole = $data['userrole'];
             $res->usernumber = $data['usernumber'];
             $res->membershipid = 0;
@@ -186,7 +207,7 @@ class UserController extends Controller
             $res->username = $data['name'];
             $res->email = $data['email'];
             if ($data['password']) $res->password = Hash::make($data['password']);
-            $res->companyid = $data['companyid'];
+            $res->companyid = isset($data['companyid']) ? $data['companyid'] : Auth::user()->companyid;
             $res->userrole = $data['userrole'];
             $res->usernumber = $data['usernumber'];
             $res->updated_at = date('Y-m-d h:i:s',strtotime(now()));

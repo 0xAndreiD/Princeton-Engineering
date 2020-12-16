@@ -36,26 +36,26 @@
                     <thead>
                         <tr>
                             @if(Auth::user()->userrole == 2)
-                            <th class="text-center" style="width: 10%;">ID</th>
+                            <th class="text-center" style="width: 7%;">ID</th>
                             <th style="width:10%">Company Name</th>
                             <th style="width:10%;">User</th>
                             <th style="width:15%;">Project Name</th>
-                            <th style="width:10%;">Project Number</th>
-                            <th style="width:5%;">File Name</th>
-                            <th style="width:10%;">Created Time</th>
-                            <th style="width:10%;">Submitted Time</th>
-                            <th style="width:5%;">Plan Status</th>
-                            <th style="width:5%;">Project Status</th>
-                            <th style="min-width: 150px;">Action</th>
+                            <th style="width:7%;">Project Number</th>
+                            <th style="width:10%;">File Name</th>
+                            <th style="width:12%;">Created Time</th>
+                            <th style="width:12%;">Submitted Time</th>
+                            <th style="width:8%;">Project Status</th>
+                            <th style="width:8%;">Plan Status</th>
+                            <th style="min-width: 90px;">Action</th>
                             @else
-                            <th class="text-center" style="width: 10%;">ID</th>
+                            <th class="text-center" style="width: 7%;">ID</th>
                             <th style="width:15%;">User</th>
-                            <th style="width:20%;">Project Name</th>
-                            <th style="width:10%;">Project Number</th>
-                            <th style="width:10%;">Created Time</th>
-                            <th style="width:10%;">Submitted Time</th>
-                            <th style="width:5%;">Plan Status</th>
-                            <th style="width:10%;">Project Status</th>
+                            <th style="width:15%;">Project Name</th>
+                            <th style="width:7%;">Project Number</th>
+                            <th style="width:15%;">Created Time</th>
+                            <th style="width:15%;">Submitted Time</th>
+                            <th style="width:15%;">Project Status</th>
+                            <th style="width:10%;">Plan Status</th>
                             <th style="min-width: 70px;">Action</th>
                             @endif
                         </tr>
@@ -92,8 +92,8 @@
                 { "data": "requestfile" },
                 { "data": "createdtime" },
                 { "data": "submittedtime" },
-                { "data": "planstatus" },
                 { "data": "projectstate" },
+                { "data": "planstatus" },
                 { "data": "actions", "orderable": false }
                 @else
                 { "data": "id" },
@@ -102,8 +102,8 @@
                 { "data": "projectnumber" },
                 { "data": "createdtime" },
                 { "data": "submittedtime" },
-                { "data": "planstatus" },
                 { "data": "projectstate" },
+                { "data": "planstatus" },
                 { "data": "actions", "orderable": false }
                 @endif
             ]	 

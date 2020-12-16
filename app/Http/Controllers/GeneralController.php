@@ -283,7 +283,7 @@ class GeneralController extends Controller
         }
         else
         {
-            $handler = JobRequest::where('companyId', Auth::user()->companyid);
+            $handler = JobRequest::where('job_request.companyId', Auth::user()->companyid);
             $columns = array( 
                 0 =>'id', 
                 1 =>'userId',

@@ -7,14 +7,14 @@
         <div class="content content-full content-top">
             <div class="pt-5 pb-4 text-center">
                 <h1 class="h2 font-w700 mb-2 text-white">
-                    Company Profile
+                    Client Admin Panel
                 </h1>
                 <h2 class="h5 text-white-75 mb-0">
-                    Panel Status
+                    Welcome, {{Auth::user()->username}}
                 </h2>
-                <span class="badge badge-success mt-2">
+                <!-- <span class="badge badge-success mt-2">
                     <i class="fa fa-spinner fa-spin mr-1"></i> Running
-                </span>
+                </span> -->
             </div>
         </div>
     </div>
