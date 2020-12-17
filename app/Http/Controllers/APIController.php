@@ -38,18 +38,18 @@ class APIController extends Controller
      * @return JSON
      */
     public function getJobList(Request $request){
-        $query = JobRequest::where('available', '!=', 'Removed');
+        $query = new JobRequest;
         if(isset($request['dateFrom']))
-            $query->where('createdTime', '>=', $request['dateFrom']);
+            $query = $query->where('createdTime', '>=', $request['dateFrom']);
         if(isset($request['dateTo']))
         {
             $dateTo = date('Y-m-d H:i:s',strtotime('+23 hour +59 minutes +59 seconds',strtotime($request['dateTo'])));
-            $query->where('createdTime', '<=', $dateTo);
+            $query = $query->where('createdTime', '<=', $dateTo);
         }
         if(isset($request['clientIdFrom']))
-            $query->where('companyId', '>=', $request['clientIdFrom']);
+            $query = $query->where('companyId', '>=', $request['clientIdFrom']);
         if(isset($request['clientIdTo']))
-            $query->where('companyId', '<=', $request['clientIdTo']);
+            $query = $query->where('companyId', '<=', $request['clientIdTo']);
         
         return response()->json(['success' => true, 'message' => 'Success', 'data' => $query->get()]);
     }
