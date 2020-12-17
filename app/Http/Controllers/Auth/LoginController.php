@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\User;
 
 class LoginController extends Controller
 {
@@ -54,13 +55,15 @@ class LoginController extends Controller
         ]);
   
         $fieldType = filter_var($request->username, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
-        if(auth()->attempt(array($fieldType => $input['username'], 'password' => $input['password'])))
+        $user = User::where($fieldType, '=', $input['username'])->where('password', '=', $input['password'])->first();
+
+        if($user)
         {
+            auth()->loginUsingId($user->id);
             return redirect()->route('home');
         }else{
             $validator->errors()->add('username', 'These credentials do not match our records.');
             return redirect()->route('login')->withErrors($validator)->withInput();
         }
-          
     }
 }
