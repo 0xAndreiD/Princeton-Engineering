@@ -99,7 +99,7 @@
         <tr class="h13 class-truss-hide" id="tr-7-1">
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">A-7</td>
-            <td class="iw400-bdr" style="vertical-align : middle;" rowspan="4">Select any two inputs</td>
+            <td class="iw400-bdr" style="vertical-align : middle;" rowspan="4">Enter any two values</td>
             <td class="iw400-right-bdr" >Roof Slope</td>
             <td class="iw400-bdr">deg</td>
             <td id="value-7-1" class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="a-7-1" tabindex="31" value="33.00"></input></td>
