@@ -1012,7 +1012,7 @@ var loadStateOptions = function() {
 var updateUserOption = function(userId) {
     // call ajax
     $.ajax({
-        url:"{{ route('getUserData') }}",
+        url:"getUserData",
         type:'post',
         data:{userId:userId},
         success:function(res){
@@ -2040,7 +2040,7 @@ $(document).ready(function() {
     // initialize equipment section
     var loadEquipmentSection = function() {
         $.ajax({
-            url:"{{ route('getPVModules') }}",
+            url:"getPVModules",
             type:'post',
             dataType: "json",
             success:function(res){
@@ -2081,7 +2081,7 @@ $(document).ready(function() {
         });
 
         $.ajax({
-            url:"{{ route('getPVInverters') }}",
+            url:"getPVInverters",
             type:'post',
             dataType: "json",
             success:function(res){
@@ -2122,7 +2122,7 @@ $(document).ready(function() {
         });
 
         $.ajax({
-            url:"{{ route('getStanchions') }}",
+            url:"getStanchions",
             type:'post',
             dataType: "json",
             success:function(res){
@@ -2163,7 +2163,7 @@ $(document).ready(function() {
         });
 
         $.ajax({
-            url:"{{ route('getRailsupport') }}",
+            url:"getRailsupport",
             type:'post',
             dataType: "json",
             success:function(res){
@@ -2385,7 +2385,7 @@ $(document).ready(function() {
         //{
             // call ajax
         $.ajax({
-            url:"{{ route('submitInput') }}",
+            url:"submitInput",
             type:'post',
             data:{data: data, status: status, caseCount: caseCount},
             success:function(res){
@@ -2404,7 +2404,7 @@ $(document).ready(function() {
                     })
                     .then(( result ) => {
                         if ( result.value ) {
-                            window.location = "{{ route('home') }}";
+                            window.location = "home";
                         } 
                     });
                 } else {
