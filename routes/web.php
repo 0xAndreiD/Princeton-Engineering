@@ -52,3 +52,12 @@ Route::post('/getProjectList', 'GeneralController@getProjectList')->name('getPro
 Route::get('/getJobList', 'APIController@getJobList')->name('getJobList');
 Route::get('/updateJobData', 'APIController@updateJobData')->name('updateJobData');
 Route::get('/downloadFile', 'APIController@downloadFile')->name('downloadFile');
+
+// PV Modules
+Route::post('/getPVModules', 'GeneralController@getPVModules')->name('getPVModules');
+// PV Inverters
+Route::post('/getPVInverters', 'GeneralController@getPVInverters')->name('getPVInverters');
+// Stanchions
+Route::post('/getStanchions', 'GeneralController@getStanchions')->name('getStanchions');
+// Rail Support
+Route::post('/getRailsupport', 'GeneralController@getRailsupport')->name('getRailsupport');

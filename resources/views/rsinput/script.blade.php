@@ -648,64 +648,10 @@ var availableMATowns = [
     "Woburn", "Worcester", "Worthington", "Wrentham", "Yarmouth"
 ];
 
-var availablePVModules = 
-@php
-    echo '[';
-    foreach ($pv_modules as $module) {
-        echo '[';
-        echo '"'. $module['module'] .'",';
-        echo '"'. $module['submodule'] .'",';
-        echo '"'. $module['rating'] .'",';
-        echo '"'. $module['length'] .'",';
-        echo '"'. $module['width'] .'",';
-        echo '"'. $module['depth'] .'",';
-        echo '"'. $module['weight'] .'"';
-        echo '],';
-    }
-    echo ']';
-@endphp
-
-var availablePVInverters = 
-@php
-    echo '[';
-    foreach ($pv_inverters as $module) {
-        echo '[';
-        echo '"'. $module['module'] .'",';
-        echo '"'. $module['submodule'] .'",';
-        echo '"'. $module['option1'] .'",';
-        echo '"'. $module['option2'] .'"';
-        echo '],';
-    }
-    echo ']';
-@endphp
-
-var availableStanchions = 
-@php
-    echo '[';
-    foreach ($stanchions as $module) {
-        echo '[';
-        echo '"'. $module['module'] .'",';
-        echo '"'. $module['submodule'] .'",';
-        echo '"'. $module['option1'] .'",';
-        echo '"'. $module['option2'] .'"';
-        echo '],';
-    }
-    echo ']';
-@endphp
-
-var availableRailSupports = 
-@php
-    echo '[';
-    foreach ($railsupport as $module) {
-        echo '[';
-        echo '"'. $module['module'] .'",';
-        echo '"'. $module['submodule'] .'",';
-        echo '"'. $module['option1'] .'",';
-        echo '"'. $module['option2'] .'"';
-        echo '],';
-    }
-    echo ']';
-@endphp
+var availablePVModules = [];
+var availablePVInverters = [];
+var availableStanchions = [];
+var availableRailSupports = [];
 
 var getPVModuleTypes = function() {
     var mainTypes = [];
@@ -2093,102 +2039,169 @@ $(document).ready(function() {
 
     // initialize equipment section
     var loadEquipmentSection = function() {
+        $.ajax({
+            url:"{{ route('getPVModules') }}",
+            type:'post',
+            dataType: "json",
+            success:function(res){
+                if(res.length > 0)
+                {
+                    for(let i = 0; i < res.length; i ++){
+                        availablePVModules.push([res[i]['module'], res[i]['submodule'], res[i]['rating'], res[i]['length'], res[i]['width'], res[i]['depth'], res[i]['weight']]);
+                    }
+                }
+                // ------------------- First Line ---------------------
+                // pv module section
+                $('#option-module-type').find('option').remove();
+                mainTypes = getPVModuleTypes();
 
-        // ------------------- First Line ---------------------
-        // pv module section
-        $('#option-module-type').find('option').remove();
-        mainTypes = getPVModuleTypes();
+                // load selected from preloaded_data
+                selectedMainType = mainTypes[0];
+                if (typeof preloaded_data['option-module-type'] !== 'undefined') {
+                    selectedMainType = preloaded_data['option-module-type'];
+                }
 
-        // load selected from preloaded_data
-        selectedMainType = mainTypes[0];
-        if (typeof preloaded_data['option-module-type'] !== 'undefined') {
-            selectedMainType = preloaded_data['option-module-type'];
-        }
+                for (index=0; index<mainTypes.length; index++) 
+                {
+                    if (mainTypes[index] == selectedMainType) {
+                        $('#option-module-type').append(`<option data-value="${mainTypes[index]}" selected> ${mainTypes[index]}</option>`);
+                    }
+                    else {
+                        $('#option-module-type').append(`<option data-value="${mainTypes[index]}"> ${mainTypes[index]} </option>`);
+                    }
+                }
 
-        for (index=0; index<mainTypes.length; index++) 
-        {
-            if (mainTypes[index] == selectedMainType) {
-                $('#option-module-type').append(`<option data-value="${mainTypes[index]}" selected> ${mainTypes[index]}</option>`);
+                // pv submodule section
+                updatePVSubmoduleField(selectedMainType);
+            },
+            error: function(xhr, status, error) {
+                res = JSON.parse(xhr.responseText);
+                console.log(res);
             }
-            else {
-                $('#option-module-type').append(`<option data-value="${mainTypes[index]}"> ${mainTypes[index]} </option>`);
+        });
+
+        $.ajax({
+            url:"{{ route('getPVInverters') }}",
+            type:'post',
+            dataType: "json",
+            success:function(res){
+                if(res.length > 0)
+                {
+                    for(let i = 0; i < res.length; i ++){
+                        availablePVInverters.push([res[i]['module'], res[i]['submodule'], res[i]['option1'], res[i]['option2']]);
+                    }
+                }
+                // ------------------- Second Line ---------------------
+                // inverter module section
+                $('#option-inverter-type').find('option').remove();
+                mainTypes = getPVInvertorTypes();
+
+                // load selected from preloaded_data
+                selectedMainType = mainTypes[0];
+                if (typeof preloaded_data['option-inverter-type'] !== 'undefined') {
+                    selectedMainType = preloaded_data['option-inverter-type'];
+                }
+
+                for (index=0; index<mainTypes.length; index++) 
+                {
+                    if (mainTypes[index] == selectedMainType) {
+                        $('#option-inverter-type').append(`<option data-value="${mainTypes[index]}" selected> ${mainTypes[index]}</option>`);
+                    }
+                    else {
+                        $('#option-inverter-type').append(`<option data-value="${mainTypes[index]}"> ${mainTypes[index]} </option>`);
+                    }
+                }
+
+                // inverter submodule section
+                updatePVInvertorSubField(selectedMainType);
+            },
+            error: function(xhr, status, error) {
+                res = JSON.parse(xhr.responseText);
+                console.log(res);
             }
-        }
+        });
 
-        // pv submodule section
-        updatePVSubmoduleField(selectedMainType);
+        $.ajax({
+            url:"{{ route('getStanchions') }}",
+            type:'post',
+            dataType: "json",
+            success:function(res){
+                if(res.length > 0)
+                {
+                    for(let i = 0; i < res.length; i ++){
+                        availableStanchions.push([res[i]['module'], res[i]['submodule'], res[i]['option1'], res[i]['option2']]);
+                    }
+                }
+                // ------------------- Third Line ---------------------
+                // Stanchion module section
+                $('#option-stanchion-type').find('option').remove();
+                mainTypes = getStanchionTypes();
 
-        // ------------------- Second Line ---------------------
-        // inverter module section
-        $('#option-inverter-type').find('option').remove();
-        mainTypes = getPVInvertorTypes();
+                // load selected from preloaded_data
+                selectedMainType = mainTypes[0];
+                if (typeof preloaded_data['option-stanchion-type'] !== 'undefined') {
+                    selectedMainType = preloaded_data['option-stanchion-type'];
+                }
 
-        // load selected from preloaded_data
-        selectedMainType = mainTypes[0];
-        if (typeof preloaded_data['option-inverter-type'] !== 'undefined') {
-            selectedMainType = preloaded_data['option-inverter-type'];
-        }
+                for (index=0; index<mainTypes.length; index++) 
+                {
+                    if (mainTypes[index] == selectedMainType) {
+                        $('#option-stanchion-type').append(`<option data-value="${mainTypes[index]}" selected> ${mainTypes[index]}</option>`);
+                    }
+                    else {
+                        $('#option-stanchion-type').append(`<option data-value="${mainTypes[index]}"> ${mainTypes[index]} </option>`);
+                    }
+                }
 
-        for (index=0; index<mainTypes.length; index++) 
-        {
-            if (mainTypes[index] == selectedMainType) {
-                $('#option-inverter-type').append(`<option data-value="${mainTypes[index]}" selected> ${mainTypes[index]}</option>`);
+                // Stanchion submodule section
+                updateStanchionSubField(selectedMainType);
+            },
+            error: function(xhr, status, error) {
+                res = JSON.parse(xhr.responseText);
+                console.log(res);
             }
-            else {
-                $('#option-inverter-type').append(`<option data-value="${mainTypes[index]}"> ${mainTypes[index]} </option>`);
+        });
+
+        $.ajax({
+            url:"{{ route('getRailsupport') }}",
+            type:'post',
+            dataType: "json",
+            success:function(res){
+                if(res.length > 0)
+                {
+                    for(let i = 0; i < res.length; i ++){
+                        availableRailSupports.push([res[i]['module'], res[i]['submodule'], res[i]['option1'], res[i]['option2']]);
+                    }
+                }
+                // ------------------- Fourth Line ---------------------
+                // Rail Support module section
+                $('#option-railsupport-type').find('option').remove();
+                mainTypes = getRailSupportTypes();
+
+                // load selected from preloaded_data
+                selectedMainType = mainTypes[0];
+                if (typeof preloaded_data['option-railsupport-type'] !== 'undefined') {
+                    selectedMainType = preloaded_data['option-railsupport-type'];
+                }
+
+                for (index=0; index<mainTypes.length; index++) 
+                {
+                    if (mainTypes[index] == selectedMainType) {
+                        $('#option-railsupport-type').append(`<option data-value="${mainTypes[index]}" selected> ${mainTypes[index]}</option>`);
+                    }
+                    else {
+                        $('#option-railsupport-type').append(`<option data-value="${mainTypes[index]}"> ${mainTypes[index]} </option>`);
+                    }
+                }
+
+                // Rail Support submodule section
+                updateRailSupportSubField(selectedMainType);
+            },
+            error: function(xhr, status, error) {
+                res = JSON.parse(xhr.responseText);
+                console.log(res);
             }
-        }
-
-        // inverter submodule section
-        updatePVInvertorSubField(selectedMainType);
-
-        // ------------------- Third Line ---------------------
-        // Stanchion module section
-        $('#option-stanchion-type').find('option').remove();
-        mainTypes = getStanchionTypes();
-
-        // load selected from preloaded_data
-        selectedMainType = mainTypes[0];
-        if (typeof preloaded_data['option-stanchion-type'] !== 'undefined') {
-            selectedMainType = preloaded_data['option-stanchion-type'];
-        }
-
-        for (index=0; index<mainTypes.length; index++) 
-        {
-            if (mainTypes[index] == selectedMainType) {
-                $('#option-stanchion-type').append(`<option data-value="${mainTypes[index]}" selected> ${mainTypes[index]}</option>`);
-            }
-            else {
-                $('#option-stanchion-type').append(`<option data-value="${mainTypes[index]}"> ${mainTypes[index]} </option>`);
-            }
-        }
-
-        // Stanchion submodule section
-        updateStanchionSubField(selectedMainType);
-
-        // ------------------- Fourth Line ---------------------
-        // Rail Support module section
-        $('#option-railsupport-type').find('option').remove();
-        mainTypes = getRailSupportTypes();
-
-        // load selected from preloaded_data
-        selectedMainType = mainTypes[0];
-        if (typeof preloaded_data['option-railsupport-type'] !== 'undefined') {
-            selectedMainType = preloaded_data['option-railsupport-type'];
-        }
-
-        for (index=0; index<mainTypes.length; index++) 
-        {
-            if (mainTypes[index] == selectedMainType) {
-                $('#option-railsupport-type').append(`<option data-value="${mainTypes[index]}" selected> ${mainTypes[index]}</option>`);
-            }
-            else {
-                $('#option-railsupport-type').append(`<option data-value="${mainTypes[index]}"> ${mainTypes[index]} </option>`);
-            }
-        }
-
-        // Rail Support submodule section
-        updateRailSupportSubField(selectedMainType);
+        });
     }
 
     // component hander functions

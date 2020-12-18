@@ -50,21 +50,13 @@ class GeneralController extends Controller
     public function rsinput()
     {
         $company = Company::where('id', Auth::user()->companyid)->first();
-        $pv_modules = PVModule::all();
-        $pv_inverters = PVInverter::all();
-        $stanchions = Stanchion::all();
-        $railsupport = RailSupport::all();
         if( $company )
         {
             $companymembers = User::where('companyid', $company['id'])->get();
             return view('rsinput.body')
                     ->with('companyName', $company['company_name'])
                     ->with('companyNumber', $company['company_number'])
-                    ->with('companyMembers', $companymembers)
-                    ->with('pv_modules', $pv_modules)
-                    ->with('pv_inverters', $pv_inverters)
-                    ->with('stanchions', $stanchions)
-                    ->with('railsupport', $railsupport);
+                    ->with('companyMembers', $companymembers);
         }
         else
         {
@@ -72,11 +64,7 @@ class GeneralController extends Controller
             return view('rsinput.body')
                     ->with('companyName', "")
                     ->with('companyNumber', "")
-                    ->with('companyMembers', $companymembers)
-                    ->with('pv_modules', $pv_modules)
-                    ->with('pv_inverters', $pv_inverters)
-                    ->with('stanchions', $stanchions)
-                    ->with('railsupport', $railsupport);
+                    ->with('companyMembers', $companymembers);
         }
     }
 
@@ -477,5 +465,45 @@ class GeneralController extends Controller
         }
         else
             return "Sorry, We cannot find the file.";
+    }
+
+    /**
+     * Return the list of pv modules.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getPVModules(Request $request){
+        $pv_modules = PVModule::all();
+        return json_encode($pv_modules);
+    }
+
+    /**
+     * Return the list of pv inverters.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getPVInverters(Request $request){
+        $pv_inverters = PVInverter::all();
+        return json_encode($pv_inverters);
+    }
+
+    /**
+     * Return the list of stanchions.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getStanchions(Request $request){
+        $stanchions = Stanchion::all();
+        return json_encode($stanchions);
+    }
+
+    /**
+     * Return the list of railsupports.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getRailsupport(Request $request){
+        $railsupport = RailSupport::all();
+        return json_encode($railsupport);
     }
 }
