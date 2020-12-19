@@ -106,7 +106,7 @@ class GeneralController extends Controller
             else if($request['status'] == 'Data Check')
                 $planStatus = 2;
             else if($request['status'] == 'Submitted')
-                $planStatus = 3;
+                $planStatus = 4;
             JobRequest::create([
                 'companyName' => $company['company_name'],
                 'companyId' => Auth::user()->companyid,
@@ -387,42 +387,42 @@ class GeneralController extends Controller
                 $nestedData['createdtime'] = $job->createdtime;
                 $nestedData['submittedtime'] = $job->submittedtime;
                 
-                switch ($job->planstatus){
-                    case 0:
-                        $nestedData['planstatus'] = "<span class='badge badge-danger'> None </span>"; break;
-                    case 1:
-                        $nestedData['planstatus'] = "<span class='badge badge-primary'> Saved </span>"; break;
-                    case 2:
-                        $nestedData['planstatus'] = "<span class='badge badge-info'> Check Requested </span>"; break;
-                    case 3:
-                        $nestedData['planstatus'] = "<span class='badge badge-warning'> Reviewed </span>"; break;
-                    case 4:
-                        $nestedData['planstatus'] = "<span class='badge badge-warning'> Submitted </span>"; break;
-                    case 5:
-                        $nestedData['planstatus'] = "<span class='badge badge-warning'> Report Prepared </span>"; break;
-                    case 6:
-                        $nestedData['planstatus'] = "<span class='badge badge-warning'> Link Sent </span>"; break;
-                    case 7:
-                        $nestedData['planstatus'] = "<span class='badge badge-warning'> Completed </span>"; break;
-                }
-
                 switch ($job->projectstate){
                     case 0:
-                        $nestedData['projectstate'] = "<span class='badge badge-danger'> No action </span>"; break;
+                        $nestedData['projectstate'] = "<span class='badge badge-danger'> None </span>"; break;
                     case 1:
-                        $nestedData['projectstate'] = "<span class='badge badge-primary'> Plans uploaded to portal </span>"; break;
+                        $nestedData['projectstate'] = "<span class='badge badge-primary'> Saved </span>"; break;
                     case 2:
-                        $nestedData['projectstate'] = "<span class='badge badge-info'> Plans reviewed </span>"; break;
+                        $nestedData['projectstate'] = "<span class='badge badge-info'> Check Requested </span>"; break;
                     case 3:
-                        $nestedData['projectstate'] = "<span class='badge badge-warning'> Comments issued </span>"; break;
+                        $nestedData['projectstate'] = "<span class='badge badge-warning'> Reviewed </span>"; break;
                     case 4:
-                        $nestedData['projectstate'] = "<span class='badge badge-warning'> Updated plans uploaded to portal </span>"; break;
+                        $nestedData['projectstate'] = "<span class='badge badge-warning'> Submitted </span>"; break;
                     case 5:
-                        $nestedData['projectstate'] = "<span class='badge badge-warning'> Revised comments issued </span>"; break;
+                        $nestedData['projectstate'] = "<span class='badge badge-warning'> Report Prepared </span>"; break;
                     case 6:
-                        $nestedData['projectstate'] = "<span class='badge badge-warning'> Final plans uploaded to portal </span>"; break;
+                        $nestedData['projectstate'] = "<span class='badge badge-warning'> Link Sent </span>"; break;
                     case 7:
-                        $nestedData['projectstate'] = "<span class='badge badge-warning'> PE sealed plans link sent </span>"; break;
+                        $nestedData['projectstate'] = "<span class='badge badge-warning'> Completed </span>"; break;
+                }
+
+                switch ($job->planstatus){
+                    case 0:
+                        $nestedData['planstatus'] = "<span class='badge badge-danger'> No action </span>"; break;
+                    case 1:
+                        $nestedData['planstatus'] = "<span class='badge badge-primary'> Plans uploaded to portal </span>"; break;
+                    case 2:
+                        $nestedData['planstatus'] = "<span class='badge badge-info'> Plans reviewed </span>"; break;
+                    case 3:
+                        $nestedData['planstatus'] = "<span class='badge badge-warning'> Comments issued </span>"; break;
+                    case 4:
+                        $nestedData['planstatus'] = "<span class='badge badge-warning'> Updated plans uploaded to portal </span>"; break;
+                    case 5:
+                        $nestedData['planstatus'] = "<span class='badge badge-warning'> Revised comments issued </span>"; break;
+                    case 6:
+                        $nestedData['planstatus'] = "<span class='badge badge-warning'> Final plans uploaded to portal </span>"; break;
+                    case 7:
+                        $nestedData['planstatus'] = "<span class='badge badge-warning'> PE sealed plans link sent </span>"; break;
                 }
 
                 $nestedData['actions'] = "
