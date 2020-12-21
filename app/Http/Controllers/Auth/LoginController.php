@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\User;
+use App\LandingPage;
 
 class LoginController extends Controller
 {
@@ -21,7 +22,9 @@ class LoginController extends Controller
     |
     */
 
-    use AuthenticatesUsers;
+    use AuthenticatesUsers {
+        logout as performLogout;
+    }
 
     /**
      * Where to redirect users after login.
@@ -65,5 +68,15 @@ class LoginController extends Controller
             $validator->errors()->add('username', 'These credentials do not match our records.');
             return redirect()->route('login')->withErrors($validator)->withInput();
         }
+    }
+
+    public function logout(Request $request)
+    {
+        $this->performLogout($request);
+        $target = LandingPage::where('active_lp', '=', '1')->first();
+        if($target)
+            return redirect($target->landingPage);
+        else
+            return redirect('https://www.princeton-engineering.com/framinganalysis.html');
     }
 }
