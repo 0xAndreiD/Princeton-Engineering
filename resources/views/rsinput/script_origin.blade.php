@@ -2044,7 +2044,7 @@ $(document).ready(function() {
                 if(res.length > 0)
                 {
                     for(let i = 0; i < res.length; i ++){
-                        availablePVModules.push([res[i]['module'], res[i]['submodule'], res[i]['rating'], res[i]['length'], res[i]['width'], res[i]['depth'], res[i]['weight']]);
+                        availablePVModules.push([res[i]['mfr'], res[i]['model'], res[i]['rating'], res[i]['length'], res[i]['width'], res[i]['depth'], res[i]['weight']]);
                     }
                 }
                 // ------------------- First Line ---------------------
