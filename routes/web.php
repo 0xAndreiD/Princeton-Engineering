@@ -47,6 +47,7 @@ Route::post('/submitInput', 'GeneralController@submitInput')->name('submitInput'
 Route::get('/projectlist', 'GeneralController@projectList')->name('projectlist');
 Route::get('/requestFile', 'GeneralController@requestFile')->name('requestFile');
 Route::post('/getProjectList', 'GeneralController@getProjectList')->name('getProjectList');
+Route::post('/getProjectJson', 'GeneralController@getProjectJson')->name('getProjectJson');
 
 // APIs for list, update, download
 Route::get('/getJobList', 'APIController@getJobList')->name('getJobList');

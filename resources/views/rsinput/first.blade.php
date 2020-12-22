@@ -1,82 +1,5 @@
 <!-- header section -->
 <form id="inputform-first">
-<!-- <table id="rs02_header" cellspacing="0" cellpadding="0" style="border-spacing:0;">
-    <colgroup>
-        <col width="80">
-        <col width="600">
-        <col width="80">
-        <col width="160">
-        <col width="80">
-    </colgroup>
-    <tbody>
-        <tr class="h13">
-            <td><div style="overflow:hidden"></td>
-            <td><div style="overflow:hidden"></td>
-            <td><div style="overflow:hidden"></td>
-            <td><div style="overflow:hidden"></td>
-            <td><div style="overflow:hidden"></td>
-        </tr>
-        <tr class="h13">
-            <td><div style="overflow:hidden"></td>
-            <td class="w700" ><div style="overflow:hidden"></td>
-            <td ><div style="overflow:hidden"></td>
-            <td class="iw400" >Multiple Framing Data Input</td>
-            <td><div style="overflow:hidden"></td>
-        </tr>
-        <tr class="h16"> 
-            <td><div style="overflow:hidden"></td>
-            <td class="w700" style="font-size: 20px;">iRoof™ Structural Analysis Data Input Pages</td>
-            <td ><div style="overflow:hidden"></td>
-            <td class="iw400">Rev 2.0.3</td>
-            <td><div style="overflow:hidden"></td>
-        </tr>
-        <tr class="h16"> 
-            <td><div style="overflow:hidden"></td>
-            <td class="w700" >Common Data Entry Page</td>
-            <td ><div style="overflow:hidden"></td>
-            <td class="iw400"><div style="overflow:hidden"></td>
-            <td><div style="overflow:hidden"></td>
-        </tr>
-        <tr class="h13">
-            <td><div style="overflow:hidden"></td>
-            <td><div style="overflow:hidden"></td>
-            <td><div style="overflow:hidden"></td>
-            <td><div style="overflow:hidden"></td>
-            <td><div style="overflow:hidden"></td>
-        </tr>
-        <tr style="height:52pt;">
-            <td>&nbsp;</td>
-            <td class="iw400-bdr" style="height:52pt;" colspan="3">
-                Copyright © 2020 Richard Pantel.
-All Rights Reserved<span>&nbsp; </span>No parts of this
-data input form or related calculation reports may be copied in format,
-content or intent, or reproduced in any form or by any electronic or mechanical
-means, including information storage and retrieval systems, without
-permission in writing from the author.<span>&nbsp;
-</span>Further, dis-assembly or reverse engineering of this data input form
-or related calculation reports is strictly prohibited. The author's contact
-information is: RPantel@Princeton-Engineering.com, web-site:
-www.Princeton-Engineering.com; tel: 908-507-5500
-            </td>
-            <td>&nbsp;</td>
-        </tr>
-        <tr class="h13">
-            <td><div style="overflow:hidden"></td>
-            <td><div style="overflow:hidden"></td>
-            <td><div style="overflow:hidden"></td>
-            <td><div style="overflow:hidden"></td>
-            <td><div style="overflow:hidden"></td>
-        </tr>
-        <tr class="h13">
-            <td><div style="overflow:hidden"></div></td>
-            <td class="w400" colspan="2">This form is for inputing multiple framing data, 
-                <font class="w700">NOT</font><font class="w400"> for trussed roofs</font>
-            </td>
-            <td><div style="overflow:hidden"></div></td>
-        </tr>
-    </tbody>
-</table> -->
-
 <!-- sample static color cell section -->
 <table id="sample-static-color-table" cellspacing="0" cellpadding="0" style="border-spacing:0;" >    
     <colgroup>
@@ -118,75 +41,6 @@ www.Princeton-Engineering.com; tel: 908-507-5500
     </tr>                                        
 </tbody> 
 </table>
-
-<!-- company information table section -->
-<!-- <table id="company-info-table" cellspacing="0" cellpadding="0" style="border-spacing:0;" >    
-    <colgroup>
-        <col width="80">
-        <col width="160">
-        <col width="200">
-        <col width="300">
-        <col width="80">
-    </colgroup>
-<tbody>
-    <tr class="h13">
-        <td><div style="overflow:hidden"></td>
-        <td><div style="overflow:hidden"></td>
-        <td><div style="overflow:hidden"></td>
-        <td><div style="overflow:hidden"></td>
-        <td><div style="overflow:hidden"></td>
-    </tr>
-    <tr class="h13">
-        <td><div style="overflow:hidden"></div></td>
-        <td class="iw400-right-bdr">Company Name</td>
-        <td class="w400-left-bdr"><input type="text" id="txt-company-name" tabindex="1" value="{{ $companyName }}" disabled></input></td>
-        <td><div style="overflow:hidden"></div></td>
-        <td><div style="overflow:hidden"></div></td>
-    </tr>
-    <tr class="h13">
-        <td><div style="overflow:hidden"></div></td>
-        <td class="iw400-right-bdr">Company Number</td>
-        <td class="w400-left-bdr"><input type="text" id="txt-company-number" tabindex="2" value="{{ $companyNumber }}" disabled></input></td>
-        <td><div style="overflow:hidden"></div></td>
-        <td><div style="overflow:hidden"></div></td>
-    </tr>
-    <tr class="h13">
-        <td><div style="overflow:hidden"></div></td>
-        <td class="iw400-right-bdr">User ID</td>
-        <td class="w400-yellow-bdr">
-            <select id="option-user-id" tabindex="3" disabled>
-                @foreach ($companyMembers as $member)
-                    @if ($member['id'] == Auth::user()->id)
-                        <option data-companyid="{{ $member['usernumber'] }}" data-userid="{{ $member['id'] }}" selected>
-                            {{ Auth::user()->companyid. '.' . $member['usernumber'] }}
-                        </option>
-                    @else
-                        <option data-companyid="{{ $member['usernumber'] }}" data-userid="{{ $member['id'] }}">
-                            {{ Auth::user()->companyid. '.' . $member['usernumber'] }}
-                        </option>
-                    @endif
-                @endforeach
-            </select>
-        </td>
-        <td><div style="overflow:hidden"></div></td>
-        <td><div style="overflow:hidden"></div></td>
-    </tr>
-    <tr class="h13">
-        <td><div style="overflow:hidden"></div></td>
-        <td class="iw400-right-bdr">User Name</td>
-        <td class="w400-left-bdr"><input type="text" id="txt-user-name" tabindex="4" value="{{ Auth::user()->username }}" disabled></input></td>
-        <td><div style="overflow:hidden"></div></td>
-        <td><div style="overflow:hidden"></div></td>
-    </tr>
-    <tr class="h13">
-        <td><div style="overflow:hidden"></div></td>
-        <td class="iw400-right-bdr">User Email</td>
-        <td class="w400-left-bdr"><input type="text" id="txt-user-email" tabindex="5" value="{{ Auth::user()->email }}" disabled></input></td>
-        <td><div style="overflow:hidden"></div></td>
-        <td><div style="overflow:hidden"></div></td>
-    </tr>
-</tbody> 
-</table> -->
 
 <!-- Project information table section -->
 <table id="project-info-table" cellspacing="0" cellpadding="0" style="border-spacing:0;" >    
@@ -463,5 +317,5 @@ www.Princeton-Engineering.com; tel: 908-507-5500
     </tr>
 </tbody>
 </table>
-
+<input type="text" value="{{ $projectId }}" id="projectId" hidden>
 </form>
