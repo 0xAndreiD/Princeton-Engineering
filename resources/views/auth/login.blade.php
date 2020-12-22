@@ -80,9 +80,9 @@
                 <!-- Meta Info Section -->
                 <div class="hero-static col-md-6 d-none d-md-flex align-items-md-center justify-content-md-center text-md-center">
                     <div class="p-3">
-                        <p class="display-4 font-w700 text-white mb-3">
-                            iRoof™, Residential Roof Framing Analysis
-                        </p>
+                        <p class="display-4 font-w700 text-white mb-3">iRoof™</p>
+                        <p class="display-4 font-w700 text-white mb-3">Residential Roof Framing Analysis</p>
+                        <p class="display-4 font-w700 text-white mb-3">for Solar Installations</p>
                         <p class="font-size-lg font-w600 text-white-75 mb-0">
                             Copyright &copy; <span data-toggle="year-copy"></span>
                         </p>

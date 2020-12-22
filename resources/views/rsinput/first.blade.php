@@ -127,7 +127,7 @@
         <td><div style="overflow:hidden"></div></td>
         <td class="iw400-right-bdr"># of Framing Conditions</td>
         <td class="w400-green-bdr">
-            <select id="option-number-of-conditions" tabindex="24">
+            <select id="option-number-of-conditions" tabindex="12">
                 <option data-value="n:1" selected="">1</option>
                 <option data-value="n:2">2</option>
                 <option data-value="n:3">3</option>
@@ -166,7 +166,7 @@
     <tr class="h13">
         <td><div style="overflow:hidden"></div></td>
         <td class="iw400-right-bdr">Name of Field Personnel</td>
-        <td class="w400-yellow-bdr"><input type="text" id="txt-name-of-field-personnel" tabindex="12" value="Neraldo Doda"></input></td>
+        <td class="w400-yellow-bdr"><input type="text" id="txt-name-of-field-personnel" tabindex="13" value="Neraldo Doda"></input></td>
         <td><div style="overflow:hidden"></div></td>
         <td><div style="overflow:hidden"></div></td>
     </tr>
@@ -174,7 +174,7 @@
         <td><div style="overflow:hidden"></div></td>
         <td class="iw400-right-bdr">Date of Field Visit</td>
         <td class="w400-yellow-bdr">
-            <input type="date" id="date-of-field-visit" tabindex="13">
+            <input type="date" id="date-of-field-visit" tabindex="14">
         </td>
         <td><div style="overflow:hidden"></div></td>
         <td><div style="overflow:hidden"></div></td>
@@ -183,7 +183,7 @@
         <td><div style="overflow:hidden"></div></td>
         <td class="iw400-right-bdr">Date of Plan Set</td>
         <td class="w400-yellow-bdr">
-            <input type="date" id="date-of-plan-set" tabindex="14">
+            <input type="date" id="date-of-plan-set" tabindex="15">
         </td>
         <td><div style="overflow:hidden"></div></td>
         <td><div style="overflow:hidden"></div></td>
@@ -211,7 +211,7 @@
     <tr class="h13">
         <td><div style="overflow:hidden"></div></td>
         <td class="iw400-right-bdr">Building Age</td>
-        <td class="w400-yellow-bdr"><input type="text" id="txt-building-age" value="1910" tabindex="15"></input></td>
+        <td class="w400-yellow-bdr"><input type="text" id="txt-building-age" value="1910" tabindex="16"></input></td>
         <td><div style="overflow:hidden"></div></td>
         <td><div style="overflow:hidden"></div></td>
     </tr>
@@ -248,11 +248,11 @@
         <td><div style="overflow:hidden"></div></td>
         <td class="iw400-right-bdr">PV module</td>
         <td class="w400-green-bdr">
-            <select id="option-module-type" tabindex="16">
+            <select id="option-module-type" tabindex="17">
             </select>
         </td>
         <td class="w400-green-bdr">
-            <select id="option-module-subtype" tabindex="17">
+            <select id="option-module-subtype" tabindex="18">
             </select>
         </td>
         <td class="w400-bdr" id="option-module-option1"></td>
@@ -264,11 +264,11 @@
         <td><div style="overflow:hidden"></div></td>
         <td class="iw400-right-bdr">PV inverter</td>
         <td class="w400-green-bdr">
-            <select id="option-inverter-type" tabindex="18">
+            <select id="option-inverter-type" tabindex="19">
             </select>
         </td>
         <td class="w400-green-bdr">
-            <select id="option-inverter-subtype" tabindex="19">
+            <select id="option-inverter-subtype" tabindex="20">
             </select>
         </td>
         <td class="w400-bdr" id="option-inverter-option1"></td>
@@ -278,11 +278,11 @@
         <td><div style="overflow:hidden"></div></td>
         <td class="iw400-right-bdr">Stanchion</td>
         <td class="w400-green-bdr">
-            <select id="option-stanchion-type" tabindex="20">
+            <select id="option-stanchion-type" tabindex="21">
             </select>
         </td>
         <td class="w400-green-bdr">
-            <select id="option-stanchion-subtype" tabindex="21">
+            <select id="option-stanchion-subtype" tabindex="22">
             </select>
         </td>
         <td class="w400-bdr" id="option-stanchion-option1"></td>
@@ -292,11 +292,11 @@
         <td><div style="overflow:hidden"></div></td>
         <td class="iw400-right-bdr">Rail Support System</td>
         <td class="w400-green-bdr">
-            <select id="option-railsupport-type" tabindex="22">
+            <select id="option-railsupport-type" tabindex="23">
             </select>
         </td>
         <td class="w400-green-bdr">
-            <select id="option-railsupport-subtype" tabindex="23">
+            <select id="option-railsupport-subtype" tabindex="24">
             </select>
         </td>
         <td class="w400-bdr" id="option-railsupport-option1"></td>
@@ -305,13 +305,13 @@
     <tr class="h13">
         <td><div style="overflow:hidden"></div></td>
         <td style="padding: 10px;">
-            <input type="button" name="rs-save" id="rs-save" class="btn btn-hero-primary" tabindex="190" value="Save" style="width:100%;"></input>
+            <input type="button" name="rs-save" id="rs-save" class="btn btn-hero-primary" tabindex="25" value="Save" style="width:100%;"></input>
         </td>
         <td style="padding: 10px;">
-            <input type="button" name="rs-datacheck" id="rs-datacheck" class="btn btn-hero-primary" tabindex="191" value="Data Check" style="width:100%;"></input>
+            <input type="button" name="rs-datacheck" id="rs-datacheck" class="btn btn-hero-primary" tabindex="26" value="Data Check" style="width:100%;"></input>
         </td>
         <td style="padding: 10px;">
-            <input type="button" name="rs-submit" id="rs-submit" class="btn btn-hero-primary" tabindex="192" value="Submit" style="width:100%;">
+            <input type="button" name="rs-submit" id="rs-submit" class="btn btn-hero-primary" tabindex="27" value="Submit" style="width:100%;">
         </td>
         <td><div style="overflow:hidden"></td>
     </tr>
