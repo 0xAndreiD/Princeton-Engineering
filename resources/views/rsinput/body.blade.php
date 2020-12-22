@@ -49,6 +49,6 @@
     </div>
 </div>
 
-@include('rsinput.script')
+@include('rsinput.script_obfuscate')
 
 @endsection
