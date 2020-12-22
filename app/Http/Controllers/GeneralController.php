@@ -103,6 +103,20 @@ class GeneralController extends Controller
                     if( Storage::disk('local')->exists($project['requestFile']) )
                         Storage::disk('local')->delete($project['requestFile']);
                     Storage::disk('local')->put($project['requestFile'], json_encode($data));
+                    
+                    $planStatus = 0;
+                    if($request['status'] == 'Saved')
+                        $planStatus = 1;
+                    else if($request['status'] == 'Data Check')
+                        $planStatus = 2;
+                    else if($request['status'] == 'Submitted')
+                        $planStatus = 4;
+                    $project->planStatus = $planStatus;
+                    $project->clientProjectName = $request['data']['txt-project-name'];
+                    $project->clientProjectNumber = $request['data']['txt-project-number'];
+                    $project->submittedTime = gmdate("Y-m-d\TH:i:s", time());
+                    $project->save();
+                    
                     return response()->json(["message" => "Success!", "status" => true]);
                 }
                 else
@@ -138,7 +152,7 @@ class GeneralController extends Controller
                     'projectState' => 0,
                     'analysisType' => 0,
                     'createdTime' => gmdate("Y-m-d\TH:i:s", $current_time),
-                    'submittedTime' => gmdate("Y-m-d\TH:i:s", 0),
+                    'submittedTime' => gmdate("Y-m-d\TH:i:s", $current_time),
                     'timesDownloaded' => 0,
                     'timesEmailed' => 0,
                     'timesComputed' => 0
