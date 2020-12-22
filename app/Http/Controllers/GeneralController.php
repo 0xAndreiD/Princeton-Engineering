@@ -104,19 +104,19 @@ class GeneralController extends Controller
                         Storage::disk('local')->delete($project['requestFile']);
                     Storage::disk('local')->put($project['requestFile'], json_encode($data));
                     
-                    $planStatus = 0;
+                    $projectState = 0;
                     if($request['status'] == 'Saved')
-                        $planStatus = 1;
+                        $projectState = 1;
                     else if($request['status'] == 'Data Check')
-                        $planStatus = 2;
+                        $projectState = 2;
                     else if($request['status'] == 'Submitted')
-                        $planStatus = 4;
-                    $project->planStatus = $planStatus;
+                        $projectState = 4;
+                    $project->projectState = $projectState;
                     $project->clientProjectName = $request['data']['txt-project-name'];
                     $project->clientProjectNumber = $request['data']['txt-project-number'];
                     $project->submittedTime = gmdate("Y-m-d\TH:i:s", time());
                     $project->save();
-                    
+
                     return response()->json(["message" => "Success!", "status" => true]);
                 }
                 else
@@ -134,13 +134,13 @@ class GeneralController extends Controller
                 $company = Company::where('id', Auth::user()->companyid)->first();
                 $data = $this->inputToJson($request['data'], $request['caseCount']);
                 Storage::disk('local')->put($filename, json_encode($data));
-                $planStatus = 0;
+                $projectState = 0;
                 if($request['status'] == 'Saved')
-                    $planStatus = 1;
+                    $projectState = 1;
                 else if($request['status'] == 'Data Check')
-                    $planStatus = 2;
+                    $projectState = 2;
                 else if($request['status'] == 'Submitted')
-                    $planStatus = 4;
+                    $projectState = 4;
                 JobRequest::create([
                     'companyName' => $company['company_name'],
                     'companyId' => Auth::user()->companyid,
@@ -148,8 +148,8 @@ class GeneralController extends Controller
                     'clientProjectName' => $request['data']['txt-project-name'],
                     'clientProjectNumber' => $request['data']['txt-project-number'],
                     'requestFile' => $filename,
-                    'planStatus' => $planStatus,
-                    'projectState' => 0,
+                    'planStatus' => 0,
+                    'projectState' => $projectState,
                     'analysisType' => 0,
                     'createdTime' => gmdate("Y-m-d\TH:i:s", $current_time),
                     'submittedTime' => gmdate("Y-m-d\TH:i:s", $current_time),
