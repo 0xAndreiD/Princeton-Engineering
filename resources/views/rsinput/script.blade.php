@@ -553,9 +553,8 @@ var loadPreloadedData = function() {
 
                         $('#txt-building-age').val(preloaded_data['BuildingAge']);
 
-                        $('#option-module-type').val(preloaded_data['Equipment']['PVModule']['Type']);
-                        $('#option-module-subtype').val(preloaded_data['Equipment']['PVModule']['SubType']);
-                        $('#option-module-option1').html(preloaded_data['Equipment']['PVModule']['Option1']);
+                        $('#option-module-quantity').val(preloaded_data['Equipment']['PVModule']['Quantity']);
+                        $('#option-inverter-quantity').val(preloaded_data['Equipment']['PVInverter']['Quantity']);
 
                         $("#option-number-of-conditions").val(preloaded_data['NumberLoadingConditions']);
                         updateNumberOfConditions(parseInt(preloaded_data['NumberLoadingConditions']));
@@ -899,7 +898,6 @@ var updatePVSubmoduleField = function(mainType, subType="") {
         subType = selectedSubType; 
     }
 
-    console.log(mainType, subType);
     $('#option-module-option1').html(optionPVModule(mainType, subType, 2));
     
     $('#pv-module-length').val(optionPVModule(mainType, subType, 3));
@@ -1329,8 +1327,10 @@ var getData = function(caseCount = 10) {
     alldata['option-user-id'] = $('#option-user-id').val();
     alldata['option-module-option1'] = $('#option-module-option1').html();
     alldata['option-module-option2'] = $('#option-module-option2').html();
+    alldata['option-module-quantity'] = $('#option-module-quantity').val();
     alldata['option-inverter-option1'] = $('#option-inverter-option1').html();
     alldata['option-inverter-option2'] = $('#option-inverter-option2').html();
+    alldata['option-inverter-quantity'] = $('#option-inverter-quantity').val();
     alldata['option-stanchion-option1'] = $('#option-stanchion-option1').html();
     alldata['option-stanchion-option2'] = $('#option-stanchion-option2').html();
     alldata['option-railsupport-option1'] = $('#option-railsupport-option1').html();

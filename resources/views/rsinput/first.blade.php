@@ -241,8 +241,17 @@
     </tr>
     <tr class="h13">
         <td><div style="overflow:hidden"></div></td>
-        <td class="iw400-bdr" colspan="5">Equipment section</td>
+        <td class="iw400-bdr" colspan="6">Equipment section</td>
         <td><div style="overflow:hidden"></div></td>
+    </tr>
+    <tr class="h13">
+        <td ><div style="overflow:hidden"></div></td>
+        <td class="iw400-bdr">Description</td>
+        <td class="iw400-bdr">Manufacturer</td>
+        <td class="iw400-bdr">Model</td>
+        <td class="iw400-bdr">Value</td>
+        <td class="iw400-bdr">Unit</td>
+        <td class="iw400-bdr">Quantity</td>
     </tr>
     <tr class="h13">
         <td><div style="overflow:hidden"></div></td>
@@ -257,6 +266,7 @@
         </td>
         <td class="w400-bdr" id="option-module-option1"></td>
         <td class="w400-bdr" id="option-module-option2">watts</td>
+        <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="option-module-quantity" tabindex="19" value="0"></td>
         <input class="w400-bdr" id="pv-module-length" hidden>
         <input class="w400-bdr" id="pv-module-width" hidden>
     </tr>
@@ -273,6 +283,7 @@
         </td>
         <td class="w400-bdr" id="option-inverter-option1"></td>
         <td class="w400-bdr" id="option-inverter-option2"></td>
+        <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="option-inverter-quantity" tabindex="20" value="0"></td>
     </tr>
     <tr class="h13">
         <td><div style="overflow:hidden"></div></td>
