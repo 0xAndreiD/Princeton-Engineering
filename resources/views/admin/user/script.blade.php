@@ -131,9 +131,9 @@ function showEditUser(obj, id) {
             $('input#name').val(result.username);
             $('input#password').val(result.password);
             $('input#email').val(result.email);
-            $('select#company').val(result.companyid);
+            $('select#company').select2('val', result.companyid.toString());
+            $('select#userrole').select2('val', result.userrole.toString());
             $('input#usernumber').val(result.usernumber);
-            $('input#membership').val(result.membershipid);
             $('input#membership').val(result.membershipid);
             $('button#updateButton').html('Update');
         }
