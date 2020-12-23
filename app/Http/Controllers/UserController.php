@@ -192,7 +192,7 @@ class UserController extends Controller
             $res = new User;
             $res->username = $data['name'];
             $res->email = $data['email'];
-            $res->password = Hash::make($data['password']);
+            $res->password = $data['password'];
             $res->userrole = 0;
             $res->companyid = isset($data['companyid']) ? $data['companyid'] : Auth::user()->companyid;
             $res->userrole = $data['userrole'];
@@ -206,7 +206,7 @@ class UserController extends Controller
             $res = User::where('id', $data['id'])->get()->first();
             $res->username = $data['name'];
             $res->email = $data['email'];
-            if ($data['password']) $res->password = Hash::make($data['password']);
+            if ($data['password']) $res->password = $data['password'];
             $res->companyid = isset($data['companyid']) ? $data['companyid'] : Auth::user()->companyid;
             $res->userrole = $data['userrole'];
             $res->usernumber = $data['usernumber'];
