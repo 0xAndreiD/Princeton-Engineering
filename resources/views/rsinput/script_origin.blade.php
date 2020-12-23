@@ -1267,12 +1267,12 @@ var isEmptyInputBox = function() {
     var caseCount = $("#option-number-of-conditions").val();
     for(let i = 1; i <= caseCount; i ++)
     {
-        if($(`#inputform-${i} #c-2-1`).val() != "" && ($(`#inputform-${i} #c-1-1`).val() == ""))
+        if($(`#inputform-${i} #c-2-1`).val() != "" && parseFloat($(`#inputform-${i} #c-2-1`).val()) != 0 && ($(`#inputform-${i} #c-1-1`).val() == ""))
         {
             isEmpty = true;
             $(`#inputform-${i} #c-1-1`).css('background-color', '#FFC7CE');
         }    
-        if($(`#inputform-${i} #c-2-1`).val() != "" && ($(`#inputform-${i} #c-3-1`).val() == ""))
+        if($(`#inputform-${i} #c-2-1`).val() != "" && parseFloat($(`#inputform-${i} #c-2-1`).val()) != 0 && ($(`#inputform-${i} #c-3-1`).val() == ""))
         {
             isEmpty = true;
             $(`#inputform-${i} #c-3-1`).css('background-color', '#FFC7CE');
