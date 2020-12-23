@@ -15,6 +15,9 @@ use App\Stanchion;
 use App\RailSupport;
 use App\JobRequest;
 
+use DateTime;
+use DateTimeZone;
+
 class GeneralController extends Controller
 {
     /**
@@ -97,6 +100,7 @@ class GeneralController extends Controller
      * @return JSON
      */
     public function submitInput(Request $request){
+        date_default_timezone_set("America/New_York");
         if($request['data'] && $request['data']['projectId'] && $request['data']['projectId'] > 0){
             $project = JobRequest::where('id', '=', $request['data']['projectId'])->first();
             if($project){
@@ -176,6 +180,7 @@ class GeneralController extends Controller
      * @return JSON
      */
     private function inputToJson($input, $caseCount){
+        date_default_timezone_set("America/New_York");
         $data = array();
 
         //ProgramData
@@ -424,45 +429,50 @@ class GeneralController extends Controller
                 $nestedData['username'] = $job->username;
                 $nestedData['projectname'] = $job->projectname;
                 $nestedData['projectnumber'] = $job->projectnumber;
-                $nestedData['createdtime'] = $job->createdtime;
-                $nestedData['submittedtime'] = $job->submittedtime;
+                $date = new DateTime($job->createdtime, new DateTimeZone('UTC'));
+                $date->setTimezone(new DateTimeZone('EST'));
+                $nestedData['createdtime'] = $date->format("Y-m-d H:i:s");
+
+                $date = new DateTime($job->submittedtime, new DateTimeZone('UTC'));
+                $date->setTimezone(new DateTimeZone('EST'));
+                $nestedData['submittedtime'] = $date->format("Y-m-d H:i:s");
                 
                 switch ($job->projectstate){
                     case 0:
-                        $nestedData['projectstate'] = "<span class='badge badge-danger'> None </span>"; break;
+                        $nestedData['projectstate'] = "<span class='badge badge-danger' style='white-space: pre-wrap;'> None </span>"; break;
                     case 1:
-                        $nestedData['projectstate'] = "<span class='badge badge-primary'> Saved </span>"; break;
+                        $nestedData['projectstate'] = "<span class='badge badge-primary' style='white-space: pre-wrap;'> Saved </span>"; break;
                     case 2:
-                        $nestedData['projectstate'] = "<span class='badge badge-info'> Check Requested </span>"; break;
+                        $nestedData['projectstate'] = "<span class='badge badge-info' style='white-space: pre-wrap;'> Check Requested </span>"; break;
                     case 3:
-                        $nestedData['projectstate'] = "<span class='badge badge-warning'> Reviewed </span>"; break;
+                        $nestedData['projectstate'] = "<span class='badge badge-warning' style='white-space: pre-wrap;'> Reviewed </span>"; break;
                     case 4:
-                        $nestedData['projectstate'] = "<span class='badge badge-warning'> Submitted </span>"; break;
+                        $nestedData['projectstate'] = "<span class='badge badge-warning' style='white-space: pre-wrap;'> Submitted </span>"; break;
                     case 5:
-                        $nestedData['projectstate'] = "<span class='badge badge-warning'> Report Prepared </span>"; break;
+                        $nestedData['projectstate'] = "<span class='badge badge-warning' style='white-space: pre-wrap;'> Report Prepared </span>"; break;
                     case 6:
-                        $nestedData['projectstate'] = "<span class='badge badge-warning'> Link Sent </span>"; break;
+                        $nestedData['projectstate'] = "<span class='badge badge-warning' style='white-space: pre-wrap;'> Link Sent </span>"; break;
                     case 7:
-                        $nestedData['projectstate'] = "<span class='badge badge-warning'> Completed </span>"; break;
+                        $nestedData['projectstate'] = "<span class='badge badge-warning' style='white-space: pre-wrap;'> Completed </span>"; break;
                 }
 
                 switch ($job->planstatus){
                     case 0:
-                        $nestedData['planstatus'] = "<span class='badge badge-danger'> No action </span>"; break;
+                        $nestedData['planstatus'] = "<span class='badge badge-danger' style='white-space: pre-wrap;'> No action </span>"; break;
                     case 1:
-                        $nestedData['planstatus'] = "<span class='badge badge-primary'> Plans uploaded to portal </span>"; break;
+                        $nestedData['planstatus'] = "<span class='badge badge-primary' style='white-space: pre-wrap;'> Plans uploaded to portal </span>"; break;
                     case 2:
-                        $nestedData['planstatus'] = "<span class='badge badge-info'> Plans reviewed </span>"; break;
+                        $nestedData['planstatus'] = "<span class='badge badge-info' style='white-space: pre-wrap;'> Plans reviewed </span>"; break;
                     case 3:
-                        $nestedData['planstatus'] = "<span class='badge badge-warning'> Comments issued </span>"; break;
+                        $nestedData['planstatus'] = "<span class='badge badge-warning' style='white-space: pre-wrap;'> Comments issued </span>"; break;
                     case 4:
-                        $nestedData['planstatus'] = "<span class='badge badge-warning'> Updated plans uploaded to portal </span>"; break;
+                        $nestedData['planstatus'] = "<span class='badge badge-warning' style='white-space: pre-wrap;'> Updated plans uploaded to portal </span>"; break;
                     case 5:
-                        $nestedData['planstatus'] = "<span class='badge badge-warning'> Revised comments issued </span>"; break;
+                        $nestedData['planstatus'] = "<span class='badge badge-warning' style='white-space: pre-wrap;'> Revised comments issued </span>"; break;
                     case 6:
-                        $nestedData['planstatus'] = "<span class='badge badge-warning'> Final plans uploaded to portal </span>"; break;
+                        $nestedData['planstatus'] = "<span class='badge badge-warning' style='white-space: pre-wrap;'> Final plans uploaded to portal </span>"; break;
                     case 7:
-                        $nestedData['planstatus'] = "<span class='badge badge-warning'> PE sealed plans link sent </span>"; break;
+                        $nestedData['planstatus'] = "<span class='badge badge-warning' style='white-space: pre-wrap;'> PE sealed plans link sent </span>"; break;
                 }
 
                 $nestedData['actions'] = "

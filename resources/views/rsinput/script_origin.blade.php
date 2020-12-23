@@ -545,6 +545,7 @@ var loadPreloadedData = function() {
                         $('#txt-street-address').val(preloaded_data['ProjectInfo']['Street']);
                         $('#txt-city').val(preloaded_data['ProjectInfo']['City']);
                         $('#option-state').val(preloaded_data['ProjectInfo']['State']);
+                        detectCorrectTownForMA();
                         $('#txt-zip').val(preloaded_data['ProjectInfo']['Zip']);
 
                         $('#txt-name-of-field-personnel').val(preloaded_data['Personnel']['Name']);
