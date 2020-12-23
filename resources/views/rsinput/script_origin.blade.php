@@ -1282,9 +1282,12 @@ var isEmptyInputBox = function() {
     var empty_textboxes = $('input:text:enabled').filter(function() { return this.value === ""; });
     empty_textboxes.each(function() { 
         // skip note 
-        if ($(this).attr('id').includes("i-1-") || ignorable.indexOf($(this).attr('id')) > -1) {
+        if (typeof $(this).attr('id') == "string" && ($(this).attr('id').includes("i-1-") || ignorable.indexOf($(this).attr('id')) > -1)) {
             return;
         }
+        // skip sweet alert
+        if(typeof $(this).attr('class') == "string" && $(this).attr('class').includes('swal2-input'))
+            return;
 
         $(this).css('background-color', '#FFC7CE');
         isEmpty = true;
@@ -2593,6 +2596,7 @@ $(document).ready(function() {
             data:{data: data, status: status, caseCount: caseCount},
             success:function(res){
                 if (res.status == true) {
+                    $("#projectId").val(res.projectId);
                     message = 'Succeeded to send input data. Do you want back to home page?';
                     if (status == 'Data Check') {
                         message = 'Input Data sent for review. An email will be sent to you summarizing the data input and notifying you of any problems.\nGo back to home page?';
@@ -2632,13 +2636,34 @@ $(document).ready(function() {
     }
 
     $('#rs-save').click(function(e) {
+        $('#projectState').val("1");
         submitData(e, 'Saved');
     });
     $('#rs-datacheck').click(function(e){
+        $('#projectState').val("2");
         submitData(e, 'Data Check');
     });
     $("#rs-submit").click(function(e){
-        submitData(e, 'Submitted');
+        var projectState = $('#projectState').val();
+        if(projectState < 3){
+            swal.fire({
+                title: "Warning",
+                html: "Warning - You should really check the data before submitting it for a final report.<br /> Continue?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: `Yes`,
+                cancelButtonText: `No`,
+            })
+            .then(( result ) => {
+                if ( result.value ) {
+                    $('#projectState').val("4");
+                    submitData(e, 'Submitted');
+                } 
+            });
+        }
+        else{
+            submitData(e, 'Submitted');
+        }
     });
 
     function GetCPU () {

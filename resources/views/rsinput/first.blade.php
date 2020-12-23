@@ -329,4 +329,5 @@
 </tbody>
 </table>
 <input type="text" value="{{ $projectId }}" id="projectId" hidden>
+<input type="text" value="{{ $projectState }}" id="projectState" hidden>
 </form>

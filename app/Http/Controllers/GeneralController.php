@@ -53,10 +53,12 @@ class GeneralController extends Controller
         if( $company )
         {
             $companymembers = User::where('companyid', $company['id'])->get();
+            $project = JobRequest::where('id', '=', $request['projectId'])->first();
             return view('rsinput.body')
                     ->with('companyName', $company['company_name'])
                     ->with('companyNumber', $company['company_number'])
                     ->with('companyMembers', $companymembers)
+                    ->with('projectState', $project ? $project->projectState : 0)
                     ->with('projectId', $request['projectId'] ? $request['projectId'] : -1);
         }
         else
@@ -66,6 +68,7 @@ class GeneralController extends Controller
                     ->with('companyName', "")
                     ->with('companyNumber', "")
                     ->with('companyMembers', $companymembers)
+                    ->with('projectState', 0)
                     ->with('projectId', $request['projectId'] ? $request['projectId'] : -1);
         }
     }
@@ -117,7 +120,7 @@ class GeneralController extends Controller
                     $project->submittedTime = gmdate("Y-m-d\TH:i:s", time());
                     $project->save();
 
-                    return response()->json(["message" => "Success!", "status" => true]);
+                    return response()->json(["message" => "Success!", "status" => true, "projectId" => $project->id]);
                 }
                 else
                     return response()->json(["message" => "You don't have permission to edit this project.", "status" => false]);
@@ -129,6 +132,7 @@ class GeneralController extends Controller
         {
             $current_time = time();
             $company = Company::where('id', Auth::user()->companyid)->first();
+            $projectId = -1;
             $filename = ($company ? sprintf("%06d", $company['company_number']) : "000000") . "-" . sprintf("%04d", Auth::user()->id) . "-" . $current_time . ".json";
             try {
                 $company = Company::where('id', Auth::user()->companyid)->first();
@@ -141,7 +145,7 @@ class GeneralController extends Controller
                     $projectState = 2;
                 else if($request['status'] == 'Submitted')
                     $projectState = 4;
-                JobRequest::create([
+                $project = JobRequest::create([
                     'companyName' => $company['company_name'],
                     'companyId' => Auth::user()->companyid,
                     'userId' => Auth::user()->usernumber,
@@ -157,11 +161,12 @@ class GeneralController extends Controller
                     'timesEmailed' => 0,
                     'timesComputed' => 0
                 ]);
+                $projectId = $project->id;
             }
             catch(Exception $e) {
                 return response()->json(["message" => "Failed to generate RS json data file", "status" => false]);
             }
-            return response()->json(["message" => "Success!", "status" => true]);
+            return response()->json(["message" => "Success!", "status" => true, "projectId" => $projectId]);
         }
     }
 
