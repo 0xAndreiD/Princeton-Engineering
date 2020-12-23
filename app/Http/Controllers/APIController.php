@@ -126,4 +126,33 @@ class APIController extends Controller
         else
             return response()->json(['success' => false, 'message' => 'Auth required.']);
     }
+
+    /**
+     * Get User and Client Admin Email / Name
+     *
+     * @return JSON
+     */
+    public function getUserInfo(Request $request){
+        if(isset($request['username']) && isset($request['password'])){
+            $user = User::where('username', '=', $request['username'])->where('password', '=', $request['password'])->first();
+            if($user && $user->userrole == 2)
+            {
+                $data = array();
+                if(isset($request['companyId'])){
+                    $data['ClientAdmin'] = User::select('username', 'email')->where('userrole', '=', '1')->where('companyid', '=', $request['companyId'])->first();
+                }
+                else
+                    return response()->json(['success' => false, 'message' => 'Fail', 'message' => 'Wrong File Name.']);
+
+                if(isset($request['userId'])){
+                    $data['Client'] = User::select('username', 'email')->where('usernumber', '=', $request['userId'])->where('companyid', '=', $request['companyId'])->first();
+                }
+                return response()->json(['success' => true, 'data' => $data]);
+            }
+            else
+                return response()->json(['success' => false, 'message' => 'Auth failed.']);
+        }
+        else
+            return response()->json(['success' => false, 'message' => 'Auth required.']);
+    }
 }
