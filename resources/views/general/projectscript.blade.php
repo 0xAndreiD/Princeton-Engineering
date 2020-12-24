@@ -1,6 +1,6 @@
 <script>
 
-function delUser(obj, id) {
+function delProject(obj, id) {
     let toast = Swal.mixin({
         buttonsStyling: false,
         customClass: {

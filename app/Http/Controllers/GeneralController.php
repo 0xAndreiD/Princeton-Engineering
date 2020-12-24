@@ -480,7 +480,7 @@ class GeneralController extends Controller
                     <a href='rsinput?projectId={$nestedData['id']}' class='btn btn-primary'>
                         <i class='fa fa-pencil-alt'></i>
                     </a>" . 
-                    (Auth::user()->userrole == 2 ? "<button type='button' class='js-swal-confirm btn btn-danger' onclick='delJob(this,{$nestedData['id']})'>
+                    (Auth::user()->userrole == 2 ? "<button type='button' class='js-swal-confirm btn btn-danger' onclick='delProject(this,{$nestedData['id']})'>
                         <i class='fa fa-trash'></i>
                     </button>" : "") . "</div>";
                 $data[] = $nestedData;
@@ -583,5 +583,16 @@ class GeneralController extends Controller
         }
         else
             return response()->json(['success' => false, 'message' => 'Wrong Project Id.'] );
+    }
+
+    /**
+     * Delete Project
+     *
+     * @return JSON
+     */
+    function delProject(Request $request){
+        $id = $request->input('data');
+        $res = JobRequest::where('id', $id)->delete();
+        return $res;
     }
 }
