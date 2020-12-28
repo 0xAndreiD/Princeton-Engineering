@@ -316,13 +316,13 @@
     <tr class="h13">
         <td><div style="overflow:hidden"></div></td>
         <td style="padding: 10px;">
-            <input type="button" name="rs-save" id="rs-save" class="btn btn-hero-primary" tabindex="25" value="Save" style="width:100%;"></input>
+            <input type="button" name="rs-save" id="rs-save" class="btn btn-hero-primary {{ $projectState > 2 ? 'disabled' : '' }}" tabindex="25" value="Save" style="width:100%;"></input>
         </td>
         <td style="padding: 10px;">
-            <input type="button" name="rs-datacheck" id="rs-datacheck" class="btn btn-hero-primary" tabindex="26" value="Data Check" style="width:100%;"></input>
+            <input type="button" name="rs-datacheck" id="rs-datacheck" class="btn btn-hero-primary {{ $projectState > 2 ? 'disabled' : '' }}" tabindex="26" value="Data Check" style="width:100%;"></input>
         </td>
         <td style="padding: 10px;">
-            <input type="button" name="rs-submit" id="rs-submit" class="btn btn-hero-primary" tabindex="27" value="Submit" style="width:100%;">
+            <input type="button" name="rs-submit" id="rs-submit" class="btn btn-hero-primary {{ $projectState != 3 ? 'disabled' : '' }}" tabindex="27" value="Submit" style="width:100%;">
         </td>
         <td><div style="overflow:hidden"></td>
     </tr>

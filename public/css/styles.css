@@ -184,3 +184,8 @@ html, body {
     border: 1px solid black !important;
     border-radius: 5px;
 }
+
+.disabled{
+    pointer-events: none;
+    background-color: grey;
+}
