@@ -106,7 +106,12 @@
                 { "data": "planstatus" },
                 { "data": "actions", "orderable": false }
                 @endif
-            ]	 
+            ],
+            @if(Auth::user()->userrole == 2)
+            "order": [[ 6, "desc" ]]
+            @else
+            "order": [[ 4, "desc" ]]
+            @endif
         });
 
         $.ajaxSetup({
