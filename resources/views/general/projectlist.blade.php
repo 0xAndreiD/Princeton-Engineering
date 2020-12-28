@@ -59,9 +59,38 @@
                             <th style="min-width: 70px;">Action</th>
                             @endif
                         </tr>
+                        <tr>
+                            @if(Auth::user()->userrole == 2)
+                            <th></th>
+                            <th class="searchHead"> <input type="text" placeholder="Search Company" class="searchBox" id="companyFilter"> </th>
+                            <th class="searchHead"> <input type="text" placeholder="Search User" class="searchBox" id="userFilter"> </th>
+                            <th class="searchHead"> <input type="text" placeholder="Search Name" class="searchBox" id="projectNameFilter"> </th>
+                            <th class="searchHead"> <input type="text" placeholder="Search Number" class="searchBox" id="projectNumberFilter"> </th>
+                            <th></th>
+                            <th class="searchHead">
+                                <input type="text" class="js-flatpickr bg-white searchBox" id="created_from" name="created_from_datetime" data-enable-time="true" placeholder="From" style="margin-bottom: 5px;">
+                                <input type="text" class="js-flatpickr bg-white searchBox" id="created_to" name="created_to_datetime" data-enable-time="true" placeholder="To">
+                            </th>
+                            <th class="searchHead">
+                                <input type="text" class="js-flatpickr bg-white searchBox" id="submitted_from" name="submitted_from_datetime" data-enable-time="true" placeholder="From" style="margin-bottom: 5px;">
+                                <input type="text" class="js-flatpickr bg-white searchBox" id="submitted_to" name="submitted_to_datetime" data-enable-time="true" placeholder="To">
+                            </th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            @else
+                            <th></th>
+                            <th class="searchHead"> <input type="text" placeholder="Search User" class="searchBox" id="userFilter"> </th>
+                            <th class="searchHead"> <input type="text" placeholder="Search Name" class="searchBox" id="projectNameFilter"> </th>
+                            <th class="searchHead"> <input type="text" placeholder="Search Number" class="searchBox" id="projectNumberFilter"> </th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            @endif
+                        </tr>
                     </thead>
-                    <tbody>
-                    </tbody>
                 </table>
             </div>
         </div>
@@ -72,15 +101,26 @@
 
 <script>
     $(document).ready(function () {
-        $('#users').DataTable({
+        $.ajaxSetup({
+            headers:
+            { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
+        });
+
+        var table = $('#users').DataTable({
             "processing": true,
             "serverSide": true,
             "responsive": true,
+            "orderCellsTop": true,
             "ajax":{
                     "url": "{{ url('getProjectList') }}",
                     "dataType": "json",
                     "type": "POST",
-                    "data":{ _token: "{{csrf_token()}}"}
+                    "data": function(data){ 
+                        data.created_from = $("#created_from").val();
+                        data.created_to = $("#created_to").val();
+                        data.submitted_from = $("#submitted_from").val();
+                        data.submitted_to = $("#submitted_to").val();
+                    }
                 },
             "columns": [
                 @if(Auth::user()->userrole == 2)
@@ -113,11 +153,24 @@
             "order": [[ 4, "desc" ]]
             @endif
         });
+        
+        //console.log(table.column("2:visible"));
 
-        $.ajaxSetup({
-            headers:
-            { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
+        $("#userFilter, #projectNameFilter, #projectNumberFilter").on('keyup change', function() {
+            table.column($(this).parent().index() + ':visible').search(this.value).draw();
         });
+
+        $("#created_from, #created_to, #submitted_from, #submitted_to").on('change', function() {
+            console.log(this.value);
+            table.draw();
+        });
+
+        @if(Auth::user()->userrole == 2)
+        $("#companyFilter").on('keyup change', function() {
+            table.column($(this).parent().index() + ':visible').search(this.value).draw();
+        });
+        @endif
+
     });
 </script>
 

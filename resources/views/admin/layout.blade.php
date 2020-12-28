@@ -41,6 +41,8 @@
         <link rel="stylesheet" href="{{ asset('js/plugins/datatables/dataTables.bootstrap4.css') }}">
         <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.1.7/css/fixedHeader.bootstrap.min.css">
         <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.6/css/responsive.bootstrap.min.css">
+
+        <link rel="stylesheet" href="{{ asset('js/plugins/flatpickr/flatpickr.min.css') }}">
         <!-- END Stylesheets -->
 
         <script src="{{ asset('js/jquery.min.js') }}"></script>
@@ -318,11 +320,15 @@
         <!-- Page JS Plugins -->
         <script src="{{ asset('js/plugins/jquery.sparkline.min.js') }}"></script>
         <script src="{{ asset('js/plugins/select2/js/select2.full.min.js') }}"></script>
+
+        <!-- Date Time Picker Plugins -->
+        <script src="{{ asset('js/plugins/flatpickr/flatpickr.min.js') }}"></script>
         
         <!-- Page JS Helpers (jQuery Sparkline plugin) -->
         <script>jQuery(function(){ Dashmix.helpers('sparkline'); });</script>
 
         <script>jQuery(function(){ Dashmix.helpers('select2'); });</script>
+        <script>jQuery(function(){ Dashmix.helpers(['flatpickr']); });</script>
         <script src="{{ asset('/js/plugins/jquery-validation/jquery.validate.min.js') }}"></script>
         <script src="{{ asset('/js/plugins/jquery-validation/additional-methods.js') }}"></script>
 

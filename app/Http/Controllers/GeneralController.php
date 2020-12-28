@@ -345,15 +345,55 @@ class GeneralController extends Controller
         $order = $columns[$request->input('order.0.column')];
         $dir = $request->input('order.0.dir');
 
+        $handler = $handler->offset($start)
+            ->leftjoin('company_info', "company_info.id", "=", "job_request.companyId")
+            ->leftjoin('users', function($join){
+                $join->on('job_request.companyId', '=', 'users.companyid');
+                $join->on('job_request.userId', '=', 'users.usernumber');
+            });
+
+        if(!empty($request->input("created_from")) && $request->input("created_from") != "")
+        {
+            $date = new DateTime($request->input("created_from"), new DateTimeZone('EST'));
+            $date->setTimezone(new DateTimeZone('UTC'));
+            $handler = $handler->where('job_request.createdTime', '>=', $date->format("Y-m-d H:i:s"));
+        }
+        if(!empty($request->input("created_to")) && $request->input("created_to") != "")
+        {
+            $date = new DateTime($request->input("created_to"), new DateTimeZone('EST'));
+            $date->setTimezone(new DateTimeZone('UTC'));
+            $handler = $handler->where('job_request.createdTime', '<=', $date->format("Y-m-d H:i:s"));
+        }
+        if(!empty($request->input("submitted_from")) && $request->input("submitted_from") != "")
+        {
+            $date = new DateTime($request->input("submitted_from"), new DateTimeZone('EST'));
+            $date->setTimezone(new DateTimeZone('UTC'));
+            $handler = $handler->where('job_request.submittedTime', '>=', $date->format("Y-m-d H:i:s"));
+        }
+        if(!empty($request->input("submitted_to")) && $request->input("submitted_to") != "")
+        {
+            $date = new DateTime($request->input("submitted_to"), new DateTimeZone('EST'));
+            $date->setTimezone(new DateTimeZone('UTC'));
+            $handler = $handler->where('job_request.submittedTime', '<=', $date->format("Y-m-d H:i:s"));
+        }
+
+        if(Auth::user()->userrole == 2){
+            if(!empty($request->input("columns.1.search.value")))
+                $handler = $handler->where('company_info.company_name', 'LIKE', "%{$request->input("columns.1.search.value")}%");
+            if(!empty($request->input("columns.2.search.value")))
+                $handler = $handler->where('users.username', 'LIKE', "%{$request->input('columns.2.search.value')}%");
+            if(!empty($request->input("columns.3.search.value")))
+                $handler = $handler->where('job_request.clientProjectName', 'LIKE', "%{$request->input('columns.3.search.value')}%");
+            if(!empty($request->input("columns.4.search.value")))
+                $handler = $handler->where('job_request.clientProjectNumber', 'LIKE', "%{$request->input('columns.4.search.value')}%");
+        }
+        else{
+
+        }
+
         if(empty($request->input('search.value')))
         {            
-            $jobs = $handler->offset($start)
-                ->leftjoin('company_info', "company_info.id", "=", "job_request.companyId")
-                ->leftjoin('users', function($join){
-                    $join->on('job_request.companyId', '=', 'users.companyid');
-                    $join->on('job_request.userId', '=', 'users.usernumber');
-                })
-                ->limit($limit)
+            $jobs = $handler->limit($limit)
                 ->orderBy($order,$dir)
                 ->get(
                     array(
@@ -369,22 +409,17 @@ class GeneralController extends Controller
                         'job_request.projectState as projectstate',
                     )
                 );
+            $totalFiltered = $handler->count();
         }
         else {
             $search = $request->input('search.value'); 
             $jobs =  $handler->where('job_request.id','LIKE',"%{$search}%")
-                        ->leftjoin('company_info', "company_info.id", "=", "job_request.companyId")
-                        ->leftjoin('users', function($join){
-                            $join->on('job_request.companyId', '=', 'users.companyid');
-                            $join->on('job_request.userId', '=', 'users.usernumber');
-                        })
                         ->orWhere('company_info.company_name', 'LIKE',"%{$search}%")
                         ->orWhere('users.username', 'LIKE',"%{$search}%")
                         ->orWhere('job_request.clientProjectName', 'LIKE',"%{$search}%")
                         ->orWhere('job_request.clientProjectNumber', 'LIKE',"%{$search}%")
                         ->orWhere('job_request.createdTime', 'LIKE',"%{$search}%")
                         ->orWhere('job_request.submittedTime', 'LIKE',"%{$search}%")
-                        ->offset($start)
                         ->limit($limit)
                         ->orderBy($order,$dir)
                         ->get(
@@ -403,8 +438,6 @@ class GeneralController extends Controller
                         );
 
             $totalFiltered = $handler->where('job_request.id','LIKE',"%{$search}%")
-                        ->leftjoin('company_info', "company_info.id", "=", "job_request.companyId")
-                        ->leftjoin('users', "users.id", "=", "job_request.userId")
                         ->orWhere('company_info.company_name', 'LIKE',"%{$search}%")
                         ->orWhere('users.username', 'LIKE',"%{$search}%")
                         ->orWhere('job_request.clientProjectName', 'LIKE',"%{$search}%")

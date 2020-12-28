@@ -175,3 +175,12 @@ html, body {
     padding-left: 4px;
     color: red;
 }
+
+.searchHead{
+    vertical-align: middle !important;
+}
+
+.searchBox{
+    border: 1px solid black !important;
+    border-radius: 5px;
+}
