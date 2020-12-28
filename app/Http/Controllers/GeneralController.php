@@ -388,7 +388,12 @@ class GeneralController extends Controller
                 $handler = $handler->where('job_request.clientProjectNumber', 'LIKE', "%{$request->input('columns.4.search.value')}%");
         }
         else{
-
+            if(!empty($request->input("columns.1.search.value")))
+                $handler = $handler->where('users.username', 'LIKE', "%{$request->input('columns.1.search.value')}%");
+            if(!empty($request->input("columns.2.search.value")))
+                $handler = $handler->where('job_request.clientProjectName', 'LIKE', "%{$request->input('columns.2.search.value')}%");
+            if(!empty($request->input("columns.3.search.value")))
+                $handler = $handler->where('job_request.clientProjectNumber', 'LIKE', "%{$request->input('columns.3.search.value')}%");
         }
 
         if(empty($request->input('search.value')))
