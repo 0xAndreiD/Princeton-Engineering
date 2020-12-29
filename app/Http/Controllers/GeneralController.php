@@ -100,7 +100,6 @@ class GeneralController extends Controller
      * @return JSON
      */
     public function submitInput(Request $request){
-        date_default_timezone_set("America/New_York");
         if($request['data'] && $request['data']['projectId'] && $request['data']['projectId'] > 0){
             $project = JobRequest::where('id', '=', $request['data']['projectId'])->first();
             if($project){
@@ -305,6 +304,11 @@ class GeneralController extends Controller
         return view('general.projectlist');
     }
 
+    /**
+     * Return the result of server-side rendering
+     *
+     * @return JSON
+     */
     public function getProjectList(Request $request){
         if(Auth::user()->userrole == 2)
         {
@@ -534,9 +538,9 @@ class GeneralController extends Controller
     }
 
     /**
-     * Show the list of projects.
+     * Return the json file content.
      *
-     * @return \Illuminate\Contracts\Support\Renderable
+     * @return JSON or TEXT
      */
     public function requestFile(Request $request){
         $job = JobRequest::where('id', $request['jobId'])->first();
@@ -556,7 +560,7 @@ class GeneralController extends Controller
     /**
      * Return the list of pv modules.
      *
-     * @return \Illuminate\Contracts\Support\Renderable
+     * @return JSON
      */
     public function getPVModules(Request $request){
         $pv_modules = PVModule::all();
@@ -566,7 +570,7 @@ class GeneralController extends Controller
     /**
      * Return the list of pv inverters.
      *
-     * @return \Illuminate\Contracts\Support\Renderable
+     * @return JSON
      */
     public function getPVInverters(Request $request){
         $pv_inverters = PVInverter::all();
@@ -576,7 +580,7 @@ class GeneralController extends Controller
     /**
      * Return the list of stanchions.
      *
-     * @return \Illuminate\Contracts\Support\Renderable
+     * @return JSON
      */
     public function getStanchions(Request $request){
         $stanchions = Stanchion::all();
@@ -586,7 +590,7 @@ class GeneralController extends Controller
     /**
      * Return the list of railsupports.
      *
-     * @return \Illuminate\Contracts\Support\Renderable
+     * @return JSON
      */
     public function getRailsupport(Request $request){
         $railsupport = RailSupport::all();
@@ -596,7 +600,7 @@ class GeneralController extends Controller
     /**
      * Return the json contents of project.
      *
-     * @return \Illuminate\Contracts\Support\Renderable
+     * @return JSON
      */
     public function getProjectJson(Request $request){
         if($request['projectId'])
@@ -632,5 +636,39 @@ class GeneralController extends Controller
         $id = $request->input('data');
         $res = JobRequest::where('id', $id)->delete();
         return $res;
+    }
+
+    /**
+     * Set the project state of the project.
+     *
+     * @return JSON
+     */
+    public function setProjectState(Request $request){
+        if($request['projectId'])
+        {
+            $project = JobRequest::where('id', '=', $request['projectId'])->first();
+            if($project)
+            {
+                if(Auth::user()->userrole == 2 || Auth::user()->companyid == $project['companyId'])
+                {
+                    if( $request['state'] )
+                    {
+                        $project->projectState = $request['state'];
+                        $project->save();
+                        return response()->json(['success' => true]);
+                    }
+                    else
+                        return response()->json(['success' => false, 'message' => "Wrong state value."] );
+                }
+                else
+                {
+                    return response()->json(['success' => false, 'message' => "You don't have any permission to set state of this project."] );
+                }
+            }
+            else
+                return response()->json(['success' => false, 'message' => 'Cannot find the project.'] );
+        }
+        else
+            return response()->json(['success' => false, 'message' => 'Wrong Project Id.'] );
     }
 }

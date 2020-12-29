@@ -2666,6 +2666,41 @@ $(document).ready(function() {
             submitData(e, 'Submitted');
         }
     });
+    $('#rs-initialize').click(function(e){
+        swal.fire({
+            title: "Warning",
+            html: "Warning - Your project state will be initialized.<br /> Continue?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: `Yes`,
+            cancelButtonText: `No`,
+        })
+        .then(( result ) => {
+            if ( result.value ) {
+                $.ajax({
+                    url:"setProjectState",
+                    type:'post',
+                    data:{projectId: $('#projectId').val(), state: 1},
+                    success:function(res){
+                        if (res.success == true) {
+                            $("#rs-save").removeClass('disabled');
+                            $("#rs-datacheck").removeClass('disabled');
+                            $("#rs-initialize").addClass('disabled');
+                            $('#projectState').val("1");
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        res = JSON.parse(xhr.responseText);
+                        message = res.message;
+                        swal.fire({ title: "Error",
+                                text: message == "" ? "Error happened while processing. Please try again later." : message,
+                                icon: "error",
+                                confirmButtonText: `OK` });
+                    }
+                });
+            } 
+        });
+    });
 
     function GetCPU () {
         var parser = new UAParser();

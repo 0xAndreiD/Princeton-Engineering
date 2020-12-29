@@ -324,7 +324,13 @@
         <td style="padding: 10px;">
             <input type="button" name="rs-submit" id="rs-submit" class="btn btn-hero-primary {{ $projectState != 3 ? 'disabled' : '' }}" tabindex="27" value="Submit" style="width:100%;">
         </td>
-        <td><div style="overflow:hidden"></td>
+        @if($projectState > 3)
+        <td style="padding: 10px;">
+            <input type="button" name="rs-initialize" id="rs-initialize" class="btn btn-hero-primary" tabindex="28" value="Initialize" style="width:100%;"></input>
+        </td>
+        @else
+        <td><div style="overflow:hidden"></div></td>
+        @endif
     </tr>
 </tbody>
 </table>
