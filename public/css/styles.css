@@ -189,3 +189,11 @@ html, body {
     pointer-events: none;
     background-color: grey;
 }
+
+.job-dropdown{
+    white-space: pre-wrap;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    justify-content: space-around;
+}

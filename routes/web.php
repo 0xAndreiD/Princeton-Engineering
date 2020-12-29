@@ -50,6 +50,7 @@ Route::post('/getProjectList', 'GeneralController@getProjectList')->name('getPro
 Route::post('/getProjectJson', 'GeneralController@getProjectJson')->name('getProjectJson');
 Route::post('/delProject', 'GeneralController@delProject')->name('delProject');
 Route::post('/setProjectState', 'GeneralController@setProjectState')->name('setProjectState');
+Route::post('/setPlanStatus', 'GeneralController@setPlanStatus')->name('setPlanStatus');
 
 // APIs for list, update, download
 Route::get('/getJobList', 'APIController@getJobList')->name('getJobList');

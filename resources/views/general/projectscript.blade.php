@@ -42,4 +42,50 @@ function delProject(obj, id) {
     });
 }
 
+var badgeColors = {'info': '#3c90df', 'warning': '#ffb119', 'primary': '#689550', 'danger': '#e04f1a', 'dark': '#343a40', 'secondary': 'rgba(0, 0, 0, 0.33)', 'success': '#82b54b'}
+
+function changeState(jobId, state){
+    $.ajax({
+        url:"setProjectState",
+        type:'post',
+        data:{projectId: jobId, state: state},
+        success:function(res){
+            if (res.success == true) {
+                $(`#state_${jobId}`).html(res.stateText);
+                $(`#state_${jobId}`).css('background-color', badgeColors[res.stateColor]);
+            }
+        },
+        error: function(xhr, status, error) {
+            res = JSON.parse(xhr.responseText);
+            message = res.message;
+            swal.fire({ title: "Error",
+                    text: message == "" ? "Error happened while processing. Please try again later." : message,
+                    icon: "error",
+                    confirmButtonText: `OK` });
+        }
+    });
+}
+
+function changeStatus(jobId, status){
+    $.ajax({
+        url:"setPlanStatus",
+        type:'post',
+        data:{projectId: jobId, status: status},
+        success:function(res){
+            if (res.success == true) {
+                $(`#status_${jobId}`).html(res.statusText);
+                $(`#status_${jobId}`).css('background-color', badgeColors[res.statusColor]);
+            }
+        },
+        error: function(xhr, status, error) {
+            res = JSON.parse(xhr.responseText);
+            message = res.message;
+            swal.fire({ title: "Error",
+                    text: message == "" ? "Error happened while processing. Please try again later." : message,
+                    icon: "error",
+                    confirmButtonText: `OK` });
+        }
+    });
+}
+
 </script>
