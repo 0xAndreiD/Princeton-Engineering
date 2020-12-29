@@ -117,6 +117,7 @@
             "serverSide": true,
             "responsive": true,
             "orderCellsTop": true,
+            "pageLength" : 50,
             "ajax":{
                     "url": "{{ url('getProjectList') }}",
                     "dataType": "json",
