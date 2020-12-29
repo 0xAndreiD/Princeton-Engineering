@@ -304,6 +304,11 @@ class GeneralController extends Controller
         return view('general.projectlist');
     }
 
+    protected $globalStates = array("None", "Saved", "Check Requested", "Reviewed", "Submitted", "Report Prepared", "Plan Requested", "Plan Reviewed", "Link Sent", "Completed");
+    protected $globalStatus = array("No action", "Plans uploaded to portal", "Plans reviewed", "Comments issued", "Updated plans uploaded to portal", "Revised comments issued", "Final plans uploaded to portal", "PE sealed plans link sent");
+    protected $stateColors = array("danger", "primary", "info", "warning", "primary", "info", "primary", "info", "primary", "info");
+    protected $statusColors = array("danger", "primary", "info", "warning", "primary", "info", "primary", "info");
+
     /**
      * Return the result of server-side rendering
      *
@@ -418,7 +423,8 @@ class GeneralController extends Controller
                         'job_request.projectState as projectstate',
                     )
                 );
-            $totalFiltered = $handler->count();
+            if($handler->count() > 0)
+                $totalFiltered = $handler->count();
         }
         else {
             $search = $request->input('search.value'); 
@@ -479,43 +485,27 @@ class GeneralController extends Controller
                 $date->setTimezone(new DateTimeZone('EST'));
                 $nestedData['submittedtime'] = $date->format("Y-m-d H:i:s");
                 
-                switch ($job->projectstate){
-                    case 0:
-                        $nestedData['projectstate'] = "<span class='badge badge-danger' style='white-space: pre-wrap;'> None </span>"; break;
-                    case 1:
-                        $nestedData['projectstate'] = "<span class='badge badge-primary' style='white-space: pre-wrap;'> Saved </span>"; break;
-                    case 2:
-                        $nestedData['projectstate'] = "<span class='badge badge-info' style='white-space: pre-wrap;'> Check Requested </span>"; break;
-                    case 3:
-                        $nestedData['projectstate'] = "<span class='badge badge-warning' style='white-space: pre-wrap;'> Reviewed </span>"; break;
-                    case 4:
-                        $nestedData['projectstate'] = "<span class='badge badge-warning' style='white-space: pre-wrap;'> Submitted </span>"; break;
-                    case 5:
-                        $nestedData['projectstate'] = "<span class='badge badge-warning' style='white-space: pre-wrap;'> Report Prepared </span>"; break;
-                    case 6:
-                        $nestedData['projectstate'] = "<span class='badge badge-warning' style='white-space: pre-wrap;'> Link Sent </span>"; break;
-                    case 7:
-                        $nestedData['projectstate'] = "<span class='badge badge-warning' style='white-space: pre-wrap;'> Completed </span>"; break;
-                }
+                // if(Auth::user()->userrole == 2){
+                //     $nestedData['projectstate'] = "<select id='state_{$job->id}' value='{$job->projectstate}'>";
+                //     $i = 0;
+                //     foreach($this->globalStates as $state){
+                //         $nestedData['projectstate'] .= "<option value='{$i}'" . ($i == $job->projectstate ? "selected" : "") . "> {$this->globalStates[$i]} </option>";
+                //         $i ++;
+                //     }
+                //     $nestedData['projectstate'] .= "</select>";
 
-                switch ($job->planstatus){
-                    case 0:
-                        $nestedData['planstatus'] = "<span class='badge badge-danger' style='white-space: pre-wrap;'> No action </span>"; break;
-                    case 1:
-                        $nestedData['planstatus'] = "<span class='badge badge-primary' style='white-space: pre-wrap;'> Plans uploaded to portal </span>"; break;
-                    case 2:
-                        $nestedData['planstatus'] = "<span class='badge badge-info' style='white-space: pre-wrap;'> Plans reviewed </span>"; break;
-                    case 3:
-                        $nestedData['planstatus'] = "<span class='badge badge-warning' style='white-space: pre-wrap;'> Comments issued </span>"; break;
-                    case 4:
-                        $nestedData['planstatus'] = "<span class='badge badge-warning' style='white-space: pre-wrap;'> Updated plans uploaded to portal </span>"; break;
-                    case 5:
-                        $nestedData['planstatus'] = "<span class='badge badge-warning' style='white-space: pre-wrap;'> Revised comments issued </span>"; break;
-                    case 6:
-                        $nestedData['planstatus'] = "<span class='badge badge-warning' style='white-space: pre-wrap;'> Final plans uploaded to portal </span>"; break;
-                    case 7:
-                        $nestedData['planstatus'] = "<span class='badge badge-warning' style='white-space: pre-wrap;'> PE sealed plans link sent </span>"; break;
-                }
+                //     $nestedData['planstatus'] = "<select id='status_{$job->id}' value='{$job->planstatus}'>";
+                //     $i = 0;
+                //     foreach($this->globalStatus as $status){
+                //         $nestedData['planstatus'] .= "<option value='{$i}'" . ($i == $job->planstatus ? "selected" : "") . "> {$this->globalStatus[$i]} </option>";
+                //         $i ++;
+                //     }
+                //     $nestedData['planstatus'] .= "</select>";
+                // }
+                // else{
+                    $nestedData['projectstate'] = "<span class='badge badge-{$this->stateColors[intval($job->projectstate)]}' style='white-space: pre-wrap;'> {$this->globalStates[intval($job->projectstate)]} </span>";                
+                    $nestedData['planstatus'] = "<span class='badge badge-{$this->statusColors[intval($job->planstatus)]}' style='white-space: pre-wrap;'> {$this->globalStatus[intval($job->planstatus)]} </span>";                
+                //}
 
                 $nestedData['actions'] = "
                 <div class='text-center'>
