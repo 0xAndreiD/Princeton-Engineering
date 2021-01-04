@@ -320,7 +320,7 @@ class GeneralController extends Controller
             $handler = new JobRequest;
             $columns = array( 
                 0 =>'id', 
-                1 =>'companyId',
+                1 =>'job_request.companyId',
                 2 =>'userId',
                 3 =>'clientProjectName',
                 4 =>'clientProjectNumber',
@@ -361,24 +361,34 @@ class GeneralController extends Controller
                 $join->on('job_request.userId', '=', 'users.usernumber');
             });
 
+        // sort by company when $order == 'userId'
+        if($order == 'userId')
+        {
+            $handler = $handler->orderBy('job_request.companyId', $dir);
+        }
+
+        // filter created_from
         if(!empty($request->input("created_from")) && $request->input("created_from") != "")
         {
             $date = new DateTime($request->input("created_from"), new DateTimeZone('EST'));
             $date->setTimezone(new DateTimeZone('UTC'));
             $handler = $handler->where('job_request.createdTime', '>=', $date->format("Y-m-d H:i:s"));
         }
+        // filter created_to
         if(!empty($request->input("created_to")) && $request->input("created_to") != "")
         {
             $date = new DateTime($request->input("created_to"), new DateTimeZone('EST'));
             $date->setTimezone(new DateTimeZone('UTC'));
             $handler = $handler->where('job_request.createdTime', '<=', $date->format("Y-m-d H:i:s"));
         }
+        // filter submitted_from
         if(!empty($request->input("submitted_from")) && $request->input("submitted_from") != "")
         {
             $date = new DateTime($request->input("submitted_from"), new DateTimeZone('EST'));
             $date->setTimezone(new DateTimeZone('UTC'));
             $handler = $handler->where('job_request.submittedTime', '>=', $date->format("Y-m-d H:i:s"));
         }
+        // filter submitted_to
         if(!empty($request->input("submitted_to")) && $request->input("submitted_to") != "")
         {
             $date = new DateTime($request->input("submitted_to"), new DateTimeZone('EST'));
@@ -386,6 +396,7 @@ class GeneralController extends Controller
             $handler = $handler->where('job_request.submittedTime', '<=', $date->format("Y-m-d H:i:s"));
         }
 
+        // admin filter company name, user, project name, project number
         if(Auth::user()->userrole == 2){
             if(!empty($request->input("columns.1.search.value")))
                 $handler = $handler->where('company_info.company_name', 'LIKE', "%{$request->input("columns.1.search.value")}%");
@@ -396,7 +407,7 @@ class GeneralController extends Controller
             if(!empty($request->input("columns.4.search.value")))
                 $handler = $handler->where('job_request.clientProjectNumber', 'LIKE', "%{$request->input('columns.4.search.value')}%");
         }
-        else{
+        else{ // client filter user, project name, project number
             if(!empty($request->input("columns.1.search.value")))
                 $handler = $handler->where('users.username', 'LIKE', "%{$request->input('columns.1.search.value')}%");
             if(!empty($request->input("columns.2.search.value")))

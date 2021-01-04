@@ -168,7 +168,6 @@
         });
 
         $("#created_from, #created_to, #submitted_from, #submitted_to").on('change', function() {
-            console.log(this.value);
             table.draw();
         });
 
