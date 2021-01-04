@@ -1688,7 +1688,7 @@ var updateNumberSegment1 = function (condId, roofPlane, keepStatus = true) {
     $(`#inputform-${condId} #td-sum-of-length-entered`).html(totalLength.toFixed(2));
 
     var lengthRoofPlane = parseFloat($(`#inputform-${condId} #txt-length-of-roof-plane`).val());
-    if (Math.abs(lengthRoofPlane.toFixed(2) - totalLength.toFixed(2)) < 0.5) {
+    if (Math.abs(lengthRoofPlane.toFixed(2) - totalLength.toFixed(2)) <= parseFloat($('#companyOffset').val())) {
         $(`#inputform-${condId} #td-checksum-of-segment1`).html("OK");
         $(`#inputform-${condId} #td-checksum-of-segment1`).css('background-color', 'white');
     }
@@ -1725,7 +1725,7 @@ var updateNumberSegment2 = function (condId, floorPlane, keepStatus = true) {
     $(`#inputform-${condId} #td-total-length-entered`).html(totalLength.toFixed(2));
 
     var lengthFloorPlane = parseFloat($(`#inputform-${condId} #txt-length-of-floor-plane`).val());
-    if (lengthFloorPlane.toFixed(2) == totalLength.toFixed(2)) {
+    if (Math.abs(lengthFloorPlane.toFixed(2) - totalLength.toFixed(2)) <= parseFloat($('#companyOffset').val())) {
         $(`#inputform-${condId} #td-checksum-of-segment2`).html("OK");
         $(`#inputform-${condId} #td-checksum-of-segment2`).css('background-color', 'white');
     }

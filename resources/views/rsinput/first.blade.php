@@ -336,4 +336,5 @@
 </table>
 <input type="text" value="{{ $projectId }}" id="projectId" hidden>
 <input type="text" value="{{ $projectState }}" id="projectState" hidden>
+<input type="text" value="{{ $offset }}" id="companyOffset" hidden>
 </form>
