@@ -195,7 +195,7 @@
             <td class="w400-bdr">C-1</td>
             <td class="iw400-right-bdr" colspan="2">Collar Tie Description</td>
             <td class="iw400-bdr">text</td>
-            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="c-1-1"  tabindex="39" value="2x6 collar tie"></input></td>
+            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="c-1-1"  tabindex="39" value=""></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
         <tr class="h13 class-truss-hide">
@@ -203,7 +203,7 @@
             <td class="w400-bdr">C-2</td>
             <td class="iw400-right-bdr" colspan="2">Dist. from Top of Collar Tie to Attic Deck</td>
             <td class="iw400-bdr">ft</td>
-            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="c-2-1"  tabindex="40" value="3.08"></input></td>
+            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="c-2-1"  tabindex="40" value=""></input></td>
             <td><div id="c-2-warn" class="warnCell">Warning - Height above high end of rafter</td>
         </tr>
         <tr class="h13 class-truss-hide">
@@ -211,7 +211,7 @@
             <td class="w400-bdr">C-3</td>
             <td class="iw400-right-bdr" colspan="2">Tie Spacing - Center to Center</td>
             <td class="iw400-bdr">in</td>
-            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="c-3-1"  tabindex="41" value="32.00"></input></td>
+            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="c-3-1"  tabindex="41" value=""></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
         <tr class="h13 class-truss-hide">
@@ -219,7 +219,7 @@
             <td class="w400-bdr">C-4</td>
             <td class="iw400-right-bdr" colspan="2">Knee Wall Height</td>
             <td class="iw400-bdr">ft</td>
-            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="c-4-1"  tabindex="41" value="2.00"></input></td>
+            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="c-4-1"  tabindex="41" value=""></input></td>
             <td><div id="c-4-warn" class="warnCell">Warning - Height above high end of rafter</td>
         </tr>
         <tr class="h13">
