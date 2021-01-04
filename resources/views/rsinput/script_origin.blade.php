@@ -1257,7 +1257,7 @@ var updateNumberOfConditions = function(conditions) {
     }
 }
 
-var ignorable = ['ac-7-1', 'ac-8-1', 'ac-9-1', 'ac-10-1', 'c-1-1', 'c-2-1', 'c-3-1', 'c-4-1'];
+var ignorable = ['a-7-1', 'a-8-1', 'a-9-1', 'a-10-1', 'ac-7-1', 'ac-8-1', 'ac-9-1', 'ac-10-1', 'c-1-1', 'c-2-1', 'c-3-1', 'c-4-1'];
 
 var isEmptyInputBox = function() {
 
@@ -1279,7 +1279,7 @@ var isEmptyInputBox = function() {
             $(`#inputform-${i} #c-3-1`).css('background-color', '#FFC7CE');
         }
     }
-
+    
     var empty_textboxes = $('input:text:enabled').filter(function() { return this.value === ""; });
     empty_textboxes.each(function() { 
         // skip note 
@@ -1293,6 +1293,7 @@ var isEmptyInputBox = function() {
         $(this).css('background-color', '#FFC7CE');
         isEmpty = true;
     });
+    
 
     // check empty date boxes
     if ($('#date-of-field-visit').val() == "") {
@@ -2504,11 +2505,11 @@ $(document).ready(function() {
         $(`#inputform-${i} #option-floor-member-type`).on('change', function() {
             updateFloorMemberType(window.conditionId, $(this).children("option:selected").val());
         });
-        $(`#inputform-${i} #truss-axis`).on('change', function() {
+        $(`#truss-axis-${i}`).on('change', function() {
             show_axis[window.conditionId] = !show_axis[window.conditionId];
             drawTrussGraph(window.conditionId);
         });
-        $(`#inputform-${i} #stick-axis`).on('change', function() {
+        $(`#stick-axis-${i}`).on('change', function() {
             stick_show_axis[window.conditionId] = !stick_show_axis[window.conditionId];
             drawStickGraph(window.conditionId);
         });

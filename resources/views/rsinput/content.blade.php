@@ -102,7 +102,7 @@
             <td class="iw400-bdr" style="vertical-align : middle;" rowspan="4">Enter any two values</td>
             <td class="iw400-right-bdr" >Roof Slope</td>
             <td class="iw400-bdr">deg</td>
-            <td id="value-7-1" class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="a-7-1" tabindex="31" value="33.00"></input></td>
+            <td id="value-7-1" class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="a-7-1" tabindex="31" value=""></input></td>
             <td id="calced-7-1" class="calcedCell"></td>
             <input type="text" class="txt-center-align" id="ac-7-1" value="" hidden>
             <!-- <td class="w400-bdr"><input type="checkbox" id="aa-7-1" checked></input></td> -->
@@ -112,7 +112,7 @@
             <td class="w400-bdr">A-8</td>
             <td class="iw400-right-bdr">Diagonal Rafter Length from Plate to Ridge</td>
             <td class="iw400-bdr">ft</td>
-            <td id="value-8-1" class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="a-8-1"  tabindex="32" value="13.42"></input></td>
+            <td id="value-8-1" class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="a-8-1"  tabindex="32" value=""></input></td>
             <td id="calced-8-1" class="calcedCell"></td>
             <input type="text" class="txt-center-align" id="ac-8-1" value="" hidden>
             <!-- <td class="w400-bdr" id="tc-8-1" style="pointer-events: none;"><input type="text" class="txt-center-align" id="ac-8-1"></td>
@@ -123,7 +123,7 @@
             <td class="w400-bdr">A-9</td>
             <td class="iw400-right-bdr" id="label-A-9">Rise from Rafter Plate to Top Ridge</td>
             <td class="iw400-bdr">ft</td>
-            <td id="value-9-1" class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="a-9-1"  tabindex="33" value="5.00"></input></td>
+            <td id="value-9-1" class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="a-9-1"  tabindex="33" value=""></input></td>
             <td id="calced-9-1" class="calcedCell"></td>
             <input type="text" class="txt-center-align" id="ac-9-1" value="" hidden>
             <!-- <td class="w400-bdr" id="tc-9-1" style="pointer-events: none;"><input type="text" class="txt-center-align" id="ac-9-1"></td>
@@ -134,7 +134,7 @@
             <td class="w400-bdr">A-10</td>
             <td class="iw400-right-bdr" id="label-A-10" >Horiz Len from Outside of Rafter Plate to Ridge</td>
             <td class="iw400-bdr">ft</td>
-            <td id="value-10-1" class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="a-10-1"  tabindex="34" value="11.25"></input></td>
+            <td id="value-10-1" class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="a-10-1"  tabindex="34" value=""></input></td>
             <td id="calced-10-1" class="calcedCell"></td>
             <input type="text" class="txt-center-align" id="ac-10-1" value="" hidden>
             <!-- <td class="w400-bdr" id="tc-10-1" style="pointer-events: none; display: table-cell !important;"><input type="text" class="txt-center-align" id="ac-10-1"></td>
@@ -420,7 +420,7 @@
             <td><div style="overflow:hidden"></td>
             <td colspan="11" rowspan="19" style="position: relative;" class="iw400-bdr">
                 <canvas class="px-4" id="stick-canvas-{{ $conditionId }}" style="z-index:2; background:aliceblue" width="900px" height="500px"></canvas>
-                <div class="axisCheckBox"><input type="checkbox" id="stick-axis" tabindex="106"><label for="stick-axis">Show axis</label></div>
+                <div class="axisCheckBox"><input type="checkbox" id="stick-axis-{{ $conditionId }}" tabindex="106"><label for="stick-axis-{{ $conditionId }}">Show axis</label></div>
                 <div class="alertModuleFlow" id="stick-module-alert">Warning - Modules extend past ridge</div>
             </td>
         </tr>
@@ -928,7 +928,7 @@
             </tr> -->
             <td colspan="11" rowspan="19" style="position: relative;" class="iw400-bdr">
                 <canvas class="px-4" id="canvas-{{ $conditionId }}" style="z-index:2; background:aliceblue" width="900px" height="500px"></canvas>
-                <div class="axisCheckBox"><input type="checkbox" id="truss-axis" tabindex="106"><label for="truss-axis">Show axis</label></div>
+                <div class="axisCheckBox"><input type="checkbox" id="truss-axis-{{ $conditionId }}" tabindex="106"><label for="truss-axis-{{ $conditionId }}">Show axis</label></div>
                 <div class="alertModuleFlow" id="truss-module-alert">Warning - Modules extend past ridge</div>
             </td>
             </tbody>
