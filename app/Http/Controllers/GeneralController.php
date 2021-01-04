@@ -327,8 +327,8 @@ class GeneralController extends Controller
                 5 =>'requestFile',
                 6 =>'createdTime',
                 7 =>'submittedTime',
-                8 =>'planStatus',
-                9 =>'projectState'
+                8 =>'projectState',
+                9 =>'planStatus'
             );
         }
         else
@@ -341,8 +341,8 @@ class GeneralController extends Controller
                 3 =>'clientProjectNumber',
                 4 =>'createdTime',
                 5 =>'submittedTime',
-                6 =>'planStatus',
-                7 =>'projectState'
+                6 =>'projectState',
+                7 =>'planStatus'
             );
         }
         
@@ -419,8 +419,8 @@ class GeneralController extends Controller
                         'job_request.requestFile as requestfile',
                         'job_request.createdTime as createdtime',
                         'job_request.submittedTime as submittedtime',
-                        'job_request.planStatus as planstatus',
                         'job_request.projectState as projectstate',
+                        'job_request.planStatus as planstatus',
                     )
                 );
             if($handler->count() > 0)
@@ -447,8 +447,8 @@ class GeneralController extends Controller
                                 'job_request.requestFile as requestfile',
                                 'job_request.createdTime as createdtime',
                                 'job_request.submittedTime as submittedtime',
-                                'job_request.planStatus as planstatus',
                                 'job_request.projectState as projectstate',
+                                'job_request.planStatus as planstatus',
                             )
                         );
 
