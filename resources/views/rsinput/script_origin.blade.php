@@ -633,15 +633,15 @@ var loadPreloadedData = function() {
                                     $(this).attr('selected', false);
                                 }         
                             });
-                            updateNumberSegment1(i + 1, parseInt(trussData['RoofPlane']['NumberOfSegments']));
                             $(`#inputform-${i + 1} #td-sum-of-length-entered`).val(trussData['RoofPlane']['SumOfLengthsEntered']);
                             $(`#inputform-${i + 1} #td-checksum-of-segment1`).val(trussData['RoofPlane']['ChecksumOfChordLength']);
                             if(trussData['RoofPlane']['LengthOfSegment1']) $(`#inputform-${i + 1} #txt-roof-segment1-length`).val(trussData['RoofPlane']['LengthOfSegment1']);
                             if(trussData['RoofPlane']['LengthOfSegment2']) $(`#inputform-${i + 1} #txt-roof-segment2-length`).val(trussData['RoofPlane']['LengthOfSegment2']);
-                            if(trussData['RoofPlane']['LengthOfSegment3']) $(`#inputform-${i + 1} #txt-roof-segment2-length`).val(trussData['RoofPlane']['LengthOfSegment3']);
-                            if(trussData['RoofPlane']['LengthOfSegment4']) $(`#inputform-${i + 1} #txt-roof-segment2-length`).val(trussData['RoofPlane']['LengthOfSegment4']);
-                            if(trussData['RoofPlane']['LengthOfSegment5']) $(`#inputform-${i + 1} #txt-roof-segment2-length`).val(trussData['RoofPlane']['LengthOfSegment5']);
-                            if(trussData['RoofPlane']['LengthOfSegment6']) $(`#inputform-${i + 1} #txt-roof-segment2-length`).val(trussData['RoofPlane']['LengthOfSegment6']);
+                            if(trussData['RoofPlane']['LengthOfSegment3']) $(`#inputform-${i + 1} #txt-roof-segment3-length`).val(trussData['RoofPlane']['LengthOfSegment3']);
+                            if(trussData['RoofPlane']['LengthOfSegment4']) $(`#inputform-${i + 1} #txt-roof-segment4-length`).val(trussData['RoofPlane']['LengthOfSegment4']);
+                            if(trussData['RoofPlane']['LengthOfSegment5']) $(`#inputform-${i + 1} #txt-roof-segment5-length`).val(trussData['RoofPlane']['LengthOfSegment5']);
+                            if(trussData['RoofPlane']['LengthOfSegment6']) $(`#inputform-${i + 1} #txt-roof-segment6-length`).val(trussData['RoofPlane']['LengthOfSegment6']);
+                            updateNumberSegment1(i + 1, parseInt(trussData['RoofPlane']['NumberOfSegments']));
 
                             $(`#inputform-${i + 1} #option-floor-member-type`).val(trussData['FloorPlane']['MemberType']);
                             updateFloorMemberType(i + 1, trussData['FloorPlane']['MemberType']);
@@ -653,15 +653,15 @@ var loadPreloadedData = function() {
                                 else
                                     $(this).attr('selected', false);      
                             });
-                            updateNumberSegment2(i + 1, parseInt(trussData['FloorPlane']['NumberOfSegments']));
                             $(`#inputform-${i + 1} #td-total-length-entered`).val(trussData['FloorPlane']['SumOfLengthsEntered']);
                             $(`#inputform-${i + 1} #td-checksum-of-segment2`).val(trussData['FloorPlane']['ChecksumOfChordLength']);
                             if(trussData['FloorPlane']['LengthOfSegment1']) $(`#inputform-${i + 1} #txt-floor-segment1-length`).val(trussData['FloorPlane']['LengthOfSegment1']);
                             if(trussData['FloorPlane']['LengthOfSegment2']) $(`#inputform-${i + 1} #txt-floor-segment2-length`).val(trussData['FloorPlane']['LengthOfSegment2']);
-                            if(trussData['FloorPlane']['LengthOfSegment3']) $(`#inputform-${i + 1} #txt-floor-segment2-length`).val(trussData['FloorPlane']['LengthOfSegment3']);
-                            if(trussData['FloorPlane']['LengthOfSegment4']) $(`#inputform-${i + 1} #txt-floor-segment2-length`).val(trussData['FloorPlane']['LengthOfSegment4']);
-                            if(trussData['FloorPlane']['LengthOfSegment5']) $(`#inputform-${i + 1} #txt-floor-segment2-length`).val(trussData['FloorPlane']['LengthOfSegment5']);
-                            if(trussData['FloorPlane']['LengthOfSegment6']) $(`#inputform-${i + 1} #txt-floor-segment2-length`).val(trussData['FloorPlane']['LengthOfSegment6']);
+                            if(trussData['FloorPlane']['LengthOfSegment3']) $(`#inputform-${i + 1} #txt-floor-segment3-length`).val(trussData['FloorPlane']['LengthOfSegment3']);
+                            if(trussData['FloorPlane']['LengthOfSegment4']) $(`#inputform-${i + 1} #txt-floor-segment4-length`).val(trussData['FloorPlane']['LengthOfSegment4']);
+                            if(trussData['FloorPlane']['LengthOfSegment5']) $(`#inputform-${i + 1} #txt-floor-segment5-length`).val(trussData['FloorPlane']['LengthOfSegment5']);
+                            if(trussData['FloorPlane']['LengthOfSegment6']) $(`#inputform-${i + 1} #txt-floor-segment6-length`).val(trussData['FloorPlane']['LengthOfSegment6']);
+                            updateNumberSegment2(i + 1, parseInt(trussData['FloorPlane']['NumberOfSegments']));
 
                             for(let j = 0; j < caseData['Diagonal1'].length; j ++){
                                 $(`#inputform-${i + 1} #diag-1-${j + 1}`).prop('checked', !caseData['Diagonal1'][j]['include']);
