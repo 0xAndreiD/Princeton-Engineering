@@ -301,7 +301,8 @@ class GeneralController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function projectList(){
-        return view('general.projectlist');
+        $companyList = Company::all();
+        return view('general.projectlist')->with('companyList', $companyList);
     }
 
     protected $globalStates = array("None", "Saved", "Check Requested", "Reviewed", "Submitted", "Report Prepared", "Plan Requested", "Plan Reviewed", "Link Sent", "Completed");

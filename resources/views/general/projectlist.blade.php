@@ -62,7 +62,15 @@
                         <tr>
                             @if(Auth::user()->userrole == 2)
                             <th></th>
-                            <th class="searchHead"> <input type="text" placeholder="Search Company" class="searchBox" id="companyFilter"> </th>
+                            <th class="searchHead">
+                                <select placeholder="Search Company" class="searchBox" id="companyFilter">
+                                    <option value="">All</option>
+                                    @foreach($companyList as $company)
+                                        <option value="{{ $company['company_name'] }}">{{ $company['company_name'] }}</option>
+                                    @endforeach
+                                </select>
+                                <!-- <input type="text" placeholder="Search Company" class="searchBox" id="companyFilter">  -->
+                            </th>
                             <th class="searchHead"> <input type="text" placeholder="Search User" class="searchBox" id="userFilter"> </th>
                             <th class="searchHead"> <input type="text" placeholder="Search Name" class="searchBox" id="projectNameFilter"> </th>
                             <th class="searchHead"> <input type="text" placeholder="Search Number" class="searchBox" id="projectNumberFilter"> </th>
