@@ -2577,6 +2577,29 @@ $(document).ready(function() {
     // })();
     //}
 
+    var checkWarnings = function() {
+        var hasWarnings = false;
+        var caseCount = $("#option-number-of-conditions").val();
+        for(let i = 1; i <= caseCount; i ++){
+            if($(`#trussFlagOption-${i}-2`)[0].checked){ // Truss 
+                if($(`#inputform-${i} #td-checksum-of-segment1`).html() != "OK")
+                    hasWarnings = true;
+                if($(`#inputform-${i} #td-checksum-of-segment2`).html() != "OK")
+                    hasWarnings = true;
+                if($(`#inputform-${i} #truss-module-alert`)[0].style.display == "block")
+                    hasWarnings = true;
+            } else { // Stick
+                if($(`#inputform-${i} #c-2-warn`)[0].style.display == "block")
+                    hasWarnings = true;
+                if($(`#inputform-${i} #c-4-warn`)[0].style.display == "block")
+                    hasWarnings = true;
+                if($(`#inputform-${i} #stick-module-alert`)[0].style.display == "block")
+                    hasWarnings = true;
+            }
+        }
+        return hasWarnings;
+    }
+
     var submitData = function(e, status) {
         e.preventDefault();
         e.stopPropagation(); 
@@ -2638,8 +2661,15 @@ $(document).ready(function() {
     }
 
     $('#rs-save').click(function(e) {
-        $('#projectState').val("1");
-        submitData(e, 'Saved');
+        if( !checkWarnings() ){
+            $('#projectState').val("1");
+            submitData(e, 'Saved');
+        } else{
+            swal.fire({ title: "Error",
+                    text: "Warning - Please fix the warnings before submit.",
+                    icon: "error",
+                    confirmButtonText: `OK` });
+        }
     });
     $('#rs-datacheck').click(function(e){
         $('#projectState').val("2");
