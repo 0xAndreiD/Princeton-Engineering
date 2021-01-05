@@ -33,53 +33,53 @@ document.getElementById("defaultOpen").click();
 function fcChangeType( conditionId, type ){
     if( type == 1 )
     {
-        $(`#inputform-${conditionId} #label-A-1`).attr('rowspan', 7);
-        $(`#inputform-${conditionId} #label-B-1`)[0].style.display = "none";
-        $(`#inputform-${conditionId} #title-B-3`)[0].style.display = "table-cell";
+        $(`#label-A-1-${conditionId}`).attr('rowspan', 7);
+        $(`#label-B-1-${conditionId}`)[0].style.display = "none";
+        $(`#title-B-3-${conditionId}`)[0].style.display = "table-cell";
         var elements = $(`#inputform-${conditionId} .class-truss-hide`);
         for(let i = 0; i < elements.length; i ++)
         {
             elements[i].style.display = 'none';
         }
-        $(`#inputform-${conditionId} #label-A-9`)[0].innerHTML = 'Rise from Truss Plate to Top Ridge';
-        $(`#inputform-${conditionId} #label-A-10`)[0].innerHTML = 'Horiz Len from Outside of Truss Plate to Ridge';
-        $(`#inputform-${conditionId} #label-A-11`)[0].innerHTML = 'Diagonal Overhang Length past Truss Plate';
-        $(`#inputform-${conditionId} #label-B-3`)[0].innerHTML = 'Truss Spacing - Center to Center';
-        $(`#inputform-${conditionId} #label-B-4`)[0].innerHTML = 'Truss Material';
-        $(`#inputform-${conditionId} #label-F-1`)[0].innerHTML = 'Maximum # Modules along Truss';
+        $(`#label-A-9-${conditionId}`)[0].innerHTML = 'Rise from Truss Plate to Top Ridge';
+        $(`#label-A-10-${conditionId}`)[0].innerHTML = 'Horiz Len from Outside of Truss Plate to Ridge';
+        $(`#label-A-11-${conditionId}`)[0].innerHTML = 'Diagonal Overhang Length past Truss Plate';
+        $(`#label-B-3-${conditionId}`)[0].innerHTML = 'Truss Spacing - Center to Center';
+        $(`#label-B-4-${conditionId}`)[0].innerHTML = 'Truss Material';
+        $(`#label-F-1-${conditionId}`)[0].innerHTML = 'Maximum # Modules along Truss';
         document.getElementById(`trussInput-${conditionId}`).style.display = "block";
     }    
     else
     {
-        $(`#inputform-${conditionId} #label-A-1`).attr('rowspan', 11);
-        $(`#inputform-${conditionId} #label-B-1`)[0].style.display = "table-cell";
-        $(`#inputform-${conditionId} #title-B-3`)[0].style.display = "none";
+        $(`#label-A-1-${conditionId}`).attr('rowspan', 11);
+        $(`#label-B-1-${conditionId}`)[0].style.display = "table-cell";
+        $(`#title-B-3-${conditionId}`)[0].style.display = "none";
         var elements = $(`#inputform-${conditionId} .class-truss-hide`);
         for(let i = 0; i < elements.length; i ++)
         {
             elements[i].style.display = 'table-row';
         }
-        $(`#inputform-${conditionId} #label-A-9`)[0].innerHTML = 'Rise from Rafter Plate to Top Ridge';
-        $(`#inputform-${conditionId} #label-A-10`)[0].innerHTML = 'Horiz Len from Outside of Rafter Plate to Ridge';
-        $(`#inputform-${conditionId} #label-A-11`)[0].innerHTML = 'Diagonal Overhang Length past Rafter Plate';
-        $(`#inputform-${conditionId} #label-B-3`)[0].innerHTML = 'Joist Spacing - Center to Center';
-        $(`#inputform-${conditionId} #label-B-4`)[0].innerHTML = 'Rafter Material';
-        $(`#inputform-${conditionId} #label-F-1`)[0].innerHTML = 'Maximum # Modules along Rafter';
+        $(`#label-A-9-${conditionId}`)[0].innerHTML = 'Rise from Rafter Plate to Top Ridge';
+        $(`#label-A-10-${conditionId}`)[0].innerHTML = 'Horiz Len from Outside of Rafter Plate to Ridge';
+        $(`#label-A-11-${conditionId}`)[0].innerHTML = 'Diagonal Overhang Length past Rafter Plate';
+        $(`#label-B-3-${conditionId}`)[0].innerHTML = 'Joist Spacing - Center to Center';
+        $(`#label-B-4-${conditionId}`)[0].innerHTML = 'Rafter Material';
+        $(`#label-F-1-${conditionId}`)[0].innerHTML = 'Maximum # Modules along Rafter';
         document.getElementById(`trussInput-${conditionId}`).style.display = "none";
     }
 }
 
 function maxModuleNumChange( conditionId ){
-    var moduleNum = $(`#inputform-${conditionId} #f-1-1`).val();
+    var moduleNum = $(`#f-1-${conditionId}`).val();
     let i;
-    $(`#inputform-${conditionId} #Module-Left-Text`).attr('rowspan', Math.min(moduleNum, 12));
+    $(`#Module-Left-Text-${conditionId}`).attr('rowspan', Math.min(moduleNum, 12));
     for(i = 1; i <= 12 && i <= moduleNum; i ++)
     {
-        $(`#inputform-${conditionId} #Module-${i}`)[0].style.display = "table-row";
+        $(`#Module-${i}-${conditionId}`)[0].style.display = "table-row";
     }
     for(; i <= 12; i ++)
     {
-        $(`#inputform-${conditionId} #Module-${i}`)[0].style.display = "none";
+        $(`#Module-${i}-${conditionId}`)[0].style.display = "none";
     }
 }
 
@@ -118,8 +118,8 @@ var drawBaseLine = function( condId ) {
     // ctx.clearRect( 0, grid_size, canvas_width, - canvas_height);
     ctx[condId].clearRect( 0, 100, canvas_width[condId] + 100, - canvas_height[condId] - 100);
 
-    var angleRadian = degreeToRadian( parseFloat($(`#inputform-${condId} #txt-roof-degree`).val()) );
-    var overhangLength = parseFloat($(`#inputform-${condId} #a-11-1`).val());
+    var angleRadian = degreeToRadian( parseFloat($(`#txt-roof-degree-${condId}`).val()) );
+    var overhangLength = parseFloat($(`#a-11-${condId}`).val());
     var overhangX = Math.floor(overhangLength * grid_size[condId] * Math.sin(Math.PI / 2 - angleRadian ));
     var overhangY = Math.floor(overhangLength * grid_size[condId] * Math.sin(angleRadian));
 
@@ -269,10 +269,10 @@ var adjustDrawingPanel = function( condId ) {
     // console.log("topXpoint : " + topXPoint);
     // console.log("topYpoint : " + topYPoint);
 
-    var angle = parseFloat($(`#inputform-${condId} #txt-roof-degree`).val());
+    var angle = parseFloat($(`#txt-roof-degree-${condId}`).val());
     var angleRadian = degreeToRadian(angle);
-    var overhangX = parseFloat($(`#inputform-${condId} #a-11-1`).val()) * Math.sin(Math.PI / 2 - angleRadian);
-    var overhangY = parseFloat($(`#inputform-${condId} #a-11-1`).val()) * Math.sin(angleRadian );
+    var overhangX = parseFloat($(`#a-11-${condId}`).val()) * Math.sin(Math.PI / 2 - angleRadian);
+    var overhangY = parseFloat($(`#a-11-${condId}`).val()) * Math.sin(angleRadian );
 
     topXPoint += overhangX;
     topYPoint += overhangY;
@@ -280,18 +280,18 @@ var adjustDrawingPanel = function( condId ) {
     var moduleDepth = 1.17 / 12;
     var moduleWidth = parseFloat($("#pv-module-width").val()) / 12;
     var moduleHeight = parseFloat($("#pv-module-length").val()) / 12;
-    var moduleGap = parseFloat($(`#inputform-${condId} #g-1-1`).val()) / 12;
+    var moduleGap = parseFloat($(`#g-1-${condId}`).val()) / 12;
 
-    var moduleCount = parseInt($(`#inputform-${condId} #f-1-1`).val());
+    var moduleCount = parseInt($(`#f-1-${condId}`).val());
     
-    var moduleLengthSum = parseFloat($(`#inputform-${condId} #e-1-1`).val());
+    var moduleLengthSum = parseFloat($(`#e-1-${condId}`).val());
     var orientation = false;
     for(let i = 1; i <= moduleCount; i ++)
     {
         orientation = false;
-        if($(`#inputform-${condId} #a-6-1`).val() == "Portrait")
+        if($(`#a-6-${condId}`).val() == "Portrait")
             orientation = true;
-        if($(`#inputform-${condId} #h-${i}-1`)[0].checked)
+        if($(`#h-${i}-${condId}`)[0].checked)
             orientation = !orientation;
 
         moduleLengthSum += (moduleGap + (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)));
@@ -299,9 +299,9 @@ var adjustDrawingPanel = function( condId ) {
 
     // Show alert when module length is longer
     if(topXPoint < moduleLengthSum * Math.cos(angleRadian) || topYPoint < moduleLengthSum * Math.sin(angleRadian))
-        $(`#inputform-${condId} #truss-module-alert`).css('display', 'block');
+        $(`#truss-module-alert-${condId}`).css('display', 'block');
     else
-        $(`#inputform-${condId} #truss-module-alert`).css('display', 'none');
+        $(`#truss-module-alert-${condId}`).css('display', 'none');
 
     topXPoint = Math.max(topXPoint, moduleLengthSum * Math.cos(angleRadian));
     topYPoint = Math.max(topYPoint, moduleLengthSum * Math.sin(angleRadian));
@@ -420,7 +420,7 @@ var drawTrussGraph = function( condId ) {
     // draw di­agonals lines 
     var index = 0;
     for (var key in globalDiagnoal1Lines[condId]) {
-        var bAllow = !($(`#inputform-${condId} #diag-1-` + (index+1)).is(":checked"));
+        var bAllow = !($(`#diag-1-${index+1}-${condId}`).is(":checked"));
         if (bAllow == true) {
             drawLine(condId, globalDiagnoal1Lines[condId][key][0], globalDiagnoal1Lines[condId][key][1], "M"+label_index);
         }
@@ -431,9 +431,9 @@ var drawTrussGraph = function( condId ) {
 
     index = 0;
     for (var key in globalDiagnoal2Lines[condId]) {
-        var bAllow = !($(`#inputform-${condId} #diag-2-` + (index+1)).is(":checked"));
+        var bAllow = !($(`#diag-2-${index+1}-${condId}`).is(":checked"));
         if (bAllow == true) {
-            var bReverse = ($(`#inputform-${condId} #diag-2-reverse-` + (index+1)).is(":checked"));
+            var bReverse = ($(`#diag-2-reverse-${index+1}-${condId}`).is(":checked"));
             if(bReverse && globalDiagnoal2ReverseLines[condId][key])
                 drawLine(condId, globalDiagnoal2ReverseLines[condId][key][0], globalDiagnoal2ReverseLines[condId][key][1], "M"+label_index);
             else
@@ -445,11 +445,11 @@ var drawTrussGraph = function( condId ) {
     }
 
     // Draw Overhang
-    var angle = parseFloat($(`#inputform-${condId} #txt-roof-degree`).val());
+    var angle = parseFloat($(`#txt-roof-degree-${condId}`).val());
     var angleRadian = degreeToRadian(angle);
     
-    var overhangLength = parseFloat($(`#inputform-${condId} #a-11-1`).val());
-    var uphillDist = parseFloat($(`#inputform-${condId} #e-1-1`).val());
+    var overhangLength = parseFloat($(`#a-11-${condId}`).val());
+    var uphillDist = parseFloat($(`#e-1-${condId}`).val());
 
     var overhang = Math.max(100, Math.floor(overhangLength * grid_size[condId] * Math.sin(Math.PI / 2 - angleRadian )));
 
@@ -480,7 +480,7 @@ var drawTrussGraph = function( condId ) {
     var moduleDepth = 1.17 / 12;
     var moduleWidth = parseFloat($("#pv-module-width").val()) / 12;
     var moduleHeight = parseFloat($("#pv-module-length").val()) / 12;
-    var moduleGap = parseFloat($(`#inputform-${condId} #g-1-1`).val()) / 12;
+    var moduleGap = parseFloat($(`#g-1-${condId}`).val()) / 12;
 
     var startPoint = [- Math.sin(Math.PI / 2 - angleRadian) * startModule * grid_size[condId] - grid_size[condId] / 4 * Math.sin(angleRadian), Math.cos(Math.PI / 2 - angleRadian) * startModule * grid_size[condId] - grid_size[condId] / 4];
     ctx[condId].translate(startPoint[0], startPoint[1]);
@@ -494,20 +494,20 @@ var drawTrussGraph = function( condId ) {
         totalRoofLength += getDistance(globalRoofLines[condId][key][0], globalRoofLines[condId][key][1]);
     }
     totalRoofLength += startModule;
-    var moduleCount = parseInt($(`#inputform-${condId} #f-1-1`).val());
+    var moduleCount = parseInt($(`#f-1-${condId}`).val());
     
     let moduleStartX = 0;
     var orientation = false;
 
-    var supportStart = parseFloat($(`#inputform-${condId} #e-2-1`).val()) - parseFloat($(`#inputform-${condId} #e-1-1`).val());
+    var supportStart = parseFloat($(`#e-2-${condId}`).val()) - parseFloat($(`#e-1-${condId}`).val());
 
     ctx[condId].fillStyle = '#000';
     for(let i = 1; i <= moduleCount; i ++)
     {
         orientation = false;
-        if($(`#inputform-${condId} #a-6-1`).val() == "Portrait")
+        if($(`#a-6-${condId}`).val() == "Portrait")
             orientation = true;
-        if($(`#inputform-${condId} #h-${i}-1`)[0].checked)
+        if($(`#h-${i}-${condId}`)[0].checked)
             orientation = !orientation;
         
         ctx[condId].strokeRect(moduleStartX * grid_size[condId], 0, (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)) * grid_size[condId], moduleDepth * grid_size[condId]);
@@ -566,66 +566,66 @@ var loadPreloadedData = function() {
                             $(`#trussFlagOption-${i + 1}-1`).prop('checked', !caseData['TrussFlag']);
                             $(`#trussFlagOption-${i + 1}-2`).prop('checked', caseData['TrussFlag']);
                             fcChangeType(i + 1, caseData['TrussFlag']);
-                            $(`#inputform-${i + 1} #a-2-1`).val(caseData['RoofDataInput']['A2']);
-                            $(`#inputform-${i + 1} #a-3-1`).val(caseData['RoofDataInput']['A3']);
-                            $(`#inputform-${i + 1} #a-4-1`).val(caseData['RoofDataInput']['A4']);
-                            $(`#inputform-${i + 1} #a-5-1`).val(caseData['RoofDataInput']['A5']);
-                            $(`#inputform-${i + 1} #a-6-1`).val(caseData['RoofDataInput']['A6']);
-                            $(`#inputform-${i + 1} #a-7-1`).val(caseData['RoofDataInput']['A7']);
-                            $(`#inputform-${i + 1} #a-8-1`).val(caseData['RoofDataInput']['A8']);
-                            $(`#inputform-${i + 1} #a-9-1`).val(caseData['RoofDataInput']['A9']);
-                            $(`#inputform-${i + 1} #a-10-1`).val(caseData['RoofDataInput']['A10']);
-                            $(`#inputform-${i + 1} #a-11-1`).val(caseData['RoofDataInput']['A11']);
+                            $(`#a-2-${i + 1}`).val(caseData['RoofDataInput']['A2']);
+                            $(`#a-3-${i + 1}`).val(caseData['RoofDataInput']['A3']);
+                            $(`#a-4-${i + 1}`).val(caseData['RoofDataInput']['A4']);
+                            $(`#a-5-${i + 1}`).val(caseData['RoofDataInput']['A5']);
+                            $(`#a-6-${i + 1}`).val(caseData['RoofDataInput']['A6']);
+                            $(`#a-7-${i + 1}`).val(caseData['RoofDataInput']['A7']);
+                            $(`#a-8-${i + 1}`).val(caseData['RoofDataInput']['A8']);
+                            $(`#a-9-${i + 1}`).val(caseData['RoofDataInput']['A9']);
+                            $(`#a-10-${i + 1}`).val(caseData['RoofDataInput']['A10']);
+                            $(`#a-11-${i + 1}`).val(caseData['RoofDataInput']['A11']);
 
-                            $(`#inputform-${i + 1} #b-1-1`).val(caseData['RafterDataInput']['B1']);
-                            $(`#inputform-${i + 1} #b-2-1`).val(caseData['RafterDataInput']['B2']);
-                            $(`#inputform-${i + 1} #b-3-1`).val(caseData['RafterDataInput']['B3']);
-                            $(`#inputform-${i + 1} #b-4-1`).val(caseData['RafterDataInput']['B4']);
+                            $(`#b-1-${i + 1}`).val(caseData['RafterDataInput']['B1']);
+                            $(`#b-2-${i + 1}`).val(caseData['RafterDataInput']['B2']);
+                            $(`#b-3-${i + 1}`).val(caseData['RafterDataInput']['B3']);
+                            $(`#b-4-${i + 1}`).val(caseData['RafterDataInput']['B4']);
 
-                            $(`#inputform-${i + 1} #c-1-1`).val(caseData['CollarTieInformation']['C1']);
-                            $(`#inputform-${i + 1} #c-2-1`).val(caseData['CollarTieInformation']['C2']);
-                            $(`#inputform-${i + 1} #c-3-1`).val(caseData['CollarTieInformation']['C3']);
-                            $(`#inputform-${i + 1} #c-4-1`).val(caseData['CollarTieInformation']['C4']);
+                            $(`#c-1-${i + 1}`).val(caseData['CollarTieInformation']['C1']);
+                            $(`#c-2-${i + 1}`).val(caseData['CollarTieInformation']['C2']);
+                            $(`#c-3-${i + 1}`).val(caseData['CollarTieInformation']['C3']);
+                            $(`#c-4-${i + 1}`).val(caseData['CollarTieInformation']['C4']);
 
-                            $(`#inputform-${i + 1} #d-1-1`).val(caseData['RoofDeckSurface']['D1']);
-                            $(`#inputform-${i + 1} #d-2-1`).val(caseData['RoofDeckSurface']['D2']);
-                            $(`#inputform-${i + 1} #d-3-1`).val(caseData['RoofDeckSurface']['D3']);
+                            $(`#d-1-${i + 1}`).val(caseData['RoofDeckSurface']['D1']);
+                            $(`#d-2-${i + 1}`).val(caseData['RoofDeckSurface']['D2']);
+                            $(`#d-3-${i + 1}`).val(caseData['RoofDeckSurface']['D3']);
 
-                            $(`#inputform-${i + 1} #e-1-1`).val(caseData['Location']['E1']);
-                            $(`#inputform-${i + 1} #e-2-1`).val(caseData['Location']['E2']);
-                            $(`#inputform-${i + 1} #e-3-1`).val(caseData['Location']['E3']);
+                            $(`#e-1-${i + 1}`).val(caseData['Location']['E1']);
+                            $(`#e-2-${i + 1}`).val(caseData['Location']['E2']);
+                            $(`#e-3-${i + 1}`).val(caseData['Location']['E3']);
 
-                            $(`#inputform-${i + 1} #f-1-1`).val(caseData['NumberOfModules']['F1']);
+                            $(`#f-1-${i + 1}`).val(caseData['NumberOfModules']['F1']);
                             maxModuleNumChange(i + 1);
-                            $(`#inputform-${i + 1} #g-1-1`).val(caseData['NSGap']['G1']);
+                            $(`#g-1-${i + 1}`).val(caseData['NSGap']['G1']);
                             
-                            $(`#inputform-${i + 1} #h-1-1`).prop('checked', caseData['RotateModuleOrientation']['H1']);
-                            $(`#inputform-${i + 1} #h-2-1`).prop('checked', caseData['RotateModuleOrientation']['H2']);
-                            $(`#inputform-${i + 1} #h-3-1`).prop('checked', caseData['RotateModuleOrientation']['H3']);
-                            $(`#inputform-${i + 1} #h-4-1`).prop('checked', caseData['RotateModuleOrientation']['H4']);
-                            $(`#inputform-${i + 1} #h-5-1`).prop('checked', caseData['RotateModuleOrientation']['H5']);
-                            $(`#inputform-${i + 1} #h-6-1`).prop('checked', caseData['RotateModuleOrientation']['H6']);
-                            $(`#inputform-${i + 1} #h-7-1`).prop('checked', caseData['RotateModuleOrientation']['H7']);
-                            $(`#inputform-${i + 1} #h-8-1`).prop('checked', caseData['RotateModuleOrientation']['H8']);
-                            $(`#inputform-${i + 1} #h-9-1`).prop('checked', caseData['RotateModuleOrientation']['H9']);
-                            $(`#inputform-${i + 1} #h-10-1`).prop('checked', caseData['RotateModuleOrientation']['H10']);
-                            $(`#inputform-${i + 1} #h-11-1`).prop('checked', caseData['RotateModuleOrientation']['H11']);
-                            $(`#inputform-${i + 1} #h-12-1`).prop('checked', caseData['RotateModuleOrientation']['H12']);
+                            $(`#h-1-${i + 1}`).prop('checked', caseData['RotateModuleOrientation']['H1']);
+                            $(`#h-2-${i + 1}`).prop('checked', caseData['RotateModuleOrientation']['H2']);
+                            $(`#h-3-${i + 1}`).prop('checked', caseData['RotateModuleOrientation']['H3']);
+                            $(`#h-4-${i + 1}`).prop('checked', caseData['RotateModuleOrientation']['H4']);
+                            $(`#h-5-${i + 1}`).prop('checked', caseData['RotateModuleOrientation']['H5']);
+                            $(`#h-6-${i + 1}`).prop('checked', caseData['RotateModuleOrientation']['H6']);
+                            $(`#h-7-${i + 1}`).prop('checked', caseData['RotateModuleOrientation']['H7']);
+                            $(`#h-8-${i + 1}`).prop('checked', caseData['RotateModuleOrientation']['H8']);
+                            $(`#h-9-${i + 1}`).prop('checked', caseData['RotateModuleOrientation']['H9']);
+                            $(`#h-10-${i + 1}`).prop('checked', caseData['RotateModuleOrientation']['H10']);
+                            $(`#h-11-${i + 1}`).prop('checked', caseData['RotateModuleOrientation']['H11']);
+                            $(`#h-12-${i + 1}`).prop('checked', caseData['RotateModuleOrientation']['H12']);
 
-                            $(`#inputform-${i + 1} #i-1-1`).val(caseData['Notes']['I1']);
+                            $(`#i-1-${i + 1}`).val(caseData['Notes']['I1']);
 
                             let trussData = caseData['TrussDataInput'];
-                            $(`#inputform-${i + 1} #option-roof-slope`).val(trussData['RoofSlope']['Type']);
-                            $(`#inputform-${i + 1} #txt-roof-degree`).val(trussData['RoofSlope']['Degree']);
-                            $(`#inputform-${i + 1} #td-unknown-degree1`).val(trussData['RoofSlope']['UnknownDegree']);
-                            $(`#inputform-${i + 1} #td-calculated-roof-plane-length`).val(trussData['RoofSlope']['CalculatedRoofPlaneLength']);
-                            $(`#inputform-${i + 1} #td-diff-between-measured-and-calculated`).val(trussData['RoofSlope']['td-diff-between-measured-and-calculated']);
+                            $(`#option-roof-slope-${i + 1}`).val(trussData['RoofSlope']['Type']);
+                            $(`#txt-roof-degree-${i + 1}`).val(trussData['RoofSlope']['Degree']);
+                            $(`#td-unknown-degree1-${i + 1}`).val(trussData['RoofSlope']['UnknownDegree']);
+                            $(`#td-calculated-roof-plane-length-${i + 1}`).val(trussData['RoofSlope']['CalculatedRoofPlaneLength']);
+                            $(`#td-diff-between-measured-and-calculated-${i + 1}`).val(trussData['RoofSlope']['td-diff-between-measured-and-calculated']);
 
-                            $(`#inputform-${i + 1} #option-roof-member-type`).val(trussData['RoofPlane']['MemberType']);
+                            $(`#option-roof-member-type-${i + 1}`).val(trussData['RoofPlane']['MemberType']);
                             updateRoofMemberType(i + 1, trussData['RoofPlane']['MemberType']);
-                            $(`#inputform-${i + 1} #txt-length-of-roof-plane`).val(trussData['RoofPlane']['Length']);
-                            $(`#inputform-${i + 1} #option-number-segments1`).val(trussData['RoofPlane']['NumberOfSegments']);
-                            $(`#inputform-${i + 1} #option-number-segments1 > option`).each(function() { 
+                            $(`#txt-length-of-roof-plane-${i + 1}`).val(trussData['RoofPlane']['Length']);
+                            $(`#option-number-segments1-${i + 1}`).val(trussData['RoofPlane']['NumberOfSegments']);
+                            $(`#option-number-segments1-${i + 1} > option`).each(function() { 
                                 if ($(this).attr('data-value') == trussData['RoofPlane']['NumberOfSegments']) {
                                     $(this).attr('selected', true);
                                 }
@@ -633,47 +633,47 @@ var loadPreloadedData = function() {
                                     $(this).attr('selected', false);
                                 }         
                             });
-                            $(`#inputform-${i + 1} #td-sum-of-length-entered`).val(trussData['RoofPlane']['SumOfLengthsEntered']);
-                            $(`#inputform-${i + 1} #td-checksum-of-segment1`).val(trussData['RoofPlane']['ChecksumOfChordLength']);
-                            if(trussData['RoofPlane']['LengthOfSegment1']) $(`#inputform-${i + 1} #txt-roof-segment1-length`).val(trussData['RoofPlane']['LengthOfSegment1']);
-                            if(trussData['RoofPlane']['LengthOfSegment2']) $(`#inputform-${i + 1} #txt-roof-segment2-length`).val(trussData['RoofPlane']['LengthOfSegment2']);
-                            if(trussData['RoofPlane']['LengthOfSegment3']) $(`#inputform-${i + 1} #txt-roof-segment3-length`).val(trussData['RoofPlane']['LengthOfSegment3']);
-                            if(trussData['RoofPlane']['LengthOfSegment4']) $(`#inputform-${i + 1} #txt-roof-segment4-length`).val(trussData['RoofPlane']['LengthOfSegment4']);
-                            if(trussData['RoofPlane']['LengthOfSegment5']) $(`#inputform-${i + 1} #txt-roof-segment5-length`).val(trussData['RoofPlane']['LengthOfSegment5']);
-                            if(trussData['RoofPlane']['LengthOfSegment6']) $(`#inputform-${i + 1} #txt-roof-segment6-length`).val(trussData['RoofPlane']['LengthOfSegment6']);
+                            $(`#td-sum-of-length-entered-${i + 1}`).val(trussData['RoofPlane']['SumOfLengthsEntered']);
+                            $(`#td-checksum-of-segment1-${i + 1}`).val(trussData['RoofPlane']['ChecksumOfChordLength']);
+                            if(trussData['RoofPlane']['LengthOfSegment1']) $(`#txt-roof-segment1-length-${i + 1}`).val(trussData['RoofPlane']['LengthOfSegment1']);
+                            if(trussData['RoofPlane']['LengthOfSegment2']) $(`#txt-roof-segment2-length-${i + 1}`).val(trussData['RoofPlane']['LengthOfSegment2']);
+                            if(trussData['RoofPlane']['LengthOfSegment3']) $(`#txt-roof-segment3-length-${i + 1}`).val(trussData['RoofPlane']['LengthOfSegment3']);
+                            if(trussData['RoofPlane']['LengthOfSegment4']) $(`#txt-roof-segment4-length-${i + 1}`).val(trussData['RoofPlane']['LengthOfSegment4']);
+                            if(trussData['RoofPlane']['LengthOfSegment5']) $(`#txt-roof-segment5-length-${i + 1}`).val(trussData['RoofPlane']['LengthOfSegment5']);
+                            if(trussData['RoofPlane']['LengthOfSegment6']) $(`#txt-roof-segment6-length-${i + 1}`).val(trussData['RoofPlane']['LengthOfSegment6']);
                             updateNumberSegment1(i + 1, parseInt(trussData['RoofPlane']['NumberOfSegments']));
 
-                            $(`#inputform-${i + 1} #option-floor-member-type`).val(trussData['FloorPlane']['MemberType']);
+                            $(`#option-floor-member-type-${i + 1}`).val(trussData['FloorPlane']['MemberType']);
                             updateFloorMemberType(i + 1, trussData['FloorPlane']['MemberType']);
-                            $(`#inputform-${i + 1} #txt-length-of-floor-plane`).val(trussData['FloorPlane']['Length']);
-                            $(`#inputform-${i + 1} #option-number-segments2`).val(trussData['FloorPlane']['NumberOfSegments']);
-                            $(`#inputform-${i + 1} #option-number-segments2 > option`).each(function() { 
+                            $(`#txt-length-of-floor-plane-${i + 1}`).val(trussData['FloorPlane']['Length']);
+                            $(`#option-number-segments2-${i + 1}`).val(trussData['FloorPlane']['NumberOfSegments']);
+                            $(`#option-number-segments2-${i + 1} > option`).each(function() { 
                                 if ($(this).attr('data-value') == trussData['FloorPlane']['NumberOfSegments'])
                                     $(this).attr('selected', true);
                                 else
                                     $(this).attr('selected', false);      
                             });
-                            $(`#inputform-${i + 1} #td-total-length-entered`).val(trussData['FloorPlane']['SumOfLengthsEntered']);
-                            $(`#inputform-${i + 1} #td-checksum-of-segment2`).val(trussData['FloorPlane']['ChecksumOfChordLength']);
-                            if(trussData['FloorPlane']['LengthOfSegment1']) $(`#inputform-${i + 1} #txt-floor-segment1-length`).val(trussData['FloorPlane']['LengthOfSegment1']);
-                            if(trussData['FloorPlane']['LengthOfSegment2']) $(`#inputform-${i + 1} #txt-floor-segment2-length`).val(trussData['FloorPlane']['LengthOfSegment2']);
-                            if(trussData['FloorPlane']['LengthOfSegment3']) $(`#inputform-${i + 1} #txt-floor-segment3-length`).val(trussData['FloorPlane']['LengthOfSegment3']);
-                            if(trussData['FloorPlane']['LengthOfSegment4']) $(`#inputform-${i + 1} #txt-floor-segment4-length`).val(trussData['FloorPlane']['LengthOfSegment4']);
-                            if(trussData['FloorPlane']['LengthOfSegment5']) $(`#inputform-${i + 1} #txt-floor-segment5-length`).val(trussData['FloorPlane']['LengthOfSegment5']);
-                            if(trussData['FloorPlane']['LengthOfSegment6']) $(`#inputform-${i + 1} #txt-floor-segment6-length`).val(trussData['FloorPlane']['LengthOfSegment6']);
+                            $(`#td-total-length-entered-${i + 1}`).val(trussData['FloorPlane']['SumOfLengthsEntered']);
+                            $(`#td-checksum-of-segment2-${i + 1}`).val(trussData['FloorPlane']['ChecksumOfChordLength']);
+                            if(trussData['FloorPlane']['LengthOfSegment1']) $(`#txt-floor-segment1-length-${i + 1}`).val(trussData['FloorPlane']['LengthOfSegment1']);
+                            if(trussData['FloorPlane']['LengthOfSegment2']) $(`#txt-floor-segment2-length-${i + 1}`).val(trussData['FloorPlane']['LengthOfSegment2']);
+                            if(trussData['FloorPlane']['LengthOfSegment3']) $(`#txt-floor-segment3-length-${i + 1}`).val(trussData['FloorPlane']['LengthOfSegment3']);
+                            if(trussData['FloorPlane']['LengthOfSegment4']) $(`#txt-floor-segment4-length-${i + 1}`).val(trussData['FloorPlane']['LengthOfSegment4']);
+                            if(trussData['FloorPlane']['LengthOfSegment5']) $(`#txt-floor-segment5-length-${i + 1}`).val(trussData['FloorPlane']['LengthOfSegment5']);
+                            if(trussData['FloorPlane']['LengthOfSegment6']) $(`#txt-floor-segment6-length-${i + 1}`).val(trussData['FloorPlane']['LengthOfSegment6']);
                             updateNumberSegment2(i + 1, parseInt(trussData['FloorPlane']['NumberOfSegments']));
 
                             for(let j = 0; j < caseData['Diagonal1'].length; j ++){
-                                $(`#inputform-${i + 1} #diag-1-${j + 1}`).prop('checked', !caseData['Diagonal1'][j]['include']);
-                                $(`#inputform-${i + 1} #option-diagonals-mem1-${j + 1}-type`).val(caseData['Diagonal1'][j]['memType']);
-                                $(`#inputform-${i + 1} #td-diag-1-${j + 1}`).val(caseData['Diagonal1'][j]['memId']);
+                                $(`#diag-1-${j + 1}-${i + 1}`).prop('checked', !caseData['Diagonal1'][j]['include']);
+                                $(`#option-diagonals-mem1-${j + 1}-type-${i + 1}`).val(caseData['Diagonal1'][j]['memType']);
+                                $(`#td-diag-1-${j + 1}-${i + 1}`).val(caseData['Diagonal1'][j]['memId']);
                             }
 
                             for(let j = 0; j < caseData['Diagonal2'].length; j ++){
-                                $(`#inputform-${i + 1} #diag-2-${j + 1}`).prop('checked', !caseData['Diagonal2'][j]['include']);
-                                $(`#inputform-${i + 1} #diag-2-reverse-${j + 1}`).prop('checked', caseData['Diagonal2'][j]['reverse']);
-                                $(`#inputform-${i + 1} #option-diagonals-mem2-${j + 1}-type`).val(caseData['Diagonal2'][j]['memType']);
-                                $(`#inputform-${i + 1} #td-diag-2-${j + 1}`).val(caseData['Diagonal2'][j]['memId']);
+                                $(`#diag-2-${j + 1}-${i + 1}`).prop('checked', !caseData['Diagonal2'][j]['include']);
+                                $(`#diag-2-reverse-${j + 1}-${i + 1}`).prop('checked', caseData['Diagonal2'][j]['reverse']);
+                                $(`#option-diagonals-mem2-${j + 1}-type-${i + 1}`).val(caseData['Diagonal2'][j]['memType']);
+                                $(`#td-diag-2-${j + 1}-${i + 1}`).val(caseData['Diagonal2'][j]['memId']);
                             }
                         }
 
@@ -1257,7 +1257,20 @@ var updateNumberOfConditions = function(conditions) {
     }
 }
 
-var ignorable = ['a-7-1', 'a-8-1', 'a-9-1', 'a-10-1', 'ac-7-1', 'ac-8-1', 'ac-9-1', 'ac-10-1', 'c-1-1', 'c-2-1', 'c-3-1', 'c-4-1'];
+var ignorable = ['a-7-', 'a-8-', 'a-9-', 'a-10-', 'ac-7-', 'ac-8-', 'ac-9-', 'ac-10-', 'c-1-', 'c-2-', 'c-3-', 'c-4-'];
+
+var isIgnorable = function(id) {
+    let canIgnore = false;
+    for(let i = 0; i < ignorable.length; i ++)
+    {
+        if(typeof id == 'string' && id.includes(ignorable[i]))
+        {
+            canIgnore = true;
+            break;
+        }
+    }
+    return canIgnore;
+}
 
 var isEmptyInputBox = function() {
 
@@ -1268,22 +1281,22 @@ var isEmptyInputBox = function() {
     var caseCount = $("#option-number-of-conditions").val();
     for(let i = 1; i <= caseCount; i ++)
     {
-        if($(`#inputform-${i} #c-2-1`).val() != "" && parseFloat($(`#inputform-${i} #c-2-1`).val()) != 0 && ($(`#inputform-${i} #c-1-1`).val() == ""))
+        if($(`#c-2-${i}`).val() != "" && parseFloat($(`#c-2-${i}`).val()) != 0 && ($(`#c-1-${i}`).val() == ""))
         {
             isEmpty = true;
-            $(`#inputform-${i} #c-1-1`).css('background-color', '#FFC7CE');
+            $(`#c-1-${i}`).css('background-color', '#FFC7CE');
         }    
-        if($(`#inputform-${i} #c-2-1`).val() != "" && parseFloat($(`#inputform-${i} #c-2-1`).val()) != 0 && ($(`#inputform-${i} #c-3-1`).val() == ""))
+        if($(`#c-2-${i}`).val() != "" && parseFloat($(`#c-2-${i}`).val()) != 0 && ($(`#c-3-${i}`).val() == ""))
         {
             isEmpty = true;
-            $(`#inputform-${i} #c-3-1`).css('background-color', '#FFC7CE');
+            $(`#c-3-${i}`).css('background-color', '#FFC7CE');
         }
     }
     
     var empty_textboxes = $('input:text:enabled').filter(function() { return this.value === ""; });
     empty_textboxes.each(function() { 
         // skip note 
-        if (typeof $(this).attr('id') == "string" && ($(this).attr('id').includes("i-1-") || ignorable.indexOf($(this).attr('id')) > -1)) {
+        if (typeof $(this).attr('id') == "string" && ($(this).attr('id').includes("i-1-") || isIgnorable($(this).attr('id')) )) {
             return;
         }
         // skip sweet alert
@@ -1360,27 +1373,27 @@ var getData = function(caseCount = 10) {
             data[$(this).attr('id')] = $(this).val();
         });
 
-        data['td-unknown-degree1'] = $(`#inputform-${i} #td-unknown-degree1`).html();
-        data['td-calculated-roof-plane-length'] = $(`#inputform-${i} #td-calculated-roof-plane-length`).html();
-        data['td-diff-between-measured-and-calculated'] = $(`#inputform-${i} #td-diff-between-measured-and-calculated`).html();
-        data['td-sum-of-length-entered'] = $(`#inputform-${i} #td-sum-of-length-entered`).html();
-        data['td-checksum-of-segment1'] = $(`#inputform-${i} #td-checksum-of-segment1`).html();
-        data['td-total-length-entered'] = $(`#inputform-${i} #td-total-length-entered`).html();
-        data['td-checksum-of-segment2'] = $(`#inputform-${i} #td-checksum-of-segment2`).html();
+        data[`td-unknown-degree1-${i}`] = $(`#td-unknown-degree1-${i}`).html();
+        data[`td-calculated-roof-plane-length-${i}`] = $(`#td-calculated-roof-plane-length-${i}`).html();
+        data[`td-diff-between-measured-and-calculated-${i}`] = $(`#td-diff-between-measured-and-calculated-${i}`).html();
+        data[`td-sum-of-length-entered-${i}`] = $(`#td-sum-of-length-entered-${i}`).html();
+        data[`td-checksum-of-segment1-${i}`] = $(`#td-checksum-of-segment1-${i}`).html();
+        data[`td-total-length-entered-${i}`] = $(`#td-total-length-entered-${i}`).html();
+        data[`td-checksum-of-segment2-${i}`] = $(`#td-checksum-of-segment2-${i}`).html();
 
-        data['td-diag-1-1'] = $(`#inputform-${i} #td-diag-1-1`).html();
-        data['td-diag-1-2'] = $(`#inputform-${i} #td-diag-1-2`).html();
-        data['td-diag-1-3'] = $(`#inputform-${i} #td-diag-1-3`).html();
-        data['td-diag-1-4'] = $(`#inputform-${i} #td-diag-1-4`).html();
-        data['td-diag-1-5'] = $(`#inputform-${i} #td-diag-1-5`).html();
-        data['td-diag-1-6'] = $(`#inputform-${i} #td-diag-1-6`).html();
+        data[`td-diag-1-1-${i}`] = $(`#td-diag-1-1-${i}`).html();
+        data[`td-diag-1-2-${i}`] = $(`#td-diag-1-2-${i}`).html();
+        data[`td-diag-1-3-${i}`] = $(`#td-diag-1-3-${i}`).html();
+        data[`td-diag-1-4-${i}`] = $(`#td-diag-1-4-${i}`).html();
+        data[`td-diag-1-5-${i}`] = $(`#td-diag-1-5-${i}`).html();
+        data[`td-diag-1-6-${i}`] = $(`#td-diag-1-6-${i}`).html();
 
-        data['td-diag-2-1'] = $(`#inputform-${i} #td-diag-2-1`).html();
-        data['td-diag-2-2'] = $(`#inputform-${i} #td-diag-2-2`).html();
-        data['td-diag-2-3'] = $(`#inputform-${i} #td-diag-2-3`).html();
-        data['td-diag-2-4'] = $(`#inputform-${i} #td-diag-2-4`).html();
-        data['td-diag-2-5'] = $(`#inputform-${i} #td-diag-2-5`).html();
-        data['td-diag-2-6'] = $(`#inputform-${i} #td-diag-2-6`).html();
+        data[`td-diag-2-1-${i}`] = $(`#td-diag-2-1-${i}`).html();
+        data[`td-diag-2-2-${i}`] = $(`#td-diag-2-2-${i}`).html();
+        data[`td-diag-2-3-${i}`] = $(`#td-diag-2-3-${i}`).html();
+        data[`td-diag-2-4-${i}`] = $(`#td-diag-2-4-${i}`).html();
+        data[`td-diag-2-5-${i}`] = $(`#td-diag-2-5-${i}`).html();
+        data[`td-diag-2-6-${i}`] = $(`#td-diag-2-6-${i}`).html();
 
         alldata['caseInputs'].push(data);
     }
@@ -1425,14 +1438,14 @@ var degreeToRadian = function(a) {
 }
 
 var updateRoofSlopeAnotherField = function( condId ) {
-    selectedVal = $(`#inputform-${condId} #option-roof-slope`).children("option:selected").val();
+    selectedVal = $(`#option-roof-slope-${condId}`).children("option:selected").val();
     if (selectedVal == "Roof slope (degrees)") {
         globalRoofSlopeDegree[condId] = true;
-        $(`#inputform-${condId} #txt-roof-slope-another`).html("Top ridge height above floor plane");
+        $(`#txt-roof-slope-another-${condId}`).html("Top ridge height above floor plane");
     }
     else {
         globalRoofSlopeDegree[condId] = false;
-        $(`#inputform-${condId} #txt-roof-slope-another`).html("Roof slope (degrees)");
+        $(`#txt-roof-slope-another-${condId}`).html("Roof slope (degrees)");
     }
 
     updatePlanes(condId);
@@ -1450,36 +1463,36 @@ var updatePlanes = function( condId ) {
     if (globalRoofSlopeDegree[condId] == false) { AB5 = true; }
     else { AB5 = false; }
 
-    var F139 = parseFloat($(`#inputform-${condId} #txt-roof-degree`).val());
-    var F161 = parseFloat($(`#inputform-${condId} #txt-length-of-floor-plane`).val());
+    var F139 = parseFloat($(`#txt-roof-degree-${condId}`).val());
+    var F161 = parseFloat($(`#txt-length-of-floor-plane-${condId}`).val());
     
     var W44, Y44, W25, W36, W39, W40;
     if (AB5 == true) {
         W44 = Math.atan(F139 / F161);
         Y44 = radianToDegree(W44);
         
-        W25 = parseFloat($(`#inputform-${condId} #td-sum-of-length-entered`).html());
-        W36 = parseFloat($(`#inputform-${condId} #td-total-length-entered`).html());
+        W25 = parseFloat($(`#td-sum-of-length-entered-${condId}`).html());
+        W36 = parseFloat($(`#td-total-length-entered-${condId}`).html());
         var W39 = W36 / Math.cos(W44);
         var W40 = W39 - W25;
 
-        $(`#inputform-${condId} #td-unknown-degree1`).html(Y44.toFixed(2));
-        $(`#inputform-${condId} #td-calculated-roof-plane-length`).html(W39.toFixed(2));
-        $(`#inputform-${condId} #td-diff-between-measured-and-calculated`).html(W40.toFixed(2));
+        $(`#td-unknown-degree1-${condId}`).html(Y44.toFixed(2));
+        $(`#td-calculated-roof-plane-length-${condId}`).html(W39.toFixed(2));
+        $(`#td-diff-between-measured-and-calculated-${condId}`).html(W40.toFixed(2));
 
     }
     else {
-        var W25 = parseFloat($(`#inputform-${condId} #td-sum-of-length-entered`).html());
-        var W36 = parseFloat($(`#inputform-${condId} #td-total-length-entered`).html());
+        var W25 = parseFloat($(`#td-sum-of-length-entered-${condId}`).html());
+        var W36 = parseFloat($(`#td-total-length-entered-${condId}`).html());
         var W44 = degreeToRadian(F139);
         var W41 = Math.sin(W44) * W25;
         var Y44 = W41;
         var W39 = W36 / Math.cos(W44);
         var W40 = W39 - W25;
 
-        $(`#inputform-${condId} #td-unknown-degree1`).html(Y44.toFixed(2));
-        $(`#inputform-${condId} #td-calculated-roof-plane-length`).html(W39.toFixed(2));
-        $(`#inputform-${condId} #td-diff-between-measured-and-calculated`).html(W40.toFixed(2));
+        $(`#td-unknown-degree1-${condId}`).html(Y44.toFixed(2));
+        $(`#td-calculated-roof-plane-length-${condId}`).html(W39.toFixed(2));
+        $(`#td-diff-between-measured-and-calculated-${condId}`).html(W40.toFixed(2));
     }
     
     var option_number_segements1 = document.getElementsByClassName(`${condId}-option-number-segments1`)[0];
@@ -1503,43 +1516,43 @@ var updatePlanes = function( condId ) {
     globalRoofPoints[condId].push(PQ18);
     globalFloorPoints[condId].push(PQ18);
 
-    var O19 = parseFloat($(`#inputform-${condId} #txt-roof-segment1-length`).val());
+    var O19 = parseFloat($(`#txt-roof-segment1-length-${condId}`).val());
     if (U19 == true) { PQ19 = [Math.cos(W44) * O19, Math.sin(W44) * O19]; globalRoofPoints[condId].push(PQ19); }
 
-    var O20 = O19 + parseFloat($(`#inputform-${condId} #txt-roof-segment2-length`).val());
+    var O20 = O19 + parseFloat($(`#txt-roof-segment2-length-${condId}`).val());
     if (U20 == true) { PQ20 = [Math.cos(W44) * O20, Math.sin(W44) * O20]; globalRoofPoints[condId].push(PQ20); }
 
-    var O21 = O20 + parseFloat($(`#inputform-${condId} #txt-roof-segment3-length`).val());
+    var O21 = O20 + parseFloat($(`#txt-roof-segment3-length-${condId}`).val());
     if (U21 == true) { PQ21 = [Math.cos(W44) * O21, Math.sin(W44) * O21]; globalRoofPoints[condId].push(PQ21); }
 
-    var O22 = O21 + parseFloat($(`#inputform-${condId} #txt-roof-segment4-length`).val());
+    var O22 = O21 + parseFloat($(`#txt-roof-segment4-length-${condId}`).val());
     if (U22 == true) { PQ22 = [Math.cos(W44) * O22, Math.sin(W44) * O22]; globalRoofPoints[condId].push(PQ22); }
 
-    var O23 = O22 + parseFloat($(`#inputform-${condId} #txt-roof-segment5-length`).val());
+    var O23 = O22 + parseFloat($(`#txt-roof-segment5-length-${condId}`).val());
     if (U23 == true) { PQ23 = [Math.cos(W44) * O23, Math.sin(W44) * O23]; globalRoofPoints[condId].push(PQ23); }
 
-    var O24 = O23 + parseFloat($(`#inputform-${condId} #txt-roof-segment6-length`).val());
+    var O24 = O23 + parseFloat($(`#txt-roof-segment6-length-${condId}`).val());
     if (U24 == true) { PQ24 = [Math.cos(W44) * O24, Math.sin(W44) * O24]; globalRoofPoints[condId].push(PQ24); }
 
     var W45 = 0;
     var PQ30, PQ31, PQ32, PQ33, PQ34, PQ35;
 
-    var O30 = parseFloat($(`#inputform-${condId} #txt-floor-segment1-length`).val());
+    var O30 = parseFloat($(`#txt-floor-segment1-length-${condId}`).val());
     if (U30 == true) { PQ30 = [Math.cos(W45)*O30, 0]; globalFloorPoints[condId].push(PQ30); }
 
-    var O31 = O30 + parseFloat($(`#inputform-${condId} #txt-floor-segment2-length`).val());
+    var O31 = O30 + parseFloat($(`#txt-floor-segment2-length-${condId}`).val());
     if (U31 == true) { PQ31 = [Math.cos(W45)*O31, 0]; globalFloorPoints[condId].push(PQ31); }
 
-    var O32 = O31 + parseFloat($(`#inputform-${condId} #txt-floor-segment3-length`).val());
+    var O32 = O31 + parseFloat($(`#txt-floor-segment3-length-${condId}`).val());
     if (U32 == true) { PQ32 = [Math.cos(W45)*O32, 0]; globalFloorPoints[condId].push(PQ32); }
 
-    var O33 = O32 + parseFloat($(`#inputform-${condId} #txt-floor-segment4-length`).val());
+    var O33 = O32 + parseFloat($(`#txt-floor-segment4-length-${condId}`).val());
     if (U33 == true) { PQ33 = [Math.cos(W45)*O33, 0]; globalFloorPoints[condId].push(PQ33); }
 
-    var O34 = O33 + parseFloat($(`#inputform-${condId} #txt-floor-segment5-length`).val());
+    var O34 = O33 + parseFloat($(`#txt-floor-segment5-length-${condId}`).val());
     if (U34 == true) { PQ34 = [Math.cos(W45)*O34, 0]; globalFloorPoints[condId].push(PQ34); }
 
-    var O35 = O34 + parseFloat($(`#inputform-${condId} #txt-floor-segment6-length`).val());
+    var O35 = O34 + parseFloat($(`#txt-floor-segment6-length-${condId}`).val());
     if (U35 == true) { PQ35 = [Math.cos(W45)*O35, 0]; globalFloorPoints[condId].push(PQ35); }
 
     // create roof lines
@@ -1590,33 +1603,33 @@ var updatePlanes = function( condId ) {
 
 // ----- Truss segement & comments functions --------------
 var updateTrussAndComments = function(condId, keepStatus) {
-    var roofPlane = parseInt($(`#inputform-${condId} #option-number-segments1`).children("option:selected").val());
-    var floorPlane = parseInt($(`#inputform-${condId} #option-number-segments2`).children("option:selected").val());
+    var roofPlane = parseInt($(`#option-number-segments1-${condId}`).children("option:selected").val());
+    var floorPlane = parseInt($(`#option-number-segments2-${condId}`).children("option:selected").val());
 
     for (index = 0; index < roofPlane; index++) {
-        $(`#inputform-${condId} #td-roof-segment` + (index+1) +'-caption').html("Segment " + (index + 1) + " Length");
-        $(`#inputform-${condId} #td-truss-roof-segment` + (index+1)).html((index + 1));
-        $(`#inputform-${condId} #td-truss-roof-segment` + (index+1)).addClass('w400-bdr').removeClass('w400-blue-bdr');
-        $(`#inputform-${condId} #td-truss-roof-segment` + (index+1) +"-type").addClass('w400-bdr').removeClass('w400-blue-bdr');
+        $(`#td-roof-segment${index+1}-caption-${condId}`).html("Segment " + (index + 1) + " Length");
+        $(`#td-truss-roof-segment${index+1}-${condId}`).html((index + 1));
+        $(`#td-truss-roof-segment${index+1}-${condId}`).addClass('w400-bdr').removeClass('w400-blue-bdr');
+        $(`#td-truss-roof-segment${index+1}-type-${condId}`).addClass('w400-bdr').removeClass('w400-blue-bdr');
 
     }
     for (index = roofPlane; index < 6; index++) {
-        $(`#inputform-${condId} #td-roof-segment` + (index+1) +'-caption').html("");
-        $(`#inputform-${condId} #td-truss-roof-segment` + (index+1)).html("");
-        $(`#inputform-${condId} #td-truss-roof-segment` + (index+1)).removeClass('w400-bdr').addClass('w400-blue-bdr');
-        $(`#inputform-${condId} #td-truss-roof-segment` + (index+1) +"-type").removeClass('w400-bdr').addClass('w400-blue-bdr');
+        $(`#td-roof-segment${index+1}-caption-${condId}`).html("");
+        $(`#td-truss-roof-segment${index+1}-${condId}`).html("");
+        $(`#td-truss-roof-segment${index+1}-${condId}`).removeClass('w400-bdr').addClass('w400-blue-bdr');
+        $(`#td-truss-roof-segment${index+1}-type-${condId}`).removeClass('w400-bdr').addClass('w400-blue-bdr');
     }
     for (index = 0; index < floorPlane; index++) {
-        $(`#inputform-${condId} #td-floor-segment` + (index+1) +'-caption').html("Segment " + (index + roofPlane + 1) + " Length");
-        $(`#inputform-${condId} #td-truss-floor-segment` + (index+1)).html((index + roofPlane + 1));
-        $(`#inputform-${condId} #td-truss-floor-segment` + (index+1)).addClass('w400-bdr').removeClass('w400-blue-bdr');
-        $(`#inputform-${condId} #td-truss-floor-segment` + (index+1) +"-type").addClass('w400-bdr').removeClass('w400-blue-bdr');
+        $(`#td-floor-segment${index+1}-caption-${condId}`).html("Segment " + (index + roofPlane + 1) + " Length");
+        $(`#td-truss-floor-segment${index+1}-${condId}`).html((index + roofPlane + 1));
+        $(`#td-truss-floor-segment${index+1}-${condId}`).addClass('w400-bdr').removeClass('w400-blue-bdr');
+        $(`#td-truss-floor-segment${index+1}-type-${condId}`).addClass('w400-bdr').removeClass('w400-blue-bdr');
     }
     for (index = floorPlane; index < 6; index++) {
-        $(`#inputform-${condId} #td-floor-segment` + (index+1) +'-caption').html("");
-        $(`#inputform-${condId} #td-truss-floor-segment` + (index+1)).html("");
-        $(`#inputform-${condId} #td-truss-floor-segment` + (index+1)).removeClass('w400-bdr').addClass('w400-blue-bdr');
-        $(`#inputform-${condId} #td-truss-floor-segment` + (index+1) +"-type").removeClass('w400-bdr').addClass('w400-blue-bdr');
+        $(`#td-floor-segment${index+1}-caption-${condId}`).html("");
+        $(`#td-truss-floor-segment${index+1}-${condId}`).html("");
+        $(`#td-truss-floor-segment${index+1}-${condId}`).removeClass('w400-bdr').addClass('w400-blue-bdr');
+        $(`#td-truss-floor-segment${index+1}-type-${condId}`).removeClass('w400-bdr').addClass('w400-blue-bdr');
     }
 
     globalDiagnoals1[condId] = Math.min(roofPlane, floorPlane);
@@ -1625,43 +1638,43 @@ var updateTrussAndComments = function(condId, keepStatus) {
     // Diagnoals 
     for (index = 0; index < globalDiagnoals1[condId]; index++) {
         if (keepStatus == false) {
-            $(`#inputform-${condId} #diag-1-` + (index+1)).prop( "checked", false );
+            $(`#diag-1-${index+1}-${condId}`).prop( "checked", false );
         }
-        $(`#inputform-${condId} #td-diag-1-` + (index+1)).html(roofPlane + floorPlane + index+1);
-        $(`#inputform-${condId} #td-diag-1-` + (index+1)).removeClass('w400-blue-bdr').addClass('w400-bdr');
-        $(`#inputform-${condId} #td-diag-1-` + (index+1) + '-type').removeClass('w400-blue-bdr').addClass('w400-green-bdr');
-        $(`#inputform-${condId} #td-diag-1-` + (index+1) + "-type *").attr('disabled', false);
+        $(`#td-diag-1-${index+1}-${condId}`).html(roofPlane + floorPlane + index+1);
+        $(`#td-diag-1-${index+1}-${condId}`).removeClass('w400-blue-bdr').addClass('w400-bdr');
+        $(`#td-diag-1-${index+1}-type-${condId}`).removeClass('w400-blue-bdr').addClass('w400-green-bdr');
+        $(`#td-diag-1-${index+1}-type-${condId} *`).attr('disabled', false);
     }
     for (index = globalDiagnoals1[condId]; index < 6; index++) {
         if (keepStatus == false) {
-            $(`#inputform-${condId} #diag-1-` + (index+1)).prop( "checked", false );
+            $(`#diag-1-${index+1}-${condId}`).prop( "checked", false );
         }
-        $(`#inputform-${condId} #td-diag-1-` + (index+1)).html('');
-        $(`#inputform-${condId} #td-diag-1-` + (index+1)).addClass('w400-blue-bdr').removeClass('w400-bdr');
-        $(`#inputform-${condId} #td-diag-1-` + (index+1) + '-type').addClass('w400-blue-bdr').removeClass('w400-green-bdr');
-        $(`#inputform-${condId} #td-diag-1-` + (index+1) + "-type *").attr('disabled', true);
+        $(`#td-diag-1-${index+1}-${condId}`).html('');
+        $(`#td-diag-1-${index+1}-${condId}`).addClass('w400-blue-bdr').removeClass('w400-bdr');
+        $(`#td-diag-1-${index+1}-type-${condId}`).addClass('w400-blue-bdr').removeClass('w400-green-bdr');
+        $(`#td-diag-1-${index+1}-type-${condId} *`).attr('disabled', true);
     }
     for (index = 0; index < globalDiagnoals2[condId]; index++) {
         if (keepStatus == false) {
-            $(`#inputform-${condId} #diag-2-` + (index+1)).prop( "checked", false );
+            $(`#diag-2-${index+1}-${condId}`).prop( "checked", false );
         }
-        $(`#inputform-${condId} #td-diag-2-` + (index+1)).html(roofPlane + floorPlane + globalDiagnoals1[condId] + index+1);
-        $(`#inputform-${condId} #td-diag-2-` + (index+1)).removeClass('w400-blue-bdr').addClass('w400-bdr');
-        $(`#inputform-${condId} #td-diag-2-` + (index+1) + '-type').removeClass('w400-blue-bdr').addClass('w400-green-bdr');
-        $(`#inputform-${condId} #td-diag-2-` + (index+1) + "-type *").attr('disabled', false);
-        $(`#inputform-${condId} #td-diag-2-` + (index+1) + '-reverse').removeClass('w400-blue-bdr').addClass('w400-green-bdr');
-        $(`#inputform-${condId} #td-diag-2-` + (index+1) + "-reverse *").attr('disabled', false);
+        $(`#td-diag-2-${index+1}-${condId}`).html(roofPlane + floorPlane + globalDiagnoals1[condId] + index+1);
+        $(`#td-diag-2-${index+1}-${condId}`).removeClass('w400-blue-bdr').addClass('w400-bdr');
+        $(`#td-diag-2-${index+1}-type-${condId}`).removeClass('w400-blue-bdr').addClass('w400-green-bdr');
+        $(`#td-diag-2-${index+1}-type-${condId} *`).attr('disabled', false);
+        $(`#td-diag-2-${index+1}-reverse-${condId}`).removeClass('w400-blue-bdr').addClass('w400-green-bdr');
+        $(`#td-diag-2-${index+1}-reverse-${condId} *`).attr('disabled', false);
     }
     for (index = globalDiagnoals2[condId]; index < 6; index++) {
         if (keepStatus == false) {
-            $(`#inputform-${condId} #diag-2-` + (index+1)).prop( "checked", false );
+            $(`#diag-2-${index+1}-${condId}`).prop( "checked", false );
         }
-        $(`#inputform-${condId} #td-diag-2-` + (index+1)).html('');
-        $(`#inputform-${condId} #td-diag-2-` + (index+1)).addClass('w400-blue-bdr').removeClass('w400-bdr');
-        $(`#inputform-${condId} #td-diag-2-` + (index+1) + '-type').addClass('w400-blue-bdr').removeClass('w400-green-bdr');
-        $(`#inputform-${condId} #td-diag-2-` + (index+1) + "-type *").attr('disabled', true);
-        $(`#inputform-${condId} #td-diag-2-` + (index+1) + '-reverse').addClass('w400-blue-bdr').removeClass('w400-green-bdr');
-        $(`#inputform-${condId} #td-diag-2-` + (index+1) + "-reverse *").attr('disabled', true);
+        $(`#td-diag-2-${index+1}-${condId}`).html('');
+        $(`#td-diag-2-${index+1}-${condId}`).addClass('w400-blue-bdr').removeClass('w400-bdr');
+        $(`#td-diag-2-${index+1}-type-${condId}`).addClass('w400-blue-bdr').removeClass('w400-green-bdr');
+        $(`#td-diag-2-${index+1}-type-${condId} *`).attr('disabled', true);
+        $(`#td-diag-2-${index+1}-reverse-${condId}`).addClass('w400-blue-bdr').removeClass('w400-green-bdr');
+        $(`#td-diag-2-${index+1}-reverse-${condId} *`).attr('disabled', true);
     }
 
     updateRoofSlopeAnotherField(condId);
@@ -1673,32 +1686,32 @@ var updateNumberSegment1 = function (condId, roofPlane, keepStatus = true) {
     roofPlane = parseInt(roofPlane);
 
     for (index = 0; index < roofPlane; index++) {
-        totalLength += parseFloat($(`#inputform-${condId} #txt-roof-segment` + (index + 1) + '-length').val());
+        totalLength += parseFloat($(`#txt-roof-segment${index + 1}-length-${condId}`).val());
 
         // enable appropricate cells        
-        $(`#inputform-${condId} #td-roof-segment` + (index + 1) + "-length").addClass('w400-yellow-bdr').removeClass('w400-blue-bdr');
-        $(`#inputform-${condId} #td-roof-segment` + (index + 1) + "-length *").attr('disabled', false);
+        $(`#td-roof-segment${index + 1}-length-${condId}`).addClass('w400-yellow-bdr').removeClass('w400-blue-bdr');
+        $(`#td-roof-segment${index + 1}-length-${condId} *`).attr('disabled', false);
     }
     for (index = roofPlane; index < 6; index++) {
         // disable appropricate cells        
-        $(`#inputform-${condId} #td-roof-segment` + (index + 1) + "-length").removeClass('w400-yellow-bdr').addClass('w400-blue-bdr');
-        $(`#inputform-${condId} #td-roof-segment` + (index + 1) + "-length *").attr('disabled', true);
+        $(`#td-roof-segment${index + 1}-length-${condId}`).removeClass('w400-yellow-bdr').addClass('w400-blue-bdr');
+        $(`#td-roof-segment${index + 1}-length-${condId} *`).attr('disabled', true);
     }
 
-    $(`#inputform-${condId} #td-sum-of-length-entered`).html(totalLength.toFixed(2));
+    $(`#td-sum-of-length-entered-${condId}`).html(totalLength.toFixed(2));
 
-    var lengthRoofPlane = parseFloat($(`#inputform-${condId} #txt-length-of-roof-plane`).val());
+    var lengthRoofPlane = parseFloat($(`#txt-length-of-roof-plane-${condId}`).val());
     if (Math.abs(lengthRoofPlane.toFixed(2) - totalLength.toFixed(2)) <= parseFloat($('#companyOffset').val())) {
-        $(`#inputform-${condId} #td-checksum-of-segment1`).html("OK");
-        $(`#inputform-${condId} #td-checksum-of-segment1`).css('background-color', 'white');
+        $(`#td-checksum-of-segment1-${condId}`).html("OK");
+        $(`#td-checksum-of-segment1-${condId}`).css('background-color', 'white');
     }
     else if (lengthRoofPlane.toFixed(2) < totalLength.toFixed(2)) {
-        $(`#inputform-${condId} #td-checksum-of-segment1`).html("Segments add to greater than total length");
-        $(`#inputform-${condId} #td-checksum-of-segment1`).css('background-color', '#FFC7CE');
+        $(`#td-checksum-of-segment1-${condId}`).html("Segments add to greater than total length");
+        $(`#td-checksum-of-segment1-${condId}`).css('background-color', '#FFC7CE');
     }
     else {
-        $(`#inputform-${condId} #td-checksum-of-segment1`).html("Segments add to less than total length");
-        $(`#inputform-${condId} #td-checksum-of-segment1`).css('background-color', '#FFC7CE');
+        $(`#td-checksum-of-segment1-${condId}`).html("Segments add to less than total length");
+        $(`#td-checksum-of-segment1-${condId}`).css('background-color', '#FFC7CE');
     }
 
     updateTrussAndComments(condId, keepStatus);
@@ -1710,32 +1723,32 @@ var updateNumberSegment2 = function (condId, floorPlane, keepStatus = true) {
     floorPlane = parseInt(floorPlane);
 
     for (index = 0; index < floorPlane; index++) {
-        totalLength += parseFloat($(`#inputform-${condId} #txt-floor-segment` + (index + 1) + '-length').val());
+        totalLength += parseFloat($(`#txt-floor-segment${index + 1}-length-${condId}`).val());
 
         // enable appropricate cells        
-        $(`#inputform-${condId} #td-floor-segment` + (index + 1) + "-length").addClass('w400-yellow-bdr').removeClass('w400-blue-bdr');
-        $(`#inputform-${condId} #td-floor-segment` + (index + 1) + "-length *").attr('disabled', false);
+        $(`#td-floor-segment${index + 1}-length-${condId}`).addClass('w400-yellow-bdr').removeClass('w400-blue-bdr');
+        $(`#td-floor-segment${index + 1}-length-${condId} *`).attr('disabled', false);
     }
     for (index = floorPlane; index < 6; index++) {
         // disable appropricate cells        
-        $(`#inputform-${condId} #td-floor-segment` + (index + 1) + "-length").removeClass('w400-yellow-bdr').addClass('w400-blue-bdr');
-        $(`#inputform-${condId} #td-floor-segment` + (index + 1) + "-length *").attr('disabled', true);
+        $(`#td-floor-segment${index + 1}-length-${condId}`).removeClass('w400-yellow-bdr').addClass('w400-blue-bdr');
+        $(`#td-floor-segment${index + 1}-length-${condId} *`).attr('disabled', true);
     }
 
-    $(`#inputform-${condId} #td-total-length-entered`).html(totalLength.toFixed(2));
+    $(`#td-total-length-entered-${condId}`).html(totalLength.toFixed(2));
 
-    var lengthFloorPlane = parseFloat($(`#inputform-${condId} #txt-length-of-floor-plane`).val());
+    var lengthFloorPlane = parseFloat($(`#txt-length-of-floor-plane-${condId}`).val());
     if (Math.abs(lengthFloorPlane.toFixed(2) - totalLength.toFixed(2)) <= parseFloat($('#companyOffset').val())) {
-        $(`#inputform-${condId} #td-checksum-of-segment2`).html("OK");
-        $(`#inputform-${condId} #td-checksum-of-segment2`).css('background-color', 'white');
+        $(`#td-checksum-of-segment2-${condId}`).html("OK");
+        $(`#td-checksum-of-segment2-${condId}`).css('background-color', 'white');
     }
     else if (lengthFloorPlane.toFixed(2) < totalLength.toFixed(2)) {
-        $(`#inputform-${condId} #td-checksum-of-segment2`).html("Segments add to greater than total length");
-        $(`#inputform-${condId} #td-checksum-of-segment2`).css('background-color', '#FFC7CE');
+        $(`#td-checksum-of-segment2-${condId}`).html("Segments add to greater than total length");
+        $(`#td-checksum-of-segment2-${condId}`).css('background-color', '#FFC7CE');
     }
     else {
-        $(`#inputform-${condId} #td-checksum-of-segment2`).html("Segments add to less than total length");
-        $(`#inputform-${condId} #td-checksum-of-segment2`).css('background-color', '#FFC7CE');
+        $(`#td-checksum-of-segment2-${condId}`).html("Segments add to less than total length");
+        $(`#td-checksum-of-segment2-${condId}`).css('background-color', '#FFC7CE');
     }
 
     updateTrussAndComments(condId, keepStatus);
@@ -1743,13 +1756,13 @@ var updateNumberSegment2 = function (condId, floorPlane, keepStatus = true) {
 
 var updateRoofMemberType = function(condId, selectedVal) {
     for (index = 0; index<6; index++) {
-        $(`#inputform-${condId} #td-truss-roof-segment`+ (index+1) + '-type').html(selectedVal);
+        $(`#td-truss-roof-segment${index+1}-type-${condId}`).html(selectedVal);
     }
 }
 
 var updateFloorMemberType = function(condId, selectedVal) {
     for (index = 0; index<6; index++) {
-        $(`#inputform-${condId} #td-truss-floor-segment`+ (index+1) + '-type').html(selectedVal);
+        $(`#td-truss-floor-segment${index+1}-type-${condId}`).html(selectedVal);
     }
 }
 
@@ -1859,8 +1872,8 @@ var drawStickBaseLine = function( condId ) {
     // ctx.clearRect( 0, grid_size, canvas_width, - canvas_height);
     stick_ctx[condId].clearRect( 0, 100, stick_canvas_width[condId] + 100, - stick_canvas_height[condId] - 100);
 
-    var angleRadian = degreeToRadian( parseFloat($(`#inputform-${condId} #a-7-1`).val()) );
-    var overhangLength = parseFloat($(`#inputform-${condId} #a-11-1`).val());
+    var angleRadian = degreeToRadian( parseFloat($(`#a-7-${condId}`).val()) );
+    var overhangLength = parseFloat($(`#a-11-${condId}`).val());
     var overhangX = Math.floor(overhangLength * stick_grid_size[condId] * Math.sin(Math.PI / 2 - angleRadian ));
     var overhangY = Math.floor(overhangLength * stick_grid_size[condId] * Math.sin(angleRadian));
 
@@ -1992,31 +2005,31 @@ var drawStickBaseLine = function( condId ) {
 var adjustStickDrawingPanel = function( condId ) {
     var topYPoint = 0, topXPoint = 0;
 
-    var angleRadian = degreeToRadian( parseFloat($(`#inputform-${condId} #a-7-1`).val()) );
+    var angleRadian = degreeToRadian( parseFloat($(`#a-7-${condId}`).val()) );
     var roofHeight;
     //if(stick_right_input[condId] == 'height')
-        roofHeight = parseFloat($(`#inputform-${condId} #a-9-1`).val());
+        roofHeight = parseFloat($(`#a-9-${condId}`).val());
     // else if(stick_right_input[condId] == 'diagnol')
-    //     roofHeight = parseFloat($(`#inputform-${condId} #a-8-1`).val()) * Math.sin(angleRadian);
+    //     roofHeight = parseFloat($(`#a-8-${condId}`).val()) * Math.sin(angleRadian);
     // else if(stick_right_input[condId] == 'length')
-    //     roofHeight = parseFloat($(`#inputform-${condId} #a-10-1`).val()) * Math.tan(angleRadian);
+    //     roofHeight = parseFloat($(`#a-10-${condId}`).val()) * Math.tan(angleRadian);
     
-    var overhangX = parseFloat($(`#inputform-${condId} #a-11-1`).val()) * Math.sin(Math.PI / 2 - angleRadian);
-    var overhangY = parseFloat($(`#inputform-${condId} #a-11-1`).val()) * Math.sin(angleRadian );
+    var overhangX = parseFloat($(`#a-11-${condId}`).val()) * Math.sin(Math.PI / 2 - angleRadian);
+    var overhangY = parseFloat($(`#a-11-${condId}`).val()) * Math.sin(angleRadian );
 
-    var moduleCount = parseInt($(`#inputform-${condId} #f-1-1`).val());
-    var moduleGap = parseFloat($(`#inputform-${condId} #g-1-1`).val()) / 12;
+    var moduleCount = parseInt($(`#f-1-${condId}`).val());
+    var moduleGap = parseFloat($(`#g-1-${condId}`).val()) / 12;
     var moduleWidth = parseFloat($("#pv-module-width").val()) / 12;
     var moduleHeight = parseFloat($("#pv-module-length").val()) / 12;
 
-    var moduleLengthSum = parseFloat($(`#inputform-${condId} #e-1-1`).val());
+    var moduleLengthSum = parseFloat($(`#e-1-${condId}`).val());
     var orientation;
     for(let i = 1; i <= moduleCount; i ++)
     {
         orientation = false;
-        if($(`#inputform-${condId} #a-6-1`).val() == "Portrait")
+        if($(`#a-6-${condId}`).val() == "Portrait")
             orientation = true;
-        if($(`#inputform-${condId} #h-${i}-1`)[0].checked)
+        if($(`#h-${i}-${condId}`)[0].checked)
             orientation = !orientation;
         
         moduleLengthSum += (moduleGap + (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)));
@@ -2024,9 +2037,9 @@ var adjustStickDrawingPanel = function( condId ) {
 
     // Show alert when module length is longer
     if( roofHeight + overhangY < Math.sin(angleRadian) * moduleLengthSum || (angleRadian != 0 && (1.0 / Math.tan(angleRadian)) * (roofHeight + overhangY) + overhangX < Math.cos(angleRadian) * moduleLengthSum))
-        $(`#inputform-${condId} #stick-module-alert`).css('display', 'block');
+        $(`#stick-module-alert-${condId}`).css('display', 'block');
     else
-        $(`#inputform-${condId} #stick-module-alert`).css('display', 'none');
+        $(`#stick-module-alert-${condId}`).css('display', 'none');
 
     topYPoint = Math.max(roofHeight + overhangY, Math.sin(angleRadian) * moduleLengthSum);
     topXPoint = Math.max(angleRadian != 0 ? (1.0 / Math.tan(angleRadian)) * (roofHeight + overhangY) + overhangX : 0, Math.sin(Math.PI / 2 - angleRadian) * moduleLengthSum);
@@ -2054,7 +2067,7 @@ var adjustStickDrawingPanel = function( condId ) {
 }
 
 var drawStickGraph = function( condId ) {
-    if($(`#inputform-${condId} #a-7-1`).val() == "") // angle should not be empty
+    if($(`#a-7-${condId}`).val() == "") // angle should not be empty
         return;
     adjustStickDrawingPanel(condId);
     drawStickBaseLine(condId);
@@ -2062,11 +2075,11 @@ var drawStickGraph = function( condId ) {
     var label_index = 1;
 
     // Draw Overhang
-    var angle = parseFloat($(`#inputform-${condId} #a-7-1`).val());
+    var angle = parseFloat($(`#a-7-${condId}`).val());
     var angleRadian = degreeToRadian(angle);
     
-    var overhangLength = parseFloat($(`#inputform-${condId} #a-11-1`).val());
-    var uphillDist = parseFloat($(`#inputform-${condId} #e-1-1`).val());
+    var overhangLength = parseFloat($(`#a-11-${condId}`).val());
+    var uphillDist = parseFloat($(`#e-1-${condId}`).val());
 
     stick_ctx[condId].beginPath();
     stick_ctx[condId].lineWidth = 2;
@@ -2093,11 +2106,11 @@ var drawStickGraph = function( condId ) {
     // Draw Roof
     //var roofHeight;
     //if(stick_right_input[condId] == 'height')
-        roofHeight = parseFloat($(`#inputform-${condId} #a-9-1`).val());
+        roofHeight = parseFloat($(`#a-9-${condId}`).val());
     //else if(stick_right_input[condId] == 'diagnol')
-        //roofHeight = parseFloat($(`#inputform-${condId} #a-8-1`).val()) * Math.sin(angleRadian);
+        //roofHeight = parseFloat($(`#a-8-${condId}`).val()) * Math.sin(angleRadian);
     //else if(stick_right_input[condId] == 'length')
-        //roofHeight = parseFloat($(`#inputform-${condId} #a-10-1`).val()) * Math.tan(angleRadian);
+        //roofHeight = parseFloat($(`#a-10-${condId}`).val()) * Math.tan(angleRadian);
 
     if( angleRadian != 0 ){ // Draw Roof when angle is not 0
         stick_ctx[condId].beginPath();
@@ -2143,11 +2156,11 @@ var drawStickGraph = function( condId ) {
     stick_ctx[condId].setLineDash([25, 0]);
 
     // Draw Knee Wall
-    var kneeWallHeight = $(`#inputform-${condId} #c-4-1`).val() == "" ? 0 : parseFloat($(`#inputform-${condId} #c-4-1`).val());
+    var kneeWallHeight = $(`#c-4-${condId}`).val() == "" ? 0 : parseFloat($(`#c-4-${condId}`).val());
 
     if( kneeWallHeight <= roofHeight )
     {
-        $(`#inputform-${condId} #c-4-warn`).css('display', 'none');
+        $(`#c-4-warn-${condId}`).css('display', 'none');
         stick_ctx[condId].beginPath();
         stick_ctx[condId].lineWidth = 2;
         stick_ctx[condId].strokeStyle = "#0000FF";
@@ -2156,13 +2169,13 @@ var drawStickGraph = function( condId ) {
         stick_ctx[condId].stroke();
     }
     else
-        $(`#inputform-${condId} #c-4-warn`).css('display', 'block');
+        $(`#c-4-warn-${condId}`).css('display', 'block');
 
     // Draw Collar Tie
-    var collarTieHeight = $(`#inputform-${condId} #c-2-1`).val() == "" ? 0 : parseFloat($(`#inputform-${condId} #c-2-1`).val());
+    var collarTieHeight = $(`#c-2-${condId}`).val() == "" ? 0 : parseFloat($(`#c-2-${condId}`).val());
     if( collarTieHeight <= roofHeight )
     {
-        $(`#inputform-${condId} #c-2-warn`).css('display', 'none');
+        $(`#c-2-warn-${condId}`).css('display', 'none');
         stick_ctx[condId].beginPath();
         stick_ctx[condId].lineWidth = 2;
         stick_ctx[condId].strokeStyle = "#0000FF";
@@ -2171,14 +2184,14 @@ var drawStickGraph = function( condId ) {
         stick_ctx[condId].stroke();
     }
     else
-        $(`#inputform-${condId} #c-2-warn`).css('display', 'block');
+        $(`#c-2-warn-${condId}`).css('display', 'block');
 
     // Draw solar rectangles
     var startModule = overhangLength - uphillDist;
     var moduleDepth = 1.17 / 12;
     var moduleWidth = parseFloat($("#pv-module-width").val()) / 12;
     var moduleHeight = parseFloat($("#pv-module-length").val()) / 12;
-    var moduleGap = parseFloat($(`#inputform-${condId} #g-1-1`).val()) / 12;
+    var moduleGap = parseFloat($(`#g-1-${condId}`).val()) / 12;
 
     var startPoint = [- Math.sin(Math.PI / 2 - angleRadian) * startModule * stick_grid_size[condId] - stick_grid_size[condId] / 4 * Math.sin(angleRadian), Math.cos(Math.PI / 2 - angleRadian) * startModule * stick_grid_size[condId] - stick_grid_size[condId] / 4];
     stick_ctx[condId].translate(startPoint[0], startPoint[1]);
@@ -2187,21 +2200,21 @@ var drawStickGraph = function( condId ) {
     stick_ctx[condId].lineWidth = 2;
     stick_ctx[condId].strokeStyle = "#000000";
 
-    //totalRoofLength = parseFloat($(`#inputform-${condId} #a-9-1`).val()) / Math.sin(angleRadian);
-    var moduleCount = parseInt($(`#inputform-${condId} #f-1-1`).val());
+    //totalRoofLength = parseFloat($(`#a-9-${condId}`).val()) / Math.sin(angleRadian);
+    var moduleCount = parseInt($(`#f-1-${condId}`).val());
     
     let moduleStartX = 0;
     var orientation = false;
     
-    var supportStart = parseFloat($(`#inputform-${condId} #e-2-1`).val()) - parseFloat($(`#inputform-${condId} #e-1-1`).val());
+    var supportStart = parseFloat($(`#e-2-${condId}`).val()) - parseFloat($(`#e-1-${condId}`).val());
 
     stick_ctx[condId].fillStyle = "#000";
     for(let i = 1; i <= moduleCount; i ++)
     {
         orientation = false;
-        if($(`#inputform-${condId} #a-6-1`).val() == "Portrait")
+        if($(`#a-6-${condId}`).val() == "Portrait")
             orientation = true;
-        if($(`#inputform-${condId} #h-${i}-1`)[0].checked)
+        if($(`#h-${i}-${condId}`)[0].checked)
             orientation = !orientation;
         
         stick_ctx[condId].strokeStyle = "#000000";
@@ -2476,33 +2489,33 @@ $(document).ready(function() {
     var i = 0;
     for(i = 1; i <= 10; i ++)
     {
-        $(`#inputform-${i} #option-roof-slope`).on('change', function() {
+        $(`#option-roof-slope-${i}`).on('change', function() {
             updateRoofSlopeAnotherField(window.conditionId);
         });
-        $(`#inputform-${i} #txt-roof-degree`).change(function(){
+        $(`#txt-roof-degree-${i}`).change(function(){
             $(this).val(parseFloat($(this).val()).toFixed(2));
             updateRoofSlopeAnotherField(window.conditionId);
         });
-        $(`#inputform-${i} #option-number-segments1`).on('change', function() {
+        $(`#option-number-segments1-${i}`).on('change', function() {
             updateNumberSegment1(window.conditionId, $(this).children("option:selected").val());
         });
-        $(`#inputform-${i} #txt-length-of-roof-plane, #inputform-${i} #txt-roof-segment1-length, #inputform-${i} #txt-roof-segment2-length, #inputform-${i} #txt-roof-segment3-length, #inputform-${i} #txt-roof-segment4-length, #inputform-${i} #txt-roof-segment5-length, #inputform-${i} #txt-roof-segment6-length`)
+        $(`#txt-length-of-roof-plane-${i}, #txt-roof-segment1-length-${i}, #txt-roof-segment2-length-${i}, #txt-roof-segment3-length-${i}, #txt-roof-segment4-length-${i}, #txt-roof-segment5-length-${i}, #txt-roof-segment6-length-${i}`)
         .change(function(){
             $(this).val(parseFloat($(this).val()).toFixed(2));
-            updateNumberSegment1(window.conditionId, $(`#inputform-${window.conditionId} #option-number-segments1`).children("option:selected").val());
+            updateNumberSegment1(window.conditionId, $(`#option-number-segments1-${window.conditionId}`).children("option:selected").val());
         });
-        $(`#inputform-${i} #option-number-segments2`).on('change', function() {
+        $(`#option-number-segments2-${i}`).on('change', function() {
             updateNumberSegment2(window.conditionId, $(this).children("option:selected").val());
         });
-        $(`#inputform-${i} #txt-length-of-floor-plane, #inputform-${i} #txt-floor-segment1-length, #inputform-${i} #txt-floor-segment2-length, #inputform-${i} #txt-floor-segment3-length, #inputform-${i} #txt-floor-segment4-length, #inputform-${i} #txt-floor-segment5-length, #inputform-${i} #txt-floor-segment6-length`)
+        $(`#txt-length-of-floor-plane-${i}, #txt-floor-segment1-length-${i}, #txt-floor-segment2-length-${i}, #txt-floor-segment3-length-${i}, #txt-floor-segment4-length-${i}, #txt-floor-segment5-length-${i}, #txt-floor-segment6-length-${i}`)
         .change(function(){
             $(this).val(parseFloat($(this).val()).toFixed(2));
-            updateNumberSegment2(window.conditionId, $(`#inputform-${window.conditionId} #option-number-segments2`).children("option:selected").val());
+            updateNumberSegment2(window.conditionId, $(`#option-number-segments2-${window.conditionId}`).children("option:selected").val());
         });
-        $(`#inputform-${i} #option-roof-member-type`).on('change', function() {
+        $(`#option-roof-member-type-${i}`).on('change', function() {
             updateRoofMemberType(window.conditionId, $(this).children("option:selected").val());
         });
-        $(`#inputform-${i} #option-floor-member-type`).on('change', function() {
+        $(`#option-floor-member-type-${i}`).on('change', function() {
             updateFloorMemberType(window.conditionId, $(this).children("option:selected").val());
         });
         $(`#truss-axis-${i}`).on('change', function() {
@@ -2513,51 +2526,51 @@ $(document).ready(function() {
             stick_show_axis[window.conditionId] = !stick_show_axis[window.conditionId];
             drawStickGraph(window.conditionId);
         });
-        $(`#inputform-${i} #a-6-1, #inputform-${i} #g-1-1`).on('change', function() {
+        $(`#a-6-${i}, #g-1-${i}`).on('change', function() {
             drawTrussGraph(window.conditionId);
             drawStickGraph(window.conditionId);
         });
-        $(`#inputform-${i} #f-1-1, #inputform-${i} #a-11-1, #inputform-${i} #e-1-1, #inputform-${i} #e-2-1`).on('change', function() {
+        $(`#f-1-${i}, #a-11-${i}, #e-1-${i}, #e-2-${i}`).on('change', function() {
             drawTrussGraph(window.conditionId);
             drawStickGraph(window.conditionId);
         });
-        $(`#inputform-${i} #c-2-1, #inputform-${i} #c-4-1`).on('change', function() {
+        $(`#c-2-${i}, #c-4-${i}`).on('change', function() {
             drawStickGraph(window.conditionId);
         });
-        $(`#inputform-${i} #a-7-1`).on('change', function() {
+        $(`#a-7-${i}`).on('change', function() {
             if(this.value == "") { stick_input_changed[window.conditionId] = stick_input_changed[window.conditionId].filter(e => e != 'angle'); return; }
             roofInputMode(window.conditionId, 'angle');
             checkRoofInput(window.conditionId);
             drawStickGraph(window.conditionId);
         });
-        $(`#inputform-${i} #a-8-1`).on('change', function() {
+        $(`#a-8-${i}`).on('change', function() {
             if(this.value == "") { stick_input_changed[window.conditionId] = stick_input_changed[window.conditionId].filter(e => e != 'diagnol'); return; }
             roofInputMode(window.conditionId, 'diagnol');
             checkRoofInput(window.conditionId);
             drawStickGraph(window.conditionId);
         });
-        $(`#inputform-${i} #a-9-1`).on('change', function() {
+        $(`#a-9-${i}`).on('change', function() {
             if(this.value == "") { stick_input_changed[window.conditionId] = stick_input_changed[window.conditionId].filter(e => e != 'height'); return; }
             roofInputMode(window.conditionId, 'height');
             checkRoofInput(window.conditionId);
             drawStickGraph(window.conditionId);
         });
-        $(`#inputform-${i} #a-10-1`).on('change', function() {
+        $(`#a-10-${i}`).on('change', function() {
             if(this.value == "") { stick_input_changed[window.conditionId] = stick_input_changed[window.conditionId].filter(e => e != 'length'); return; }
             roofInputMode(window.conditionId, 'length');
             checkRoofInput(window.conditionId);
             drawStickGraph(window.conditionId);
         });
+        $(`#h-1-${i}, #h-2-${i}, #h-3-${i}, #h-4-${i}, #h-5-${i}, #h-6-${i}, #h-7-${i}, #h-8-${i}, #h-9-${i}, #h-10-${i}, #h-11-${i}, #h-12-${i}`)
+        .click( function() {
+            drawStickGraph(window.conditionId);
+            drawTrussGraph(window.conditionId);
+        });
+        $(`#diag-1-1-${i}, #diag-1-2-${i}, #diag-1-3-${i}, #diag-1-4-${i}, #diag-1-5-${i}, #diag-1-6-${i}, #diag-2-1-${i}, #diag-2-2-${i}, #diag-2-3-${i}, #diag-2-4-${i}, #diag-2-5-${i}, #diag-2-6-${i}, #diag-2-reverse-1-${i}, #diag-2-reverse-2-${i}, #diag-2-reverse-3-${i}, #diag-2-reverse-4-${i}, #diag-2-reverse-5-${i}, #diag-2-reverse-6-${i}`)
+        .click( function(){
+            drawTrussGraph(window.conditionId);
+        });
     }
-    $(`#h-1-1, #h-2-1, #h-3-1, #h-4-1, #h-5-1, #h-6-1, #h-7-1, #h-8-1, #h-9-1, #h-10-1, #h-11-1, #h-12-1`)
-    .click( function() {
-        drawStickGraph(window.conditionId);
-        drawTrussGraph(window.conditionId);
-    });
-    $(`#diag-1-1, #diag-1-2, #diag-1-3, #diag-1-4, #diag-1-5, #diag-1-6, #diag-2-1, #diag-2-2, #diag-2-3, #diag-2-4, #diag-2-5, #diag-2-6, #diag-2-reverse-1, #diag-2-reverse-2, #diag-2-reverse-3, #diag-2-reverse-4, #diag-2-reverse-5, #diag-2-reverse-6`)
-    .click( function(){
-        drawTrussGraph(window.conditionId);
-    });
 
     // Framing condition related function
     // (function(){
@@ -2582,18 +2595,18 @@ $(document).ready(function() {
         var caseCount = $("#option-number-of-conditions").val();
         for(let i = 1; i <= caseCount; i ++){
             if($(`#trussFlagOption-${i}-2`)[0].checked){ // Truss 
-                if($(`#inputform-${i} #td-checksum-of-segment1`).html() != "OK")
+                if($(`#td-checksum-of-segment1-${i}`).html() != "OK")
                     hasWarnings = true;
-                if($(`#inputform-${i} #td-checksum-of-segment2`).html() != "OK")
+                if($(`#td-checksum-of-segment2-${i}`).html() != "OK")
                     hasWarnings = true;
-                if($(`#inputform-${i} #truss-module-alert`)[0].style.display == "block")
+                if($(`#truss-module-alert-${i}`)[0].style.display == "block")
                     hasWarnings = true;
             } else { // Stick
-                if($(`#inputform-${i} #c-2-warn`)[0].style.display == "block")
+                if($(`#c-2-warn-${i}`)[0].style.display == "block")
                     hasWarnings = true;
-                if($(`#inputform-${i} #c-4-warn`)[0].style.display == "block")
+                if($(`#c-4-warn-${i}`)[0].style.display == "block")
                     hasWarnings = true;
-                if($(`#inputform-${i} #stick-module-alert`)[0].style.display == "block")
+                if($(`#stick-module-alert-${i}`)[0].style.display == "block")
                     hasWarnings = true;
             }
         }
@@ -2773,126 +2786,126 @@ $(document).ready(function() {
 
     // Calculate correct values
     function checkRoofInput(condId) {
-        var angleRadian = degreeToRadian($(`#inputform-${condId} #a-7-1`).val());
-        if(stick_right_input[condId] == 'height' && $(`#inputform-${condId} #a-9-1`).val() != "")
+        var angleRadian = degreeToRadian($(`#a-7-${condId}`).val());
+        if(stick_right_input[condId] == 'height' && $(`#a-9-${condId}`).val() != "")
         {
-            var height = parseFloat($(`#inputform-${condId} #a-9-1`).val());
+            var height = parseFloat($(`#a-9-${condId}`).val());
             var rightDiagnol = (height / Math.sin(angleRadian)).toFixed(2);
             var rightLength = (height / Math.tan(angleRadian)).toFixed(2);
 
-            $(`#inputform-${condId} #value-7-1`).css('background', '#ffc'); $(`#inputform-${condId} #calced-7-1`)[0].innerHTML = "";
-            $(`#inputform-${condId} #value-8-1`).css('background', '#95b3d7'); $(`#inputform-${condId} #calced-8-1`)[0].innerHTML = "calculated value";
-            $(`#inputform-${condId} #value-9-1`).css('background', '#ffc'); $(`#inputform-${condId} #calced-9-1`)[0].innerHTML = "";
-            $(`#inputform-${condId} #value-10-1`).css('background', '#95b3d7'); $(`#inputform-${condId} #calced-10-1`)[0].innerHTML = "calculated value";
+            $(`#value-7-${condId}`).css('background', '#ffc'); $(`#calced-7-${condId}`)[0].innerHTML = "";
+            $(`#value-8-${condId}`).css('background', '#95b3d7'); $(`#calced-8-${condId}`)[0].innerHTML = "calculated value";
+            $(`#value-9-${condId}`).css('background', '#ffc'); $(`#calced-9-${condId}`)[0].innerHTML = "";
+            $(`#value-10-${condId}`).css('background', '#95b3d7'); $(`#calced-10-${condId}`)[0].innerHTML = "calculated value";
 
-            $(`#inputform-${condId} #a-8-1`).val(rightDiagnol);
-            $(`#inputform-${condId} #a-10-1`).val(rightLength);
+            $(`#a-8-${condId}`).val(rightDiagnol);
+            $(`#a-10-${condId}`).val(rightLength);
 
-            $(`#inputform-${condId} #ac-7-1`).val($(`#inputform-${condId} #a-7-1`).val());
-            $(`#inputform-${condId} #ac-8-1`).val($(`#inputform-${condId} #a-8-1`).val());
-            $(`#inputform-${condId} #ac-9-1`).val($(`#inputform-${condId} #a-9-1`).val());
-            $(`#inputform-${condId} #ac-10-1`).val($(`#inputform-${condId} #a-10-1`).val());
+            $(`#ac-7-${condId}`).val($(`#a-7-${condId}`).val());
+            $(`#ac-8-${condId}`).val($(`#a-8-${condId}`).val());
+            $(`#ac-9-${condId}`).val($(`#a-9-${condId}`).val());
+            $(`#ac-10-${condId}`).val($(`#a-10-${condId}`).val());
         }
-        else if(stick_right_input[condId] == 'length' && $(`#inputform-${condId} #a-10-1`).val() != "")
+        else if(stick_right_input[condId] == 'length' && $(`#a-10-${condId}`).val() != "")
         {
-            var length = parseFloat($(`#inputform-${condId} #a-10-1`).val());
+            var length = parseFloat($(`#a-10-${condId}`).val());
             var rightDiagnol = (length / Math.cos(angleRadian)).toFixed(2);
             var rightHeight = (length * Math.tan(angleRadian)).toFixed(2);
 
-            $(`#inputform-${condId} #value-7-1`).css('background', '#ffc'); $(`#inputform-${condId} #calced-7-1`)[0].innerHTML = "";
-            $(`#inputform-${condId} #value-8-1`).css('background', '#95b3d7'); $(`#inputform-${condId} #calced-8-1`)[0].innerHTML = "calculated value";
-            $(`#inputform-${condId} #value-9-1`).css('background', '#95b3d7'); $(`#inputform-${condId} #calced-9-1`)[0].innerHTML = "calculated value";
-            $(`#inputform-${condId} #value-10-1`).css('background', '#ffc'); $(`#inputform-${condId} #calced-10-1`)[0].innerHTML = "";
+            $(`#value-7-${condId}`).css('background', '#ffc'); $(`#calced-7-${condId}`)[0].innerHTML = "";
+            $(`#value-8-${condId}`).css('background', '#95b3d7'); $(`#calced-8-${condId}`)[0].innerHTML = "calculated value";
+            $(`#value-9-${condId}`).css('background', '#95b3d7'); $(`#calced-9-${condId}`)[0].innerHTML = "calculated value";
+            $(`#value-10-${condId}`).css('background', '#ffc'); $(`#calced-10-${condId}`)[0].innerHTML = "";
             
-            $(`#inputform-${condId} #a-8-1`).val(rightDiagnol);
-            $(`#inputform-${condId} #a-9-1`).val(rightHeight);
+            $(`#a-8-${condId}`).val(rightDiagnol);
+            $(`#a-9-${condId}`).val(rightHeight);
 
-            $(`#inputform-${condId} #ac-7-1`).val($(`#inputform-${condId} #a-7-1`).val());
-            $(`#inputform-${condId} #ac-8-1`).val($(`#inputform-${condId} #a-8-1`).val());
-            $(`#inputform-${condId} #ac-9-1`).val($(`#inputform-${condId} #a-9-1`).val());
-            $(`#inputform-${condId} #ac-10-1`).val($(`#inputform-${condId} #a-10-1`).val());
+            $(`#ac-7-${condId}`).val($(`#a-7-${condId}`).val());
+            $(`#ac-8-${condId}`).val($(`#a-8-${condId}`).val());
+            $(`#ac-9-${condId}`).val($(`#a-9-${condId}`).val());
+            $(`#ac-10-${condId}`).val($(`#a-10-${condId}`).val());
         }
-        else if(stick_right_input[condId] == 'diagnol' && $(`#inputform-${condId} #a-8-1`).val() != "")
+        else if(stick_right_input[condId] == 'diagnol' && $(`#a-8-${condId}`).val() != "")
         {
-            var diagnol = parseFloat($(`#inputform-${condId} #a-8-1`).val());
+            var diagnol = parseFloat($(`#a-8-${condId}`).val());
             var rightHeight = (diagnol * Math.sin(angleRadian)).toFixed(2);
             var rightWidth = (diagnol * Math.cos(angleRadian)).toFixed(2);
 
-            $(`#inputform-${condId} #value-7-1`).css('background', '#ffc'); $(`#inputform-${condId} #calced-7-1`)[0].innerHTML = "";
-            $(`#inputform-${condId} #value-8-1`).css('background', '#ffc'); $(`#inputform-${condId} #calced-8-1`)[0].innerHTML = "";
-            $(`#inputform-${condId} #value-9-1`).css('background', '#95b3d7'); $(`#inputform-${condId} #calced-9-1`)[0].innerHTML = "calculated value";
-            $(`#inputform-${condId} #value-10-1`).css('background', '#95b3d7'); $(`#inputform-${condId} #calced-10-1`)[0].innerHTML = "calculated value";
+            $(`#value-7-${condId}`).css('background', '#ffc'); $(`#calced-7-${condId}`)[0].innerHTML = "";
+            $(`#value-8-${condId}`).css('background', '#ffc'); $(`#calced-8-${condId}`)[0].innerHTML = "";
+            $(`#value-9-${condId}`).css('background', '#95b3d7'); $(`#calced-9-${condId}`)[0].innerHTML = "calculated value";
+            $(`#value-10-${condId}`).css('background', '#95b3d7'); $(`#calced-10-${condId}`)[0].innerHTML = "calculated value";
 
-            $(`#inputform-${condId} #a-9-1`).val(rightHeight);
-            $(`#inputform-${condId} #a-10-1`).val(rightWidth);
+            $(`#a-9-${condId}`).val(rightHeight);
+            $(`#a-10-${condId}`).val(rightWidth);
 
-            $(`#inputform-${condId} #ac-7-1`).val($(`#inputform-${condId} #a-7-1`).val());
-            $(`#inputform-${condId} #ac-8-1`).val($(`#inputform-${condId} #a-8-1`).val());
-            $(`#inputform-${condId} #ac-9-1`).val($(`#inputform-${condId} #a-9-1`).val());
-            $(`#inputform-${condId} #ac-10-1`).val($(`#inputform-${condId} #a-10-1`).val());
+            $(`#ac-7-${condId}`).val($(`#a-7-${condId}`).val());
+            $(`#ac-8-${condId}`).val($(`#a-8-${condId}`).val());
+            $(`#ac-9-${condId}`).val($(`#a-9-${condId}`).val());
+            $(`#ac-10-${condId}`).val($(`#a-10-${condId}`).val());
         }
-        else if(stick_right_input[condId] == 'diagnolheight' && $(`#inputform-${condId} #a-8-1`).val() != "" && $(`#inputform-${condId} #a-9-1`).val() != "")
+        else if(stick_right_input[condId] == 'diagnolheight' && $(`#a-8-${condId}`).val() != "" && $(`#a-9-${condId}`).val() != "")
         {
-            var diagnol = parseFloat($(`#inputform-${condId} #a-8-1`).val());
-            var height = parseFloat($(`#inputform-${condId} #a-9-1`).val());
+            var diagnol = parseFloat($(`#a-8-${condId}`).val());
+            var height = parseFloat($(`#a-9-${condId}`).val());
             var rightAngle = Math.asin(height / diagnol);
             var rightAngleDegree = radianToDegree(rightAngle).toFixed(2);
             var rightLength = (diagnol * Math.cos(rightAngle)).toFixed(2);
 
-            $(`#inputform-${condId} #value-7-1`).css('background', '#95b3d7'); $(`#inputform-${condId} #calced-7-1`)[0].innerHTML = "calculated value";
-            $(`#inputform-${condId} #value-8-1`).css('background', '#ffc'); $(`#inputform-${condId} #calced-8-1`)[0].innerHTML = "";
-            $(`#inputform-${condId} #value-9-1`).css('background', '#ffc'); $(`#inputform-${condId} #calced-9-1`)[0].innerHTML = "";
-            $(`#inputform-${condId} #value-10-1`).css('background', '#95b3d7'); $(`#inputform-${condId} #calced-10-1`)[0].innerHTML = "calculated value";
+            $(`#value-7-${condId}`).css('background', '#95b3d7'); $(`#calced-7-${condId}`)[0].innerHTML = "calculated value";
+            $(`#value-8-${condId}`).css('background', '#ffc'); $(`#calced-8-${condId}`)[0].innerHTML = "";
+            $(`#value-9-${condId}`).css('background', '#ffc'); $(`#calced-9-${condId}`)[0].innerHTML = "";
+            $(`#value-10-${condId}`).css('background', '#95b3d7'); $(`#calced-10-${condId}`)[0].innerHTML = "calculated value";
             
-            $(`#inputform-${condId} #a-7-1`).val(rightAngleDegree);
-            $(`#inputform-${condId} #a-10-1`).val(rightLength);
+            $(`#a-7-${condId}`).val(rightAngleDegree);
+            $(`#a-10-${condId}`).val(rightLength);
 
-            $(`#inputform-${condId} #ac-7-1`).val($(`#inputform-${condId} #a-7-1`).val());
-            $(`#inputform-${condId} #ac-8-1`).val($(`#inputform-${condId} #a-8-1`).val());
-            $(`#inputform-${condId} #ac-9-1`).val($(`#inputform-${condId} #a-9-1`).val());
-            $(`#inputform-${condId} #ac-10-1`).val($(`#inputform-${condId} #a-10-1`).val());
+            $(`#ac-7-${condId}`).val($(`#a-7-${condId}`).val());
+            $(`#ac-8-${condId}`).val($(`#a-8-${condId}`).val());
+            $(`#ac-9-${condId}`).val($(`#a-9-${condId}`).val());
+            $(`#ac-10-${condId}`).val($(`#a-10-${condId}`).val());
         }
-        else if(stick_right_input[condId] == 'diagnollength' && $(`#inputform-${condId} #a-8-1`).val() != "" && $(`#inputform-${condId} #a-10-1`).val() != "")
+        else if(stick_right_input[condId] == 'diagnollength' && $(`#a-8-${condId}`).val() != "" && $(`#a-10-${condId}`).val() != "")
         {
-            var diagnol = parseFloat($(`#inputform-${condId} #a-8-1`).val());
-            var length = parseFloat($(`#inputform-${condId} #a-10-1`).val());
+            var diagnol = parseFloat($(`#a-8-${condId}`).val());
+            var length = parseFloat($(`#a-10-${condId}`).val());
             var rightAngle = Math.acos(length / diagnol);
             var rightAngleDegree = radianToDegree(rightAngle).toFixed(2);
             var rightHeight = (diagnol * Math.sin(rightAngle)).toFixed(2);
 
-            $(`#inputform-${condId} #value-7-1`).css('background', '#95b3d7'); $(`#inputform-${condId} #calced-7-1`)[0].innerHTML = "calculated value";
-            $(`#inputform-${condId} #value-8-1`).css('background', '#ffc'); $(`#inputform-${condId} #calced-8-1`)[0].innerHTML = "";
-            $(`#inputform-${condId} #value-9-1`).css('background', '#95b3d7'); $(`#inputform-${condId} #calced-9-1`)[0].innerHTML = "calculated value";
-            $(`#inputform-${condId} #value-10-1`).css('background', '#ffc'); $(`#inputform-${condId} #calced-10-1`)[0].innerHTML = "";
+            $(`#value-7-${condId}`).css('background', '#95b3d7'); $(`#calced-7-${condId}`)[0].innerHTML = "calculated value";
+            $(`#value-8-${condId}`).css('background', '#ffc'); $(`#calced-8-${condId}`)[0].innerHTML = "";
+            $(`#value-9-${condId}`).css('background', '#95b3d7'); $(`#calced-9-${condId}`)[0].innerHTML = "calculated value";
+            $(`#value-10-${condId}`).css('background', '#ffc'); $(`#calced-10-${condId}`)[0].innerHTML = "";
             
-            $(`#inputform-${condId} #a-7-1`).val(rightAngleDegree);
-            $(`#inputform-${condId} #a-9-1`).val(rightHeight);
+            $(`#a-7-${condId}`).val(rightAngleDegree);
+            $(`#a-9-${condId}`).val(rightHeight);
 
-            $(`#inputform-${condId} #ac-7-1`).val($(`#inputform-${condId} #a-7-1`).val());
-            $(`#inputform-${condId} #ac-8-1`).val($(`#inputform-${condId} #a-8-1`).val());
-            $(`#inputform-${condId} #ac-9-1`).val($(`#inputform-${condId} #a-9-1`).val());
-            $(`#inputform-${condId} #ac-10-1`).val($(`#inputform-${condId} #a-10-1`).val());
+            $(`#ac-7-${condId}`).val($(`#a-7-${condId}`).val());
+            $(`#ac-8-${condId}`).val($(`#a-8-${condId}`).val());
+            $(`#ac-9-${condId}`).val($(`#a-9-${condId}`).val());
+            $(`#ac-10-${condId}`).val($(`#a-10-${condId}`).val());
         }
-        else if(stick_right_input[condId] == 'heightlength' && $(`#inputform-${condId} #a-9-1`).val() != "" && $(`#inputform-${condId} #a-10-1`).val() != "")
+        else if(stick_right_input[condId] == 'heightlength' && $(`#a-9-${condId}`).val() != "" && $(`#a-10-${condId}`).val() != "")
         {
-            var height = parseFloat($(`#inputform-${condId} #a-9-1`).val());
-            var length = parseFloat($(`#inputform-${condId} #a-10-1`).val());
+            var height = parseFloat($(`#a-9-${condId}`).val());
+            var length = parseFloat($(`#a-10-${condId}`).val());
             var rightAngle = Math.atan(height / length);
             var rightAngleDegree = radianToDegree(rightAngle).toFixed(2);
             var rightDiagnol = (height / Math.sin(rightAngle)).toFixed(2);
 
-            $(`#inputform-${condId} #value-7-1`).css('background', '#95b3d7'); $(`#inputform-${condId} #calced-7-1`)[0].innerHTML = "calculated value";
-            $(`#inputform-${condId} #value-8-1`).css('background', '#95b3d7'); $(`#inputform-${condId} #calced-8-1`)[0].innerHTML = "calculated value";
-            $(`#inputform-${condId} #value-9-1`).css('background', '#ffc'); $(`#inputform-${condId} #calced-9-1`)[0].innerHTML = "";
-            $(`#inputform-${condId} #value-10-1`).css('background', '#ffc'); $(`#inputform-${condId} #calced-10-1`)[0].innerHTML = "";
+            $(`#value-7-${condId}`).css('background', '#95b3d7'); $(`#calced-7-${condId}`)[0].innerHTML = "calculated value";
+            $(`#value-8-${condId}`).css('background', '#95b3d7'); $(`#calced-8-${condId}`)[0].innerHTML = "calculated value";
+            $(`#value-9-${condId}`).css('background', '#ffc'); $(`#calced-9-${condId}`)[0].innerHTML = "";
+            $(`#value-10-${condId}`).css('background', '#ffc'); $(`#calced-10-${condId}`)[0].innerHTML = "";
 
-            $(`#inputform-${condId} #a-7-1`).val(rightAngleDegree);
-            $(`#inputform-${condId} #a-8-1`).val(rightDiagnol);
+            $(`#a-7-${condId}`).val(rightAngleDegree);
+            $(`#a-8-${condId}`).val(rightDiagnol);
 
-            $(`#inputform-${condId} #ac-7-1`).val($(`#inputform-${condId} #a-7-1`).val());
-            $(`#inputform-${condId} #ac-8-1`).val($(`#inputform-${condId} #a-8-1`).val());
-            $(`#inputform-${condId} #ac-9-1`).val($(`#inputform-${condId} #a-9-1`).val());
-            $(`#inputform-${condId} #ac-10-1`).val($(`#inputform-${condId} #a-10-1`).val());
+            $(`#ac-7-${condId}`).val($(`#a-7-${condId}`).val());
+            $(`#ac-8-${condId}`).val($(`#a-8-${condId}`).val());
+            $(`#ac-9-${condId}`).val($(`#a-9-${condId}`).val());
+            $(`#ac-10-${condId}`).val($(`#a-10-${condId}`).val());
         }
     }
 
@@ -2913,8 +2926,8 @@ $(document).ready(function() {
             if (preloaded_data.size == 0)
                 keepStatus = false;
 
-            updateNumberSegment1(i, $(`#inputform-${i} #option-number-segments1`).children("option:selected").val(), keepStatus);
-            updateNumberSegment2(i, $(`#inputform-${i} #option-number-segments2`).children("option:selected").val(), keepStatus);
+            updateNumberSegment1(i, $(`#option-number-segments1-${i}`).children("option:selected").val(), keepStatus);
+            updateNumberSegment2(i, $(`#option-number-segments2-${i}`).children("option:selected").val(), keepStatus);
 
             checkRoofInput(i, 'height');
             // GetCPU();
