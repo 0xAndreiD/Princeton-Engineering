@@ -49,6 +49,25 @@
         </tr>
         <tr class="h13">
             <td><div style="overflow:hidden"></td>
+            <td class="iw400-right-bdr">Wind Exposure Category</td>
+            <td class="w400-green-bdr">
+                <select id="wind-exposure">
+                    <option data-value="A">A</option>
+                    <option data-value="B" selected="">B</option>
+                    <option data-value="C">C</option>
+                    <option data-value="D">D</option>
+                </select>
+            </td>
+        </tr>
+        <tr class="h13">
+            <td><div style="overflow:hidden"></td>
+            <td><div style="overflow:hidden"></td>
+            <td><div style="overflow:hidden"></td>
+            <td><div style="overflow:hidden"></td>
+            <td><div style="overflow:hidden"></td>
+        </tr>
+        <tr class="h13">
+            <td><div style="overflow:hidden"></td>
             <td class="iw400-right-bdr">Units</td>
             <td class="w400-green-bdr">
                 <select id="override-unit">

@@ -681,7 +681,7 @@ var loadPreloadedData = function() {
                         $(`#wind-speed-override`).prop('checked', preloaded_data['WindCheckbox']);
                         $(`#ground-snow`).val(preloaded_data['Snow']);
                         $(`#ground-snow-override`).prop('checked', preloaded_data['SnowCheckbox']);
-
+                        $(`#wind-exposure`).val(preloaded_data['WindExposure']);
                         $(`#override-unit`).val(preloaded_data['Units']);
 
                         for(let i = 1; i <= 10; i ++)
@@ -1402,6 +1402,7 @@ var getData = function(caseCount = 10) {
     alldata['wind-speed-override'] = $('#wind-speed-override')[0].checked;
     alldata['ground-snow'] = $('#ground-snow').val();
     alldata['ground-snow-override'] = $('#ground-snow-override')[0].checked;
+    alldata['wind-exposure'] = $('#wind-exposure').val();
     alldata['override-unit'] = $('#override-unit').val();
 
     return alldata;
