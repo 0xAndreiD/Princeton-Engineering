@@ -131,8 +131,8 @@ function showEditUser(obj, id) {
             $('input#name').val(result.username);
             $('input#password').val(result.password);
             $('input#email').val(result.email);
-            $('select#company').select2('val', result.companyid.toString());
-            $('select#userrole').select2('val', result.userrole.toString());
+            $('select#company').val(result.companyid.toString()).trigger('change');
+            $('select#userrole').val(result.userrole.toString()).trigger('change');
             $('input#usernumber').val(result.usernumber);
             $('input#membership').val(result.membershipid);
             $('button#updateButton').html('Update');
@@ -144,8 +144,8 @@ function showAddUser() {
     $('input#userid').val(0);
     $('input#name').val('');
     $('input#email').val('');
-    $('select#company').val(1);
-    $('select#userrole').val(0);
+    $('select#company').val("1").trigger('change');
+    $('select#userrole').val("0").trigger('change');
     $('input#usernumber').val('');
     $('button#updateButton').html('Add');
 }

@@ -94,7 +94,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="company">Company <span class="text-danger">*</span></label><br/>
-                                    <select class="js-select2 form-control" id="company" name="company">
+                                    <select class="form-control" id="company" name="company">
                                         @foreach ($companyList as $company)
                                             <option value="{{$company->id}}">{{ $company->company_name }}</option>
                                         @endforeach
@@ -102,7 +102,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="userrole">User Role <span class="text-danger">*</span></label><br/>
-                                    <select class="js-select2 form-control" id="userrole" name="userrole">
+                                    <select class="form-control" id="userrole" name="userrole">
                                         <option value="0"><span class='badge badge-info'> User </span></option>
                                         <option value="1"><span class='badge badge-primary'> Client </span></option>
                                         <option value="2"><span class='badge badge-danger'> Admin </span></option>
@@ -155,6 +155,9 @@
             headers:
             { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
         });
+
+        $("#company").select2({ width: '100%' });
+        $("#userrole").select2({ width: '100%' });
     });
 </script>
 @include('admin.user.script')
