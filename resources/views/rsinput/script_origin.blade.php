@@ -528,251 +528,6 @@ var drawTrussGraph = function( condId ) {
 }
 
 var preloaded_data = [];
-var loadPreloadedData = function() {
-    var projectId = $('#projectId').val();
-    if(projectId >= 0){
-        $.ajax({
-            url:"getProjectJson",
-            type:'post',
-            data:{projectId: projectId},
-            success:function(res){
-                if(res.success == true) {
-                    preloaded_data = JSON.parse(res.data);
-                    console.log(preloaded_data);
-                    try{
-                        $('#txt-project-number').val(preloaded_data['ProjectInfo']['Number']);
-                        $('#txt-project-name').val(preloaded_data['ProjectInfo']['Name']);
-                        $('#txt-street-address').val(preloaded_data['ProjectInfo']['Street']);
-                        $('#txt-city').val(preloaded_data['ProjectInfo']['City']);
-                        $('#option-state').val(preloaded_data['ProjectInfo']['State']);
-                        detectCorrectTownForMA();
-                        $('#txt-zip').val(preloaded_data['ProjectInfo']['Zip']);
-
-                        $('#txt-name-of-field-personnel').val(preloaded_data['Personnel']['Name']);
-                        $('#date-of-field-visit').val(preloaded_data['Personnel']['DateOfFieldVisit']);
-                        $('#date-of-plan-set').val(preloaded_data['Personnel']['DateOfPlanSet']);
-
-                        $('#txt-building-age').val(preloaded_data['BuildingAge']);
-
-                        $('#option-module-quantity').val(preloaded_data['Equipment']['PVModule']['Quantity']);
-                        $('#option-inverter-quantity').val(preloaded_data['Equipment']['PVInverter']['Quantity']);
-
-                        $("#option-number-of-conditions").val(preloaded_data['NumberLoadingConditions']);
-                        updateNumberOfConditions(parseInt(preloaded_data['NumberLoadingConditions']));
-
-                        for(let i = 0; i < preloaded_data['LoadingCase'].length; i ++)
-                        {
-                            let caseData = preloaded_data['LoadingCase'][i];
-                            $(`#trussFlagOption-${i + 1}-1`).prop('checked', !caseData['TrussFlag']);
-                            $(`#trussFlagOption-${i + 1}-2`).prop('checked', caseData['TrussFlag']);
-                            fcChangeType(i + 1, caseData['TrussFlag']);
-                            $(`#a-2-${i + 1}`).val(caseData['RoofDataInput']['A2']);
-                            $(`#a-3-${i + 1}`).val(caseData['RoofDataInput']['A3']);
-                            $(`#a-4-${i + 1}`).val(caseData['RoofDataInput']['A4']);
-                            $(`#a-5-${i + 1}`).val(caseData['RoofDataInput']['A5']);
-                            $(`#a-6-${i + 1}`).val(caseData['RoofDataInput']['A6']);
-                            $(`#a-7-${i + 1}`).val(caseData['RoofDataInput']['A7']);
-                            $(`#a-8-${i + 1}`).val(caseData['RoofDataInput']['A8']);
-                            $(`#a-9-${i + 1}`).val(caseData['RoofDataInput']['A9']);
-                            $(`#a-10-${i + 1}`).val(caseData['RoofDataInput']['A10']);
-                            $(`#a-11-${i + 1}`).val(caseData['RoofDataInput']['A11']);
-
-                            $(`#b-1-${i + 1}`).val(caseData['RafterDataInput']['B1']);
-                            $(`#b-2-${i + 1}`).val(caseData['RafterDataInput']['B2']);
-                            $(`#b-3-${i + 1}`).val(caseData['RafterDataInput']['B3']);
-                            $(`#b-4-${i + 1}`).val(caseData['RafterDataInput']['B4']);
-
-                            $(`#c-1-${i + 1}`).val(caseData['CollarTieInformation']['C1']);
-                            $(`#c-2-${i + 1}`).val(caseData['CollarTieInformation']['C2']);
-                            $(`#c-3-${i + 1}`).val(caseData['CollarTieInformation']['C3']);
-                            $(`#c-4-${i + 1}`).val(caseData['CollarTieInformation']['C4']);
-
-                            $(`#d-1-${i + 1}`).val(caseData['RoofDeckSurface']['D1']);
-                            $(`#d-2-${i + 1}`).val(caseData['RoofDeckSurface']['D2']);
-                            $(`#d-3-${i + 1}`).val(caseData['RoofDeckSurface']['D3']);
-
-                            $(`#e-1-${i + 1}`).val(caseData['Location']['E1']);
-                            $(`#e-2-${i + 1}`).val(caseData['Location']['E2']);
-                            $(`#e-3-${i + 1}`).val(caseData['Location']['E3']);
-
-                            $(`#f-1-${i + 1}`).val(caseData['NumberOfModules']['F1']);
-                            maxModuleNumChange(i + 1);
-                            $(`#g-1-${i + 1}`).val(caseData['NSGap']['G1']);
-                            
-                            $(`#h-1-${i + 1}`).prop('checked', caseData['RotateModuleOrientation']['H1']);
-                            $(`#h-2-${i + 1}`).prop('checked', caseData['RotateModuleOrientation']['H2']);
-                            $(`#h-3-${i + 1}`).prop('checked', caseData['RotateModuleOrientation']['H3']);
-                            $(`#h-4-${i + 1}`).prop('checked', caseData['RotateModuleOrientation']['H4']);
-                            $(`#h-5-${i + 1}`).prop('checked', caseData['RotateModuleOrientation']['H5']);
-                            $(`#h-6-${i + 1}`).prop('checked', caseData['RotateModuleOrientation']['H6']);
-                            $(`#h-7-${i + 1}`).prop('checked', caseData['RotateModuleOrientation']['H7']);
-                            $(`#h-8-${i + 1}`).prop('checked', caseData['RotateModuleOrientation']['H8']);
-                            $(`#h-9-${i + 1}`).prop('checked', caseData['RotateModuleOrientation']['H9']);
-                            $(`#h-10-${i + 1}`).prop('checked', caseData['RotateModuleOrientation']['H10']);
-                            $(`#h-11-${i + 1}`).prop('checked', caseData['RotateModuleOrientation']['H11']);
-                            $(`#h-12-${i + 1}`).prop('checked', caseData['RotateModuleOrientation']['H12']);
-
-                            $(`#i-1-${i + 1}`).val(caseData['Notes']['I1']);
-
-                            let trussData = caseData['TrussDataInput'];
-                            $(`#option-roof-slope-${i + 1}`).val(trussData['RoofSlope']['Type']);
-                            $(`#txt-roof-degree-${i + 1}`).val(trussData['RoofSlope']['Degree']);
-                            $(`#td-unknown-degree1-${i + 1}`).val(trussData['RoofSlope']['UnknownDegree']);
-                            $(`#td-calculated-roof-plane-length-${i + 1}`).val(trussData['RoofSlope']['CalculatedRoofPlaneLength']);
-                            $(`#td-diff-between-measured-and-calculated-${i + 1}`).val(trussData['RoofSlope']['td-diff-between-measured-and-calculated']);
-
-                            $(`#option-roof-member-type-${i + 1}`).val(trussData['RoofPlane']['MemberType']);
-                            updateRoofMemberType(i + 1, trussData['RoofPlane']['MemberType']);
-                            $(`#txt-length-of-roof-plane-${i + 1}`).val(trussData['RoofPlane']['Length']);
-                            $(`#option-number-segments1-${i + 1}`).val(trussData['RoofPlane']['NumberOfSegments']);
-                            $(`#option-number-segments1-${i + 1} > option`).each(function() { 
-                                if ($(this).attr('data-value') == trussData['RoofPlane']['NumberOfSegments']) {
-                                    $(this).attr('selected', true);
-                                }
-                                else {
-                                    $(this).attr('selected', false);
-                                }         
-                            });
-                            $(`#td-sum-of-length-entered-${i + 1}`).val(trussData['RoofPlane']['SumOfLengthsEntered']);
-                            $(`#td-checksum-of-segment1-${i + 1}`).val(trussData['RoofPlane']['ChecksumOfChordLength']);
-                            if(trussData['RoofPlane']['LengthOfSegment1']) $(`#txt-roof-segment1-length-${i + 1}`).val(trussData['RoofPlane']['LengthOfSegment1']);
-                            if(trussData['RoofPlane']['LengthOfSegment2']) $(`#txt-roof-segment2-length-${i + 1}`).val(trussData['RoofPlane']['LengthOfSegment2']);
-                            if(trussData['RoofPlane']['LengthOfSegment3']) $(`#txt-roof-segment3-length-${i + 1}`).val(trussData['RoofPlane']['LengthOfSegment3']);
-                            if(trussData['RoofPlane']['LengthOfSegment4']) $(`#txt-roof-segment4-length-${i + 1}`).val(trussData['RoofPlane']['LengthOfSegment4']);
-                            if(trussData['RoofPlane']['LengthOfSegment5']) $(`#txt-roof-segment5-length-${i + 1}`).val(trussData['RoofPlane']['LengthOfSegment5']);
-                            if(trussData['RoofPlane']['LengthOfSegment6']) $(`#txt-roof-segment6-length-${i + 1}`).val(trussData['RoofPlane']['LengthOfSegment6']);
-                            updateNumberSegment1(i + 1, parseInt(trussData['RoofPlane']['NumberOfSegments']));
-
-                            $(`#option-floor-member-type-${i + 1}`).val(trussData['FloorPlane']['MemberType']);
-                            updateFloorMemberType(i + 1, trussData['FloorPlane']['MemberType']);
-                            $(`#txt-length-of-floor-plane-${i + 1}`).val(trussData['FloorPlane']['Length']);
-                            $(`#option-number-segments2-${i + 1}`).val(trussData['FloorPlane']['NumberOfSegments']);
-                            $(`#option-number-segments2-${i + 1} > option`).each(function() { 
-                                if ($(this).attr('data-value') == trussData['FloorPlane']['NumberOfSegments'])
-                                    $(this).attr('selected', true);
-                                else
-                                    $(this).attr('selected', false);      
-                            });
-                            $(`#td-total-length-entered-${i + 1}`).val(trussData['FloorPlane']['SumOfLengthsEntered']);
-                            $(`#td-checksum-of-segment2-${i + 1}`).val(trussData['FloorPlane']['ChecksumOfChordLength']);
-                            if(trussData['FloorPlane']['LengthOfSegment1']) $(`#txt-floor-segment1-length-${i + 1}`).val(trussData['FloorPlane']['LengthOfSegment1']);
-                            if(trussData['FloorPlane']['LengthOfSegment2']) $(`#txt-floor-segment2-length-${i + 1}`).val(trussData['FloorPlane']['LengthOfSegment2']);
-                            if(trussData['FloorPlane']['LengthOfSegment3']) $(`#txt-floor-segment3-length-${i + 1}`).val(trussData['FloorPlane']['LengthOfSegment3']);
-                            if(trussData['FloorPlane']['LengthOfSegment4']) $(`#txt-floor-segment4-length-${i + 1}`).val(trussData['FloorPlane']['LengthOfSegment4']);
-                            if(trussData['FloorPlane']['LengthOfSegment5']) $(`#txt-floor-segment5-length-${i + 1}`).val(trussData['FloorPlane']['LengthOfSegment5']);
-                            if(trussData['FloorPlane']['LengthOfSegment6']) $(`#txt-floor-segment6-length-${i + 1}`).val(trussData['FloorPlane']['LengthOfSegment6']);
-                            updateNumberSegment2(i + 1, parseInt(trussData['FloorPlane']['NumberOfSegments']));
-
-                            for(let j = 0; j < caseData['Diagonal1'].length; j ++){
-                                $(`#diag-1-${j + 1}-${i + 1}`).prop('checked', !caseData['Diagonal1'][j]['include']);
-                                $(`#option-diagonals-mem1-${j + 1}-type-${i + 1}`).val(caseData['Diagonal1'][j]['memType']);
-                                $(`#td-diag-1-${j + 1}-${i + 1}`).val(caseData['Diagonal1'][j]['memId']);
-                            }
-
-                            for(let j = 0; j < caseData['Diagonal2'].length; j ++){
-                                $(`#diag-2-${j + 1}-${i + 1}`).prop('checked', !caseData['Diagonal2'][j]['include']);
-                                $(`#diag-2-reverse-${j + 1}-${i + 1}`).prop('checked', caseData['Diagonal2'][j]['reverse']);
-                                $(`#option-diagonals-mem2-${j + 1}-type-${i + 1}`).val(caseData['Diagonal2'][j]['memType']);
-                                $(`#td-diag-2-${j + 1}-${i + 1}`).val(caseData['Diagonal2'][j]['memId']);
-                            }
-                        }
-
-                        $(`#wind-speed`).val(preloaded_data['Wind']);
-                        $(`#wind-speed-override`).prop('checked', preloaded_data['WindCheckbox']);
-                        $(`#ground-snow`).val(preloaded_data['Snow']);
-                        $(`#ground-snow-override`).prop('checked', preloaded_data['SnowCheckbox']);
-                        $(`#wind-exposure`).val(preloaded_data['WindExposure']);
-                        $(`#override-unit`).val(preloaded_data['Units']);
-
-                        for(let i = 1; i <= 10; i ++)
-                        {
-                            drawTrussGraph(i);
-                            drawStickGraph(i);
-                        }
-                    }
-                    catch(e){
-                        console.log(e);
-                    }
-                } 
-                else{
-                    swal.fire({ title: "Error", text: res.message, icon: "error", confirmButtonText: `OK` });
-                }
-            },
-            error: function(xhr, status, error) {
-                res = JSON.parse(xhr.responseText);
-                swal.fire({ title: "Error", text: res.message, icon: "error", confirmButtonText: `OK` });
-            }
-        });
-    }
-
-    // $('input:text:enabled').each(function() { 
-    //     if (typeof preloaded_data[$(this).attr('id')] !== 'undefined')
-    //         $(this).val(preloaded_data[$(this).attr('id')]);
-    // });
-    // $('input[type=checkbox]:enabled').each(function() { 
-    //     if (typeof preloaded_data[$(this).attr('id')] !== 'undefined') {
-    //         console.log($(this).attr('id') + " : " + preloaded_data[$(this).attr('id')]);
-    //         if (preloaded_data[$(this).attr('id')] == 'on') {
-    //             $(this).prop('checked', true);
-    //         }
-    //         else {
-    //             $(this).prop('checked', false);
-    //         }         
-    //     }
-    // });
-    // // $("input[name='mail']:enabled".each(function() { 
-    // //     data[$(this).attr('id')] = $(this).val();
-    // // });
-    // $('input[type=date]:enabled').each(function() { 
-    //     if (typeof preloaded_data[$(this).attr('id')] !== 'undefined') {
-    //         $(this).val(preloaded_data[$(this).attr('id')]);
-    //     }
-    // });
-    // $('select:enabled').each(function() { 
-    //     if (typeof preloaded_data[$(this).attr('id')] !== 'undefined') {
-    //         selectedValue = preloaded_data[$(this).attr('id')];
-    //         $(this).find('option').each(function() {
-    //             console.log($(this).val() + " : " + selectedValue);
-    //             if ($(this).val() == selectedValue) {
-    //                 $(this).prop('selected', true);
-    //             }
-    //         })
-
-    //         // $(this).val(preloaded_data[$(this).attr('id')]);
-    //     }
-    // });
-
-    // // $('#option-module-option1').html(preloaded_data['option-module-option1']);
-    // // $('#option-module-option2').html(preloaded_data['option-module-option2']);
-    // // $('#option-inverter-option1').html(preloaded_data['option-inverter-option1']);
-    // // $('#option-inverter-option2').html(preloaded_data['option-inverter-option2']);
-    // // $('#option-stanchion-option1').html(preloaded_data['option-stanchion-option1']);
-    // // $('#option-stanchion-option2').html(preloaded_data['option-stanchion-option2']);
-    // // $('#option-railsupport-option1').html(preloaded_data['option-railsupport-option1']);
-    // // $('#option-railsupport-option2').html(preloaded_data['option-railsupport-option2']);
-
-    // $('#td-unknown-degree1').html(preloaded_data['td-unknown-degree1']);
-    // $('#td-calculated-roof-plane-length').html(preloaded_data['td-calculated-roof-plane-length']);
-    // $('#td-diff-between-measured-and-calculated').html(preloaded_data['td-diff-between-measured-and-calculated']);
-    // $('#td-sum-of-length-entered').html(preloaded_data['td-sum-of-length-entered']);
-    // $('#td-checksum-of-segment1').html(preloaded_data['td-checksum-of-segment1']);
-    // $('#td-total-length-entered').html(preloaded_data['td-total-length-entered']);
-    // $('#td-checksum-of-segment2').html(preloaded_data['td-checksum-of-segment2']);
-
-    // $('#td-diag-1-1').html(preloaded_data['td-diag-1-1']);
-    // $('#td-diag-1-2').html(preloaded_data['td-diag-1-2']);
-    // $('#td-diag-1-3').html(preloaded_data['td-diag-1-3']);
-    // $('#td-diag-1-4').html(preloaded_data['td-diag-1-4']);
-    // $('#td-diag-1-5').html(preloaded_data['td-diag-1-5']);
-    // $('#td-diag-1-6').html(preloaded_data['td-diag-1-6']);
-
-    // $('#td-diag-2-1').html(preloaded_data['td-diag-2-1']);
-    // $('#td-diag-2-2').html(preloaded_data['td-diag-2-2']);
-    // $('#td-diag-2-3').html(preloaded_data['td-diag-2-3']);
-    // $('#td-diag-2-4').html(preloaded_data['td-diag-2-4']);
-    // $('#td-diag-2-5').html(preloaded_data['td-diag-2-5']);
-    // $('#td-diag-2-6').html(preloaded_data['td-diag-2-6']);
-}
 
 var availableUSState = [
   "AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","ME","MD","MA","MI","MN","MS","MO","MT",
@@ -1257,7 +1012,7 @@ var updateNumberOfConditions = function(conditions) {
     }
 }
 
-var ignorable = ['a-7-', 'a-8-', 'a-9-', 'a-10-', 'ac-7-', 'ac-8-', 'ac-9-', 'ac-10-', 'c-1-', 'c-2-', 'c-3-', 'c-4-'];
+var ignorable = ['a-7-', 'a-8-', 'af-8-', 'ai-8-', 'a-9-', 'af-9-', 'ai-9-', 'a-10-', 'af-10-', 'ai-10-', 'ac-7-', 'ac-8-', 'ac-9-', 'ac-10-', 'c-1-', 'c-2-', 'cf-2-', 'ci-2-', 'c-3-', 'cf-3-', 'ci-3-', 'c-4-', 'cf-4-', 'ci-4-', 'calc-algorithm-'];
 
 var isIgnorable = function(id) {
     let canIgnore = false;
@@ -1301,6 +1056,11 @@ var isEmptyInputBox = function() {
         }
         // skip sweet alert
         if(typeof $(this).attr('class') == "string" && $(this).attr('class').includes('swal2-input'))
+            return;
+        // skip feet / inch pair input
+        if(typeof $(this).attr('id') == "string" && ($(this).attr('id').includes("f-") && $('#' + $(this).attr('id').replace('f-', 'i-')).val() != ""))
+            return;
+        if(typeof $(this).attr('id') == "string" && ($(this).attr('id').includes("i-") && $('#' + $(this).attr('id').replace('i-', 'f-')).val() != ""))
             return;
 
         $(this).css('background-color', '#FFC7CE');
@@ -2571,6 +2331,9 @@ $(document).ready(function() {
         .click( function(){
             drawTrussGraph(window.conditionId);
         });
+        $(`#af-2-${i}, #ai-2-${i}, #af-3-${i}, #ai-3-${i}, #af-4-${i}, #ai-4-${i}, #af-8-${i}, #ai-8-${i}, #af-9-${i}, #ai-9-${i}, #af-10-${i}, #ai-10-${i}, #af-11-${i}, #ai-11-${i}, #cf-2-${i}, #ci-2-${i}, #cf-4-${i}, #ai-4-${i}, #ef-1-${i}, #ei-1-${i}, #ef-2-${i}, #ei-2-${i}`).on('change', function() {
+            calcDecimalFeet($(this).attr('id'));
+        });
     }
 
     // Framing condition related function
@@ -2590,6 +2353,24 @@ $(document).ready(function() {
     //     });
     // })();
     //}
+
+    var calcDecimalFeet = function(activeId) {
+        if(activeId.includes('i-')){ // active input is inch
+            var feetId = activeId.replace('i-', 'f-');
+            var decimalFeetId = activeId.replace('i', '');
+            var decimalValue = parseFloat($(`#${feetId}`).val() == "" ? 0 : $(`#${feetId}`).val()) + parseFloat($(`#${activeId}`).val() == "" ? 0 : $(`#${activeId}`).val()) / 12;
+            $(`#${decimalFeetId}`).val(decimalValue.toFixed(2));
+            $(`#${decimalFeetId}`).trigger('change');
+        }
+        else if(activeId.includes('f-')){
+            var inchId = activeId.replace('f-', 'i-');
+            var decimalFeetId = activeId.replace('f', '');
+            var decimalValue = parseFloat($(`#${activeId}`).val() == "" ? 0 : $(`#${activeId}`).val()) + parseFloat($(`#${inchId}`).val() == "" ? 0 : $(`#${inchId}`).val()) / 12;
+            $(`#${decimalFeetId}`).val(decimalValue.toFixed(2));
+            console.log(activeId, inchId, $(`#${activeId}`).val(), $(`#${inchId}`).val());
+            $(`#${decimalFeetId}`).trigger('change');
+        }
+    }
 
     var checkWarnings = function() {
         var hasWarnings = false;
@@ -2782,11 +2563,12 @@ $(document).ready(function() {
             else if(stick_input_changed[condId].indexOf('height') > -1 && stick_input_changed[condId].indexOf('length') > -1)
                 stick_right_input[condId] = 'heightlength';
         }
+        $(`#calc-algorithm-${condId}`).val(stick_right_input[condId]);
         console.log(stick_right_input[condId]);
     }
 
     // Calculate correct values
-    function checkRoofInput(condId) {
+    var checkRoofInput = function(condId) {
         var angleRadian = degreeToRadian($(`#a-7-${condId}`).val());
         if(stick_right_input[condId] == 'height' && $(`#a-9-${condId}`).val() != "")
         {
@@ -2795,12 +2577,12 @@ $(document).ready(function() {
             var rightLength = (height / Math.tan(angleRadian)).toFixed(2);
 
             $(`#value-7-${condId}`).css('background', '#ffc'); $(`#calced-7-${condId}`)[0].innerHTML = "";
-            $(`#value-8-${condId}`).css('background', '#95b3d7'); $(`#calced-8-${condId}`)[0].innerHTML = "calculated value";
-            $(`#value-9-${condId}`).css('background', '#ffc'); $(`#calced-9-${condId}`)[0].innerHTML = "";
-            $(`#value-10-${condId}`).css('background', '#95b3d7'); $(`#calced-10-${condId}`)[0].innerHTML = "calculated value";
-
-            $(`#a-8-${condId}`).val(rightDiagnol);
-            $(`#a-10-${condId}`).val(rightLength);
+            $(`#valuef-8-${condId}`).css('background', '#95b3d7'); $(`#valuei-8-${condId}`).css('background', '#95b3d7'); $(`#calced-8-${condId}`)[0].innerHTML = "calculated value";
+            $(`#valuef-9-${condId}`).css('background', '#ffc'); $(`#valuei-9-${condId}`).css('background', '#ffc'); $(`#calced-9-${condId}`)[0].innerHTML = "";
+            $(`#valuef-10-${condId}`).css('background', '#95b3d7'); $(`#valuei-10-${condId}`).css('background', '#95b3d7'); $(`#calced-10-${condId}`)[0].innerHTML = "calculated value";
+            
+            $(`#af-8-${condId}`).val(""); $(`#ai-8-${condId}`).val(""); $(`#a-8-${condId}`).val(rightDiagnol);
+            $(`#af-10-${condId}`).val(""); $(`#ai-10-${condId}`).val(""); $(`#a-10-${condId}`).val(rightLength);
 
             $(`#ac-7-${condId}`).val($(`#a-7-${condId}`).val());
             $(`#ac-8-${condId}`).val($(`#a-8-${condId}`).val());
@@ -2814,12 +2596,12 @@ $(document).ready(function() {
             var rightHeight = (length * Math.tan(angleRadian)).toFixed(2);
 
             $(`#value-7-${condId}`).css('background', '#ffc'); $(`#calced-7-${condId}`)[0].innerHTML = "";
-            $(`#value-8-${condId}`).css('background', '#95b3d7'); $(`#calced-8-${condId}`)[0].innerHTML = "calculated value";
-            $(`#value-9-${condId}`).css('background', '#95b3d7'); $(`#calced-9-${condId}`)[0].innerHTML = "calculated value";
-            $(`#value-10-${condId}`).css('background', '#ffc'); $(`#calced-10-${condId}`)[0].innerHTML = "";
+            $(`#valuef-8-${condId}`).css('background', '#95b3d7'); $(`#valuei-8-${condId}`).css('background', '#95b3d7'); $(`#calced-8-${condId}`)[0].innerHTML = "calculated value";
+            $(`#valuef-9-${condId}`).css('background', '#95b3d7'); $(`#valuei-9-${condId}`).css('background', '#95b3d7'); $(`#calced-9-${condId}`)[0].innerHTML = "calculated value";
+            $(`#valuef-10-${condId}`).css('background', '#ffc'); $(`#valuei-10-${condId}`).css('background', '#ffc'); $(`#calced-10-${condId}`)[0].innerHTML = "";
             
-            $(`#a-8-${condId}`).val(rightDiagnol);
-            $(`#a-9-${condId}`).val(rightHeight);
+            $(`#af-8-${condId}`).val(""); $(`#ai-8-${condId}`).val(""); $(`#a-8-${condId}`).val(rightDiagnol);
+            $(`#af-9-${condId}`).val(""); $(`#ai-9-${condId}`).val(""); $(`#a-9-${condId}`).val(rightHeight);
 
             $(`#ac-7-${condId}`).val($(`#a-7-${condId}`).val());
             $(`#ac-8-${condId}`).val($(`#a-8-${condId}`).val());
@@ -2833,12 +2615,12 @@ $(document).ready(function() {
             var rightWidth = (diagnol * Math.cos(angleRadian)).toFixed(2);
 
             $(`#value-7-${condId}`).css('background', '#ffc'); $(`#calced-7-${condId}`)[0].innerHTML = "";
-            $(`#value-8-${condId}`).css('background', '#ffc'); $(`#calced-8-${condId}`)[0].innerHTML = "";
-            $(`#value-9-${condId}`).css('background', '#95b3d7'); $(`#calced-9-${condId}`)[0].innerHTML = "calculated value";
-            $(`#value-10-${condId}`).css('background', '#95b3d7'); $(`#calced-10-${condId}`)[0].innerHTML = "calculated value";
+            $(`#valuef-8-${condId}`).css('background', '#ffc'); $(`#valuei-8-${condId}`).css('background', '#ffc'); $(`#value-8-${condId}`).css('background', '#ffc'); $(`#calced-8-${condId}`)[0].innerHTML = "";
+            $(`#valuef-9-${condId}`).css('background', '#95b3d7'); $(`#valuei-9-${condId}`).css('background', '#95b3d7'); $(`#value-9-${condId}`).css('background', '#95b3d7'); $(`#calced-9-${condId}`)[0].innerHTML = "calculated value";
+            $(`#valuef-10-${condId}`).css('background', '#95b3d7'); $(`#valuei-10-${condId}`).css('background', '#95b3d7'); $(`#value-10-${condId}`).css('background', '#95b3d7'); $(`#calced-10-${condId}`)[0].innerHTML = "calculated value";
 
-            $(`#a-9-${condId}`).val(rightHeight);
-            $(`#a-10-${condId}`).val(rightWidth);
+            $(`#af-9-${condId}`).val(""); $(`#ai-9-${condId}`).val(""); $(`#a-9-${condId}`).val(rightHeight);
+            $(`#af-10-${condId}`).val(""); $(`#ai-10-${condId}`).val(""); $(`#a-10-${condId}`).val(rightWidth);
 
             $(`#ac-7-${condId}`).val($(`#a-7-${condId}`).val());
             $(`#ac-8-${condId}`).val($(`#a-8-${condId}`).val());
@@ -2854,12 +2636,12 @@ $(document).ready(function() {
             var rightLength = (diagnol * Math.cos(rightAngle)).toFixed(2);
 
             $(`#value-7-${condId}`).css('background', '#95b3d7'); $(`#calced-7-${condId}`)[0].innerHTML = "calculated value";
-            $(`#value-8-${condId}`).css('background', '#ffc'); $(`#calced-8-${condId}`)[0].innerHTML = "";
-            $(`#value-9-${condId}`).css('background', '#ffc'); $(`#calced-9-${condId}`)[0].innerHTML = "";
-            $(`#value-10-${condId}`).css('background', '#95b3d7'); $(`#calced-10-${condId}`)[0].innerHTML = "calculated value";
+            $(`#valuef-8-${condId}`).css('background', '#ffc'); $(`#valuei-8-${condId}`).css('background', '#ffc'); $(`#calced-8-${condId}`)[0].innerHTML = "";
+            $(`#valuef-9-${condId}`).css('background', '#ffc'); $(`#valuei-9-${condId}`).css('background', '#ffc'); $(`#calced-9-${condId}`)[0].innerHTML = "";
+            $(`#valuef-10-${condId}`).css('background', '#95b3d7'); $(`#valuei-10-${condId}`).css('background', '#95b3d7'); $(`#calced-10-${condId}`)[0].innerHTML = "calculated value";
             
-            $(`#a-7-${condId}`).val(rightAngleDegree);
-            $(`#a-10-${condId}`).val(rightLength);
+            $(`#af-7-${condId}`).val(""); $(`#ai-7-${condId}`).val(""); $(`#a-7-${condId}`).val(rightAngleDegree);
+            $(`#af-10-${condId}`).val(""); $(`#ai-10-${condId}`).val(""); $(`#a-10-${condId}`).val(rightLength);
 
             $(`#ac-7-${condId}`).val($(`#a-7-${condId}`).val());
             $(`#ac-8-${condId}`).val($(`#a-8-${condId}`).val());
@@ -2875,12 +2657,12 @@ $(document).ready(function() {
             var rightHeight = (diagnol * Math.sin(rightAngle)).toFixed(2);
 
             $(`#value-7-${condId}`).css('background', '#95b3d7'); $(`#calced-7-${condId}`)[0].innerHTML = "calculated value";
-            $(`#value-8-${condId}`).css('background', '#ffc'); $(`#calced-8-${condId}`)[0].innerHTML = "";
-            $(`#value-9-${condId}`).css('background', '#95b3d7'); $(`#calced-9-${condId}`)[0].innerHTML = "calculated value";
-            $(`#value-10-${condId}`).css('background', '#ffc'); $(`#calced-10-${condId}`)[0].innerHTML = "";
+            $(`#valuef-8-${condId}`).css('background', '#ffc'); $(`#valuei-8-${condId}`).css('background', '#ffc'); $(`#value-8-${condId}`).css('background', '#ffc'); $(`#calced-8-${condId}`)[0].innerHTML = "";
+            $(`#valuef-9-${condId}`).css('background', '#95b3d7'); $(`#valuei-9-${condId}`).css('background', '#95b3d7'); $(`#calced-9-${condId}`)[0].innerHTML = "calculated value";
+            $(`#valuef-10-${condId}`).css('background', '#ffc'); $(`#valuei-10-${condId}`).css('background', '#ffc'); $(`#calced-10-${condId}`)[0].innerHTML = "";
             
-            $(`#a-7-${condId}`).val(rightAngleDegree);
-            $(`#a-9-${condId}`).val(rightHeight);
+            $(`#af-7-${condId}`).val(""); $(`#ai-7-${condId}`).val(""); $(`#a-7-${condId}`).val(rightAngleDegree);
+            $(`#af-9-${condId}`).val(""); $(`#ai-9-${condId}`).val(""); $(`#a-9-${condId}`).val(rightHeight);
 
             $(`#ac-7-${condId}`).val($(`#a-7-${condId}`).val());
             $(`#ac-8-${condId}`).val($(`#a-8-${condId}`).val());
@@ -2896,12 +2678,12 @@ $(document).ready(function() {
             var rightDiagnol = (height / Math.sin(rightAngle)).toFixed(2);
 
             $(`#value-7-${condId}`).css('background', '#95b3d7'); $(`#calced-7-${condId}`)[0].innerHTML = "calculated value";
-            $(`#value-8-${condId}`).css('background', '#95b3d7'); $(`#calced-8-${condId}`)[0].innerHTML = "calculated value";
-            $(`#value-9-${condId}`).css('background', '#ffc'); $(`#calced-9-${condId}`)[0].innerHTML = "";
-            $(`#value-10-${condId}`).css('background', '#ffc'); $(`#calced-10-${condId}`)[0].innerHTML = "";
+            $(`#valuef-8-${condId}`).css('background', '#95b3d7'); $(`#valuei-8-${condId}`).css('background', '#95b3d7'); $(`#calced-8-${condId}`)[0].innerHTML = "calculated value";
+            $(`#valuef-9-${condId}`).css('background', '#ffc'); $(`#valuei-9-${condId}`).css('background', '#ffc'); $(`#calced-9-${condId}`)[0].innerHTML = "";
+            $(`#valuef-10-${condId}`).css('background', '#ffc'); $(`#valuei-10-${condId}`).css('background', '#ffc'); $(`#calced-10-${condId}`)[0].innerHTML = "";
 
-            $(`#a-7-${condId}`).val(rightAngleDegree);
-            $(`#a-8-${condId}`).val(rightDiagnol);
+            $(`#af-7-${condId}`).val(""); $(`#ai-7-${condId}`).val(""); $(`#a-7-${condId}`).val(rightAngleDegree);
+            $(`#af-8-${condId}`).val(""); $(`#ai-8-${condId}`).val(""); $(`#a-8-${condId}`).val(rightDiagnol);
 
             $(`#ac-7-${condId}`).val($(`#a-7-${condId}`).val());
             $(`#ac-8-${condId}`).val($(`#a-8-${condId}`).val());
@@ -2909,6 +2691,289 @@ $(document).ready(function() {
             $(`#ac-10-${condId}`).val($(`#a-10-${condId}`).val());
         }
     }
+
+var loadPreloadedData = function() {
+    var projectId = $('#projectId').val();
+    if(projectId >= 0){
+        $.ajax({
+            url:"getProjectJson",
+            type:'post',
+            data:{projectId: projectId},
+            success:function(res){
+                if(res.success == true) {
+                    preloaded_data = JSON.parse(res.data);
+                    console.log(preloaded_data);
+                    try{
+                        $('#txt-project-number').val(preloaded_data['ProjectInfo']['Number']);
+                        $('#txt-project-name').val(preloaded_data['ProjectInfo']['Name']);
+                        $('#txt-street-address').val(preloaded_data['ProjectInfo']['Street']);
+                        $('#txt-city').val(preloaded_data['ProjectInfo']['City']);
+                        $('#option-state').val(preloaded_data['ProjectInfo']['State']);
+                        detectCorrectTownForMA();
+                        $('#txt-zip').val(preloaded_data['ProjectInfo']['Zip']);
+
+                        $('#txt-name-of-field-personnel').val(preloaded_data['Personnel']['Name']);
+                        $('#date-of-field-visit').val(preloaded_data['Personnel']['DateOfFieldVisit']);
+                        $('#date-of-plan-set').val(preloaded_data['Personnel']['DateOfPlanSet']);
+
+                        $('#txt-building-age').val(preloaded_data['BuildingAge']);
+
+                        $('#option-module-quantity').val(preloaded_data['Equipment']['PVModule']['Quantity']);
+                        $('#option-inverter-quantity').val(preloaded_data['Equipment']['PVInverter']['Quantity']);
+
+                        $("#option-number-of-conditions").val(preloaded_data['NumberLoadingConditions']);
+                        updateNumberOfConditions(parseInt(preloaded_data['NumberLoadingConditions']));
+
+                        for(let i = 0; i < preloaded_data['LoadingCase'].length; i ++)
+                        {
+                            let caseData = preloaded_data['LoadingCase'][i];
+                            $(`#trussFlagOption-${i + 1}-1`).prop('checked', !caseData['TrussFlag']);
+                            $(`#trussFlagOption-${i + 1}-2`).prop('checked', caseData['TrussFlag']);
+                            fcChangeType(i + 1, caseData['TrussFlag']);
+                            $(`#af-2-${i + 1}`).val(caseData['RoofDataInput']['A2_feet']);
+                            $(`#ai-2-${i + 1}`).val(caseData['RoofDataInput']['A2_inches']);
+                            $(`#a-2-${i + 1}`).val(caseData['RoofDataInput']['A2']);
+                            $(`#af-3-${i + 1}`).val(caseData['RoofDataInput']['A3_feet']);
+                            $(`#ai-3-${i + 1}`).val(caseData['RoofDataInput']['A3_inches']);
+                            $(`#a-3-${i + 1}`).val(caseData['RoofDataInput']['A3']);
+                            $(`#af-4-${i + 1}`).val(caseData['RoofDataInput']['A4_feet']);
+                            $(`#ai-4-${i + 1}`).val(caseData['RoofDataInput']['A4_inches']);
+                            $(`#a-4-${i + 1}`).val(caseData['RoofDataInput']['A4']);
+                            $(`#a-5-${i + 1}`).val(caseData['RoofDataInput']['A5']);
+                            $(`#a-6-${i + 1}`).val(caseData['RoofDataInput']['A6']);
+                            $(`#a-7-${i + 1}`).val(caseData['RoofDataInput']['A7']);
+                            $(`#af-8-${i + 1}`).val(caseData['RoofDataInput']['A8_feet']);
+                            $(`#ai-8-${i + 1}`).val(caseData['RoofDataInput']['A8_inches']);
+                            $(`#a-8-${i + 1}`).val(caseData['RoofDataInput']['A8']);
+                            $(`#af-9-${i + 1}`).val(caseData['RoofDataInput']['A9_feet']);
+                            $(`#ai-9-${i + 1}`).val(caseData['RoofDataInput']['A9_inches']);
+                            $(`#a-9-${i + 1}`).val(caseData['RoofDataInput']['A9']);
+                            $(`#af-10-${i + 1}`).val(caseData['RoofDataInput']['A10_feet']);
+                            $(`#ai-10-${i + 1}`).val(caseData['RoofDataInput']['A10_inches']);
+                            $(`#a-10-${i + 1}`).val(caseData['RoofDataInput']['A10']);
+
+                            switch (caseData['RoofDataInput']['A_calc_algorithm']){
+                                case 'diagnol':
+                                    stick_input_changed[i + 1] = ['angle', 'diagnol']; stick_right_input[i + 1] = 'diagnol'; break;
+                                case 'length':
+                                    stick_input_changed[i + 1] = ['angle', 'length']; stick_right_input[i + 1] = 'length'; break;
+                                case 'height':
+                                    stick_input_changed[i + 1] = ['angle', 'height']; stick_right_input[i + 1] = 'height'; break;
+                                case 'diagnolheight':
+                                    stick_input_changed[i + 1] = ['diagnol', 'height']; stick_right_input[i + 1] = 'diagnolheight'; break;
+                                case 'diagnollength':
+                                    stick_input_changed[i + 1] = ['diagnol', 'length']; stick_right_input[i + 1] = 'diagnollength'; break;
+                                case 'heightlength':
+                                    stick_input_changed[i + 1] = ['height', 'length']; stick_right_input[i + 1] = 'heightlength'; break;
+                            }
+
+                            $(`#a-11-${i + 1}`).val(caseData['RoofDataInput']['A11']);
+
+                            $(`#b-1-${i + 1}`).val(caseData['RafterDataInput']['B1']);
+                            $(`#b-2-${i + 1}`).val(caseData['RafterDataInput']['B2']);
+                            $(`#b-3-${i + 1}`).val(caseData['RafterDataInput']['B3']);
+                            $(`#b-4-${i + 1}`).val(caseData['RafterDataInput']['B4']);
+
+                            $(`#c-1-${i + 1}`).val(caseData['CollarTieInformation']['C1']);
+                            $(`#cf-2-${i + 1}`).val(caseData['CollarTieInformation']['C2_feet']);
+                            $(`#ci-2-${i + 1}`).val(caseData['CollarTieInformation']['C2_inches']);
+                            $(`#c-2-${i + 1}`).val(caseData['CollarTieInformation']['C2']);
+                            $(`#c-3-${i + 1}`).val(caseData['CollarTieInformation']['C3']);
+                            $(`#cf-4-${i + 1}`).val(caseData['CollarTieInformation']['C4_feet']);
+                            $(`#ci-4-${i + 1}`).val(caseData['CollarTieInformation']['C4_inches']);
+                            $(`#c-4-${i + 1}`).val(caseData['CollarTieInformation']['C4']);
+
+                            $(`#d-1-${i + 1}`).val(caseData['RoofDeckSurface']['D1']);
+                            $(`#d-2-${i + 1}`).val(caseData['RoofDeckSurface']['D2']);
+                            $(`#d-3-${i + 1}`).val(caseData['RoofDeckSurface']['D3']);
+
+                            $(`#ef-1-${i + 1}`).val(caseData['Location']['E1_feet']);
+                            $(`#ef-1-${i + 1}`).val(caseData['Location']['E1_inches']);
+                            $(`#e-1-${i + 1}`).val(caseData['Location']['E1']);
+                            $(`#ef-2-${i + 1}`).val(caseData['Location']['E2_feet']);
+                            $(`#ef-2-${i + 1}`).val(caseData['Location']['E2_inches']);
+                            $(`#e-2-${i + 1}`).val(caseData['Location']['E2']);
+
+                            $(`#f-1-${i + 1}`).val(caseData['NumberOfModules']['F1']);
+                            maxModuleNumChange(i + 1);
+                            $(`#g-1-${i + 1}`).val(caseData['NSGap']['G1']);
+                            
+                            $(`#h-1-${i + 1}`).prop('checked', caseData['RotateModuleOrientation']['H1']);
+                            $(`#h-2-${i + 1}`).prop('checked', caseData['RotateModuleOrientation']['H2']);
+                            $(`#h-3-${i + 1}`).prop('checked', caseData['RotateModuleOrientation']['H3']);
+                            $(`#h-4-${i + 1}`).prop('checked', caseData['RotateModuleOrientation']['H4']);
+                            $(`#h-5-${i + 1}`).prop('checked', caseData['RotateModuleOrientation']['H5']);
+                            $(`#h-6-${i + 1}`).prop('checked', caseData['RotateModuleOrientation']['H6']);
+                            $(`#h-7-${i + 1}`).prop('checked', caseData['RotateModuleOrientation']['H7']);
+                            $(`#h-8-${i + 1}`).prop('checked', caseData['RotateModuleOrientation']['H8']);
+                            $(`#h-9-${i + 1}`).prop('checked', caseData['RotateModuleOrientation']['H9']);
+                            $(`#h-10-${i + 1}`).prop('checked', caseData['RotateModuleOrientation']['H10']);
+                            $(`#h-11-${i + 1}`).prop('checked', caseData['RotateModuleOrientation']['H11']);
+                            $(`#h-12-${i + 1}`).prop('checked', caseData['RotateModuleOrientation']['H12']);
+
+                            $(`#i-1-${i + 1}`).val(caseData['Notes']['I1']);
+
+                            let trussData = caseData['TrussDataInput'];
+                            $(`#option-roof-slope-${i + 1}`).val(trussData['RoofSlope']['Type']);
+                            $(`#txt-roof-degree-${i + 1}`).val(trussData['RoofSlope']['Degree']);
+                            $(`#td-unknown-degree1-${i + 1}`).val(trussData['RoofSlope']['UnknownDegree']);
+                            $(`#td-calculated-roof-plane-length-${i + 1}`).val(trussData['RoofSlope']['CalculatedRoofPlaneLength']);
+                            $(`#td-diff-between-measured-and-calculated-${i + 1}`).val(trussData['RoofSlope']['td-diff-between-measured-and-calculated']);
+
+                            $(`#option-roof-member-type-${i + 1}`).val(trussData['RoofPlane']['MemberType']);
+                            updateRoofMemberType(i + 1, trussData['RoofPlane']['MemberType']);
+                            $(`#txt-length-of-roof-plane-${i + 1}`).val(trussData['RoofPlane']['Length']);
+                            $(`#option-number-segments1-${i + 1}`).val(trussData['RoofPlane']['NumberOfSegments']);
+                            $(`#option-number-segments1-${i + 1} > option`).each(function() { 
+                                if ($(this).attr('data-value') == trussData['RoofPlane']['NumberOfSegments']) {
+                                    $(this).attr('selected', true);
+                                }
+                                else {
+                                    $(this).attr('selected', false);
+                                }         
+                            });
+                            $(`#td-sum-of-length-entered-${i + 1}`).val(trussData['RoofPlane']['SumOfLengthsEntered']);
+                            $(`#td-checksum-of-segment1-${i + 1}`).val(trussData['RoofPlane']['ChecksumOfChordLength']);
+                            if(trussData['RoofPlane']['LengthOfSegment1']) $(`#txt-roof-segment1-length-${i + 1}`).val(trussData['RoofPlane']['LengthOfSegment1']);
+                            if(trussData['RoofPlane']['LengthOfSegment2']) $(`#txt-roof-segment2-length-${i + 1}`).val(trussData['RoofPlane']['LengthOfSegment2']);
+                            if(trussData['RoofPlane']['LengthOfSegment3']) $(`#txt-roof-segment3-length-${i + 1}`).val(trussData['RoofPlane']['LengthOfSegment3']);
+                            if(trussData['RoofPlane']['LengthOfSegment4']) $(`#txt-roof-segment4-length-${i + 1}`).val(trussData['RoofPlane']['LengthOfSegment4']);
+                            if(trussData['RoofPlane']['LengthOfSegment5']) $(`#txt-roof-segment5-length-${i + 1}`).val(trussData['RoofPlane']['LengthOfSegment5']);
+                            if(trussData['RoofPlane']['LengthOfSegment6']) $(`#txt-roof-segment6-length-${i + 1}`).val(trussData['RoofPlane']['LengthOfSegment6']);
+                            updateNumberSegment1(i + 1, parseInt(trussData['RoofPlane']['NumberOfSegments']));
+
+                            $(`#option-floor-member-type-${i + 1}`).val(trussData['FloorPlane']['MemberType']);
+                            updateFloorMemberType(i + 1, trussData['FloorPlane']['MemberType']);
+                            $(`#txt-length-of-floor-plane-${i + 1}`).val(trussData['FloorPlane']['Length']);
+                            $(`#option-number-segments2-${i + 1}`).val(trussData['FloorPlane']['NumberOfSegments']);
+                            $(`#option-number-segments2-${i + 1} > option`).each(function() { 
+                                if ($(this).attr('data-value') == trussData['FloorPlane']['NumberOfSegments'])
+                                    $(this).attr('selected', true);
+                                else
+                                    $(this).attr('selected', false);      
+                            });
+                            $(`#td-total-length-entered-${i + 1}`).val(trussData['FloorPlane']['SumOfLengthsEntered']);
+                            $(`#td-checksum-of-segment2-${i + 1}`).val(trussData['FloorPlane']['ChecksumOfChordLength']);
+                            if(trussData['FloorPlane']['LengthOfSegment1']) $(`#txt-floor-segment1-length-${i + 1}`).val(trussData['FloorPlane']['LengthOfSegment1']);
+                            if(trussData['FloorPlane']['LengthOfSegment2']) $(`#txt-floor-segment2-length-${i + 1}`).val(trussData['FloorPlane']['LengthOfSegment2']);
+                            if(trussData['FloorPlane']['LengthOfSegment3']) $(`#txt-floor-segment3-length-${i + 1}`).val(trussData['FloorPlane']['LengthOfSegment3']);
+                            if(trussData['FloorPlane']['LengthOfSegment4']) $(`#txt-floor-segment4-length-${i + 1}`).val(trussData['FloorPlane']['LengthOfSegment4']);
+                            if(trussData['FloorPlane']['LengthOfSegment5']) $(`#txt-floor-segment5-length-${i + 1}`).val(trussData['FloorPlane']['LengthOfSegment5']);
+                            if(trussData['FloorPlane']['LengthOfSegment6']) $(`#txt-floor-segment6-length-${i + 1}`).val(trussData['FloorPlane']['LengthOfSegment6']);
+                            updateNumberSegment2(i + 1, parseInt(trussData['FloorPlane']['NumberOfSegments']));
+
+                            for(let j = 0; j < caseData['Diagonal1'].length; j ++){
+                                $(`#diag-1-${j + 1}-${i + 1}`).prop('checked', !caseData['Diagonal1'][j]['include']);
+                                $(`#option-diagonals-mem1-${j + 1}-type-${i + 1}`).val(caseData['Diagonal1'][j]['memType']);
+                                $(`#td-diag-1-${j + 1}-${i + 1}`).val(caseData['Diagonal1'][j]['memId']);
+                            }
+
+                            for(let j = 0; j < caseData['Diagonal2'].length; j ++){
+                                $(`#diag-2-${j + 1}-${i + 1}`).prop('checked', !caseData['Diagonal2'][j]['include']);
+                                $(`#diag-2-reverse-${j + 1}-${i + 1}`).prop('checked', caseData['Diagonal2'][j]['reverse']);
+                                $(`#option-diagonals-mem2-${j + 1}-type-${i + 1}`).val(caseData['Diagonal2'][j]['memType']);
+                                $(`#td-diag-2-${j + 1}-${i + 1}`).val(caseData['Diagonal2'][j]['memId']);
+                            }
+                        }
+
+                        $(`#wind-speed`).val(preloaded_data['Wind']);
+                        $(`#wind-speed-override`).prop('checked', preloaded_data['WindCheckbox']);
+                        $(`#ground-snow`).val(preloaded_data['Snow']);
+                        $(`#ground-snow-override`).prop('checked', preloaded_data['SnowCheckbox']);
+                        $(`#wind-exposure`).val(preloaded_data['WindExposure']);
+                        $(`#override-unit`).val(preloaded_data['Units']);
+
+                        for(let i = 1; i <= 10; i ++)
+                        {
+                            checkRoofInput(i);
+                            drawTrussGraph(i);
+                            drawStickGraph(i);
+                            
+                        }
+                    }
+                    catch(e){
+                        console.log(e);
+                    }
+                } 
+                else{
+                    swal.fire({ title: "Error", text: res.message, icon: "error", confirmButtonText: `OK` });
+                }
+            },
+            error: function(xhr, status, error) {
+                res = JSON.parse(xhr.responseText);
+                swal.fire({ title: "Error", text: res.message, icon: "error", confirmButtonText: `OK` });
+            }
+        });
+    }
+
+    // $('input:text:enabled').each(function() { 
+    //     if (typeof preloaded_data[$(this).attr('id')] !== 'undefined')
+    //         $(this).val(preloaded_data[$(this).attr('id')]);
+    // });
+    // $('input[type=checkbox]:enabled').each(function() { 
+    //     if (typeof preloaded_data[$(this).attr('id')] !== 'undefined') {
+    //         console.log($(this).attr('id') + " : " + preloaded_data[$(this).attr('id')]);
+    //         if (preloaded_data[$(this).attr('id')] == 'on') {
+    //             $(this).prop('checked', true);
+    //         }
+    //         else {
+    //             $(this).prop('checked', false);
+    //         }         
+    //     }
+    // });
+    // // $("input[name='mail']:enabled".each(function() { 
+    // //     data[$(this).attr('id')] = $(this).val();
+    // // });
+    // $('input[type=date]:enabled').each(function() { 
+    //     if (typeof preloaded_data[$(this).attr('id')] !== 'undefined') {
+    //         $(this).val(preloaded_data[$(this).attr('id')]);
+    //     }
+    // });
+    // $('select:enabled').each(function() { 
+    //     if (typeof preloaded_data[$(this).attr('id')] !== 'undefined') {
+    //         selectedValue = preloaded_data[$(this).attr('id')];
+    //         $(this).find('option').each(function() {
+    //             console.log($(this).val() + " : " + selectedValue);
+    //             if ($(this).val() == selectedValue) {
+    //                 $(this).prop('selected', true);
+    //             }
+    //         })
+
+    //         // $(this).val(preloaded_data[$(this).attr('id')]);
+    //     }
+    // });
+
+    // // $('#option-module-option1').html(preloaded_data['option-module-option1']);
+    // // $('#option-module-option2').html(preloaded_data['option-module-option2']);
+    // // $('#option-inverter-option1').html(preloaded_data['option-inverter-option1']);
+    // // $('#option-inverter-option2').html(preloaded_data['option-inverter-option2']);
+    // // $('#option-stanchion-option1').html(preloaded_data['option-stanchion-option1']);
+    // // $('#option-stanchion-option2').html(preloaded_data['option-stanchion-option2']);
+    // // $('#option-railsupport-option1').html(preloaded_data['option-railsupport-option1']);
+    // // $('#option-railsupport-option2').html(preloaded_data['option-railsupport-option2']);
+
+    // $('#td-unknown-degree1').html(preloaded_data['td-unknown-degree1']);
+    // $('#td-calculated-roof-plane-length').html(preloaded_data['td-calculated-roof-plane-length']);
+    // $('#td-diff-between-measured-and-calculated').html(preloaded_data['td-diff-between-measured-and-calculated']);
+    // $('#td-sum-of-length-entered').html(preloaded_data['td-sum-of-length-entered']);
+    // $('#td-checksum-of-segment1').html(preloaded_data['td-checksum-of-segment1']);
+    // $('#td-total-length-entered').html(preloaded_data['td-total-length-entered']);
+    // $('#td-checksum-of-segment2').html(preloaded_data['td-checksum-of-segment2']);
+
+    // $('#td-diag-1-1').html(preloaded_data['td-diag-1-1']);
+    // $('#td-diag-1-2').html(preloaded_data['td-diag-1-2']);
+    // $('#td-diag-1-3').html(preloaded_data['td-diag-1-3']);
+    // $('#td-diag-1-4').html(preloaded_data['td-diag-1-4']);
+    // $('#td-diag-1-5').html(preloaded_data['td-diag-1-5']);
+    // $('#td-diag-1-6').html(preloaded_data['td-diag-1-6']);
+
+    // $('#td-diag-2-1').html(preloaded_data['td-diag-2-1']);
+    // $('#td-diag-2-2').html(preloaded_data['td-diag-2-2']);
+    // $('#td-diag-2-3').html(preloaded_data['td-diag-2-3']);
+    // $('#td-diag-2-4').html(preloaded_data['td-diag-2-4']);
+    // $('#td-diag-2-5').html(preloaded_data['td-diag-2-5']);
+    // $('#td-diag-2-6').html(preloaded_data['td-diag-2-6']);
+}
 
     // initialize function
     var initializeSpreadSheet = function() {
@@ -2930,7 +2995,7 @@ $(document).ready(function() {
             updateNumberSegment1(i, $(`#option-number-segments1-${i}`).children("option:selected").val(), keepStatus);
             updateNumberSegment2(i, $(`#option-number-segments2-${i}`).children("option:selected").val(), keepStatus);
 
-            checkRoofInput(i, 'height');
+            checkRoofInput(i);
             // GetCPU();
         }
     }

@@ -20,7 +20,9 @@
             <col width="80">
             <col width="300">
             <col width="70">
-            <col width="100">
+            <col width="70">
+            <col width="70">
+            <col width="70">
             <col width="250">
         </colgroup>
     <tbody>
@@ -39,8 +41,8 @@
             <td class="iw400-bdr">Item</td>
             <td class="iw400-bdr" colspan="2">Description</td>
             <td class="iw400-bdr">Units</td>
-            <td class="iw400-bdr">Data Entry</td>
-            <td><div style="overflow:hidden"></div></td>
+            <td class="iw400-bdr" colspan="2">Data Entry</td>
+            <td class="iw400-bdr">Dec. Feet</td>
         </tr>
         <tr class="h13">
             <td><div style="overflow:hidden"></td>
@@ -48,31 +50,37 @@
             <td class="w400-bdr">A-1</td>
             <td class="iw400-right-bdr" colspan="2">Framing Condition Number</td>
             <td class="iw400-bdr"></td>
-            <td class="w400-green-bdr">{{ $conditionId }}</td>
+            <td class="w400-green-bdr" colspan="2">{{ $conditionId }}</td>
             <td><div style="overflow:hidden"></td>
         </tr>
         <tr class="h13">
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">A-2</td>
             <td class="iw400-right-bdr" colspan="2">Roof Average Height</td>
-            <td class="iw400-bdr">ft</td>
-            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="a-2-{{ $conditionId }}" tabindex="26" value="30.00"></input></td>
+            <td class="iw400-bdr">ft | in</td>
+            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="af-2-{{ $conditionId }}" tabindex="26" value="30.00"></input></td>
+            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="ai-2-{{ $conditionId }}" tabindex="26" value="0.00"></input></td>
+            <td class="w400-blue-bdr"><input type="text" class="txt-calced" id="a-2-{{ $conditionId }}" tabindex="26" value="30.00"></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
         <tr class="h13">
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">A-3</td>
             <td class="iw400-right-bdr" colspan="2">Plan View Length of Building Section</td>
-            <td class="iw400-bdr">ft</td>
-            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="a-3-{{ $conditionId }}"  tabindex="27" value="31.17"></input></td>
+            <td class="iw400-bdr">ft | in</td>
+            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="af-3-{{ $conditionId }}"  tabindex="27" value="31.17"></input></td>
+            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="ai-3-{{ $conditionId }}"  tabindex="27" value="0.00"></input></td>
+            <td class="w400-blue-bdr"><input type="text" class="txt-calced" id="a-3-{{ $conditionId }}"  tabindex="27" value="31.17"></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
         <tr class="h13">
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">A-4</td>
             <td class="iw400-right-bdr" colspan="2">Plan View Width of Building Section</td>
-            <td class="iw400-bdr">ft</td>
-            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="a-4-{{ $conditionId }}"  tabindex="28" value="14.25"></input></td>
+            <td class="iw400-bdr">ft | in</td>
+            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="af-4-{{ $conditionId }}"  tabindex="28" value="14.25"></input></td>
+            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="ai-4-{{ $conditionId }}"  tabindex="28" value="0.00"></input></td>
+            <td class="w400-blue-bdr"><input type="text" class="txt-calced" id="a-4-{{ $conditionId }}"  tabindex="28" value="14.25"></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
         <tr class="h13">
@@ -80,7 +88,7 @@
             <td class="w400-bdr">A-5</td>
             <td class="iw400-right-bdr" colspan="2">Name of Array Section</td>
             <td class="iw400-bdr">text</td>
-            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="a-5-{{ $conditionId }}"  tabindex="29" value="MP1"></input></td>
+            <td class="w400-yellow-bdr" colspan="2"><input type="text" class="txt-center-align" id="a-5-{{ $conditionId }}"  tabindex="29" value="MP1"></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
         <tr class="h13">
@@ -88,7 +96,7 @@
             <td class="w400-bdr">A-6</td>
             <td class="iw400-right-bdr" colspan="2">Orientation</td>
             <td class="iw400-bdr">select</td>
-            <td class="w400-green-bdr">
+            <td class="w400-green-bdr" colspan="2">
                 <select id="a-6-{{ $conditionId }}" tabindex="30">
                     <option data-value="Landscape" selected="">Landscape</option>
                     <option data-value="Portrait">Portrait</option>
@@ -102,7 +110,7 @@
             <td class="iw400-bdr" style="vertical-align : middle;" rowspan="4">Enter any two values</td>
             <td class="iw400-right-bdr" >Roof Slope</td>
             <td class="iw400-bdr">deg</td>
-            <td id="value-7-{{ $conditionId }}" class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="a-7-{{ $conditionId }}" tabindex="31" value=""></input></td>
+            <td id="value-7-{{ $conditionId }}" class="w400-yellow-bdr" colspan="2"><input type="text" class="txt-center-align" id="a-7-{{ $conditionId }}" tabindex="31" value=""></input></td>
             <td id="calced-7-{{ $conditionId }}" class="calcedCell"></td>
             <input type="text" class="txt-center-align" id="ac-7-{{ $conditionId }}" value="" hidden>
             <!-- <td class="w400-bdr"><input type="checkbox" id="aa-7-1" checked></input></td> -->
@@ -111,8 +119,10 @@
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">A-8</td>
             <td class="iw400-right-bdr">Diagonal Rafter Length from Plate to Ridge</td>
-            <td class="iw400-bdr">ft</td>
-            <td id="value-8-{{ $conditionId }}" class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="a-8-{{ $conditionId }}"  tabindex="32" value=""></input></td>
+            <td class="iw400-bdr">ft | in</td>
+            <td id="valuef-8-{{ $conditionId }}" class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="af-8-{{ $conditionId }}"  tabindex="32" value=""></input></td>
+            <td id="valuei-8-{{ $conditionId }}" class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="ai-8-{{ $conditionId }}"  tabindex="32" value=""></input></td>
+            <td id="value-8-{{ $conditionId }}" class="w400-blue-bdr"><input type="text" class="txt-calced" id="a-8-{{ $conditionId }}"  tabindex="32" value=""></input></td>
             <td id="calced-8-{{ $conditionId }}" class="calcedCell"></td>
             <input type="text" class="txt-center-align" id="ac-8-{{ $conditionId }}" value="" hidden>
             <!-- <td class="w400-bdr" id="tc-8-1" style="pointer-events: none;"><input type="text" class="txt-center-align" id="ac-8-1"></td>
@@ -122,8 +132,10 @@
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">A-9</td>
             <td class="iw400-right-bdr" id="label-A-9-{{ $conditionId }}">Rise from Rafter Plate to Top Ridge</td>
-            <td class="iw400-bdr">ft</td>
-            <td id="value-9-{{ $conditionId }}" class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="a-9-{{ $conditionId }}"  tabindex="33" value=""></input></td>
+            <td class="iw400-bdr">ft | in</td>
+            <td id="valuef-9-{{ $conditionId }}" class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="af-9-{{ $conditionId }}"  tabindex="33" value=""></input></td>
+            <td id="valuei-9-{{ $conditionId }}" class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="ai-9-{{ $conditionId }}"  tabindex="33" value=""></input></td>
+            <td id="value-9-{{ $conditionId }}" class="w400-blue-bdr"><input type="text" class="txt-calced" id="a-9-{{ $conditionId }}"  tabindex="33" value=""></input></td>
             <td id="calced-9-{{ $conditionId }}" class="calcedCell"></td>
             <input type="text" class="txt-center-align" id="ac-9-{{ $conditionId }}" value="" hidden>
             <!-- <td class="w400-bdr" id="tc-9-1" style="pointer-events: none;"><input type="text" class="txt-center-align" id="ac-9-1"></td>
@@ -133,10 +145,13 @@
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">A-10</td>
             <td class="iw400-right-bdr" id="label-A-10-{{ $conditionId }}" >Horiz Len from Outside of Rafter Plate to Ridge</td>
-            <td class="iw400-bdr">ft</td>
-            <td id="value-10-{{ $conditionId }}" class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="a-10-{{ $conditionId }}"  tabindex="34" value=""></input></td>
+            <td class="iw400-bdr">ft | in</td>
+            <td id="valuef-10-{{ $conditionId }}" class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="af-10-{{ $conditionId }}"  tabindex="34" value=""></input></td>
+            <td id="valuei-10-{{ $conditionId }}" class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="ai-10-{{ $conditionId }}"  tabindex="34" value=""></input></td>
+            <td id="value-10-{{ $conditionId }}" class="w400-blue-bdr"><input type="text" class="txt-calced" id="a-10-{{ $conditionId }}"  tabindex="34" value=""></input></td>
             <td id="calced-10-{{ $conditionId }}" class="calcedCell"></td>
             <input type="text" class="txt-center-align" id="ac-10-{{ $conditionId }}" value="" hidden>
+            <input type="text" class="txt-center-align" id="calc-algorithm-{{ $conditionId }}" value="" hidden>
             <!-- <td class="w400-bdr" id="tc-10-1" style="pointer-events: none; display: table-cell !important;"><input type="text" class="txt-center-align" id="ac-10-1"></td>
             <td class="w400-bdr"><input type="checkbox" id="aa-10-1"></input></td> -->
         </tr>
@@ -144,8 +159,10 @@
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">A-11</td>
             <td class="iw400-right-bdr" id="label-A-11-{{ $conditionId }}" colspan="2">Diagonal Overhang Length past Rafter Plate</td>
-            <td class="iw400-bdr">ft</td>
-            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="a-11-{{ $conditionId }}"  tabindex="35" value="0.83"></input></td>
+            <td class="iw400-bdr">ft | in</td>
+            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="af-11-{{ $conditionId }}"  tabindex="35" value="0.83"></input></td>
+            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="ai-11-{{ $conditionId }}"  tabindex="35" value="0.00"></input></td>
+            <td class="w400-blue-bdr"><input type="text" class="txt-calced" id="a-11-{{ $conditionId }}"  tabindex="35" value="0.83"></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
         <tr class="h13 class-truss-hide">
@@ -154,7 +171,7 @@
             <td class="w400-bdr">B-1</td>
             <td class="iw400-right-bdr" colspan="2">Rafter width **</td>
             <td class="iw400-bdr">in</td>
-            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="b-1-{{ $conditionId }}"  tabindex="36" value="1.50"></input></td>
+            <td class="w400-yellow-bdr" colspan="2"><input type="text" class="txt-center-align" id="b-1-{{ $conditionId }}"  tabindex="36" value="1.50"></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
         <tr class="h13 class-truss-hide">
@@ -162,7 +179,7 @@
             <td class="w400-bdr">B-2</td>
             <td class="iw400-right-bdr" colspan="2">Rafter Height **</td>
             <td class="iw400-bdr">in</td>
-            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="b-2-{{ $conditionId }}"  tabindex="37" value="5.50"></input></td>
+            <td class="w400-yellow-bdr" colspan="2"><input type="text" class="txt-center-align" id="b-2-{{ $conditionId }}"  tabindex="37" value="5.50"></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
         <tr class="h13">
@@ -171,7 +188,7 @@
             <td class="w400-bdr">B-3</td>
             <td class="iw400-right-bdr" id="label-B-3-{{ $conditionId }}" colspan="2">Joist Spacing - Center to Center</td>
             <td class="iw400-bdr">in</td>
-            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="b-3-{{ $conditionId }}"  tabindex="38" value="16.00"></input></td>
+            <td class="w400-yellow-bdr" colspan="2"><input type="text" class="txt-center-align" id="b-3-{{ $conditionId }}"  tabindex="38" value="16.00"></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
         <tr class="h13">
@@ -179,7 +196,7 @@
             <td class="w400-bdr">B-4</td>
             <td class="iw400-right-bdr" id="label-B-4-{{ $conditionId }}" colspan="2">Rafter Material</td>
             <td class="iw400-bdr">select</td>
-            <td class="w400-green-bdr">
+            <td class="w400-green-bdr" colspan="2">
                 <select id="b-4-{{ $conditionId }}">
                     <option data-value="Douglas-fir" selected="">Douglas-fir</option>
                     <option data-value="Hemlock">Hemlock</option>
@@ -195,15 +212,17 @@
             <td class="w400-bdr">C-1</td>
             <td class="iw400-right-bdr" colspan="2">Collar Tie Description</td>
             <td class="iw400-bdr">text</td>
-            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="c-1-{{ $conditionId }}"  tabindex="39" value=""></input></td>
+            <td class="w400-yellow-bdr" colspan="2"><input type="text" class="txt-center-align" id="c-1-{{ $conditionId }}"  tabindex="39" value=""></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
         <tr class="h13 class-truss-hide">
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">C-2</td>
             <td class="iw400-right-bdr" colspan="2">Dist. from Top of Collar Tie to Attic Deck</td>
-            <td class="iw400-bdr">ft</td>
-            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="c-2-{{ $conditionId }}"  tabindex="40" value=""></input></td>
+            <td class="iw400-bdr">ft | in</td>
+            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="cf-2-{{ $conditionId }}"  tabindex="40" value=""></input></td>
+            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="ci-2-{{ $conditionId }}"  tabindex="40" value=""></input></td>
+            <td class="w400-blue-bdr"><input type="text" class="txt-calced" id="c-2-{{ $conditionId }}"  tabindex="40" value=""></input></td>
             <td><div id="c-2-warn-{{ $conditionId }}" class="warnCell">Warning - Height above high end of rafter</td>
         </tr>
         <tr class="h13 class-truss-hide">
@@ -211,15 +230,17 @@
             <td class="w400-bdr">C-3</td>
             <td class="iw400-right-bdr" colspan="2">Tie Spacing - Center to Center</td>
             <td class="iw400-bdr">in</td>
-            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="c-3-{{ $conditionId }}"  tabindex="41" value=""></input></td>
+            <td class="w400-yellow-bdr" colspan="2"><input type="text" class="txt-center-align" id="c-3-{{ $conditionId }}"  tabindex="41" value=""></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
         <tr class="h13 class-truss-hide">
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">C-4</td>
             <td class="iw400-right-bdr" colspan="2">Knee Wall Height</td>
-            <td class="iw400-bdr">ft</td>
-            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="c-4-{{ $conditionId }}"  tabindex="41" value=""></input></td>
+            <td class="iw400-bdr">ft | in</td>
+            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="cf-4-{{ $conditionId }}"  tabindex="41" value=""></input></td>
+            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="ci-4-{{ $conditionId }}"  tabindex="41" value=""></input></td>
+            <td class="w400-blue-bdr"><input type="text" class="txt-calced" id="c-4-{{ $conditionId }}"  tabindex="41" value=""></input></td>
             <td><div id="c-4-warn-{{ $conditionId }}" class="warnCell">Warning - Height above high end of rafter</td>
         </tr>
         <tr class="h13">
@@ -228,7 +249,7 @@
             <td class="w400-bdr">D-1</td>
             <td class="iw400-right-bdr" colspan="2">Plywood Thickness</td>
             <td class="iw400-bdr">in</td>
-            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="d-1-{{ $conditionId }}"  tabindex="42" value="0.50"></input></td>
+            <td class="w400-yellow-bdr" colspan="2"><input type="text" class="txt-center-align" id="d-1-{{ $conditionId }}"  tabindex="42" value="0.50"></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
         <tr class="h13">
@@ -236,7 +257,7 @@
             <td class="w400-bdr">D-2</td>
             <td class="iw400-right-bdr" colspan="2">Shingle Type</td>
             <td class="iw400-bdr">select</td>
-            <td class="w400-green-bdr">
+            <td class="w400-green-bdr" colspan="2">
                 <select id="d-2-{{ $conditionId }}" tabindex="43">
                     <option data-value="Standard" selected="">Standard</option>
                     <option data-value="Architecture">Architectural - Heavy</option>
@@ -251,7 +272,7 @@
             <td class="w400-bdr">D-3</td>
             <td class="iw400-right-bdr" colspan="2"># Shingle Layers</td>
             <td class="iw400-bdr">#</td>
-            <td class="w400-yellow-bdr">
+            <td class="w400-yellow-bdr" colspan="2">
                 <select id="d-3-{{ $conditionId }}" tabindex="44">
                     <option data-value="1" selected="">1</option>
                     <option data-value="2">2</option>
@@ -265,16 +286,20 @@
             <td class="iw400-bdr" style="vertical-align : middle;" rowspan="2">Location</td>
             <td class="w400-bdr">E-1</td>
             <td class="iw400-right-bdr" colspan="2">Uphill Distance from Eave to Low Edge of Module</td>
-            <td class="iw400-bdr">ft</td>
-            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="e-1-{{ $conditionId }}" tabindex="45" value="4.25"></input></td>
+            <td class="iw400-bdr">ft | in</td>
+            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="ef-1-{{ $conditionId }}" tabindex="45" value="4.25"></input></td>
+            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="ei-1-{{ $conditionId }}" tabindex="45" value="0.00"></input></td>
+            <td class="w400-blue-bdr"><input type="text" class="txt-calced" id="e-1-{{ $conditionId }}" tabindex="45" value="4.25"></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
         <tr class="h13">
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">E-2</td>
             <td class="iw400-right-bdr" colspan="2">Uphill Distance from Eave to Lowest Support</td>
-            <td class="iw400-bdr">ft</td>
-            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="e-2-{{ $conditionId }}" tabindex="46" value="4.25"></input></td>
+            <td class="iw400-bdr">ft | in</td>
+            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="ef-2-{{ $conditionId }}" tabindex="46" value="4.25"></input></td>
+            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="ei-2-{{ $conditionId }}" tabindex="46" value="0.00"></input></td>
+            <td class="w400-blue-bdr"><input type="text" class="txt-calced" id="e-2-{{ $conditionId }}" tabindex="46" value="4.25"></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
         <tr class="h13">
@@ -283,7 +308,7 @@
             <td class="w400-bdr">F-1</td>
             <td class="iw400-right-bdr" id="label-F-1-{{ $conditionId }}" colspan="2">Maximum # Modules along Rafter</td>
             <td class="iw400-bdr"></td>
-            <td class="w400-yellow-bdr">
+            <td class="w400-yellow-bdr" colspan="2">
                 <select id="f-1-{{ $conditionId }}" tabindex="47" onchange="maxModuleNumChange({{ $conditionId }})">
                     <option data-value="1">1</option>
                     <option data-value="2" selected="">2</option>
@@ -307,7 +332,7 @@
             <td class="w400-bdr">G-1</td>
             <td class="iw400-right-bdr" colspan="2">Uphill Gap Between Modules</td>
             <td class="iw400-bdr">in</td>
-            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="g-1-{{ $conditionId }}" tabindex="48" value="1"></input></td>
+            <td class="w400-yellow-bdr" colspan="2"><input type="text" class="txt-center-align" id="g-1-{{ $conditionId }}" tabindex="48" value="1"></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
         <tr class="h13" id="Module-1-{{ $conditionId }}">
@@ -316,7 +341,7 @@
             <td class="w400-bdr">H-1</td>
             <td class="iw400-right-bdr" colspan="2">Module 1</td>
             <td class="iw400-bdr"></td>
-            <td class="w400-yellow-bdr"><input type="checkbox" id="h-1-{{ $conditionId }}" tabindex="49"></input></td>
+            <td class="w400-yellow-bdr" colspan="2"><input type="checkbox" id="h-1-{{ $conditionId }}" tabindex="49"></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
         <tr class="h13" id="Module-2-{{ $conditionId }}">
@@ -324,7 +349,7 @@
             <td class="w400-bdr">H-2</td>
             <td class="iw400-right-bdr" colspan="2">Module 2</td>
             <td class="iw400-bdr"></td>
-            <td class="w400-yellow-bdr"><input type="checkbox" id="h-2-{{ $conditionId }}" tabindex="50"></input></td>
+            <td class="w400-yellow-bdr" colspan="2"><input type="checkbox" id="h-2-{{ $conditionId }}" tabindex="50"></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
         <tr class="h13" id="Module-3-{{ $conditionId }}" style="display: none;">
@@ -332,7 +357,7 @@
             <td class="w400-bdr">H-3</td>
             <td class="iw400-right-bdr" colspan="2">Module 3</td>
             <td class="iw400-bdr"></td>
-            <td class="w400-yellow-bdr"><input type="checkbox" id="h-3-{{ $conditionId }}" tabindex="51"></input></td>
+            <td class="w400-yellow-bdr" colspan="2"><input type="checkbox" id="h-3-{{ $conditionId }}" tabindex="51"></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
         <tr class="h13" id="Module-4-{{ $conditionId }}" style="display: none;">
@@ -340,7 +365,7 @@
             <td class="w400-bdr">H-4</td>
             <td class="iw400-right-bdr" colspan="2">Module 4</td>
             <td class="iw400-bdr"></td>
-            <td class="w400-yellow-bdr"><input type="checkbox" id="h-4-{{ $conditionId }}" tabindex="52"></input></td>
+            <td class="w400-yellow-bdr" colspan="2"><input type="checkbox" id="h-4-{{ $conditionId }}" tabindex="52"></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
         <tr class="h13" id="Module-5-{{ $conditionId }}" style="display: none;">
@@ -348,7 +373,7 @@
             <td class="w400-bdr">H-5</td>
             <td class="iw400-right-bdr" colspan="2">Module 5</td>
             <td class="iw400-bdr"></td>
-            <td class="w400-yellow-bdr"><input type="checkbox" id="h-5-{{ $conditionId }}" tabindex="53"></input></td>
+            <td class="w400-yellow-bdr" colspan="2"><input type="checkbox" id="h-5-{{ $conditionId }}" tabindex="53"></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
         <tr class="h13" id="Module-6-{{ $conditionId }}" style="display: none;">
@@ -356,7 +381,7 @@
             <td class="w400-bdr">H-6</td>
             <td class="iw400-right-bdr" colspan="2">Module 6</td>
             <td class="iw400-bdr"></td>
-            <td class="w400-yellow-bdr"><input type="checkbox" id="h-6-{{ $conditionId }}" tabindex="54"></input></td>
+            <td class="w400-yellow-bdr" colspan="2"><input type="checkbox" id="h-6-{{ $conditionId }}" tabindex="54"></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
         <tr class="h13" id="Module-7-{{ $conditionId }}" style="display: none;">
@@ -364,7 +389,7 @@
             <td class="w400-bdr">H-7</td>
             <td class="iw400-right-bdr" colspan="2">Module 7</td>
             <td class="iw400-bdr"></td>
-            <td class="w400-yellow-bdr"><input type="checkbox" id="h-7-{{ $conditionId }}" tabindex="55"></input></td>
+            <td class="w400-yellow-bdr" colspan="2"><input type="checkbox" id="h-7-{{ $conditionId }}" tabindex="55"></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
         <tr class="h13" id="Module-8-{{ $conditionId }}" style="display: none;">
@@ -372,7 +397,7 @@
             <td class="w400-bdr">H-8</td>
             <td class="iw400-right-bdr" colspan="2">Module 8</td>
             <td class="iw400-bdr"></td>
-            <td class="w400-yellow-bdr"><input type="checkbox" id="h-8-{{ $conditionId }}" tabindex="55"></input></td>
+            <td class="w400-yellow-bdr" colspan="2"><input type="checkbox" id="h-8-{{ $conditionId }}" tabindex="55"></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
         <tr class="h13" id="Module-9-{{ $conditionId }}" style="display: none;">
@@ -380,7 +405,7 @@
             <td class="w400-bdr">H-9</td>
             <td class="iw400-right-bdr" colspan="2">Module 9</td>
             <td class="iw400-bdr"></td>
-            <td class="w400-yellow-bdr"><input type="checkbox" id="h-9-{{ $conditionId }}" tabindex="55"></input></td>
+            <td class="w400-yellow-bdr" colspan="2"><input type="checkbox" id="h-9-{{ $conditionId }}" tabindex="55"></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
         <tr class="h13" id="Module-10-{{ $conditionId }}" style="display: none;">
@@ -388,7 +413,7 @@
             <td class="w400-bdr">H-10</td>
             <td class="iw400-right-bdr" colspan="2">Module 10</td>
             <td class="iw400-bdr"></td>
-            <td class="w400-yellow-bdr"><input type="checkbox" id="h-10-{{ $conditionId }}" tabindex="55"></input></td>
+            <td class="w400-yellow-bdr" colspan="2"><input type="checkbox" id="h-10-{{ $conditionId }}" tabindex="55"></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
         <tr class="h13" id="Module-11-{{ $conditionId }}" style="display: none;">
@@ -396,7 +421,7 @@
             <td class="w400-bdr">H-11</td>
             <td class="iw400-right-bdr" colspan="2">Module 11</td>
             <td class="iw400-bdr"></td>
-            <td class="w400-yellow-bdr"><input type="checkbox" id="h-11-{{ $conditionId }}" tabindex="55"></input></td>
+            <td class="w400-yellow-bdr" colspan="2"><input type="checkbox" id="h-11-{{ $conditionId }}" tabindex="55"></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
         <tr class="h13" id="Module-12-{{ $conditionId }}" style="display: none;">
@@ -404,7 +429,7 @@
             <td class="w400-bdr">H-12</td>
             <td class="iw400-right-bdr" colspan="2">Module 12</td>
             <td class="iw400-bdr"></td>
-            <td class="w400-yellow-bdr"><input type="checkbox" id="h-12-{{ $conditionId }}" tabindex="55"></input></td>
+            <td class="w400-yellow-bdr" colspan="2"><input type="checkbox" id="h-12-{{ $conditionId }}" tabindex="55"></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
         <tr class="h13">
@@ -413,7 +438,7 @@
             <td class="w400-bdr">I-1</td>
             <td class="iw400-right-bdr" colspan="2"></td>
             <td class="iw400-bdr"></td>
-            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="i-1-{{ $conditionId }}" tabindex="56"></input></td>
+            <td class="w400-yellow-bdr" colspan="2"><input type="text" class="txt-center-align" id="i-1-{{ $conditionId }}" tabindex="56"></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
         <tr class="class-truss-hide">

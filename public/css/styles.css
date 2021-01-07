@@ -197,3 +197,8 @@ html, body {
     cursor: pointer;
     justify-content: space-around;
 }
+
+.txt-calced{
+    text-align: center;
+    pointer-events: none;
+}
