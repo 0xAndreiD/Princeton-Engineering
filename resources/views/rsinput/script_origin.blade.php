@@ -2580,9 +2580,9 @@ $(document).ready(function() {
             var rightLength = (height / Math.tan(angleRadian)).toFixed(2);
 
             $(`#value-7-${condId}`).css('background', '#ffc'); $(`#calced-7-${condId}`)[0].innerHTML = "";
-            $(`#valuef-8-${condId}`).css('background', '#95b3d7'); $(`#valuei-8-${condId}`).css('background', '#95b3d7'); $(`#calced-8-${condId}`)[0].innerHTML = "calculated value";
-            $(`#valuef-9-${condId}`).css('background', '#ffc'); $(`#valuei-9-${condId}`).css('background', '#ffc'); $(`#calced-9-${condId}`)[0].innerHTML = "";
-            $(`#valuef-10-${condId}`).css('background', '#95b3d7'); $(`#valuei-10-${condId}`).css('background', '#95b3d7'); $(`#calced-10-${condId}`)[0].innerHTML = "calculated value";
+            $(`#valuef-8-${condId}`).css('background', '#95b3d7'); $(`#valuei-8-${condId}`).css('background', '#95b3d7'); //$(`#calced-8-${condId}`)[0].innerHTML = "calculated value";
+            $(`#valuef-9-${condId}`).css('background', '#ffc'); $(`#valuei-9-${condId}`).css('background', '#ffc'); //$(`#calced-9-${condId}`)[0].innerHTML = "";
+            $(`#valuef-10-${condId}`).css('background', '#95b3d7'); $(`#valuei-10-${condId}`).css('background', '#95b3d7'); //$(`#calced-10-${condId}`)[0].innerHTML = "calculated value";
             
             $(`#af-8-${condId}`).val(""); $(`#ai-8-${condId}`).val(""); $(`#a-8-${condId}`).val(rightDiagnol);
             $(`#af-10-${condId}`).val(""); $(`#ai-10-${condId}`).val(""); $(`#a-10-${condId}`).val(rightLength);
@@ -2598,10 +2598,10 @@ $(document).ready(function() {
             var rightDiagnol = (length / Math.cos(angleRadian)).toFixed(2);
             var rightHeight = (length * Math.tan(angleRadian)).toFixed(2);
 
-            $(`#value-7-${condId}`).css('background', '#ffc'); $(`#calced-7-${condId}`)[0].innerHTML = "";
-            $(`#valuef-8-${condId}`).css('background', '#95b3d7'); $(`#valuei-8-${condId}`).css('background', '#95b3d7'); $(`#calced-8-${condId}`)[0].innerHTML = "calculated value";
-            $(`#valuef-9-${condId}`).css('background', '#95b3d7'); $(`#valuei-9-${condId}`).css('background', '#95b3d7'); $(`#calced-9-${condId}`)[0].innerHTML = "calculated value";
-            $(`#valuef-10-${condId}`).css('background', '#ffc'); $(`#valuei-10-${condId}`).css('background', '#ffc'); $(`#calced-10-${condId}`)[0].innerHTML = "";
+            $(`#value-7-${condId}`).css('background', '#ffc'); //$(`#calced-7-${condId}`)[0].innerHTML = "";
+            $(`#valuef-8-${condId}`).css('background', '#95b3d7'); $(`#valuei-8-${condId}`).css('background', '#95b3d7'); //$(`#calced-8-${condId}`)[0].innerHTML = "calculated value";
+            $(`#valuef-9-${condId}`).css('background', '#95b3d7'); $(`#valuei-9-${condId}`).css('background', '#95b3d7'); //$(`#calced-9-${condId}`)[0].innerHTML = "calculated value";
+            $(`#valuef-10-${condId}`).css('background', '#ffc'); $(`#valuei-10-${condId}`).css('background', '#ffc'); //$(`#calced-10-${condId}`)[0].innerHTML = "";
             
             $(`#af-8-${condId}`).val(""); $(`#ai-8-${condId}`).val(""); $(`#a-8-${condId}`).val(rightDiagnol);
             $(`#af-9-${condId}`).val(""); $(`#ai-9-${condId}`).val(""); $(`#a-9-${condId}`).val(rightHeight);
@@ -2617,10 +2617,10 @@ $(document).ready(function() {
             var rightHeight = (diagnol * Math.sin(angleRadian)).toFixed(2);
             var rightWidth = (diagnol * Math.cos(angleRadian)).toFixed(2);
 
-            $(`#value-7-${condId}`).css('background', '#ffc'); $(`#calced-7-${condId}`)[0].innerHTML = "";
-            $(`#valuef-8-${condId}`).css('background', '#ffc'); $(`#valuei-8-${condId}`).css('background', '#ffc'); $(`#value-8-${condId}`).css('background', '#ffc'); $(`#calced-8-${condId}`)[0].innerHTML = "";
-            $(`#valuef-9-${condId}`).css('background', '#95b3d7'); $(`#valuei-9-${condId}`).css('background', '#95b3d7'); $(`#value-9-${condId}`).css('background', '#95b3d7'); $(`#calced-9-${condId}`)[0].innerHTML = "calculated value";
-            $(`#valuef-10-${condId}`).css('background', '#95b3d7'); $(`#valuei-10-${condId}`).css('background', '#95b3d7'); $(`#value-10-${condId}`).css('background', '#95b3d7'); $(`#calced-10-${condId}`)[0].innerHTML = "calculated value";
+            $(`#value-7-${condId}`).css('background', '#ffc'); //$(`#calced-7-${condId}`)[0].innerHTML = "";
+            $(`#valuef-8-${condId}`).css('background', '#ffc'); $(`#valuei-8-${condId}`).css('background', '#ffc'); //$(`#calced-8-${condId}`)[0].innerHTML = "";
+            $(`#valuef-9-${condId}`).css('background', '#95b3d7'); $(`#valuei-9-${condId}`).css('background', '#95b3d7'); //$(`#calced-9-${condId}`)[0].innerHTML = "calculated value";
+            $(`#valuef-10-${condId}`).css('background', '#95b3d7'); $(`#valuei-10-${condId}`).css('background', '#95b3d7'); //$(`#calced-10-${condId}`)[0].innerHTML = "calculated value";
 
             $(`#af-9-${condId}`).val(""); $(`#ai-9-${condId}`).val(""); $(`#a-9-${condId}`).val(rightHeight);
             $(`#af-10-${condId}`).val(""); $(`#ai-10-${condId}`).val(""); $(`#a-10-${condId}`).val(rightWidth);
@@ -2638,10 +2638,10 @@ $(document).ready(function() {
             var rightAngleDegree = radianToDegree(rightAngle).toFixed(2);
             var rightLength = (diagnol * Math.cos(rightAngle)).toFixed(2);
 
-            $(`#value-7-${condId}`).css('background', '#95b3d7'); $(`#calced-7-${condId}`)[0].innerHTML = "calculated value";
-            $(`#valuef-8-${condId}`).css('background', '#ffc'); $(`#valuei-8-${condId}`).css('background', '#ffc'); $(`#calced-8-${condId}`)[0].innerHTML = "";
-            $(`#valuef-9-${condId}`).css('background', '#ffc'); $(`#valuei-9-${condId}`).css('background', '#ffc'); $(`#calced-9-${condId}`)[0].innerHTML = "";
-            $(`#valuef-10-${condId}`).css('background', '#95b3d7'); $(`#valuei-10-${condId}`).css('background', '#95b3d7'); $(`#calced-10-${condId}`)[0].innerHTML = "calculated value";
+            $(`#value-7-${condId}`).css('background', '#95b3d7'); //$(`#calced-7-${condId}`)[0].innerHTML = "calculated value";
+            $(`#valuef-8-${condId}`).css('background', '#ffc'); $(`#valuei-8-${condId}`).css('background', '#ffc'); //$(`#calced-8-${condId}`)[0].innerHTML = "";
+            $(`#valuef-9-${condId}`).css('background', '#ffc'); $(`#valuei-9-${condId}`).css('background', '#ffc'); //$(`#calced-9-${condId}`)[0].innerHTML = "";
+            $(`#valuef-10-${condId}`).css('background', '#95b3d7'); $(`#valuei-10-${condId}`).css('background', '#95b3d7'); //$(`#calced-10-${condId}`)[0].innerHTML = "calculated value";
             
             $(`#af-7-${condId}`).val(""); $(`#ai-7-${condId}`).val(""); $(`#a-7-${condId}`).val(rightAngleDegree);
             $(`#af-10-${condId}`).val(""); $(`#ai-10-${condId}`).val(""); $(`#a-10-${condId}`).val(rightLength);
@@ -2659,10 +2659,10 @@ $(document).ready(function() {
             var rightAngleDegree = radianToDegree(rightAngle).toFixed(2);
             var rightHeight = (diagnol * Math.sin(rightAngle)).toFixed(2);
 
-            $(`#value-7-${condId}`).css('background', '#95b3d7'); $(`#calced-7-${condId}`)[0].innerHTML = "calculated value";
-            $(`#valuef-8-${condId}`).css('background', '#ffc'); $(`#valuei-8-${condId}`).css('background', '#ffc'); $(`#value-8-${condId}`).css('background', '#ffc'); $(`#calced-8-${condId}`)[0].innerHTML = "";
-            $(`#valuef-9-${condId}`).css('background', '#95b3d7'); $(`#valuei-9-${condId}`).css('background', '#95b3d7'); $(`#calced-9-${condId}`)[0].innerHTML = "calculated value";
-            $(`#valuef-10-${condId}`).css('background', '#ffc'); $(`#valuei-10-${condId}`).css('background', '#ffc'); $(`#calced-10-${condId}`)[0].innerHTML = "";
+            $(`#value-7-${condId}`).css('background', '#95b3d7'); //$(`#calced-7-${condId}`)[0].innerHTML = "calculated value";
+            $(`#valuef-8-${condId}`).css('background', '#ffc'); $(`#valuei-8-${condId}`).css('background', '#ffc'); //$(`#value-8-${condId}`).css('background', '#ffc'); $(`#calced-8-${condId}`)[0].innerHTML = "";
+            $(`#valuef-9-${condId}`).css('background', '#95b3d7'); $(`#valuei-9-${condId}`).css('background', '#95b3d7'); //$(`#calced-9-${condId}`)[0].innerHTML = "calculated value";
+            $(`#valuef-10-${condId}`).css('background', '#ffc'); $(`#valuei-10-${condId}`).css('background', '#ffc'); //$(`#calced-10-${condId}`)[0].innerHTML = "";
             
             $(`#af-7-${condId}`).val(""); $(`#ai-7-${condId}`).val(""); $(`#a-7-${condId}`).val(rightAngleDegree);
             $(`#af-9-${condId}`).val(""); $(`#ai-9-${condId}`).val(""); $(`#a-9-${condId}`).val(rightHeight);
@@ -2680,10 +2680,10 @@ $(document).ready(function() {
             var rightAngleDegree = radianToDegree(rightAngle).toFixed(2);
             var rightDiagnol = (height / Math.sin(rightAngle)).toFixed(2);
 
-            $(`#value-7-${condId}`).css('background', '#95b3d7'); $(`#calced-7-${condId}`)[0].innerHTML = "calculated value";
-            $(`#valuef-8-${condId}`).css('background', '#95b3d7'); $(`#valuei-8-${condId}`).css('background', '#95b3d7'); $(`#calced-8-${condId}`)[0].innerHTML = "calculated value";
-            $(`#valuef-9-${condId}`).css('background', '#ffc'); $(`#valuei-9-${condId}`).css('background', '#ffc'); $(`#calced-9-${condId}`)[0].innerHTML = "";
-            $(`#valuef-10-${condId}`).css('background', '#ffc'); $(`#valuei-10-${condId}`).css('background', '#ffc'); $(`#calced-10-${condId}`)[0].innerHTML = "";
+            $(`#value-7-${condId}`).css('background', '#95b3d7'); //$(`#calced-7-${condId}`)[0].innerHTML = "calculated value";
+            $(`#valuef-8-${condId}`).css('background', '#95b3d7'); $(`#valuei-8-${condId}`).css('background', '#95b3d7'); //$(`#calced-8-${condId}`)[0].innerHTML = "calculated value";
+            $(`#valuef-9-${condId}`).css('background', '#ffc'); $(`#valuei-9-${condId}`).css('background', '#ffc'); //$(`#calced-9-${condId}`)[0].innerHTML = "";
+            $(`#valuef-10-${condId}`).css('background', '#ffc'); $(`#valuei-10-${condId}`).css('background', '#ffc'); //$(`#calced-10-${condId}`)[0].innerHTML = "";
 
             $(`#af-7-${condId}`).val(""); $(`#ai-7-${condId}`).val(""); $(`#a-7-${condId}`).val(rightAngleDegree);
             $(`#af-8-${condId}`).val(""); $(`#ai-8-${condId}`).val(""); $(`#a-8-${condId}`).val(rightDiagnol);
