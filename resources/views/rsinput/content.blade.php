@@ -60,7 +60,7 @@
             <td class="iw400-bdr">ft | in</td>
             <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="af-2-{{ $conditionId }}" tabindex="26" value="30.00"></input></td>
             <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="ai-2-{{ $conditionId }}" tabindex="26" value="0.00"></input></td>
-            <td class="w400-blue-bdr"><input type="text" class="txt-calced" id="a-2-{{ $conditionId }}" tabindex="-1" value="30.00" readonly></input></td>
+            <td class="w400-lightblue-bdr"><input type="text" class="txt-calced" id="a-2-{{ $conditionId }}" tabindex="-1" value="30.00" readonly></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
         <tr class="h13">
@@ -70,7 +70,7 @@
             <td class="iw400-bdr">ft | in</td>
             <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="af-3-{{ $conditionId }}"  tabindex="27" value="31.17"></input></td>
             <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="ai-3-{{ $conditionId }}"  tabindex="27" value="0.00"></input></td>
-            <td class="w400-blue-bdr"><input type="text" class="txt-calced" id="a-3-{{ $conditionId }}"  tabindex="-1" value="31.17" readonly></input></td>
+            <td class="w400-lightblue-bdr"><input type="text" class="txt-calced" id="a-3-{{ $conditionId }}"  tabindex="-1" value="31.17" readonly></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
         <tr class="h13">
@@ -80,7 +80,7 @@
             <td class="iw400-bdr">ft | in</td>
             <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="af-4-{{ $conditionId }}"  tabindex="28" value="14.25"></input></td>
             <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="ai-4-{{ $conditionId }}"  tabindex="28" value="0.00"></input></td>
-            <td class="w400-blue-bdr"><input type="text" class="txt-calced" id="a-4-{{ $conditionId }}"  tabindex="-1" value="14.25" readonly></input></td>
+            <td class="w400-lightblue-bdr"><input type="text" class="txt-calced" id="a-4-{{ $conditionId }}"  tabindex="-1" value="14.25" readonly></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
         <tr class="h13">
@@ -122,7 +122,7 @@
             <td class="iw400-bdr">ft | in</td>
             <td id="valuef-8-{{ $conditionId }}" class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="af-8-{{ $conditionId }}"  tabindex="32" value=""></input></td>
             <td id="valuei-8-{{ $conditionId }}" class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="ai-8-{{ $conditionId }}"  tabindex="32" value=""></input></td>
-            <td id="value-8-{{ $conditionId }}" class="w400-blue-bdr"><input type="text" class="txt-calced" id="a-8-{{ $conditionId }}"  tabindex="-1" value="" readonly></input></td>
+            <td id="value-8-{{ $conditionId }}" class="w400-lightblue-bdr"><input type="text" class="txt-calced" id="a-8-{{ $conditionId }}"  tabindex="-1" value="" readonly></input></td>
             <td id="calced-8-{{ $conditionId }}" class="calcedCell"></td>
             <input type="text" class="txt-center-align" id="ac-8-{{ $conditionId }}" value="" hidden>
             <!-- <td class="w400-bdr" id="tc-8-1" style="pointer-events: none;"><input type="text" class="txt-center-align" id="ac-8-1"></td>
@@ -135,7 +135,7 @@
             <td class="iw400-bdr">ft | in</td>
             <td id="valuef-9-{{ $conditionId }}" class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="af-9-{{ $conditionId }}"  tabindex="33" value=""></input></td>
             <td id="valuei-9-{{ $conditionId }}" class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="ai-9-{{ $conditionId }}"  tabindex="33" value=""></input></td>
-            <td id="value-9-{{ $conditionId }}" class="w400-blue-bdr"><input type="text" class="txt-calced" id="a-9-{{ $conditionId }}"  tabindex="-1" value="" readonly></input></td>
+            <td id="value-9-{{ $conditionId }}" class="w400-lightblue-bdr"><input type="text" class="txt-calced" id="a-9-{{ $conditionId }}"  tabindex="-1" value="" readonly></input></td>
             <td id="calced-9-{{ $conditionId }}" class="calcedCell"></td>
             <input type="text" class="txt-center-align" id="ac-9-{{ $conditionId }}" value="" hidden>
             <!-- <td class="w400-bdr" id="tc-9-1" style="pointer-events: none;"><input type="text" class="txt-center-align" id="ac-9-1"></td>
@@ -148,7 +148,7 @@
             <td class="iw400-bdr">ft | in</td>
             <td id="valuef-10-{{ $conditionId }}" class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="af-10-{{ $conditionId }}"  tabindex="34" value=""></input></td>
             <td id="valuei-10-{{ $conditionId }}" class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="ai-10-{{ $conditionId }}"  tabindex="34" value=""></input></td>
-            <td id="value-10-{{ $conditionId }}" class="w400-blue-bdr"><input type="text" class="txt-calced" id="a-10-{{ $conditionId }}"  tabindex="-1" value="" readonly></input></td>
+            <td id="value-10-{{ $conditionId }}" class="w400-lightblue-bdr"><input type="text" class="txt-calced" id="a-10-{{ $conditionId }}"  tabindex="-1" value="" readonly></input></td>
             <td id="calced-10-{{ $conditionId }}" class="calcedCell"></td>
             <input type="text" class="txt-center-align" id="ac-10-{{ $conditionId }}" value="" hidden>
             <input type="text" class="txt-center-align" id="calc-algorithm-{{ $conditionId }}" value="" hidden>
@@ -162,7 +162,7 @@
             <td class="iw400-bdr">ft | in</td>
             <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="af-11-{{ $conditionId }}"  tabindex="35" value="0.83"></input></td>
             <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="ai-11-{{ $conditionId }}"  tabindex="35" value="0.00"></input></td>
-            <td class="w400-blue-bdr"><input type="text" class="txt-calced" id="a-11-{{ $conditionId }}"  tabindex="-1" value="0.83" readonly></input></td>
+            <td class="w400-lightblue-bdr"><input type="text" class="txt-calced" id="a-11-{{ $conditionId }}"  tabindex="-1" value="0.83" readonly></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
         <tr class="h13 class-truss-hide">
@@ -222,7 +222,7 @@
             <td class="iw400-bdr">ft | in</td>
             <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="cf-2-{{ $conditionId }}"  tabindex="40" value=""></input></td>
             <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="ci-2-{{ $conditionId }}"  tabindex="40" value=""></input></td>
-            <td class="w400-blue-bdr"><input type="text" class="txt-calced" id="c-2-{{ $conditionId }}"  tabindex="-1" value="" readonly></input></td>
+            <td class="w400-lightblue-bdr"><input type="text" class="txt-calced" id="c-2-{{ $conditionId }}"  tabindex="-1" value="" readonly></input></td>
             <td><div id="c-2-warn-{{ $conditionId }}" class="warnCell">Warning - Height above high end of rafter</td>
         </tr>
         <tr class="h13 class-truss-hide">
@@ -240,7 +240,7 @@
             <td class="iw400-bdr">ft | in</td>
             <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="cf-4-{{ $conditionId }}"  tabindex="41" value=""></input></td>
             <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="ci-4-{{ $conditionId }}"  tabindex="41" value=""></input></td>
-            <td class="w400-blue-bdr"><input type="text" class="txt-calced" id="c-4-{{ $conditionId }}"  tabindex="-1" value="" readonly></input></td>
+            <td class="w400-lightblue-bdr"><input type="text" class="txt-calced" id="c-4-{{ $conditionId }}"  tabindex="-1" value="" readonly></input></td>
             <td><div id="c-4-warn-{{ $conditionId }}" class="warnCell">Warning - Height above high end of rafter</td>
         </tr>
         <tr class="h13">
@@ -289,7 +289,7 @@
             <td class="iw400-bdr">ft | in</td>
             <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="ef-1-{{ $conditionId }}" tabindex="45" value="4.25"></input></td>
             <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="ei-1-{{ $conditionId }}" tabindex="45" value="0.00"></input></td>
-            <td class="w400-blue-bdr"><input type="text" class="txt-calced" id="e-1-{{ $conditionId }}" tabindex="-1" value="4.25" readonly></input></td>
+            <td class="w400-lightblue-bdr"><input type="text" class="txt-calced" id="e-1-{{ $conditionId }}" tabindex="-1" value="4.25" readonly></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
         <tr class="h13">
@@ -299,7 +299,7 @@
             <td class="iw400-bdr">ft | in</td>
             <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="ef-2-{{ $conditionId }}" tabindex="46" value="4.25"></input></td>
             <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="ei-2-{{ $conditionId }}" tabindex="46" value="0.00"></input></td>
-            <td class="w400-blue-bdr"><input type="text" class="txt-calced" id="e-2-{{ $conditionId }}" tabindex="-1" value="4.25" readonly></input></td>
+            <td class="w400-lightblue-bdr"><input type="text" class="txt-calced" id="e-2-{{ $conditionId }}" tabindex="-1" value="4.25" readonly></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
         <tr class="h13">
@@ -528,7 +528,7 @@
                 <td class="iw400" colspan="7" style="text-align:left !important;">ft (based upon floor plane and ridge height values)</td>
             </tr>
             <tr class="h13">
-                <td class="iw400" colspan="3" style="text-align:center !important;">Differnce between measured and calculated</td>
+                <td class="iw400" colspan="3" style="text-align:center !important;">Diff between measured and calculated</td>
                 <td class="w400-bdr" style="color:red; font-weight:700" id="td-diff-between-measured-and-calculated-{{ $conditionId }}">2.47</td>
                 <td class="iw400" colspan="7" style="text-align:left !important;">ft Please check all values</td>
             </tr>
