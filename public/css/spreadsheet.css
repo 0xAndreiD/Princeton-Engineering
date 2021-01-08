@@ -152,18 +152,18 @@
     vertical-align: bottom;
 }
 
-*.w400-lightblue-bdr {
-    background: #ADD8E6;
-    border: .75pt solid windowtext;
+*.td-dec-feet {
+    background: transparent;
     color: black;
     font-family: Arial,sans-serif;
     font-size: 10.00pt;
     font-style: normal;
     font-weight: 400;
+    font-style: italic;
     padding-left: 1px;
     padding-right: 1px;
     padding-top: 1px;
-    text-align: center;
+    text-align: left;
     vertical-align: bottom;
 }
 

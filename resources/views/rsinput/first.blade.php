@@ -38,13 +38,7 @@
         <td class="w400-blue-bdr" class="h13"><div style="overflow:hidden"></div></td>
         <td class="iw400" style="text-align:left !important;">Inactive cell</td>
         <td ><div style="overflow:hidden"></div></td>
-    </tr>                                        
-    <tr class="h13">
-        <td colspan="3"><div style="overflow:hidden"></div></td>
-        <td class="w400-lightblue-bdr" class="h13"><div style="overflow:hidden"></div></td>
-        <td class="iw400" style="text-align:left !important;">Computed value</td>
-        <td ><div style="overflow:hidden"></div></td>
-    </tr>                                        
+    </tr>
 </tbody> 
 </table>
 

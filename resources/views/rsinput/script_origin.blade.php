@@ -1368,7 +1368,7 @@ var updateTrussAndComments = function(condId, keepStatus) {
     var floorPlane = parseInt($(`#option-number-segments2-${condId}`).children("option:selected").val());
 
     for (index = 0; index < roofPlane; index++) {
-        $(`#td-roof-segment${index+1}-caption-${condId}`).html("Segment " + (index + 1) + " Length (ft | in | Dec. Feet)");
+        $(`#td-roof-segment${index+1}-caption-${condId}`).html("Segment " + (index + 1) + " Length (ft | in)");
         $(`#td-truss-roof-segment${index+1}-${condId}`).html((index + 1));
         $(`#td-truss-roof-segment${index+1}-${condId}`).addClass('w400-bdr').removeClass('w400-blue-bdr');
         $(`#td-truss-roof-segment${index+1}-type-${condId}`).addClass('w400-bdr').removeClass('w400-blue-bdr');
@@ -1381,7 +1381,7 @@ var updateTrussAndComments = function(condId, keepStatus) {
         $(`#td-truss-roof-segment${index+1}-type-${condId}`).removeClass('w400-bdr').addClass('w400-blue-bdr');
     }
     for (index = 0; index < floorPlane; index++) {
-        $(`#td-floor-segment${index+1}-caption-${condId}`).html("Segment " + (index + roofPlane + 1) + " Length (ft | in | Dec. Feet)");
+        $(`#td-floor-segment${index+1}-caption-${condId}`).html("Segment " + (index + roofPlane + 1) + " Length (ft | in)");
         $(`#td-truss-floor-segment${index+1}-${condId}`).html((index + roofPlane + 1));
         $(`#td-truss-floor-segment${index+1}-${condId}`).addClass('w400-bdr').removeClass('w400-blue-bdr');
         $(`#td-truss-floor-segment${index+1}-type-${condId}`).addClass('w400-bdr').removeClass('w400-blue-bdr');
@@ -1452,7 +1452,7 @@ var updateNumberSegment1 = function (condId, roofPlane, keepStatus = true) {
         // enable appropricate cells        
         $(`#td-roof-segment${index + 1}-length-f-${condId}`).addClass('w400-yellow-bdr').removeClass('w400-blue-bdr');
         $(`#td-roof-segment${index + 1}-length-i-${condId}`).addClass('w400-yellow-bdr').removeClass('w400-blue-bdr');
-        $(`#td-roof-segment${index + 1}-length-${condId}`).addClass('w400-yellow-bdr').removeClass('w400-blue-bdr');
+        //$(`#td-roof-segment${index + 1}-length-${condId}`).addClass('w400-yellow-bdr').removeClass('w400-blue-bdr');
         $(`#td-roof-segment${index + 1}-length-f-${condId} *`).attr('disabled', false);
         $(`#td-roof-segment${index + 1}-length-i-${condId} *`).attr('disabled', false);
         $(`#td-roof-segment${index + 1}-length-${condId} *`).attr('disabled', false);
@@ -1461,7 +1461,7 @@ var updateNumberSegment1 = function (condId, roofPlane, keepStatus = true) {
         // disable appropricate cells        
         $(`#td-roof-segment${index + 1}-length-f-${condId}`).removeClass('w400-yellow-bdr').addClass('w400-blue-bdr');
         $(`#td-roof-segment${index + 1}-length-i-${condId}`).removeClass('w400-yellow-bdr').addClass('w400-blue-bdr');
-        $(`#td-roof-segment${index + 1}-length-${condId}`).removeClass('w400-yellow-bdr').addClass('w400-blue-bdr');
+        //$(`#td-roof-segment${index + 1}-length-${condId}`).removeClass('w400-yellow-bdr').addClass('w400-blue-bdr');
         $(`#td-roof-segment${index + 1}-length-f-${condId} *`).attr('disabled', true);
         $(`#td-roof-segment${index + 1}-length-i-${condId} *`).attr('disabled', true);
         $(`#td-roof-segment${index + 1}-length-${condId} *`).attr('disabled', true);
@@ -1497,7 +1497,7 @@ var updateNumberSegment2 = function (condId, floorPlane, keepStatus = true) {
         // enable appropricate cells        
         $(`#td-floor-segment${index + 1}-length-f-${condId}`).addClass('w400-yellow-bdr').removeClass('w400-blue-bdr');
         $(`#td-floor-segment${index + 1}-length-i-${condId}`).addClass('w400-yellow-bdr').removeClass('w400-blue-bdr');
-        $(`#td-floor-segment${index + 1}-length-${condId}`).addClass('w400-yellow-bdr').removeClass('w400-blue-bdr');
+        //$(`#td-floor-segment${index + 1}-length-${condId}`).addClass('w400-yellow-bdr').removeClass('w400-blue-bdr');
         $(`#td-floor-segment${index + 1}-length-f-${condId} *`).attr('disabled', false);
         $(`#td-floor-segment${index + 1}-length-i-${condId} *`).attr('disabled', false);
         $(`#td-floor-segment${index + 1}-length-${condId} *`).attr('disabled', false);
@@ -1506,7 +1506,7 @@ var updateNumberSegment2 = function (condId, floorPlane, keepStatus = true) {
         // disable appropricate cells        
         $(`#td-floor-segment${index + 1}-length-f-${condId}`).removeClass('w400-yellow-bdr').addClass('w400-blue-bdr');
         $(`#td-floor-segment${index + 1}-length-i-${condId}`).removeClass('w400-yellow-bdr').addClass('w400-blue-bdr');
-        $(`#td-floor-segment${index + 1}-length-${condId}`).removeClass('w400-yellow-bdr').addClass('w400-blue-bdr');
+        //$(`#td-floor-segment${index + 1}-length-${condId}`).removeClass('w400-yellow-bdr').addClass('w400-blue-bdr');
         $(`#td-floor-segment${index + 1}-length-f-${condId} *`).attr('disabled', true);
         $(`#td-floor-segment${index + 1}-length-i-${condId} *`).attr('disabled', true);
         $(`#td-floor-segment${index + 1}-length-${condId} *`).attr('disabled', true);

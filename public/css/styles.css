@@ -201,4 +201,6 @@ html, body {
 .txt-calced{
     text-align: center;
     pointer-events: none;
+    font-style: italic;
+    font-weight: bold;
 }
