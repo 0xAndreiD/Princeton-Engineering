@@ -55,7 +55,7 @@
     padding-right: 1px;
     padding-top: 1px;
     text-align: right;
-    vertical-align: bottom;
+    vertical-align: center;
 }
 
 *.iw400-left {
@@ -120,6 +120,14 @@
     padding-top: 1px;
     text-align: center;
     vertical-align: center;
+}
+
+*.right-bdr{
+    border-right: .75pt solid windowtext;
+}
+
+*.bottom-bdr{
+    border-bottom: .75pt solid windowtext;
 }
 
 *.w400-yellow-bdr {
