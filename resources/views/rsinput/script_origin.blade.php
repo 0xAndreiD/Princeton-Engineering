@@ -1368,7 +1368,7 @@ var updateTrussAndComments = function(condId, keepStatus) {
     var floorPlane = parseInt($(`#option-number-segments2-${condId}`).children("option:selected").val());
 
     for (index = 0; index < roofPlane; index++) {
-        $(`#td-roof-segment${index+1}-caption-${condId}`).html("Segment " + (index + 1) + " Length");
+        $(`#td-roof-segment${index+1}-caption-${condId}`).html("Segment " + (index + 1) + " Length (ft | in | Dec. Feet)");
         $(`#td-truss-roof-segment${index+1}-${condId}`).html((index + 1));
         $(`#td-truss-roof-segment${index+1}-${condId}`).addClass('w400-bdr').removeClass('w400-blue-bdr');
         $(`#td-truss-roof-segment${index+1}-type-${condId}`).addClass('w400-bdr').removeClass('w400-blue-bdr');
@@ -1381,7 +1381,7 @@ var updateTrussAndComments = function(condId, keepStatus) {
         $(`#td-truss-roof-segment${index+1}-type-${condId}`).removeClass('w400-bdr').addClass('w400-blue-bdr');
     }
     for (index = 0; index < floorPlane; index++) {
-        $(`#td-floor-segment${index+1}-caption-${condId}`).html("Segment " + (index + roofPlane + 1) + " Length");
+        $(`#td-floor-segment${index+1}-caption-${condId}`).html("Segment " + (index + roofPlane + 1) + " Length (ft | in | Dec. Feet)");
         $(`#td-truss-floor-segment${index+1}-${condId}`).html((index + roofPlane + 1));
         $(`#td-truss-floor-segment${index+1}-${condId}`).addClass('w400-bdr').removeClass('w400-blue-bdr');
         $(`#td-truss-floor-segment${index+1}-type-${condId}`).addClass('w400-bdr').removeClass('w400-blue-bdr');

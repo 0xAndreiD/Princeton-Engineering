@@ -595,7 +595,7 @@
                 </td>
             </tr>
             <tr class="h13">
-                <td class="iw400" colspan="3" style="text-align:right !important;">Length of roof plane</td>
+                <td class="iw400" colspan="3" style="text-align:right !important;">Length of roof plane (ft | in | Dec. Feet)</td>
                 <td class="w400-yellow-bdr">
                     <input type="text" class="txt-center-align" id="txt-length-of-roof-plane-f-{{ $conditionId }}" tabindex="59" value="14.50"></input>
                 </td>
@@ -606,7 +606,7 @@
                     <input type="text" class="txt-calced" id="txt-length-of-roof-plane-{{ $conditionId }}" tabindex="-1" value="14.50"></input>
                 </td>
                 <td><div style="overflow:hidden"></td>
-                <td class="iw400" colspan="3" style="text-align:right !important; border-left: 1.00pt solid windowtext;">Length of floor plane</td>
+                <td class="iw400" colspan="3" style="text-align:right !important; border-left: 1.00pt solid windowtext;">Length of floor plane (ft | in | Dec. Feet)</td>
                 <td class="w400-yellow-bdr">
                     <input type="text" class="txt-center-align" id="txt-length-of-floor-plane-f-{{ $conditionId }}" tabindex="68" value="12.00"></input>
                 </td>
@@ -643,7 +643,7 @@
                 </td>
             </tr>
             <tr class="h13">
-                <td class="iw400" colspan="3" style="text-align:right !important;" id="td-roof-segment1-caption-{{ $conditionId }}">Segment 1 length</td>
+                <td class="iw400" colspan="3" style="text-align:right !important;" id="td-roof-segment1-caption-{{ $conditionId }}">Segment 1 length (ft | in | Dec. Feet)</td>
                 <td class="w400-yellow-bdr" id="td-roof-segment1-length-f-{{ $conditionId }}">
                     <input type="text" class="txt-center-align" id="txt-roof-segment1-length-f-{{ $conditionId }}" tabindex="61" value="4.50"></input>
                 </td>
@@ -654,7 +654,7 @@
                     <input type="text" class="txt-calced" id="txt-roof-segment1-length-{{ $conditionId }}" tabindex="-1" value="4.50"></input>
                 </td>
                 <td><div style="overflow:hidden"></td>
-                <td class="iw400" colspan="3" style="text-align:right !important; border-left: 1.00pt solid windowtext;" id="td-floor-segment1-caption-{{ $conditionId }}">Segment 6 length</td>
+                <td class="iw400" colspan="3" style="text-align:right !important; border-left: 1.00pt solid windowtext;" id="td-floor-segment1-caption-{{ $conditionId }}">Segment 6 length (ft | in | Dec. Feet)</td>
                 <td class="w400-yellow-bdr" id="td-floor-segment1-length-f-{{ $conditionId }}">
                     <input type="text" class="txt-center-align" id="txt-floor-segment1-length-f-{{ $conditionId }}" tabindex="70" value="4.00"></input>
                 </td>
@@ -666,7 +666,7 @@
                 </td>
             </tr>
             <tr class="h13">
-                <td class="iw400" colspan="3" style="text-align:right !important;" id="td-roof-segment2-caption-{{ $conditionId }}">Segment 2 length</td>
+                <td class="iw400" colspan="3" style="text-align:right !important;" id="td-roof-segment2-caption-{{ $conditionId }}">Segment 2 length (ft | in | Dec. Feet)</td>
                 <td class="w400-yellow-bdr" id="td-roof-segment2-length-f-{{ $conditionId }}">
                     <input type="text" class="txt-center-align" id="txt-roof-segment2-length-f-{{ $conditionId }}" tabindex="62" value="3.00"></input>
                 </td>
@@ -677,7 +677,7 @@
                     <input type="text" class="txt-calced" id="txt-roof-segment2-length-{{ $conditionId }}" tabindex="-1" value="3.00"></input>
                 </td>
                 <td><div style="overflow:hidden"></td>
-                <td class="iw400" colspan="3" style="text-align:right !important; border-left: 1.00pt solid windowtext;" id="td-floor-segment2-caption-{{ $conditionId }}">Segment 7 length</td>
+                <td class="iw400" colspan="3" style="text-align:right !important; border-left: 1.00pt solid windowtext;" id="td-floor-segment2-caption-{{ $conditionId }}">Segment 7 length (ft | in | Dec. Feet)</td>
                 <td class="w400-yellow-bdr" id="td-floor-segment2-length-f-{{ $conditionId }}">
                     <input type="text" class="txt-center-align" id="txt-floor-segment2-length-f-{{ $conditionId }}" tabindex="71" value="4.00"></input>
                 </td>
@@ -689,7 +689,7 @@
                 </td>
             </tr>
             <tr class="h13">
-                <td class="iw400" colspan="3" style="text-align:right !important;" id="td-roof-segment3-caption-{{ $conditionId }}">Segment 3 length</td>
+                <td class="iw400" colspan="3" style="text-align:right !important;" id="td-roof-segment3-caption-{{ $conditionId }}">Segment 3 length (ft | in | Dec. Feet)</td>
                 <td class="w400-yellow-bdr" id="td-roof-segment3-length-f-{{ $conditionId }}">
                     <input type="text" class="txt-center-align" id="txt-roof-segment3-length-f-{{ $conditionId }}" tabindex="63" value="4.00"></input>
                 </td>
@@ -700,7 +700,7 @@
                     <input type="text" class="txt-calced" id="txt-roof-segment3-length-{{ $conditionId }}" tabindex="-1" value="4.00"></input>
                 </td>
                 <td><div style="overflow:hidden"></td>
-                <td class="iw400" colspan="3" style="text-align:right !important; border-left: 1.00pt solid windowtext;" id="td-floor-segment3-caption-{{ $conditionId }}">Segment 8 length</td>
+                <td class="iw400" colspan="3" style="text-align:right !important; border-left: 1.00pt solid windowtext;" id="td-floor-segment3-caption-{{ $conditionId }}">Segment 8 length (ft | in | Dec. Feet)</td>
                 <td class="w400-yellow-bdr" id="td-floor-segment3-length-f-{{ $conditionId }}">
                     <input type="text" class="txt-center-align" id="txt-floor-segment3-length-f-{{ $conditionId }}" tabindex="72" value="4.00"></input>
                 </td>
@@ -712,7 +712,7 @@
                 </td>
             </tr>
             <tr class="h13">
-                <td class="iw400" colspan="3" style="text-align:right !important;" id="td-roof-segment4-caption-{{ $conditionId }}">Segment 4 length</td>
+                <td class="iw400" colspan="3" style="text-align:right !important;" id="td-roof-segment4-caption-{{ $conditionId }}">Segment 4 length (ft | in | Dec. Feet)</td>
                 <td class="w400-yellow-bdr" id="td-roof-segment4-length-f-{{ $conditionId }}">
                     <input type="text" class="txt-center-align" id="txt-roof-segment4-length-f-{{ $conditionId }}" tabindex="64" value="3.00"></input>
                 </td>
