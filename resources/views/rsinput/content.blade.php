@@ -479,20 +479,24 @@
                 <col width="80">
                 <col width="80">
                 <col width="80">
+                <col width="40">
+                <col width="40">
                 <col width="80">
                 <col width="80">
                 <col width="80">
                 <col width="80">
                 <col width="80">
-                <col width="80">
-                <col width="80">
+                <col width="40">
+                <col width="40">
                 <col width="80">
             </colgroup>
         <tbody>
             <tr class="h13">
-                <td class="iw400-bdr" colspan="11" >Truss Data Input</td>
+                <td class="iw400-bdr" colspan="13" >Truss Data Input</td>
             </tr>
             <tr class="h13">
+                <td><div style="overflow:hidden"></td>
+                <td><div style="overflow:hidden"></td>
                 <td><div style="overflow:hidden"></td>
                 <td><div style="overflow:hidden"></td>
                 <td><div style="overflow:hidden"></td>
@@ -512,25 +516,25 @@
                         <option data-value="Top ridge height above floor plane">Top ridge height above floor plane</option>
                     </select>
                 </td>
-                <td class="w400-yellow-bdr">
+                <td class="w400-yellow-bdr" colspan="2">
                     <input type="text" id="txt-roof-degree-{{ $conditionId }}" class="txt-center-align" tabindex="57" value="45.00"></input>
                 </td>
-                <td colspan="7"><div style="overflow:hidden"></div></td>
+                <td colspan="8"><div style="overflow:hidden"></div></td>
             </tr>
             <tr class="h13">
                 <td class="iw400" colspan="3" id="txt-roof-slope-another-{{ $conditionId }}" style="text-align:center !important;">Top ridge height above floor plane</td>
-                <td class="w400-bdr" id="td-unknown-degree1-{{ $conditionId }}" >10.25</td>
-                <td colspan="7"><div style="overflow:hidden"></div></td>
+                <td class="w400-bdr" id="td-unknown-degree1-{{ $conditionId }}" colspan="2">10.25</td>
+                <td colspan="8"><div style="overflow:hidden"></div></td>
             </tr>
             <tr class="h13">
                 <td class="iw400" colspan="3" style="text-align:center !important;">Calculated roof plane length</td>
-                <td class="w400-bdr" id="td-calculated-roof-plane-length-{{ $conditionId }}">16.97</td>
-                <td class="iw400" colspan="7" style="text-align:left !important;">ft (based upon floor plane and ridge height values)</td>
+                <td class="w400-bdr" id="td-calculated-roof-plane-length-{{ $conditionId }}" colspan="2">16.97</td>
+                <td class="iw400" colspan="8" style="text-align:left !important;">ft (based upon floor plane and ridge height values)</td>
             </tr>
             <tr class="h13">
                 <td class="iw400" colspan="3" style="text-align:center !important;">Diff between measured and calculated</td>
-                <td class="w400-bdr" style="color:red; font-weight:700" id="td-diff-between-measured-and-calculated-{{ $conditionId }}">2.47</td>
-                <td class="iw400" colspan="7" style="text-align:left !important;">ft Please check all values</td>
+                <td class="w400-bdr" style="color:red; font-weight:700" id="td-diff-between-measured-and-calculated-{{ $conditionId }}" colspan="2">2.47</td>
+                <td class="iw400" colspan="8" style="text-align:left !important;">ft Please check all values</td>
             </tr>
             <tr class="h13">
                 <td><div style="overflow:hidden"></td>
@@ -544,30 +548,32 @@
                 <td><div style="overflow:hidden"></td>
                 <td><div style="overflow:hidden"></td>
                 <td><div style="overflow:hidden"></td>
-            </tr>
-            <tr class="h13">
-                <td><div style="overflow:hidden"></td>
-                <td><div style="overflow:hidden"></td>
-                <td><div style="overflow:hidden"></td>
-                <td><div style="overflow:hidden"></td>
-                <td><div style="overflow:hidden"></td>
-                <td><div style="overflow:hidden"></td>
-                <td><div style="overflow:hidden"></td>
-                <td><div style="overflow:hidden"></td>
-                <td><div style="overflow:hidden"></td>
                 <td><div style="overflow:hidden"></td>
                 <td><div style="overflow:hidden"></td>
             </tr>
             <tr class="h13">
-                <td class="iw400-bdr" colspan="4">Roof Plane</td>
-                <td><div style="overflow:hidden"></td>
-                <td  class="iw400-bdr" colspan="4">Floor Plane</td>
                 <td><div style="overflow:hidden"></td>
                 <td><div style="overflow:hidden"></td>
+                <td><div style="overflow:hidden"></td>
+                <td><div style="overflow:hidden"></td>
+                <td><div style="overflow:hidden"></td>
+                <td><div style="overflow:hidden"></td>
+                <td><div style="overflow:hidden"></td>
+                <td><div style="overflow:hidden"></td>
+                <td><div style="overflow:hidden"></td>
+                <td><div style="overflow:hidden"></td>
+                <td><div style="overflow:hidden"></td>
+                <td><div style="overflow:hidden"></td>
+                <td><div style="overflow:hidden"></td>
+            </tr>
+            <tr class="h13">
+                <td class="iw400-bdr" colspan="6">Roof Plane</td>
+                <td><div style="overflow:hidden"></td>
+                <td  class="iw400-bdr" colspan="6">Floor Plane</td>
             </tr>
             <tr class="h13">
                 <td class="iw400" colspan="3" style="text-align:right !important;">Member type</td>
-                <td class="w400-green-bdr">
+                <td class="w400-green-bdr" colspan="3">
                     <select id="option-roof-member-type-{{ $conditionId }}" tabindex="58">
                         <option data-value="2x4">2x4</option>
                         <option data-value="2x6" selected="">2x6</option>
@@ -578,7 +584,7 @@
                 </td>
                 <td><div style="overflow:hidden"></td>
                 <td class="iw400" colspan="3" style="text-align:right !important; border-left: 1.00pt solid windowtext;">Member type</td>
-                <td class="w400-green-bdr">
+                <td class="w400-green-bdr" colspan="3">
                     <select id="option-floor-member-type-{{ $conditionId }}" tabindex="67">
                         <option data-value="2x4">2x4</option>
                         <option data-value="2x6">2x6</option>
@@ -587,25 +593,33 @@
                         <option data-value="2x12" selected>2x12</option>
                     </select>
                 </td>
-                <td><div style="overflow:hidden"></td>
-                <td><div style="overflow:hidden"></td>
             </tr>
             <tr class="h13">
                 <td class="iw400" colspan="3" style="text-align:right !important;">Length of roof plane</td>
                 <td class="w400-yellow-bdr">
-                    <input type="text" class="txt-center-align" id="txt-length-of-roof-plane-{{ $conditionId }}" tabindex="59" value="14.50"></input>
+                    <input type="text" class="txt-center-align" id="txt-length-of-roof-plane-f-{{ $conditionId }}" tabindex="59" value="14.50"></input>
+                </td>
+                <td class="w400-yellow-bdr">
+                    <input type="text" class="txt-center-align" id="txt-length-of-roof-plane-i-{{ $conditionId }}" tabindex="59" value="0.00"></input>
+                </td>
+                <td class="w400-lightblue-bdr">
+                    <input type="text" class="txt-calced" id="txt-length-of-roof-plane-{{ $conditionId }}" tabindex="-1" value="14.50"></input>
                 </td>
                 <td><div style="overflow:hidden"></td>
                 <td class="iw400" colspan="3" style="text-align:right !important; border-left: 1.00pt solid windowtext;">Length of floor plane</td>
                 <td class="w400-yellow-bdr">
-                    <input type="text" class="txt-center-align" id="txt-length-of-floor-plane-{{ $conditionId }}" tabindex="68" value="12.00"></input>
+                    <input type="text" class="txt-center-align" id="txt-length-of-floor-plane-f-{{ $conditionId }}" tabindex="68" value="12.00"></input>
                 </td>
-                <td><div style="overflow:hidden"></td>
-                <td><div style="overflow:hidden"></td>
+                <td class="w400-yellow-bdr">
+                    <input type="text" class="txt-center-align" id="txt-length-of-floor-plane-i-{{ $conditionId }}" tabindex="68" value="0.00"></input>
+                </td>
+                <td class="w400-lightblue-bdr">
+                    <input type="text" class="txt-calced" id="txt-length-of-floor-plane-{{ $conditionId }}" tabindex="-1" value="12.00"></input>
+                </td>
             </tr>
             <tr class="h13">
                 <td class="iw400" colspan="3" style="text-align:right !important;">Number of segments along roof plane</td>
-                <td class="w400-green-bdr">
+                <td class="w400-green-bdr" colspan="3">
                     <select id="option-number-segments1-{{ $conditionId }}" style="text-align:center" tabindex="60" class="{{ $conditionId }}-option-number-segments1">
                         <option data-value="1">1</option>
                         <option data-value="2">2</option>
@@ -617,7 +631,7 @@
                 </td>
                 <td><div style="overflow:hidden"></td>
                 <td class="iw400" colspan="3" style="text-align:right !important; border-left: 1.00pt solid windowtext;">Number of segments along floor plane</td>
-                <td class="w400-green-bdr">
+                <td class="w400-green-bdr" colspan="3">
                     <select id="option-number-segments2-{{ $conditionId }}" style="text-align:center" tabindex="69" class="{{ $conditionId }}-option-number-segments2">
                         <option data-value="1">1</option>
                         <option data-value="2">2</option>
@@ -627,106 +641,162 @@
                         <option data-value="6">6</option>
                     </select>            
                 </td>
-                <td><div style="overflow:hidden"></td>
-                <td><div style="overflow:hidden"></td>
             </tr>
             <tr class="h13">
                 <td class="iw400" colspan="3" style="text-align:right !important;" id="td-roof-segment1-caption-{{ $conditionId }}">Segment 1 length</td>
-                <td class="w400-yellow-bdr" id="td-roof-segment1-length-{{ $conditionId }}">
-                    <input type="text" class="txt-center-align" id="txt-roof-segment1-length-{{ $conditionId }}" tabindex="61" value="4.50"></input>
+                <td class="w400-yellow-bdr" id="td-roof-segment1-length-f-{{ $conditionId }}">
+                    <input type="text" class="txt-center-align" id="txt-roof-segment1-length-f-{{ $conditionId }}" tabindex="61" value="4.50"></input>
+                </td>
+                <td class="w400-yellow-bdr" id="td-roof-segment1-length-i-{{ $conditionId }}">
+                    <input type="text" class="txt-center-align" id="txt-roof-segment1-length-i-{{ $conditionId }}" tabindex="61" value="0.00"></input>
+                </td>
+                <td class="w400-lightblue-bdr" id="td-roof-segment1-length-{{ $conditionId }}">
+                    <input type="text" class="txt-calced" id="txt-roof-segment1-length-{{ $conditionId }}" tabindex="-1" value="4.50"></input>
                 </td>
                 <td><div style="overflow:hidden"></td>
                 <td class="iw400" colspan="3" style="text-align:right !important; border-left: 1.00pt solid windowtext;" id="td-floor-segment1-caption-{{ $conditionId }}">Segment 6 length</td>
-                <td class="w400-yellow-bdr" id="td-floor-segment1-length-{{ $conditionId }}">
-                    <input type="text" class="txt-center-align" id="txt-floor-segment1-length-{{ $conditionId }}" tabindex="70" value="4.00"></input>
+                <td class="w400-yellow-bdr" id="td-floor-segment1-length-f-{{ $conditionId }}">
+                    <input type="text" class="txt-center-align" id="txt-floor-segment1-length-f-{{ $conditionId }}" tabindex="70" value="4.00"></input>
                 </td>
-                <td><div style="overflow:hidden"></td>
-                <td><div style="overflow:hidden"></td>
+                <td class="w400-yellow-bdr" id="td-floor-segment1-length-i-{{ $conditionId }}">
+                    <input type="text" class="txt-center-align" id="txt-floor-segment1-length-i-{{ $conditionId }}" tabindex="70" value="0.00"></input>
+                </td>
+                <td class="w400-lightblue-bdr" id="td-floor-segment1-length-{{ $conditionId }}">
+                    <input type="text" class="txt-calced" id="txt-floor-segment1-length-{{ $conditionId }}" tabindex="-1" value="4.00"></input>
+                </td>
             </tr>
             <tr class="h13">
                 <td class="iw400" colspan="3" style="text-align:right !important;" id="td-roof-segment2-caption-{{ $conditionId }}">Segment 2 length</td>
-                <td class="w400-yellow-bdr" id="td-roof-segment2-length-{{ $conditionId }}">
-                    <input type="text" class="txt-center-align" id="txt-roof-segment2-length-{{ $conditionId }}" tabindex="62" value="3.00"></input>
+                <td class="w400-yellow-bdr" id="td-roof-segment2-length-f-{{ $conditionId }}">
+                    <input type="text" class="txt-center-align" id="txt-roof-segment2-length-f-{{ $conditionId }}" tabindex="62" value="3.00"></input>
+                </td>
+                <td class="w400-yellow-bdr" id="td-roof-segment2-length-i-{{ $conditionId }}">
+                    <input type="text" class="txt-center-align" id="txt-roof-segment2-length-i-{{ $conditionId }}" tabindex="62" value="0.00"></input>
+                </td>
+                <td class="w400-lightblue-bdr" id="td-roof-segment2-length-{{ $conditionId }}">
+                    <input type="text" class="txt-calced" id="txt-roof-segment2-length-{{ $conditionId }}" tabindex="-1" value="3.00"></input>
                 </td>
                 <td><div style="overflow:hidden"></td>
                 <td class="iw400" colspan="3" style="text-align:right !important; border-left: 1.00pt solid windowtext;" id="td-floor-segment2-caption-{{ $conditionId }}">Segment 7 length</td>
-                <td class="w400-yellow-bdr" id="td-floor-segment2-length-{{ $conditionId }}">
-                    <input type="text" class="txt-center-align" id="txt-floor-segment2-length-{{ $conditionId }}" tabindex="71" value="4.00"></input>
+                <td class="w400-yellow-bdr" id="td-floor-segment2-length-f-{{ $conditionId }}">
+                    <input type="text" class="txt-center-align" id="txt-floor-segment2-length-f-{{ $conditionId }}" tabindex="71" value="4.00"></input>
                 </td>
-                <td><div style="overflow:hidden"></td>
-                <td><div style="overflow:hidden"></td>
+                <td class="w400-yellow-bdr" id="td-floor-segment2-length-i-{{ $conditionId }}">
+                    <input type="text" class="txt-center-align" id="txt-floor-segment2-length-i-{{ $conditionId }}" tabindex="71" value="0.00"></input>
+                </td>
+                <td class="w400-lightblue-bdr" id="td-floor-segment2-length-{{ $conditionId }}">
+                    <input type="text" class="txt-calced" id="txt-floor-segment2-length-{{ $conditionId }}" tabindex="-1" value="4.00"></input>
+                </td>
             </tr>
             <tr class="h13">
                 <td class="iw400" colspan="3" style="text-align:right !important;" id="td-roof-segment3-caption-{{ $conditionId }}">Segment 3 length</td>
-                <td class="w400-yellow-bdr" id="td-roof-segment3-length-{{ $conditionId }}">
-                    <input type="text" class="txt-center-align" id="txt-roof-segment3-length-{{ $conditionId }}" tabindex="63" value="4.00"></input>
+                <td class="w400-yellow-bdr" id="td-roof-segment3-length-f-{{ $conditionId }}">
+                    <input type="text" class="txt-center-align" id="txt-roof-segment3-length-f-{{ $conditionId }}" tabindex="63" value="4.00"></input>
+                </td>
+                <td class="w400-yellow-bdr" id="td-roof-segment3-length-i-{{ $conditionId }}">
+                    <input type="text" class="txt-center-align" id="txt-roof-segment3-length-i-{{ $conditionId }}" tabindex="63" value="0.00"></input>
+                </td>
+                <td class="w400-lightblue-bdr" id="td-roof-segment3-length-{{ $conditionId }}">
+                    <input type="text" class="txt-calced" id="txt-roof-segment3-length-{{ $conditionId }}" tabindex="-1" value="4.00"></input>
                 </td>
                 <td><div style="overflow:hidden"></td>
                 <td class="iw400" colspan="3" style="text-align:right !important; border-left: 1.00pt solid windowtext;" id="td-floor-segment3-caption-{{ $conditionId }}">Segment 8 length</td>
-                <td class="w400-yellow-bdr" id="td-floor-segment3-length-{{ $conditionId }}">
-                    <input type="text" class="txt-center-align" id="txt-floor-segment3-length-{{ $conditionId }}" tabindex="72" value="4.00"></input>
+                <td class="w400-yellow-bdr" id="td-floor-segment3-length-f-{{ $conditionId }}">
+                    <input type="text" class="txt-center-align" id="txt-floor-segment3-length-f-{{ $conditionId }}" tabindex="72" value="4.00"></input>
                 </td>
-                <td><div style="overflow:hidden"></td>
-                <td><div style="overflow:hidden"></td>
+                <td class="w400-yellow-bdr" id="td-floor-segment3-length-i-{{ $conditionId }}">
+                    <input type="text" class="txt-center-align" id="txt-floor-segment3-length-i-{{ $conditionId }}" tabindex="72" value="0.00"></input>
+                </td>
+                <td class="w400-lightblue-bdr" id="td-floor-segment3-length-{{ $conditionId }}">
+                    <input type="text" class="txt-calced" id="txt-floor-segment3-length-{{ $conditionId }}" tabindex="-1" value="4.00"></input>
+                </td>
             </tr>
             <tr class="h13">
                 <td class="iw400" colspan="3" style="text-align:right !important;" id="td-roof-segment4-caption-{{ $conditionId }}">Segment 4 length</td>
-                <td class="w400-yellow-bdr" id="td-roof-segment4-length-{{ $conditionId }}">
-                    <input type="text" class="txt-center-align" id="txt-roof-segment4-length-{{ $conditionId }}" tabindex="64" value="3.00"></input>
+                <td class="w400-yellow-bdr" id="td-roof-segment4-length-f-{{ $conditionId }}">
+                    <input type="text" class="txt-center-align" id="txt-roof-segment4-length-f-{{ $conditionId }}" tabindex="64" value="3.00"></input>
+                </td>
+                <td class="w400-yellow-bdr" id="td-roof-segment4-length-i-{{ $conditionId }}">
+                    <input type="text" class="txt-center-align" id="txt-roof-segment4-length-i-{{ $conditionId }}" tabindex="64" value="0.00"></input>
+                </td>
+                <td class="w400-lightblue-bdr" id="td-roof-segment4-length-{{ $conditionId }}">
+                    <input type="text" class="txt-calced" id="txt-roof-segment4-length-{{ $conditionId }}" tabindex="-1" value="3.00"></input>
                 </td>
                 <td><div style="overflow:hidden"></td>
                 <td class="iw400" colspan="3" style="text-align:right !important; border-left: 1.00pt solid windowtext;" id="td-floor-segment4-caption-{{ $conditionId }}"></td>
-                <td class="w400-blue-bdr" id="td-floor-segment4-length-{{ $conditionId }}">
-                    <input type="text" class="txt-center-align" id="txt-floor-segment4-length-{{ $conditionId }}" tabindex="73" value="3.00"></input>
+                <td class="w400-blue-bdr" id="td-floor-segment4-length-f-{{ $conditionId }}">
+                    <input type="text" class="txt-center-align" id="txt-floor-segment4-length-f-{{ $conditionId }}" tabindex="73" value="3.00"></input>
                 </td>
-                <td><div style="overflow:hidden"></td>
-                <td><div style="overflow:hidden"></td>
+                <td class="w400-blue-bdr" id="td-floor-segment4-length-i-{{ $conditionId }}">
+                    <input type="text" class="txt-center-align" id="txt-floor-segment4-length-i-{{ $conditionId }}" tabindex="73" value="0.00"></input>
+                </td>
+                <td class="w400-lightblue-bdr" id="td-floor-segment4-length-{{ $conditionId }}">
+                    <input type="text" class="txt-calced" id="txt-floor-segment4-length-{{ $conditionId }}" tabindex="73" value="3.00"></input>
+                </td>
             </tr>
             <tr class="h13">
                 <td class="iw400" colspan="3" style="text-align:right !important;" id="td-roof-segment5-caption-{{ $conditionId }}"></td>
-                <td class="w400-blue-bdr" id="td-roof-segment5-length-{{ $conditionId }}">
-                    <input type="text" class="txt-center-align" id="txt-roof-segment5-length-{{ $conditionId }}" tabindex="65" value="3.00"></input>
+                <td class="w400-blue-bdr" id="td-roof-segment5-length-f-{{ $conditionId }}">
+                    <input type="text" class="txt-center-align" id="txt-roof-segment5-length-f-{{ $conditionId }}" tabindex="65" value="3.00"></input>
+                </td>
+                <td class="w400-blue-bdr" id="td-roof-segment5-length-i-{{ $conditionId }}">
+                    <input type="text" class="txt-center-align" id="txt-roof-segment5-length-i-{{ $conditionId }}" tabindex="65" value="0.00"></input>
+                </td>
+                <td class="w400-lightblue-bdr" id="td-roof-segment5-length-{{ $conditionId }}">
+                    <input type="text" class="txt-calced" id="txt-roof-segment5-length-{{ $conditionId }}" tabindex="-1" value="3.00"></input>
                 </td>
                 <td><div style="overflow:hidden"></td>
                 <td class="iw400" colspan="3" style="text-align:right !important; border-left: 1.00pt solid windowtext;" id="td-floor-segment5-caption-{{ $conditionId }}"></td>
-                <td class="w400-blue-bdr" id="td-floor-segment5-length-{{ $conditionId }}">
-                    <input type="text" class="txt-center-align" id="txt-floor-segment5-length-{{ $conditionId }}" tabindex="74" value="3.00"></input>
+                <td class="w400-blue-bdr" id="td-floor-segment5-length-f-{{ $conditionId }}">
+                    <input type="text" class="txt-center-align" id="txt-floor-segment5-length-f-{{ $conditionId }}" tabindex="74" value="3.00"></input>
                 </td>
-                <td><div style="overflow:hidden"></td>
-                <td><div style="overflow:hidden"></td>
+                <td class="w400-blue-bdr" id="td-floor-segment5-length-i-{{ $conditionId }}">
+                    <input type="text" class="txt-center-align" id="txt-floor-segment5-length-i-{{ $conditionId }}" tabindex="74" value="0.00"></input>
+                </td>
+                <td class="w400-lightblue-bdr" id="td-floor-segment5-length-{{ $conditionId }}">
+                    <input type="text" class="txt-calced" id="txt-floor-segment5-length-{{ $conditionId }}" tabindex="-1" value="3.00"></input>
+                </td>
             </tr>
             <tr class="h13">
                 <td class="iw400" colspan="3" style="text-align:right !important;" id="td-roof-segment6-caption-{{ $conditionId }}"></td>
-                <td class="w400-blue-bdr" id="td-roof-segment6-length-{{ $conditionId }}">
-                    <input type="text" class="txt-center-align" id="txt-roof-segment6-length-{{ $conditionId }}" tabindex="66" value="3.00"></input>
+                <td class="w400-blue-bdr" id="td-roof-segment6-length-f-{{ $conditionId }}">
+                    <input type="text" class="txt-center-align" id="txt-roof-segment6-length-f-{{ $conditionId }}" tabindex="66" value="3.00"></input>
+                </td>
+                <td class="w400-blue-bdr" id="td-roof-segment6-length-i-{{ $conditionId }}">
+                    <input type="text" class="txt-center-align" id="txt-roof-segment6-length-i-{{ $conditionId }}" tabindex="66" value="0.00"></input>
+                </td>
+                <td class="w400-lightblue-bdr" id="td-roof-segment6-length-{{ $conditionId }}">
+                    <input type="text" class="txt-calced" id="txt-roof-segment6-length-{{ $conditionId }}" tabindex="-1" value="3.00"></input>
                 </td>
                 <td><div style="overflow:hidden"></td>
                 <td class="iw400" colspan="3" style="text-align:right !important; border-left: 1.00pt solid windowtext;" id="td-floor-segment6-caption-{{ $conditionId }}"></td>
-                <td class="w400-blue-bdr" id="td-floor-segment6-length-{{ $conditionId }}">
-                    <input type="text" class="txt-center-align" id="txt-floor-segment6-length-{{ $conditionId }}" tabindex="75" value="3.00"></input>
+                <td class="w400-blue-bdr" id="td-floor-segment6-length-f-{{ $conditionId }}">
+                    <input type="text" class="txt-center-align" id="txt-floor-segment6-length-f-{{ $conditionId }}" tabindex="75" value="3.00"></input>
                 </td>
-                <td><div style="overflow:hidden"></td>
-                <td><div style="overflow:hidden"></td>
+                <td class="w400-blue-bdr" id="td-floor-segment6-length-i-{{ $conditionId }}">
+                    <input type="text" class="txt-center-align" id="txt-floor-segment6-length-i-{{ $conditionId }}" tabindex="75" value="0.00"></input>
+                </td>
+                <td class="w400-lightblue-bdr" id="td-floor-segment6-length-{{ $conditionId }}">
+                    <input type="text" class="txt-calced" id="txt-floor-segment6-length-{{ $conditionId }}" tabindex="-1" value="3.00"></input>
+                </td>
             </tr>
             <tr class="h13">
                 <td class="iw400" colspan="3" style="text-align:right !important;">Sum of lengths entered</td>
-                <td class="w400-bdr" id="td-sum-of-length-entered-{{ $conditionId }}">14.50</td>
+                <td class="w400-bdr" id="td-sum-of-length-entered-{{ $conditionId }}" colspan="3">14.50</td>
                 <td><div style="overflow:hidden"></td>
                 <td class="iw400" colspan="3" style="text-align:right !important; border-left: 1.00pt solid windowtext;">Total length entered</td>
-                <td class="w400-bdr" id="td-total-length-entered-{{ $conditionId }}">12.00</td>
-                <td class="iw400" style="text-align:left !important;"></td>
-                <td><div style="overflow:hidden"></td>
+                <td class="w400-bdr" id="td-total-length-entered-{{ $conditionId }}" colspan="3">12.00</td>
             </tr>
             <tr class="h13">
                 <td class="iw400" colspan="3" style="text-align:right !important;border-bottom: 1.00pt solid windowtext;">Check sum of chord lengths</td>
-                <td class="w400-bdr" style="font-weight:800" id="td-checksum-of-segment1-{{ $conditionId }}">OK</td>
+                <td class="w400-bdr" style="font-weight:800" id="td-checksum-of-segment1-{{ $conditionId }}" colspan="3">OK</td>
                 <td><div style="overflow:hidden"></td>
                 <td class="iw400" colspan="3" style="text-align:right !important; border-left: 1.00pt solid windowtext;border-bottom: 1.00pt solid windowtext;">Check sum of chord lengths</td>
-                <td class="w400-bdr" style="font-weight:800" id="td-checksum-of-segment2-{{ $conditionId }}">OK</td>
-                <td class="iw400" style="text-align:left !important;"></td>
-                <td><div style="overflow:hidden"></td>
+                <td class="w400-bdr" style="font-weight:800" id="td-checksum-of-segment2-{{ $conditionId }}" colspan="3">OK</td>
             </tr>
             <tr class="h13">
+                <td><div style="overflow:hidden"></td>
+                <td><div style="overflow:hidden"></td>
                 <td><div style="overflow:hidden"></td>
                 <td><div style="overflow:hidden"></td>
                 <td><div style="overflow:hidden"></td>
@@ -741,31 +811,31 @@
             </tr>
 
             <tr class="h13">
-                <td class="iw400-bdr" colspan="11" style="border: 2pt solid windowtext;">Truss Segments</td>
+                <td class="iw400-bdr" colspan="13" style="border: 2pt solid windowtext;">Truss Segments</td>
             </tr>
             <tr class="h13">
                 <td class="iw400-bdr" style="border: 2pt solid windowtext;" colspan="2">Roof Plane</td>
-                <td class="iw400-bdr" style="border: 2pt solid windowtext;" colspan="2">Floor Plane</td>
-                <td class="iw400-bdr" style="border: 2pt solid windowtext;" colspan="7">Diagonals</td>
+                <td class="iw400-bdr" style="border: 2pt solid windowtext;" colspan="3">Floor Plane</td>
+                <td class="iw400-bdr" style="border: 2pt solid windowtext;" colspan="8">Diagonals</td>
             </tr>
             <tr class="h13">
                 <td class="w400-bdr" style="border-left: 2pt solid windowtext;">Mem #</td>
                 <td class="w400-bdr">Mem Type</td>
                 <td class="w400-bdr" style="border-left: 2pt solid windowtext;">Mem #</td>
-                <td class="w400-bdr">Mem Type</td>
+                <td class="w400-bdr" colspan="2">Mem Type</td>
                 <td class="w400-bdr" style="border-left: 2pt solid windowtext;">Remove</td>
                 <td class="w400-bdr">Mem #</td>
                 <td class="w400-bdr">Mem Type</td>
                 <td class="w400-bdr" style="border-left: 2pt solid windowtext;">Remove</td>
                 <td class="w400-bdr">Mem #</td>
-                <td class="w400-bdr">Mem Type</td>
+                <td class="w400-bdr" colspan="2">Mem Type</td>
                 <td class="w400-bdr" style="border-right: 2pt solid windowtext;">Reverse</td>
             </tr>
             <tr class="h13">
                 <td class="w400-bdr" id="td-truss-roof-segment1-{{ $conditionId }}" style="border-left: 2pt solid windowtext;">1</td>
                 <td class="w400-bdr" id="td-truss-roof-segment1-type-{{ $conditionId }}">2x6</td>
                 <td class="w400-bdr" id="td-truss-floor-segment1-{{ $conditionId }}" style="border-left: 2pt solid windowtext;">5</td>
-                <td class="w400-bdr" id="td-truss-floor-segment1-type-{{ $conditionId }}">2x12</td>
+                <td class="w400-bdr" id="td-truss-floor-segment1-type-{{ $conditionId }}" colspan="2">2x12</td>
                 <td class="w400-green-bdr" style="border-left: 2pt solid windowtext;"><input type="checkbox" id="diag-1-1-{{ $conditionId }}" tabindex="76"></input></td>
                 <td class="w400-bdr" id="td-diag-1-1-{{ $conditionId }}">8</td>
                 <td class="w400-green-bdr" id="td-diag-1-1-type-{{ $conditionId }}">
@@ -779,7 +849,7 @@
                 </td>
                 <td class="w400-green-bdr" style="border-left: 2pt solid windowtext;"><input type="checkbox" id="diag-2-1-{{ $conditionId }}" tabindex="88"></input></td>
                 <td class="w400-bdr" id="td-diag-2-1-{{ $conditionId }}">11</td>
-                <td class="w400-green-bdr" id="td-diag-2-1-type-{{ $conditionId }}">
+                <td class="w400-green-bdr" id="td-diag-2-1-type-{{ $conditionId }}" colspan="2">
                     <select id="option-diagonals-mem2-1-type-{{ $conditionId }}" tabindex="89">
                         <option data-value="2x4" selected="">2x4</option>
                         <option data-value="2x6">2x6</option>
@@ -794,7 +864,7 @@
                 <td class="w400-bdr" id="td-truss-roof-segment2-{{ $conditionId }}" style="border-left: 2pt solid windowtext;">2</td>
                 <td class="w400-bdr" id="td-truss-roof-segment2-type-{{ $conditionId }}">2x6</td>
                 <td class="w400-bdr" id="td-truss-floor-segment2-{{ $conditionId }}" style="border-left: 2pt solid windowtext;">6</td>
-                <td class="w400-bdr" id="td-truss-floor-segment2-type-{{ $conditionId }}">2x12</td>
+                <td class="w400-bdr" id="td-truss-floor-segment2-type-{{ $conditionId }}" colspan="2">2x12</td>
                 <td class="w400-green-bdr" style="border-left: 2pt solid windowtext;"><input type="checkbox" id="diag-1-2-{{ $conditionId }}" tabindex="78"></input></td>
                 <td class="w400-bdr" id="td-diag-1-2-{{ $conditionId }}">9</td>
                 <td class="w400-green-bdr" id="td-diag-1-2-type-{{ $conditionId }}">
@@ -808,7 +878,7 @@
                 </td>
                 <td class="w400-green-bdr" style="border-left: 2pt solid windowtext;"><input type="checkbox" id="diag-2-2-{{ $conditionId }}" tabindex="91"></input></td>
                 <td class="w400-bdr" id="td-diag-2-2-{{ $conditionId }}">12</td>
-                <td class="w400-green-bdr" id="td-diag-2-2-type-{{ $conditionId }}">
+                <td class="w400-green-bdr" id="td-diag-2-2-type-{{ $conditionId }}" colspan="2">
                     <select id="option-diagonals-mem2-2-type-{{ $conditionId }}" tabindex="92">
                         <option data-value="2x4" selected="">2x4</option>
                         <option data-value="2x6">2x6</option>
@@ -823,7 +893,7 @@
                 <td class="w400-bdr" id="td-truss-roof-segment3-{{ $conditionId }}" style="border-left: 2pt solid windowtext;">3</td>
                 <td class="w400-bdr" id="td-truss-roof-segment3-type-{{ $conditionId }}">2x6</td>
                 <td class="w400-bdr" id="td-truss-floor-segment3-{{ $conditionId }}" style="border-left: 2pt solid windowtext;">7</td>
-                <td class="w400-bdr" id="td-truss-floor-segment3-type-{{ $conditionId }}">2x12</td>
+                <td class="w400-bdr" id="td-truss-floor-segment3-type-{{ $conditionId }}" colspan="2">2x12</td>
                 <td class="w400-green-bdr" style="border-left: 2pt solid windowtext;"><input type="checkbox" id="diag-1-3-{{ $conditionId }}" tabindex="80"></input></td>
                 <td class="w400-bdr" id="td-diag-1-3-{{ $conditionId }}">10</td>
                 <td class="w400-green-bdr" id="td-diag-1-3-type-{{ $conditionId }}">
@@ -837,7 +907,7 @@
                 </td>
                 <td class="w400-green-bdr" style="border-left: 2pt solid windowtext;"><input type="checkbox" id="diag-2-3-{{ $conditionId }}" tabindex="94"></input></td>
                 <td class="w400-bdr" id="td-diag-2-3-{{ $conditionId }}">13</td>
-                <td class="w400-green-bdr" id="td-diag-2-3-type-{{ $conditionId }}">
+                <td class="w400-green-bdr" id="td-diag-2-3-type-{{ $conditionId }}" colspan="2">
                     <select id="option-diagonals-mem2-3-type-{{ $conditionId }}" tabindex="95">
                         <option data-value="2x4" selected="">2x4</option>
                         <option data-value="2x6">2x6</option>
@@ -852,7 +922,7 @@
                 <td class="w400-bdr" id="td-truss-roof-segment4-{{ $conditionId }}" style="border-left: 2pt solid windowtext;">4</td>
                 <td class="w400-bdr" id="td-truss-roof-segment4-type-{{ $conditionId }}">2x6</td>
                 <td class="w400-blue-bdr" id="td-truss-floor-segment4-{{ $conditionId }}" style="border-left: 2pt solid windowtext;"></td>
-                <td class="w400-blue-bdr" id="td-truss-floor-segment4-type-{{ $conditionId }}">2x12</td>
+                <td class="w400-blue-bdr" id="td-truss-floor-segment4-type-{{ $conditionId }}" colspan="2">2x12</td>
                 <td class="w400-green-bdr" style="border-left: 2pt solid windowtext;"><input type="checkbox" id="diag-1-4-{{ $conditionId }}" tabindex="82"></input></td>
                 <td class="w400-blue-bdr" id="td-diag-1-4-{{ $conditionId }}"></td>
                 <td class="w400-blue-bdr" id="td-diag-1-4-type-{{ $conditionId }}">
@@ -866,7 +936,7 @@
                 </td>
                 <td class="w400-green-bdr" style="border-left: 2pt solid windowtext;"><input type="checkbox" id="diag-2-4-{{ $conditionId }}" tabindex="97"></input></td>
                 <td class="w400-blue-bdr" id="td-diag-2-4-{{ $conditionId }}"></td>
-                <td class="w400-blue-bdr" id="td-diag-2-4-type-{{ $conditionId }}">
+                <td class="w400-blue-bdr" id="td-diag-2-4-type-{{ $conditionId }}" colspan="2">
                     <select id="option-diagonals-mem2-4-type-{{ $conditionId }}" tabindex="98">
                         <option data-value="2x4" selected="">2x4</option>
                         <option data-value="2x6">2x6</option>
@@ -881,7 +951,7 @@
                 <td class="w400-blue-bdr" id="td-truss-roof-segment5-{{ $conditionId }}" style="border-left: 2pt solid windowtext;"></td>
                 <td class="w400-blue-bdr" id="td-truss-roof-segment5-type-{{ $conditionId }}">2x6</td>
                 <td class="w400-blue-bdr" id="td-truss-floor-segment5-{{ $conditionId }}" style="border-left: 2pt solid windowtext;"></td>
-                <td class="w400-blue-bdr" id="td-truss-floor-segment5-type-{{ $conditionId }}">2x12</td>
+                <td class="w400-blue-bdr" id="td-truss-floor-segment5-type-{{ $conditionId }}" colspan="2">2x12</td>
                 <td class="w400-green-bdr" style="border-left: 2pt solid windowtext;"><input type="checkbox" id="diag-1-5-{{ $conditionId }}" tabindex="84"></input></td>
                 <td class="w400-blue-bdr" id="td-diag-1-5-{{ $conditionId }}"></td>
                 <td class="w400-blue-bdr" id="td-diag-1-5-type-{{ $conditionId }}">
@@ -895,7 +965,7 @@
                 </td>
                 <td class="w400-green-bdr" style="border-left: 2pt solid windowtext;"><input type="checkbox" id="diag-2-5-{{ $conditionId }}" tabindex="100"></input></td>
                 <td class="w400-blue-bdr" id="td-diag-2-5-{{ $conditionId }}"></td>
-                <td class="w400-blue-bdr" id="td-diag-2-5-type-{{ $conditionId }}">
+                <td class="w400-blue-bdr" id="td-diag-2-5-type-{{ $conditionId }}" colspan="2">
                     <select id="option-diagonals-mem2-5-type-{{ $conditionId }}" tabindex="101">
                         <option data-value="2x4" selected="">2x4</option>
                         <option data-value="2x6">2x6</option>
@@ -910,7 +980,7 @@
                 <td class="w400-blue-bdr" id="td-truss-roof-segment6-{{ $conditionId }}" style="border-left: 2pt solid windowtext;"></td>
                 <td class="w400-blue-bdr" id="td-truss-roof-segment6-type-{{ $conditionId }}">2x6</td>
                 <td class="w400-blue-bdr" id="td-truss-floor-segment6-{{ $conditionId }}" style="border-left: 2pt solid windowtext;"></td>
-                <td class="w400-blue-bdr" id="td-truss-floor-segment6-type-{{ $conditionId }}">2x12</td>
+                <td class="w400-blue-bdr" id="td-truss-floor-segment6-type-{{ $conditionId }}" colspan="2">2x12</td>
                 <td class="w400-green-bdr" style="border-left: 2pt solid windowtext;"><input type="checkbox" id="diag-1-6-{{ $conditionId }}" tabindex="86"></input></td>
                 <td class="w400-blue-bdr" id="td-diag-1-6-{{ $conditionId }}"></td>
                 <td class="w400-blue-bdr" id="td-diag-1-6-type-{{ $conditionId }}">
@@ -924,7 +994,7 @@
                 </td>
                 <td class="w400-green-bdr" style="border-left: 2pt solid windowtext;"><input type="checkbox" id="diag-2-6-{{ $conditionId }}" tabindex="103"></input></td>
                 <td class="w400-blue-bdr" id="td-diag-2-6-{{ $conditionId }}"></td>
-                <td class="w400-blue-bdr" id="td-diag-2-6-type-{{ $conditionId }}">
+                <td class="w400-blue-bdr" id="td-diag-2-6-type-{{ $conditionId }}" colspan="2">
                     <select id="option-diagonals-mem2-6-type-{{ $conditionId }}" tabindex="104">
                         <option data-value="2x4" selected="">2x4</option>
                         <option data-value="2x6">2x6</option>
@@ -947,11 +1017,13 @@
                 <td><div style="overflow:hidden"></td>
                 <td><div style="overflow:hidden"></td>
                 <td><div style="overflow:hidden"></td>
+                <td><div style="overflow:hidden"></td>
+                <td><div style="overflow:hidden"></td>
             </tr>
             <!-- <tr class="h13">
                 <td class="iw400" colspan="11" style="text-align:left;">Loading includes member self weight and roofing materials  w loading = wind on exposed areas</td>
             </tr> -->
-            <td colspan="11" rowspan="19" style="position: relative;" class="iw400-bdr">
+            <td colspan="13" rowspan="19" style="position: relative;" class="iw400-bdr">
                 <canvas class="px-4" id="canvas-{{ $conditionId }}" style="z-index:2; background:aliceblue" width="900px" height="500px"></canvas>
                 <div class="axisCheckBox"><input type="checkbox" id="truss-axis-{{ $conditionId }}" tabindex="106"><label for="truss-axis-{{ $conditionId }}">Show axis</label></div>
                 <div class="alertModuleFlow" id="truss-module-alert-{{ $conditionId }}">Warning - Modules extend past ridge</div>

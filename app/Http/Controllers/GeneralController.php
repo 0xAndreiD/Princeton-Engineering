@@ -267,20 +267,69 @@ class GeneralController extends Controller
 
             $caseData['TrussDataInput'] = array();
             $caseData['TrussDataInput']['RoofSlope'] = array('Type' => $caseInput["option-roof-slope-{$number}"], 'Degree' => number_format(floatval($caseInput["txt-roof-degree-{$number}"]), 2), 'UnknownDegree' => number_format(floatval($caseInput["td-unknown-degree1-{$number}"]), 2), 'CalculatedRoofPlaneLength' => number_format(floatval($caseInput["td-calculated-roof-plane-length-{$number}"]), 2), 'td-diff-between-measured-and-calculated' => number_format(floatval($caseInput["td-diff-between-measured-and-calculated-{$number}"]), 2));
-            $caseData['TrussDataInput']['RoofPlane'] = array('MemberType' => $caseInput["option-roof-member-type-{$number}"], 'Length' => number_format(floatval($caseInput["txt-length-of-roof-plane-{$number}"]), 2), 'NumberOfSegments' => $caseInput["option-number-segments1-{$number}"], 'SumOfLengthsEntered' => number_format(floatval($caseInput["td-sum-of-length-entered-{$number}"]), 2), 'ChecksumOfChordLength' => $caseInput["td-checksum-of-segment1-{$number}"]);
-            if( isset($caseInput["txt-roof-segment1-length-{$number}"]) ) $caseData['TrussDataInput']['RoofPlane']['LengthOfSegment1'] = number_format(floatval($caseInput["txt-roof-segment1-length-{$number}"]), 2);
-            if( isset($caseInput["txt-roof-segment2-length-{$number}"]) ) $caseData['TrussDataInput']['RoofPlane']['LengthOfSegment2'] = number_format(floatval($caseInput["txt-roof-segment2-length-{$number}"]), 2);
-            if( isset($caseInput["txt-roof-segment3-length-{$number}"]) ) $caseData['TrussDataInput']['RoofPlane']['LengthOfSegment3'] = number_format(floatval($caseInput["txt-roof-segment3-length-{$number}"]), 2);
-            if( isset($caseInput["txt-roof-segment4-length-{$number}"]) ) $caseData['TrussDataInput']['RoofPlane']['LengthOfSegment4'] = number_format(floatval($caseInput["txt-roof-segment4-length-{$number}"]), 2);
-            if( isset($caseInput["txt-roof-segment5-length-{$number}"]) ) $caseData['TrussDataInput']['RoofPlane']['LengthOfSegment5'] = number_format(floatval($caseInput["txt-roof-segment5-length-{$number}"]), 2);
-            if( isset($caseInput["txt-roof-segment6-length-{$number}"]) ) $caseData['TrussDataInput']['RoofPlane']['LengthOfSegment6'] = number_format(floatval($caseInput["txt-roof-segment6-length-{$number}"]), 2);
-            $caseData['TrussDataInput']['FloorPlane'] = array('MemberType' => $caseInput["option-floor-member-type-{$number}"], 'Length' => number_format(floatval($caseInput["txt-length-of-floor-plane-{$number}"]), 2), 'NumberOfSegments' => $caseInput["option-number-segments2-{$number}"], 'SumOfLengthsEntered' => number_format(floatval($caseInput["td-total-length-entered-{$number}"]), 2), 'ChecksumOfChordLength' => $caseInput["td-checksum-of-segment2-{$number}"]);
-            if( isset($caseInput["txt-floor-segment1-length-{$number}"]) ) $caseData['TrussDataInput']['FloorPlane']['LengthOfSegment1'] = number_format(floatval($caseInput["txt-floor-segment1-length-{$number}"]), 2);
-            if( isset($caseInput["txt-floor-segment2-length-{$number}"]) ) $caseData['TrussDataInput']['FloorPlane']['LengthOfSegment2'] = number_format(floatval($caseInput["txt-floor-segment2-length-{$number}"]), 2);
-            if( isset($caseInput["txt-floor-segment3-length-{$number}"]) ) $caseData['TrussDataInput']['FloorPlane']['LengthOfSegment3'] = number_format(floatval($caseInput["txt-floor-segment3-length-{$number}"]), 2);
-            if( isset($caseInput["txt-floor-segment4-length-{$number}"]) ) $caseData['TrussDataInput']['FloorPlane']['LengthOfSegment4'] = number_format(floatval($caseInput["txt-floor-segment4-length-{$number}"]), 2);
-            if( isset($caseInput["txt-floor-segment5-length-{$number}"]) ) $caseData['TrussDataInput']['FloorPlane']['LengthOfSegment5'] = number_format(floatval($caseInput["txt-floor-segment5-length-{$number}"]), 2);
-            if( isset($caseInput["txt-floor-segment6-length-{$number}"]) ) $caseData['TrussDataInput']['FloorPlane']['LengthOfSegment6'] = number_format(floatval($caseInput["txt-floor-segment6-length-{$number}"]), 2);
+            $caseData['TrussDataInput']['RoofPlane'] = array('MemberType' => $caseInput["option-roof-member-type-{$number}"], 'Length_feet' => number_format(floatval($caseInput["txt-length-of-roof-plane-f-{$number}"]), 2), 'Length_inches' => number_format(floatval($caseInput["txt-length-of-roof-plane-i-{$number}"]), 2), 'Length' => number_format(floatval($caseInput["txt-length-of-roof-plane-{$number}"]), 2), 'NumberOfSegments' => $caseInput["option-number-segments1-{$number}"], 'SumOfLengthsEntered' => number_format(floatval($caseInput["td-sum-of-length-entered-{$number}"]), 2), 'ChecksumOfChordLength' => $caseInput["td-checksum-of-segment1-{$number}"]);
+            if( isset($caseInput["txt-roof-segment1-length-{$number}"]) )
+            {
+                $caseData['TrussDataInput']['RoofPlane']['LengthOfSegment1_feet'] = number_format(floatval($caseInput["txt-roof-segment1-length-f-{$number}"]), 2);
+                $caseData['TrussDataInput']['RoofPlane']['LengthOfSegment1_inches'] = number_format(floatval($caseInput["txt-roof-segment1-length-i-{$number}"]), 2);
+                $caseData['TrussDataInput']['RoofPlane']['LengthOfSegment1'] = number_format(floatval($caseInput["txt-roof-segment1-length-{$number}"]), 2);
+            } 
+            if( isset($caseInput["txt-roof-segment2-length-{$number}"]) ){
+                $caseData['TrussDataInput']['RoofPlane']['LengthOfSegment2_feet'] = number_format(floatval($caseInput["txt-roof-segment2-length-f-{$number}"]), 2);
+                $caseData['TrussDataInput']['RoofPlane']['LengthOfSegment2_inches'] = number_format(floatval($caseInput["txt-roof-segment2-length-i-{$number}"]), 2);
+                $caseData['TrussDataInput']['RoofPlane']['LengthOfSegment2'] = number_format(floatval($caseInput["txt-roof-segment2-length-{$number}"]), 2);
+            } 
+            if( isset($caseInput["txt-roof-segment3-length-{$number}"]) ){
+                $caseData['TrussDataInput']['RoofPlane']['LengthOfSegment3_feet'] = number_format(floatval($caseInput["txt-roof-segment3-length-f-{$number}"]), 2);
+                $caseData['TrussDataInput']['RoofPlane']['LengthOfSegment3_inches'] = number_format(floatval($caseInput["txt-roof-segment3-length-i-{$number}"]), 2);
+                $caseData['TrussDataInput']['RoofPlane']['LengthOfSegment3'] = number_format(floatval($caseInput["txt-roof-segment3-length-{$number}"]), 2);
+            } 
+            if( isset($caseInput["txt-roof-segment4-length-{$number}"]) ){
+                $caseData['TrussDataInput']['RoofPlane']['LengthOfSegment4_feet'] = number_format(floatval($caseInput["txt-roof-segment4-length-f-{$number}"]), 2);
+                $caseData['TrussDataInput']['RoofPlane']['LengthOfSegment4_inches'] = number_format(floatval($caseInput["txt-roof-segment4-length-i-{$number}"]), 2);
+                $caseData['TrussDataInput']['RoofPlane']['LengthOfSegment4'] = number_format(floatval($caseInput["txt-roof-segment4-length-{$number}"]), 2);
+            } 
+            if( isset($caseInput["txt-roof-segment5-length-{$number}"]) ){
+                $caseData['TrussDataInput']['RoofPlane']['LengthOfSegment5_feet'] = number_format(floatval($caseInput["txt-roof-segment5-length-f-{$number}"]), 2);
+                $caseData['TrussDataInput']['RoofPlane']['LengthOfSegment5_inches'] = number_format(floatval($caseInput["txt-roof-segment5-length-i-{$number}"]), 2);
+                $caseData['TrussDataInput']['RoofPlane']['LengthOfSegment5'] = number_format(floatval($caseInput["txt-roof-segment5-length-{$number}"]), 2);
+            } 
+            if( isset($caseInput["txt-roof-segment6-length-{$number}"]) ){
+                $caseData['TrussDataInput']['RoofPlane']['LengthOfSegment6_feet'] = number_format(floatval($caseInput["txt-roof-segment6-length-f-{$number}"]), 2);
+                $caseData['TrussDataInput']['RoofPlane']['LengthOfSegment6_inches'] = number_format(floatval($caseInput["txt-roof-segment6-length-i-{$number}"]), 2);
+                $caseData['TrussDataInput']['RoofPlane']['LengthOfSegment6'] = number_format(floatval($caseInput["txt-roof-segment6-length-{$number}"]), 2);
+            } 
+            $caseData['TrussDataInput']['FloorPlane'] = array('MemberType' => $caseInput["option-floor-member-type-{$number}"], 'Length_feet' => number_format(floatval($caseInput["txt-length-of-floor-plane-f-{$number}"]), 2), 'Length_inches' => number_format(floatval($caseInput["txt-length-of-floor-plane-i-{$number}"]), 2), 'Length' => number_format(floatval($caseInput["txt-length-of-floor-plane-{$number}"]), 2), 'NumberOfSegments' => $caseInput["option-number-segments2-{$number}"], 'SumOfLengthsEntered' => number_format(floatval($caseInput["td-total-length-entered-{$number}"]), 2), 'ChecksumOfChordLength' => $caseInput["td-checksum-of-segment2-{$number}"]);
+            if( isset($caseInput["txt-floor-segment1-length-{$number}"]) ){
+                $caseData['TrussDataInput']['FloorPlane']['LengthOfSegment1_feet'] = number_format(floatval($caseInput["txt-floor-segment1-length-f-{$number}"]), 2);
+                $caseData['TrussDataInput']['FloorPlane']['LengthOfSegment1_inches'] = number_format(floatval($caseInput["txt-floor-segment1-length-i-{$number}"]), 2);
+                $caseData['TrussDataInput']['FloorPlane']['LengthOfSegment1'] = number_format(floatval($caseInput["txt-floor-segment1-length-{$number}"]), 2);
+            } 
+            if( isset($caseInput["txt-floor-segment2-length-{$number}"]) ){
+                $caseData['TrussDataInput']['FloorPlane']['LengthOfSegment2_feet'] = number_format(floatval($caseInput["txt-floor-segment2-length-f-{$number}"]), 2);
+                $caseData['TrussDataInput']['FloorPlane']['LengthOfSegment2_inches'] = number_format(floatval($caseInput["txt-floor-segment2-length-i-{$number}"]), 2);
+                $caseData['TrussDataInput']['FloorPlane']['LengthOfSegment2'] = number_format(floatval($caseInput["txt-floor-segment2-length-{$number}"]), 2);
+            } 
+            if( isset($caseInput["txt-floor-segment3-length-{$number}"]) ){
+                $caseData['TrussDataInput']['FloorPlane']['LengthOfSegment3_feet'] = number_format(floatval($caseInput["txt-floor-segment3-length-f-{$number}"]), 2);
+                $caseData['TrussDataInput']['FloorPlane']['LengthOfSegment3_inches'] = number_format(floatval($caseInput["txt-floor-segment3-length-i-{$number}"]), 2);
+                $caseData['TrussDataInput']['FloorPlane']['LengthOfSegment3'] = number_format(floatval($caseInput["txt-floor-segment3-length-{$number}"]), 2);
+            } 
+            if( isset($caseInput["txt-floor-segment4-length-{$number}"]) ){
+                $caseData['TrussDataInput']['FloorPlane']['LengthOfSegment4_feet'] = number_format(floatval($caseInput["txt-floor-segment4-length-f-{$number}"]), 2);
+                $caseData['TrussDataInput']['FloorPlane']['LengthOfSegment4_inches'] = number_format(floatval($caseInput["txt-floor-segment4-length-i-{$number}"]), 2);
+                $caseData['TrussDataInput']['FloorPlane']['LengthOfSegment4'] = number_format(floatval($caseInput["txt-floor-segment4-length-{$number}"]), 2);
+            } 
+            if( isset($caseInput["txt-floor-segment5-length-{$number}"]) ){
+                $caseData['TrussDataInput']['FloorPlane']['LengthOfSegment5_feet'] = number_format(floatval($caseInput["txt-floor-segment5-length-f-{$number}"]), 2);
+                $caseData['TrussDataInput']['FloorPlane']['LengthOfSegment5_inches'] = number_format(floatval($caseInput["txt-floor-segment5-length-i-{$number}"]), 2);
+                $caseData['TrussDataInput']['FloorPlane']['LengthOfSegment5'] = number_format(floatval($caseInput["txt-floor-segment5-length-{$number}"]), 2);
+            } 
+            if( isset($caseInput["txt-floor-segment6-length-{$number}"]) ){
+                $caseData['TrussDataInput']['FloorPlane']['LengthOfSegment6_feet'] = number_format(floatval($caseInput["txt-floor-segment6-length-f-{$number}"]), 2);
+                $caseData['TrussDataInput']['FloorPlane']['LengthOfSegment6_inches'] = number_format(floatval($caseInput["txt-floor-segment6-length-i-{$number}"]), 2);
+                $caseData['TrussDataInput']['FloorPlane']['LengthOfSegment6'] = number_format(floatval($caseInput["txt-floor-segment6-length-{$number}"]), 2);
+            } 
 
             $caseData['Diagonal1'] = array();
             if( isset($caseInput["option-diagonals-mem1-1-type-{$number}"]) ) array_push( $caseData['Diagonal1'], array("include" => $caseInput["diag-1-1-{$number}"] == 'on' ? false : true, "memType" => $caseInput["option-diagonals-mem1-1-type-{$number}"], "memId" => intval($caseInput["td-diag-1-1-{$number}"])) );

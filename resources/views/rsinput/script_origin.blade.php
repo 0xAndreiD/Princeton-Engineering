@@ -1450,12 +1450,20 @@ var updateNumberSegment1 = function (condId, roofPlane, keepStatus = true) {
         totalLength += parseFloat($(`#txt-roof-segment${index + 1}-length-${condId}`).val());
 
         // enable appropricate cells        
+        $(`#td-roof-segment${index + 1}-length-f-${condId}`).addClass('w400-yellow-bdr').removeClass('w400-blue-bdr');
+        $(`#td-roof-segment${index + 1}-length-i-${condId}`).addClass('w400-yellow-bdr').removeClass('w400-blue-bdr');
         $(`#td-roof-segment${index + 1}-length-${condId}`).addClass('w400-yellow-bdr').removeClass('w400-blue-bdr');
+        $(`#td-roof-segment${index + 1}-length-f-${condId} *`).attr('disabled', false);
+        $(`#td-roof-segment${index + 1}-length-i-${condId} *`).attr('disabled', false);
         $(`#td-roof-segment${index + 1}-length-${condId} *`).attr('disabled', false);
     }
     for (index = roofPlane; index < 6; index++) {
         // disable appropricate cells        
+        $(`#td-roof-segment${index + 1}-length-f-${condId}`).removeClass('w400-yellow-bdr').addClass('w400-blue-bdr');
+        $(`#td-roof-segment${index + 1}-length-i-${condId}`).removeClass('w400-yellow-bdr').addClass('w400-blue-bdr');
         $(`#td-roof-segment${index + 1}-length-${condId}`).removeClass('w400-yellow-bdr').addClass('w400-blue-bdr');
+        $(`#td-roof-segment${index + 1}-length-f-${condId} *`).attr('disabled', true);
+        $(`#td-roof-segment${index + 1}-length-i-${condId} *`).attr('disabled', true);
         $(`#td-roof-segment${index + 1}-length-${condId} *`).attr('disabled', true);
     }
 
@@ -1487,12 +1495,20 @@ var updateNumberSegment2 = function (condId, floorPlane, keepStatus = true) {
         totalLength += parseFloat($(`#txt-floor-segment${index + 1}-length-${condId}`).val());
 
         // enable appropricate cells        
+        $(`#td-floor-segment${index + 1}-length-f-${condId}`).addClass('w400-yellow-bdr').removeClass('w400-blue-bdr');
+        $(`#td-floor-segment${index + 1}-length-i-${condId}`).addClass('w400-yellow-bdr').removeClass('w400-blue-bdr');
         $(`#td-floor-segment${index + 1}-length-${condId}`).addClass('w400-yellow-bdr').removeClass('w400-blue-bdr');
+        $(`#td-floor-segment${index + 1}-length-f-${condId} *`).attr('disabled', false);
+        $(`#td-floor-segment${index + 1}-length-i-${condId} *`).attr('disabled', false);
         $(`#td-floor-segment${index + 1}-length-${condId} *`).attr('disabled', false);
     }
     for (index = floorPlane; index < 6; index++) {
         // disable appropricate cells        
+        $(`#td-floor-segment${index + 1}-length-f-${condId}`).removeClass('w400-yellow-bdr').addClass('w400-blue-bdr');
+        $(`#td-floor-segment${index + 1}-length-i-${condId}`).removeClass('w400-yellow-bdr').addClass('w400-blue-bdr');
         $(`#td-floor-segment${index + 1}-length-${condId}`).removeClass('w400-yellow-bdr').addClass('w400-blue-bdr');
+        $(`#td-floor-segment${index + 1}-length-f-${condId} *`).attr('disabled', true);
+        $(`#td-floor-segment${index + 1}-length-i-${condId} *`).attr('disabled', true);
         $(`#td-floor-segment${index + 1}-length-${condId} *`).attr('disabled', true);
     }
 
@@ -2332,8 +2348,11 @@ $(document).ready(function() {
             drawTrussGraph(window.conditionId);
         });
         $(`#af-2-${i}, #ai-2-${i}, #af-3-${i}, #ai-3-${i}, #af-4-${i}, #ai-4-${i}, #af-8-${i}, #ai-8-${i}, #af-9-${i}, #ai-9-${i}, #af-10-${i}, #ai-10-${i}, #af-11-${i}, #ai-11-${i}, #cf-2-${i}, #ci-2-${i}, #cf-4-${i}, #ci-4-${i}, #ai-4-${i}, #ef-1-${i}, #ei-1-${i}, #ef-2-${i}, #ei-2-${i}`).on('change', function() {
-            console.log('hello');
             calcDecimalFeet($(this).attr('id'));
+        });
+        $(`#txt-length-of-roof-plane-f-${i}, #txt-length-of-roof-plane-i-${i}, #txt-roof-segment1-length-f-${i}, #txt-roof-segment1-length-i-${i}, #txt-roof-segment2-length-f-${i}, #txt-roof-segment2-length-i-${i}, #txt-roof-segment3-length-f-${i}, #txt-roof-segment3-length-i-${i}, #txt-roof-segment4-length-f-${i}, #txt-roof-segment4-length-i-${i}, #txt-roof-segment5-length-f-${i}, #txt-roof-segment5-length-i-${i}, #txt-roof-segment6-length-f-${i}, #txt-roof-segment6-length-i-${i},
+           #txt-length-of-floor-plane-f-${i}, #txt-length-of-floor-plane-i-${i}, #txt-floor-segment1-length-f-${i}, #txt-floor-segment1-length-i-${i}, #txt-floor-segment2-length-f-${i}, #txt-floor-segment2-length-i-${i}, #txt-floor-segment3-length-f-${i}, #txt-floor-segment3-length-i-${i}, #txt-floor-segment4-length-f-${i}, #txt-floor-segment4-length-i-${i}, #txt-floor-segment5-length-f-${i}, #txt-floor-segment5-length-i-${i}, #txt-floor-segment6-length-f-${i}, #txt-floor-segment6-length-i-${i}`).on('change', function() {
+            calcTrussDecimalFeet($(this).attr('id'));
         });
     }
 
@@ -2356,21 +2375,35 @@ $(document).ready(function() {
     //}
 
     var calcDecimalFeet = function(activeId) {
-        console.log(activeId);
         if(activeId.includes('i-')){ // active input is inch
             var feetId = activeId.replace('i-', 'f-');
             var decimalFeetId = activeId.replace('i', '');
             var decimalValue = parseFloat($(`#${feetId}`).val() == "" ? 0 : $(`#${feetId}`).val()) + parseFloat($(`#${activeId}`).val() == "" ? 0 : $(`#${activeId}`).val()) / 12;
-            console.log(decimalValue);
             $(`#${decimalFeetId}`).val(decimalValue.toFixed(2));
             $(`#${decimalFeetId}`).trigger('change');
         }
-        else if(activeId.includes('f-')){
+        else if(activeId.includes('f-')){ // active input is feet
             var inchId = activeId.replace('f-', 'i-');
             var decimalFeetId = activeId.replace('f', '');
             var decimalValue = parseFloat($(`#${activeId}`).val() == "" ? 0 : $(`#${activeId}`).val()) + parseFloat($(`#${inchId}`).val() == "" ? 0 : $(`#${inchId}`).val()) / 12;
             $(`#${decimalFeetId}`).val(decimalValue.toFixed(2));
-            console.log(activeId, inchId, $(`#${activeId}`).val(), $(`#${inchId}`).val());
+            $(`#${decimalFeetId}`).trigger('change');
+        }
+    }
+
+    var calcTrussDecimalFeet = function(activeId) {
+        if(activeId.includes('-i-')){ // active input is inch
+            var feetId = activeId.replace('-i-', '-f-');
+            var decimalFeetId = activeId.replace('-i-', '-');
+            var decimalValue = parseFloat($(`#${feetId}`).val() == "" ? 0 : $(`#${feetId}`).val()) + parseFloat($(`#${activeId}`).val() == "" ? 0 : $(`#${activeId}`).val()) / 12;
+            $(`#${decimalFeetId}`).val(decimalValue.toFixed(2));
+            $(`#${decimalFeetId}`).trigger('change');
+        }
+        else if(activeId.includes('-f-')){ // active input is feet
+            var inchId = activeId.replace('-f-', '-i-');
+            var decimalFeetId = activeId.replace('-f-', '-');
+            var decimalValue = parseFloat($(`#${activeId}`).val() == "" ? 0 : $(`#${activeId}`).val()) + parseFloat($(`#${inchId}`).val() == "" ? 0 : $(`#${inchId}`).val()) / 12;
+            $(`#${decimalFeetId}`).val(decimalValue.toFixed(2));
             $(`#${decimalFeetId}`).trigger('change');
         }
     }
@@ -2892,9 +2925,18 @@ var loadPreloadedData = function() {
                             $(`#td-unknown-degree1-${i + 1}`).val(trussData['RoofSlope']['UnknownDegree']);
                             $(`#td-calculated-roof-plane-length-${i + 1}`).val(trussData['RoofSlope']['CalculatedRoofPlaneLength']);
                             $(`#td-diff-between-measured-and-calculated-${i + 1}`).val(trussData['RoofSlope']['td-diff-between-measured-and-calculated']);
-
+                            
                             $(`#option-roof-member-type-${i + 1}`).val(trussData['RoofPlane']['MemberType']);
                             updateRoofMemberType(i + 1, trussData['RoofPlane']['MemberType']);
+                            if(!trussData['RoofPlane']['Length_feet'] && !trussData['RoofPlane']['Length_inches'])
+                            {
+                                $(`#txt-length-of-roof-plane-f-${i + 1}`).val(trussData['RoofPlane']['Length']);
+                                $(`#txt-length-of-roof-plane-i-${i + 1}`).val("0.00");
+                            }
+                            else{
+                                $(`#txt-length-of-roof-plane-f-${i + 1}`).val(trussData['RoofPlane']['Length_feet']);
+                                $(`#txt-length-of-roof-plane-i-${i + 1}`).val(trussData['RoofPlane']['Length_inches']);
+                            }
                             $(`#txt-length-of-roof-plane-${i + 1}`).val(trussData['RoofPlane']['Length']);
                             $(`#option-number-segments1-${i + 1}`).val(trussData['RoofPlane']['NumberOfSegments']);
                             $(`#option-number-segments1-${i + 1} > option`).each(function() { 
@@ -2907,16 +2949,91 @@ var loadPreloadedData = function() {
                             });
                             $(`#td-sum-of-length-entered-${i + 1}`).val(trussData['RoofPlane']['SumOfLengthsEntered']);
                             $(`#td-checksum-of-segment1-${i + 1}`).val(trussData['RoofPlane']['ChecksumOfChordLength']);
-                            if(trussData['RoofPlane']['LengthOfSegment1']) $(`#txt-roof-segment1-length-${i + 1}`).val(trussData['RoofPlane']['LengthOfSegment1']);
-                            if(trussData['RoofPlane']['LengthOfSegment2']) $(`#txt-roof-segment2-length-${i + 1}`).val(trussData['RoofPlane']['LengthOfSegment2']);
-                            if(trussData['RoofPlane']['LengthOfSegment3']) $(`#txt-roof-segment3-length-${i + 1}`).val(trussData['RoofPlane']['LengthOfSegment3']);
-                            if(trussData['RoofPlane']['LengthOfSegment4']) $(`#txt-roof-segment4-length-${i + 1}`).val(trussData['RoofPlane']['LengthOfSegment4']);
-                            if(trussData['RoofPlane']['LengthOfSegment5']) $(`#txt-roof-segment5-length-${i + 1}`).val(trussData['RoofPlane']['LengthOfSegment5']);
-                            if(trussData['RoofPlane']['LengthOfSegment6']) $(`#txt-roof-segment6-length-${i + 1}`).val(trussData['RoofPlane']['LengthOfSegment6']);
+                            if(trussData['RoofPlane']['LengthOfSegment1']){
+                                if(!trussData['RoofPlane']['LengthOfSegment1_feet'] && !trussData['RoofPlane']['LengthOfSegment1_inches'])
+                                {
+                                    $(`#txt-roof-segment1-length-f-${i + 1}`).val(trussData['RoofPlane']['LengthOfSegment1']);
+                                    $(`#txt-roof-segment1-length-i-${i + 1}`).val("0.00");
+                                }
+                                else{
+                                    $(`#txt-roof-segment1-length-f-${i + 1}`).val(trussData['RoofPlane']['LengthOfSegment1_feet']);
+                                    $(`#txt-roof-segment1-length-i-${i + 1}`).val(trussData['RoofPlane']['LengthOfSegment1_inches']);
+                                }
+                                $(`#txt-roof-segment1-length-${i + 1}`).val(trussData['RoofPlane']['LengthOfSegment1']);
+                            } 
+                            if(trussData['RoofPlane']['LengthOfSegment2']){
+                                if(!trussData['RoofPlane']['LengthOfSegment2_feet'] && !trussData['RoofPlane']['LengthOfSegment2_inches'])
+                                {
+                                    $(`#txt-roof-segment2-length-f-${i + 1}`).val(trussData['RoofPlane']['LengthOfSegment2']);
+                                    $(`#txt-roof-segment2-length-i-${i + 1}`).val("0.00");
+                                }
+                                else{
+                                    $(`#txt-roof-segment2-length-f-${i + 1}`).val(trussData['RoofPlane']['LengthOfSegment2_feet']);
+                                    $(`#txt-roof-segment2-length-i-${i + 1}`).val(trussData['RoofPlane']['LengthOfSegment2_inches']);
+                                }
+                                $(`#txt-roof-segment2-length-${i + 1}`).val(trussData['RoofPlane']['LengthOfSegment2']);
+                            } 
+                            if(trussData['RoofPlane']['LengthOfSegment3']){
+                                if(!trussData['RoofPlane']['LengthOfSegment3_feet'] && !trussData['RoofPlane']['LengthOfSegment3_inches'])
+                                {
+                                    $(`#txt-roof-segment3-length-f-${i + 1}`).val(trussData['RoofPlane']['LengthOfSegment3']);
+                                    $(`#txt-roof-segment3-length-i-${i + 1}`).val("0.00");
+                                }
+                                else{
+                                    $(`#txt-roof-segment3-length-f-${i + 1}`).val(trussData['RoofPlane']['LengthOfSegment3_feet']);
+                                    $(`#txt-roof-segment3-length-i-${i + 1}`).val(trussData['RoofPlane']['LengthOfSegment3_inches']);
+                                }
+                                $(`#txt-roof-segment3-length-${i + 1}`).val(trussData['RoofPlane']['LengthOfSegment3']);
+                            } 
+                            if(trussData['RoofPlane']['LengthOfSegment4']){
+                                if(!trussData['RoofPlane']['LengthOfSegment4_feet'] && !trussData['RoofPlane']['LengthOfSegment4_inches'])
+                                {
+                                    $(`#txt-roof-segment4-length-f-${i + 1}`).val(trussData['RoofPlane']['LengthOfSegment4']);
+                                    $(`#txt-roof-segment4-length-i-${i + 1}`).val("0.00");
+                                }
+                                else{
+                                    $(`#txt-roof-segment4-length-f-${i + 1}`).val(trussData['RoofPlane']['LengthOfSegment4_feet']);
+                                    $(`#txt-roof-segment4-length-i-${i + 1}`).val(trussData['RoofPlane']['LengthOfSegment4_inches']);
+                                }
+                                $(`#txt-roof-segment4-length-${i + 1}`).val(trussData['RoofPlane']['LengthOfSegment4']);
+                            } 
+                            if(trussData['RoofPlane']['LengthOfSegment5']){
+                                if(!trussData['RoofPlane']['LengthOfSegment5_feet'] && !trussData['RoofPlane']['LengthOfSegment5_inches'])
+                                {
+                                    $(`#txt-roof-segment5-length-f-${i + 1}`).val(trussData['RoofPlane']['LengthOfSegment5']);
+                                    $(`#txt-roof-segment5-length-i-${i + 1}`).val("0.00");
+                                }
+                                else{
+                                    $(`#txt-roof-segment5-length-f-${i + 1}`).val(trussData['RoofPlane']['LengthOfSegment5_feet']);
+                                    $(`#txt-roof-segment5-length-i-${i + 1}`).val(trussData['RoofPlane']['LengthOfSegment5_inches']);
+                                }
+                                $(`#txt-roof-segment5-length-${i + 1}`).val(trussData['RoofPlane']['LengthOfSegment5']);
+                            } 
+                            if(trussData['RoofPlane']['LengthOfSegment6']){
+                                if(!trussData['RoofPlane']['LengthOfSegment6_feet'] && !trussData['RoofPlane']['LengthOfSegment6_inches'])
+                                {
+                                    $(`#txt-roof-segment6-length-f-${i + 1}`).val(trussData['RoofPlane']['LengthOfSegment6']);
+                                    $(`#txt-roof-segment6-length-i-${i + 1}`).val("0.00");
+                                }
+                                else{
+                                    $(`#txt-roof-segment6-length-f-${i + 1}`).val(trussData['RoofPlane']['LengthOfSegment6_feet']);
+                                    $(`#txt-roof-segment6-length-i-${i + 1}`).val(trussData['RoofPlane']['LengthOfSegment6_inches']);
+                                }
+                                $(`#txt-roof-segment6-length-${i + 1}`).val(trussData['RoofPlane']['LengthOfSegment6']);
+                            } 
                             updateNumberSegment1(i + 1, parseInt(trussData['RoofPlane']['NumberOfSegments']));
 
                             $(`#option-floor-member-type-${i + 1}`).val(trussData['FloorPlane']['MemberType']);
                             updateFloorMemberType(i + 1, trussData['FloorPlane']['MemberType']);
+                            if(!trussData['FloorPlane']['Length_feet'] && !trussData['FloorPlane']['Length_inches'])
+                            {
+                                $(`#txt-length-of-floor-plane-f-${i + 1}`).val(trussData['FloorPlane']['Length']);
+                                $(`#txt-length-of-floor-plane-i-${i + 1}`).val("0.00");
+                            }
+                            else{
+                                $(`#txt-length-of-floor-plane-f-${i + 1}`).val(trussData['FloorPlane']['Length_feet']);
+                                $(`#txt-length-of-floor-plane-i-${i + 1}`).val(trussData['FloorPlane']['Length_inches']);
+                            }
                             $(`#txt-length-of-floor-plane-${i + 1}`).val(trussData['FloorPlane']['Length']);
                             $(`#option-number-segments2-${i + 1}`).val(trussData['FloorPlane']['NumberOfSegments']);
                             $(`#option-number-segments2-${i + 1} > option`).each(function() { 
@@ -2927,12 +3044,78 @@ var loadPreloadedData = function() {
                             });
                             $(`#td-total-length-entered-${i + 1}`).val(trussData['FloorPlane']['SumOfLengthsEntered']);
                             $(`#td-checksum-of-segment2-${i + 1}`).val(trussData['FloorPlane']['ChecksumOfChordLength']);
-                            if(trussData['FloorPlane']['LengthOfSegment1']) $(`#txt-floor-segment1-length-${i + 1}`).val(trussData['FloorPlane']['LengthOfSegment1']);
-                            if(trussData['FloorPlane']['LengthOfSegment2']) $(`#txt-floor-segment2-length-${i + 1}`).val(trussData['FloorPlane']['LengthOfSegment2']);
-                            if(trussData['FloorPlane']['LengthOfSegment3']) $(`#txt-floor-segment3-length-${i + 1}`).val(trussData['FloorPlane']['LengthOfSegment3']);
-                            if(trussData['FloorPlane']['LengthOfSegment4']) $(`#txt-floor-segment4-length-${i + 1}`).val(trussData['FloorPlane']['LengthOfSegment4']);
-                            if(trussData['FloorPlane']['LengthOfSegment5']) $(`#txt-floor-segment5-length-${i + 1}`).val(trussData['FloorPlane']['LengthOfSegment5']);
-                            if(trussData['FloorPlane']['LengthOfSegment6']) $(`#txt-floor-segment6-length-${i + 1}`).val(trussData['FloorPlane']['LengthOfSegment6']);
+                            if(trussData['FloorPlane']['LengthOfSegment1']){
+                                if(!trussData['FloorPlane']['LengthOfSegment1_feet'] && !trussData['FloorPlane']['LengthOfSegment1_inches'])
+                                {
+                                    $(`#txt-floor-segment1-length-f-${i + 1}`).val(trussData['FloorPlane']['LengthOfSegment1']);
+                                    $(`#txt-floor-segment1-length-i-${i + 1}`).val("0.00");
+                                }
+                                else{
+                                    $(`#txt-floor-segment1-length-f-${i + 1}`).val(trussData['FloorPlane']['LengthOfSegment1_feet']);
+                                    $(`#txt-floor-segment1-length-i-${i + 1}`).val(trussData['FloorPlane']['LengthOfSegment1_inches']);
+                                }
+                                $(`#txt-floor-segment1-length-${i + 1}`).val(trussData['FloorPlane']['LengthOfSegment1']);
+                            } 
+                            if(trussData['FloorPlane']['LengthOfSegment2']){
+                                if(!trussData['FloorPlane']['LengthOfSegment2_feet'] && !trussData['FloorPlane']['LengthOfSegment2_inches'])
+                                {
+                                    $(`#txt-floor-segment2-length-f-${i + 1}`).val(trussData['FloorPlane']['LengthOfSegment2']);
+                                    $(`#txt-floor-segment2-length-i-${i + 1}`).val("0.00");
+                                }
+                                else{
+                                    $(`#txt-floor-segment2-length-f-${i + 1}`).val(trussData['FloorPlane']['LengthOfSegment2_feet']);
+                                    $(`#txt-floor-segment2-length-i-${i + 1}`).val(trussData['FloorPlane']['LengthOfSegment2_inches']);
+                                }
+                                $(`#txt-floor-segment2-length-${i + 1}`).val(trussData['FloorPlane']['LengthOfSegment2']);
+                            } 
+                            if(trussData['FloorPlane']['LengthOfSegment3']){
+                                if(!trussData['FloorPlane']['LengthOfSegment3_feet'] && !trussData['FloorPlane']['LengthOfSegment3_inches'])
+                                {
+                                    $(`#txt-floor-segment3-length-f-${i + 1}`).val(trussData['FloorPlane']['LengthOfSegment3']);
+                                    $(`#txt-floor-segment3-length-i-${i + 1}`).val("0.00");
+                                }
+                                else{
+                                    $(`#txt-floor-segment3-length-f-${i + 1}`).val(trussData['FloorPlane']['LengthOfSegment3_feet']);
+                                    $(`#txt-floor-segment3-length-i-${i + 1}`).val(trussData['FloorPlane']['LengthOfSegment3_inches']);
+                                }
+                                $(`#txt-floor-segment3-length-${i + 1}`).val(trussData['FloorPlane']['LengthOfSegment3']);
+                            } 
+                            if(trussData['FloorPlane']['LengthOfSegment4']){
+                                if(!trussData['FloorPlane']['LengthOfSegment4_feet'] && !trussData['FloorPlane']['LengthOfSegment4_inches'])
+                                {
+                                    $(`#txt-floor-segment4-length-f-${i + 1}`).val(trussData['FloorPlane']['LengthOfSegment4']);
+                                    $(`#txt-floor-segment4-length-i-${i + 1}`).val("0.00");
+                                }
+                                else{
+                                    $(`#txt-floor-segment4-length-f-${i + 1}`).val(trussData['FloorPlane']['LengthOfSegment4_feet']);
+                                    $(`#txt-floor-segment4-length-i-${i + 1}`).val(trussData['FloorPlane']['LengthOfSegment4_inches']);
+                                }
+                                $(`#txt-floor-segment4-length-${i + 1}`).val(trussData['FloorPlane']['LengthOfSegment4']);
+                            } 
+                            if(trussData['FloorPlane']['LengthOfSegment5']){
+                                if(!trussData['FloorPlane']['LengthOfSegment5_feet'] && !trussData['FloorPlane']['LengthOfSegment5_inches'])
+                                {
+                                    $(`#txt-floor-segment5-length-f-${i + 1}`).val(trussData['FloorPlane']['LengthOfSegment5']);
+                                    $(`#txt-floor-segment5-length-i-${i + 1}`).val("0.00");
+                                }
+                                else{
+                                    $(`#txt-floor-segment5-length-f-${i + 1}`).val(trussData['FloorPlane']['LengthOfSegment5_feet']);
+                                    $(`#txt-floor-segment5-length-i-${i + 1}`).val(trussData['FloorPlane']['LengthOfSegment5_inches']);
+                                }
+                                $(`#txt-floor-segment5-length-${i + 1}`).val(trussData['FloorPlane']['LengthOfSegment5']);
+                            } 
+                            if(trussData['FloorPlane']['LengthOfSegment6']){
+                                if(!trussData['FloorPlane']['LengthOfSegment6_feet'] && !trussData['FloorPlane']['LengthOfSegment6_inches'])
+                                {
+                                    $(`#txt-floor-segment6-length-f-${i + 1}`).val(trussData['FloorPlane']['LengthOfSegment6']);
+                                    $(`#txt-floor-segment6-length-i-${i + 1}`).val("0.00");
+                                }
+                                else{
+                                    $(`#txt-floor-segment6-length-f-${i + 1}`).val(trussData['FloorPlane']['LengthOfSegment6_feet']);
+                                    $(`#txt-floor-segment6-length-i-${i + 1}`).val(trussData['FloorPlane']['LengthOfSegment6_inches']);
+                                }
+                                $(`#txt-floor-segment6-length-${i + 1}`).val(trussData['FloorPlane']['LengthOfSegment6']);
+                            } 
                             updateNumberSegment2(i + 1, parseInt(trussData['FloorPlane']['NumberOfSegments']));
 
                             for(let j = 0; j < caseData['Diagonal1'].length; j ++){
