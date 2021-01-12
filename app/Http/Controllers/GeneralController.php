@@ -368,7 +368,7 @@ class GeneralController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function projectList(){
-        $companyList = Company::all();
+        $companyList = Company::orderBy('company_name', 'asc')->get();
         return view('general.projectlist')->with('companyList', $companyList);
     }
 
