@@ -30,6 +30,7 @@ Route::post('/getUserData', 'UserController@getUserData')->name('getUserData');
 Route::post('/getUser', 'UserController@getUser')->name('getUser');
 Route::post('/updateUser', 'UserController@updateUser')->name('updateUser');
 Route::post('/delUser', 'UserController@delete')->name('delUser');
+Route::post('/recommendUserNum', 'UserController@recommendUserNum')->name('recommendUserNum');
 
 // Manage Companies
 Route::get('/companyList', 'CompanyController@index')->name('companyList');

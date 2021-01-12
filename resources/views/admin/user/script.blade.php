@@ -36,6 +36,12 @@ $(document).ready(function(){
         updateUser();
     }
     });
+
+    $('select#company').on('change', function(){
+        $.post("recommendUserNum", {companyid: $(this).val()}, function(result){
+            $('input#usernumber').attr('placeholder', 'Recommended User Number: ' + result);
+        });
+    })
 })
 
 function delUser(obj, id) {
@@ -109,14 +115,23 @@ function updateUser() {
             } else if (result == "exist") {
                 toast.fire('Error!', 'User already exists with the same name', 'error');
                 return;
+            } else if (result == "idexist") {
+                toast.fire('Error!', 'User number already exists in the same company', 'error');
+                return;
             }
             $('#modal-block-normal').modal('toggle');
             $('#users').DataTable().ajax.reload();
         });
     } else { // Update User
         $.post("updateUser", {data: data}, function(result){
-            if (result){
+            if (result == true){
                 toast.fire('Updated!', 'User has been updated.', 'success');
+            } else if (result == "exist") {
+                toast.fire('Error!', 'User already exists with the same name', 'error');
+                return;
+            } else if (result == "idexist") {
+                toast.fire('Error!', 'User number already exists in the same company', 'error');
+                return;
             }
             $('#modal-block-normal').modal('toggle');
             $('#users').DataTable().ajax.reload();
@@ -136,6 +151,9 @@ function showEditUser(obj, id) {
             $('input#usernumber').val(result.usernumber);
             $('input#membership').val(result.membershipid);
             $('button#updateButton').html('Update');
+            $.post("recommendUserNum", {companyid: result.companyid}, function(userNum){
+                $('input#usernumber').attr('placeholder', 'Recommended User Number: ' + userNum);
+            });
         }
     });
 }
@@ -148,5 +166,8 @@ function showAddUser() {
     $('select#userrole').val("0").trigger('change');
     $('input#usernumber').val('');
     $('button#updateButton').html('Add');
+    $.post("recommendUserNum", {companyid: 1}, function(result){
+        $('input#usernumber').attr('placeholder', 'Recommended User Number: ' + result);
+    });
 }
 </script>

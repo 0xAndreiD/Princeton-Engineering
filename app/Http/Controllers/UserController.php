@@ -188,6 +188,11 @@ class UserController extends Controller
                 echo "exist";
                 return;
             }
+            $idExist = User::where('companyid', $data['companyid'])->where('usernumber', $data['usernumber'])->get()->first();
+            if ($idExist) {
+                echo "idexist";
+                return;
+            }
 
             $res = new User;
             $res->username = $data['name'];
@@ -203,6 +208,17 @@ class UserController extends Controller
             $res->save();
             echo true;
         } else {
+            $isExist = User::where('username', $data['name'])->where('id', '!=', $data['id'])->get()->first();
+            if ($isExist) {
+                echo "exist";
+                return;
+            }
+            $idExist = User::where('companyid', $data['companyid'])->where('usernumber', $data['usernumber'])->where('id', '!=', $data['id'])->get()->first();
+            if ($idExist) {
+                echo "idexist";
+                return;
+            }
+            
             $res = User::where('id', $data['id'])->get()->first();
             $res->username = $data['name'];
             $res->email = $data['email'];
@@ -236,5 +252,22 @@ class UserController extends Controller
         $id = $request->input('data');
         $user = User::where('id', $id)->first();
         return response()->json($user);
+    }
+
+    /**
+     * Return Max User Num inside a company
+     *
+     * @return Number
+     */
+    function recommendUserNum(Request $request){
+        if(isset($request['companyid'])){
+            $user = User::where('companyid', $request['companyid'])->orderBy('usernumber', 'desc')->first();
+            if($user)
+                return $user['usernumber'] + 1;
+            else
+                return 1;
+        }
+        else
+            return 1;
     }
 }
