@@ -32,7 +32,7 @@
         </div>
         <div class="block-content block-content-full">
             <div class="table-responsive">
-                <table id="users" class="table table-bordered table-striped table-vcenter text-center" style="width:100%;">
+                <table id="users" class="table table-bordered table-striped table-vcenter text-center" style="width:100%; min-height: 350px;">
                     <thead>
                         <tr>
                             @if(Auth::user()->userrole == 2)
@@ -83,8 +83,36 @@
                                 <input type="text" class="js-flatpickr bg-white searchBox" id="submitted_from" name="submitted_from_datetime" placeholder="From" style="margin-bottom: 5px;">
                                 <input type="text" class="js-flatpickr bg-white searchBox" id="submitted_to" name="submitted_to_datetime" placeholder="To">
                             </th>
-                            <th></th>
-                            <th></th>
+                            <th class="searchHead">
+                                <span class="badge dropdown-toggle job-dropdown" id="statusFilter" data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>All</span>
+                                <div class="dropdown-menu"  aria-labelledby="statusFilter">
+                                    <a class="dropdown-item" href="javascript:changeStatusFilter('')">All</a>
+                                    <a class="dropdown-item" href="javascript:changeStatusFilter('0')">None</a>
+                                    <a class="dropdown-item" href="javascript:changeStatusFilter('1')">Saved</a>
+                                    <a class="dropdown-item" href="javascript:changeStatusFilter('2')">Check Requested</a>
+                                    <a class="dropdown-item" href="javascript:changeStatusFilter('3')">Reviewed</a>
+                                    <a class="dropdown-item" href="javascript:changeStatusFilter('4')">Submitted</a>
+                                    <a class="dropdown-item" href="javascript:changeStatusFilter('5')">Report Prepared</a>
+                                    <a class="dropdown-item" href="javascript:changeStatusFilter('6')">Plan Requested</a>
+                                    <a class="dropdown-item" href="javascript:changeStatusFilter('7')">Plan Reviewed</a>
+                                    <a class="dropdown-item" href="javascript:changeStatusFilter('8')">Link Sent</a>
+                                    <a class="dropdown-item" href="javascript:changeStatusFilter('9')">Completed</a>
+                                </div>
+                            </th>
+                            <th class="searchHead">
+                                <span class="badge dropdown-toggle job-dropdown" id="stateFilter" data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>All</span>
+                                <div class="dropdown-menu"  aria-labelledby="stateFilter">
+                                    <a class="dropdown-item" href="javascript:changeStateFilter('')">All</a>
+                                    <a class="dropdown-item" href="javascript:changeStateFilter('0')">No action</a>
+                                    <a class="dropdown-item" href="javascript:changeStateFilter('1')">Plans uploaded to portal</a>
+                                    <a class="dropdown-item" href="javascript:changeStateFilter('2')">Plans reviewed</a>
+                                    <a class="dropdown-item" href="javascript:changeStateFilter('3')">Comments issued</a>
+                                    <a class="dropdown-item" href="javascript:changeStateFilter('4')">Updated plans uploaded to portal</a>
+                                    <a class="dropdown-item" href="javascript:changeStateFilter('5')">Revised comments issued</a>
+                                    <a class="dropdown-item" href="javascript:changeStateFilter('6')">Final plans uploaded to portal</a>
+                                    <a class="dropdown-item" href="javascript:changeStateFilter('7')">PE sealed plans link sent</a>
+                                </div>
+                            </th>
                             <th></th>
                             @else
                             <th></th>
@@ -183,6 +211,36 @@
         $("#companyFilter").on('keyup change', function() {
             table.column($(this).parent().index() + ':visible').search(this.value).draw();
         });
+
+        changeStatusFilter = function(status){
+            table.column('8:visible').search(status).draw();
+            $(`#statusFilter`).css('color', '#FFFFFF');
+            if(status == ''){ $(`#statusFilter`).css('color', '#495057'); $(`#statusFilter`).html('All');  $(`#statusFilter`).css('background-color', '#FFFFFF'); }
+            else if(status == '0'){ $(`#statusFilter`).html('None');  $(`#statusFilter`).css('background-color', '#e04f1a'); }
+            else if(status == '1'){ $(`#statusFilter`).html('Saved');  $(`#statusFilter`).css('background-color', '#689550'); }
+            else if(status == '2'){ $(`#statusFilter`).html('Check Requested');  $(`#statusFilter`).css('background-color', '#3c90df'); }
+            else if(status == '3'){ $(`#statusFilter`).html('Reviewed');  $(`#statusFilter`).css('background-color', '#ffb119'); }
+            else if(status == '4'){ $(`#statusFilter`).html('Submitted');  $(`#statusFilter`).css('background-color', '#689550'); }
+            else if(status == '5'){ $(`#statusFilter`).html('Report Prepared');  $(`#statusFilter`).css('background-color', '#3c90df'); }
+            else if(status == '6'){ $(`#statusFilter`).html('Plan Requested');  $(`#statusFilter`).css('background-color', '#689550'); }
+            else if(status == '7'){ $(`#statusFilter`).html('Plan Reviewed');  $(`#statusFilter`).css('background-color', '#343a40'); }
+            else if(status == '8'){ $(`#statusFilter`).html('Link Sent');  $(`#statusFilter`).css('background-color', 'rgba(0, 0, 0, 0.33)'); }
+            else if(status == '9'){ $(`#statusFilter`).html('Completed');  $(`#statusFilter`).css('background-color', '#82b54b'); }
+        }
+
+        changeStateFilter = function(status){
+            table.column('9:visible').search(status).draw();
+            $(`#stateFilter`).css('color', '#FFFFFF');
+            if(status == ''){ $(`#stateFilter`).css('color', '#495057'); $(`#stateFilter`).html('All');  $(`#stateFilter`).css('background-color', '#FFFFFF'); }
+            else if(status == '0'){ $(`#stateFilter`).html('No action');  $(`#stateFilter`).css('background-color', '#e04f1a'); }
+            else if(status == '1'){ $(`#stateFilter`).html('Plans uploaded to portal');  $(`#stateFilter`).css('background-color', '#689550'); }
+            else if(status == '2'){ $(`#stateFilter`).html('Plans reviewed');  $(`#stateFilter`).css('background-color', '#3c90df'); }
+            else if(status == '3'){ $(`#stateFilter`).html('Comments issued');  $(`#stateFilter`).css('background-color', '#ffb119'); }
+            else if(status == '4'){ $(`#stateFilter`).html('Updated plans uploaded to portal');  $(`#stateFilter`).css('background-color', '#689550'); }
+            else if(status == '5'){ $(`#stateFilter`).html('Revised comments issued');  $(`#stateFilter`).css('background-color', '#343a40'); }
+            else if(status == '6'){ $(`#stateFilter`).html('Final plans uploaded to portal');  $(`#stateFilter`).css('background-color', 'rgba(0, 0, 0, 0.33)'); }
+            else if(status == '7'){ $(`#stateFilter`).html('PE sealed plans link sent');  $(`#stateFilter`).css('background-color', '#82b54b'); }
+        }
         @endif
 
     });
