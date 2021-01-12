@@ -464,7 +464,7 @@ class GeneralController extends Controller
             $handler = $handler->where('job_request.submittedTime', '<=', $date->format("Y-m-d H:i:s"));
         }
 
-        // admin filter company name, user, project name, project number
+        // admin filter company name, user, project name, project number, project state, plan status
         if(Auth::user()->userrole == 2){
             if(!empty($request->input("columns.1.search.value")))
                 $handler = $handler->where('company_info.company_name', 'LIKE', "%{$request->input("columns.1.search.value")}%");
@@ -474,6 +474,10 @@ class GeneralController extends Controller
                 $handler = $handler->where('job_request.clientProjectName', 'LIKE', "%{$request->input('columns.3.search.value')}%");
             if(!empty($request->input("columns.4.search.value")))
                 $handler = $handler->where('job_request.clientProjectNumber', 'LIKE', "%{$request->input('columns.4.search.value')}%");
+            if(isset($request["columns.8.search.value"]))
+                $handler = $handler->where('job_request.projectState', 'LIKE', "%{$request->input('columns.8.search.value')}%");
+            if(isset($request["columns.9.search.value"]))
+                $handler = $handler->where('job_request.planStatus', 'LIKE', "%{$request->input('columns.9.search.value')}%");
         }
         else{ // client filter user, project name, project number
             if(!empty($request->input("columns.1.search.value")))
