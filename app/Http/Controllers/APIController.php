@@ -54,8 +54,14 @@ class APIController extends Controller
                     $query = $query->where('companyId', '>=', $request['clientIdFrom']);
                 if(isset($request['clientIdTo']))
                     $query = $query->where('companyId', '<=', $request['clientIdTo']);
+
+                $data = $query->get();
+                if(isset($request['sortAlphabetical']) && ($request['sortAlphabetical'] == 'false' ))
+                    $data = $data->sortBy('clientProjectNumber', SORT_REGULAR, true);
+                else
+                    $data = $data->sortBy('clientProjectNumber', SORT_REGULAR, false);
                 
-                return response()->json(['success' => true, 'message' => 'Success', 'data' => $query->get()]);
+                return response()->json(['success' => true, 'message' => 'Success', 'data' => $data]);
             }
             else
                 return response()->json(['success' => false, 'message' => 'Auth failed.']);
