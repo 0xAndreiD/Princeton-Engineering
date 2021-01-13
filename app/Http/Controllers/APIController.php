@@ -60,7 +60,7 @@ class APIController extends Controller
                     $query = $query->where('companyName', '=', $request['company']);
 
                 $data = $query->get();
-                if(isset($request['sortAlphabetical']) && ($request['sortAlphabetical'] == 'false' ))
+                if(isset($request['sortAlphabetical']) && ($request['sortAlphabetical'] == 'false' || $request['sortAlphabetical'] == 'False' || $request['sortAlphabetical'] == 'FALSE'))
                     $data = $data->sortBy('clientProjectNumber', SORT_REGULAR, true)->values();
                 else
                     $data = $data->sortBy('clientProjectNumber', SORT_REGULAR, false)->values();
@@ -177,7 +177,7 @@ class APIController extends Controller
             if($user && $user->userrole == 2)
             {
                 $data = Company::all();
-                if(isset($request['sortAlphabetical']) && ($request['sortAlphabetical'] == 'false' ))
+                if(isset($request['sortAlphabetical']) && ($request['sortAlphabetical'] == 'false' || $request['sortAlphabetical'] == 'False' || $request['sortAlphabetical'] == 'FALSE'))
                     $data = $data->sortBy('company_name', SORT_REGULAR, true)->values();
                 else
                     $data = $data->sortBy('company_name', SORT_REGULAR, false)->values();
