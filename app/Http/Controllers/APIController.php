@@ -61,9 +61,9 @@ class APIController extends Controller
 
                 $data = $query->get();
                 if(isset($request['sortAlphabetical']) && ($request['sortAlphabetical'] == 'false' ))
-                    $data = $data->sortBy('clientProjectNumber', SORT_REGULAR, true);
+                    $data = $data->sortBy('clientProjectNumber', SORT_REGULAR, true)->values();
                 else
-                    $data = $data->sortBy('clientProjectNumber', SORT_REGULAR, false);
+                    $data = $data->sortBy('clientProjectNumber', SORT_REGULAR, false)->values();
                 
                 return response()->json(['success' => true, 'message' => 'Success', 'data' => $data]);
             }
