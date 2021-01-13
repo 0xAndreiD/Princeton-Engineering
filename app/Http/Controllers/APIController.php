@@ -9,6 +9,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Schema;
 use App\User;
 use App\JobRequest;
+use App\Company;
 
 class APIController extends Controller
 {
@@ -43,6 +44,7 @@ class APIController extends Controller
             if($user && $user->userrole == 2)
             {
                 $query = new JobRequest;
+
                 if(isset($request['dateFrom']))
                     $query = $query->where('createdTime', '>=', $request['dateFrom']);
                 if(isset($request['dateTo']))
@@ -54,6 +56,8 @@ class APIController extends Controller
                     $query = $query->where('companyId', '>=', $request['clientIdFrom']);
                 if(isset($request['clientIdTo']))
                     $query = $query->where('companyId', '<=', $request['clientIdTo']);
+                if(isset($request['company']))
+                    $query = $query->where('companyName', '=', $request['company']);
 
                 $data = $query->get();
                 if(isset($request['sortAlphabetical']) && ($request['sortAlphabetical'] == 'false' ))
