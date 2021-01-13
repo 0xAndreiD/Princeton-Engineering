@@ -165,4 +165,29 @@ class APIController extends Controller
         else
             return response()->json(['success' => false, 'message' => 'Auth required.']);
     }
+
+    /**
+     * Return the list of company
+     *
+     * @return JSON
+     */
+    public function getCompanyList(Request $request){
+        if(isset($request['username']) && isset($request['password'])){
+            $user = User::where('username', '=', $request['username'])->where('password', '=', $request['password'])->first();
+            if($user && $user->userrole == 2)
+            {
+                $data = Company::all();
+                if(isset($request['sortAlphabetical']) && ($request['sortAlphabetical'] == 'false' ))
+                    $data = $data->sortBy('company_name', SORT_REGULAR, true)->values();
+                else
+                    $data = $data->sortBy('company_name', SORT_REGULAR, false)->values();
+                
+                return response()->json(['success' => true, 'message' => 'Success', 'data' => $data]);
+            }
+            else
+                return response()->json(['success' => false, 'message' => 'Auth failed.']);
+        }
+        else
+            return response()->json(['success' => false, 'message' => 'Auth required.']);
+    }
 }

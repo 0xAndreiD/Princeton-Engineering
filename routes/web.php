@@ -58,6 +58,7 @@ Route::get('/getJobList', 'APIController@getJobList')->name('getJobList');
 Route::get('/updateJobData', 'APIController@updateJobData')->name('updateJobData');
 Route::get('/downloadFile', 'APIController@downloadFile')->name('downloadFile');
 Route::get('/getUserInfo', 'APIController@getUserInfo')->name('getUserInfo');
+Route::get('/getCompanyList', 'APIController@getCompanyList')->name('getCompanyList');
 
 // PV Modules
 Route::post('/getPVModules', 'GeneralController@getPVModules')->name('getPVModules');
