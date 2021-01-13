@@ -422,8 +422,7 @@ class GeneralController extends Controller
         $order = $columns[$request->input('order.0.column')];
         $dir = $request->input('order.0.dir');
 
-        $handler = $handler->offset($start)
-            ->leftjoin('company_info', "company_info.id", "=", "job_request.companyId")
+        $handler = $handler->leftjoin('company_info', "company_info.id", "=", "job_request.companyId")
             ->leftjoin('users', function($join){
                 $join->on('job_request.companyId', '=', 'users.companyid');
                 $join->on('job_request.userId', '=', 'users.usernumber');
@@ -490,7 +489,8 @@ class GeneralController extends Controller
 
         if(empty($request->input('search.value')))
         {            
-            $jobs = $handler->limit($limit)
+            $totalFiltered = $handler->count();
+            $jobs = $handler->offset($start)->limit($limit)
                 ->orderBy($order,$dir)
                 ->get(
                     array(
@@ -506,12 +506,12 @@ class GeneralController extends Controller
                         'job_request.planStatus as planstatus',
                     )
                 );
-            if($handler->count() > 0)
-                $totalFiltered = $handler->count();
+            //if($handler->offset($start)->count() > 0)
+                
         }
         else {
             $search = $request->input('search.value'); 
-            $jobs =  $handler->where('job_request.id','LIKE',"%{$search}%")
+            $jobs =  $handler->offset($start)->where('job_request.id','LIKE',"%{$search}%")
                         ->orWhere('company_info.company_name', 'LIKE',"%{$search}%")
                         ->orWhere('users.username', 'LIKE',"%{$search}%")
                         ->orWhere('job_request.clientProjectName', 'LIKE',"%{$search}%")
@@ -535,7 +535,7 @@ class GeneralController extends Controller
                             )
                         );
 
-            $totalFiltered = $handler->where('job_request.id','LIKE',"%{$search}%")
+            $totalFiltered = $handler->offset($start)->where('job_request.id','LIKE',"%{$search}%")
                         ->orWhere('company_info.company_name', 'LIKE',"%{$search}%")
                         ->orWhere('users.username', 'LIKE',"%{$search}%")
                         ->orWhere('job_request.clientProjectName', 'LIKE',"%{$search}%")
