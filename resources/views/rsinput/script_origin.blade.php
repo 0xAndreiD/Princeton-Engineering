@@ -304,7 +304,7 @@ var adjustDrawingPanel = function( condId ) {
         $(`#truss-module-alert-${condId}`).css('display', 'none');
 
     topXPoint = Math.max(topXPoint, moduleLengthSum * Math.cos(angleRadian));
-    topYPoint = Math.max(topYPoint, moduleLengthSum * Math.sin(angleRadian));
+    topYPoint = Math.max(topYPoint, moduleLengthSum * Math.sin(angleRadian) + moduleHeight * Math.sin(degreeToRadian( parseFloat($(`#g-2-${condId}`).val()) )));
     
     var xx = Math.floor((canvas_width[condId] - 100) / topXPoint);
     var yy = Math.floor((canvas_height[condId] - 100) / topYPoint);  // for height adjustment
@@ -500,6 +500,7 @@ var drawTrussGraph = function( condId ) {
     var orientation = false;
 
     var supportStart = parseFloat($(`#e-2-${condId}`).val()) - parseFloat($(`#e-1-${condId}`).val());
+    var moduleTilt = degreeToRadian(parseFloat($(`#g-2-${condId}`).val()));
 
     ctx[condId].fillStyle = '#000';
     for(let i = 1; i <= moduleCount; i ++)
@@ -509,14 +510,20 @@ var drawTrussGraph = function( condId ) {
             orientation = true;
         if($(`#h-${i}-${condId}`)[0].checked)
             orientation = !orientation;
-        
-        ctx[condId].strokeRect(moduleStartX * grid_size[condId], 0, (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)) * grid_size[condId], moduleDepth * grid_size[condId]);
-        // Left Support
-        ctx[condId].fillRect(moduleStartX * grid_size[condId] + supportStart * grid_size[condId] - 1, moduleDepth * grid_size[condId], grid_size[condId] / 12, grid_size[condId] / 4 + 1 - moduleDepth * grid_size[condId]);
-        // Right Support
-        ctx[condId].fillRect(moduleStartX * grid_size[condId] + (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)) * grid_size[condId] - (supportStart + 1 / 12) * grid_size[condId] + 1, moduleDepth * grid_size[condId], grid_size[condId] / 12, grid_size[condId] / 4 + 1 - moduleDepth * grid_size[condId]);
 
-        moduleStartX += (moduleGap + (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)));
+        let curModuleWidth = (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight));
+                
+        ctx[condId].translate(moduleStartX * grid_size[condId], 0);
+        ctx[condId].rotate(- moduleTilt);
+        ctx[condId].strokeRect(0, 0, curModuleWidth * grid_size[condId], moduleDepth * grid_size[condId]);
+        // Left Support
+        ctx[condId].fillRect(supportStart * grid_size[condId] - 1, moduleDepth * grid_size[condId], grid_size[condId] / 12, grid_size[condId] / 4 / Math.cos(moduleTilt) + 1 - moduleDepth * grid_size[condId]);
+        // Right Support
+        ctx[condId].fillRect(curModuleWidth * grid_size[condId] - (supportStart + 1 / 12) * grid_size[condId] + 1, moduleDepth * grid_size[condId], grid_size[condId] / 12, grid_size[condId] / 4 / Math.cos(moduleTilt) + 1 - moduleDepth * grid_size[condId] + curModuleWidth * Math.tan(moduleTilt) * grid_size[condId]);
+        ctx[condId].rotate(moduleTilt);
+        ctx[condId].translate(- moduleStartX * grid_size[condId], 0);
+
+        moduleStartX += (moduleGap + curModuleWidth);
     }
     
     ctx[condId].rotate(angleRadian);
@@ -1822,7 +1829,7 @@ var adjustStickDrawingPanel = function( condId ) {
     else
         $(`#stick-module-alert-${condId}`).css('display', 'none');
 
-    topYPoint = Math.max(roofHeight + overhangY, Math.sin(angleRadian) * moduleLengthSum);
+    topYPoint = Math.max(roofHeight + overhangY, Math.sin(angleRadian) * moduleLengthSum + moduleHeight * Math.sin(degreeToRadian( parseFloat($(`#g-2-${condId}`).val()) )));
     topXPoint = Math.max(angleRadian != 0 ? (1.0 / Math.tan(angleRadian)) * (roofHeight + overhangY) + overhangX : 0, Math.sin(Math.PI / 2 - angleRadian) * moduleLengthSum);
  
     // console.log("topXpoint : " + topXPoint);
@@ -1988,6 +1995,7 @@ var drawStickGraph = function( condId ) {
     var orientation = false;
     
     var supportStart = parseFloat($(`#e-2-${condId}`).val()) - parseFloat($(`#e-1-${condId}`).val());
+    var moduleTilt = degreeToRadian(parseFloat($(`#g-2-${condId}`).val()));
 
     stick_ctx[condId].fillStyle = "#000";
     for(let i = 1; i <= moduleCount; i ++)
@@ -1999,12 +2007,19 @@ var drawStickGraph = function( condId ) {
             orientation = !orientation;
         
         stick_ctx[condId].strokeStyle = "#000000";
-        stick_ctx[condId].strokeRect(moduleStartX * stick_grid_size[condId], 0, (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)) * stick_grid_size[condId], moduleDepth * stick_grid_size[condId]);
+        
+        let curModuleWidth = (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight));
+        stick_ctx[condId].translate(moduleStartX * stick_grid_size[condId], 0);
+        stick_ctx[condId].rotate(- moduleTilt);
+        stick_ctx[condId].strokeRect(0, 0, curModuleWidth * stick_grid_size[condId], moduleDepth * stick_grid_size[condId]);
         // Left Support
-        stick_ctx[condId].fillRect(moduleStartX * stick_grid_size[condId] + supportStart * stick_grid_size[condId] - 1, moduleDepth * stick_grid_size[condId], stick_grid_size[condId] / 12, stick_grid_size[condId] / 4 + 1 - moduleDepth * stick_grid_size[condId]);
+        stick_ctx[condId].fillRect(supportStart * stick_grid_size[condId] - 1, moduleDepth * stick_grid_size[condId], stick_grid_size[condId] / 12, stick_grid_size[condId] / 4 / Math.cos(moduleTilt) - moduleDepth * stick_grid_size[condId] + 4);
         // Right Support
-        stick_ctx[condId].fillRect(moduleStartX * stick_grid_size[condId] + (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)) * stick_grid_size[condId] - stick_grid_size[condId] * (1 / 12 + supportStart) + 1, moduleDepth * stick_grid_size[condId], stick_grid_size[condId] / 12, stick_grid_size[condId] / 4 + 1 - moduleDepth * stick_grid_size[condId]);
-        moduleStartX += (moduleGap + (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)));
+        stick_ctx[condId].fillRect(curModuleWidth * stick_grid_size[condId] - stick_grid_size[condId] * (1 / 12 + supportStart) + 1, moduleDepth * stick_grid_size[condId], stick_grid_size[condId] / 12, stick_grid_size[condId] / 4 / Math.cos(moduleTilt) - moduleDepth * stick_grid_size[condId] + curModuleWidth * Math.tan(moduleTilt) * stick_grid_size[condId] + 1);
+        stick_ctx[condId].rotate(moduleTilt);
+        stick_ctx[condId].translate(- moduleStartX * stick_grid_size[condId], 0);
+
+        moduleStartX += (moduleGap + curModuleWidth);
     }
     
     stick_ctx[condId].rotate(angleRadian);
@@ -2307,7 +2322,7 @@ $(document).ready(function() {
             stick_show_axis[window.conditionId] = !stick_show_axis[window.conditionId];
             drawStickGraph(window.conditionId);
         });
-        $(`#a-6-${i}, #g-1-${i}`).on('change', function() {
+        $(`#a-6-${i}, #g-1-${i}, #g-2-${i}`).on('change', function() {
             drawTrussGraph(window.conditionId);
             drawStickGraph(window.conditionId);
         });
@@ -2849,6 +2864,7 @@ var loadPreloadedData = function() {
                                     case 'heightlength':
                                         stick_input_changed[i + 1] = ['height', 'length']; stick_right_input[i + 1] = 'heightlength'; break;
                                 }
+                                $(`#calc-algorithm-${i + 1}`).val(caseData['RoofDataInput']['A_calc_algorithm']);
 
                                 $(`#a-11-${i + 1}`).val(caseData['RoofDataInput']['A11']);
 
@@ -2908,6 +2924,7 @@ var loadPreloadedData = function() {
                                 $(`#f-1-${i + 1}`).val(caseData['NumberOfModules']['F1']);
                                 maxModuleNumChange(i + 1);
                                 $(`#g-1-${i + 1}`).val(caseData['NSGap']['G1']);
+                                if(caseData['NSGap']['G2']) $(`#g-2-${i + 1}`).val(caseData['NSGap']['G2']);
                                 
                                 $(`#h-1-${i + 1}`).prop('checked', caseData['RotateModuleOrientation']['H1']);
                                 $(`#h-2-${i + 1}`).prop('checked', caseData['RotateModuleOrientation']['H2']);
