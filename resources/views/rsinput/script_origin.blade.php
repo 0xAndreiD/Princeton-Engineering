@@ -513,15 +513,27 @@ var drawTrussGraph = function( condId ) {
 
         let curModuleWidth = (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight));
                 
-        ctx[condId].translate(moduleStartX * grid_size[condId], 0);
-        ctx[condId].rotate(- moduleTilt);
-        ctx[condId].strokeRect(0, 0, curModuleWidth * grid_size[condId], moduleDepth * grid_size[condId]);
-        // Left Support
-        ctx[condId].fillRect(supportStart * grid_size[condId] - 1, moduleDepth * grid_size[condId], grid_size[condId] / 12, grid_size[condId] / 4 / Math.cos(moduleTilt) + 1 - moduleDepth * grid_size[condId]);
-        // Right Support
-        ctx[condId].fillRect(curModuleWidth * grid_size[condId] - (supportStart + 1 / 12) * grid_size[condId] + 1, moduleDepth * grid_size[condId], grid_size[condId] / 12, grid_size[condId] / 4 / Math.cos(moduleTilt) + 1 - moduleDepth * grid_size[condId] + curModuleWidth * Math.tan(moduleTilt) * grid_size[condId]);
-        ctx[condId].rotate(moduleTilt);
-        ctx[condId].translate(- moduleStartX * grid_size[condId], 0);
+        if(moduleTilt >= 0){
+            ctx[condId].translate(moduleStartX * grid_size[condId], 0);
+            ctx[condId].rotate(- moduleTilt);
+            ctx[condId].strokeRect(0, 0, curModuleWidth * grid_size[condId], moduleDepth * grid_size[condId]);
+            // Left Support
+            ctx[condId].fillRect(supportStart * grid_size[condId] - 1, moduleDepth * grid_size[condId], grid_size[condId] / 12, grid_size[condId] / 4 / Math.cos(moduleTilt) + 1 - moduleDepth * grid_size[condId] + supportStart * Math.tan(moduleTilt) * grid_size[condId]);
+            // Right Support
+            ctx[condId].fillRect(curModuleWidth * grid_size[condId] - (supportStart + 1 / 12) * grid_size[condId] + 1, moduleDepth * grid_size[condId], grid_size[condId] / 12, grid_size[condId] / 4 / Math.cos(moduleTilt) + 1 - moduleDepth * grid_size[condId] + curModuleWidth * Math.tan(moduleTilt) * grid_size[condId] - supportStart * Math.tan(moduleTilt) * grid_size[condId]);
+            ctx[condId].rotate(moduleTilt);
+            ctx[condId].translate(- moduleStartX * grid_size[condId], 0);
+        }else{
+            ctx[condId].translate(moduleStartX * grid_size[condId] + curModuleWidth * grid_size[condId], 0);
+            ctx[condId].rotate(- moduleTilt);
+            ctx[condId].strokeRect(0, 0, - curModuleWidth * grid_size[condId], moduleDepth * grid_size[condId]);
+            // Left Support
+            ctx[condId].fillRect(- curModuleWidth * grid_size[condId] + supportStart * grid_size[condId] - 1, moduleDepth * grid_size[condId], grid_size[condId] / 12, grid_size[condId] / 4 / Math.cos(moduleTilt) + 1 - moduleDepth * grid_size[condId] - curModuleWidth * Math.tan(moduleTilt) * grid_size[condId] + supportStart * Math.tan(moduleTilt) * grid_size[condId]);
+            // Right Support
+            ctx[condId].fillRect(- (supportStart + 1 / 12) * grid_size[condId] + 1, moduleDepth * grid_size[condId], grid_size[condId] / 12, grid_size[condId] / 4 / Math.cos(moduleTilt) + 1 - moduleDepth * grid_size[condId] - supportStart * Math.tan(moduleTilt) * grid_size[condId]);
+            ctx[condId].rotate(moduleTilt);
+            ctx[condId].translate(- moduleStartX * grid_size[condId] - curModuleWidth * grid_size[condId], 0);
+        }
 
         moduleStartX += (moduleGap + curModuleWidth);
     }
@@ -2009,15 +2021,28 @@ var drawStickGraph = function( condId ) {
         stick_ctx[condId].strokeStyle = "#000000";
         
         let curModuleWidth = (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight));
-        stick_ctx[condId].translate(moduleStartX * stick_grid_size[condId], 0);
-        stick_ctx[condId].rotate(- moduleTilt);
-        stick_ctx[condId].strokeRect(0, 0, curModuleWidth * stick_grid_size[condId], moduleDepth * stick_grid_size[condId]);
-        // Left Support
-        stick_ctx[condId].fillRect(supportStart * stick_grid_size[condId] - 1, moduleDepth * stick_grid_size[condId], stick_grid_size[condId] / 12, stick_grid_size[condId] / 4 / Math.cos(moduleTilt) - moduleDepth * stick_grid_size[condId] + 4);
-        // Right Support
-        stick_ctx[condId].fillRect(curModuleWidth * stick_grid_size[condId] - stick_grid_size[condId] * (1 / 12 + supportStart) + 1, moduleDepth * stick_grid_size[condId], stick_grid_size[condId] / 12, stick_grid_size[condId] / 4 / Math.cos(moduleTilt) - moduleDepth * stick_grid_size[condId] + curModuleWidth * Math.tan(moduleTilt) * stick_grid_size[condId] + 1);
-        stick_ctx[condId].rotate(moduleTilt);
-        stick_ctx[condId].translate(- moduleStartX * stick_grid_size[condId], 0);
+        if(moduleTilt >= 0){
+            stick_ctx[condId].translate(moduleStartX * stick_grid_size[condId], 0);
+            stick_ctx[condId].rotate(- moduleTilt);
+            stick_ctx[condId].strokeRect(0, 0, curModuleWidth * stick_grid_size[condId], moduleDepth * stick_grid_size[condId]);
+            // Left Support
+            stick_ctx[condId].fillRect(supportStart * stick_grid_size[condId] - 1, moduleDepth * stick_grid_size[condId], stick_grid_size[condId] / 12, stick_grid_size[condId] / 4 / Math.cos(moduleTilt) - moduleDepth * stick_grid_size[condId] + 4 + supportStart * Math.tan(moduleTilt) * stick_grid_size[condId]);
+            // Right Support
+            stick_ctx[condId].fillRect(curModuleWidth * stick_grid_size[condId] - stick_grid_size[condId] * (1 / 12 + supportStart) + 1, moduleDepth * stick_grid_size[condId], stick_grid_size[condId] / 12, stick_grid_size[condId] / 4 / Math.cos(moduleTilt) - moduleDepth * stick_grid_size[condId] + curModuleWidth * Math.tan(moduleTilt) * stick_grid_size[condId] + 1 - supportStart * Math.tan(moduleTilt) * stick_grid_size[condId]);
+            stick_ctx[condId].rotate(moduleTilt);
+            stick_ctx[condId].translate(- moduleStartX * stick_grid_size[condId], 0);
+        }
+        else{
+            stick_ctx[condId].translate(moduleStartX * stick_grid_size[condId] + curModuleWidth * stick_grid_size[condId], 0);
+            stick_ctx[condId].rotate(- moduleTilt);
+            stick_ctx[condId].strokeRect(0, 0, - curModuleWidth * stick_grid_size[condId], moduleDepth * stick_grid_size[condId]);
+            // Left Support
+            stick_ctx[condId].fillRect(- curModuleWidth * stick_grid_size[condId] + supportStart * stick_grid_size[condId] - 1, moduleDepth * stick_grid_size[condId], stick_grid_size[condId] / 12, stick_grid_size[condId] / 4 / Math.cos(moduleTilt) - moduleDepth * stick_grid_size[condId] + 1 - curModuleWidth * Math.tan(moduleTilt) * stick_grid_size[condId] + supportStart * Math.tan(moduleTilt) * stick_grid_size[condId]);
+            // Right Support
+            stick_ctx[condId].fillRect(- stick_grid_size[condId] * (1 / 12 + supportStart) + 1, moduleDepth * stick_grid_size[condId], stick_grid_size[condId] / 12, stick_grid_size[condId] / 4 / Math.cos(moduleTilt) - moduleDepth * stick_grid_size[condId] + 4 - supportStart * Math.tan(moduleTilt) * stick_grid_size[condId]);
+            stick_ctx[condId].rotate(moduleTilt);
+            stick_ctx[condId].translate(- moduleStartX * stick_grid_size[condId] - curModuleWidth * stick_grid_size[condId], 0);
+        }
 
         moduleStartX += (moduleGap + curModuleWidth);
     }
