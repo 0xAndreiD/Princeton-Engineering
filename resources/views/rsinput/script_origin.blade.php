@@ -417,6 +417,7 @@ var drawTrussGraph = function( condId ) {
     ctx[condId].textAlign = 'middle';
     ctx[condId].fillText("Attic Floor", floorWidth * grid_size[condId] / 2, 30);
 
+    var lastDiagnol;
     // draw di­agonals lines 
     var index = 0;
     for (var key in globalDiagnoal1Lines[condId]) {
@@ -428,6 +429,7 @@ var drawTrussGraph = function( condId ) {
 
         index++;
     }
+    lastDiagnol = globalDiagnoal1Lines[condId][key];
 
     index = 0;
     for (var key in globalDiagnoal2Lines[condId]) {
@@ -443,6 +445,9 @@ var drawTrussGraph = function( condId ) {
         
         index++;
     }
+    if(globalDiagnoal2Lines[condId][key] && globalDiagnoal2Lines[condId][key][0] && globalDiagnoal2Lines[condId][key][1] &&
+    (lastDiagnol[0][0] < globalDiagnoal2Lines[condId][key][0][0] || lastDiagnol[1][0] < globalDiagnoal2Lines[condId][key][1][0] || lastDiagnol[0][1] < globalDiagnoal2Lines[condId][key][0][1] || lastDiagnol[1][1] < globalDiagnoal2Lines[condId][key][1][1]))
+        lastDiagnol = globalDiagnoal2Lines[condId][key];
 
     // Draw Overhang
     var angle = parseFloat($(`#txt-roof-degree-${condId}`).val());
@@ -474,6 +479,21 @@ var drawTrussGraph = function( condId ) {
     ctx[condId].rotate(- Math.PI / 2);
     ctx[condId].fillText("Wall", - 40, 20);
     ctx[condId].rotate(Math.PI / 2);
+
+    // Draw Required Collar Tie
+    if($(`#collartie-${condId}`).css('display') == 'table-row' && lastDiagnol && lastDiagnol[0] && lastDiagnol[1]){
+        var newTieHeight = $(`#collartie-height-${condId}`).html();
+        ctx[condId].beginPath();
+        ctx[condId].lineWidth = 2;
+        ctx[condId].strokeStyle = "#FF0000";
+        ctx[condId].setLineDash([5, 5]);
+        ctx[condId].moveTo(angleRadian != 0 ? newTieHeight * (1 / Math.tan(angleRadian))  * grid_size[condId] : 0, - newTieHeight * grid_size[condId]);
+        ctx[condId].lineTo(angleRadian != 0 ? (lastDiagnol[1][0] - newTieHeight * (lastDiagnol[1][0] - lastDiagnol[0][0]) / (lastDiagnol[0][1] - lastDiagnol[1][1]) ) * grid_size[condId] : 0, - newTieHeight * grid_size[condId]);
+        ctx[condId].stroke();
+        ctx[condId].setLineDash([5, 0]);
+        ctx[condId].fillStyle = "#FF0000";
+        ctx[condId].fillText("Prop Collar Tie",  newTieHeight * (1 / Math.tan(angleRadian))  * grid_size[condId] / 2 + (lastDiagnol[1][0] - newTieHeight * (lastDiagnol[1][0] - lastDiagnol[0][0]) / (lastDiagnol[0][1] - lastDiagnol[1][1]) ) * grid_size[condId] / 2 - 50, - newTieHeight * grid_size[condId] + 20);
+    }
 
     // Draw solar rectangles
     var startModule = overhangLength - uphillDist;
@@ -1031,7 +1051,7 @@ var updateNumberOfConditions = function(conditions) {
     }
 }
 
-var ignorable = ['a-7-', 'a-8-', 'af-8-', 'ai-8-', 'a-9-', 'af-9-', 'ai-9-', 'a-10-', 'af-10-', 'ai-10-', 'ac-7-', 'ac-8-', 'ac-9-', 'ac-10-', 'c-1-', 'c-2-', 'cf-2-', 'ci-2-', 'c-3-', 'cf-3-', 'ci-3-', 'c-4-', 'cf-4-', 'ci-4-', 'calc-algorithm-'];
+var ignorable = ['a-7-', 'a-8-', 'af-8-', 'ai-8-', 'a-9-', 'af-9-', 'ai-9-', 'a-10-', 'af-10-', 'ai-10-', 'ac-7-', 'ac-8-', 'ac-9-', 'ac-10-', 'c-1-', 'c-2-', 'cf-2-', 'ci-2-', 'c-3-', 'cf-3-', 'ci-3-', 'c-4-', 'cf-4-', 'ci-4-', 'calc-algorithm-', 'collarHeights'];
 
 var isIgnorable = function(id) {
     let canIgnore = false;
@@ -1971,6 +1991,21 @@ var drawStickGraph = function( condId ) {
     else
         $(`#c-4-warn-${condId}`).css('display', 'block');
 
+    // Draw Required Collar Tie
+    if($(`#collartie-${condId}`).css('display') == 'table-row'){
+        var newTieHeight = $(`#collartie-height-${condId}`).html();
+        stick_ctx[condId].beginPath();
+        stick_ctx[condId].lineWidth = 2;
+        stick_ctx[condId].strokeStyle = "#FF0000";
+        stick_ctx[condId].setLineDash([5, 5]);
+        stick_ctx[condId].moveTo(angleRadian != 0 ? newTieHeight * (1 / Math.tan(angleRadian))  * stick_grid_size[condId] : 0, - newTieHeight * stick_grid_size[condId]);
+        stick_ctx[condId].lineTo(angleRadian != 0 ? roofHeight * (1 / Math.tan(angleRadian))  * stick_grid_size[condId] : 0, - newTieHeight * stick_grid_size[condId]);
+        stick_ctx[condId].stroke();
+        stick_ctx[condId].setLineDash([5, 0]);
+        stick_ctx[condId].fillStyle = "#FF0000";
+        stick_ctx[condId].fillText("Prop Collar Tie",  newTieHeight * (1 / Math.tan(angleRadian))  * stick_grid_size[condId] / 2 + roofHeight * (1 / Math.tan(angleRadian))  * stick_grid_size[condId] / 2 - 50, - newTieHeight * stick_grid_size[condId] + 20);
+    }
+
     // Draw Collar Tie
     var collarTieHeight = $(`#c-2-${condId}`).val() == "" ? 0 : parseFloat($(`#c-2-${condId}`).val());
     if( collarTieHeight <= roofHeight )
@@ -2244,6 +2279,30 @@ $(document).ready(function() {
                 console.log(res);
             }
         });
+    }
+
+    var loadFramingChanges = function(){
+        var collarHeights = $("#collarHeights").val();
+        var haveChanges = false;
+        for(let i = 1; i <= $('#option-number-of-conditions').val(); i ++){
+            if(collarHeights.length >= 5 * i)
+            {
+                let tabCollar = collarHeights.slice(5 * (i - 1), 5 * i);
+                if(parseFloat(tabCollar) != 0)
+                {
+                    haveChanges = true;
+                    $(`#collartie-height-${i}`).html(parseFloat(tabCollar).toFixed(2));
+                    $(`#collartie-title-${i}`).html(i + ': ' + $(`#a-5-${i}`).val());
+                    $(`#collartie-${i}`).css('display', "table-row");
+                    $(`#collartie-warning-${i}`).css('display', 'block');
+                    $(`#collartie-warning-${i}`).html('Framing modification required.  Add collar tie / knee wall at ' + parseFloat(tabCollar).toFixed(2) + ' ft.');
+                }
+            }
+        }
+        if(haveChanges){
+            $('#collartie-header').css('display', "table-row");
+            $('#collartie-headers').css('display', "table-row");
+        }
     }
 
     // component hander functions
@@ -3290,6 +3349,7 @@ var loadPreloadedData = function() {
         await loadPreloadedData();
         loadStateOptions();
         loadEquipmentSection();
+        loadFramingChanges();
 
         var i;
         for(i = 1; i <= 10; i ++)
