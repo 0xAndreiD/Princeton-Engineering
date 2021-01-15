@@ -107,7 +107,8 @@ class GeneralController extends Controller
             if($project){
                 if(Auth::user()->userrole == 2 || $project->companyId == Auth::user()->companyid)
                 {
-                    $data = $this->inputToJson($request['data'], $request['caseCount']);
+                    $user = User::where('companyid', $project['companyId'])->where('usernumber', $project['userId'])->first();
+                    $data = $this->inputToJson($request['data'], $request['caseCount'], $user);
                     if( Storage::disk('local')->exists($project['requestFile']) )
                         Storage::disk('local')->delete($project['requestFile']);
                     Storage::disk('local')->put($project['requestFile'], json_encode($data));
@@ -180,7 +181,7 @@ class GeneralController extends Controller
      *
      * @return JSON
      */
-    private function inputToJson($input, $caseCount){
+    private function inputToJson($input, $caseCount, $user = null){
         date_default_timezone_set("America/New_York");
         $data = array();
 
@@ -193,15 +194,18 @@ class GeneralController extends Controller
         $data['ProgramData']['Description'] = "Data Input form for roof structural analysis for Residential Solar Projects";
         $data['ProgramData']['Copyright'] = "Copyright © 2020 Richard Pantel. All Rights Reserved  No parts of this data input form or related calculation reports may be copied in format, content or intent, or reproduced in any form or by any electronic or mechanical means, including information storage and retrieval systems, without permission in writing from the author.  Further, dis-assembly or reverse engineering of this data input form or related calculation reports is strictly prohibited. The author's contact information is: RPantel@Princeton-Engineering.com, web-site: www.Princeton-Engineering.com; tel: 908-507-5500";
 
-        $company = Company::where('id', Auth::user()->companyid)->first();
+        if($user)
+            $company = Company::where('id', $user['companyid'])->first();
+        else
+            $company = Company::where('id', Auth::user()->companyid)->first();
         
         //CompanyInfo
         $data['CompanyInfo'] = array();
         $data['CompanyInfo']['Name'] = $company['company_name'];
         $data['CompanyInfo']['Number'] = $company['company_number'];
-        $data['CompanyInfo']['UserId'] = $company['company_number'] . "." . Auth::user()->usernumber;
-        $data['CompanyInfo']['Username'] = Auth::user()->username;
-        $data['CompanyInfo']['UserEmail'] = Auth::user()->email;
+        $data['CompanyInfo']['UserId'] = $company['company_number'] . "." . ($user ? $user['usernumber'] : Auth::user()->usernumber);
+        $data['CompanyInfo']['Username'] = $user ? $user['username'] : Auth::user()->username;
+        $data['CompanyInfo']['UserEmail'] = $user ? $user['email'] : Auth::user()->email;
 
         //ProjectInfo
         $data['ProjectInfo'] = array();
