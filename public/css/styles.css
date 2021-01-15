@@ -204,3 +204,11 @@ html, body {
     font-style: italic;
     font-weight: bold;
 }
+
+.txt-collar-warning{
+    font-weight: bold;
+    color: red;
+    font-size: 10.00pt;
+    margin: 0;
+    display: none;
+}

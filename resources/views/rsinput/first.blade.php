@@ -332,9 +332,36 @@
         <td><div style="overflow:hidden"></div></td>
         @endif
     </tr>
+    <tr class="h13">
+        <td><div style="overflow:hidden"></td>
+        <td><div style="overflow:hidden"></td>
+        <td><div style="overflow:hidden"></td>
+        <td><div style="overflow:hidden"></td>
+        <td><div style="overflow:hidden"></td>
+        <td><div style="overflow:hidden"></td>
+        <td><div style="overflow:hidden"></td>
+    </tr>
+    <tr class="h13" style="display: none;" id="collartie-header">
+        <td><div style="overflow:hidden"></div></td>
+        <td class="iw400-bdr" colspan="2">Required Framing Changes</td>
+        <td><div style="overflow:hidden"></div></td>
+    </tr>
+    <tr class="h13" style="display: none;" id="collartie-headers">
+        <td><div style="overflow:hidden"></div></td>
+        <td class="iw400-bdr">Framing Condition # and Name</td>
+        <td class="iw400-bdr">Collar Tie Height (ft)</td>
+    </tr>
+    @for($j = 1; $j <= 10; $j ++)
+    <tr class="h13" style="display: none;" id="collartie-{{$j}}">
+        <td><div style="overflow:hidden"></div></td>
+        <td class="iw400-bdr" id="collartie-title-{{$j}}" style="color:red;">{{$j}}: MP{{$j}}</td>
+        <td class="iw400-bdr" id="collartie-height-{{$j}}" style="color:red;">0.00</td>
+    </tr>
+    @endfor
 </tbody>
 </table>
 <input type="text" value="{{ $projectId }}" id="projectId" hidden>
 <input type="text" value="{{ $projectState }}" id="projectState" hidden>
 <input type="text" value="{{ $offset }}" id="companyOffset" hidden>
+<input type="text" value="{{ $collarHeights }}" id="collarHeights" hidden>
 </form>

@@ -63,7 +63,8 @@ class GeneralController extends Controller
                     ->with('companyMembers', $companymembers)
                     ->with('projectState', $project ? $project->projectState : 0)
                     ->with('projectId', $request['projectId'] ? $request['projectId'] : -1)
-                    ->with('offset', $company['offset']);
+                    ->with('offset', $company['offset'])
+                    ->with('collarHeights', $project['collarHeights']);
         }
         else
         {
@@ -74,7 +75,8 @@ class GeneralController extends Controller
                     ->with('companyMembers', $companymembers)
                     ->with('projectState', 0)
                     ->with('projectId', $request['projectId'] ? $request['projectId'] : -1)
-                    ->with('offset', 0.5);
+                    ->with('offset', 0.5)
+                    ->with('collarHeights', '');
         }
     }
 

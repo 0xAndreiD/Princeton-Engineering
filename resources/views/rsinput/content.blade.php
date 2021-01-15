@@ -9,6 +9,7 @@
         <input type="radio" class="custom-control-input rfdTypeSelect" id="trussFlagOption-{{ $conditionId }}-2" name="trussFlag-{{ $conditionId }}" onchange="fcChangeType({{ $conditionId }}, 1)" value="1">
         <label class="custom-control-label rfdTypeSelect" for="trussFlagOption-{{ $conditionId }}-2">Truss Framing Data Input</label>
     </div>
+    <p class="txt-collar-warning" id="collartie-warning-{{ $conditionId }}">Framing modification required.  Add collar tie / knee wall at xx.yy ft.</p>
 </div>
 <div class="row">
     <!-- Section info table section -->
