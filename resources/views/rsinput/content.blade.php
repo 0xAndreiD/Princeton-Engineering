@@ -1,16 +1,21 @@
 <form id="inputform-{{ $conditionId }}">
 <!-- Section info table section -->
 <div class="form-group rfdTypePane">
-    <div class="custom-control custom-radio custom-control-success mb-1">
-        <input type="radio" class="custom-control-input rfdTypeSelect" id="trussFlagOption-{{ $conditionId }}-1" name="trussFlag-{{ $conditionId }}" onchange="fcChangeType({{ $conditionId }}, 0)" checked value="0">
-        <label class="custom-control-label rfdTypeSelect" for="trussFlagOption-{{ $conditionId }}-1">Stick Framing Data Input</label>
+    <div>
+        <div class="custom-control custom-radio custom-control-success mb-1">
+            <input type="radio" class="custom-control-input rfdTypeSelect" id="trussFlagOption-{{ $conditionId }}-1" name="trussFlag-{{ $conditionId }}" onchange="fcChangeType({{ $conditionId }}, 0)" checked value="0">
+            <label class="custom-control-label rfdTypeSelect" for="trussFlagOption-{{ $conditionId }}-1">Stick Framing Data Input</label>
+        </div>
+        <div class="custom-control custom-radio custom-control-success mb-1 ">
+            <input type="radio" class="custom-control-input rfdTypeSelect" id="trussFlagOption-{{ $conditionId }}-2" name="trussFlag-{{ $conditionId }}" onchange="fcChangeType({{ $conditionId }}, 1)" value="1">
+            <label class="custom-control-label rfdTypeSelect" for="trussFlagOption-{{ $conditionId }}-2">Truss Framing Data Input</label>
+        </div>
     </div>
-    <div class="custom-control custom-radio custom-control-success mb-1 ">
-        <input type="radio" class="custom-control-input rfdTypeSelect" id="trussFlagOption-{{ $conditionId }}-2" name="trussFlag-{{ $conditionId }}" onchange="fcChangeType({{ $conditionId }}, 1)" value="1">
-        <label class="custom-control-label rfdTypeSelect" for="trussFlagOption-{{ $conditionId }}-2">Truss Framing Data Input</label>
+    <div>
+        <input type="button" class="btn btn-info duplicateBtn" id="duplicate-{{ $conditionId }}" value="Duplicate"></input>
     </div>
-    <p class="txt-collar-warning" id="collartie-warning-{{ $conditionId }}">Framing modification required.  Add collar tie / knee wall at xx.yy ft.</p>
 </div>
+<p class="txt-collar-warning" id="collartie-warning-{{ $conditionId }}">Framing modification required.  Add collar tie / knee wall at xx.yy ft.</p>
 <div class="row">
     <!-- Section info table section -->
     <table id="section-info-table-{{ $conditionId }}" cellspacing="0" cellpadding="0" style="border-spacing:0;" >    
