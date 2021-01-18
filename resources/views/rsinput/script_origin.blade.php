@@ -1207,7 +1207,6 @@ var getData = function(caseCount = 10) {
     return alldata;
 }
 
-
 var availableAlongRoofPlane = ["1","2","3","4","5","6"];
 var globalAlongRoofPlane = 4;
 
@@ -2457,6 +2456,9 @@ $(document).ready(function() {
            #txt-length-of-floor-plane-f-${i}, #txt-length-of-floor-plane-i-${i}, #txt-floor-segment1-length-f-${i}, #txt-floor-segment1-length-i-${i}, #txt-floor-segment2-length-f-${i}, #txt-floor-segment2-length-i-${i}, #txt-floor-segment3-length-f-${i}, #txt-floor-segment3-length-i-${i}, #txt-floor-segment4-length-f-${i}, #txt-floor-segment4-length-i-${i}, #txt-floor-segment5-length-f-${i}, #txt-floor-segment5-length-i-${i}, #txt-floor-segment6-length-f-${i}, #txt-floor-segment6-length-i-${i}`).on('change', function() {
             calcTrussDecimalFeet($(this).attr('id'));
         });
+        $(`#duplicate-${i}`).click(function() {
+            duplicateTab(window.conditionId);
+        })
     }
 
     // Framing condition related function
@@ -2830,6 +2832,64 @@ $(document).ready(function() {
             $(`#ac-10-${condId}`).val($(`#a-10-${condId}`).val());
         }
     }
+
+var duplicateTab = function(curTabId) {
+    var caseCount = parseInt($("#option-number-of-conditions").val());
+    if(caseCount >= 10){
+        swal.fire({ title: "Warning", text: "You are reached to FC cases limit.", icon: "warning", confirmButtonText: `OK` });
+    } else {
+        let targetTabId = caseCount + 1;
+        $("#option-number-of-conditions").val(caseCount + 1);
+        updateNumberOfConditions(caseCount + 1);
+        $(`#trussFlagOption-${targetTabId}-1`).prop('checked', $(`#trussFlagOption-${curTabId}-1`)[0].checked);
+        $(`#trussFlagOption-${targetTabId}-2`).prop('checked', $(`#trussFlagOption-${curTabId}-2`)[0].checked);
+        fcChangeType(targetTabId, $(`#trussFlagOption-${curTabId}-2`)[0].checked);
+        $(`#inputform-${curTabId} input:text:enabled, #inputform-${curTabId} select:enabled`).each(function() { 
+            let elementId = $(this).attr('id');
+            elementId = elementId.slice(0, elementId.length  - 2) + '-' + targetTabId;
+            $(`#${elementId}`).val($(this).val());
+        });
+        $(`#inputform-${curTabId} input:checkbox:enabled`).each(function() { 
+            let elementId = $(this).attr('id');
+            elementId = elementId.slice(0, elementId.length  - 2) + '-' + targetTabId;
+            $(`#${elementId}`).prop('checked', $(this)[0].checked);
+        });
+        maxModuleNumChange(targetTabId);
+        updateRoofMemberType(targetTabId, $(`#option-roof-member-type-${curTabId}`).val());
+        updateNumberSegment1(targetTabId, $(`#option-number-segments1-${curTabId}`).val());
+        updateFloorMemberType(targetTabId, $(`#option-floor-member-type-${curTabId}`).val());
+        updateNumberSegment2(targetTabId, $(`#option-number-segments2-${curTabId}`).val());
+
+        drawTrussGraph(targetTabId);
+        drawStickGraph(targetTabId);
+        stick_input_changed[targetTabId] = stick_input_changed[curTabId];
+        stick_right_input[targetTabId] = stick_right_input[curTabId];
+        checkRoofInput(targetTabId);
+        var i, tabcontent, tablinks, tabName = 'fc-' + targetTabId;
+        tabcontent = document.getElementsByClassName("rfdTabContent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(tabName).style.display = "block";
+        document.getElementById('fcTab-' + targetTabId).className += " active";
+        
+        if( tabName == "tab_first" )
+            document.getElementById('subPageTitle').innerHTML = 'Site and Equipment Data Input';
+        else if( tabName == "tab_override" )
+            document.getElementById('subPageTitle').innerHTML = 'Custom Program Data Overrides';
+        else 
+        {
+            window.conditionId = parseInt(tabName.slice(3));
+            document.getElementById('subPageTitle').innerHTML = 'Framing Data Input';
+        }
+        
+        console.log('Tab No:', window.conditionId);
+    }
+}
 
 var loadPreloadedData = function() {
     return new Promise((resolve, reject) => {
