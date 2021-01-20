@@ -2298,10 +2298,28 @@ $(document).ready(function() {
                             $('#stateCode').html(res.data.stateCode);
                             $('#ASCE').html(res.data.ASCE);
                             $('#NEC').html(res.data.NEC);
-                            $('#windLoadingValue').html(res.data.windLoadingValue);
-                            $('#windLoadingContent').html('mph - ' + res.data.windLoadingContent);
-                            $('#snowLoadingValue').html(res.data.snowLoadingValue);
-                            $('#snowLoadingContent').html("psf - Ground Snow Load, 'pg' (" + res.data.snowLoadingContent + ")");
+                            if(res.data.windLoadingValue < 0){
+                                $('#windLoadingValue').html('SPECIAL');
+                                $('#windLoadingValue').css('color', 'red');
+                                $('#windLoadingContent').html('Enter correct value in Override tab');
+                                $('#windLoadingContent').css('color', 'red');
+                            } else {
+                                $('#windLoadingValue').html(res.data.windLoadingValue);
+                                $('#windLoadingValue').css('color', 'black');
+                                $('#windLoadingContent').html('mph - ' + res.data.windLoadingContent);
+                                $('#windLoadingContent').css('color', 'black');
+                            }
+                            if(res.data.snowLoadingValue < 0){
+                                $('#snowLoadingValue').html('SPECIAL');
+                                $('#snowLoadingValue').css('color', 'red');
+                                $('#snowLoadingContent').html("Enter correct value in Override tab");
+                                $('#snowLoadingContent').css('color', 'red');
+                            } else {
+                                $('#snowLoadingValue').html(res.data.snowLoadingValue);
+                                $('#snowLoadingValue').css('color', 'black');
+                                $('#snowLoadingContent').html("psf - Ground Snow Load, 'pg' (" + res.data.snowLoadingContent + ")");
+                                $('#snowLoadingContent').css('color', 'black');
+                            }
                             $('#DCWatts').html(res.data.DCWatts);
                             $('#InverterAmperage').html(res.data.InverterAmperage);
                             $('#OCPDRating').html(res.data.OCPDRating);
