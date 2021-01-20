@@ -2308,11 +2308,7 @@ $(document).ready(function() {
                             $('#OCPDRating').html(res.data.OCPDRating);
                             $('#RecommendOCPD').html(res.data.RecommendOCPD);
                             $('#MinCu').html(res.data.MinCu);
-                            $('#site-check-table').css('display', 'table');
-                            $('#code-check-table').css('display', 'table');
-                            $('#environment-check-table').css('display', 'table');
-                            $('#electric-check-table').css('display', 'table');
-
+                            
                             var collarHeights = res.data.collarHeights;
                             var haveChanges = false;
                             for(let i = 1; i <= $('#option-number-of-conditions').val(); i ++){
@@ -2333,7 +2329,16 @@ $(document).ready(function() {
                             if(haveChanges){
                                 $('#collartie-header').css('display', "table-row");
                                 $('#collartie-headers').css('display', "table-row");
+                                $('#requiredNotes').css('color', 'red');
+                                $('#requiredNotes').html(' *************** Roof Framing Changes are Required *************** ');
+                            } else {
+                                $('#requiredNotes').css('color', 'black');
+                                $('#requiredNotes').html(' *************** No Roof Framing Changes are Required *************** ');
                             }
+                            $('#site-check-table').css('display', 'table');
+                            $('#code-check-table').css('display', 'table');
+                            $('#environment-check-table').css('display', 'table');
+                            $('#electric-check-table').css('display', 'table');
                             resolve(true);
                         } else
                             resolve(true);

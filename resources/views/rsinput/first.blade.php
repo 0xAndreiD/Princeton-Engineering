@@ -357,7 +357,7 @@
     </tr>
     <tr class="h13">
         <td><div style="overflow:hidden"></div></td>
-        <td colspan="3" style="text-align:center; color: red;"> *************** Roof Framing Changes are Required *************** </td>
+        <td colspan="3" style="text-align:center; color: red;" id="requiredNotes"> *************** Roof Framing Changes are Required *************** </td>
         <td><div style="overflow:hidden"></div></td>
     </tr>
     <tr class="h13">
