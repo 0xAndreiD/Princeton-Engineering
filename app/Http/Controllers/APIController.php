@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Schema;
 use App\User;
 use App\JobRequest;
 use App\Company;
+use App\DataCheck;
 
 class APIController extends Controller
 {
@@ -88,10 +89,24 @@ class APIController extends Controller
                 {
                     $job = JobRequest::where('requestFile', $request['requestFile'])->first();
                     if($job){
-                        $columns = Schema::getColumnListing('job_request');
-                        foreach($columns as $column){
+                        $jobCols = Schema::getColumnListing('job_request');
+                        foreach($jobCols as $column){
                             if($column != 'requestFile' && isset($request[$column]))
                                 $job[$column] = $request[$column];
+                        }
+                        $update = false;
+                        $dataCheckCols = Schema::getColumnListing('data_check');
+                        foreach($dataCheckCols as $column){
+                            if(isset($request[$column]))
+                                $update = true;
+                        }
+                        if($update){
+                            $dataCheck = DataCheck::firstOrNew(array('jobId' => $job['id']));
+                            foreach($dataCheckCols as $column){
+                                if($column != 'jobId' && isset($request[$column]))
+                                    $dataCheck[$column] = $request[$column];
+                            }
+                            $dataCheck->save();
                         }
                         if($job->save())
                             return response()->json(['success' => true, 'message' => 'Success']);

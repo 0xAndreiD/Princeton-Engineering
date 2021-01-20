@@ -49,6 +49,7 @@ Route::get('/projectlist', 'GeneralController@projectList')->name('projectlist')
 Route::get('/requestFile', 'GeneralController@requestFile')->name('requestFile');
 Route::post('/getProjectList', 'GeneralController@getProjectList')->name('getProjectList');
 Route::post('/getProjectJson', 'GeneralController@getProjectJson')->name('getProjectJson');
+Route::post('/getDataCheck', 'GeneralController@getDataCheck')->name('getDataCheck');
 Route::post('/delProject', 'GeneralController@delProject')->name('delProject');
 Route::post('/setProjectState', 'GeneralController@setProjectState')->name('setProjectState');
 Route::post('/setPlanStatus', 'GeneralController@setPlanStatus')->name('setPlanStatus');

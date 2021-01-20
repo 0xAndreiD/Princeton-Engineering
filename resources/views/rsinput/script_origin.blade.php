@@ -1296,11 +1296,11 @@ var updatePlanes = function( condId ) {
     
     var option_number_segements1 = document.getElementsByClassName(`${condId}-option-number-segments1`)[0];
     var selected1 = option_number_segements1.options[option_number_segements1.selectedIndex];
-    var F148 = selected1.getAttribute('data-value');
+    var F148 = selected1 ? selected1.getAttribute('data-value') : 4;
 
     var option_number_segements2 = document.getElementsByClassName(`${condId}-option-number-segments2`)[0];
     var selected2 = option_number_segements2.options[option_number_segements2.selectedIndex];
-    var F162 = selected2.getAttribute('data-value');
+    var F162 = selected2 ? selected2.getAttribute('data-value') : 3;
 
     // Calculate Points
     var V19 = 1, V20 = 2, V21 = 3, V22 = 4, V23 = 5, V24 = 6;
@@ -2280,28 +2280,73 @@ $(document).ready(function() {
         });
     }
 
-    var loadFramingChanges = function(){
-        var collarHeights = $("#collarHeights").val();
-        var haveChanges = false;
-        for(let i = 1; i <= $('#option-number-of-conditions').val(); i ++){
-            if(collarHeights.length >= 5 * i)
-            {
-                let tabCollar = collarHeights.slice(5 * (i - 1), 5 * i);
-                if(parseFloat(tabCollar) != 0)
-                {
-                    haveChanges = true;
-                    $(`#collartie-height-${i}`).html(parseFloat(tabCollar).toFixed(2));
-                    $(`#collartie-title-${i}`).html(i + ': ' + $(`#a-5-${i}`).val());
-                    $(`#collartie-${i}`).css('display', "table-row");
-                    $(`#collartie-warning-${i}`).css('display', 'block');
-                    $(`#collartie-warning-${i}`).html('Framing modification required.  Add collar tie / knee wall at ' + parseFloat(tabCollar).toFixed(2) + ' ft.');
-                }
-            }
-        }
-        if(haveChanges){
-            $('#collartie-header').css('display', "table-row");
-            $('#collartie-headers').css('display', "table-row");
-        }
+    var loadDataCheck = function(){
+        return new Promise((resolve, reject) => {
+            var projectId = $('#projectId').val();
+            if(projectId >= 0){
+                $.ajax({
+                    url:"getDataCheck",
+                    type:'post',
+                    data:{projectId: projectId},
+                    success:function(res){
+                        if(res && res.success == true && res.data){
+                            $('#exposureUnit').html(res.data.exposureUnit);
+                            $('#exposureContent').html('Exposure Category (' + res.data.exposureContent + ')');
+                            $('#occupancyUnit').html(res.data.occupancyUnit);
+                            $('#occupancyContent').html('Occupancy Category / Risk Category (' + res.data.occupancyContent + ')');
+                            $('#IBC').html(res.data.IBC);
+                            $('#stateCode').html(res.data.stateCode);
+                            $('#ASCE').html(res.data.ASCE);
+                            $('#NEC').html(res.data.NEC);
+                            $('#windLoadingValue').html(res.data.windLoadingValue);
+                            $('#windLoadingContent').html('mph - ' + res.data.windLoadingContent);
+                            $('#snowLoadingValue').html(res.data.snowLoadingValue);
+                            $('#snowLoadingContent').html("psf - Ground Snow Load, 'pg' (" + res.data.snowLoadingContent + ")");
+                            $('#DCWatts').html(res.data.DCWatts);
+                            $('#InverterAmperage').html(res.data.InverterAmperage);
+                            $('#OCPDRating').html(res.data.OCPDRating);
+                            $('#OCPDRating').html(res.data.OCPDRating);
+                            $('#RecommendOCPD').html(res.data.RecommendOCPD);
+                            $('#MinCu').html(res.data.MinCu);
+                            $('#site-check-table').css('display', 'table');
+                            $('#code-check-table').css('display', 'table');
+                            $('#environment-check-table').css('display', 'table');
+                            $('#electric-check-table').css('display', 'table');
+
+                            var collarHeights = res.data.collarHeights;
+                            var haveChanges = false;
+                            for(let i = 1; i <= $('#option-number-of-conditions').val(); i ++){
+                                if(collarHeights.length >= 5 * i)
+                                {
+                                    let tabCollar = collarHeights.slice(5 * (i - 1), 5 * i);
+                                    if(parseFloat(tabCollar) != 0)
+                                    {
+                                        haveChanges = true;
+                                        $(`#collartie-height-${i}`).html(parseFloat(tabCollar).toFixed(2));
+                                        $(`#collartie-title-${i}`).html(i + ': ' + $(`#a-5-${i}`).val());
+                                        $(`#collartie-${i}`).css('display', "table-row");
+                                        $(`#collartie-warning-${i}`).css('display', 'block');
+                                        $(`#collartie-warning-${i}`).html('Framing modification required.  Add collar tie / knee wall at ' + parseFloat(tabCollar).toFixed(2) + ' ft.');
+                                    }
+                                }
+                            }
+                            if(haveChanges){
+                                $('#collartie-header').css('display', "table-row");
+                                $('#collartie-headers').css('display', "table-row");
+                            }
+                            resolve(true);
+                        } else
+                            resolve(true);
+                    },
+                    error: function(xhr, status, error) {
+                        res = JSON.parse(xhr.responseText);
+                        swal.fire({ title: "Error", text: res.message, icon: "error", confirmButtonText: `OK` });
+                        resolve(false);
+                    }
+                });
+            } else
+                resolve(true);
+        });
     }
 
     // component hander functions
@@ -2913,7 +2958,7 @@ var loadPreloadedData = function() {
                 type:'post',
                 data:{projectId: projectId},
                 success:function(res){
-                    if(res.success == true) {
+                    if(res && res.success == true) {
                         preloaded_data = JSON.parse(res.data);
                         console.log(preloaded_data);
                         try{
@@ -3422,7 +3467,7 @@ var loadPreloadedData = function() {
         await loadPreloadedData();
         loadStateOptions();
         loadEquipmentSection();
-        loadFramingChanges();
+        await loadDataCheck();
 
         var i;
         for(i = 1; i <= 10; i ++)

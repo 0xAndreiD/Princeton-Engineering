@@ -332,6 +332,195 @@
         <td><div style="overflow:hidden"></div></td>
         @endif
     </tr>
+</tbody>
+</table>
+
+<!-- Site Check section -->
+<table id="site-check-table" cellspacing="0" cellpadding="0" style="border-spacing:0; display:none;" >    
+    <colgroup>
+        <col width="80">
+        <col width="160">
+        <col width="70">
+        <col width="500">
+    </colgroup>
+<tbody>
+    <tr class="h13">
+        <td><div style="overflow:hidden"></td>
+        <td><div style="overflow:hidden"></td>
+        <td><div style="overflow:hidden"></td>
+        <td><div style="overflow:hidden"></td>
+    </tr>
+    <tr class="h13">
+        <td><div style="overflow:hidden"></div></td>
+        <td colspan="3" style="text-align:center;"><h4 style="margin:0">Data Input Check</h4></td>
+        <td><div style="overflow:hidden"></div></td>
+    </tr>
+    <tr class="h13">
+        <td><div style="overflow:hidden"></div></td>
+        <td colspan="3" style="text-align:center; color: red;"> *************** Roof Framing Changes are Required *************** </td>
+        <td><div style="overflow:hidden"></div></td>
+    </tr>
+    <tr class="h13">
+        <td><div style="overflow:hidden"></div></td>
+        <td class="iw400-bdr" colspan="3">Site</td>
+        <td><div style="overflow:hidden"></div></td>
+    </tr>
+    <tr class="h13">
+        <td><div style="overflow:hidden"></div></td>
+        <td class="iw400-right-bdr">Exposure Category</td>
+        <td class="w400-bdr" rowspan="" id="exposureUnit">B</input></td>
+        <td class="w400-bdr" style="text-align: left; font-style: italic;" id="exposureContent">Exposure Category (ASCE 7-16, Sect 26.7.3, pp 266)</td>
+    </tr>
+    <tr class="h13">
+        <td><div style="overflow:hidden"></div></td>
+        <td class="iw400-right-bdr" >Occupancy Category</td>
+        <td class="w400-bdr" rowspan="" id="occupancyUnit">II</input></td>
+        <td class="w400-bdr" style="text-align: left; font-style: italic;" id="occupancyContent">Occupancy Category / Risk Category (ASCE 7-16, Table 1.5.1, pp 4)</td>
+    </tr>
+</tbody>
+</table>
+
+<!-- Code Check section -->
+<table id="code-check-table" cellspacing="0" cellpadding="0" style="border-spacing:0; display:none;" >    
+    <colgroup>
+        <col width="80">
+        <col width="160">
+        <col width="140">
+        <col width="160">
+        <col width="140">
+        <col width="130">
+    </colgroup>
+<tbody>
+    <tr class="h13">
+        <td><div style="overflow:hidden"></td>
+        <td><div style="overflow:hidden"></td>
+        <td><div style="overflow:hidden"></td>
+        <td><div style="overflow:hidden"></td>
+        <td><div style="overflow:hidden"></td>
+        <td><div style="overflow:hidden"></td>
+    </tr>
+    <tr class="h13">
+        <td><div style="overflow:hidden"></div></td>
+        <td class="iw400-bdr" colspan="5">Code Check</td>
+    </tr>
+    <tr class="h13">
+        <td><div style="overflow:hidden"></div></td>
+        <td class="iw400-right-bdr">IBC</td>
+        <td class="w400-bdr" id="IBC">2018</input></td>
+        <td class="iw400-right-bdr">State Res Code</td>
+        <td class="w400-bdr" colspan="2" id="stateCode"><div style="overflow:hidden">FBC 2020</div></td>
+    </tr>
+    <tr class="h13">
+        <td><div style="overflow:hidden"></div></td>
+        <td class="iw400-right-bdr">ASCE</td>
+        <td class="w400-bdr" id="ASCE">ASCE 7-16</input></td>
+        <td class="iw400-right-bdr">NEC</td>
+        <td class="w400-bdr" id="NEC">2017</input></td>
+        <td><div style="overflow:hidden"></div></td>
+    </tr>
+</tbody>
+</table>
+
+<!-- Environmental Check section -->
+<table id="environment-check-table" cellspacing="0" cellpadding="0" style="border-spacing:0; display:none;" >    
+    <colgroup>
+        <col width="80">
+        <col width="160">
+        <col width="70">
+        <col width="500">
+    </colgroup>
+<tbody>
+    <tr class="h13">
+        <td><div style="overflow:hidden"></td>
+        <td><div style="overflow:hidden"></td>
+        <td><div style="overflow:hidden"></td>
+        <td><div style="overflow:hidden"></td>
+    </tr>
+    <tr class="h13">
+        <td><div style="overflow:hidden"></div></td>
+        <td class="iw400-bdr" colspan="3">Environmental</td>
+        <td><div style="overflow:hidden"></div></td>
+    </tr>
+    <tr class="h13">
+        <td><div style="overflow:hidden"></div></td>
+        <td class="iw400-right-bdr">Wind Loading</td>
+        <td class="w400-bdr" rowspan="" id="windLoadingValue">139</input></td>
+        <td class="w400-bdr" style="text-align: center; font-style: italic;" id="windLoadingContent">mph - Orange County, FL Wind Speeds Risk Category II map</td>
+    </tr>
+    <tr class="h13">
+        <td><div style="overflow:hidden"></div></td>
+        <td class="iw400-right-bdr">Snow Loading</td>
+        <td class="w400-bdr" rowspan="" id="snowLoadingValue">0</input></td>
+        <td class="w400-bdr" style="text-align: center; font-style: italic;" id="snowLoadingContent">psf - Ground Snow Load, 'pg' (ASCE 7-16 Table 7.2-1, Page 52-53)</td>
+    </tr>
+</tbody>
+</table>
+
+<!-- Electrical Check section -->
+<table id="electric-check-table" cellspacing="0" cellpadding="0" style="border-spacing:0; display:none;" >    
+    <colgroup>
+        <col width="80">
+        <col width="160">
+        <col width="70">
+        <col width="70">
+    </colgroup>
+<tbody>
+    <tr class="h13">
+        <td><div style="overflow:hidden"></td>
+        <td><div style="overflow:hidden"></td>
+        <td><div style="overflow:hidden"></td>
+        <td><div style="overflow:hidden"></td>
+    </tr>
+    <tr class="h13">
+        <td><div style="overflow:hidden"></div></td>
+        <td class="iw400-bdr" colspan="3">Electrical</td>
+        <td><div style="overflow:hidden"></div></td>
+    </tr>
+    <tr class="h13">
+        <td><div style="overflow:hidden"></div></td>
+        <td class="iw400-right-bdr">Total DC Watts</td>
+        <td class="w400-bdr" rowspan="" id="DCWatts">8160</input></td>
+        <td class="w400-bdr" style="text-align: left;">w</td>
+    </tr>
+    <tr class="h13">
+        <td><div style="overflow:hidden"></div></td>
+        <td class="iw400-right-bdr">Total Inverter Amperage</td>
+        <td class="w400-bdr" rowspan="" id="InverterAmperage">24</input></td>
+        <td class="w400-bdr" style="text-align: left;">A</td>
+    </tr>
+    <tr class="h13">
+        <td><div style="overflow:hidden"></div></td>
+        <td class="iw400-right-bdr">Min OCPD rating</td>
+        <td class="w400-bdr" rowspan="" id="OCPDRating">30</input></td>
+        <td class="w400-bdr" style="text-align: left;">w</td>
+    </tr>
+    <tr class="h13">
+        <td><div style="overflow:hidden"></div></td>
+        <td class="iw400-right-bdr">Recommended OCPD</td>
+        <td class="w400-bdr" rowspan="" id="RecommendOCPD">30</input></td>
+        <td class="w400-bdr" style="text-align: left;">A</td>
+    </tr>
+    <tr class="h13">
+        <td><div style="overflow:hidden"></div></td>
+        <td class="iw400-right-bdr">Min Cu 75 deg C wire</td>
+        <td class="w400-bdr" rowspan="" id="MinCu">#10</input></td>
+        <td class="w400-bdr" style="text-align: left;">AWG</td>
+    </tr>
+</tbody>
+</table>
+
+<!-- Error table -->
+<table cellspacing="0" cellpadding="0" style="border-spacing:0;" >    
+    <colgroup>
+        <col width="80">
+        <col width="160">
+        <col width="200">
+        <col width="200">
+        <col width="80">
+        <col width="80">
+        <col width="80">
+    </colgroup>
+<tbody>
     <tr class="h13">
         <td><div style="overflow:hidden"></td>
         <td><div style="overflow:hidden"></td>
@@ -363,5 +552,4 @@
 <input type="text" value="{{ $projectId }}" id="projectId" hidden>
 <input type="text" value="{{ $projectState }}" id="projectState" hidden>
 <input type="text" value="{{ $offset }}" id="companyOffset" hidden>
-<input type="text" value="{{ $collarHeights }}" id="collarHeights" hidden>
 </form>
