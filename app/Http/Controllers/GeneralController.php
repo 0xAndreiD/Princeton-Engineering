@@ -726,6 +726,8 @@ class GeneralController extends Controller
                     $datacheck = DataCheck::where('jobId', $request['projectId'])->first();
                     if($datacheck)
                         return response()->json(['success' => true, 'data' => $datacheck]);
+                    else
+                        return response()->json(['success' => false, 'message' => "No Data Check"]);
                 }
                 else
                     return response()->json(['success' => false, 'message' => "You don't have any permission to view this project."] );
