@@ -138,7 +138,7 @@ class APIController extends Controller
             {
                 if(isset($request['fileName'])){
                     if( Storage::disk('local')->exists($request['fileName']) )
-                        return response()->download(storage_path('/app/' . $request['fileName']), null, ['Cache-Control' => 'no-cache, must-revalidate']);
+                        return response()->download(storage_path('/app/' . $request['fileName']), null, ['Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0']);
                     else
                         return response()->json(['success' => false, 'message' => 'Fail', 'reason' => 'Cannot find file.']);
                 }
