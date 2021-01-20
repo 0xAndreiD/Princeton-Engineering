@@ -2311,18 +2311,20 @@ $(document).ready(function() {
                             
                             var collarHeights = res.data.collarHeights;
                             var haveChanges = false;
-                            for(let i = 1; i <= $('#option-number-of-conditions').val(); i ++){
-                                if(collarHeights.length >= 5 * i)
-                                {
-                                    let tabCollar = collarHeights.slice(5 * (i - 1), 5 * i);
-                                    if(parseFloat(tabCollar) != 0)
+                            if(collarHeights){
+                                for(let i = 1; i <= $('#option-number-of-conditions').val(); i ++){
+                                    if(collarHeights.length >= 5 * i)
                                     {
-                                        haveChanges = true;
-                                        $(`#collartie-height-${i}`).html(parseFloat(tabCollar).toFixed(2));
-                                        $(`#collartie-title-${i}`).html(i + ': ' + $(`#a-5-${i}`).val());
-                                        $(`#collartie-${i}`).css('display', "table-row");
-                                        $(`#collartie-warning-${i}`).css('display', 'block');
-                                        $(`#collartie-warning-${i}`).html('Framing modification required.  Add collar tie / knee wall at ' + parseFloat(tabCollar).toFixed(2) + ' ft.');
+                                        let tabCollar = collarHeights.slice(5 * (i - 1), 5 * i);
+                                        if(parseFloat(tabCollar) != 0)
+                                        {
+                                            haveChanges = true;
+                                            $(`#collartie-height-${i}`).html(parseFloat(tabCollar).toFixed(2));
+                                            $(`#collartie-title-${i}`).html(i + ': ' + $(`#a-5-${i}`).val());
+                                            $(`#collartie-${i}`).css('display', "table-row");
+                                            $(`#collartie-warning-${i}`).css('display', 'block');
+                                            $(`#collartie-warning-${i}`).html('Framing modification required.  Add collar tie / knee wall at ' + parseFloat(tabCollar).toFixed(2) + ' ft.');
+                                        }
                                     }
                                 }
                             }
