@@ -450,7 +450,8 @@ class GeneralController extends Controller
         // filter created_to
         if(!empty($request->input("created_to")) && $request->input("created_to") != "")
         {
-            $date = new DateTime($request->input("created_to"), new DateTimeZone('EST'));
+            $dateTo = date('Y-m-d H:i:s',strtotime('+23 hour +59 minutes +59 seconds',strtotime($request->input("created_to"))));
+            $date = new DateTime($dateTo, new DateTimeZone('EST'));
             $date->setTimezone(new DateTimeZone('UTC'));
             $handler = $handler->where('job_request.createdTime', '<=', $date->format("Y-m-d H:i:s"));
         }
@@ -464,7 +465,8 @@ class GeneralController extends Controller
         // filter submitted_to
         if(!empty($request->input("submitted_to")) && $request->input("submitted_to") != "")
         {
-            $date = new DateTime($request->input("submitted_to"), new DateTimeZone('EST'));
+            $dateTo = date('Y-m-d H:i:s',strtotime('+23 hour +59 minutes +59 seconds',strtotime($request->input("submitted_to"))));
+            $date = new DateTime($dateTo, new DateTimeZone('EST'));
             $date->setTimezone(new DateTimeZone('UTC'));
             $handler = $handler->where('job_request.submittedTime', '<=', $date->format("Y-m-d H:i:s"));
         }
