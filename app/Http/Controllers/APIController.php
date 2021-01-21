@@ -12,6 +12,9 @@ use App\JobRequest;
 use App\Company;
 use App\DataCheck;
 
+use DateTime;
+use DateTimeZone;
+
 class APIController extends Controller
 {
     /**
@@ -46,12 +49,17 @@ class APIController extends Controller
             {
                 $query = new JobRequest;
 
-                if(isset($request['dateFrom']))
-                    $query = $query->where('createdTime', '>=', $request['dateFrom']);
+                if(isset($request['dateFrom'])){
+                    $date = new DateTime($request['dateFrom'], new DateTimeZone('EST'));
+                    $date->setTimezone(new DateTimeZone('UTC'));
+                    $query = $query->where('createdTime', '>=', $date->format("Y-m-d H:i:s"));
+                }
                 if(isset($request['dateTo']))
                 {
                     $dateTo = date('Y-m-d H:i:s',strtotime('+23 hour +59 minutes +59 seconds',strtotime($request['dateTo'])));
-                    $query = $query->where('createdTime', '<=', $dateTo);
+                    $date = new DateTime($dateTo, new DateTimeZone('EST'));
+                    $date->setTimezone(new DateTimeZone('UTC'));
+                    $query = $query->where('createdTime', '<=', $date->format("Y-m-d H:i:s"));
                 }
                 if(isset($request['clientIdFrom']))
                     $query = $query->where('companyId', '>=', $request['clientIdFrom']);
@@ -65,6 +73,10 @@ class APIController extends Controller
                     $data = $data->sortBy('clientProjectNumber', SORT_REGULAR, true)->values();
                 else
                     $data = $data->sortBy('clientProjectNumber', SORT_REGULAR, false)->values();
+                foreach($data as $job){
+                    $job['createdTime'] = date('Y-m-d H:i:s', strtotime('-5 hour',strtotime($job['createdTime'])));
+                    $job['submittedTime'] = date('Y-m-d H:i:s', strtotime('-5 hour',strtotime($job['submittedTime'])));
+                }
                 
                 return response()->json(['success' => true, 'message' => 'Success', 'data' => $data]);
             }
