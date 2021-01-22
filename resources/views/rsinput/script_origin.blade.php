@@ -1296,11 +1296,11 @@ var updatePlanes = function( condId ) {
     
     var option_number_segements1 = document.getElementsByClassName(`${condId}-option-number-segments1`)[0];
     var selected1 = option_number_segements1.options[option_number_segements1.selectedIndex];
-    var F148 = selected1.getAttribute('data-value');
+    var F148 = selected1 ? selected1.getAttribute('data-value') : 4;
 
     var option_number_segements2 = document.getElementsByClassName(`${condId}-option-number-segments2`)[0];
     var selected2 = option_number_segements2.options[option_number_segements2.selectedIndex];
-    var F162 = selected2.getAttribute('data-value');
+    var F162 = selected2 ? selected2.getAttribute('data-value') : 3;
 
     // Calculate Points
     var V19 = 1, V20 = 2, V21 = 3, V22 = 4, V23 = 5, V24 = 6;
@@ -2280,28 +2280,98 @@ $(document).ready(function() {
         });
     }
 
-    var loadFramingChanges = function(){
-        var collarHeights = $("#collarHeights").val();
-        var haveChanges = false;
-        for(let i = 1; i <= $('#option-number-of-conditions').val(); i ++){
-            if(collarHeights.length >= 5 * i)
-            {
-                let tabCollar = collarHeights.slice(5 * (i - 1), 5 * i);
-                if(parseFloat(tabCollar) != 0)
-                {
-                    haveChanges = true;
-                    $(`#collartie-height-${i}`).html(parseFloat(tabCollar).toFixed(2));
-                    $(`#collartie-title-${i}`).html(i + ': ' + $(`#a-5-${i}`).val());
-                    $(`#collartie-${i}`).css('display', "table-row");
-                    $(`#collartie-warning-${i}`).css('display', 'block');
-                    $(`#collartie-warning-${i}`).html('Framing modification required.  Add collar tie / knee wall at ' + parseFloat(tabCollar).toFixed(2) + ' ft.');
-                }
-            }
-        }
-        if(haveChanges){
-            $('#collartie-header').css('display', "table-row");
-            $('#collartie-headers').css('display', "table-row");
-        }
+    var loadDataCheck = function(){
+        return new Promise((resolve, reject) => {
+            var projectId = $('#projectId').val();
+            if(projectId >= 0){
+                $.ajax({
+                    url:"getDataCheck",
+                    type:'post',
+                    data:{projectId: projectId},
+                    success:function(res){
+                        if(res && res.success == true && res.data){
+                            $('#exposureUnit').html(res.data.exposureUnit);
+                            $('#exposureContent').html('Exposure Category (' + res.data.exposureContent + ')');
+                            $('#occupancyUnit').html(res.data.occupancyUnit);
+                            $('#occupancyContent').html('Occupancy Category / Risk Category (' + res.data.occupancyContent + ')');
+                            $('#IBC').html(res.data.IBC);
+                            $('#stateCode').html(res.data.stateCode);
+                            $('#ASCE').html(res.data.ASCE);
+                            $('#NEC').html(res.data.NEC);
+                            if(res.data.windLoadingValue < 0){
+                                $('#windLoadingValue').html('SPECIAL');
+                                $('#windLoadingValue').css('color', 'red');
+                                $('#windLoadingContent').html('Enter correct value in Override tab');
+                                $('#windLoadingContent').css('color', 'red');
+                            } else {
+                                $('#windLoadingValue').html(res.data.windLoadingValue);
+                                $('#windLoadingValue').css('color', 'black');
+                                $('#windLoadingContent').html('mph - ' + res.data.windLoadingContent);
+                                $('#windLoadingContent').css('color', 'black');
+                            }
+                            if(res.data.snowLoadingValue < 0){
+                                $('#snowLoadingValue').html('SPECIAL');
+                                $('#snowLoadingValue').css('color', 'red');
+                                $('#snowLoadingContent').html("Enter correct value in Override tab");
+                                $('#snowLoadingContent').css('color', 'red');
+                            } else {
+                                $('#snowLoadingValue').html(res.data.snowLoadingValue);
+                                $('#snowLoadingValue').css('color', 'black');
+                                $('#snowLoadingContent').html("psf - Ground Snow Load, 'pg' (" + res.data.snowLoadingContent + ")");
+                                $('#snowLoadingContent').css('color', 'black');
+                            }
+                            $('#DCWatts').html(res.data.DCWatts);
+                            $('#InverterAmperage').html(res.data.InverterAmperage);
+                            $('#OCPDRating').html(res.data.OCPDRating);
+                            $('#OCPDRating').html(res.data.OCPDRating);
+                            $('#RecommendOCPD').html(res.data.RecommendOCPD);
+                            $('#MinCu').html(res.data.MinCu);
+                            
+                            var collarHeights = res.data.collarHeights;
+                            var haveChanges = false;
+                            if(collarHeights){
+                                for(let i = 1; i <= $('#option-number-of-conditions').val(); i ++){
+                                    if(collarHeights.length >= 5 * i)
+                                    {
+                                        let tabCollar = collarHeights.slice(5 * (i - 1), 5 * i);
+                                        if(parseFloat(tabCollar) != 0)
+                                        {
+                                            haveChanges = true;
+                                            $(`#collartie-height-${i}`).html(parseFloat(tabCollar).toFixed(2));
+                                            $(`#collartie-title-${i}`).html(i + ': ' + $(`#a-5-${i}`).val());
+                                            $(`#collartie-${i}`).css('display', "table-row");
+                                            $(`#collartie-warning-${i}`).css('display', 'block');
+                                            $(`#collartie-warning-${i}`).html('Framing modification required.  Add collar tie / knee wall at ' + parseFloat(tabCollar).toFixed(2) + ' ft.');
+                                        }
+                                    }
+                                }
+                            }
+                            if(haveChanges){
+                                $('#collartie-header').css('display', "table-row");
+                                $('#collartie-headers').css('display', "table-row");
+                                $('#requiredNotes').css('color', 'red');
+                                $('#requiredNotes').html(' *************** Roof Framing Changes are Required *************** ');
+                            } else {
+                                $('#requiredNotes').css('color', 'black');
+                                $('#requiredNotes').html(' *************** No Roof Framing Changes are Required *************** ');
+                            }
+                            $('#site-check-table').css('display', 'table');
+                            $('#code-check-table').css('display', 'table');
+                            $('#environment-check-table').css('display', 'table');
+                            $('#electric-check-table').css('display', 'table');
+                            resolve(true);
+                        } else
+                            resolve(true);
+                    },
+                    error: function(xhr, status, error) {
+                        res = JSON.parse(xhr.responseText);
+                        swal.fire({ title: "Error", text: res.message, icon: "error", confirmButtonText: `OK` });
+                        resolve(false);
+                    }
+                });
+            } else
+                resolve(true);
+        });
     }
 
     // component hander functions
@@ -2838,56 +2908,69 @@ var duplicateTab = function(curTabId) {
     if(caseCount >= 10){
         swal.fire({ title: "Warning", text: "You are reached to FC cases limit.", icon: "warning", confirmButtonText: `OK` });
     } else {
-        let targetTabId = caseCount + 1;
-        $("#option-number-of-conditions").val(caseCount + 1);
-        updateNumberOfConditions(caseCount + 1);
-        $(`#trussFlagOption-${targetTabId}-1`).prop('checked', $(`#trussFlagOption-${curTabId}-1`)[0].checked);
-        $(`#trussFlagOption-${targetTabId}-2`).prop('checked', $(`#trussFlagOption-${curTabId}-2`)[0].checked);
-        fcChangeType(targetTabId, $(`#trussFlagOption-${curTabId}-2`)[0].checked);
-        $(`#inputform-${curTabId} input:text:enabled, #inputform-${curTabId} select:enabled`).each(function() { 
-            let elementId = $(this).attr('id');
-            elementId = elementId.slice(0, elementId.length  - 2) + '-' + targetTabId;
-            $(`#${elementId}`).val($(this).val());
-        });
-        $(`#inputform-${curTabId} input:checkbox:enabled`).each(function() { 
-            let elementId = $(this).attr('id');
-            elementId = elementId.slice(0, elementId.length  - 2) + '-' + targetTabId;
-            $(`#${elementId}`).prop('checked', $(this)[0].checked);
-        });
-        maxModuleNumChange(targetTabId);
-        updateRoofMemberType(targetTabId, $(`#option-roof-member-type-${curTabId}`).val());
-        updateNumberSegment1(targetTabId, $(`#option-number-segments1-${curTabId}`).val());
-        updateFloorMemberType(targetTabId, $(`#option-floor-member-type-${curTabId}`).val());
-        updateNumberSegment2(targetTabId, $(`#option-number-segments2-${curTabId}`).val());
+        swal.fire({ title: "Input the target FC Tab Number", input: 'text', confirmButtonText: `OK`, showCancelButton: true }).then((result => {
+            if(result && result.value && result.value != curTabId){
+                if(parseInt(result.value) < 1 || parseInt(result.value) > 10)
+                    swal.fire({ title: "Warning", text: "Please input correct target number(1~10).", icon: "warning", confirmButtonText: `OK` });
+                else{
+                    let targetTabId;
+                    if(result.value > caseCount){
+                        targetTabId = caseCount + 1;
+                        $("#option-number-of-conditions").val(caseCount + 1);
+                        updateNumberOfConditions(caseCount + 1);
+                    }
+                    else
+                        targetTabId = parseInt(result.value);
+                    $(`#trussFlagOption-${targetTabId}-1`).prop('checked', $(`#trussFlagOption-${curTabId}-1`)[0].checked);
+                    $(`#trussFlagOption-${targetTabId}-2`).prop('checked', $(`#trussFlagOption-${curTabId}-2`)[0].checked);
+                    fcChangeType(targetTabId, $(`#trussFlagOption-${curTabId}-2`)[0].checked);
+                    $(`#inputform-${curTabId} input:text:enabled, #inputform-${curTabId} select:enabled`).each(function() { 
+                        let elementId = $(this).attr('id');
+                        elementId = elementId.slice(0, elementId.length  - 2) + '-' + targetTabId;
+                        $(`#${elementId}`).val($(this).val());
+                    });
+                    $(`#inputform-${curTabId} input:checkbox:enabled`).each(function() { 
+                        let elementId = $(this).attr('id');
+                        elementId = elementId.slice(0, elementId.length  - 2) + '-' + targetTabId;
+                        $(`#${elementId}`).prop('checked', $(this)[0].checked);
+                    });
+                    maxModuleNumChange(targetTabId);
+                    updateRoofMemberType(targetTabId, $(`#option-roof-member-type-${curTabId}`).val());
+                    updateNumberSegment1(targetTabId, $(`#option-number-segments1-${curTabId}`).val());
+                    updateFloorMemberType(targetTabId, $(`#option-floor-member-type-${curTabId}`).val());
+                    updateNumberSegment2(targetTabId, $(`#option-number-segments2-${curTabId}`).val());
 
-        drawTrussGraph(targetTabId);
-        drawStickGraph(targetTabId);
-        stick_input_changed[targetTabId] = stick_input_changed[curTabId];
-        stick_right_input[targetTabId] = stick_right_input[curTabId];
-        checkRoofInput(targetTabId);
-        var i, tabcontent, tablinks, tabName = 'fc-' + targetTabId;
-        tabcontent = document.getElementsByClassName("rfdTabContent");
-        for (i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].style.display = "none";
-        }
-        tablinks = document.getElementsByClassName("tablinks");
-        for (i = 0; i < tablinks.length; i++) {
-            tablinks[i].className = tablinks[i].className.replace(" active", "");
-        }
-        document.getElementById(tabName).style.display = "block";
-        document.getElementById('fcTab-' + targetTabId).className += " active";
-        
-        if( tabName == "tab_first" )
-            document.getElementById('subPageTitle').innerHTML = 'Site and Equipment Data Input';
-        else if( tabName == "tab_override" )
-            document.getElementById('subPageTitle').innerHTML = 'Custom Program Data Overrides';
-        else 
-        {
-            window.conditionId = parseInt(tabName.slice(3));
-            document.getElementById('subPageTitle').innerHTML = 'Framing Data Input';
-        }
-        
-        console.log('Tab No:', window.conditionId);
+                    drawTrussGraph(targetTabId);
+                    drawStickGraph(targetTabId);
+                    stick_input_changed[targetTabId] = stick_input_changed[curTabId];
+                    stick_right_input[targetTabId] = stick_right_input[curTabId];
+                    checkRoofInput(targetTabId);
+                    var i, tabcontent, tablinks, tabName = 'fc-' + targetTabId;
+                    tabcontent = document.getElementsByClassName("rfdTabContent");
+                    for (i = 0; i < tabcontent.length; i++) {
+                        tabcontent[i].style.display = "none";
+                    }
+                    tablinks = document.getElementsByClassName("tablinks");
+                    for (i = 0; i < tablinks.length; i++) {
+                        tablinks[i].className = tablinks[i].className.replace(" active", "");
+                    }
+                    document.getElementById(tabName).style.display = "block";
+                    document.getElementById('fcTab-' + targetTabId).className += " active";
+                    
+                    if( tabName == "tab_first" )
+                        document.getElementById('subPageTitle').innerHTML = 'Site and Equipment Data Input';
+                    else if( tabName == "tab_override" )
+                        document.getElementById('subPageTitle').innerHTML = 'Custom Program Data Overrides';
+                    else 
+                    {
+                        window.conditionId = parseInt(tabName.slice(3));
+                        document.getElementById('subPageTitle').innerHTML = 'Framing Data Input';
+                    }
+                    
+                    console.log('Tab No:', window.conditionId);   
+                }
+            }
+        }))
     }
 }
 
@@ -2900,7 +2983,7 @@ var loadPreloadedData = function() {
                 type:'post',
                 data:{projectId: projectId},
                 success:function(res){
-                    if(res.success == true) {
+                    if(res && res.success == true) {
                         preloaded_data = JSON.parse(res.data);
                         console.log(preloaded_data);
                         try{
@@ -3409,7 +3492,7 @@ var loadPreloadedData = function() {
         await loadPreloadedData();
         loadStateOptions();
         loadEquipmentSection();
-        loadFramingChanges();
+        await loadDataCheck();
 
         var i;
         for(i = 1; i <= 10; i ++)

@@ -14,6 +14,7 @@ use App\PVInverter;
 use App\Stanchion;
 use App\RailSupport;
 use App\JobRequest;
+use App\DataCheck;
 
 use DateTime;
 use DateTimeZone;
@@ -63,8 +64,7 @@ class GeneralController extends Controller
                     ->with('companyMembers', $companymembers)
                     ->with('projectState', $project ? $project->projectState : 0)
                     ->with('projectId', $request['projectId'] ? $request['projectId'] : -1)
-                    ->with('offset', $company['offset'])
-                    ->with('collarHeights', $project['collarHeights']);
+                    ->with('offset', $company['offset']);
         }
         else
         {
@@ -75,8 +75,7 @@ class GeneralController extends Controller
                     ->with('companyMembers', $companymembers)
                     ->with('projectState', 0)
                     ->with('projectId', $request['projectId'] ? $request['projectId'] : -1)
-                    ->with('offset', 0.5)
-                    ->with('collarHeights', '');
+                    ->with('offset', 0.5);
         }
     }
 
@@ -451,7 +450,8 @@ class GeneralController extends Controller
         // filter created_to
         if(!empty($request->input("created_to")) && $request->input("created_to") != "")
         {
-            $date = new DateTime($request->input("created_to"), new DateTimeZone('EST'));
+            $dateTo = date('Y-m-d H:i:s',strtotime('+23 hour +59 minutes +59 seconds',strtotime($request->input("created_to"))));
+            $date = new DateTime($dateTo, new DateTimeZone('EST'));
             $date->setTimezone(new DateTimeZone('UTC'));
             $handler = $handler->where('job_request.createdTime', '<=', $date->format("Y-m-d H:i:s"));
         }
@@ -465,7 +465,8 @@ class GeneralController extends Controller
         // filter submitted_to
         if(!empty($request->input("submitted_to")) && $request->input("submitted_to") != "")
         {
-            $date = new DateTime($request->input("submitted_to"), new DateTimeZone('EST'));
+            $dateTo = date('Y-m-d H:i:s',strtotime('+23 hour +59 minutes +59 seconds',strtotime($request->input("submitted_to"))));
+            $date = new DateTime($dateTo, new DateTimeZone('EST'));
             $date->setTimezone(new DateTimeZone('UTC'));
             $handler = $handler->where('job_request.submittedTime', '<=', $date->format("Y-m-d H:i:s"));
         }
@@ -703,6 +704,35 @@ class GeneralController extends Controller
                 {
                     return response()->json(['success' => false, 'message' => "You don't have any permission to view this project."] );
                 }
+            }
+            else
+                return response()->json(['success' => false, 'message' => 'Cannot find the project.'] );
+        }
+        else
+            return response()->json(['success' => false, 'message' => 'Wrong Project Id.'] );
+    }
+
+    /**
+     * Return the data check contents of project.
+     *
+     * @return JSON
+     */
+    public function getDataCheck(Request $request){
+        if($request['projectId'])
+        {
+            $project = JobRequest::where('id', '=', $request['projectId'])->first();
+            if($project)
+            {
+                if(Auth::user()->userrole == 2 || Auth::user()->companyid == $project['companyId'])
+                {
+                    $datacheck = DataCheck::where('jobId', $request['projectId'])->first();
+                    if($datacheck)
+                        return response()->json(['success' => true, 'data' => $datacheck]);
+                    else
+                        return response()->json(['success' => false, 'message' => "No Data Check"]);
+                }
+                else
+                    return response()->json(['success' => false, 'message' => "You don't have any permission to view this project."] );
             }
             else
                 return response()->json(['success' => false, 'message' => 'Cannot find the project.'] );

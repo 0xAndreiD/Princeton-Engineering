@@ -10,6 +10,10 @@ use Illuminate\Support\Facades\Schema;
 use App\User;
 use App\JobRequest;
 use App\Company;
+use App\DataCheck;
+
+use DateTime;
+use DateTimeZone;
 
 class APIController extends Controller
 {
@@ -45,12 +49,17 @@ class APIController extends Controller
             {
                 $query = new JobRequest;
 
-                if(isset($request['dateFrom']))
-                    $query = $query->where('createdTime', '>=', $request['dateFrom']);
+                if(isset($request['dateFrom'])){
+                    $date = new DateTime($request['dateFrom'], new DateTimeZone('EST'));
+                    $date->setTimezone(new DateTimeZone('UTC'));
+                    $query = $query->where('createdTime', '>=', $date->format("Y-m-d H:i:s"));
+                }
                 if(isset($request['dateTo']))
                 {
                     $dateTo = date('Y-m-d H:i:s',strtotime('+23 hour +59 minutes +59 seconds',strtotime($request['dateTo'])));
-                    $query = $query->where('createdTime', '<=', $dateTo);
+                    $date = new DateTime($dateTo, new DateTimeZone('EST'));
+                    $date->setTimezone(new DateTimeZone('UTC'));
+                    $query = $query->where('createdTime', '<=', $date->format("Y-m-d H:i:s"));
                 }
                 if(isset($request['clientIdFrom']))
                     $query = $query->where('companyId', '>=', $request['clientIdFrom']);
@@ -64,6 +73,10 @@ class APIController extends Controller
                     $data = $data->sortBy('clientProjectNumber', SORT_REGULAR, true)->values();
                 else
                     $data = $data->sortBy('clientProjectNumber', SORT_REGULAR, false)->values();
+                foreach($data as $job){
+                    $job['createdTime'] = date('Y-m-d H:i:s', strtotime('-5 hour',strtotime($job['createdTime'])));
+                    $job['submittedTime'] = date('Y-m-d H:i:s', strtotime('-5 hour',strtotime($job['submittedTime'])));
+                }
                 
                 return response()->json(['success' => true, 'message' => 'Success', 'data' => $data]);
             }
@@ -88,10 +101,24 @@ class APIController extends Controller
                 {
                     $job = JobRequest::where('requestFile', $request['requestFile'])->first();
                     if($job){
-                        $columns = Schema::getColumnListing('job_request');
-                        foreach($columns as $column){
+                        $jobCols = Schema::getColumnListing('job_request');
+                        foreach($jobCols as $column){
                             if($column != 'requestFile' && isset($request[$column]))
                                 $job[$column] = $request[$column];
+                        }
+                        $update = false;
+                        $dataCheckCols = Schema::getColumnListing('data_check');
+                        foreach($dataCheckCols as $column){
+                            if(isset($request[$column]))
+                                $update = true;
+                        }
+                        if($update){
+                            $dataCheck = DataCheck::firstOrNew(array('jobId' => $job['id']));
+                            foreach($dataCheckCols as $column){
+                                if($column != 'jobId' && isset($request[$column]))
+                                    $dataCheck[$column] = $request[$column];
+                            }
+                            $dataCheck->save();
                         }
                         if($job->save())
                             return response()->json(['success' => true, 'message' => 'Success']);
@@ -123,7 +150,7 @@ class APIController extends Controller
             {
                 if(isset($request['fileName'])){
                     if( Storage::disk('local')->exists($request['fileName']) )
-                        return response()->download(storage_path('/app/' . $request['fileName']), null, ['Cache-Control' => 'no-cache, must-revalidate']);
+                        return response()->download(storage_path('/app/' . $request['fileName']), null, ['Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0']);
                     else
                         return response()->json(['success' => false, 'message' => 'Fail', 'reason' => 'Cannot find file.']);
                 }
