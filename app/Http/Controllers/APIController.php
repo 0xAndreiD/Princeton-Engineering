@@ -113,12 +113,13 @@ class APIController extends Controller
                                 $update = true;
                         }
                         if($update){
-                            $dataCheck = DataCheck::firstOrNew(array('jobId' => $job['id']));
+                            $dataCheck = DataCheck::firstOrCreate(array('jobId' => $job['id']));
                             foreach($dataCheckCols as $column){
                                 if($column != 'jobId' && isset($request[$column]))
                                     $dataCheck[$column] = $request[$column];
                             }
                             $dataCheck->save();
+                            Storage::disk('local')->put('ping_'.$request['requestFile'], $request->fullUrl());
                         }
                         if($job->save())
                             return response()->json(['success' => true, 'message' => 'Success']);
