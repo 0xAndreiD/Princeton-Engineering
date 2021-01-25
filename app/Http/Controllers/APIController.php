@@ -103,23 +103,29 @@ class APIController extends Controller
                     if($job){
                         $jobCols = Schema::getColumnListing('job_request');
                         foreach($jobCols as $column){
-                            if($column != 'requestFile' && isset($request[$column]))
-                                $job[$column] = $request[$column];
+                            if($column != 'requestFile' && !empty($request->input($column)))
+                                $job[$column] = $request->input($column);
                         }
                         $update = false;
                         $dataCheckCols = Schema::getColumnListing('data_check');
                         foreach($dataCheckCols as $column){
-                            if(isset($request[$column]))
+                            if(!empty($request->input($column)))
                                 $update = true;
                         }
                         if($update){
-                            $dataCheck = DataCheck::firstOrCreate(array('jobId' => $job['id']));
+                            $dataCheck = DataCheck::where('jobId', $job['id'])->first();
+                            if(!$dataCheck){
+                                $dataCheck = DataCheck::create([
+                                    'jobId' => $job['id'],
+                                    'collarHeights' => null
+                                ]);
+                            }
                             foreach($dataCheckCols as $column){
-                                if($column != 'jobId' && isset($request[$column]))
-                                    $dataCheck[$column] = $request[$column];
+                                if($column != 'jobId' && !empty($request->input($column)))
+                                    $dataCheck[$column] = $request->input($column);
                             }
                             $dataCheck->save();
-                            Storage::disk('local')->put('ping_'.$request['requestFile'], $request->fullUrl());
+                            Storage::disk('local')->append('ping_'.$request['requestFile'], $request->fullUrl()."\n");
                         }
                         if($job->save())
                             return response()->json(['success' => true, 'message' => 'Success']);
