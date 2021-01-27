@@ -69,3 +69,6 @@ Route::post('/getPVInverters', 'GeneralController@getPVInverters')->name('getPVI
 Route::post('/getStanchions', 'GeneralController@getStanchions')->name('getStanchions');
 // Rail Support
 Route::post('/getRailsupport', 'GeneralController@getRailsupport')->name('getRailsupport');
+
+// File Uploads
+Route::post('/jobFileUpload', 'GeneralController@jobFileUpload')->name('jobFileUpload');
