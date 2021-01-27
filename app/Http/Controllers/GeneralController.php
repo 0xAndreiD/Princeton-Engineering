@@ -842,10 +842,7 @@ class GeneralController extends Controller
                 $dropbox = new Dropbox($app);
                 $dropboxFile = new DropboxFile($localpath);
                 $dropfile = $dropbox->upload($dropboxFile, '/' . $filepath . '/' . $file->getClientOriginalName(), ['autorename' => TRUE]);
-                // $Client = new Client(env('DROPBOX_TOKEN'), env('DROPBOX_SECRET'));
-                // $size = filesize(public_path('img') . '/' . $filepath);
-                // $Client->uploadFile('/' . $filepath . '/' . $file->getClientOriginalName(), WriteMode::add(), $file, $size);
-                // $share = $Client->createShareableLink($dropboxFileName);
+                
                 return response()->json(['success' => true, 'message' => 'Multiple Image File Has Been uploaded Successfully', 'data' => $localpath, 'dropfile' => $dropfile]);
             } else {
                 return response()->json(['success' => false, 'message' => 'Cannot find the project.']);
