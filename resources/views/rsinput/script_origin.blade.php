@@ -18,6 +18,8 @@ function openRfdTab(evt, tabName) {
     document.getElementById('subPageTitle').innerHTML = 'Site and Equipment Data Input';
   else if( tabName == "tab_override" )
     document.getElementById('subPageTitle').innerHTML = 'Custom Program Data Overrides';
+  else if( tabName == "tab_upload" )
+    document.getElementById('subPageTitle').innerHTML = 'Multiple Documents Upload';
   else 
   {
     window.conditionId = parseInt(tabName.slice(3));
@@ -2089,6 +2091,10 @@ var drawStickGraph = function( condId ) {
     stick_ctx[condId].translate(- overhangX, overhangY);
 }
 
+window.totalCount = 0; // file uploads count
+window.finishedCount = 0; // file uploads count
+window.uploadError = false; // file uploads count
+
 $(document).ready(function() {
     $.ajaxSetup({
         headers: {
@@ -2528,7 +2534,112 @@ $(document).ready(function() {
         });
         $(`#duplicate-${i}`).click(function() {
             duplicateTab(window.conditionId);
-        })
+        });
+    }
+
+    $(`#upload`).on("dragover", function(){
+        $("#drop").css("background-color", "#1E3134");
+    });
+    $(`#upload`).on("dragleave dragenter drop", function(){
+        $("#drop").css("background-color", "#2E3134");
+    });
+    $(document).on('drop dragover', function (e) {
+        e.preventDefault();
+    });
+    $('#upload').fileupload({
+    dropZone: $('#drop'),
+    add: function (e, data) {
+        var tpl = $('<li class="working"><input type="text" value="0" data-width="48" data-height="48"'+
+            ' data-fgColor="#0788a5" data-readOnly="1" data-bgColor="#3e4043" /><p></p><span></span></li>');
+        tpl.find('p').text(data.files[0].name)
+                    .append('<i>' + formatFileSize(data.files[0].size) + '</i>');
+        data.context = tpl.appendTo($('#upload ul'));
+
+        tpl.find('input').knob();
+
+        tpl.find('span').click(function(){
+
+            if(tpl.hasClass('working')){
+                jqXHR.abort();
+            }
+
+            tpl.fadeOut(function(){
+                tpl.remove();
+            });
+
+        });
+        $("#uploadStatus").html("Uploading...");
+        window.totalCount ++;
+        if(window.finishedCount == 0)
+            $("#progressBar-value").css("width", "0%");
+
+        var jqXHR = data.submit();
+    },
+    progress: function(e, data){
+        var progress = parseInt(data.loaded / data.total * 100, 10);
+
+        data.context.find('input').val(progress).change();
+
+        // if(progress == 100){
+        //     data.context.removeClass('working');
+        // }
+    },
+
+    fail:function(e, data){
+        data.context.addClass('error');
+        setTotalProgress(false);
+    },
+
+    done:function(e, data){
+        if(data.result && data.result.success){
+            data.context.removeClass('working');
+            data.context.addClass('success');
+            setTotalProgress(true);
+        }
+        else{
+            data.context.addClass('error');
+            setTotalProgress(false);
+        }
+    }
+
+    });
+    $('#drop a').click(function(){
+        $(this).parent().find('input').click();
+    });
+
+    var formatFileSize = function(bytes) {
+        if (typeof bytes !== 'number') {
+            return '';
+        }
+
+        if (bytes >= 1000000000) {
+            return (bytes / 1000000000).toFixed(2) + ' GB';
+        }
+
+        if (bytes >= 1000000) {
+            return (bytes / 1000000).toFixed(2) + ' MB';
+        }
+
+        return (bytes / 1000).toFixed(2) + ' KB';
+    }
+
+    var setTotalProgress = function(status){
+        window.finishedCount ++;
+        var progress = (window.finishedCount * 100 / window.totalCount).toFixed(2);
+        $("#progressBar-value").css("width", progress + "%");
+        $("#uploadPercent").html(progress + "%");
+        if(status == false)
+            window.uploadError = true;
+        if(window.finishedCount >= window.totalCount){
+            if(window.uploadError)
+                swal.fire({ title: "Warning", text: "Upload Failed.", icon: "warning", confirmButtonText: `OK` });
+            else
+                swal.fire({ title: "Success", text: "Upload Done.", icon: "success", confirmButtonText: `OK` });
+            window.finishedCount = 0;
+            window.totalCount = 0;
+            window.uploadError = false;
+            $("#uploadStatus").html("Done");
+        }
     }
 
     // Framing condition related function
@@ -2628,6 +2739,7 @@ $(document).ready(function() {
             success:function(res){
                 if (res.status == true) {
                     $("#projectId").val(res.projectId);
+                    $("#uploadJobId").val(res.projectId);
                     message = 'Succeeded to send input data. Do you want back to home page?';
                     if (status == 'Data Check') {
                         message = 'Input Data sent for review. An email will be sent to you summarizing the data input and notifying you of any problems.\nGo back to home page?';

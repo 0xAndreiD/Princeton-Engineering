@@ -15,6 +15,9 @@ use App\Stanchion;
 use App\RailSupport;
 use App\JobRequest;
 use App\DataCheck;
+use Kunnu\Dropbox\DropboxApp;
+use Kunnu\Dropbox\Dropbox;
+use Kunnu\Dropbox\DropboxFile;
 
 use DateTime;
 use DateTimeZone;
@@ -814,5 +817,41 @@ class GeneralController extends Controller
         }
         else
             return response()->json(['success' => false, 'message' => 'Wrong Project Id.'] );
+    }
+    
+    /**
+     * Upload the files of the project.
+     *
+     * @return JSON
+     */
+    public function jobFileUpload(Request $request) {
+        if(!empty($request->input('uploadProjectId')) && !empty($request->file('upl')))
+        {
+            $job = JobRequest::where('id', $request->input('uploadProjectId'))->first();
+            if($job){
+                $user = User::where('companyid', $job['companyId'])->where('usernumber', $job['userId'])->first();
+                $file = $request->file('upl');
+                if($user)
+                    $filepath = $job['companyName'] . '/' . sprintf("%04d", $job['userId']) . ' ' . $user['username'] . '/' . sprintf("%06d", $job['clientProjectNumber']) . ' ' . $job['clientProjectName'];
+                else
+                    $filepath = $job['companyName'] . '/' . sprintf("%04d", $job['userId']) . '/' . sprintf("%06d", $job['clientProjectNumber']) . ' ' . $job['clientProjectName'];
+                $file->move(public_path('img') . '/' . $filepath, $file->getClientOriginalName());
+                $localpath = public_path('img') . '/' . $filepath . '/' . $file->getClientOriginalName();
+
+                $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
+                $dropbox = new Dropbox($app);
+                $dropboxFile = new DropboxFile($localpath);
+                $dropfile = $dropbox->upload($dropboxFile, '/' . $filepath . '/' . $file->getClientOriginalName(), ['autorename' => TRUE]);
+                // $Client = new Client(env('DROPBOX_TOKEN'), env('DROPBOX_SECRET'));
+                // $size = filesize(public_path('img') . '/' . $filepath);
+                // $Client->uploadFile('/' . $filepath . '/' . $file->getClientOriginalName(), WriteMode::add(), $file, $size);
+                // $share = $Client->createShareableLink($dropboxFileName);
+                return response()->json(['success' => true, 'message' => 'Multiple Image File Has Been uploaded Successfully', 'data' => $localpath, 'dropfile' => $dropfile]);
+            } else {
+                return response()->json(['success' => false, 'message' => 'Cannot find the project.']);
+            }
+        }
+        else
+            return response()->json(['success' => false, 'message' => 'Empty Id or file.']);
     }
 }
