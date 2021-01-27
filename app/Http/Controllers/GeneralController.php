@@ -829,21 +829,25 @@ class GeneralController extends Controller
         {
             $job = JobRequest::where('id', $request->input('uploadProjectId'))->first();
             if($job){
-                $user = User::where('companyid', $job['companyId'])->where('usernumber', $job['userId'])->first();
                 $file = $request->file('upl');
-                if($user)
-                    $filepath = $job['companyName'] . '/' . sprintf("%04d", $job['userId']) . ' ' . $user['username'] . '/' . sprintf("%06d", $job['clientProjectNumber']) . ' ' . $job['clientProjectName'];
-                else
-                    $filepath = $job['companyName'] . '/' . sprintf("%04d", $job['userId']) . '/' . sprintf("%06d", $job['clientProjectNumber']) . ' ' . $job['clientProjectName'];
-                $file->move(public_path('img') . '/' . $filepath, $file->getClientOriginalName());
-                $localpath = public_path('img') . '/' . $filepath . '/' . $file->getClientOriginalName();
+                
+                $state = '';
+                if(Storage::disk('local')->exists($job['requestFile']))
+                {
+                    $jobData = json_decode(Storage::disk('local')->get($job['requestFile']), true);
+                    $state = $jobData['ProjectInfo']['State'];
+                }
 
+                $filepath = $job['companyName'] . '/' . sprintf("%06d", $job['clientProjectNumber']) . '.' . $state;
+                $file->move(storage_path('upload') . '/' . $filepath, $file->getClientOriginalName());
+                $localpath = storage_path('upload') . '/' . $filepath . '/' . $file->getClientOriginalName();
+                    
                 $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
                 $dropbox = new Dropbox($app);
                 $dropboxFile = new DropboxFile($localpath);
-                $dropfile = $dropbox->upload($dropboxFile, '/' . $filepath . '/' . $file->getClientOriginalName(), ['autorename' => TRUE]);
+                $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_PREFIX') . $filepath . '/' . $file->getClientOriginalName(), ['autorename' => TRUE]);
                 
-                return response()->json(['success' => true, 'message' => 'Multiple Image File Has Been uploaded Successfully', 'data' => $localpath, 'dropfile' => $dropfile]);
+                return response()->json(['success' => true, 'message' => 'Multiple Image File Has Been uploaded Successfully', 'data' => $localpath]);
             } else {
                 return response()->json(['success' => false, 'message' => 'Cannot find the project.']);
             }
