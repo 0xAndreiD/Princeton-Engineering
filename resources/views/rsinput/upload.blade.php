@@ -18,4 +18,8 @@
             <span id="uploadPercent"> 0% </span>
         </div>
     </div>
+
+    @php
+        echo $filelist;
+    @endphp
 </form>
