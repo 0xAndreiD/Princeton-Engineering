@@ -19,7 +19,7 @@
         </div>
     </div>
 
-    @php
-        echo $filelist;
-    @endphp
+    @foreach ($filelist as $file)
+        {{ print_r($file) }}
+    @endforeach
 </form>
