@@ -18,8 +18,36 @@
             <span id="uploadPercent"> 0% </span>
         </div>
     </div>
-
-    @foreach ($filelist as $file)
-        {{ print_r($file) }}
-    @endforeach
 </form>
+
+<div class="block-content block-content-full">
+    <div class="table-responsive">
+        <table id="filelist" class="table table-bordered table-striped table-vcenter text-center" style="width:100%;">
+            <thead>
+                <tr>
+                    <th style="width:50%">Name</th>
+                    <th style="width:30%;">Modified Time</th>
+                    <th style="width:20%">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach ($filelist as $file)
+                <tr>
+                    <td>{{ $file->name }}</td>
+                    <td>{{ $file->client_modified }}</td>
+                    <td>
+                        <div class='text-center'>
+                            <a href='' class='btn btn-primary'>
+                                <i class='fa fa-pencil-alt'></i>
+                            </a>
+                            <button type='button' class='js-swal-confirm btn btn-danger' onclick=''>
+                                <i class='fa fa-trash'></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
+    </div>
+</div>
