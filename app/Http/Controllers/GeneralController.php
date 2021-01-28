@@ -56,6 +56,26 @@ class GeneralController extends Controller
      */
     public function rsinput(Request $request)
     {
+        $filelist = array();
+        if(!empty($request['projectId'])){
+            $job = JobRequest::where('id', $request['projectId'])->first();
+            if($job){
+                $state = '';
+                if(Storage::disk('local')->exists($job['requestFile']))
+                {
+                    $jobData = json_decode(Storage::disk('local')->get($job['requestFile']), true);
+                    $state = $jobData['ProjectInfo']['State'];
+                }
+
+                $filepath = $job['companyName'] . '/' . sprintf("%06d", $job['clientProjectNumber']) . '.' . $state;
+                    
+                $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
+                $dropbox = new Dropbox($app);
+                $listFolderContents = $dropbox->listFolder(env('DROPBOX_PREFIX') . $filepath);
+                $filelist = $listFolderContents->getItems()->all();
+            }
+        }
+        
         $company = Company::where('id', Auth::user()->companyid)->first();
         if( $company )
         {
@@ -67,7 +87,8 @@ class GeneralController extends Controller
                     ->with('companyMembers', $companymembers)
                     ->with('projectState', $project ? $project->projectState : 0)
                     ->with('projectId', $request['projectId'] ? $request['projectId'] : -1)
-                    ->with('offset', $company['offset']);
+                    ->with('offset', $company['offset'])
+                    ->with('filelist', $filelist);
         }
         else
         {
@@ -78,7 +99,8 @@ class GeneralController extends Controller
                     ->with('companyMembers', $companymembers)
                     ->with('projectState', 0)
                     ->with('projectId', $request['projectId'] ? $request['projectId'] : -1)
-                    ->with('offset', 0.5);
+                    ->with('offset', 0.5)
+                    ->with('filelist', $filelist);
         }
     }
 
