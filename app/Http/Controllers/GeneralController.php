@@ -18,6 +18,7 @@ use App\DataCheck;
 use Kunnu\Dropbox\DropboxApp;
 use Kunnu\Dropbox\Dropbox;
 use Kunnu\Dropbox\DropboxFile;
+use Kunnu\Dropbox\Exceptions\DropboxClientException
 
 use DateTime;
 use DateTimeZone;
@@ -71,8 +72,12 @@ class GeneralController extends Controller
                     
                 $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
                 $dropbox = new Dropbox($app);
-                $listFolderContents = $dropbox->listFolder(env('DROPBOX_PREFIX') . $filepath);
-                $filelist = $listFolderContents->getItems()->all();
+                try{
+                    $listFolderContents = $dropbox->listFolder(env('DROPBOX_PREFIX') . $filepath);
+                    $filelist = $listFolderContents->getItems()->all();
+                } catch (DropboxClientException $e) {
+
+                }
             }
         }
         
