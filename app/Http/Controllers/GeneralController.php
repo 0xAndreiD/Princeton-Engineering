@@ -18,7 +18,7 @@ use App\DataCheck;
 use Kunnu\Dropbox\DropboxApp;
 use Kunnu\Dropbox\Dropbox;
 use Kunnu\Dropbox\DropboxFile;
-use Kunnu\Dropbox\Exceptions\DropboxClientException
+use Kunnu\Dropbox\Exceptions\DropboxClientException;
 
 use DateTime;
 use DateTimeZone;
