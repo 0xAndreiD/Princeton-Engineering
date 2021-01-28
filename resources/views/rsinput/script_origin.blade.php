@@ -2096,6 +2096,10 @@ window.finishedCount = 0; // file uploads count
 window.uploadError = false; // file uploads count
 
 $(document).ready(function() {
+    $('#filelist').DataTable({
+        "responsive": true
+    });
+
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
