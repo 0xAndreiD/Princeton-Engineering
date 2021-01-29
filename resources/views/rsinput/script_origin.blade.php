@@ -3672,7 +3672,7 @@ function delFile(obj, filename){
                 data:{filename: filename, projectId: $('#projectId').val()},
                 success:function(res){
                     if (res.success == true) {
-                        $(obj).parents("tr").remove().draw;
+                        $("#filelist").DataTable().row($(obj).parents("tr")).remove().draw(false);
                         toast.fire('Deleted!', 'File has been deleted.', 'success');
                     } else
                         toast.fire('Failed!', res.message, 'error');
