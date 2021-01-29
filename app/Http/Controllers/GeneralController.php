@@ -68,7 +68,7 @@ class GeneralController extends Controller
                     $state = $jobData['ProjectInfo']['State'];
                 }
 
-                $filepath = $job['companyName'] . '/' . sprintf("%06d", $job['clientProjectNumber']) . '.' . $state;
+                $filepath = $job['companyName'] . '/' . sprintf("%06d", $job['clientProjectNumber']) . '. ' . $job['clientProjectName'] . ' ' . $state;
                     
                 $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
                 $dropbox = new Dropbox($app);
@@ -865,7 +865,7 @@ class GeneralController extends Controller
                     $state = $jobData['ProjectInfo']['State'];
                 }
 
-                $filepath = $job['companyName'] . '/' . sprintf("%06d", $job['clientProjectNumber']) . '.' . $state;
+                $filepath = $job['companyName'] . '/' . sprintf("%06d", $job['clientProjectNumber']) . '. ' . $job['clientProjectName'] . ' ' . $state;
                 $file->move(storage_path('upload') . '/' . $filepath, $file->getClientOriginalName());
                 $localpath = storage_path('upload') . '/' . $filepath . '/' . $file->getClientOriginalName();
                     
@@ -874,7 +874,39 @@ class GeneralController extends Controller
                 $dropboxFile = new DropboxFile($localpath);
                 $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_PREFIX') . $filepath . '/' . $file->getClientOriginalName(), ['autorename' => TRUE]);
                 
-                return response()->json(['success' => true, 'message' => 'Multiple Image File Has Been uploaded Successfully', 'data' => $localpath]);
+                return response()->json(['success' => true, 'message' => 'Multiple Image File Has Been uploaded Successfully', 'filename' => $file->getClientOriginalName(), 'date' => $dropfile->getClientModified()]);
+            } else {
+                return response()->json(['success' => false, 'message' => 'Cannot find the project.']);
+            }
+        }
+        else
+            return response()->json(['success' => false, 'message' => 'Empty Id or file.']);
+    }
+
+    /**
+     * Delete the file from the dropbox.
+     *
+     * @return JSON
+     */
+    public function delDropboxFile(Request $request) {
+        if(!empty($request->input('projectId')) && !empty($request->input('filename')))
+        {
+            $job = JobRequest::where('id', $request->input('projectId'))->first();
+            if($job){
+                $state = '';
+                if(Storage::disk('local')->exists($job['requestFile']))
+                {
+                    $jobData = json_decode(Storage::disk('local')->get($job['requestFile']), true);
+                    $state = $jobData['ProjectInfo']['State'];
+                }
+
+                $filepath = $job['companyName'] . '/' . sprintf("%06d", $job['clientProjectNumber']) . '. ' . $job['clientProjectName'] . ' ' . $state . '/' . $request->input('filename');
+                    
+                $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
+                $dropbox = new Dropbox($app);
+                $dropbox->delete($filepath);
+                
+                return response()->json(['success' => true, 'message' => 'File Deleted Successfully']);
             } else {
                 return response()->json(['success' => false, 'message' => 'Cannot find the project.']);
             }

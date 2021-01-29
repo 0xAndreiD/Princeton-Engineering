@@ -38,9 +38,9 @@
                     <td>
                         <div class='text-center'>
                             <a href='' class='btn btn-primary'>
-                                <i class='fa fa-pencil-alt'></i>
+                                <i class='fa fa-download'></i>
                             </a>
-                            <button type='button' class='js-swal-confirm btn btn-danger' onclick=''>
+                            <button type='button' class='btn btn-danger' onclick="delFile(this, '{{ $file->name }}')">
                                 <i class='fa fa-trash'></i>
                             </button>
                         </div>
