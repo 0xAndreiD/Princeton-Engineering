@@ -34,7 +34,7 @@
             @foreach ($filelist as $file)
                 <tr>
                     <td>{{ $file->name }}</td>
-                    <td>{{ $file->client_modified }}</td>
+                    <td>{{ date('Y-m-d H:i:s', strtotime('-5 hour',strtotime($file->client_modified))) }}</td>
                     <td>
                         <div class='text-center'>
                             <a href='' class='btn btn-primary'>
