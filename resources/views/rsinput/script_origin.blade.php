@@ -3671,7 +3671,7 @@ function delFile(obj, filename){
                 type:'post',
                 data:{filename: filename, projectId: $('#projectId').val()},
                 success:function(res){
-                    if (res.success == true) {
+                    if (res.success) {
                         $("#filelist").DataTable().row($(obj).parents("tr")).remove().draw(false);
                         toast.fire('Deleted!', 'File has been deleted.', 'success');
                     } else
@@ -3698,7 +3698,10 @@ function downloadFile(filename){
         type:'post',
         data:{filename: filename, projectId: $('#projectId').val()},
         success:function(res){
-            console.log(res);
+            if(res.success){
+                window.open(res.link);
+            } else
+                toast.fire('Failed!', res.message, 'error');
         },
         error: function(xhr, status, error) {
             res = JSON.parse(xhr.responseText);
