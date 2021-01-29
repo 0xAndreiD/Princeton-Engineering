@@ -900,13 +900,17 @@ class GeneralController extends Controller
                     $state = $jobData['ProjectInfo']['State'];
                 }
 
-                $filepath = $job['companyName'] . '/' . sprintf("%06d", $job['clientProjectNumber']) . '. ' . $job['clientProjectName'] . ' ' . $state . '/' . $request->input('filename');
+                $filepath = env('DROPBOX_PREFIX') . $job['companyName'] . '/' . sprintf("%06d", $job['clientProjectNumber']) . '. ' . $job['clientProjectName'] . ' ' . $state . '/' . $request->input('filename');
                     
                 $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
                 $dropbox = new Dropbox($app);
-                $dropbox->delete($filepath);
-                
-                return response()->json(['success' => true, 'message' => 'File Deleted Successfully']);
+                try {
+                    $dropbox->delete($filepath);
+                    return response()->json(['success' => true, 'message' => 'File Deleted Successfully']);
+                }
+                catch (DropboxClientException $e) {
+                    return response()->json(['success' => false, 'message' => 'Cannot find specified file.']);
+                }
             } else {
                 return response()->json(['success' => false, 'message' => 'Cannot find the project.']);
             }
