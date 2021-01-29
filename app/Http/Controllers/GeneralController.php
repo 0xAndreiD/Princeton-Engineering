@@ -918,4 +918,40 @@ class GeneralController extends Controller
         else
             return response()->json(['success' => false, 'message' => 'Empty Id or file.']);
     }
+
+    /**
+     * Get the temporary link from the dropbox.
+     *
+     * @return JSON
+     */
+    public function getTemporaryLink(Request $request) {
+        if(!empty($request->input('projectId')) && !empty($request->input('filename')))
+        {
+            $job = JobRequest::where('id', $request->input('projectId'))->first();
+            if($job){
+                $state = '';
+                if(Storage::disk('local')->exists($job['requestFile']))
+                {
+                    $jobData = json_decode(Storage::disk('local')->get($job['requestFile']), true);
+                    $state = $jobData['ProjectInfo']['State'];
+                }
+
+                $filepath = env('DROPBOX_PREFIX') . $job['companyName'] . '/' . sprintf("%06d", $job['clientProjectNumber']) . '. ' . $job['clientProjectName'] . ' ' . $state . '/' . $request->input('filename');
+                    
+                $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
+                $dropbox = new Dropbox($app);
+                try {
+                    $temporaryLink = $dropbox->getTemporaryLink($filepath);
+                    return response()->json(['success' => true, 'message' => 'Link Generated Successfully', 'link' => $temporaryLink->getLink()]);
+                }
+                catch (DropboxClientException $e) {
+                    return response()->json(['success' => false, 'message' => 'Cannot find specified file.']);
+                }
+            } else {
+                return response()->json(['success' => false, 'message' => 'Cannot find the project.']);
+            }
+        }
+        else
+            return response()->json(['success' => false, 'message' => 'Empty Id or file.']);
+    }
 }

@@ -3691,4 +3691,23 @@ function delFile(obj, filename){
         }
     });
 }
+
+function downloadFile(filename){
+    $.ajax({
+        url:"getTemporaryLink",
+        type:'post',
+        data:{filename: filename, projectId: $('#projectId').val()},
+        success:function(res){
+            console.log(res);
+        },
+        error: function(xhr, status, error) {
+            res = JSON.parse(xhr.responseText);
+            message = res.message;
+            swal.fire({ title: "Error",
+                    text: message == "" ? "Error happened while processing. Please try again later." : message,
+                    icon: "error",
+                    confirmButtonText: `OK` });
+        }
+    });
+}
 </script>
