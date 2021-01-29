@@ -2599,7 +2599,7 @@ $(document).ready(function() {
             data.context.removeClass('working');
             data.context.addClass('success');
             var t = $('#filelist').DataTable();
-            t.row.add([data.result.filename, data.result.date, "<div class='text-center'><a href='' class='btn btn-primary'><i class='fa fa-download'></i></a><button type='button' class='btn btn-danger' onclick=\"delFile(this, '" + data.result.filename + "')\"><i class='fa fa-trash'></i></button></div>"]).draw;
+            t.row.add([data.result.filename, data.result.date, "<div class='text-center'><a href='' class='btn btn-primary'><i class='fa fa-download'></i></a><button type='button' class='btn btn-danger' onclick=\"delFile(this, '" + data.result.filename + "')\"><i class='fa fa-trash'></i></button></div>"]).draw();
             console.log(t);
             setTotalProgress(true);
         }
