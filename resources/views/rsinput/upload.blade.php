@@ -37,9 +37,9 @@
                     <td>{{ date('Y-m-d H:i:s', strtotime('-5 hour',strtotime($file->client_modified))) }}</td>
                     <td>
                         <div class='text-center'>
-                            <a href='' class='btn btn-primary'>
+                            <button type="button" class='btn btn-primary' onclick="downloadFile('{{ $file->name }}')">
                                 <i class='fa fa-download'></i>
-                            </a>
+                            </button>
                             <button type='button' class='btn btn-danger' onclick="delFile(this, '{{ $file->name }}')">
                                 <i class='fa fa-trash'></i>
                             </button>
