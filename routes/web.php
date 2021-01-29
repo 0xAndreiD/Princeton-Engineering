@@ -72,3 +72,4 @@ Route::post('/getRailsupport', 'GeneralController@getRailsupport')->name('getRai
 
 // File Uploads
 Route::post('/jobFileUpload', 'GeneralController@jobFileUpload')->name('jobFileUpload');
+Route::post('/delDropboxFile', 'GeneralController@delDropboxFile')->name('delDropboxFile');
