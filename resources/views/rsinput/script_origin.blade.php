@@ -2600,6 +2600,7 @@ $(document).ready(function() {
             data.context.addClass('success');
             var t = $('#filelist').DataTable();
             t.row.add([data.result.filename, data.result.date, "<div class='text-center'><a href='' class='btn btn-primary'><i class='fa fa-download'></i></a><button type='button' class='btn btn-danger' onclick=\"delFile(this, '" + data.result.filename + "')\"><i class='fa fa-trash'></i></button></div>"]).draw;
+            console.log(t);
             setTotalProgress(true);
         }
         else{
@@ -2646,61 +2647,6 @@ $(document).ready(function() {
             window.uploadError = false;
             $("#uploadStatus").html("Done");
         }
-    }
-
-    var delFile = function(obj, filename){
-        let toast = Swal.mixin({
-            buttonsStyling: false,
-            customClass: {
-                confirmButton: 'btn btn-success m-1',
-                cancelButton: 'btn btn-danger m-1',
-                input: 'form-control'
-            }
-        });
-        toast.fire({
-            title: 'Are you sure?',
-            text: 'You will not be able to recover this file!',
-            icon: 'warning',
-            showCancelButton: true,
-            customClass: {
-                confirmButton: 'btn btn-danger m-1',
-                cancelButton: 'btn btn-secondary m-1'
-            },
-            confirmButtonText: 'Yes, delete it!',
-            html: false,
-            preConfirm: e => {
-                return new Promise(resolve => {
-                    setTimeout(() => {
-                        resolve();
-                    }, 50);
-                });
-            }
-        }).then(result => {
-            if (result.value) {
-                $.ajax({
-                    url:"delDropboxFile",
-                    type:'post',
-                    data:{filename: filename, projectId: $('#projectId').val()},
-                    success:function(res){
-                        if (res.success == true) {
-                            $(obj).parents("tr").remove().draw;
-                            toast.fire('Deleted!', 'File has been deleted.', 'success');
-                        } else
-                            toast.fire('Failed!', res.message, 'error');
-                    },
-                    error: function(xhr, status, error) {
-                        res = JSON.parse(xhr.responseText);
-                        message = res.message;
-                        swal.fire({ title: "Error",
-                                text: message == "" ? "Error happened while processing. Please try again later." : message,
-                                icon: "error",
-                                confirmButtonText: `OK` });
-                    }
-                });
-            } else if (result.dismiss === 'cancel') {
-                toast.fire('Cancelled', 'File is safe :)', 'error');
-            }
-        });
     }
 
     // Framing condition related function
@@ -3690,4 +3636,59 @@ var loadPreloadedData = function() {
 
 initializeSpreadSheet();
 });
+
+function delFile(obj, filename){
+    let toast = Swal.mixin({
+        buttonsStyling: false,
+        customClass: {
+            confirmButton: 'btn btn-success m-1',
+            cancelButton: 'btn btn-danger m-1',
+            input: 'form-control'
+        }
+    });
+    toast.fire({
+        title: 'Are you sure?',
+        text: 'You will not be able to recover this file!',
+        icon: 'warning',
+        showCancelButton: true,
+        customClass: {
+            confirmButton: 'btn btn-danger m-1',
+            cancelButton: 'btn btn-secondary m-1'
+        },
+        confirmButtonText: 'Yes, delete it!',
+        html: false,
+        preConfirm: e => {
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    resolve();
+                }, 50);
+            });
+        }
+    }).then(result => {
+        if (result.value) {
+            $.ajax({
+                url:"delDropboxFile",
+                type:'post',
+                data:{filename: filename, projectId: $('#projectId').val()},
+                success:function(res){
+                    if (res.success == true) {
+                        $(obj).parents("tr").remove().draw;
+                        toast.fire('Deleted!', 'File has been deleted.', 'success');
+                    } else
+                        toast.fire('Failed!', res.message, 'error');
+                },
+                error: function(xhr, status, error) {
+                    res = JSON.parse(xhr.responseText);
+                    message = res.message;
+                    swal.fire({ title: "Error",
+                            text: message == "" ? "Error happened while processing. Please try again later." : message,
+                            icon: "error",
+                            confirmButtonText: `OK` });
+                }
+            });
+        } else if (result.dismiss === 'cancel') {
+            toast.fire('Cancelled', 'File is safe :)', 'error');
+        }
+    });
+}
 </script>
