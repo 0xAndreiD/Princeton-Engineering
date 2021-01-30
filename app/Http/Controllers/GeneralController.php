@@ -848,7 +848,7 @@ class GeneralController extends Controller
                 $dropboxFile = new DropboxFile($localpath);
                 $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_PREFIX_IN') . $filepath . '/' . $file->getClientOriginalName(), ['autorename' => TRUE]);
                 
-                return response()->json(['success' => true, 'message' => 'Multiple Image File Has Been uploaded Successfully', 'filename' => $file->getClientOriginalName(), 'id' => $dropfile->id]);
+                return response()->json(['success' => true, 'message' => 'Multiple Image File Has Been uploaded Successfully', 'filename' => $file->getClientOriginalName(), 'id' => $dropfile->getId()]);
             } else {
                 return response()->json(['success' => false, 'message' => 'Cannot find the project.']);
             }
@@ -884,7 +884,7 @@ class GeneralController extends Controller
                     $files = $listFolderContents->getItems()->all();
                     $filelist['IN'] = array();
                     foreach($files as $file)
-                        $filelist['IN'][] = array('name' => $file->name, 'id' => $file->id);
+                        $filelist['IN'][] = array('name' => $file->getName(), 'id' => $file->getId());
                 } catch (DropboxClientException $e) { 
                     $filelist['IN'] = array();
                 }
@@ -894,7 +894,7 @@ class GeneralController extends Controller
                     $files = $listFolderContents->getItems()->all();
                     $filelist['OUT'] = array();
                     foreach($files as $file)
-                        $filelist['OUT'][] = array('name' => $file->name, 'id' => $file->id);
+                        $filelist['OUT'][] = array('name' => $file->getName(), 'id' => $file->getId());
                 } catch (DropboxClientException $e) {
                     $filelist['OUT'] = array();
                  }

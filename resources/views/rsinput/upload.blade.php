@@ -26,7 +26,7 @@
 
 <div class="col-md-6 filetreePane">
     <div class="fileActions mt-1 mb-2">
-        <button class="btn btn-success"><i class="fa fa-download"></i> Download</button>
+        <button class="btn btn-success" onclick="downloadFile()"><i class="fa fa-download"></i> Download</button>
         <button class="btn btn-danger" onclick="delFile()"><i class="fa fa-trash"></i> Delete</button>
     </div>
     <div id="filetree" >

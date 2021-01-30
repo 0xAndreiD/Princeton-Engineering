@@ -3718,25 +3718,28 @@ function delFile(){
             if (result.value) {
                 selectedIds.forEach(nodeId => {
                     var node = $('#filetree').jstree(true).get_node(nodeId);
-                    $.ajax({
-                        url:"delDropboxFile",
-                        type:'post',
-                        data:{filename: node.text, projectId: $('#projectId').val()},
-                        success:function(res){
-                            if (res.success) {
-                                $("#filetree").jstree("remove", nodeId);
-                            } else
-                                $("#filetree").jstree("uncheck_node", nodeId);
-                        },
-                        error: function(xhr, status, error) {
-                            res = JSON.parse(xhr.responseText);
-                            message = res.message;
-                            swal.fire({ title: "Error",
-                                    text: message == "" ? "Error happened while processing. Please try again later." : message,
-                                    icon: "error",
-                                    confirmButtonText: `OK` });
-                        }
-                    });
+                    if(node.type == "infile"){
+                        $.ajax({
+                            url:"delDropboxFile",
+                            type:'post',
+                            data:{filename: node.text, projectId: $('#projectId').val()},
+                            success:function(res){
+                                if (res.success) {
+                                    $("#filetree").jstree("delete_node", '#'+nodeId);
+                                } else
+                                    $("#filetree").jstree("uncheck_node", '#'+nodeId);
+                            },
+                            error: function(xhr, status, error) {
+                                res = JSON.parse(xhr.responseText);
+                                message = res.message;
+                                swal.fire({ title: "Error",
+                                        text: message == "" ? "Error happened while processing. Please try again later." : message,
+                                        icon: "error",
+                                        confirmButtonText: `OK` });
+                            }
+                        });
+                    } else 
+                        $("#filetree").jstree("uncheck_node", '#'+nodeId);
                 });
             } else if (result.dismiss === 'cancel') {
                 toast.fire('Cancelled', 'File is safe :)', 'error');
@@ -3746,23 +3749,29 @@ function delFile(){
 }
 
 function downloadFile(filename){
-    $.ajax({
-        url:"getTemporaryLink",
-        type:'post',
-        data:{filename: filename, projectId: $('#projectId').val()},
-        success:function(res){
-            if(res.success){
-                window.open(res.link);
-            } else
-                toast.fire('Failed!', res.message, 'error');
-        },
-        error: function(xhr, status, error) {
-            res = JSON.parse(xhr.responseText);
-            message = res.message;
-            swal.fire({ title: "Error",
-                    text: message == "" ? "Error happened while processing. Please try again later." : message,
-                    icon: "error",
-                    confirmButtonText: `OK` });
+    var selectedIds = $("#filetree").jstree("get_checked", null, true);
+    selectedIds.forEach(nodeId => { 
+        var node = $('#filetree').jstree(true).get_node(nodeId);
+        if(node.type == "infile" || node.type == "outfile"){
+            $.ajax({
+                url:"getTemporaryLink",
+                type:'post',
+                data:{filename: node.text, projectId: $('#projectId').val()},
+                success:function(res){
+                    if(res.success){
+                        window.location.assign(res.link);
+                    } else
+                        toast.fire('Failed!', res.message, 'error');
+                },
+                error: function(xhr, status, error) {
+                    res = JSON.parse(xhr.responseText);
+                    message = res.message;
+                    swal.fire({ title: "Error",
+                            text: message == "" ? "Error happened while processing. Please try again later." : message,
+                            icon: "error",
+                            confirmButtonText: `OK` });
+                }
+            });
         }
     });
 }
