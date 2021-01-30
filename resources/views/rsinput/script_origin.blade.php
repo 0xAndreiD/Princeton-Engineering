@@ -2649,6 +2649,58 @@ $(document).ready(function() {
         }
     }
 
+    $("#filetree").jstree({
+        'plugins': ["wholerow", "checkbox", "types"],
+        'core': {
+            "check_callback": true,
+            "themes" : {
+                "responsive": true
+            },
+        },
+        "types" : {
+            "folder" : { "icon" : "fa fa-folder m--font-warning" },
+            "infile" : {"icon" : "fa fa-file m--font-warning" },
+            "outfile" : {"icon" : "fa fa-file m--font-warning" }
+        },  
+    });
+
+    $("#filetree").jstree('create_node', null, {"text":"Root", "id": "root", "type": "folder", "state": {"opened": true} }, 'last');
+    $("#filetree").jstree('create_node', '#root', {"text":"IN", "id": "IN", "type": "folder"}, 'last');
+    $("#filetree").jstree('create_node', '#root', {"text":"OUT", "id": "OUT", "type": "folder"}, 'last');
+
+    var loadFileList = function() {
+        var projectId = $('#projectId').val();
+        if(projectId >= 0){
+            $.ajax({
+                url:"getFileList",
+                type:'post',
+                data:{projectId: projectId},
+                success:function(res){
+                    if(res.success && res.data){
+                        if(res.data["IN"]){
+                            res.data["IN"].forEach(file => {
+                                $("#filetree").jstree('create_node', '#IN', {"text": file.name, "id": "in_" + file.id, "type": "infile"}, 'last');
+                            })
+                        }
+                        if(res.data["OUT"]){
+                            res.data["OUT"].forEach(file => {
+                                $("#filetree").jstree('create_node', '#OUT', {"text": file.name, "id": "out_" + file.id, "type": "outfile"}, 'last');
+                            })
+                        }
+                    }
+                },
+                error: function(xhr, status, error) {
+                    res = JSON.parse(xhr.responseText);
+                    message = res.message;
+                    swal.fire({ title: "Error",
+                            text: message == "" ? "Error happened while processing. Please try again later." : message,
+                            icon: "error",
+                            confirmButtonText: `OK` });
+                }
+            });
+        }
+    }
+
     // Framing condition related function
     // (function(){
 
@@ -3630,6 +3682,8 @@ var loadPreloadedData = function() {
             checkRoofInput(i);
             // GetCPU();
         }
+
+        loadFileList();
     }
 
 

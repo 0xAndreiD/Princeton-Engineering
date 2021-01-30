@@ -373,3 +373,21 @@ html, body {
     justify-content: space-between;
     color: white;
 }
+
+.filetreePane{
+    border-left: 1px solid #ccc;
+}
+
+.fileActions{
+    display: flex;
+}
+
+.fileActions button{
+    width: 150px;
+    margin-right: 20px;
+}
+
+#filetree{
+    max-height:300px; 
+    overflow-y:auto;
+}
