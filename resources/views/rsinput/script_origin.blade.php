@@ -3759,7 +3759,13 @@ function downloadFile(filename){
                 data:{filename: node.text, projectId: $('#projectId').val()},
                 success:function(res){
                     if(res.success){
-                        window.location.assign(res.link);
+                        var file_path = res.link;
+                        var a = document.createElement('A');
+                        a.href = file_path;
+                        a.download = file_path.substr(file_path.lastIndexOf('/') + 1);
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
                     } else
                         toast.fire('Failed!', res.message, 'error');
                 },
