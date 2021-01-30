@@ -881,14 +881,20 @@ class GeneralController extends Controller
                 $dropbox = new Dropbox($app);
                 try{
                     $listFolderContents = $dropbox->listFolder(env('DROPBOX_PREFIX_IN') . $filepath);
-                    $filelist['IN'] = $listFolderContents->getItems()->all();
+                    $files = $listFolderContents->getItems()->all();
+                    $filelist['IN'] = array();
+                    foreach($files as $file)
+                        $filelist['IN'][] = array('name' => $file->name, 'id' => $file->id);
                 } catch (DropboxClientException $e) { 
                     $filelist['IN'] = array();
                 }
 
                 try{
                     $listFolderContents = $dropbox->listFolder(env('DROPBOX_PREFIX_OUT') . $filepath);
-                    $filelist['OUT'] = $listFolderContents->getItems()->all();
+                    $files = $listFolderContents->getItems()->all();
+                    $filelist['OUT'] = array();
+                    foreach($files as $file)
+                        $filelist['OUT'][] = array('name' => $file->name, 'id' => $file->id);
                 } catch (DropboxClientException $e) {
                     $filelist['OUT'] = array();
                  }
