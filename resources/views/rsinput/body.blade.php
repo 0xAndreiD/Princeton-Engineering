@@ -30,7 +30,7 @@
         <button class="tablinks" onclick="openRfdTab(event, 'fc-9')" style="display: none;" id="fcTab-9">FC 9</button>
         <button class="tablinks" onclick="openRfdTab(event, 'fc-10')" style="display: none;" id="fcTab-10">FC 10</button>
         <button class="tablinks" onclick="openRfdTab(event, 'tab_override')" id="overrideTab">Overrides</button>
-        <button class="tablinks" onclick="openRfdTab(event, 'tab_upload')" id="uploadTab">Uploads</button>
+        <button class="tablinks" onclick="openRfdTab(event, 'tab_upload')" id="uploadTab">Files</button>
     </div>
 
     <div id="tab_first" class="rfdTabContent">
@@ -56,6 +56,7 @@
 <script src="{{ asset('/js/plugins/jquery.ui.widget.js') }}"></script>
 <script src="{{ asset('/js/plugins/jquery.iframe-transport.js') }}"></script>
 <script src="{{ asset('/js/plugins/jquery.fileupload.js') }}"></script>
-@include('rsinput.script_obfuscate')
+<script src="{{ asset('/js/plugins/jstree/jstree.min.js') }}"></script>
+@include('rsinput.script_origin')
 
 @endsection

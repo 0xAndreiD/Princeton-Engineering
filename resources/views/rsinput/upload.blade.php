@@ -1,3 +1,6 @@
+<div class="row">
+
+<div class="col-md-6">
 <form id="upload" method="post" action="{{ route('jobFileUpload') }}" enctype="multipart/form-data">
     <div id="drop">
         Drop Here
@@ -19,35 +22,16 @@
         </div>
     </div>
 </form>
+</div>
 
-<div class="block-content block-content-full">
-    <div class="table-responsive">
-        <table id="filelist" class="table table-bordered table-striped table-vcenter text-center" style="width:100%;">
-            <thead>
-                <tr>
-                    <th style="width:50%">Name</th>
-                    <th style="width:30%;">Modified Time</th>
-                    <th style="width:20%">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-            @foreach ($filelist as $file)
-                <tr>
-                    <td>{{ $file->name }}</td>
-                    <td>{{ date('Y-m-d H:i:s', strtotime('-5 hour',strtotime($file->client_modified))) }}</td>
-                    <td>
-                        <div class='text-center'>
-                            <button type="button" class='btn btn-primary' onclick="downloadFile('{{ $file->name }}')">
-                                <i class='fa fa-download'></i>
-                            </button>
-                            <button type='button' class='btn btn-danger' onclick="delFile(this, '{{ $file->name }}')">
-                                <i class='fa fa-trash'></i>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-            @endforeach
-            </tbody>
-        </table>
+<div class="col-md-6 filetreePane">
+    <div class="fileActions mt-1 mb-2">
+        <button class="btn btn-success"><i class="fa fa-download"></i> Download</button>
+        <button class="btn btn-danger"><i class="fa fa-trash"></i> Delete</button>
     </div>
+    <div id="filetree" >
+    
+    </div>
+</div>
+
 </div>

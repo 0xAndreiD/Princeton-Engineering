@@ -43,6 +43,7 @@
         <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.6/css/responsive.bootstrap.min.css">
 
         <link rel="stylesheet" href="{{ asset('js/plugins/flatpickr/flatpickr.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('js/plugins/jstree/themes/default/style.min.css') }}">
         <!-- END Stylesheets -->
 
         <script src="{{ asset('js/jquery.min.js') }}"></script>

@@ -57,30 +57,6 @@ class GeneralController extends Controller
      */
     public function rsinput(Request $request)
     {
-        $filelist = array();
-        if(!empty($request['projectId'])){
-            $job = JobRequest::where('id', $request['projectId'])->first();
-            if($job){
-                $state = '';
-                if(Storage::disk('local')->exists($job['requestFile']))
-                {
-                    $jobData = json_decode(Storage::disk('local')->get($job['requestFile']), true);
-                    $state = $jobData['ProjectInfo']['State'];
-                }
-
-                $filepath = $job['companyName'] . '/' . sprintf("%06d", $job['clientProjectNumber']) . '. ' . $job['clientProjectName'] . ' ' . $state;
-                    
-                $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
-                $dropbox = new Dropbox($app);
-                try{
-                    $listFolderContents = $dropbox->listFolder(env('DROPBOX_PREFIX') . $filepath);
-                    $filelist = $listFolderContents->getItems()->all();
-                } catch (DropboxClientException $e) {
-
-                }
-            }
-        }
-        
         $company = Company::where('id', Auth::user()->companyid)->first();
         if( $company )
         {
@@ -92,8 +68,7 @@ class GeneralController extends Controller
                     ->with('companyMembers', $companymembers)
                     ->with('projectState', $project ? $project->projectState : 0)
                     ->with('projectId', $request['projectId'] ? $request['projectId'] : -1)
-                    ->with('offset', $company['offset'])
-                    ->with('filelist', $filelist);
+                    ->with('offset', $company['offset']);
         }
         else
         {
@@ -104,8 +79,7 @@ class GeneralController extends Controller
                     ->with('companyMembers', $companymembers)
                     ->with('projectState', 0)
                     ->with('projectId', $request['projectId'] ? $request['projectId'] : -1)
-                    ->with('offset', 0.5)
-                    ->with('filelist', $filelist);
+                    ->with('offset', 0.5);
         }
     }
 
@@ -872,7 +846,7 @@ class GeneralController extends Controller
                 $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
                 $dropbox = new Dropbox($app);
                 $dropboxFile = new DropboxFile($localpath);
-                $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_PREFIX') . $filepath . '/' . $file->getClientOriginalName(), ['autorename' => TRUE]);
+                $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_PREFIX_IN') . $filepath . '/' . $file->getClientOriginalName(), ['autorename' => TRUE]);
                 
                 return response()->json(['success' => true, 'message' => 'Multiple Image File Has Been uploaded Successfully', 'filename' => $file->getClientOriginalName(), 'date' => date('Y-m-d H:i:s', strtotime('-5 hour',strtotime($dropfile->getClientModified())))]);
             } else {
@@ -881,6 +855,50 @@ class GeneralController extends Controller
         }
         else
             return response()->json(['success' => false, 'message' => 'Empty Id or file.']);
+    }
+
+    /**
+     * Get the filelist from the dropbox.
+     *
+     * @return JSON
+     */
+    public function getFileList(Request $request) {
+        if(!empty($request->input('projectId')))
+        {
+            $filelist = array();
+            $job = JobRequest::where('id', $request['projectId'])->first();
+            if($job){
+                $state = '';
+                if(Storage::disk('local')->exists($job['requestFile']))
+                {
+                    $jobData = json_decode(Storage::disk('local')->get($job['requestFile']), true);
+                    $state = $jobData['ProjectInfo']['State'];
+                }
+
+                $filepath = $job['companyName'] . '/' . sprintf("%06d", $job['clientProjectNumber']) . '. ' . $job['clientProjectName'] . ' ' . $state;
+                    
+                $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
+                $dropbox = new Dropbox($app);
+                try{
+                    $listFolderContents = $dropbox->listFolder(env('DROPBOX_PREFIX_IN') . $filepath);
+                    $filelist['IN'] = $listFolderContents->getItems()->all();
+                } catch (DropboxClientException $e) { 
+                    $filelist['IN'] = array();
+                }
+
+                try{
+                    $listFolderContents = $dropbox->listFolder(env('DROPBOX_PREFIX_OUT') . $filepath);
+                    $filelist['OUT'] = $listFolderContents->getItems()->all();
+                } catch (DropboxClientException $e) {
+                    $filelist['OUT'] = array();
+                 }
+
+                 return response()->json(['success' => true, 'data' => $filelist]);
+            } else 
+                return response()->json(['success' => false, 'message' => 'Cannot find specified project.']);
+        }
+        else
+            return response()->json(['success' => false, 'message' => 'Empty Job Id.']);
     }
 
     /**
@@ -900,7 +918,7 @@ class GeneralController extends Controller
                     $state = $jobData['ProjectInfo']['State'];
                 }
 
-                $filepath = env('DROPBOX_PREFIX') . $job['companyName'] . '/' . sprintf("%06d", $job['clientProjectNumber']) . '. ' . $job['clientProjectName'] . ' ' . $state . '/' . $request->input('filename');
+                $filepath = env('DROPBOX_PREFIX_IN') . $job['companyName'] . '/' . sprintf("%06d", $job['clientProjectNumber']) . '. ' . $job['clientProjectName'] . ' ' . $state . '/' . $request->input('filename');
                     
                 $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
                 $dropbox = new Dropbox($app);
@@ -936,7 +954,7 @@ class GeneralController extends Controller
                     $state = $jobData['ProjectInfo']['State'];
                 }
 
-                $filepath = env('DROPBOX_PREFIX') . $job['companyName'] . '/' . sprintf("%06d", $job['clientProjectNumber']) . '. ' . $job['clientProjectName'] . ' ' . $state . '/' . $request->input('filename');
+                $filepath = env('DROPBOX_PREFIX_IN') . $job['companyName'] . '/' . sprintf("%06d", $job['clientProjectNumber']) . '. ' . $job['clientProjectName'] . ' ' . $state . '/' . $request->input('filename');
                     
                 $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
                 $dropbox = new Dropbox($app);

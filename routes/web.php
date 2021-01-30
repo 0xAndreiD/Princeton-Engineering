@@ -72,5 +72,6 @@ Route::post('/getRailsupport', 'GeneralController@getRailsupport')->name('getRai
 
 // File Uploads
 Route::post('/jobFileUpload', 'GeneralController@jobFileUpload')->name('jobFileUpload');
+Route::post('/getFileList', 'GeneralController@getFileList')->name('getFileList');
 Route::post('/delDropboxFile', 'GeneralController@delDropboxFile')->name('delDropboxFile');
 Route::post('/getTemporaryLink', 'GeneralController@getTemporaryLink')->name('getTemporaryLink');
