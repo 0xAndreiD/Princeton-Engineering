@@ -3748,31 +3748,41 @@ function delFile(){
     }
 }
 
-function downloadFile(filename){
-    var selectedIds = $("#filetree").jstree("get_checked", null, true);
-    selectedIds.forEach(nodeId => { 
-        var node = $('#filetree').jstree(true).get_node(nodeId);
-        if(node.type == "infile" || node.type == "outfile"){
-            $.ajax({
-                url:"getTemporaryLink",
-                type:'post',
-                data:{filename: node.text, projectId: $('#projectId').val()},
-                success:function(res){
-                    if(res.success){
-                        window.open(res.link);
-                    } else
-                        toast.fire('Failed!', res.message, 'error');
-                },
-                error: function(xhr, status, error) {
-                    res = JSON.parse(xhr.responseText);
-                    message = res.message;
-                    swal.fire({ title: "Error",
-                            text: message == "" ? "Error happened while processing. Please try again later." : message,
-                            icon: "error",
-                            confirmButtonText: `OK` });
+function download(filename){
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            url:"getTemporaryLink",
+            type:'post',
+            data:{filename: filename, projectId: $('#projectId').val()},
+            success:function(res){
+                if(res.success){
+                    window.open(res.link);
+                    resolve(true);
+                } else{
+                    toast.fire('Failed!', res.message, 'error');
+                    resolve(false);
                 }
-            });
+            },
+            error: function(xhr, status, error) {
+                res = JSON.parse(xhr.responseText);
+                message = res.message;
+                swal.fire({ title: "Error",
+                        text: message == "" ? "Error happened while processing. Please try again later." : message,
+                        icon: "error",
+                        confirmButtonText: `OK` });
+                resolve(false);
+            }
+        });
+    })
+}
+
+async function downloadFile(filename){
+    var selectedIds = $("#filetree").jstree("get_checked", null, true);
+    for(let i = 0; i < selectedIds.length; i ++){
+        var node = $('#filetree').jstree(true).get_node(selectedIds[i]);
+        if(node.type == "infile" || node.type == "outfile"){
+            await download(node.text);
         }
-    });
+    }
 }
 </script>
