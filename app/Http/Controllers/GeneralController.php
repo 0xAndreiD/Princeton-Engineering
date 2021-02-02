@@ -944,11 +944,11 @@ class GeneralController extends Controller
     }
 
     /**
-     * Get the temporary link from the dropbox.
+     * Get the temporary links from the dropbox.
      *
      * @return JSON
      */
-    public function getTemporaryLink(Request $request) {
+    public function getTemporaryLinks(Request $request) {
         if(!empty($request->input('projectId')) && !empty($request->input('filename')))
         {
             $job = JobRequest::where('id', $request->input('projectId'))->first();
@@ -960,20 +960,20 @@ class GeneralController extends Controller
                     $state = $jobData['ProjectInfo']['State'];
                 }
 
-                $filepath = env('DROPBOX_PREFIX_IN') . $job['companyName'] . '/' . sprintf("%06d", $job['clientProjectNumber']) . '. ' . $job['clientProjectName'] . ' ' . $state . '/' . $request->input('filename');
-                    
                 $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
                 $dropbox = new Dropbox($app);
-                try {
-                    $temporaryLink = $dropbox->getTemporaryLink($filepath);
-                    return response()->json(['success' => true, 'message' => 'Link Generated Successfully', 'link' => $temporaryLink->getLink()]);
+                $links = array();
+                foreach($request->input('filenames') as $filename){
+                    $filepath = env('DROPBOX_PREFIX_IN') . $job['companyName'] . '/' . sprintf("%06d", $job['clientProjectNumber']) . '. ' . $job['clientProjectName'] . ' ' . $state . '/' . $filename;
+                    try {
+                        $temporaryLink = $dropbox->getTemporaryLink($filepath);
+                        $links[$filename] = $temporaryLink;
+                    }
+                    catch (DropboxClientException $e) { }
                 }
-                catch (DropboxClientException $e) {
-                    return response()->json(['success' => false, 'message' => 'Cannot find specified file.']);
-                }
-            } else {
+                return response()->json(['success' => true, 'links' => $links]);
+            } else
                 return response()->json(['success' => false, 'message' => 'Cannot find the project.']);
-            }
         }
         else
             return response()->json(['success' => false, 'message' => 'Empty Id or file.']);
