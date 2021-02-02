@@ -967,7 +967,7 @@ class GeneralController extends Controller
                     $filepath = env('DROPBOX_PREFIX_IN') . $job['companyName'] . '/' . sprintf("%06d", $job['clientProjectNumber']) . '. ' . $job['clientProjectName'] . ' ' . $state . '/' . $filename;
                     try {
                         $temporaryLink = $dropbox->getTemporaryLink($filepath);
-                        $links[$filename] = $temporaryLink;
+                        $links[$filename] = $temporaryLink->getLink();
                     }
                     catch (DropboxClientException $e) { }
                 }
