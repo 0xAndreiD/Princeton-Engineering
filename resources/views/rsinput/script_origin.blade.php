@@ -3742,7 +3742,7 @@ function delFile(){
                         $("#filetree").jstree("uncheck_node", '#'+nodeId);
                 });
             } else if (result.dismiss === 'cancel') {
-                toast.fire('Cancelled', 'File is safe :)', 'error');
+                toast.fire('Cancelled', 'File is safe :)', 'success');
             }
         });
     }
@@ -3763,7 +3763,7 @@ const download = async (url, name) => {
 	a.remove();
 };
 
-async function downloadFile(filename){
+function downloadFile(filename){
     var selectedIds = $("#filetree").jstree("get_checked", null, true);
     let filenames = [];
     for(let i = 0; i < selectedIds.length; i ++){
@@ -3786,7 +3786,7 @@ async function downloadFile(filename){
                         i ++;
                     }
                 } else{
-                    toast.fire('Failed!', res.message, 'error');
+                    swal.fire({ title: "Failed!", text: res.message, icon: "error", confirmButtonText: `OK` });
                 }
             },
             error: function(xhr, status, error) {
@@ -3799,7 +3799,7 @@ async function downloadFile(filename){
             }
         });
     } else {
-        toast.fire('Cancelled', 'Please select files', 'warning');
+        swal.fire({ title: "Warning", text: 'Please select files', icon: "warning", confirmButtonText: `OK` });
     }
 }
 </script>
