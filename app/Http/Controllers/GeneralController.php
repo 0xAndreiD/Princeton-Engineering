@@ -949,7 +949,7 @@ class GeneralController extends Controller
      * @return JSON
      */
     public function getTemporaryLinks(Request $request) {
-        if(!empty($request->input('projectId')) && !empty($request->input('filename')))
+        if(!empty($request->input('projectId')) && !empty($request->input('filenames')))
         {
             $job = JobRequest::where('id', $request->input('projectId'))->first();
             if($job){
