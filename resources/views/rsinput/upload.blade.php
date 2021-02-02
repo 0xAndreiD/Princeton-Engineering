@@ -1,6 +1,16 @@
 <div class="row">
 
-<div class="col-md-8">
+<div class="col-md-7 filetreePane">
+    <div class="fileActions mt-1 mb-2">
+        <button class="btn btn-success" onclick="downloadFile()"><i class="fa fa-download"></i> Download</button>
+        <button class="btn btn-danger" onclick="delFile()"><i class="fa fa-trash"></i> Delete</button>
+    </div>
+    <div id="filetree" >
+    
+    </div>
+</div>
+
+<div class="col-md-5">
 <form id="upload" method="post" action="{{ route('jobFileUpload') }}" enctype="multipart/form-data">
     <div id="drop">
         Drop Here
@@ -22,16 +32,6 @@
         </div>
     </div>
 </form>
-</div>
-
-<div class="col-md-4 filetreePane">
-    <div class="fileActions mt-1 mb-2">
-        <button class="btn btn-success" onclick="downloadFile()"><i class="fa fa-download"></i> Download</button>
-        <button class="btn btn-danger" onclick="delFile()"><i class="fa fa-trash"></i> Delete</button>
-    </div>
-    <div id="filetree" >
-    
-    </div>
 </div>
 
 </div>

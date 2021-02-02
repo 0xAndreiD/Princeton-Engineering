@@ -3748,48 +3748,58 @@ function delFile(){
     }
 }
 
-function download(filename){
-    return new Promise((resolve, reject) => {
+const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+const download = async (url, name) => {
+	const a = document.createElement('a');
+	a.download = name;
+	a.href = url;
+	a.style.display = 'none';
+	document.body.append(a);
+	a.click();
+
+	// Chrome requires the timeout
+	await delay(100);
+	a.remove();
+};
+
+async function downloadFile(filename){
+    var selectedIds = $("#filetree").jstree("get_checked", null, true);
+    let filenames = [];
+    for(let i = 0; i < selectedIds.length; i ++){
+        var node = $('#filetree').jstree(true).get_node(selectedIds[i]);
+        if(node.type == "infile" || node.type == "outfile"){
+            filenames.push(node.text);
+        }
+    }
+    if(filenames.length > 0){
         $.ajax({
-            url:"getTemporaryLink",
+            url:"getTemporaryLinks",
             type:'post',
-            data:{filename: filename, projectId: $('#projectId').val()},
-            success:function(res){
+            data:{filenames: filenames, projectId: $('#projectId').val()},
+            success:async function(res){
                 if(res.success){
-                    var file_path = res.link;
-                    var a = document.createElement('A');
-                    a.href = file_path;
-                    a.download = file_path.substr(file_path.lastIndexOf('/') + 1);
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                    //window.open(res.link);
-                    resolve(true);
+                    let i = 0;
+                    for(let filename in res.data){
+                        await delay(i * 1000);
+                        download(res.data[filename], filename);
+                        i ++;
+                    }
                 } else{
                     toast.fire('Failed!', res.message, 'error');
-                    resolve(false);
                 }
             },
             error: function(xhr, status, error) {
                 res = JSON.parse(xhr.responseText);
                 message = res.message;
                 swal.fire({ title: "Error",
-                        text: message == "" ? "Error happened while processing. Please try again later." : message,
-                        icon: "error",
-                        confirmButtonText: `OK` });
-                resolve(false);
+                    text: message == "" ? "Error happened while processing. Please try again later." : message,
+                    icon: "error",
+                    confirmButtonText: `OK` });
             }
         });
-    })
-}
-
-async function downloadFile(filename){
-    var selectedIds = $("#filetree").jstree("get_checked", null, true);
-    for(let i = 0; i < selectedIds.length; i ++){
-        var node = $('#filetree').jstree(true).get_node(selectedIds[i]);
-        if(node.type == "infile" || node.type == "outfile"){
-            await download(node.text);
-        }
+    } else {
+        toast.fire('Cancelled', 'Please select files', 'warning');
     }
 }
 </script>
