@@ -3782,7 +3782,7 @@ async function downloadFile(filename){
                     let i = 0;
                     for(let filename in res.links){
                         await delay(i * 1000);
-                        download(res.data[filename], filename);
+                        download(res.links[filename], filename);
                         i ++;
                     }
                 } else{
