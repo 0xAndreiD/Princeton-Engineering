@@ -2662,6 +2662,34 @@ $(document).ready(function() {
     $("#filetree").jstree('create_node', '#root', {"text":"IN", "id": "IN", "type": "folder"}, 'last');
     $("#filetree").jstree('create_node', '#root', {"text":"OUT", "id": "OUT", "type": "folder"}, 'last');
 
+    $('#filetree').on('select_node.jstree', function () {
+        var nodeIds = $("#filetree").jstree("get_checked", null, true);
+        var inCount = 0;
+        if(nodeIds.length > 0){
+            nodeIds.forEach(nodeId => {
+                var node = $('#filetree').jstree(true).get_node(nodeId);
+                if(node.type == "infile")
+                    inCount ++;
+            });
+        }
+        if(inCount > 0) $("#deleteBtn").prop("disabled", false); else $("#deleteBtn").prop("disabled", true);
+        if(inCount == 1) $("#renameBtn").prop("disabled", false); else $("#renameBtn").prop("disabled", true);
+    });
+
+    $('#filetree').on('deselect_node.jstree', function () {
+        var nodeIds = $("#filetree").jstree("get_checked", null, true);
+        var inCount = 0;
+        if(nodeIds.length > 0){
+            nodeIds.forEach(nodeId => {
+                var node = $('#filetree').jstree(true).get_node(nodeId);
+                if(node.type == "infile")
+                    inCount ++;
+            });
+        }
+        if(inCount > 0) $("#deleteBtn").prop("disabled", false); else $("#deleteBtn").prop("disabled", true);
+        if(inCount == 1) $("#renameBtn").prop("disabled", false); else $("#renameBtn").prop("disabled", true);
+    });
+
     var loadFileList = function() {
         var projectId = $('#projectId').val();
         if(projectId >= 0){
@@ -3805,6 +3833,42 @@ function downloadFile(filename){
         });
     } else {
         swal.fire({ title: "Warning", text: 'Please select files', icon: "warning", confirmButtonText: `OK` });
+    }
+}
+
+var nodeNames = {};
+
+function editFile(){
+    var selectedIds = $("#filetree").jstree("get_checked", null, true);
+    if(selectedIds.length > 0){
+        var filetree = $("#filetree").jstree(true);
+        selectedIds.forEach(nodeId => {
+            var node = $('#filetree').jstree(true).get_node(nodeId);
+            nodeNames[node.id] = node.text;
+            if(node.type == "infile")
+                filetree.edit(node, null, (data, status) => {
+                    if(nodeNames[data.id] != data.text){
+                        $.ajax({
+                            url:"renameFile",
+                            type:'post',
+                            data:{filename: nodeNames[data.id], newname: data.text, projectId: $('#projectId').val()},
+                            success: function(res){
+                                if(!res.success){
+                                    swal.fire({ title: "Failed!", text: res.message, icon: "error", confirmButtonText: `OK` });
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                res = JSON.parse(xhr.responseText);
+                                message = res.message;
+                                swal.fire({ title: "Error",
+                                    text: message == "" ? "Error happened while processing. Please try again later." : message,
+                                    icon: "error",
+                                    confirmButtonText: `OK` });
+                            }
+                        });
+                    }
+                });
+        })
     }
 }
 </script>

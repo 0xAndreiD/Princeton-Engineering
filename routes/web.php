@@ -75,3 +75,4 @@ Route::post('/jobFileUpload', 'GeneralController@jobFileUpload')->name('jobFileU
 Route::post('/getFileList', 'GeneralController@getFileList')->name('getFileList');
 Route::post('/delDropboxFile', 'GeneralController@delDropboxFile')->name('delDropboxFile');
 Route::post('/getTemporaryLinks', 'GeneralController@getTemporaryLinks')->name('getTemporaryLinks');
+Route::post('/renameFile', 'GeneralController@renameFile')->name('renameFile');

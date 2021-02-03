@@ -3,7 +3,8 @@
 <div class="col-md-7 filetreePane">
     <div class="fileActions mt-1 mb-2">
         <button class="btn btn-success" onclick="downloadFile()"><i class="fa fa-download"></i> Download</button>
-        <button class="btn btn-danger" onclick="delFile()"><i class="fa fa-trash"></i> Delete</button>
+        <button class="btn btn-danger" onclick="delFile()" id="deleteBtn" disabled><i class="fa fa-trash"></i> Delete</button>
+        <button class="btn btn-warning" onclick="editFile()" id="renameBtn" disabled><i class="fa fa-edit"></i> Rename</button>
     </div>
     <div id="filetree" >
     
