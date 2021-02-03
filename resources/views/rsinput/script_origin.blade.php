@@ -2796,6 +2796,8 @@ $(document).ready(function() {
                 if (res.status == true) {
                     $("#projectId").val(res.projectId);
                     $("#uploadJobId").val(res.projectId);
+                    if(res.directory)
+                        $("#filetree").jstree('rename_node', '#root', 'Root(' + res.directory + ')');
                     message = 'Succeeded to send input data. Do you want back to home page?';
                     if (status == 'Data Check') {
                         message = 'Input Data sent for review. An email will be sent to you summarizing the data input and notifying you of any problems.\nGo back to home page?';
