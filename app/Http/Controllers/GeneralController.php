@@ -992,4 +992,37 @@ class GeneralController extends Controller
         else
             return response()->json(['success' => false, 'message' => 'Empty Id or file.']);
     }
+
+    /**
+     * Rename dropbox file.
+     *
+     * @return JSON
+     */
+    public function renameFile(Request $request) {
+        if(!empty($request->input('projectId')) && !empty($request->input('filename')) && !empty($request->input('newname')))
+        {
+            $job = JobRequest::where('id', $request->input('projectId'))->first();
+            if($job){
+                $state = '';
+                if(Storage::disk('local')->exists($job['requestFile']))
+                {
+                    $jobData = json_decode(Storage::disk('local')->get($job['requestFile']), true);
+                    $state = $jobData['ProjectInfo']['State'];
+                }
+
+                $company = Company::where('id', $job['companyId'])->first();
+                $companyNumber = $company ? $company['company_number'] : 0;
+                
+                $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
+                $dropbox = new Dropbox($app);
+                
+                $filepath = '/' . sprintf("%06d", $companyNumber) . ". " . $job['companyName'] . '/' . sprintf("%06d", $job['clientProjectNumber']) . '. ' . $job['clientProjectName'] . ' ' . $state . env('DROPBOX_PREFIX_IN') ;
+                $dropbox->move($filepath . $request->input('filename'), $filepath . $request->input('newname'));
+                return response()->json(['success' => true]);
+            } else
+                return response()->json(['success' => false, 'message' => 'Cannot find the project.']);
+        }
+        else
+            return response()->json(['success' => false, 'message' => 'Empty Id or filename params.']);
+    }
 }
