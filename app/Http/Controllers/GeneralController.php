@@ -131,7 +131,10 @@ class GeneralController extends Controller
                     $project->submittedTime = gmdate("Y-m-d\TH:i:s", time());
                     $project->save();
 
-                    return response()->json(["message" => "Success!", "status" => true, "projectId" => $project->id]);
+                    $company = Company::where('id', $project->companyId)->first();
+                    $companyNumber = $company ? $company['company_number'] : 0;
+
+                    return response()->json(["message" => "Success!", "status" => true, "projectId" => $project->id, "directory" => "/" . sprintf("%06d", $companyNumber). '. ' . $project['companyName'] . '/' . sprintf("%06d", $project['clientProjectNumber']) . '. ' . $project['clientProjectName'] . ' ' . $request['data']['option-state'] . '/']);
                 }
                 else
                     return response()->json(["message" => "You don't have permission to edit this project.", "status" => false]);
@@ -177,7 +180,9 @@ class GeneralController extends Controller
             catch(Exception $e) {
                 return response()->json(["message" => "Failed to generate RS json data file", "status" => false]);
             }
-            return response()->json(["message" => "Success!", "status" => true, "projectId" => $projectId]);
+
+            $companyNumber = $company ? $company['company_number'] : 0;
+            return response()->json(["message" => "Success!", "status" => true, "projectId" => $projectId, "directory" => "/" . sprintf("%06d", $companyNumber). '. ' . $project['companyName'] . '/' . sprintf("%06d", $project['clientProjectNumber']) . '. ' . $project['clientProjectName'] . ' ' . $request['data']['option-state'] . '/']);
         }
     }
 
@@ -903,7 +908,7 @@ class GeneralController extends Controller
                     $filelist['OUT'] = array();
                  }
 
-                 return response()->json(['success' => true, 'data' => $filelist, 'directory' => $filepath]);
+                 return response()->json(['success' => true, 'data' => $filelist, 'directory' => '/' . $filepath . '/']);
             } else 
                 return response()->json(['success' => false, 'message' => 'Cannot find specified project.']);
         }
