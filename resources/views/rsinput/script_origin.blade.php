@@ -2671,6 +2671,9 @@ $(document).ready(function() {
                 data:{projectId: projectId},
                 success:function(res){
                     if(res.success && res.data){
+                        if(res.directory){
+                            $("#filetree").jstree('rename_node', '#root', 'Root(' + res.directory + ')');
+                        }
                         if(res.data["IN"]){
                             res.data["IN"].forEach(file => {
                                 $("#filetree").jstree('create_node', '#IN', {"text": file.name, "id": "in_" + file.id, "type": "infile"}, 'last');
