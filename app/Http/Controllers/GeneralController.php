@@ -839,14 +839,16 @@ class GeneralController extends Controller
                     $state = $jobData['ProjectInfo']['State'];
                 }
 
-                $filepath = $job['companyName'] . '/' . sprintf("%06d", $job['clientProjectNumber']) . '. ' . $job['clientProjectName'] . ' ' . $state;
+                $company = Company::where('id', $job['companyId'])->first();
+                $companyNumber = $company ? $company['company_number'] : 0;
+                $filepath = sprintf("%06d", $companyNumber). '. ' . $job['companyName'] . '/' . sprintf("%06d", $job['clientProjectNumber']) . '. ' . $job['clientProjectName'] . ' ' . $state;
                 $file->move(storage_path('upload') . '/' . $filepath, $file->getClientOriginalName());
                 $localpath = storage_path('upload') . '/' . $filepath . '/' . $file->getClientOriginalName();
                     
                 $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
                 $dropbox = new Dropbox($app);
                 $dropboxFile = new DropboxFile($localpath);
-                $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_PREFIX_IN') . $filepath . '/' . $file->getClientOriginalName(), ['autorename' => TRUE]);
+                $dropfile = $dropbox->upload($dropboxFile, '/' . $filepath . env('DROPBOX_PREFIX_IN') . $file->getClientOriginalName(), ['autorename' => TRUE]);
                 
                 return response()->json(['success' => true, 'message' => 'Multiple Image File Has Been uploaded Successfully', 'filename' => $file->getClientOriginalName(), 'id' => $dropfile->getId()]);
             } else {
@@ -875,12 +877,14 @@ class GeneralController extends Controller
                     $state = $jobData['ProjectInfo']['State'];
                 }
 
-                $filepath = $job['companyName'] . '/' . sprintf("%06d", $job['clientProjectNumber']) . '. ' . $job['clientProjectName'] . ' ' . $state;
+                $company = Company::where('id', $job['companyId'])->first();
+                $companyNumber = $company ? $company['company_number'] : 0;
+                $filepath = sprintf("%06d", $companyNumber) . ". " . $job['companyName'] . '/' . sprintf("%06d", $job['clientProjectNumber']) . '. ' . $job['clientProjectName'] . ' ' . $state;
                     
                 $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
                 $dropbox = new Dropbox($app);
                 try{
-                    $listFolderContents = $dropbox->listFolder(env('DROPBOX_PREFIX_IN') . $filepath);
+                    $listFolderContents = $dropbox->listFolder('/' . $filepath . env('DROPBOX_PREFIX_IN'));
                     $files = $listFolderContents->getItems()->all();
                     $filelist['IN'] = array();
                     foreach($files as $file)
@@ -890,7 +894,7 @@ class GeneralController extends Controller
                 }
 
                 try{
-                    $listFolderContents = $dropbox->listFolder(env('DROPBOX_PREFIX_OUT') . $filepath);
+                    $listFolderContents = $dropbox->listFolder('/' . $filepath . env('DROPBOX_PREFIX_OUT'));
                     $files = $listFolderContents->getItems()->all();
                     $filelist['OUT'] = array();
                     foreach($files as $file)
@@ -899,7 +903,7 @@ class GeneralController extends Controller
                     $filelist['OUT'] = array();
                  }
 
-                 return response()->json(['success' => true, 'data' => $filelist]);
+                 return response()->json(['success' => true, 'data' => $filelist, 'directory' => $filepath]);
             } else 
                 return response()->json(['success' => false, 'message' => 'Cannot find specified project.']);
         }
@@ -924,7 +928,9 @@ class GeneralController extends Controller
                     $state = $jobData['ProjectInfo']['State'];
                 }
 
-                $filepath = env('DROPBOX_PREFIX_IN') . $job['companyName'] . '/' . sprintf("%06d", $job['clientProjectNumber']) . '. ' . $job['clientProjectName'] . ' ' . $state . '/' . $request->input('filename');
+                $company = Company::where('id', $job['companyId'])->first();
+                $companyNumber = $company ? $company['company_number'] : 0;
+                $filepath = '/' . sprintf("%06d", $companyNumber) . ". " . $job['companyName'] . '/' . sprintf("%06d", $job['clientProjectNumber']) . '. ' . $job['clientProjectName'] . ' ' . $state . env('DROPBOX_PREFIX_IN') . $request->input('filename');
                     
                 $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
                 $dropbox = new Dropbox($app);
@@ -960,11 +966,14 @@ class GeneralController extends Controller
                     $state = $jobData['ProjectInfo']['State'];
                 }
 
+                $company = Company::where('id', $job['companyId'])->first();
+                $companyNumber = $company ? $company['company_number'] : 0;
+                
                 $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
                 $dropbox = new Dropbox($app);
                 $links = array();
                 foreach($request->input('filenames') as $filename){
-                    $filepath = env('DROPBOX_PREFIX_IN') . $job['companyName'] . '/' . sprintf("%06d", $job['clientProjectNumber']) . '. ' . $job['clientProjectName'] . ' ' . $state . '/' . $filename;
+                    $filepath = '/' . sprintf("%06d", $companyNumber) . ". " . $job['companyName'] . '/' . sprintf("%06d", $job['clientProjectNumber']) . '. ' . $job['clientProjectName'] . ' ' . $state . env('DROPBOX_PREFIX_IN') . $filename;
                     try {
                         $temporaryLink = $dropbox->getTemporaryLink($filepath);
                         $links[$filename] = $temporaryLink->getLink();
