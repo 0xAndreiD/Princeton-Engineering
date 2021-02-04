@@ -909,11 +909,11 @@ class GeneralController extends Controller
     }
 
     /**
-     * Delete the file from the dropbox.
+     * Iterate all the subdirectories from the dropbox.
      *
      * @return Object
      */
-    public function iterateFolder(Dropbox $app, String $folderPath, String $folderName, String $folderId){
+    public function iterateFolder(Dropbox $dropbox, String $folderPath, String $folderName, String $folderId){
         $content = array('childs' => array(), 'name' => $folderName, 'id' => $folderId, 'type' => 'folder', 'path' => $folderPath);
         $listFolderContents = $dropbox->listFolder($folderPath);
         $files = $listFolderContents->getItems()->all();
@@ -921,7 +921,7 @@ class GeneralController extends Controller
             if($file->getDataProperty('.tag') === 'file')
                 $content['childs'][] = array('name' => $file->getName(), 'id' => $file->getId(), 'type' => 'file', 'path' => $folderPath . $file->getName());
             else
-                $content['childs'][] = $this->iterateFolder($app, $folderPath . $file->getName() . '/', $file->getName(), $file->getId());
+                $content['childs'][] = $this->iterateFolder($dropbox, $folderPath . $file->getName() . '/', $file->getName(), $file->getId());
         }
 
         return $content;
