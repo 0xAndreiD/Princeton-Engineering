@@ -2594,7 +2594,7 @@ $(document).ready(function() {
         if(data.result && data.result.success){
             data.context.removeClass('working');
             data.context.addClass('success');
-            $("#filetree").jstree('create_node', '#IN', {"text": data.result.filename, "id": "in_" + data.result.id, "type": "infile"}, 'last');
+            $("#filetree").jstree('create_node', '#IN', {"text": data.result.filename, "id": data.result.id, "type": "infile", "path": data.result.path}, 'last');
             setTotalProgress(true);
         }
         else{
@@ -2702,11 +2702,15 @@ $(document).ready(function() {
                         if(res.directory){
                             $("#filetree").jstree('rename_node', '#root', 'Root(' + res.directory + ')');
                         }
-                        if(res.data["IN"]){
-                            
+                        if(res.data["IN"] && res.data["IN"].childs){
+                            res.data["IN"].childs.forEach(child => {
+                                addFileNode("IN", child, true);
+                            });
                         }
-                        if(res.data["OUT"]){
-                            
+                        if(res.data["OUT"] && res.data["OUT"].childs){
+                            res.data["OUT"].childs.forEach(child => {
+                                addFileNode("OUT", child, false);
+                            });
                         }
                     }
                 },
@@ -2719,6 +2723,18 @@ $(document).ready(function() {
                             confirmButtonText: `OK` });
                 }
             });
+        }
+    }
+
+    var addFileNode = function(parentId, nodeData, isIN){
+        if(nodeData.type == "folder"){
+            $("#filetree").jstree('create_node', '#' + parentId, {"text": nodeData.name, "id": nodeData.id, "type": "folder"}, 'last');
+            if(nodeData.childs && nodeData.childs.length > 0)
+                nodeData.childs.forEach(child => {
+                    addFileNode(nodeData.id, child, isIN);
+                });
+        } else {
+            $("#filetree").jstree('create_node', '#' + parentId, {"text": nodeData.name, "id": nodeData.id, "type": isIn ? "infile" : "outfile", "path": nodeData.path}, 'last');
         }
     }
 
@@ -3797,39 +3813,40 @@ function downloadFile(filename){
     let filenames = [];
     for(let i = 0; i < selectedIds.length; i ++){
         var node = $('#filetree').jstree(true).get_node(selectedIds[i]);
+        console.log(node);
         if(node.type == "infile" || node.type == "outfile"){
-            filenames.push(node.text);
+            filenames.push(node.path);
         }
     }
-    if(filenames.length > 0){
-        $.ajax({
-            url:"getTemporaryLinks",
-            type:'post',
-            data:{filenames: filenames, projectId: $('#projectId').val()},
-            success:async function(res){
-                if(res.success){
-                    let i = 0;
-                    for(let filename in res.links){
-                        await delay(i * 1000);
-                        download(res.links[filename], filename);
-                        i ++;
-                    }
-                } else{
-                    swal.fire({ title: "Failed!", text: res.message, icon: "error", confirmButtonText: `OK` });
-                }
-            },
-            error: function(xhr, status, error) {
-                res = JSON.parse(xhr.responseText);
-                message = res.message;
-                swal.fire({ title: "Error",
-                    text: message == "" ? "Error happened while processing. Please try again later." : message,
-                    icon: "error",
-                    confirmButtonText: `OK` });
-            }
-        });
-    } else {
-        swal.fire({ title: "Warning", text: 'Please select files', icon: "warning", confirmButtonText: `OK` });
-    }
+    // if(filenames.length > 0){
+    //     $.ajax({
+    //         url:"getTemporaryLinks",
+    //         type:'post',
+    //         data:{filenames: filenames, projectId: $('#projectId').val()},
+    //         success:async function(res){
+    //             if(res.success){
+    //                 let i = 0;
+    //                 for(let filename in res.links){
+    //                     await delay(i * 1000);
+    //                     download(res.links[filename], filename);
+    //                     i ++;
+    //                 }
+    //             } else{
+    //                 swal.fire({ title: "Failed!", text: res.message, icon: "error", confirmButtonText: `OK` });
+    //             }
+    //         },
+    //         error: function(xhr, status, error) {
+    //             res = JSON.parse(xhr.responseText);
+    //             message = res.message;
+    //             swal.fire({ title: "Error",
+    //                 text: message == "" ? "Error happened while processing. Please try again later." : message,
+    //                 icon: "error",
+    //                 confirmButtonText: `OK` });
+    //         }
+    //     });
+    // } else {
+    //     swal.fire({ title: "Warning", text: 'Please select files', icon: "warning", confirmButtonText: `OK` });
+    // }
 }
 
 var nodeNames = {};

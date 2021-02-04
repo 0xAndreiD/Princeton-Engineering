@@ -855,7 +855,7 @@ class GeneralController extends Controller
                 $dropboxFile = new DropboxFile($localpath);
                 $dropfile = $dropbox->upload($dropboxFile, '/' . $filepath . env('DROPBOX_PREFIX_IN') . $file->getClientOriginalName(), ['autorename' => TRUE]);
                 
-                return response()->json(['success' => true, 'message' => 'Multiple Image File Has Been uploaded Successfully', 'filename' => $file->getClientOriginalName(), 'id' => $dropfile->getId()]);
+                return response()->json(['success' => true, 'message' => 'Multiple Image File Has Been uploaded Successfully', 'filename' => $file->getClientOriginalName(), 'id' => $dropfile->getId(), 'path' => '/' . $filepath . env('DROPBOX_PREFIX_IN') . $file->getClientOriginalName()]);
             } else {
                 return response()->json(['success' => false, 'message' => 'Cannot find the project.']);
             }
