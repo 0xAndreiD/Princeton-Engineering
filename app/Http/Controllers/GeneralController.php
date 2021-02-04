@@ -889,21 +889,13 @@ class GeneralController extends Controller
                 $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
                 $dropbox = new Dropbox($app);
                 try{
-                    $listFolderContents = $dropbox->listFolder('/' . $filepath . env('DROPBOX_PREFIX_IN'));
-                    $files = $listFolderContents->getItems()->all();
-                    $filelist['IN'] = array();
-                    foreach($files as $file)
-                        $filelist['IN'][] = array('name' => $file->getName(), 'id' => $file->getId());
+                    $filelist['IN'] = $this->iterateFolder($dropbox, '/' . $filepath . env('DROPBOX_PREFIX_IN'), 'IN', 'IN');
                 } catch (DropboxClientException $e) { 
                     $filelist['IN'] = array();
                 }
 
                 try{
-                    $listFolderContents = $dropbox->listFolder('/' . $filepath . env('DROPBOX_PREFIX_OUT'));
-                    $files = $listFolderContents->getItems()->all();
-                    $filelist['OUT'] = array();
-                    foreach($files as $file)
-                        $filelist['OUT'][] = array('name' => $file->getName(), 'id' => $file->getId());
+                    $filelist['OUT'] = $this->iterateFolder($dropbox, '/' . $filepath . env('DROPBOX_PREFIX_OUT'), 'OUT', 'OUT');
                 } catch (DropboxClientException $e) {
                     $filelist['OUT'] = array();
                  }
@@ -914,6 +906,25 @@ class GeneralController extends Controller
         }
         else
             return response()->json(['success' => false, 'message' => 'Empty Job Id.']);
+    }
+
+    /**
+     * Delete the file from the dropbox.
+     *
+     * @return Object
+     */
+    public function iterateFolder(Dropbox $app, String $folderPath, String $folderName, String $folderId){
+        $content = array('childs' => array(), 'name' => $folderName, 'id' => $folderId, 'type' => 'folder', 'path' => $folderPath);
+        $listFolderContents = $dropbox->listFolder($folderPath);
+        $files = $listFolderContents->getItems()->all();
+        foreach($files as $file){
+            if($file->getDataProperty('.tag') === 'file')
+                $content['childs'][] = array('name' => $file->getName(), 'id' => $file->getId(), 'type' => 'file', 'path' => $folderPath . $file->getName());
+            else
+                $content['childs'][] = $this->iterateFolder($app, $folderPath . $file->getName() . '/', $file->getName(), $file->getId());
+        }
+
+        return $content;
     }
 
     /**

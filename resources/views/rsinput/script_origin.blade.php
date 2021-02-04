@@ -2703,14 +2703,10 @@ $(document).ready(function() {
                             $("#filetree").jstree('rename_node', '#root', 'Root(' + res.directory + ')');
                         }
                         if(res.data["IN"]){
-                            res.data["IN"].forEach(file => {
-                                $("#filetree").jstree('create_node', '#IN', {"text": file.name, "id": "in_" + file.id, "type": "infile"}, 'last');
-                            })
+                            
                         }
                         if(res.data["OUT"]){
-                            res.data["OUT"].forEach(file => {
-                                $("#filetree").jstree('create_node', '#OUT', {"text": file.name, "id": "out_" + file.id, "type": "outfile"}, 'last');
-                            })
+                            
                         }
                     }
                 },
