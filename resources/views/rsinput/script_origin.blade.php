@@ -2734,7 +2734,7 @@ $(document).ready(function() {
                     addFileNode(nodeData.id, child, isIN);
                 });
         } else {
-            $("#filetree").jstree('create_node', '#' + parentId, {"text": nodeData.name, "id": nodeData.id, "type": isIn ? "infile" : "outfile", "path": nodeData.path}, 'last');
+            $("#filetree").jstree('create_node', '#' + parentId, {"text": nodeData.name, "id": nodeData.id, "type": isIN ? "infile" : "outfile", "path": nodeData.path}, 'last');
         }
     }
 
