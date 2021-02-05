@@ -1008,8 +1008,8 @@ class GeneralController extends Controller
                         catch (DropboxClientException $e){}
                     }
                     $zip->close();
-                    return response()->download(storage_path('download') . '/' . $filename, null, ['Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0']);
-                    //return response()->json(['success' => true, 'link' => env('APP_URL') . 'downloadZip?filename=' . $filename, 'name' => sprintf("%06d", $job['clientProjectNumber']) . '. ' . $job['clientProjectName'] . ' ' . $state . ".zip"]);
+                    //return response()->download(storage_path('download') . '/' . $filename, null, ['Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0']);
+                    return response()->json(['success' => true, 'link' => 'downloadZip?filename=' . $filename, 'name' => sprintf("%06d", $job['clientProjectNumber']) . '. ' . $job['clientProjectName'] . ' ' . $state . ".zip"]);
                 }
             } else
                 return response()->json(['success' => false, 'message' => 'Cannot find the project.']);
