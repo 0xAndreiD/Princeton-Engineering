@@ -3826,12 +3826,10 @@ function downloadFile(){
             data:{files: files, projectId: $('#projectId').val()},
             success:function(res){
                 swal.close();
-                if(typeof res == "object"){
-                    if(res.success){
-                        download(res.link, res.name);
-                    } else{
-                        swal.fire({ title: "Failed!", text: res.message, icon: "error", confirmButtonText: `OK` });
-                    }
+                if(res.success){
+                    download(res.link, res.name);
+                } else{
+                    swal.fire({ title: "Failed!", text: res.message, icon: "error", confirmButtonText: `OK` });
                 }
             },
             error: function(xhr, status, error) {
