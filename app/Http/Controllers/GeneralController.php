@@ -970,38 +970,66 @@ class GeneralController extends Controller
      *
      * @return JSON
      */
-    public function getTemporaryLinks(Request $request) {
-        if(!empty($request->input('projectId')) && !empty($request->input('filenames')))
+    public function getDownloadLink(Request $request) {
+        if(!empty($request->input('projectId')) && !empty($request->input('files')))
         {
             $job = JobRequest::where('id', $request->input('projectId'))->first();
             if($job){
-                $state = '';
-                if(Storage::disk('local')->exists($job['requestFile']))
-                {
-                    $jobData = json_decode(Storage::disk('local')->get($job['requestFile']), true);
-                    $state = $jobData['ProjectInfo']['State'];
-                }
-
-                $company = Company::where('id', $job['companyId'])->first();
-                $companyNumber = $company ? $company['company_number'] : 0;
-                
                 $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
                 $dropbox = new Dropbox($app);
-                $links = array();
-                foreach($request->input('filenames') as $filename){
-                    $filepath = '/' . sprintf("%06d", $companyNumber) . ". " . $job['companyName'] . '/' . sprintf("%06d", $job['clientProjectNumber']) . '. ' . $job['clientProjectName'] . ' ' . $state . env('DROPBOX_PREFIX_IN') . $filename;
+                
+                if(count($request->input('files')) == 1){
                     try {
-                        $temporaryLink = $dropbox->getTemporaryLink($filepath);
-                        $links[$filename] = $temporaryLink->getLink();
+                        $temporaryLink = $dropbox->getTemporaryLink($request->input('files')[0]);
+                        return response()->json(['success' => true, 'link' => $temporaryLink->getLink(), 'name' => end(split('/', $request->input('files')[0]))]);
                     }
-                    catch (DropboxClientException $e) { }
+                    catch (DropboxClientException $e) {
+                        return response()->json(['success' => false, 'message' => 'Error while generating dropbox link.']);
+                     }
                 }
-                return response()->json(['success' => true, 'links' => $links]);
+                else if(count($request->input('files')) > 1) {
+                    $state = '';
+                    if(Storage::disk('local')->exists($job['requestFile']))
+                    {
+                        $jobData = json_decode(Storage::disk('local')->get($job['requestFile']), true);
+                        $state = $jobData['ProjectInfo']['State'];
+                    }
+
+                    $zip = new ZipArchive();
+                    $filename = sprintf("%06d", $job['clientProjectNumber']) . '. ' . $job['clientProjectName'] . ' ' . $state . '_' . time().".zip";
+                    $zip->open(storage_path('download') . '/' . $filename, ZipArchive::CREATE);
+                    foreach($request->input('files') as $filepath){
+                        try {
+                            $file = $dropbox->download($filepath);
+                            $path = str_contains($filepath, env('DROPBOX_PREFIX_IN')) ? substr($filepath, strpos($filepath, env('DROPBOX_PREFIX_IN'))) : substr($filepath, strpos($filepath, env('DROPBOX_PREFIX_OUT')));
+                            $zip->addFromString($path, $file->getContents());
+                        }
+                        catch (DropboxClientException $e){}
+                    }
+                    $zip->close();
+                    return response()->json(['success' => true, 'link' => env('APP_URL') . 'downloadZip?filename=' . $filename, 'name' => sprintf("%06d", $job['clientProjectNumber']) . '. ' . $job['clientProjectName'] . ' ' . $state . ".zip"]);
+                }
             } else
                 return response()->json(['success' => false, 'message' => 'Cannot find the project.']);
         }
         else
             return response()->json(['success' => false, 'message' => 'Empty Id or file.']);
+    }
+
+    /**
+     * Download Project Zip File
+     *
+     * @return JSON
+     */
+    public function downloadZip(Request $request){
+        if(isset($request['filename'])){
+            if( file_exists(storage_path('download') . '/' . $request['filename']))
+                return response()->download(storage_path('download') . '/' . $request['filename'], null, ['Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0']);
+            else
+                return response()->json(['success' => false, 'message' => 'Fail', 'reason' => 'Cannot find file.']);
+        }
+        else
+            return response()->json(['success' => false, 'message' => 'Wrong parameter.']);
     }
 
     /**
