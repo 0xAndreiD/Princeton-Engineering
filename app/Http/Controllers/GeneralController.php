@@ -982,8 +982,8 @@ class GeneralController extends Controller
                 if(count($request->input('files')) == 1){
                     try {
                         $temporaryLink = $dropbox->getTemporaryLink($request->input('files')[0]);
-                        $filepath = $request->input('files')[0];
-                        return response()->json(['success' => true, 'link' => $temporaryLink->getLink(), 'name' => end(explode('/', $filepath))]);
+                        $filepath = explode('/', $request->input('files')[0]);
+                        return response()->json(['success' => true, 'link' => $temporaryLink->getLink(), 'name' => end($filepath)]);
                     }
                     catch (DropboxClientException $e) {
                         return response()->json(['success' => false, 'message' => 'Error while generating dropbox link.']);
