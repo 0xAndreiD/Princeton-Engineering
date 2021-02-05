@@ -74,5 +74,6 @@ Route::post('/getRailsupport', 'GeneralController@getRailsupport')->name('getRai
 Route::post('/jobFileUpload', 'GeneralController@jobFileUpload')->name('jobFileUpload');
 Route::post('/getFileList', 'GeneralController@getFileList')->name('getFileList');
 Route::post('/delDropboxFile', 'GeneralController@delDropboxFile')->name('delDropboxFile');
-Route::post('/getTemporaryLinks', 'GeneralController@getTemporaryLinks')->name('getTemporaryLinks');
+Route::post('/getDownloadLink', 'GeneralController@getDownloadLink')->name('getDownloadLink');
 Route::post('/renameFile', 'GeneralController@renameFile')->name('renameFile');
+Route::get('/downloadZip', 'GeneralController@downloadZip')->name('downloadZip');

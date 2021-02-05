@@ -3808,45 +3808,39 @@ const download = async (url, name) => {
 	a.remove();
 };
 
-function downloadFile(filename){
+function downloadFile(){
     var selectedIds = $("#filetree").jstree("get_checked", null, true);
-    let filenames = [];
+    let files = [];
     for(let i = 0; i < selectedIds.length; i ++){
         var node = $('#filetree').jstree(true).get_node(selectedIds[i]);
-        console.log(node);
-        if(node.type == "infile" || node.type == "outfile"){
-            filenames.push(node.path);
+        if((node.type == "infile" || node.type == "outfile") && node.original && node.original.path){
+            files.push(node.original.path);
         }
     }
-    // if(filenames.length > 0){
-    //     $.ajax({
-    //         url:"getTemporaryLinks",
-    //         type:'post',
-    //         data:{filenames: filenames, projectId: $('#projectId').val()},
-    //         success:async function(res){
-    //             if(res.success){
-    //                 let i = 0;
-    //                 for(let filename in res.links){
-    //                     await delay(i * 1000);
-    //                     download(res.links[filename], filename);
-    //                     i ++;
-    //                 }
-    //             } else{
-    //                 swal.fire({ title: "Failed!", text: res.message, icon: "error", confirmButtonText: `OK` });
-    //             }
-    //         },
-    //         error: function(xhr, status, error) {
-    //             res = JSON.parse(xhr.responseText);
-    //             message = res.message;
-    //             swal.fire({ title: "Error",
-    //                 text: message == "" ? "Error happened while processing. Please try again later." : message,
-    //                 icon: "error",
-    //                 confirmButtonText: `OK` });
-    //         }
-    //     });
-    // } else {
-    //     swal.fire({ title: "Warning", text: 'Please select files', icon: "warning", confirmButtonText: `OK` });
-    // }
+    if(filenames.length > 0){
+        $.ajax({
+            url:"getDownloadLink",
+            type:'post',
+            data:{files: files, projectId: $('#projectId').val()},
+            success:function(res){
+                if(res.success){
+                    download(res.link, res.name);
+                } else{
+                    swal.fire({ title: "Failed!", text: res.message, icon: "error", confirmButtonText: `OK` });
+                }
+            },
+            error: function(xhr, status, error) {
+                res = JSON.parse(xhr.responseText);
+                message = res.message;
+                swal.fire({ title: "Error",
+                    text: message == "" ? "Error happened while processing. Please try again later." : message,
+                    icon: "error",
+                    confirmButtonText: `OK` });
+            }
+        });
+    } else {
+        swal.fire({ title: "Warning", text: 'Please select files', icon: "warning", confirmButtonText: `OK` });
+    }
 }
 
 var nodeNames = {};
