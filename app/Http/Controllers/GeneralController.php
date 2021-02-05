@@ -22,6 +22,7 @@ use Kunnu\Dropbox\Exceptions\DropboxClientException;
 
 use DateTime;
 use DateTimeZone;
+use ZipArchive;
 
 class GeneralController extends Controller
 {
