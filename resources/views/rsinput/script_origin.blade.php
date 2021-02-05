@@ -3818,18 +3818,24 @@ function downloadFile(){
         }
     }
     if(files.length > 0){
+        swal.fire({ title: "Please wait...", showConfirmButton: false });
+        swal.showLoading();
         $.ajax({
             url:"getDownloadLink",
             type:'post',
             data:{files: files, projectId: $('#projectId').val()},
             success:function(res){
-                if(res.success){
-                    download(res.link, res.name);
-                } else{
-                    swal.fire({ title: "Failed!", text: res.message, icon: "error", confirmButtonText: `OK` });
+                swal.close();
+                if(typeof res == "object"){
+                    if(res.success){
+                        download(res.link, res.name);
+                    } else{
+                        swal.fire({ title: "Failed!", text: res.message, icon: "error", confirmButtonText: `OK` });
+                    }
                 }
             },
             error: function(xhr, status, error) {
+                swal.close();
                 res = JSON.parse(xhr.responseText);
                 message = res.message;
                 swal.fire({ title: "Error",

@@ -1002,13 +1002,14 @@ class GeneralController extends Controller
                     foreach($request->input('files') as $filepath){
                         try {
                             $file = $dropbox->download($filepath);
-                            $path = str_contains($filepath, env('DROPBOX_PREFIX_IN')) ? substr($filepath, strpos($filepath, env('DROPBOX_PREFIX_IN'))) : substr($filepath, strpos($filepath, env('DROPBOX_PREFIX_OUT')));
+                            $path = str_contains($filepath, env('DROPBOX_PREFIX_IN')) ? substr($filepath, strpos($filepath, env('DROPBOX_PREFIX_IN')) + 1) : substr($filepath, strpos($filepath, env('DROPBOX_PREFIX_OUT')) + 1);
                             $zip->addFromString($path, $file->getContents());
                         }
                         catch (DropboxClientException $e){}
                     }
                     $zip->close();
-                    return response()->json(['success' => true, 'link' => env('APP_URL') . 'downloadZip?filename=' . $filename, 'name' => sprintf("%06d", $job['clientProjectNumber']) . '. ' . $job['clientProjectName'] . ' ' . $state . ".zip"]);
+                    return response()->download(storage_path('download') . '/' . $filename, null, ['Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0']);
+                    //return response()->json(['success' => true, 'link' => env('APP_URL') . 'downloadZip?filename=' . $filename, 'name' => sprintf("%06d", $job['clientProjectNumber']) . '. ' . $job['clientProjectName'] . ' ' . $state . ".zip"]);
                 }
             } else
                 return response()->json(['success' => false, 'message' => 'Cannot find the project.']);
