@@ -3817,7 +3817,7 @@ function downloadFile(){
             files.push(node.original.path);
         }
     }
-    if(filenames.length > 0){
+    if(files.length > 0){
         $.ajax({
             url:"getDownloadLink",
             type:'post',
