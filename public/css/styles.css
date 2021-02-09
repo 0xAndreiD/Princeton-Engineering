@@ -391,3 +391,20 @@ html, body {
     max-height:300px; 
     overflow-y:auto;
 }
+
+.backupInput{
+    border: 1px solid #d8dfed !important;
+    text-align: center;
+}
+
+#loadingAnim{
+    text-align: center;
+}
+
+#fileListBox{
+    height:180px;
+    width:100%;
+    resize: none;
+    overflow-x: auto;
+    font-size: 14px;
+}

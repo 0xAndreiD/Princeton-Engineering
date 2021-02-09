@@ -77,3 +77,9 @@ Route::post('/delDropboxFile', 'GeneralController@delDropboxFile')->name('delDro
 Route::post('/getDownloadLink', 'GeneralController@getDownloadLink')->name('getDownloadLink');
 Route::post('/renameFile', 'GeneralController@renameFile')->name('renameFile');
 Route::get('/downloadZip', 'GeneralController@downloadZip')->name('downloadZip');
+
+// Backup JSON Inputs on Admin
+Route::get('/backupInput', 'AdminController@backupInput')->name('backupInput');
+Route::post('/getProjectFiles', 'AdminController@getProjectFiles')->name('getProjectFiles');
+Route::post('/backupJSON', 'AdminController@backupJSON')->name('backupJSON');
+Route::post('/restoreJSON', 'AdminController@restoreJSON')->name('restoreJSON');

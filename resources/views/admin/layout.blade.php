@@ -44,6 +44,7 @@
 
         <link rel="stylesheet" href="{{ asset('js/plugins/flatpickr/flatpickr.min.css') }}">
         <link rel="stylesheet" href="{{ asset('js/plugins/jstree/themes/default/style.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('js/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css') }}">
         <!-- END Stylesheets -->
 
         <script src="{{ asset('js/jquery.min.js') }}"></script>
@@ -169,9 +170,9 @@
                             </a>
                         </li>
                         <li class="nav-main-item">
-                            <a class="nav-main-link" href="#">
+                            <a class="nav-main-link" href="{{ route('backupInput') }}">
                                 <i class="nav-main-link-icon fa fa-server"></i>
-                                <span class="nav-main-link-name">Database Backup / Restore</span>
+                                <span class="nav-main-link-name">Inputs Backup / Restore</span>
                             </a>
                         </li>
                     </ul>
@@ -324,12 +325,12 @@
 
         <!-- Date Time Picker Plugins -->
         <script src="{{ asset('js/plugins/flatpickr/flatpickr.min.js') }}"></script>
+
+        <!-- Bootstrap Date Range Plugins -->
+        <script src="{{ asset('js/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
         
         <!-- Page JS Helpers (jQuery Sparkline plugin) -->
-        <script>jQuery(function(){ Dashmix.helpers('sparkline'); });</script>
-
-        <script>jQuery(function(){ Dashmix.helpers('select2'); });</script>
-        <script>jQuery(function(){ Dashmix.helpers(['flatpickr']); });</script>
+        <script>jQuery(function(){ Dashmix.helpers(['flatpickr', 'datepicker', 'select2', 'sparkline']); });</script>
         <script src="{{ asset('/js/plugins/jquery-validation/jquery.validate.min.js') }}"></script>
         <script src="{{ asset('/js/plugins/jquery-validation/additional-methods.js') }}"></script>
 
