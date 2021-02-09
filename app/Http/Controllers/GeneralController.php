@@ -127,7 +127,7 @@ class GeneralController extends Controller
                     $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
                     $dropbox = new Dropbox($app);
                     $dropboxFile = new DropboxFile(storage_path('/input/') . sprintf("%06d", $companyNumber). '. ' . $project['companyName'] . '/' . $project['requestFile']);
-                    $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_JSON_INPUT') . sprintf("%06d", $companyNumber). '. ' . $project['companyName'] . '/' . $project['requestFile'], ['autorename' => TRUE]);
+                    $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_JSON_INPUT') . sprintf("%06d", $companyNumber). '. ' . $project['companyName'] . '/' . $project['requestFile'], ['mode' => 'overwrite']);
                     
                     $projectState = 0;
                     if($request['status'] == 'Saved')
