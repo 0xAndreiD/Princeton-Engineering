@@ -2828,11 +2828,14 @@ $(document).ready(function() {
         //for(let i = 0; i < parseInt(caseCount); i ++)
         //{
             // call ajax
+        swal.fire({ title: "Please wait...", showConfirmButton: false });
+        swal.showLoading();
         $.ajax({
             url:"submitInput",
             type:'post',
             data:{data: data, status: status, caseCount: caseCount},
             success:function(res){
+                swal.close();
                 if (res.status == true) {
                     $("#projectId").val(res.projectId);
                     $("#uploadJobId").val(res.projectId);
@@ -2864,6 +2867,7 @@ $(document).ready(function() {
                 }
             },
             error: function(xhr, status, error) {
+                swal.close();
                 res = JSON.parse(xhr.responseText);
                 message = res.message;
                 swal.fire({ title: "Error",
