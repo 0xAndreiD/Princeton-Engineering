@@ -59,7 +59,7 @@ function showProcess(isBackup){
 function doProcess(data){
     return new Promise((resolve, reject) => {
         if(window.backupOrRestore){
-            if(window.ignoreWarnings || !data.dropbox){
+            if(window.ignoreWarnings){
                 $.ajax({
                     url:"backupJSON",
                     type:'post',
