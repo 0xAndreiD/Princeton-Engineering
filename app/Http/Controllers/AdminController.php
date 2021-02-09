@@ -95,15 +95,15 @@ class AdminController extends Controller
                     $name = explode("-", $job['requestFile']);
                     $filepath = $name[0] . '. ' . $job['companyName'] . '/' . $job['requestFile'];
                     $file = array('file' => $filepath);
-                    // try{
-                    //     $metadata = $dropbox->getMetadata(env('DROPBOX_JSON_INPUT') . $filepath);
-                    //     if($metadata)
-                    //         $file['dropbox'] = true;
-                    //     else
-                    //         $file['dropbox'] = false;
-                    // } catch (DropboxClientException $e) { 
+                    try{
+                        $metadata = $dropbox->getMetadata(env('DROPBOX_JSON_INPUT') . $filepath);
+                        if($metadata)
+                            $file['dropbox'] = true;
+                        else
+                            $file['dropbox'] = false;
+                    } catch (DropboxClientException $e) { 
                         $file['dropbox'] = false;
-                    //}
+                    }
                     if(Storage::disk('input')->exists('/' . $filepath))
                         $file['local'] = true;
                     else
