@@ -52,14 +52,14 @@ class APIController extends Controller
                 if(isset($request['dateFrom'])){
                     $date = new DateTime($request['dateFrom'], new DateTimeZone('EST'));
                     $date->setTimezone(new DateTimeZone('UTC'));
-                    $query = $query->where('createdTime', '>=', $date->format("Y-m-d H:i:s"));
+                    $query = $query->where('submittedTime', '>=', $date->format("Y-m-d H:i:s"));
                 }
                 if(isset($request['dateTo']))
                 {
                     $dateTo = date('Y-m-d H:i:s',strtotime('+23 hour +59 minutes +59 seconds',strtotime($request['dateTo'])));
                     $date = new DateTime($dateTo, new DateTimeZone('EST'));
                     $date->setTimezone(new DateTimeZone('UTC'));
-                    $query = $query->where('createdTime', '<=', $date->format("Y-m-d H:i:s"));
+                    $query = $query->where('submittedTime', '<=', $date->format("Y-m-d H:i:s"));
                 }
                 if(isset($request['clientIdFrom']))
                     $query = $query->where('companyId', '>=', $request['clientIdFrom']);
