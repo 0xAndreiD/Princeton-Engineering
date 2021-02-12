@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Storage;
 use App\User;
 use App\Company;
 use App\JobRequest;
+use App\BackupSetting;
 use Kunnu\Dropbox\DropboxApp;
 use Kunnu\Dropbox\Dropbox;
 use Kunnu\Dropbox\DropboxFile;
@@ -160,5 +161,51 @@ class AdminController extends Controller
             }
         } else
             return response()->json(['success' => false, 'message' => 'Empty File Name']);
+    }
+
+    /**
+     * Show the backup /restore DB interface.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function backupDB()
+    {
+        if(Auth::user()->userrole == 2){
+            $settingData = BackupSetting::first();
+            if(!$settingData)
+                $setting = array("-1");
+            else
+                $setting = explode(",", $settingData['backup_days']);
+            return view('admin.backupdb.backup')->with('setting', $setting);
+        }
+        else
+            return redirect('home');
+    }
+
+    /**
+     * Update BackupSetting.
+     *
+     * @return JSON
+     */
+    public function updateDBSetting(Request $request){
+        if(Auth::user()->userrole == 2){
+            if(isset($request['setting'])){
+                $setting = BackupSetting::first();
+                if(!$setting){
+                    $setting = BackupSetting::create([
+                        'backup_days' => $request['setting']
+                    ]);
+                    return response()->json(['success' => true]);
+                } else {
+                    $setting['backup_days'] = $request['setting'];
+                    $setting->save();
+                    return response()->json(['success' => true]);
+                }
+            } else {
+                return response()->json(['success' => false, 'message' => 'Empty File Name']);
+            }
+        } else {
+            return response()->json(['success' => false, 'message' => 'You do not have any role to pass this API.']);
+        }
     }
 }
