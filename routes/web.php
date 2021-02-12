@@ -83,3 +83,5 @@ Route::get('/backupInput', 'AdminController@backupInput')->name('backupInput');
 Route::post('/getProjectFiles', 'AdminController@getProjectFiles')->name('getProjectFiles');
 Route::post('/backupJSON', 'AdminController@backupJSON')->name('backupJSON');
 Route::post('/restoreJSON', 'AdminController@restoreJSON')->name('restoreJSON');
+Route::get('/backupDB', 'AdminController@backupDB')->name('backupDB');
+Route::post('/updateDBSetting', 'AdminController@updateDBSetting')->name('updateDBSetting');

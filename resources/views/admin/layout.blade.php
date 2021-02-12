@@ -175,6 +175,12 @@
                                 <span class="nav-main-link-name">Inputs Backup / Restore</span>
                             </a>
                         </li>
+                        <li class="nav-main-item">
+                            <a class="nav-main-link" href="{{ route('backupDB') }}">
+                                <i class="nav-main-link-icon fa fa-database"></i>
+                                <span class="nav-main-link-name">DB Backup / Restore</span>
+                            </a>
+                        </li>
                     </ul>
                 </div>
                 <!-- END Side Navigation -->
