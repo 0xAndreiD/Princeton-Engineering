@@ -69,6 +69,11 @@ return [
             'root' => storage_path('input'),
         ],
 
+        'db' => [
+            'driver' => 'local',
+            'root' => storage_path('db'),
+        ],
+
     ],
 
 ];
