@@ -119,15 +119,60 @@ function delBackup(obj, filename){
         if (result.value) {
             $.post("delBackup", {filename: filename}, function(result){
                 if (result.success){
-                    $("#files").DataTable().row($(obj).parents("tr")).remove().draw(false);
+                    $(obj).parents("tr").remove().draw;
                     toast.fire('Deleted!', 'File has been deleted.', 'success');
                 } else {
                     toast.fire('Error', result.message, 'error');
                 }
             });
-
         } else if (result.dismiss === 'cancel') {
             toast.fire('Cancelled', 'File is safe :)', 'info');
+        }
+    });
+}
+
+function doRestore(obj, filename){
+    let toast = Swal.mixin({
+        buttonsStyling: false,
+        customClass: {
+            confirmButton: 'btn btn-success m-1',
+            cancelButton: 'btn btn-danger m-1',
+            input: 'form-control'
+        }
+    });
+    toast.fire({
+        title: 'Are you sure?',
+        text: 'You will not be able to recover old database!',
+        icon: 'warning',
+        showCancelButton: true,
+        customClass: {
+            confirmButton: 'btn btn-danger m-1',
+            cancelButton: 'btn btn-secondary m-1'
+        },
+        confirmButtonText: 'Yes, do it!',
+        html: false,
+        preConfirm: e => {
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    resolve();
+                }, 50);
+            });
+        }
+    }).then(result => {
+        if (result.value) {
+            swal.fire({ title: "Please wait...", showConfirmButton: false });
+            swal.showLoading();
+            $.post("restoreBackup", {filename: filename}, function(result){
+                swal.close();
+                if (result.success){
+                    $(obj).parents("tr").remove().draw;
+                    toast.fire('Restored!', 'Database has been updated.', 'success');
+                } else {
+                    toast.fire('Error', result.message, 'error');
+                }
+            });
+        } else if (result.dismiss === 'cancel') {
+            toast.fire('Cancelled', 'Database is safe :)', 'info');
         }
     });
 }

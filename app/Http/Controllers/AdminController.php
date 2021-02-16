@@ -20,6 +20,7 @@ use Ifsnop\Mysqldump as IMysqldump;
 
 use DateTime;
 use DateTimeZone;
+use DB;
 
 class AdminController extends Controller
 {
@@ -268,6 +269,50 @@ class AdminController extends Controller
                 catch (DropboxClientException $e) {
                     return response()->json(['success' => false, 'message' => 'Cannot find specified file.']);
                 }
+            } else 
+                return response()->json(['success' => false, 'message' => 'Missing filename parameter.']);
+        } else {
+            return response()->json(['success' => false, 'message' => 'You do not have any role to pass this API.']);
+        }
+    }
+
+    /**
+     * Restore Backup file to database from dropbox
+     *
+     * @return JSON
+     */
+    public function restoreBackup(Request $request){
+        if(Auth::user()->userrole == 2){
+            if(!empty($request['filename'])){
+                $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
+                $dropbox = new Dropbox($app);
+                try {
+                    $file = $dropbox->download(env('DROPBOX_DB_BACKUP') . $request['filename']);
+                    $content = $file->getContents();
+                }
+                catch (DropboxClientException $e) {
+                    return response()->json(['success' => false, 'message' => 'Cannot find specified file.']);
+                }
+                //$content = file_get_contents(storage_path('/db/') . $request['filename']);
+
+                $lines = explode("\n", $content);
+                $templine = '';
+
+                foreach($lines as $line){
+                    // Skip it if it's a comment
+                    if (substr($line, 0, 2) == '--' || $line == '')
+                        continue;
+
+                    $templine .= $line;
+                    if (substr(trim($line), -1, 1) == ';')
+                    {
+                        // Perform the query
+                        DB::connection()->getpdo()->exec($templine);
+                        // Reset temp variable to empty
+                        $templine = '';
+                    }
+                }
+                return response()->json(['success' => true]);
             } else 
                 return response()->json(['success' => false, 'message' => 'Missing filename parameter.']);
         } else {
