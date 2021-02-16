@@ -119,7 +119,7 @@ function delBackup(obj, filename){
         if (result.value) {
             $.post("delBackup", {filename: filename}, function(result){
                 if (result.success){
-                    $(obj).parents("tr").remove().draw;
+                    $("#filelist").DataTable().row($(obj).parents("tr")).remove().draw(false);
                     toast.fire('Deleted!', 'File has been deleted.', 'success');
                 } else {
                     toast.fire('Error', result.message, 'error');
