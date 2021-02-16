@@ -10,6 +10,7 @@
     "require": {
         "php": "^7.1.3",
         "fideloper/proxy": "^4.0",
+        "ifsnop/mysqldump-php": "^2.9",
         "kunalvarma05/dropbox-php-sdk": "^0.2.1",
         "laravel/framework": "5.8.*",
         "laravel/tinker": "^1.0"

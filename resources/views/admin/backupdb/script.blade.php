@@ -33,4 +33,30 @@ function updateSetting(){
         }
     });
 }
+
+function backupNow(){
+    swal.fire({ title: "Please wait...", showConfirmButton: false });
+    swal.showLoading();
+    $.ajax({
+        url:"manualDBBackup",
+        type:'post',
+        success: function(res){
+            swal.close();
+            if(res.success){
+                swal.fire({ title: "Done", text: "DB Backup Finished.", icon: "success", confirmButtonText: `OK` });
+            }
+            else 
+                swal.fire({ title: "Error", text: res.message, icon: "error", confirmButtonText: `OK` });
+        },
+        error: function(xhr, status, error) {
+            swal.close();
+            res = JSON.parse(xhr.responseText);
+            message = res.message;
+            swal.fire({ title: "Error",
+                text: message == "" ? "Error happened while processing. Please try again later." : message,
+                icon: "error",
+                confirmButtonText: `OK` });
+        }
+    });
+}
 </script>
