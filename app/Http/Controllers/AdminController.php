@@ -239,7 +239,7 @@ class AdminController extends Controller
                 $dropbox = new Dropbox($app);
                 $dropboxFile = new DropboxFile(storage_path('/db/') . $filename);
                 $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_DB_BACKUP') . $filename, ['mode' => 'overwrite']);
-                return response()->json(['success' => true, 'filename'=> $filename, date('Y-m-d H:i:s', strtotime('-5 hour',strtotime($dropfile->getClientModified())))]);
+                return response()->json(['success' => true, 'filename'=> $filename, 'modified' => date('Y-m-d H:i:s', strtotime('-5 hour',strtotime($dropfile->getClientModified())))]);
     
             } catch (\Exception $e) {
                 return response()->json(['success' => false, 'message' => $e->getMessage()]);
