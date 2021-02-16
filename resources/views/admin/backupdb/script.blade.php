@@ -11,6 +11,25 @@ $(document).ready(function(){
         "pageLength" : 50,
         "order": [[ 1, "desc" ]]
     });
+
+    $.fn.dataTable.ext.search.push(
+        function (settings, data, dataIndex) {
+            var min = new Date($('#date-from').val());
+            var max = new Date($('#date-to').val());
+            max.setDate(max.getDate() + 1);
+            var createdDate = new Date(data[1]);
+            if (min == null && max == null) return true;
+            if (min == null && createdDate <= max) return true;
+            if (max == null && createdDate >= min) return true;
+            if (createdDate <= max && createdDate >= min) return true;
+            return false;
+        }
+    );
+
+    $('#date-from, #date-to').change(function () {
+        var t = $('#files').DataTable();
+        t.draw();
+    });
 });
 
 function updateSetting(){
@@ -65,6 +84,50 @@ function backupNow(){
                 text: message == "" ? "Error happened while processing. Please try again later." : message,
                 icon: "error",
                 confirmButtonText: `OK` });
+        }
+    });
+}
+
+function delBackup(obj, filename){
+    let toast = Swal.mixin({
+        buttonsStyling: false,
+        customClass: {
+            confirmButton: 'btn btn-success m-1',
+            cancelButton: 'btn btn-danger m-1',
+            input: 'form-control'
+        }
+    });
+    toast.fire({
+        title: 'Are you sure?',
+        text: 'You will not be able to recover this file!',
+        icon: 'warning',
+        showCancelButton: true,
+        customClass: {
+            confirmButton: 'btn btn-danger m-1',
+            cancelButton: 'btn btn-secondary m-1'
+        },
+        confirmButtonText: 'Yes, delete it!',
+        html: false,
+        preConfirm: e => {
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    resolve();
+                }, 50);
+            });
+        }
+    }).then(result => {
+        if (result.value) {
+            $.post("delBackup", {filename: filename}, function(result){
+                if (result.success){
+                    $(obj).parents("tr").remove().draw;
+                    toast.fire('Deleted!', 'File has been deleted.', 'success');
+                } else {
+                    toast.fire('Error', result.message, 'error');
+                }
+            });
+
+        } else if (result.dismiss === 'cancel') {
+            toast.fire('Cancelled', 'File is safe :)', 'error');
         }
     });
 }

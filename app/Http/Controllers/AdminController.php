@@ -248,4 +248,30 @@ class AdminController extends Controller
             return response()->json(['success' => false, 'message' => 'You do not have any role to pass this API.']);
         }
     }
+
+    /**
+     * Delete Backup file on both server and dropbox
+     *
+     * @return JSON
+     */
+    public function delBackup(Request $request){
+        if(Auth::user()->userrole == 2){
+            if(!empty($request['filename'])){
+                $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
+                $dropbox = new Dropbox($app);
+                try {
+                    $dropbox->delete(env('DROPBOX_DB_BACKUP') . $request['filename']);
+                    if(Storage::disk('db')->exists('/' . $request['filename']))
+                        Storage::disk('db')->delete('/' . $request['filename']);
+                    return response()->json(['success' => true]);
+                }
+                catch (DropboxClientException $e) {
+                    return response()->json(['success' => false, 'message' => 'Cannot find specified file.']);
+                }
+            } else 
+                return response()->json(['success' => false, 'message' => 'Missing filename parameter.']);
+        } else {
+            return response()->json(['success' => false, 'message' => 'You do not have any role to pass this API.']);
+        }
+    }
 }
