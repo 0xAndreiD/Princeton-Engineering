@@ -14,14 +14,16 @@ $(document).ready(function(){
 
     $.fn.dataTable.ext.search.push(
         function (settings, data, dataIndex) {
-            var min = new Date($('#date-from').val());
-            var max = new Date($('#date-to').val());
-            max.setDate(max.getDate() + 1);
+            var min = $('#date-from').val();
+            var max = $('#date-to').val();
+            var minDate = new Date($('#date-from').val());
+            var maxDate = new Date($('#date-to').val());
+            maxDate.setDate(maxDate.getDate() + 1);
             var createdDate = new Date(data[1]);
             if (min == null && max == null) return true;
-            if (min == null && createdDate <= max) return true;
-            if (max == null && createdDate >= min) return true;
-            if (createdDate <= max && createdDate >= min) return true;
+            if (min == null && createdDate <= maxDate) return true;
+            if (max == null && createdDate >= minDate) return true;
+            if (createdDate <= maxDate && createdDate >= minDate) return true;
             return false;
         }
     );
