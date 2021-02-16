@@ -69,6 +69,50 @@
                 <button type="button" class="btn btn-hero-primary" onclick="backupNow()">Backup Now</button>
             </div>
         </div>
+        <div class="col-md-9">
+            <h2 class="content-heading pt-0">DB Backup Files</h2>
+
+            <table id="files" class="table table-bordered table-striped table-vcenter text-center" style="width:100%; min-height: 350px;">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>
+                        <div class="input-daterange input-group" data-date-format="mm/dd/yyyy" data-week-start="1" data-autoclose="true" data-today-highlight="true">
+                            <input type="text" class="form-control backupInput" id="date-from" name="date-from" placeholder="From" data-week-start="1" data-autoclose="true" data-today-highlight="true">
+                            <div class="input-group-prepend input-group-append">
+                                <span class="input-group-text font-w600">
+                                    <i class="fa fa-fw fa-arrow-right"></i>
+                                </span>
+                            </div>
+                            <input type="text" class="form-control backupInput" id="date-to" name="date-to" placeholder="To" data-week-start="1" data-autoclose="true" data-today-highlight="true">
+                        </div>
+                        </th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <th style="width:30%">Backup Filename</th>
+                        <th style="width:50%">Created Date</th>
+                        <th style="width:20%">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach($list as $file)
+                    <tr>
+                        <td>{{ $file['filename'] }}</td>
+                        <td>{{ $file['modified'] }}</td>
+                        <td>
+                            <button type='button' class='btn btn-warning' onclick="doRestore(this, '{{ $file['filename'] }}' )">
+                                <i class='fa fa-database'></i>
+                            </button>
+                            <button type='button' class='btn btn-danger' onclick="delBackup(this, '{{ $file['filename'] }}' )">
+                                <i class='fa fa-trash'></i>
+                            </button>
+                        </td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 

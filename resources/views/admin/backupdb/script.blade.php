@@ -6,6 +6,13 @@ $(document).ready(function(){
     });
 });
 
+var table = $('#files').DataTable({
+    "responsive": true,
+    "orderCellsTop": true,
+    "pageLength" : 50,
+    "order": [[ 1, "desc" ]]
+});
+
 function updateSetting(){
     var days = [];
     var weekdays = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
