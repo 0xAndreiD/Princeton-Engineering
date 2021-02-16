@@ -54,12 +54,13 @@ Route::post('/delProject', 'GeneralController@delProject')->name('delProject');
 Route::post('/setProjectState', 'GeneralController@setProjectState')->name('setProjectState');
 Route::post('/setPlanStatus', 'GeneralController@setPlanStatus')->name('setPlanStatus');
 
-// APIs for list, update, download
+// APIs for list, update, download, db backup
 Route::get('/getJobList', 'APIController@getJobList')->name('getJobList');
 Route::get('/updateJobData', 'APIController@updateJobData')->name('updateJobData');
 Route::get('/downloadFile', 'APIController@downloadFile')->name('downloadFile');
 Route::get('/getUserInfo', 'APIController@getUserInfo')->name('getUserInfo');
 Route::get('/getCompanyList', 'APIController@getCompanyList')->name('getCompanyList');
+Route::get('/cronDBBackup', 'APIController@cronDBBackup')->name('cronDBBackup');
 
 // PV Modules
 Route::post('/getPVModules', 'GeneralController@getPVModules')->name('getPVModules');
@@ -85,3 +86,4 @@ Route::post('/backupJSON', 'AdminController@backupJSON')->name('backupJSON');
 Route::post('/restoreJSON', 'AdminController@restoreJSON')->name('restoreJSON');
 Route::get('/backupDB', 'AdminController@backupDB')->name('backupDB');
 Route::post('/updateDBSetting', 'AdminController@updateDBSetting')->name('updateDBSetting');
+Route::post('/manualDBBackup', 'AdminController@manualDBBackup')->name('manualDBBackup');

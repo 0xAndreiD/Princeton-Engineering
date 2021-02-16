@@ -16,6 +16,7 @@ use Kunnu\Dropbox\DropboxApp;
 use Kunnu\Dropbox\Dropbox;
 use Kunnu\Dropbox\DropboxFile;
 use Kunnu\Dropbox\Exceptions\DropboxClientException;
+use Ifsnop\Mysqldump as IMysqldump;
 
 use DateTime;
 use DateTimeZone;
@@ -203,6 +204,32 @@ class AdminController extends Controller
                 }
             } else {
                 return response()->json(['success' => false, 'message' => 'Empty File Name']);
+            }
+        } else {
+            return response()->json(['success' => false, 'message' => 'You do not have any role to pass this API.']);
+        }
+    }
+
+    /**
+     * Backup DB and upload to dropbox manually from admin panel
+     *
+     * @return JSON
+     */
+    public function manualDBBackup(Request $request){
+        if(Auth::user()->userrole == 2){
+            try {
+                $dump = new IMysqldump\Mysqldump('mysql:host=' . env('DB_HOST') . ';dbname=' . env('DB_DATABASE'), env('DB_USERNAME'), env('DB_PASSWORD'), ['add-drop-table' => true]);
+                
+                $dump->start(storage_path('/db/') . env('DB_DATABASE') . '_' . time() . '.sql');
+    
+                $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
+                $dropbox = new Dropbox($app);
+                $dropboxFile = new DropboxFile(storage_path('/db/') . env('DB_DATABASE') . '_' . time() . '.sql');
+                $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_DB_BACKUP') . env('DB_DATABASE') . '_' . time() . '.sql', ['mode' => 'overwrite']);
+                return response()->json(['success' => true]);
+    
+            } catch (\Exception $e) {
+                return response()->json(['success' => false, 'message' => $e->getMessage()]);
             }
         } else {
             return response()->json(['success' => false, 'message' => 'You do not have any role to pass this API.']);

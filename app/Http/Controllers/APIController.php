@@ -11,6 +11,12 @@ use App\User;
 use App\JobRequest;
 use App\Company;
 use App\DataCheck;
+use App\BackupSetting;
+use Kunnu\Dropbox\DropboxApp;
+use Kunnu\Dropbox\Dropbox;
+use Kunnu\Dropbox\DropboxFile;
+use Kunnu\Dropbox\Exceptions\DropboxClientException;
+use Ifsnop\Mysqldump as IMysqldump;
 
 use DateTime;
 use DateTimeZone;
@@ -224,5 +230,30 @@ class APIController extends Controller
         }
         else
             return response()->json(['success' => false, 'message' => 'Auth required.']);
+    }
+
+    /**
+     * Backup DB and upload to dropbox by daily cron job.
+     *
+     * @return JSON
+     */
+    public function cronDBBackup(Request $request){
+        $settingData = BackupSetting::first();
+        $day_of_week = date('N', time());
+        if(!settingData || $settingData->backup_days == '-1' || in_array($day_of_week - 1, explode(",", $settingData->backup_days))){
+            try {
+                $dump = new IMysqldump\Mysqldump('mysql:host=' . env('DB_HOST') . ';dbname=' . env('DB_DATABASE'), env('DB_USERNAME'), env('DB_PASSWORD'), ['add-drop-table' => true]);
+                $dump->start(storage_path('/db/') . env('DB_DATABASE') . '_' . time() . '.sql');
+
+                $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
+                $dropbox = new Dropbox($app);
+                $dropboxFile = new DropboxFile(storage_path('/db/') . env('DB_DATABASE') . '_' . time() . '.sql');
+                $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_DB_BACKUP') . env('DB_DATABASE') . '_' . time() . '.sql', ['mode' => 'overwrite']);
+                return response()->json(['success' => true]);
+            } catch (\Exception $e) {
+                return response()->json(['success' => false, 'message' => $e->getMessage()]);
+            }
+        } else 
+            return response()->json(['success' => false, 'message' => 'Today is not a cron setted day.']);
     }
 }
