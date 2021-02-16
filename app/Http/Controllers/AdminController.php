@@ -219,13 +219,13 @@ class AdminController extends Controller
         if(Auth::user()->userrole == 2){
             try {
                 $dump = new IMysqldump\Mysqldump('mysql:host=' . env('DB_HOST') . ';dbname=' . env('DB_DATABASE'), env('DB_USERNAME'), env('DB_PASSWORD'), ['add-drop-table' => true]);
-                
-                $dump->start(storage_path('/db/') . env('DB_DATABASE') . '_' . time() . '.sql');
+                $filename = env('DB_DATABASE') . '_' . time() . '.sql';
+                $dump->start(storage_path('/db/') . $filename);
     
                 $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
                 $dropbox = new Dropbox($app);
-                $dropboxFile = new DropboxFile(storage_path('/db/') . env('DB_DATABASE') . '_' . time() . '.sql');
-                $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_DB_BACKUP') . env('DB_DATABASE') . '_' . time() . '.sql', ['mode' => 'overwrite']);
+                $dropboxFile = new DropboxFile(storage_path('/db/') . $filename);
+                $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_DB_BACKUP') . $filename, ['mode' => 'overwrite']);
                 return response()->json(['success' => true]);
     
             } catch (\Exception $e) {
