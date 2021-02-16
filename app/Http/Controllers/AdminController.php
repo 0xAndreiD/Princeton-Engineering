@@ -177,7 +177,20 @@ class AdminController extends Controller
                 $setting = array("-1");
             else
                 $setting = explode(",", $settingData['backup_days']);
-            return view('admin.backupdb.backup')->with('setting', $setting);
+            
+            try{
+                $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
+                $dropbox = new Dropbox($app);
+                $listFolderContents = $dropbox->listFolder(env('DROPBOX_DB_BACKUP'));
+                $files = $listFolderContents->getItems()->all();
+                $list = array();
+                foreach($files as $file)
+                    $list[] = array('filename' => $file->getName(), 'modified' => $file->getClientModified());
+            }catch(DropboxClientException $e){
+                $list = array();
+            }
+            
+            return view('admin.backupdb.backup')->with('setting', $setting)->with('list', $list);
         }
         else
             return redirect('home');

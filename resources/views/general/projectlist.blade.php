@@ -32,7 +32,7 @@
         </div>
         <div class="block-content block-content-full">
             <div class="table-responsive">
-                <table id="users" class="table table-bordered table-striped table-vcenter text-center" style="width:100%; min-height: 350px;">
+                <table id="projects" class="table table-bordered table-striped table-vcenter text-center" style="width:100%; min-height: 350px;">
                     <thead>
                         <tr>
                             @if(Auth::user()->userrole == 2)
@@ -148,7 +148,7 @@
             { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
         });
 
-        var table = $('#users').DataTable({
+        var table = $('#projects').DataTable({
             "processing": true,
             "serverSide": true,
             "responsive": true,
