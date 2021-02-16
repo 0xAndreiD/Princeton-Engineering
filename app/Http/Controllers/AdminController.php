@@ -185,7 +185,7 @@ class AdminController extends Controller
                 $files = $listFolderContents->getItems()->all();
                 $list = array();
                 foreach($files as $file)
-                    $list[] = array('filename' => $file->getName(), 'modified' => $file->getClientModified());
+                    $list[] = array('filename' => $file->getName(), 'modified' => date('Y-m-d H:i:s', strtotime('-5 hour',strtotime($file->getClientModified()))));
             }catch(DropboxClientException $e){
                 $list = array();
             }
@@ -239,7 +239,7 @@ class AdminController extends Controller
                 $dropbox = new Dropbox($app);
                 $dropboxFile = new DropboxFile(storage_path('/db/') . $filename);
                 $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_DB_BACKUP') . $filename, ['mode' => 'overwrite']);
-                return response()->json(['success' => true]);
+                return response()->json(['success' => true, 'filename'=> $filename, date('Y-m-d H:i:s', strtotime('-5 hour',strtotime($dropfile->getClientModified())))]);
     
             } catch (\Exception $e) {
                 return response()->json(['success' => false, 'message' => $e->getMessage()]);
