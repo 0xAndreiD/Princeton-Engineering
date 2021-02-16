@@ -119,7 +119,7 @@ function delBackup(obj, filename){
         if (result.value) {
             $.post("delBackup", {filename: filename}, function(result){
                 if (result.success){
-                    $("#filelist").DataTable().row($(obj).parents("tr")).remove().draw(false);
+                    $("#files").DataTable().row($(obj).parents("tr")).remove().draw(false);
                     toast.fire('Deleted!', 'File has been deleted.', 'success');
                 } else {
                     toast.fire('Error', result.message, 'error');
@@ -127,7 +127,7 @@ function delBackup(obj, filename){
             });
 
         } else if (result.dismiss === 'cancel') {
-            toast.fire('Cancelled', 'File is safe :)', 'error');
+            toast.fire('Cancelled', 'File is safe :)', 'info');
         }
     });
 }
