@@ -240,7 +240,7 @@ class APIController extends Controller
     public function cronDBBackup(Request $request){
         $settingData = BackupSetting::first();
         $day_of_week = date('N', time());
-        if(!settingData || $settingData->backup_days == '-1' || in_array($day_of_week - 1, explode(",", $settingData->backup_days))){
+        if(!$settingData || $settingData->backup_days == '-1' || in_array($day_of_week - 1, explode(",", $settingData->backup_days))){
             try {
                 $dump = new IMysqldump\Mysqldump('mysql:host=' . env('DB_HOST') . ';dbname=' . env('DB_DATABASE'), env('DB_USERNAME'), env('DB_PASSWORD'), ['add-drop-table' => true]);
                 $dump->start(storage_path('/db/') . env('DB_DATABASE') . '_' . time() . '.sql');
