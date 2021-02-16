@@ -18,7 +18,7 @@ $(document).ready(function(){
             var max = $('#date-to').val();
             var minDate = new Date($('#date-from').val());
             var maxDate = new Date($('#date-to').val());
-
+            
             maxDate.setDate(maxDate.getDate() + 1);
             var createdDate = new Date(data[1]);
             if (!min && !max) return true;
@@ -122,7 +122,7 @@ function delBackup(obj, filename){
         if (result.value) {
             $.post("delBackup", {filename: filename}, function(result){
                 if (result.success){
-                    $(obj).parents("tr").remove().draw;
+                    $("#files").DataTable().row($(obj).parents("tr")).remove().draw(false);
                     toast.fire('Deleted!', 'File has been deleted.', 'success');
                 } else {
                     toast.fire('Error', result.message, 'error');
@@ -168,7 +168,6 @@ function doRestore(obj, filename){
             $.post("restoreBackup", {filename: filename}, function(result){
                 swal.close();
                 if (result.success){
-                    $("#files").DataTable().row($(obj).parents("tr")).remove().draw(false);
                     toast.fire('Restored!', 'Database has been updated.', 'success');
                 } else {
                     toast.fire('Error', result.message, 'error');
