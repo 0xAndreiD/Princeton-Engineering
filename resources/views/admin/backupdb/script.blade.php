@@ -4,13 +4,13 @@ $(document).ready(function(){
         headers:
         { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
     });
-});
-
-var table = $('#files').DataTable({
-    "responsive": true,
-    "orderCellsTop": true,
-    "pageLength" : 50,
-    "order": [[ 1, "desc" ]]
+    
+    var table = $('#files').DataTable({
+        "responsive": true,
+        "orderCellsTop": true,
+        "pageLength" : 50,
+        "order": [[ 1, "desc" ]]
+    });
 });
 
 function updateSetting(){
@@ -51,6 +51,8 @@ function backupNow(){
             swal.close();
             if(res.success){
                 swal.fire({ title: "Done", text: "DB Backup Finished.", icon: "success", confirmButtonText: `OK` });
+                var t = $('#files').DataTable();
+                t.row.add([res.filename, res.modified, "<button type='button' class='btn btn-warning' style='margin-right: 5px;' onclick='doRestore(this, '" + res.filename + "')'><i class='fa fa-database'></i></button><button type='button' class='btn btn-danger' onclick='delBackup(this, '" + res.filename + ")'><i class='fa fa-trash'></i></button>"]).draw();
             }
             else 
                 swal.fire({ title: "Error", text: res.message, icon: "error", confirmButtonText: `OK` });

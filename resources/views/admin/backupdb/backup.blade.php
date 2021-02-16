@@ -64,7 +64,7 @@
                 </div>
             </div>
 
-            <h2 class="content-heading pt-0">Backup Manually</h2>
+            <h2 class="content-heading mt-3">Backup Manually</h2>
             <div class="form-group">
                 <button type="button" class="btn btn-hero-primary" onclick="backupNow()">Backup Now</button>
             </div>
