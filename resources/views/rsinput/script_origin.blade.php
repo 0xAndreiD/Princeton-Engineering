@@ -296,9 +296,9 @@ var adjustDrawingPanel = function( condId ) {
         if($(`#h-${i}-${condId}`)[0].checked)
             orientation = !orientation;
 
-        moduleLengthSum += (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight));
+        moduleLengthSum += (moduleGap + (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)));
     }
-    moduleLengthSum += moduleGap * (moduleCount - 1);
+    moduleLengthSum -= moduleGap;
 
     // Show alert when module length is longer
     if(topXPoint < moduleLengthSum * Math.cos(angleRadian) || topYPoint < moduleLengthSum * Math.sin(angleRadian))
@@ -558,9 +558,8 @@ var drawTrussGraph = function( condId ) {
             ctx[condId].translate(- moduleStartX * grid_size[condId] - curModuleWidth * grid_size[condId], 0);
         }
 
-        moduleStartX += curModuleWidth;
+        moduleStartX += (moduleGap + curModuleWidth);
     }
-    moduleStartX += moduleGap * (moduleCount - 1);
     
     ctx[condId].rotate(angleRadian);
     ctx[condId].translate(- startPoint[0], - startPoint[1]);
@@ -1855,9 +1854,9 @@ var adjustStickDrawingPanel = function( condId ) {
         if($(`#h-${i}-${condId}`)[0].checked)
             orientation = !orientation;
         
-        moduleLengthSum += (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight));
+        moduleLengthSum += (moduleGap + (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)));
     }
-    moduleLengthSum += moduleGap * (moduleCount - 1);
+    moduleLengthSum -= moduleGap;
 
     // Show alert when module length is longer
     if( roofHeight + overhangY < Math.sin(angleRadian) * moduleLengthSum || (angleRadian != 0 && (1.0 / Math.tan(angleRadian)) * (roofHeight + overhangY) + overhangX < Math.cos(angleRadian) * moduleLengthSum))
@@ -2083,9 +2082,8 @@ var drawStickGraph = function( condId ) {
             stick_ctx[condId].translate(- moduleStartX * stick_grid_size[condId] - curModuleWidth * stick_grid_size[condId], 0);
         }
 
-        moduleStartX += curModuleWidth;
+        moduleStartX += (moduleGap + curModuleWidth);
     }
-    moduleStartX += moduleGap * (moduleCount - 1);
     
     stick_ctx[condId].rotate(angleRadian);
     stick_ctx[condId].translate(- startPoint[0], - startPoint[1]);
