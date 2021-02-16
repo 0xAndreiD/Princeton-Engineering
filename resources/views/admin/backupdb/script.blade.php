@@ -18,11 +18,12 @@ $(document).ready(function(){
             var max = $('#date-to').val();
             var minDate = new Date($('#date-from').val());
             var maxDate = new Date($('#date-to').val());
+
             maxDate.setDate(maxDate.getDate() + 1);
             var createdDate = new Date(data[1]);
-            if (min == null && max == null) return true;
-            if (min == null && createdDate <= maxDate) return true;
-            if (max == null && createdDate >= minDate) return true;
+            if (!min && !max) return true;
+            if (!min && createdDate <= maxDate) return true;
+            if (!max && createdDate >= minDate) return true;
             if (createdDate <= maxDate && createdDate >= minDate) return true;
             return false;
         }
@@ -167,7 +168,7 @@ function doRestore(obj, filename){
             $.post("restoreBackup", {filename: filename}, function(result){
                 swal.close();
                 if (result.success){
-                    $(obj).parents("tr").remove().draw;
+                    $("#files").DataTable().row($(obj).parents("tr")).remove().draw(false);
                     toast.fire('Restored!', 'Database has been updated.', 'success');
                 } else {
                     toast.fire('Error', result.message, 'error');
