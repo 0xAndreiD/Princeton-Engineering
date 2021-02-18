@@ -1034,8 +1034,13 @@ class GeneralController extends Controller
 
                     $setting = UserSetting::where('userId', Auth::user()->id)->first();
                     
+                    
                     $zip = new ZipArchive();
                     $filename = sprintf("%06d", $job['clientProjectNumber']) . '. ' . $job['clientProjectName'] . ' ' . $state . ".zip";
+
+                    if(file_exists(storage_path('download') . '/' . $filename))
+                        unlink(storage_path('download') . '/' . $filename);
+
                     $zip->open(storage_path('download') . '/' . $filename, ZipArchive::CREATE);
                     foreach($request->input('files') as $filepath){
                         try {
