@@ -15,6 +15,7 @@ use App\Stanchion;
 use App\RailSupport;
 use App\JobRequest;
 use App\DataCheck;
+use App\UserSetting;
 use Kunnu\Dropbox\DropboxApp;
 use Kunnu\Dropbox\Dropbox;
 use Kunnu\Dropbox\DropboxFile;
@@ -23,7 +24,6 @@ use Kunnu\Dropbox\Exceptions\DropboxClientException;
 use DateTime;
 use DateTimeZone;
 use ZipArchive;
-use UserSetting;
 
 class GeneralController extends Controller
 {
