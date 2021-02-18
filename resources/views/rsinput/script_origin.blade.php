@@ -3703,8 +3703,26 @@ var loadPreloadedData = function() {
     });
 }
 
+    var applyUserSetting = function(){
+        $.ajax({
+            url:"getUserSetting",
+            type:'post',
+            success: function(res){
+                if(res.success){
+                    $(".h13 input").css('font-size', res.inputFontSize + 'pt');
+                    $(".h13 td").css('font-size', res.inputFontSize + 'pt');
+                    $(".h13").css('height', res.inputCellHeight + 'pt');
+                    $(".h13 input").css('font-family', res.inputFontFamily);
+                    $(".h13 td").css('font-family', res.inputFontFamily);
+                }
+            }
+        });
+    }
+
     // initialize function
     var initializeSpreadSheet = async function() {
+        applyUserSetting();
+
         await loadPreloadedData();
         loadStateOptions();
         loadEquipmentSection();

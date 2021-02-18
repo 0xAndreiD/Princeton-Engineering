@@ -23,6 +23,7 @@ use Kunnu\Dropbox\Exceptions\DropboxClientException;
 use DateTime;
 use DateTimeZone;
 use ZipArchive;
+use UserSetting;
 
 class GeneralController extends Controller
 {
@@ -1031,6 +1032,8 @@ class GeneralController extends Controller
                         $state = $jobData['ProjectInfo']['State'];
                     }
 
+                    $setting = UserSetting::where('userId', Auth::user()->id)->first();
+                    
                     $zip = new ZipArchive();
                     $filename = sprintf("%06d", $job['clientProjectNumber']) . '. ' . $job['clientProjectName'] . ' ' . $state . ".zip";
                     $zip->open(storage_path('download') . '/' . $filename, ZipArchive::CREATE);
@@ -1038,6 +1041,8 @@ class GeneralController extends Controller
                         try {
                             $file = $dropbox->download($filepath);
                             $path = str_contains($filepath, env('DROPBOX_PREFIX_IN')) ? substr($filepath, strpos($filepath, env('DROPBOX_PREFIX_IN')) + 1) : substr($filepath, strpos($filepath, env('DROPBOX_PREFIX_OUT')) + 1);
+                            if($setting)
+                                $path = sprintf("%06d", $job['clientProjectNumber']) . '. ' . $job['clientProjectName'] . ' ' . $state . '/' . $path;
                             $zip->addFromString($path, $file->getContents());
                         }
                         catch (DropboxClientException $e){}
