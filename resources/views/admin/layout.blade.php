@@ -146,24 +146,6 @@
                         </li>
                         <li class="nav-main-heading">Administrator Tools</li>
                         <li class="nav-main-item">
-                            <a class="nav-main-link" href="{{ route('companyProfile') }}">
-                                <i class="nav-main-link-icon fa fa-users"></i>
-                                <span class="nav-main-link-name">Company Profile</span>
-                            </a>
-                        </li>
-                        <li class="nav-main-item">
-                            <a class="nav-main-link" href="#">
-                                <i class="nav-main-link-icon fa fa-users"></i>
-                                <span class="nav-main-link-name">Company Info</span>
-                            </a>
-                        </li>
-                        <li class="nav-main-item">
-                            <a class="nav-main-link" href="#">
-                                <i class="nav-main-link-icon fa fa-users"></i>
-                                <span class="nav-main-link-name">Users Info</span>
-                            </a>
-                        </li>
-                        <li class="nav-main-item">
                             <a class="nav-main-link" href="#">
                                 <i class="nav-main-link-icon fa fa-cog"></i>
                                 <span class="nav-main-link-name">Equipment Section</span>
@@ -179,6 +161,13 @@
                             <a class="nav-main-link" href="{{ route('backupDB') }}">
                                 <i class="nav-main-link-icon fa fa-database"></i>
                                 <span class="nav-main-link-name">DB Backup / Restore</span>
+                            </a>
+                        </li>
+                        <li class="nav-main-heading">Configuration</li>
+                        <li class="nav-main-item">
+                            <a class="nav-main-link" href="{{ route('settings') }}">
+                                <i class="nav-main-link-icon fa fa-cogs"></i>
+                                <span class="nav-main-link-name">Settings</span>
                             </a>
                         </li>
                     </ul>

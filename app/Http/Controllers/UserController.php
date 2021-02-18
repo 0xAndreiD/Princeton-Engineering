@@ -10,6 +10,7 @@ use Illuminate\Http\File;
 use Illuminate\Support\Facades\Storage;
 use App\User;
 use App\Company;
+use App\UserSetting;
 
 class UserController extends Controller
 {
@@ -269,5 +270,59 @@ class UserController extends Controller
         }
         else
             return 1;
+    }
+
+    /**
+     * Show the User Configuration page.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function settings()
+    {
+        $setting = UserSetting::where('userId', Auth::user()->id)->first();
+        return view('user.configuration.settings')->with('setting', $setting);
+    }
+
+    /**
+     * Return the User Configuration data.
+     *
+     * JSON
+     */
+    public function getUserSetting()
+    {
+        $setting = UserSetting::where('userId', Auth::user()->id)->first();
+        if($setting)
+            return response()->json(['success' => true, 'inputFontSize' => $setting->inputFontSize, 'inputCellHeight' => $setting->inputCellHeight, 'inputFontFamily' => $setting->inputFontFamily, 'includeFolderName' => $setting->includeFolderName]);
+        else
+            return response()->json(['success' => false]);
+    }
+
+    /**
+     * Update the User Configuration data.
+     *
+     * JSON
+     */
+    public function updateUserSetting(Request $request)
+    {
+        if(!empty($request['inputFontSize'])){
+            $setting = UserSetting::where('userId', Auth::user()->id)->first();
+            if($setting){
+                $setting->inputFontSize = $request['inputFontSize'];
+                $setting->inputCellHeight = $request['inputCellHeight'];
+                $setting->inputFontFamily = $request['inputFontFamily'];
+                $setting->includeFolderName = $request['includeFolderName'];
+                $setting->save();
+            } else {
+                UserSetting::create([
+                    'userId' => Auth::user()->id,
+                    'inputFontSize' => $request['inputFontSize'],
+                    'inputCellHeight' => $request['inputCellHeight'],
+                    'inputFontFamily' => $request['inputFontFamily'],
+                    'includeFolderName' => $request['includeFolderName']
+                ]);
+            }
+            return response()->json(['success' => true]);
+        } else 
+            return response()->json(['success' => false, 'message' => 'Wrong Input Data.']);
     }
 }

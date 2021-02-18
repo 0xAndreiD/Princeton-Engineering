@@ -89,3 +89,8 @@ Route::post('/updateDBSetting', 'AdminController@updateDBSetting')->name('update
 Route::post('/manualDBBackup', 'AdminController@manualDBBackup')->name('manualDBBackup');
 Route::post('/delBackup', 'AdminController@delBackup')->name('delBackup');
 Route::post('/restoreBackup', 'AdminController@restoreBackup')->name('restoreBackup');
+
+// User configuration
+Route::get('/settings', 'UserController@settings')->name('settings');
+Route::post('/getUserSetting', 'UserController@getUserSetting')->name('getUserSetting');
+Route::post('/updateUserSetting', 'UserController@updateUserSetting')->name('updateUserSetting');
