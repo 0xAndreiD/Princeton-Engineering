@@ -53,7 +53,7 @@ function fcChangeType( conditionId, type ){
     }    
     else
     {
-        $(`#label-A-1-${conditionId}`).attr('rowspan', 11);
+        $(`#label-A-1-${conditionId}`).attr('rowspan', 12);
         $(`#label-B-1-${conditionId}`)[0].style.display = "table-cell";
         $(`#title-B-3-${conditionId}`)[0].style.display = "none";
         var elements = $(`#inputform-${conditionId} .class-truss-hide`);
@@ -2388,6 +2388,7 @@ $(document).ready(function() {
     });
     $('#option-state').on('change', function() {
         detectCorrectTownForMA();
+        loadASCEOptions($(this).val());
     });
     $('#option-user-id').on('change', function() {
         updateUserOption($(this).children("option:selected").attr('data-userid'));
@@ -3310,6 +3311,7 @@ var loadPreloadedData = function() {
                                 $(`#calc-algorithm-${i + 1}`).val(caseData['RoofDataInput']['A_calc_algorithm']);
 
                                 $(`#a-11-${i + 1}`).val(caseData['RoofDataInput']['A11']);
+                                $(`#a-12-${i + 1}`).val(caseData['RoofDataInput']['A12']);
 
                                 $(`#b-1-${i + 1}`).val(caseData['RafterDataInput']['B1']);
                                 $(`#b-2-${i + 1}`).val(caseData['RafterDataInput']['B2']);
@@ -3596,6 +3598,7 @@ var loadPreloadedData = function() {
                                     $(`#td-diag-2-${j + 1}-${i + 1}`).val(caseData['Diagonal2'][j]['memId']);
                                 }
                             }
+                            loadASCEOptions(preloaded_data['ProjectInfo']['State']);
 
                             $(`#wind-speed`).val(preloaded_data['Wind']);
                             $(`#wind-speed-override`).prop('checked', preloaded_data['WindCheckbox']);
@@ -3630,8 +3633,10 @@ var loadPreloadedData = function() {
                 }
             });
         }
-        else
+        else{
+            loadASCEOptions("MA");
             resolve(true);
+        }
 
         // $('input:text:enabled').each(function() { 
         //     if (typeof preloaded_data[$(this).attr('id')] !== 'undefined')
@@ -3719,10 +3724,33 @@ var loadPreloadedData = function() {
         });
     }
 
+    var loadASCEOptions = function(state){
+        for(let j = 0; j < 10; j ++){
+            $(`#a-12-${j + 1}`).empty();
+        }
+        $.ajax({
+            url:"getASCEOptions",
+            type:'post',
+            data:{state: state},
+            success: function(res){
+                if(res.success && res.data){
+                    for(let i = 0; i < res.data.length; i ++){
+                        for(let j = 0; j < 10; j ++){
+                            if(preloaded_data && preloaded_data['LoadingCase'] && preloaded_data['LoadingCase'][j] && preloaded_data['LoadingCase'][j]['RoofDataInput']
+                             && preloaded_data['LoadingCase'][j]['RoofDataInput']['A12'] == res.data[i])
+                                $(`#a-12-${j + 1}`).append(`<option data-value="${res.data[i]}" selected>${res.data[i]}</option>`);
+                            else
+                                $(`#a-12-${j + 1}`).append(`<option data-value="${res.data[i]}">${res.data[i]}</option>`);
+                        }
+                    }
+                }
+            }
+        });
+    }
+
     // initialize function
     var initializeSpreadSheet = async function() {
         applyUserSetting();
-
         await loadPreloadedData();
         loadStateOptions();
         loadEquipmentSection();
