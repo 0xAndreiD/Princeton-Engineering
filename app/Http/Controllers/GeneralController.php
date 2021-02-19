@@ -16,6 +16,8 @@ use App\RailSupport;
 use App\JobRequest;
 use App\DataCheck;
 use App\UserSetting;
+use App\ASCERoofTypes;
+use App\ASCEYear;
 use Kunnu\Dropbox\DropboxApp;
 use Kunnu\Dropbox\Dropbox;
 use Kunnu\Dropbox\DropboxFile;
@@ -125,10 +127,10 @@ class GeneralController extends Controller
                     Storage::disk('input')->put($folderPrefix . $project['requestFile'], json_encode($data));
                     
                     //Backup json file to dropbox
-                    $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
-                    $dropbox = new Dropbox($app);
-                    $dropboxFile = new DropboxFile(storage_path('/input/') . sprintf("%06d", $companyNumber). '. ' . $project['companyName'] . '/' . $project['requestFile']);
-                    $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_JSON_INPUT') . sprintf("%06d", $companyNumber). '. ' . $project['companyName'] . '/' . $project['requestFile'], ['mode' => 'overwrite']);
+                    // $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
+                    // $dropbox = new Dropbox($app);
+                    // $dropboxFile = new DropboxFile(storage_path('/input/') . sprintf("%06d", $companyNumber). '. ' . $project['companyName'] . '/' . $project['requestFile']);
+                    // $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_JSON_INPUT') . sprintf("%06d", $companyNumber). '. ' . $project['companyName'] . '/' . $project['requestFile'], ['mode' => 'overwrite']);
                     
                     $projectState = 0;
                     if($request['status'] == 'Saved')
@@ -166,10 +168,10 @@ class GeneralController extends Controller
                 Storage::disk('input')->put($folderPrefix . $filename, json_encode($data));
 
                 //Backup json file to dropbox
-                $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
-                $dropbox = new Dropbox($app);
-                $dropboxFile = new DropboxFile(storage_path('/input/') . sprintf("%06d", $companyNumber). '. ' . $company['company_name'] . '/' . $filename);
-                $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_JSON_INPUT') . sprintf("%06d", $companyNumber). '. ' . $company['company_name'] . '/' . $filename, ['autorename' => TRUE]);
+                // $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
+                // $dropbox = new Dropbox($app);
+                // $dropboxFile = new DropboxFile(storage_path('/input/') . sprintf("%06d", $companyNumber). '. ' . $company['company_name'] . '/' . $filename);
+                // $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_JSON_INPUT') . sprintf("%06d", $companyNumber). '. ' . $company['company_name'] . '/' . $filename, ['autorename' => TRUE]);
 
                 $projectState = 0;
                 if($request['status'] == 'Saved')
@@ -282,7 +284,8 @@ class GeneralController extends Controller
                 "A9_feet" => number_format(floatval($caseInput["af-9-{$number}"]), 2), "A9_inches" => number_format(floatval($caseInput["ai-9-{$number}"]), 2), "A9" => number_format(floatval(isset($caseInput["a-9-{$number}"]) ? $caseInput["a-9-{$number}"] : 0), 2), "A9calc" => number_format(floatval(isset($caseInput["ac-9-{$number}"]) ? $caseInput["ac-9-{$number}"] : 0), 2),
                 "A10_feet" => number_format(floatval($caseInput["af-10-{$number}"]), 2), "A10_inches" => number_format(floatval($caseInput["ai-10-{$number}"]), 2), "A10" => number_format(floatval(isset($caseInput["a-10-{$number}"]) ? $caseInput["a-10-{$number}"] : 0), 2), "A10calc" => number_format(floatval(isset($caseInput["ac-10-{$number}"]) ? $caseInput["ac-10-{$number}"] : 0), 2),
                 "A_calc_algorithm" => $caseInput["calc-algorithm-{$number}"],
-                "A11" => number_format(floatval(isset($caseInput["a-11-{$number}"]) ? $caseInput["a-11-{$number}"] : 0), 2));
+                "A11" => number_format(floatval(isset($caseInput["a-11-{$number}"]) ? $caseInput["a-11-{$number}"] : 0), 2),
+                "A12" => $caseInput["a-12-{$number}"]);
             $caseData['RafterDataInput'] = array("B1" => number_format(floatval(isset($caseInput["b-1-{$number}"]) ? $caseInput["b-1-{$number}"] : 0), 2), "B2" => number_format(floatval(isset($caseInput["b-2-{$number}"]) ? $caseInput["b-2-{$number}"] : 0), 2), "B3" => number_format(floatval($caseInput["b-3-{$number}"]), 2), "B4" => $caseInput["b-4-{$number}"]);
             $caseData['CollarTieInformation'] = array(
                 "C1" => isset($caseInput["c-1-{$number}"]) ? $caseInput["c-1-{$number}"] : "",
@@ -1111,5 +1114,25 @@ class GeneralController extends Controller
         }
         else
             return response()->json(['success' => false, 'message' => 'Empty Id or filename params.']);
+    }
+
+    /**
+     * Return ASCE Options according to the state abbreviation.
+     *
+     * @return JSON
+     */
+    public function getASCEOptions(Request $request){
+        if(!empty($request['state'])){
+            $year_value = ASCEYear::where('jurisdiction_abbrev', $request['state'])->first();
+            if($year_value){
+                $roof_types = ASCERoofTypes::where('asce', $year_value['asce7_in_years'])->get();
+                $data = array();
+                foreach($roof_types as $type)
+                    $data[] = $type->roof_type;
+                return response()->json(['success' => true, 'data' => $data]);
+            } else
+                return response()->json(['success' => false, 'message' => 'Cannot find state']);
+        } else
+            return response()->json(['success' => false, 'message' => 'Empty State Abbreviation.']);
     }
 }
