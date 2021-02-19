@@ -35,7 +35,7 @@ document.getElementById("defaultOpen").click();
 function fcChangeType( conditionId, type ){
     if( type == 1 )
     {
-        $(`#label-A-1-${conditionId}`).attr('rowspan', 7);
+        $(`#label-A-1-${conditionId}`).attr('rowspan', 8);
         $(`#label-B-1-${conditionId}`)[0].style.display = "none";
         $(`#title-B-3-${conditionId}`)[0].style.display = "table-cell";
         var elements = $(`#inputform-${conditionId} .class-truss-hide`);
