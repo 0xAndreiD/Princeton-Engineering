@@ -42,20 +42,32 @@
                             <th style="width:30%;">Company</th>
                             <th style="width:5%;">UserRole</th>
                             <th style="width:5%;">UserNumber</th>
-                            <!-- <th class="text-center" style="width: 15%;">Verified</th>
-                            <th class="d-none d-md-table-cell" style="width: 10%;">Role</th>
-                            <th class="d-none d-md-table-cell" style="width: 10%;">Company</th>
-                            <th class="d-none d-md-table-cell" style="width: 10%;">Number</th>
-                            <th class="d-none d-sm-table-cell" style="width: 10%;">Membership</th>
-                            <th class="d-none d-sm-table-cell" style="width: 15%;">MemberRole</th>
-                            <th class="d-none d-sm-table-cell" style="width: 15%;">Created Time</th>
-                            <th class="d-none d-sm-table-cell" style="width: 15%;">Updated Time</th>
-                            <th class="d-none d-sm-table-cell" style="width: 15%;">Registered</th> -->
                             <th style="min-width: 150px;">Action</th>
                         </tr>
+                        <tr>
+                            <th></th>
+                            <th class="searchHead"> <input type="text" placeholder="Search Name" class="searchBox" id="nameFilter"> </th>
+                            <th class="searchHead"> <input type="text" placeholder="Search Email" class="searchBox" id="emailFilter"> </th>
+                            <th class="searchHead">
+                                <select placeholder="Search Company" class="searchBox" id="companyFilter">
+                                    <option value="">All</option>
+                                    @foreach($companyList as $company)
+                                        <option value="{{ $company['company_name'] }}">{{ $company['company_name'] }}</option>
+                                    @endforeach
+                                </select>
+                            </th>
+                            <th class="searchHead">
+                                <select placeholder="Search Role" class="searchBox" id="roleFilter">
+                                    <option value="">All</option>
+                                    <option value="2">Admin</option>
+                                    <option value="1">Client</option>
+                                    <option value="0">User</option>
+                                </select>
+                            </th>
+                            <th class="searchHead"> <input type="text" placeholder="Search Number" class="searchBox" id="userNumFilter"> </th>
+                            <th></th>
+                        </tr>
                     </thead>
-                    <tbody>
-                    </tbody>
                 </table>
             </div>
         </div>
@@ -130,10 +142,12 @@
 
 <script>
     $(document).ready(function () {
-        $('#users').DataTable({
+        var table = $('#users').DataTable({
             "processing": true,
             "serverSide": true,
             "responsive": true,
+            "orderCellsTop": true,
+            "pageLength" : 50,
             "ajax":{
                     "url": "{{ url('getUserData') }}",
                     "dataType": "json",
@@ -158,6 +172,14 @@
 
         $("#company").select2({ width: '100%' });
         $("#userrole").select2({ width: '100%' });
+
+        $("#nameFilter, #emailFilter, #userNumFilter").on('keyup change', function() {
+            table.column($(this).parent().index() + ':visible').search(this.value).draw();
+        });
+
+        $("#companyFilter, #roleFilter").on('change', function() {
+            table.column($(this).parent().index() + ':visible').search(this.value).draw();
+        });
     });
 </script>
 @include('admin.user.script')

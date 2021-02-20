@@ -31,11 +31,11 @@ class UserController extends Controller
      */
     public function index()
     {
-        $companyList = Company::all();
+        $companyList = Company::orderBy('company_name', 'asc')->get();
         if(Auth::user()->userrole == 2)
-            return view('admin.user.userlist',compact('companyList'));
+            return view('admin.user.userlist')->with('companyList', $companyList);
         else if(Auth::user()->userrole == 1)
-            return view('clientadmin.user.userlist');
+            return view('clientadmin.user.userlist')->with('companyList', $companyList);
         else
             return redirect('home');
     }
@@ -78,10 +78,32 @@ class UserController extends Controller
         $order = $columns[$request->input('order.0.column')];
         $dir = $request->input('order.0.dir');
 
+        $handler = $handler->leftjoin('company_info', "company_info.id", "=", "users.companyid");
+
+        if(Auth::user()->userrole == 2){
+            if(!empty($request->input("columns.1.search.value")))
+                $handler = $handler->where('users.username', 'LIKE', "%{$request->input("columns.1.search.value")}%");
+            if(!empty($request->input("columns.2.search.value")))
+                $handler = $handler->where('users.email', 'LIKE', "%{$request->input("columns.2.search.value")}%");
+            if(!empty($request->input("columns.3.search.value")))
+                $handler = $handler->where('company_info.company_name', 'LIKE', "%{$request->input("columns.3.search.value")}%");
+            $handler = $handler->where('users.userrole', 'LIKE', "%{$request->input("columns.4.search.value")}%");
+            if(!empty($request->input("columns.5.search.value")))
+                $handler = $handler->where('users.usernumber', 'LIKE', "%{$request->input("columns.5.search.value")}%");
+        } else {
+            if(!empty($request->input("columns.1.search.value")))
+                $handler = $handler->where('users.username', 'LIKE', "%{$request->input("columns.1.search.value")}%");
+            if(!empty($request->input("columns.2.search.value")))
+                $handler = $handler->where('users.email', 'LIKE', "%{$request->input("columns.2.search.value")}%");
+            $handler = $handler->where('users.userrole', 'LIKE', "%{$request->input("columns.3.search.value")}%");
+            if(!empty($request->input("columns.4.search.value")))
+                $handler = $handler->where('users.usernumber', 'LIKE', "%{$request->input("columns.4.search.value")}%");
+        }
+
         if(empty($request->input('search.value')))
         {            
+            $totalFiltered = $handler->count();
             $users = $handler->offset($start)
-                ->leftjoin('company_info', "company_info.id", "=", "users.companyid")
                 ->limit($limit)
                 ->orderBy($order,$dir)
                 ->get(

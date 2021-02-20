@@ -43,6 +43,20 @@
                             <th style="width:20%;">UserNumber</th>
                             <th style="min-width: 150px;">Action</th>
                         </tr>
+                        <tr>
+                            <th></th>
+                            <th class="searchHead"> <input type="text" placeholder="Search Name" class="searchBox" id="nameFilter"> </th>
+                            <th class="searchHead"> <input type="text" placeholder="Search Email" class="searchBox" id="emailFilter"> </th>
+                            <th class="searchHead">
+                                <select placeholder="Search Role" class="searchBox" id="roleFilter">
+                                    <option value="">All</option>
+                                    <option value="1">Client</option>
+                                    <option value="0">User</option>
+                                </select>
+                            </th>
+                            <th class="searchHead"> <input type="text" placeholder="Search Number" class="searchBox" id="userNumFilter"> </th>
+                            <th></th>
+                        </tr>
                     </thead>
                     <tbody>
                     </tbody>
@@ -111,10 +125,11 @@
 
 <script>
     $(document).ready(function () {
-        $('#users').DataTable({
+        var table = $('#users').DataTable({
             "processing": true,
             "serverSide": true,
             "responsive": true,
+            "orderCellsTop": true,
             "ajax":{
                     "url": "{{ url('getUserData') }}",
                     "dataType": "json",
@@ -134,6 +149,14 @@
         $.ajaxSetup({
             headers:
             { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
+        });
+
+        $("#nameFilter, #emailFilter, #userNumFilter").on('keyup change', function() {
+            table.column($(this).parent().index() + ':visible').search(this.value).draw();
+        });
+
+        $("#roleFilter").on('change', function() {
+            table.column($(this).parent().index() + ':visible').search(this.value).draw();
         });
     });
 </script>
