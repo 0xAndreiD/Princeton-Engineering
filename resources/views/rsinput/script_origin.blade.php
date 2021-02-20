@@ -3767,7 +3767,7 @@ var loadPreloadedData = function() {
                     else
                         $("#project-id-comment").css('color', '#000000');
                     if(res.maxId)
-                        comment += ('Max Project Id: ' + res.maxId);
+                        comment += ('Max Project Number: ' + res.maxId);
                     $("#project-id-comment").html(comment);
                 }
             }
