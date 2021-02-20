@@ -26,6 +26,7 @@ use Kunnu\Dropbox\Exceptions\DropboxClientException;
 use DateTime;
 use DateTimeZone;
 use ZipArchive;
+use DB;
 
 class GeneralController extends Controller
 {
@@ -1134,5 +1135,26 @@ class GeneralController extends Controller
                 return response()->json(['success' => false, 'message' => 'Cannot find state']);
         } else
             return response()->json(['success' => false, 'message' => 'Empty State Abbreviation.']);
+    }
+
+    /**
+     * Return project number duplicate check, max project id.
+     *
+     * @return JSON
+     */
+    public function getProjectNumComment(Request $request){
+        if(!empty($request['projectNumber'])){
+            $job = JobRequest::where('clientProjectNumber', $request['projectNumber'])->first();
+            $duplicated = false;
+            if($job)
+                $duplicated = true;
+            $maxProject = DB::select(DB::raw('select max(convert(clientProjectNumber, signed integer)) as maxNumber from job_request'))[0];
+            if($maxProject)
+                $max = $maxProject->maxNumber;
+            else
+                $max = 0;
+            return response()->json(['success' => true, 'duplicated' => $duplicated, 'maxId' => $max]);
+        } else
+            return response()->json(['success' => false, 'message' => 'Empty Project Id.']);
     }
 }

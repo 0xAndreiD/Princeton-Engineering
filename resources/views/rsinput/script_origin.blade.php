@@ -2383,6 +2383,9 @@ $(document).ready(function() {
     }
 
     // component hander functions
+    $("#txt-project-number").change(function(){
+        setProjectIdComment();
+    });
     $("#txt-city").change(function(){
         detectCorrectTownForMA();
     });
@@ -3748,6 +3751,29 @@ var loadPreloadedData = function() {
         });
     }
 
+    var setProjectIdComment = function(){
+        $.ajax({
+            url:"getProjectNumComment",
+            type:'post',
+            data:{projectNumber: $("#txt-project-number").val()},
+            success: function(res){
+                if(res.success){
+                    var comment = '';
+                    if(res.duplicated)
+                    {
+                        comment = $("#txt-project-number").val() + ' is duplicated. ';
+                        $("#project-id-comment").css('color', '#FF0000');
+                    }
+                    else
+                        $("#project-id-comment").css('color', '#000000');
+                    if(res.maxId)
+                        comment += ('Max Project Id: ' + res.maxId);
+                    $("#project-id-comment").html(comment);
+                }
+            }
+        });
+    }
+
     // initialize function
     var initializeSpreadSheet = async function() {
         applyUserSetting();
@@ -3755,6 +3781,7 @@ var loadPreloadedData = function() {
         loadStateOptions();
         loadEquipmentSection();
         await loadDataCheck();
+        setProjectIdComment();
 
         var i;
         for(i = 1; i <= 10; i ++)
