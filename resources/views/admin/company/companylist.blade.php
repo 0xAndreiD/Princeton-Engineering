@@ -45,6 +45,16 @@
                             <th style="width:10%;">Website</th>
                             <th style="min-width:150px;">Action</th>
                         </tr>
+                        <tr>
+                            <th></th>
+                            <th class="searchHead"> <input type="text" placeholder="Search Name" class="searchBox" id="nameFilter"> </th>
+                            <th class="searchHead"> <input type="text" placeholder="Search Number" class="searchBox" id="numberFilter"> </th>
+                            <th class="searchHead"> <input type="text" placeholder="Search Phone" class="searchBox" id="phoneFilter"> </th>
+                            <th class="searchHead"> <input type="text" placeholder="Search Address" class="searchBox" id="addressFilter"> </th>
+                            <th class="searchHead"> <input type="text" placeholder="Search Email" class="searchBox" id="emailFilter"> </th>
+                            <th class="searchHead"> <input type="text" placeholder="Search Website" class="searchBox" id="siteFilter"> </th>
+                            <th></th>
+                        </tr>
                     </thead>
                     <tbody>
                     </tbody>
@@ -113,10 +123,12 @@
 
         <script>
             $(document).ready(function () {
-                $('#companys').DataTable({
+                var table = $('#companys').DataTable({
                     "processing": true,
                     "serverSide": true,
                     "responsive": true,
+                    "orderCellsTop": true,
+                    "pageLength" : 50,
                     "ajax":{
                             "url": "{{ url('getCompanyData') }}",
                             "dataType": "json",
@@ -138,6 +150,10 @@
                 $.ajaxSetup({
                     headers:
                     { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
+                });
+
+                $("#nameFilter, #numberFilter, #phoneFilter, #addressFilter, #emailFilter, #siteFilter").on('keyup change', function() {
+                    table.column($(this).parent().index() + ':visible').search(this.value).draw();
                 });
             });
         </script>

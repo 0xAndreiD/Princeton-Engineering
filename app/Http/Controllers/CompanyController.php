@@ -30,7 +30,10 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        return view('admin.company.companylist');
+        if(Auth::user()->userrole == 2)
+            return view('admin.company.companylist');
+        else
+            return redirect('home');
     }
 
     /**
@@ -55,9 +58,24 @@ class CompanyController extends Controller
         $order = $columns[$request->input('order.0.column')];
         $dir = $request->input('order.0.dir');
 
+        $handler = new Company;
+        if(!empty($request->input("columns.1.search.value")))
+            $handler = $handler->where('company_info.company_name', 'LIKE', "%{$request->input("columns.1.search.value")}%");
+        if(!empty($request->input("columns.2.search.value")))
+            $handler = $handler->where('company_info.company_number', 'LIKE', "%{$request->input("columns.2.search.value")}%");
+        if(!empty($request->input("columns.3.search.value")))
+            $handler = $handler->where('company_info.company_telno', 'LIKE', "%{$request->input("columns.3.search.value")}%");
+        if(!empty($request->input("columns.4.search.value")))
+            $handler = $handler->where('company_info.company_address', 'LIKE', "%{$request->input("columns.4.search.value")}%");
+        if(!empty($request->input("columns.5.search.value")))
+            $handler = $handler->where('company_info.company_email', 'LIKE', "%{$request->input("columns.5.search.value")}%");
+        if(!empty($request->input("columns.6.search.value")))
+            $handler = $handler->where('company_info.company_website', 'LIKE', "%{$request->input("columns.6.search.value")}%");
+
         if(empty($request->input('search.value')))
         {            
-            $companys = Company::offset($start)
+            $totalFiltered = $handler->count();
+            $companys = $handler->offset($start)
                 ->limit($limit)
                 ->orderBy($order,$dir)
                 ->get(
@@ -74,7 +92,7 @@ class CompanyController extends Controller
         }
         else {
             $search = $request->input('search.value'); 
-            $companys =  User::where('company_info.id','LIKE',"%{$search}%")
+            $companys =  $handler->where('company_info.id','LIKE',"%{$search}%")
                         ->orWhere('company_info.company_name', 'LIKE',"%{$search}%")
                         ->orWhere('company_info.company_number', 'LIKE',"%{$search}%")
                         ->orWhere('company_info.company_telno', 'LIKE',"%{$search}%")
@@ -96,7 +114,7 @@ class CompanyController extends Controller
                             )
                         );
 
-            $totalFiltered = User::where('company_info.id','LIKE',"%{$search}%")
+            $totalFiltered = $handler->where('company_info.id','LIKE',"%{$search}%")
                         ->orWhere('company_info.company_name', 'LIKE',"%{$search}%")
                         ->orWhere('company_info.company_number', 'LIKE',"%{$search}%")
                         ->orWhere('company_info.company_telno', 'LIKE',"%{$search}%")
