@@ -1025,13 +1025,13 @@ var detectCorrectTownForMA = function() {
     if (state_name == 'MA') {
         for (index= 0; index <availableMATowns.length ; index++) {
             if (availableMATowns[index] == city_name) {
-                $('#txt-city-comment').html(good_message);
+                $('#txt-city-comment').html('&nbsp;&nbsp;' + good_message);
                 $('#txt-city-comment').css('color', 'black');
                 return;
             }
         }
 
-        $('#txt-city-comment').html(err_message);
+        $('#txt-city-comment').html('&nbsp;&nbsp;' + err_message);
         $('#txt-city-comment').css('color', '#FF0000');
         $('#txt-city-comment').css('font-weight', 'bold');
     }
@@ -3755,19 +3755,19 @@ var loadPreloadedData = function() {
         $.ajax({
             url:"getProjectNumComment",
             type:'post',
-            data:{projectNumber: $("#txt-project-number").val()},
+            data:{projectNumber: $("#txt-project-number").val(), projectId: $('#projectId').val()},
             success: function(res){
                 if(res.success){
-                    var comment = '';
+                    var comment = '&nbsp;&nbsp;';
                     if(res.duplicated)
                     {
-                        comment = $("#txt-project-number").val() + ' is duplicated. ';
+                        comment += $("#txt-project-number").val() + ' is duplicated. ';
                         $("#project-id-comment").css('color', '#FF0000');
                     }
                     else
                         $("#project-id-comment").css('color', '#000000');
                     if(res.maxId)
-                        comment += ('Max Project Number: ' + res.maxId);
+                        comment += ('Highest Project Number Used: ' + res.maxId);
                     $("#project-id-comment").html(comment);
                 }
             }

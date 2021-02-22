@@ -1143,8 +1143,15 @@ class GeneralController extends Controller
      * @return JSON
      */
     public function getProjectNumComment(Request $request){
-        if(!empty($request['projectNumber'])){
-            $job = JobRequest::where('clientProjectNumber', $request['projectNumber'])->first();
+        if(!empty($request['projectNumber']) && !empty($request['projectId'])){
+            $self = JobRequest::where('id', $request['projectId'])->first();
+            if($self)
+                $companyId = $self->companyId;
+            else
+                $companyId = Auth::user()->companyid;
+
+            $job = JobRequest::where('clientProjectNumber', $request['projectNumber'])->where('id', '!=', $request['projectId'])->where('companyId', $companyId)->first();
+
             $duplicated = false;
             if($job)
                 $duplicated = true;
@@ -1155,6 +1162,6 @@ class GeneralController extends Controller
                 $max = 0;
             return response()->json(['success' => true, 'duplicated' => $duplicated, 'maxId' => $max]);
         } else
-            return response()->json(['success' => false, 'message' => 'Empty Project Id.']);
+            return response()->json(['success' => false, 'message' => 'Empty Project Number or Id.']);
     }
 }
