@@ -1155,7 +1155,7 @@ class GeneralController extends Controller
             $duplicated = false;
             if($job)
                 $duplicated = true;
-            $maxProject = DB::select(DB::raw('select max(convert(clientProjectNumber, signed integer)) as maxNumber from job_request'))[0];
+            $maxProject = DB::select(DB::raw('select max(convert(clientProjectNumber, signed integer)) as maxNumber from job_request where companyId=' . $companyId))[0];
             if($maxProject)
                 $max = $maxProject->maxNumber;
             else
