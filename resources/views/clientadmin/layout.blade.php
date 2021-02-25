@@ -131,6 +131,13 @@
                                 <span class="nav-main-link-name">Project list</span>
                             </a>
                         </li>
+                        <li class="nav-main-heading">My Equipments</li>
+                        <li class="nav-main-item">
+                            <a class="nav-main-link" href="{{ route('customModule') }}">
+                                <i class="nav-main-link-icon fa fa-solar-panel"></i>
+                                <span class="nav-main-link-name">Modules</span>
+                            </a>
+                        </li>
                         <li class="nav-main-heading">Company Tools</li>
                         <li class="nav-main-item">
                             <a class="nav-main-link" href="{{ route('companyProfile') }}">
@@ -142,18 +149,6 @@
                             <a class="nav-main-link" href="#">
                                 <i class="nav-main-link-icon fa fa-users"></i>
                                 <span class="nav-main-link-name">Company Info</span>
-                            </a>
-                        </li>
-                        <li class="nav-main-item">
-                            <a class="nav-main-link" href="#">
-                                <i class="nav-main-link-icon fa fa-cog"></i>
-                                <span class="nav-main-link-name">Equipment Section</span>
-                            </a>
-                        </li>
-                        <li class="nav-main-item">
-                            <a class="nav-main-link" href="#">
-                                <i class="nav-main-link-icon fa fa-server"></i>
-                                <span class="nav-main-link-name">Database Backup / Restore</span>
                             </a>
                         </li>
                         <li class="nav-main-heading">Configuration</li>

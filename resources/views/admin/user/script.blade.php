@@ -81,7 +81,7 @@ function delUser(obj, id) {
             });
 
         } else if (result.dismiss === 'cancel') {
-            toast.fire('Cancelled', 'User is safe :)', 'error');
+            toast.fire('Cancelled', 'User is safe :)', 'info');
         }
     });
 }
