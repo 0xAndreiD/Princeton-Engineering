@@ -413,3 +413,7 @@ html, body {
     opacity: 0.2;
     pointer-events: none;
 }
+
+.side-view > .form-group > .form-control{
+    border: 1px solid #f1dfd2;
+}

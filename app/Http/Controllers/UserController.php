@@ -120,7 +120,6 @@ class UserController extends Controller
         else {
             $search = $request->input('search.value'); 
             $users =  $handler->where('users.id','LIKE',"%{$search}%")
-                        ->leftjoin('company_info', "company_info.id", "=", "users.companyid")
                         ->orWhere('users.username', 'LIKE',"%{$search}%")
                         ->orWhere('users.email', 'LIKE',"%{$search}%")
                         ->offset($start)
@@ -138,7 +137,6 @@ class UserController extends Controller
                         );
 
             $totalFiltered = $handler->where('users.id','LIKE',"%{$search}%")
-                        ->leftjoin('company_info', "company_info.id", "=", "users.companyid")
                         ->orWhere('users.username', 'LIKE',"%{$search}%")
                         ->orWhere('users.email', 'LIKE',"%{$search}%")
                         ->count();

@@ -96,3 +96,10 @@ Route::post('/restoreBackup', 'AdminController@restoreBackup')->name('restoreBac
 Route::get('/settings', 'UserController@settings')->name('settings');
 Route::post('/getUserSetting', 'UserController@getUserSetting')->name('getUserSetting');
 Route::post('/updateUserSetting', 'UserController@updateUserSetting')->name('updateUserSetting');
+
+//Custom Equipment
+Route::get('/customModule', 'EquipmentController@customModule')->name('customModule');
+Route::post('/getCustomModules', 'EquipmentController@getCustomModules')->name('getCustomModules');
+Route::post('/submitModule', 'EquipmentController@submitModule')->name('submitModule');
+Route::post('/deleteModule', 'EquipmentController@deleteModule')->name('deleteModule');
+Route::post('/moduleToggleFavorite', 'EquipmentController@moduleToggleFavorite')->name('moduleToggleFavorite');
