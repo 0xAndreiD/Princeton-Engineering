@@ -1,19 +1,19 @@
 <script>
 
-var moduleId = -1;
+var rackingId = -1;
 
-function showAddModule(){
-    moduleId = -1;
-    $("#sidebar-title").html("Create Module");
+function showAddRacking(){
+    rackingId = -1;
+    $("#sidebar-title").html("Create Solar Racking");
     $(".form-control").val("");
     $(".form-control").css('background-color', '#FFFFFF');
     $("#page-container").addClass('side-overlay-o');
 }
 
 
-function showEditModule(obj, id){
-    moduleId = id;
-    $("#sidebar-title").html("Edit Module");
+function showEditRacking(obj, id){
+    rackingId = id;
+    $("#sidebar-title").html("Edit Solar Racking");
     $(".form-control").val("");
     $(".form-control").css('background-color', '#FFFFFF');
     
@@ -27,7 +27,7 @@ function showEditModule(obj, id){
 }
 
 
-var requiredFields = ['mfr', 'model', 'rating', 'length', 'width', 'depth', 'weight', 'Mtg_Hole_1', 'url'];
+var requiredFields = ['mfr', 'model', 'style', 'angle', 'rack_weight', 'width', 'depth', 'lowest_height', 'module_spacing_EW', 'module_spacing_NS', 'url'];
 function isEmptyInputBox(){
     var isEmpty = false;
     for(let i = 0; i < requiredFields.length; i ++){
@@ -39,7 +39,7 @@ function isEmptyInputBox(){
     return isEmpty;
 }
 
-function submitModule(){
+function submitRacking(){
     var alldata = {};
 
     if(isEmptyInputBox()){
@@ -52,16 +52,16 @@ function submitModule(){
     });
 
     $.ajax({
-        url:"submitModule",
+        url:"submitRacking",
         type:'post',
-        data:{moduleId: moduleId, data: alldata},
+        data:{rackingId: rackingId, data: alldata},
         success:function(res){
             $("#page-container").removeClass('side-overlay-o');
             if (res.success == true) {
-                if(moduleId == -1)
-                    swal.fire({ title: "Created!", text: "Module has been created.", icon: "success", confirmButtonText: `OK` });
+                if(rackingId == -1)
+                    swal.fire({ title: "Created!", text: "Solar Racking has been created.", icon: "success", confirmButtonText: `OK` });
                 else
-                    swal.fire({ title: "Updated!", text: "Module has been updated.", icon: "success", confirmButtonText: `OK` });
+                    swal.fire({ title: "Updated!", text: "Solar Racking has been updated.", icon: "success", confirmButtonText: `OK` });
                 $('#equipments').DataTable().ajax.reload();
             } else {
                 // error handling
@@ -83,10 +83,10 @@ function submitModule(){
     });
 }
 
-function delModule(obj, id){
+function delRacking(obj, id){
     swal.fire({
         title: 'Are you sure?',
-        text: 'You will not be able to recover this module!',
+        text: 'You will not be able to recover this Solar Racking!',
         icon: 'warning',
         showCancelButton: true,
         customClass: {
@@ -106,12 +106,12 @@ function delModule(obj, id){
     .then(( result ) => {
         if ( result.value ) {
             $.ajax({
-                url:"deleteModule",
+                url:"deleteRacking",
                 type:'post',
-                data:{moduleId: id},
+                data:{rackingId: id},
                 success:function(res){
                     if (res.success == true) {
-                        swal.fire({ title: "Deleted!", text: "Module has been deleted.", icon: "success", confirmButtonText: `OK` });
+                        swal.fire({ title: "Deleted!", text: "Solar Racking has been deleted.", icon: "success", confirmButtonText: `OK` });
                         $('#equipments').DataTable().ajax.reload();
                     } else {
                         // error handling
@@ -131,16 +131,16 @@ function delModule(obj, id){
                 }
             });
         } else if (result.dismiss === 'cancel') {
-            swal.fire({ title: "Cancelled", text: "Module is safe :)", icon: "info", confirmButtonText: `OK` });
+            swal.fire({ title: "Cancelled", text: "Solar Racking is safe :)", icon: "info", confirmButtonText: `OK` });
         }
     });
 }
 
 function toggleFavourite(obj, id){
     $.ajax({
-        url:"moduleToggleFavorite",
+        url:"rackingToggleFavorite",
         type:'post',
-        data:{moduleId: id},
+        data:{rackingId: id},
         success:function(res){
             if (res.success == true) {
                 $('#equipments').DataTable().ajax.reload();

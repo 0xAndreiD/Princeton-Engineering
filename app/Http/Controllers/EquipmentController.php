@@ -9,6 +9,9 @@ use Illuminate\Contracts\Routing\ResponseFactory;
 use App\User;
 use App\Company;
 use App\CustomModule;
+use App\CustomInverter;
+use App\CustomRacking;
+use App\CustomStanchion;
 
 class EquipmentController extends Controller
 {
@@ -205,6 +208,509 @@ class EquipmentController extends Controller
             }
         } else {
             return response()->json(['success' => false, 'message' => 'Empty moduleId.']);
+        }
+    }
+
+    /**
+     * Show the custom inverters page.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function customInverter()
+    {
+        if(Auth::user()->userrole == 2 || Auth::user()->userrole == 1){
+            return view('equipment.inverter.list');
+        }
+        else
+            return redirect('home');
+    }
+
+    /**
+     * Return the list of custom inverters.
+     *
+     * @return JSON
+     */
+    public function getCustomInverters(Request $request){
+        $columns = array( 
+            0 =>'id', 
+            1 =>'mfr',
+            2 =>'model',
+            3 =>'rating',
+        );
+        
+        $handler = CustomInverter::where('client_no', Auth::user()->companyid);
+        
+        $totalData = $handler->count();
+        $totalFiltered = $totalData; 
+
+        $limit = $request->input('length');
+        $start = $request->input('start');
+        $order = $columns[$request->input('order.0.column')];
+        $dir = $request->input('order.0.dir');
+
+        if(empty($request->input('search.value')))
+        {            
+            $inverters = $handler->offset($start)
+                ->limit($limit)
+                ->orderBy($order,$dir)
+                ->get();
+        }
+        else {
+            $search = $request->input('search.value'); 
+            $inverters =  $handler->where('mfr', 'LIKE',"%{$search}%")
+                        ->orWhere('model', 'LIKE',"%{$search}%")
+                        ->orWhere('rating', 'LIKE',"%{$search}%")
+                        ->offset($start)
+                        ->limit($limit)
+                        ->orderBy($order,$dir)
+                        ->get();
+
+            $totalFiltered = $handler->where('mfr', 'LIKE',"%{$search}%")
+                        ->orWhere('model', 'LIKE',"%{$search}%")
+                        ->orWhere('rating', 'LIKE',"%{$search}%")
+                        ->count();
+        }
+
+        $data = array();
+
+        if(!empty($inverters))
+        {
+            $id = 1;
+            foreach ($inverters as $inverter)
+            {
+                $inverter['actions'] = "
+                <div class='text-center'>
+                    <button type='button' class='btn' onclick='toggleFavourite(this,{$inverter['id']})'>
+                        " . ($inverter->favorite ? "<i class='fa fa-star'></i>" : "<i class='far fa-star'></i>") . 
+                    "</button>
+                    <button type='button' class='btn btn-primary' 
+                        onclick='showEditInverter(this,{$inverter['id']})'>
+                        <i class='fa fa-pencil-alt'></i>
+                    </button>
+                    <button type='button' class='js-swal-confirm btn btn-danger' onclick='delInverter(this,{$inverter['id']})'>
+                        <i class='fa fa-trash'></i>
+                    </button>
+                    
+                </div>";
+                $inverter['id'] = $id; $id ++;
+                $data[] = $inverter;
+            }
+        }
+        $json_data = array(
+            "draw"            => intval($request->input('draw')),  
+            "recordsTotal"    => intval($totalData),  
+            "recordsFiltered" => intval($totalFiltered), 
+            "data"            => $data   
+            );
+        echo json_encode($json_data);
+    }
+
+    /**
+     * Create / Update custom inverter data.
+     *
+     * @return JSON
+     */
+    public function submitInverter(Request $request){
+        if(!empty($request['inverterId']) && !empty($request['data'])){
+            $inverter = CustomInverter::where('id', $request['inverterId'])->first();
+            if($inverter){
+                if($inverter->client_no != Auth::user()->companyid)
+                    return response()->json(['success' => false, 'message' => 'Company Id Mismatch.']);
+                
+                foreach($request['data'] as $fieldKey => $value)
+                    $inverter[$fieldKey] = $value;
+                
+                $inverter->save();
+                return response()->json(['success' => true]);
+            } else {
+                $data = $request['data'];
+                $data['client_no'] = Auth::user()->companyid;
+                $newInverter = CustomInverter::create($data);
+                return response()->json(['success' => true]);
+            }
+        } else {
+            return response()->json(['success' => false, 'message' => 'Empty inverterId or data.']);
+        }
+    }
+
+    /**
+     * Delete custom inverter data.
+     *
+     * @return JSON
+     */
+    public function deleteInverter(Request $request){
+        if(!empty($request['inverterId'])){
+            $inverter = CustomInverter::where('id', $request['inverterId'])->first();
+            if($inverter){
+                $inverter->delete();
+                return response()->json(['success' => true]);
+            } else {
+                return response()->json(['success' => false, 'message' => 'Cannot find inverter.']);
+            }
+        } else {
+            return response()->json(['success' => false, 'message' => 'Empty inverterId.']);
+        }
+    }
+
+    /**
+     * Delete custom inverter data.
+     *
+     * @return JSON
+     */
+    public function inverterToggleFavorite(Request $request){
+        if(!empty($request['inverterId'])){
+            $inverter = CustomInverter::where('id', $request['inverterId'])->first();
+            if($inverter){
+                $inverter->favorite = !$inverter->favorite;
+                $inverter->save();
+                return response()->json(['success' => true]);
+            } else {
+                return response()->json(['success' => false, 'message' => 'Cannot find inverter.']);
+            }
+        } else {
+            return response()->json(['success' => false, 'message' => 'Empty inverterId.']);
+        }
+    }
+    
+    /**
+     * Show the custom solar racking page.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function customRacking()
+    {
+        if(Auth::user()->userrole == 2 || Auth::user()->userrole == 1){
+            return view('equipment.racking.list');
+        }
+        else
+            return redirect('home');
+    }
+
+    /**
+     * Return the list of custom solar rackings.
+     *
+     * @return JSON
+     */
+    public function getCustomRacking(Request $request){
+        $columns = array( 
+            0 =>'id', 
+            1 =>'mfr',
+            2 =>'model',
+            3 =>'rating',
+        );
+        
+        $handler = CustomRacking::where('client_no', Auth::user()->companyid);
+        
+        $totalData = $handler->count();
+        $totalFiltered = $totalData; 
+
+        $limit = $request->input('length');
+        $start = $request->input('start');
+        $order = $columns[$request->input('order.0.column')];
+        $dir = $request->input('order.0.dir');
+
+        if(empty($request->input('search.value')))
+        {            
+            $rackings = $handler->offset($start)
+                ->limit($limit)
+                ->orderBy($order,$dir)
+                ->get();
+        }
+        else {
+            $search = $request->input('search.value'); 
+            $rackings =  $handler->where('mfr', 'LIKE',"%{$search}%")
+                        ->orWhere('model', 'LIKE',"%{$search}%")
+                        ->orWhere('style', 'LIKE',"%{$search}%")
+                        ->orWhere('angle', 'LIKE',"%{$search}%")
+                        ->orWhere('rack_weight', 'LIKE',"%{$search}%")
+                        ->orWhere('width', 'LIKE',"%{$search}%")
+                        ->orWhere('depth', 'LIKE',"%{$search}%")
+                        ->orWhere('lowest_height', 'LIKE',"%{$search}%")
+                        ->orWhere('module_spacing_EW', 'LIKE',"%{$search}%")
+                        ->orWhere('module_spacing_NS', 'LIKE',"%{$search}%")
+                        ->orWhere('url', 'LIKE',"%{$search}%")
+                        ->offset($start)
+                        ->limit($limit)
+                        ->orderBy($order,$dir)
+                        ->get();
+
+            $totalFiltered = $handler->where('mfr', 'LIKE',"%{$search}%")
+                        ->orWhere('model', 'LIKE',"%{$search}%")
+                        ->orWhere('style', 'LIKE',"%{$search}%")
+                        ->orWhere('angle', 'LIKE',"%{$search}%")
+                        ->orWhere('rack_weight', 'LIKE',"%{$search}%")
+                        ->orWhere('width', 'LIKE',"%{$search}%")
+                        ->orWhere('depth', 'LIKE',"%{$search}%")
+                        ->orWhere('lowest_height', 'LIKE',"%{$search}%")
+                        ->orWhere('module_spacing_EW', 'LIKE',"%{$search}%")
+                        ->orWhere('module_spacing_NS', 'LIKE',"%{$search}%")
+                        ->orWhere('url', 'LIKE',"%{$search}%")
+                        ->count();
+        }
+
+        $data = array();
+
+        if(!empty($rackings))
+        {
+            $id = 1;
+            foreach ($rackings as $racking)
+            {
+                $racking['actions'] = "
+                <div class='text-center'>
+                    <button type='button' class='btn' onclick='toggleFavourite(this,{$racking['id']})'>
+                        " . ($racking->favorite ? "<i class='fa fa-star'></i>" : "<i class='far fa-star'></i>") . 
+                    "</button>
+                    <button type='button' class='btn btn-primary' 
+                        onclick='showEditRacking(this,{$racking['id']})'>
+                        <i class='fa fa-pencil-alt'></i>
+                    </button>
+                    <button type='button' class='js-swal-confirm btn btn-danger' onclick='delRacking(this,{$racking['id']})'>
+                        <i class='fa fa-trash'></i>
+                    </button>
+                    
+                </div>";
+                $racking['id'] = $id; $id ++;
+                $data[] = $racking;
+            }
+        }
+        $json_data = array(
+            "draw"            => intval($request->input('draw')),  
+            "recordsTotal"    => intval($totalData),  
+            "recordsFiltered" => intval($totalFiltered), 
+            "data"            => $data   
+            );
+        echo json_encode($json_data);
+    }
+
+    /**
+     * Create / Update custom solar racking data.
+     *
+     * @return JSON
+     */
+    public function submitRacking(Request $request){
+        if(!empty($request['rackingId']) && !empty($request['data'])){
+            $racking = CustomRacking::where('id', $request['rackingId'])->first();
+            if($racking){
+                if($racking->client_no != Auth::user()->companyid)
+                    return response()->json(['success' => false, 'message' => 'Company Id Mismatch.']);
+                
+                foreach($request['data'] as $fieldKey => $value)
+                    $racking[$fieldKey] = $value;
+                
+                $racking->save();
+                return response()->json(['success' => true]);
+            } else {
+                $data = $request['data'];
+                $data['client_no'] = Auth::user()->companyid;
+                $newRacking = CustomRacking::create($data);
+                return response()->json(['success' => true]);
+            }
+        } else {
+            return response()->json(['success' => false, 'message' => 'Empty rackingId or data.']);
+        }
+    }
+
+    /**
+     * Delete custom solar racking data.
+     *
+     * @return JSON
+     */
+    public function deleteRacking(Request $request){
+        if(!empty($request['rackingId'])){
+            $racking = CustomRacking::where('id', $request['rackingId'])->first();
+            if($racking){
+                $racking->delete();
+                return response()->json(['success' => true]);
+            } else {
+                return response()->json(['success' => false, 'message' => 'Cannot find racking.']);
+            }
+        } else {
+            return response()->json(['success' => false, 'message' => 'Empty rackingId.']);
+        }
+    }
+
+    /**
+     * Delete custom solar racking data.
+     *
+     * @return JSON
+     */
+    public function rackingToggleFavorite(Request $request){
+        if(!empty($request['rackingId'])){
+            $racking = CustomRacking::where('id', $request['rackingId'])->first();
+            if($racking){
+                $racking->favorite = !$racking->favorite;
+                $racking->save();
+                return response()->json(['success' => true]);
+            } else {
+                return response()->json(['success' => false, 'message' => 'Cannot find racking.']);
+            }
+        } else {
+            return response()->json(['success' => false, 'message' => 'Empty rackingId.']);
+        }
+    }
+
+    /**
+     * Show the custom stanchions page.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function customStanchion()
+    {
+        if(Auth::user()->userrole == 2 || Auth::user()->userrole == 1){
+            return view('equipment.stanchion.list');
+        }
+        else
+            return redirect('home');
+    }
+
+    /**
+     * Return the list of custom stanchions.
+     *
+     * @return JSON
+     */
+    public function getCustomStanchion(Request $request){
+        $columns = array( 
+            0 =>'id', 
+            1 =>'mfr',
+            2 =>'model',
+            3 =>'rating',
+        );
+        
+        $handler = CustomStanchion::where('client_no', Auth::user()->companyid);
+        
+        $totalData = $handler->count();
+        $totalFiltered = $totalData; 
+
+        $limit = $request->input('length');
+        $start = $request->input('start');
+        $order = $columns[$request->input('order.0.column')];
+        $dir = $request->input('order.0.dir');
+
+        if(empty($request->input('search.value')))
+        {            
+            $stanchions = $handler->offset($start)
+                ->limit($limit)
+                ->orderBy($order,$dir)
+                ->get();
+        }
+        else {
+            $search = $request->input('search.value'); 
+            $stanchions =  $handler->where('mfr', 'LIKE',"%{$search}%")
+                        ->orWhere('model', 'LIKE',"%{$search}%")
+                        ->orWhere('pullout', 'LIKE',"%{$search}%")
+                        ->orWhere('weight', 'LIKE',"%{$search}%")
+                        ->orWhere('url', 'LIKE',"%{$search}%")
+                        ->offset($start)
+                        ->limit($limit)
+                        ->orderBy($order,$dir)
+                        ->get();
+
+            $totalFiltered = $handler->where('mfr', 'LIKE',"%{$search}%")
+                        ->orWhere('model', 'LIKE',"%{$search}%")
+                        ->orWhere('pullout', 'LIKE',"%{$search}%")
+                        ->orWhere('weight', 'LIKE',"%{$search}%")
+                        ->orWhere('url', 'LIKE',"%{$search}%")
+                        ->count();
+        }
+
+        $data = array();
+
+        if(!empty($stanchions))
+        {
+            $id = 1;
+            foreach ($stanchions as $stanchion)
+            {
+                $stanchion['actions'] = "
+                <div class='text-center'>
+                    <button type='button' class='btn' onclick='toggleFavourite(this,{$stanchion['id']})'>
+                        " . ($stanchion->favorite ? "<i class='fa fa-star'></i>" : "<i class='far fa-star'></i>") . 
+                    "</button>
+                    <button type='button' class='btn btn-primary' 
+                        onclick='showEditStanchion(this,{$stanchion['id']})'>
+                        <i class='fa fa-pencil-alt'></i>
+                    </button>
+                    <button type='button' class='js-swal-confirm btn btn-danger' onclick='delStanchion(this,{$stanchion['id']})'>
+                        <i class='fa fa-trash'></i>
+                    </button>
+                    
+                </div>";
+                $stanchion['id'] = $id; $id ++;
+                $data[] = $stanchion;
+            }
+        }
+        $json_data = array(
+            "draw"            => intval($request->input('draw')),  
+            "recordsTotal"    => intval($totalData),  
+            "recordsFiltered" => intval($totalFiltered), 
+            "data"            => $data   
+            );
+        echo json_encode($json_data);
+    }
+
+    /**
+     * Create / Update custom stanchion data.
+     *
+     * @return JSON
+     */
+    public function submitStanchion(Request $request){
+        if(!empty($request['stanchionId']) && !empty($request['data'])){
+            $stanchion = CustomStanchion::where('id', $request['stanchionId'])->first();
+            if($stanchion){
+                if($stanchion->client_no != Auth::user()->companyid)
+                    return response()->json(['success' => false, 'message' => 'Company Id Mismatch.']);
+                
+                foreach($request['data'] as $fieldKey => $value)
+                    $stanchion[$fieldKey] = $value;
+                
+                $stanchion->save();
+                return response()->json(['success' => true]);
+            } else {
+                $data = $request['data'];
+                $data['client_no'] = Auth::user()->companyid;
+                $newStanchion = CustomStanchion::create($data);
+                return response()->json(['success' => true]);
+            }
+        } else {
+            return response()->json(['success' => false, 'message' => 'Empty stanchionId or data.']);
+        }
+    }
+
+    /**
+     * Delete custom stanchion data.
+     *
+     * @return JSON
+     */
+    public function deleteStanchion(Request $request){
+        if(!empty($request['stanchionId'])){
+            $stanchion = CustomStanchion::where('id', $request['stanchionId'])->first();
+            if($stanchion){
+                $stanchion->delete();
+                return response()->json(['success' => true]);
+            } else {
+                return response()->json(['success' => false, 'message' => 'Cannot find stanchion.']);
+            }
+        } else {
+            return response()->json(['success' => false, 'message' => 'Empty stanchionId.']);
+        }
+    }
+
+    /**
+     * Delete custom stanchion data.
+     *
+     * @return JSON
+     */
+    public function stanchionToggleFavorite(Request $request){
+        if(!empty($request['stanchionId'])){
+            $stanchion = CustomStanchion::where('id', $request['stanchionId'])->first();
+            if($stanchion){
+                $stanchion->favorite = !$stanchion->favorite;
+                $stanchion->save();
+                return response()->json(['success' => true]);
+            } else {
+                return response()->json(['success' => false, 'message' => 'Cannot find stanchion.']);
+            }
+        } else {
+            return response()->json(['success' => false, 'message' => 'Empty stanchionId.']);
         }
     }
 }

@@ -131,11 +131,29 @@
                                 <span class="nav-main-link-name">Project list</span>
                             </a>
                         </li>
-                        <li class="nav-main-heading">My Equipments</li>
+                        <li class="nav-main-heading">Custom Products</li>
                         <li class="nav-main-item">
                             <a class="nav-main-link" href="{{ route('customModule') }}">
                                 <i class="nav-main-link-icon fa fa-solar-panel"></i>
                                 <span class="nav-main-link-name">Modules</span>
+                            </a>
+                        </li>
+                        <li class="nav-main-item">
+                            <a class="nav-main-link" href="{{ route('customInverter') }}">
+                                <i class="nav-main-link-icon fa fa-dharmachakra"></i>
+                                <span class="nav-main-link-name">Inverters</span>
+                            </a>
+                        </li>
+                        <li class="nav-main-item">
+                            <a class="nav-main-link" href="{{ route('customRacking') }}">
+                                <i class="nav-main-link-icon fab fa-resolving"></i>
+                                <span class="nav-main-link-name">Solar Racking</span>
+                            </a>
+                        </li>
+                        <li class="nav-main-item">
+                            <a class="nav-main-link" href="{{ route('customStanchion') }}">
+                                <i class="nav-main-link-icon fa fa-wrench"></i>
+                                <span class="nav-main-link-name">Stanchions</span>
                             </a>
                         </li>
                         <li class="nav-main-heading">Company Tools</li>
