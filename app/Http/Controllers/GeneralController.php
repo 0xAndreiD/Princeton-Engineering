@@ -19,6 +19,8 @@ use App\UserSetting;
 use App\ASCERoofTypes;
 use App\ASCEYear;
 use App\CustomModule;
+use App\CustomInverter;
+use App\CustomStanchion;
 use Kunnu\Dropbox\DropboxApp;
 use Kunnu\Dropbox\Dropbox;
 use Kunnu\Dropbox\DropboxFile;
@@ -704,6 +706,15 @@ class GeneralController extends Controller
      */
     public function getPVInverters(Request $request){
         $pv_inverters = PVInverter::all();
+        $custom_inverters = CustomInverter::where('client_no', Auth::user()->companyid)->get(
+            array('mfr as module', 'model as submodule', 'rating as option1', 'favorite')
+        );
+        foreach($custom_inverters as $inverter){
+            $inverter['option2'] = 'w';
+            $inverter['custom'] = true;
+            $pv_inverters[] = $inverter;
+        }
+
         return json_encode($pv_inverters);
     }
 
@@ -714,6 +725,15 @@ class GeneralController extends Controller
      */
     public function getStanchions(Request $request){
         $stanchions = Stanchion::all();
+        $custom_stanchions = CustomStanchion::where('client_no', Auth::user()->companyid)->get(
+            array('mfr as module', 'model as submodule', 'weight as option1', 'favorite')
+        );
+        foreach($custom_stanchions as $stanchion){
+            $stanchion['option2'] = 'lb';
+            $stanchion['custom'] = true;
+            $stanchions[] = $stanchion;
+        }
+
         return json_encode($stanchions);
     }
 

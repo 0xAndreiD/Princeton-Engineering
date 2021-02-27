@@ -651,8 +651,10 @@ var getPVModuleSubTypes = function(mainType) {
                 bFound = true;
             }
         }
-        if (bFound == false)
+        if (bFound == false){
+            if(equipShowSetting == 0 || (equipShowSetting == 1 && !availablePVModules[index][7]) || (equipShowSetting == 2 && availablePVModules[index][7]) || (equipShowSetting == 3 && availablePVModules[index][8]))
             subTypes.push(availablePVModules[index]);
+        }
     }
 
     return subTypes;
@@ -676,7 +678,8 @@ var updatePVSubmoduleField = function(mainType, subType="") {
         $('#option-module-subtype').find('option').remove();
         subTypes = getPVModuleSubTypes(mainType);
         
-        selectedSubType = subTypes[0][1];
+        if(subTypes.length > 0)
+            selectedSubType = subTypes[0][1];
         if ( typeof preloaded_data != "undefined"
           && typeof preloaded_data['Equipment'] != "undefined" 
           && typeof preloaded_data['Equipment']['PVModule'] != "undefined"
@@ -687,10 +690,10 @@ var updatePVSubmoduleField = function(mainType, subType="") {
         for (index=0; index<subTypes.length; index++) 
         {
             let background = '';
-            if(subTypes[index][7])
-                background = '#FED8B1';
-            else if(subTypes[index][8])
+            if(subTypes[index][8])
                 background = '#90EE90';
+            else if(subTypes[index][7])
+                background = '#FED8B1';
 
             if (subTypes[index][1] == selectedSubType) {
                 $('#option-module-subtype').append(`<option data-value="${subTypes[index][1]}" ${background != '' ? "style='background-color: " + background + "'" : ''} selected> ${subTypes[index][1]}</option>`);
@@ -732,12 +735,14 @@ var getPVInvertorSubTypes = function(mainType) {
 
         bFound = false;
         for (typeIndex = 0; typeIndex < subTypes.length; typeIndex++) {
-            if (subTypes[typeIndex] == availablePVInverters[index][1]) {
+            if (subTypes[typeIndex] == availablePVInverters[index]) {
                 bFound = true;
             }
         }
-        if (bFound == false)
-            subTypes.push(availablePVInverters[index][1]);
+        if (bFound == false){
+            if(equipShowSetting == 0 || (equipShowSetting == 1 && !availablePVInverters[index][4]) || (equipShowSetting == 2 && availablePVInverters[index][4]) || (equipShowSetting == 3 && availablePVInverters[index][5]))
+                subTypes.push(availablePVInverters[index]);
+        }
     }
 
     return subTypes;
@@ -771,7 +776,8 @@ var updatePVInvertorSubField = function(mainType, subType = "") {
         $('#option-inverter-subtype').find('option').remove();
         subTypes = getPVInvertorSubTypes(mainType);
 
-        selectedSubType = subTypes[0];
+        if(subTypes.length > 0)
+            selectedSubType = subTypes[0][1];
         if ( typeof preloaded_data != "undefined"
           && typeof preloaded_data['Equipment'] != "undefined" 
           && typeof preloaded_data['Equipment']['PVInverter'] != "undefined"
@@ -781,15 +787,21 @@ var updatePVInvertorSubField = function(mainType, subType = "") {
 
         for (index=0; index<subTypes.length; index++) 
         {
+            let background = '';
+            if(subTypes[index][5])
+                background = '#90EE90';
+            else if(subTypes[index][4])
+                background = '#FED8B1';
+
             if (subTypes[index] == selectedSubType) {
-                $('#option-inverter-subtype').append(`<option data-value="${subTypes[index]}" selected> ${subTypes[index]}</option>`);
+                $('#option-inverter-subtype').append(`<option data-value="${subTypes[index][1]}" ${background != '' ? "style='background-color: " + background + "'" : ''} selected> ${subTypes[index][1]}</option>`);
             }
             else {
-                $('#option-inverter-subtype').append(`<option data-value="${subTypes[index]}"> ${subTypes[index]} </option>`);
+                $('#option-inverter-subtype').append(`<option data-value="${subTypes[index][1]}" ${background != '' ? "style='background-color: " + background + "'" : ''}> ${subTypes[index][1]} </option>`);
             }
         }
 
-        subType = subTypes[0];
+        subType = selectedSubType;
     }
 
     $('#option-inverter-option1').html(option1PVInverter(mainType, subType));
@@ -820,12 +832,14 @@ var getStanchionSubTypes = function(mainType) {
 
         bFound = false;
         for (typeIndex = 0; typeIndex < subTypes.length; typeIndex++) {
-            if (subTypes[typeIndex] == availableStanchions[index][1]) {
+            if (subTypes[typeIndex] == availableStanchions[index]) {
                 bFound = true;
             }
         }
-        if (bFound == false)
-            subTypes.push(availableStanchions[index][1]);
+        if (bFound == false){
+            if(equipShowSetting == 0 || (equipShowSetting == 1 && !availableStanchions[index][4]) || (equipShowSetting == 2 && availableStanchions[index][4]) || (equipShowSetting == 3 && availableStanchions[index][5]))
+                subTypes.push(availableStanchions[index]);
+        }
     }
 
     return subTypes;
@@ -859,7 +873,8 @@ var updateStanchionSubField = function(mainType, subType = "") {
         $('#option-stanchion-subtype').find('option').remove();
         subTypes = getStanchionSubTypes(mainType);
 
-        selectedSubType = subTypes[0];
+        if(subTypes.length > 0)
+            selectedSubType = subTypes[0][1];
         if ( typeof preloaded_data != "undefined"
           && typeof preloaded_data['Equipment'] != "undefined" 
           && typeof preloaded_data['Equipment']['Stanchion'] != "undefined"
@@ -869,14 +884,20 @@ var updateStanchionSubField = function(mainType, subType = "") {
 
         for (index=0; index<subTypes.length; index++) 
         {
+            let background = '';
+            if(subTypes[index][5])
+                background = '#90EE90';
+            else if(subTypes[index][4])
+                background = '#FED8B1';
+
             if (subTypes[index] == selectedSubType) {
-                $('#option-stanchion-subtype').append(`<option data-value="${subTypes[index]}" selected> ${subTypes[index]}</option>`);
+                $('#option-stanchion-subtype').append(`<option data-value="${subTypes[index][1]}" ${background != '' ? "style='background-color: " + background + "'" : ''} selected> ${subTypes[index][1]}</option>`);
             }
             else {
-                $('#option-stanchion-subtype').append(`<option data-value="${subTypes[index]}"> ${subTypes[index]} </option>`);
+                $('#option-stanchion-subtype').append(`<option data-value="${subTypes[index][1]}" ${background != '' ? "style='background-color: " + background + "'" : ''}> ${subTypes[index][1]} </option>`);
             }
         }
-        subType = subTypes[0];
+        subType = selectedSubType;
     }
 
 
@@ -969,6 +990,14 @@ var updateRailSupportSubField = function(mainType, subType = "") {
 
     $('#option-railsupport-option1').html(option1RailSupport(mainType, subType));
     $('#option-railsupport-option2').html(option2RailSupport(mainType, subType));
+}
+
+var equipShowSetting = 0;
+function updateEquipmentSetting(setting){
+    equipShowSetting = setting;
+    updatePVSubmoduleField($('#option-module-type').children("option:selected").val());
+    updatePVInvertorSubField($('#option-inverter-type').children("option:selected").val());
+    updateStanchionSubField($('#option-stanchion-type').children("option:selected").val());
 }
 
 // load US state into select component
@@ -2169,9 +2198,10 @@ $(document).ready(function() {
                 if(res.length > 0)
                 {
                     for(let i = 0; i < res.length; i ++){
-                        availablePVInverters.push([res[i]['module'], res[i]['submodule'], res[i]['option1'], res[i]['option2']]);
+                        availablePVInverters.push([res[i]['module'], res[i]['submodule'], res[i]['option1'], res[i]['option2'], res[i]['custom'], res[i]['favorite']]);
                     }
                 }
+                console.log(availablePVInverters);
                 // ------------------- Second Line ---------------------
                 // inverter module section
                 $('#option-inverter-type').find('option').remove();
@@ -2213,7 +2243,7 @@ $(document).ready(function() {
                 if(res.length > 0)
                 {
                     for(let i = 0; i < res.length; i ++){
-                        availableStanchions.push([res[i]['module'], res[i]['submodule'], res[i]['option1'], res[i]['option2']]);
+                        availableStanchions.push([res[i]['module'], res[i]['submodule'], res[i]['option1'], res[i]['option2'], res[i]['custom'], res[i]['favorite']]);
                     }
                 }
                 // ------------------- Third Line ---------------------
