@@ -21,7 +21,7 @@
 <!-- Backup Page Content -->
 <div class="content" style="text-align:left">
     <div class="row">
-        <div class="col-md-3 offset-md-2">
+        <div class="col-md-3">
             <h2 class="content-heading pt-0">Backup Settings</h2>
             <div class="form-group">
                 <div class="custom-control custom-radio custom-control-dark mb-1">

@@ -227,6 +227,8 @@
         <col width="80">
         <col width="80">
         <col width="80">
+        <col width="50">
+        <col width="150">
     </colgroup>
 <tbody>
     <tr class="h13">
@@ -251,6 +253,13 @@
         <td class="iw400-bdr">Value</td>
         <td class="iw400-bdr">Unit</td>
         <td class="iw400-bdr">Quantity</td>
+        <td><div style="overflow:hidden"></div></td>
+        <td>
+            <div class="custom-control custom-radio custom-control-dark">
+                <input type="radio" class="custom-control-input" id="equipment-mixed" name="equipment-settings" onclick="updateEquipmentSetting(0)" checked>
+                <label class="custom-control-label" for="equipment-mixed">Mixed</label>
+            </div>
+        </td>
     </tr>
     <tr class="h13">
         <td><div style="overflow:hidden"></div></td>
@@ -266,6 +275,13 @@
         <td class="w400-bdr" id="option-module-option1"></td>
         <td class="w400-bdr" id="option-module-option2">watts</td>
         <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="option-module-quantity" tabindex="19" value="0"></td>
+        <td><div style="overflow:hidden"></div></td>
+        <td>
+            <div class="custom-control custom-radio custom-control-info">
+                <input type="radio" class="custom-control-input" id="equipment-standard" name="equipment-settings" onclick="updateEquipmentSetting(1)">
+                <label class="custom-control-label" for="equipment-standard">Standard</label>
+            </div>
+        </td>
         <input class="w400-bdr" id="pv-module-length" hidden>
         <input class="w400-bdr" id="pv-module-width" hidden>
     </tr>
@@ -283,6 +299,13 @@
         <td class="w400-bdr" id="option-inverter-option1"></td>
         <td class="w400-bdr" id="option-inverter-option2"></td>
         <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="option-inverter-quantity" tabindex="20" value="0"></td>
+        <td><div style="overflow:hidden"></div></td>
+        <td>
+            <div class="custom-control custom-radio custom-control-warning">
+                <input type="radio" class="custom-control-input" id="equipment-custom" name="equipment-settings" onclick="updateEquipmentSetting(2)">
+                <label class="custom-control-label" for="equipment-custom">Custom Only</label>
+            </div>
+        </td>
     </tr>
     <tr class="h13">
         <td><div style="overflow:hidden"></div></td>
@@ -297,6 +320,14 @@
         </td>
         <td class="w400-bdr" id="option-stanchion-option1"></td>
         <td class="w400-bdr" id="option-stanchion-option2"></td>
+        <td><div style="overflow:hidden"></div></td>
+        <td><div style="overflow:hidden"></div></td>
+        <td>
+            <div class="custom-control custom-radio custom-control-success">
+                <input type="radio" class="custom-control-input" id="equipment-favorite" name="equipment-settings" onclick="updateEquipmentSetting(3)">
+                <label class="custom-control-label" for="equipment-favorite">Favorite Only</label>
+            </div>
+        </td>
     </tr>
     <tr class="h13">
         <td><div style="overflow:hidden"></div></td>
