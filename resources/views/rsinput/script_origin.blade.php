@@ -647,12 +647,12 @@ var getPVModuleSubTypes = function(mainType) {
 
         bFound = false;
         for (typeIndex = 0; typeIndex < subTypes.length; typeIndex++) {
-            if (subTypes[typeIndex] == availablePVModules[index][1]) {
+            if (subTypes[typeIndex] == availablePVModules[index]) {
                 bFound = true;
             }
         }
         if (bFound == false)
-            subTypes.push(availablePVModules[index][1]);
+            subTypes.push(availablePVModules[index]);
     }
 
     return subTypes;
@@ -676,7 +676,7 @@ var updatePVSubmoduleField = function(mainType, subType="") {
         $('#option-module-subtype').find('option').remove();
         subTypes = getPVModuleSubTypes(mainType);
         
-        selectedSubType = subTypes[0];
+        selectedSubType = subTypes[0][1];
         if ( typeof preloaded_data != "undefined"
           && typeof preloaded_data['Equipment'] != "undefined" 
           && typeof preloaded_data['Equipment']['PVModule'] != "undefined"
@@ -686,11 +686,17 @@ var updatePVSubmoduleField = function(mainType, subType="") {
 
         for (index=0; index<subTypes.length; index++) 
         {
-            if (subTypes[index] == selectedSubType) {
-                $('#option-module-subtype').append(`<option data-value="${subTypes[index]}" selected> ${subTypes[index]}</option>`);
+            let background = '';
+            if(subTypes[index][7])
+                background = '#FED8B1';
+            else if(subTypes[index][8])
+                background = '#90EE90';
+
+            if (subTypes[index][1] == selectedSubType) {
+                $('#option-module-subtype').append(`<option data-value="${subTypes[index][1]}" ${background != '' ? "style='background-color: " + background + "'" : ''} selected> ${subTypes[index][1]}</option>`);
             }
             else {
-                $('#option-module-subtype').append(`<option data-value="${subTypes[index]}"> ${subTypes[index]} </option>`);
+                $('#option-module-subtype').append(`<option data-value="${subTypes[index][1]}" ${background != '' ? "style='background-color: " + background + "'" : ''} > ${subTypes[index][1]} </option>`);
             }
         }
         subType = selectedSubType; 
@@ -2114,7 +2120,7 @@ $(document).ready(function() {
                 if(res.length > 0)
                 {
                     for(let i = 0; i < res.length; i ++){
-                        availablePVModules.push([res[i]['mfr'], res[i]['model'], res[i]['rating'], res[i]['length'], res[i]['width'], res[i]['depth'], res[i]['weight']]);
+                        availablePVModules.push([res[i]['mfr'], res[i]['model'], res[i]['rating'], res[i]['length'], res[i]['width'], res[i]['depth'], res[i]['weight'], res[i]['custom'], res[i]['favorite']]);
                     }
                 }
                 // ------------------- First Line ---------------------

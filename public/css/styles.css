@@ -417,3 +417,7 @@ html, body {
 .side-view > .form-group > .form-control{
     border: 1px solid #f1dfd2;
 }
+
+.side-view > .form-group > label{
+    text-align: left !important;
+}

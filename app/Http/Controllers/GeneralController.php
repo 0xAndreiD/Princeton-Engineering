@@ -18,6 +18,7 @@ use App\DataCheck;
 use App\UserSetting;
 use App\ASCERoofTypes;
 use App\ASCEYear;
+use App\CustomModule;
 use Kunnu\Dropbox\DropboxApp;
 use Kunnu\Dropbox\Dropbox;
 use Kunnu\Dropbox\DropboxFile;
@@ -685,6 +686,14 @@ class GeneralController extends Controller
      */
     public function getPVModules(Request $request){
         $pv_modules = PVModule::all();
+        $custom_modules = CustomModule::where('client_no', Auth::user()->companyid)->get(
+            array('mfr', 'model', 'rating', 'length', 'width', 'depth', 'weight', 'favorite')
+        );
+        foreach($custom_modules as $module){
+            $module['custom'] = true;
+            $pv_modules[] = $module;
+        }
+
         return json_encode($pv_modules);
     }
 
