@@ -672,9 +672,9 @@ var optionPVModule = function(mainType, subType, idx) {
 }
 
 var updatePVSubmoduleField = function(mainType, subType="") {
-
     if (subType == "") 
     {
+        selectedSubType = "";
         $('#option-module-subtype').find('option').remove();
         subTypes = getPVModuleSubTypes(mainType);
         
@@ -773,6 +773,7 @@ var option2PVInverter = function(mainType, subType) {
 var updatePVInvertorSubField = function(mainType, subType = "") {
     if (subType == "") 
     {
+        selectedSubType = "";
         $('#option-inverter-subtype').find('option').remove();
         subTypes = getPVInvertorSubTypes(mainType);
 
@@ -793,7 +794,7 @@ var updatePVInvertorSubField = function(mainType, subType = "") {
             else if(subTypes[index][4])
                 background = '#FED8B1';
 
-            if (subTypes[index] == selectedSubType) {
+            if (subTypes[index][1] == selectedSubType) {
                 $('#option-inverter-subtype').append(`<option data-value="${subTypes[index][1]}" ${background != '' ? "style='background-color: " + background + "'" : ''} selected> ${subTypes[index][1]}</option>`);
             }
             else {
@@ -870,6 +871,7 @@ var option2Stanchion = function(mainType, subType) {
 var updateStanchionSubField = function(mainType, subType = "") {
 
     if (subType == "") {
+        selectedSubType = "";
         $('#option-stanchion-subtype').find('option').remove();
         subTypes = getStanchionSubTypes(mainType);
 
@@ -890,7 +892,7 @@ var updateStanchionSubField = function(mainType, subType = "") {
             else if(subTypes[index][4])
                 background = '#FED8B1';
 
-            if (subTypes[index] == selectedSubType) {
+            if (subTypes[index][1] == selectedSubType) {
                 $('#option-stanchion-subtype').append(`<option data-value="${subTypes[index][1]}" ${background != '' ? "style='background-color: " + background + "'" : ''} selected> ${subTypes[index][1]}</option>`);
             }
             else {
@@ -934,7 +936,7 @@ var getRailSupportSubTypes = function(mainType) {
             }
         }
         if (bFound == false){
-            if(equipShowSetting == 0 || (equipShowSetting == 1 && !availableStanchions[index][4]) || (equipShowSetting == 2 && availableStanchions[index][4]) || (equipShowSetting == 3 && availableStanchions[index][5]))
+            if(equipShowSetting == 0 || (equipShowSetting == 1 && !availableRailSupports[index][4]) || (equipShowSetting == 2 && availableRailSupports[index][4]) || (equipShowSetting == 3 && availableRailSupports[index][5]))
                 subTypes.push(availableRailSupports[index]);
         }
     }
@@ -966,6 +968,7 @@ var option2RailSupport = function(mainType, subType) {
 
 var updateRailSupportSubField = function(mainType, subType = "") {
     if (subType == "") {
+        selectedSubType = "";
         $('#option-railsupport-subtype').find('option').remove();
         subTypes = getRailSupportSubTypes(mainType);
 
@@ -986,7 +989,7 @@ var updateRailSupportSubField = function(mainType, subType = "") {
             else if(subTypes[index][4])
                 background = '#FED8B1';
 
-            if (subTypes[index] == selectedSubType) {
+            if (subTypes[index][1] == selectedSubType) {
                 $('#option-railsupport-subtype').append(`<option data-value="${subTypes[index][1]}" ${background != '' ? "style='background-color: " + background + "'" : ''} selected> ${subTypes[index][1]}</option>`);
             }
             else {
@@ -996,6 +999,7 @@ var updateRailSupportSubField = function(mainType, subType = "") {
 
         subType = selectedSubType;
     }
+    console.log(mainType, subType);
 
     $('#option-railsupport-option1').html(option1RailSupport(mainType, subType));
     $('#option-railsupport-option2').html(option2RailSupport(mainType, subType));
