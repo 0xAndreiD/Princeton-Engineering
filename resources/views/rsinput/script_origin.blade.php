@@ -994,7 +994,7 @@ var updateRailSupportSubField = function(mainType, subType = "") {
             }
         }
 
-        subType = subTypes[0];
+        subType = selectedSubType;
     }
 
     $('#option-railsupport-option1').html(option1RailSupport(mainType, subType));
