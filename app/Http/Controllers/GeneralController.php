@@ -21,6 +21,7 @@ use App\ASCEYear;
 use App\CustomModule;
 use App\CustomInverter;
 use App\CustomStanchion;
+use App\CustomRacking;
 use Kunnu\Dropbox\DropboxApp;
 use Kunnu\Dropbox\Dropbox;
 use Kunnu\Dropbox\DropboxFile;
@@ -744,6 +745,15 @@ class GeneralController extends Controller
      */
     public function getRailsupport(Request $request){
         $railsupport = RailSupport::all();
+        $custom_supports = CustomRacking::where('client_no', Auth::user()->companyid)->get(
+            array('mfr as module', 'model as submodule', 'rack_weight as option1', 'favorite')
+        );
+        foreach($custom_supports as $support){
+            $support['option2'] = 'lb';
+            $support['custom'] = true;
+            $railsupport[] = $support;
+        }
+
         return json_encode($railsupport);
     }
 

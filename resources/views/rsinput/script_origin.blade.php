@@ -929,12 +929,14 @@ var getRailSupportSubTypes = function(mainType) {
 
         bFound = false;
         for (typeIndex = 0; typeIndex < subTypes.length; typeIndex++) {
-            if (subTypes[typeIndex] == availableRailSupports[index][1]) {
+            if (subTypes[typeIndex] == availableRailSupports[index]) {
                 bFound = true;
             }
         }
-        if (bFound == false)
-            subTypes.push(availableRailSupports[index][1]);
+        if (bFound == false){
+            if(equipShowSetting == 0 || (equipShowSetting == 1 && !availableStanchions[index][4]) || (equipShowSetting == 2 && availableStanchions[index][4]) || (equipShowSetting == 3 && availableStanchions[index][5]))
+                subTypes.push(availableRailSupports[index]);
+        }
     }
 
     return subTypes;
@@ -967,7 +969,8 @@ var updateRailSupportSubField = function(mainType, subType = "") {
         $('#option-railsupport-subtype').find('option').remove();
         subTypes = getRailSupportSubTypes(mainType);
 
-        selectedSubType = subTypes[0];
+        if(subTypes.length > 0)
+            selectedSubType = subTypes[0][1];
         if ( typeof preloaded_data != "undefined"
           && typeof preloaded_data['Equipment'] != "undefined" 
           && typeof preloaded_data['Equipment']['RailSupportSystem'] != "undefined"
@@ -977,11 +980,17 @@ var updateRailSupportSubField = function(mainType, subType = "") {
 
         for (index=0; index<subTypes.length; index++) 
         {
+            let background = '';
+            if(subTypes[index][5])
+                background = '#90EE90';
+            else if(subTypes[index][4])
+                background = '#FED8B1';
+
             if (subTypes[index] == selectedSubType) {
-                $('#option-railsupport-subtype').append(`<option data-value="${subTypes[index]}" selected> ${subTypes[index]}</option>`);
+                $('#option-railsupport-subtype').append(`<option data-value="${subTypes[index][1]}" ${background != '' ? "style='background-color: " + background + "'" : ''} selected> ${subTypes[index][1]}</option>`);
             }
             else {
-                $('#option-railsupport-subtype').append(`<option data-value="${subTypes[index]}"> ${subTypes[index]} </option>`);
+                $('#option-railsupport-subtype').append(`<option data-value="${subTypes[index][1]}" ${background != '' ? "style='background-color: " + background + "'" : ''}> ${subTypes[index][1]} </option>`);
             }
         }
 
@@ -998,6 +1007,7 @@ function updateEquipmentSetting(setting){
     updatePVSubmoduleField($('#option-module-type').children("option:selected").val());
     updatePVInvertorSubField($('#option-inverter-type').children("option:selected").val());
     updateStanchionSubField($('#option-stanchion-type').children("option:selected").val());
+    updateRailSupportSubField($('#option-railsupport-type').children("option:selected").val());
 }
 
 // load US state into select component
@@ -2287,7 +2297,7 @@ $(document).ready(function() {
                 if(res.length > 0)
                 {
                     for(let i = 0; i < res.length; i ++){
-                        availableRailSupports.push([res[i]['module'], res[i]['submodule'], res[i]['option1'], res[i]['option2']]);
+                        availableRailSupports.push([res[i]['module'], res[i]['submodule'], res[i]['option1'], res[i]['option2'], res[i]['custom'], res[i]['favorite']]);
                     }
                 }
                 // ------------------- Fourth Line ---------------------
@@ -2461,7 +2471,7 @@ $(document).ready(function() {
         updateRailSupportSubField($(this).children("option:selected").val());
     });
     $('#option-railsupport-subtype').on('change', function() {
-        updateRailSupportSubField( $('#option-stanchion-type').children("option:selected").val(), 
+        updateRailSupportSubField( $('#option-railsupport-type').children("option:selected").val(), 
                                 $(this).children("option:selected").val());
     });
     $('#option-number-of-conditions').on('change', function() {

@@ -246,6 +246,70 @@
                     <label for="Available_Fault">Available Fault Current(Aac)</label>
                     <input type="text" class="form-control" id="Available_Fault" value="">
                 </div>
+                <div class="form-group">
+                    <label for="Install_Angle_Horiz_min">Installation Angle from Horiz Min(deg)</label>
+                    <input type="text" class="form-control" id="Install_Angle_Horiz_min" value="">
+                </div>
+                <div class="form-group">
+                    <label for="height">Height(Inch)</label>
+                    <input type="text" class="form-control" id="height" value="">
+                </div>
+                <div class="form-group">
+                    <label for="width">Width(Inch)</label>
+                    <input type="text" class="form-control" id="width" value="">
+                </div>
+                <div class="form-group">
+                    <label for="depth">Depth(Inch)</label>
+                    <input type="text" class="form-control" id="depth" value="">
+                </div>
+                <div class="form-group">
+                    <label for="weight">Weight(Inch)</label>
+                    <input type="text" class="form-control" id="weight" value="">
+                </div>
+                <div class="form-group">
+                    <label for="url">URL</label>
+                    <input type="text" class="form-control" id="url" value="">
+                </div>
+                <div class="form-group">
+                    <label for="status">Status</label>
+                    <input type="text" class="form-control" id="status" value="">
+                </div>
+                <div class="form-group">
+                    <label for="product_literature">Product Literature</label>
+                    <input type="text" class="form-control" id="product_literature" value="">
+                </div>
+                <div class="form-group">
+                    <label for="cost">Cost</label>
+                    <input type="text" class="form-control" id="cost" value="">
+                </div>
+                <div class="form-group">
+                    <label for="rev_date">Revision Date</label>
+                    <input type="date" class="form-control" id="rev_date" value="" >
+                </div>
+                <div class="form-group">
+                    <label for="DC_Start_Vol">DC Start Voltage(Vdc)</label>
+                    <input type="text" class="form-control" id="DC_Start_Vol" value="">
+                </div>
+                <div class="form-group">
+                    <label for="MPPT2_Input_max">MPPT2 Max Input Current(Adc)</label>
+                    <input type="text" class="form-control" id="MPPT2_Input_max" value="">
+                </div>
+                <div class="form-group">
+                    <label for="MPPT2_Short_Circuit_max">MPPT2 Max Short Circuit Current(Adc)</label>
+                    <input type="text" class="form-control" id="MPPT2_Short_Circuit_max" value="">
+                </div>
+                <div class="form-group">
+                    <label for="Input_kW_min">Input kW Min(Adc)</label>
+                    <input type="text" class="form-control" id="Input_kW_min" value="">
+                </div>
+                <div class="form-group">
+                    <label for="MPP_Vol_Low">MPP Voltage Low(Vdc)</label>
+                    <input type="text" class="form-control" id="MPP_Vol_Low" value="">
+                </div>
+                <div class="form-group">
+                    <label for="MPP_Vol_High">MPP Voltage High(Vdc)</label>
+                    <input type="text" class="form-control" id="MPP_Vol_High" value="">
+                </div>
                 <div class="block-content row justify-content-center border-top">
                     <div class="col-9">
                         <button type="btn" class="btn btn-block btn-hero-primary" onclick="submitInverter()">
