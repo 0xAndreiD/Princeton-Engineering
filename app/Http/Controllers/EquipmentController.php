@@ -159,10 +159,14 @@ class EquipmentController extends Controller
                 foreach($request['data'] as $fieldKey => $value)
                     $module[$fieldKey] = $value;
                 
+                $tmp = unpack("l", pack("l", crc32($module['mfr'] . $module['model'] . $module['Voc'] . $module['Isc'] . $module['Mtg_Hole_1'] . $module['lead_len'])));
+                $module['crc32'] = reset($tmp);
                 $module->save();
                 return response()->json(['success' => true]);
             } else {
                 $data = $request['data'];
+                $tmp = unpack("l", pack("l", crc32($data['mfr'] . $data['model'] . $data['Voc'] . $data['Isc'] . $data['Mtg_Hole_1'] . $data['lead_len'])));
+                $data['crc32'] = reset($tmp);
                 $data['client_no'] = Auth::user()->companyid;
                 $newModule = CustomModule::create($data);
                 return response()->json(['success' => true]);
