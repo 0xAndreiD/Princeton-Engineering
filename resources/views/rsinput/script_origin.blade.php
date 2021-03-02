@@ -684,7 +684,8 @@ var updatePVSubmoduleField = function(mainType, subType="") {
           && typeof preloaded_data['Equipment'] != "undefined" 
           && typeof preloaded_data['Equipment']['PVModule'] != "undefined"
           && typeof preloaded_data['Equipment']['PVModule']['SubType'] != "undefined" ) {
-            selectedSubType = preloaded_data['Equipment']['PVModule']['SubType'];
+            if(preloaded_data['Equipment']['PVModule']['Type'] == mainType)
+                selectedSubType = preloaded_data['Equipment']['PVModule']['SubType'];
         }
 
         for (index=0; index<subTypes.length; index++) 
@@ -783,7 +784,8 @@ var updatePVInvertorSubField = function(mainType, subType = "") {
           && typeof preloaded_data['Equipment'] != "undefined" 
           && typeof preloaded_data['Equipment']['PVInverter'] != "undefined"
           && typeof preloaded_data['Equipment']['PVInverter']['SubType'] != "undefined" ) {
-            selectedSubType = preloaded_data['Equipment']['PVInverter']['SubType'];
+            if(preloaded_data['Equipment']['PVInverter']['Type'] == mainType)
+                selectedSubType = preloaded_data['Equipment']['PVInverter']['SubType'];
         }
 
         for (index=0; index<subTypes.length; index++) 
@@ -881,7 +883,8 @@ var updateStanchionSubField = function(mainType, subType = "") {
           && typeof preloaded_data['Equipment'] != "undefined" 
           && typeof preloaded_data['Equipment']['Stanchion'] != "undefined"
           && typeof preloaded_data['Equipment']['Stanchion']['SubType'] != "undefined" ) {
-            selectedSubType = preloaded_data['Equipment']['Stanchion']['SubType'];
+            if(preloaded_data['Equipment']['Stanchion']['Type'] == mainType)
+                selectedSubType = preloaded_data['Equipment']['Stanchion']['SubType'];
         }
 
         for (index=0; index<subTypes.length; index++) 
@@ -978,7 +981,8 @@ var updateRailSupportSubField = function(mainType, subType = "") {
           && typeof preloaded_data['Equipment'] != "undefined" 
           && typeof preloaded_data['Equipment']['RailSupportSystem'] != "undefined"
           && typeof preloaded_data['Equipment']['RailSupportSystem']['SubType'] != "undefined" ) {
-            selectedSubType = preloaded_data['Equipment']['RailSupportSystem']['SubType'];
+            if(preloaded_data['Equipment']['RailSupportSystem']['Type'] == mainType)
+                selectedSubType = preloaded_data['Equipment']['RailSupportSystem']['SubType'];
         }
 
         for (index=0; index<subTypes.length; index++) 
@@ -999,7 +1003,6 @@ var updateRailSupportSubField = function(mainType, subType = "") {
 
         subType = selectedSubType;
     }
-    console.log(mainType, subType);
 
     $('#option-railsupport-option1').html(option1RailSupport(mainType, subType));
     $('#option-railsupport-option2').html(option2RailSupport(mainType, subType));
@@ -2215,7 +2218,6 @@ $(document).ready(function() {
                         availablePVInverters.push([res[i]['module'], res[i]['submodule'], res[i]['option1'], res[i]['option2'], res[i]['custom'], res[i]['favorite']]);
                     }
                 }
-                console.log(availablePVInverters);
                 // ------------------- Second Line ---------------------
                 // inverter module section
                 $('#option-inverter-type').find('option').remove();
