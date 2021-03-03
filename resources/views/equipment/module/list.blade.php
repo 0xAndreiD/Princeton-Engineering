@@ -36,6 +36,21 @@
             <div class="table-responsive">
                 <table id="equipments" class="table table-bordered table-striped table-vcenter text-center" style="width:100%;">
                     <thead>
+                        @if(Auth::user()->userrole == 2)
+                        <tr>
+                            <th class="text-center" style="width: 5%;">ID</th>
+                            <th class="text-center" style="width: 15%;">Company</th>
+                            <th style="width:12%">Manufacturer</th>
+                            <th style="width:12%;">Model</th>
+                            <th style="width:8%;">Rating</th>
+                            <th style="width:8%;">Length</th>
+                            <th style="width:8%;">Width</th>
+                            <th style="width:8%;">Depth</th>
+                            <th style="width:10%;">Mtg Hole dist(1)</th>
+                            <th style="width:10%;">Url</th>
+                            <th style="min-width: 150px;">Actions</th>
+                        </tr>
+                        @else
                         <tr>
                             <th class="text-center" style="width: 5%;">ID</th>
                             <th style="width:15%">Manufacturer</th>
@@ -48,6 +63,7 @@
                             <th style="width:12%;">Url</th>
                             <th style="min-width: 150px;">Actions</th>
                         </tr>
+                        @endif
                     </thead>
                 </table>
             </div>
@@ -211,6 +227,9 @@
                 },
             "columns": [
                 { "data": "id" },
+                @if(Auth::user()->userrole == 2)
+                { "data": "companyname" },
+                @endif
                 { "data": "mfr" },
                 { "data": "model" },
                 { "data": "rating" },

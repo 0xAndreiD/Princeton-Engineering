@@ -55,19 +55,36 @@ class EquipmentController extends Controller
      * @return JSON
      */
     public function getCustomModules(Request $request){
-        $columns = array( 
-            0 =>'id', 
-            1 =>'mfr',
-            2 =>'model',
-            3 =>'rating',
-            4 =>'length',
-            5 =>'width',
-            6 =>'depth',
-            7 =>'Mtg_Hole_1',
-            8 =>'url'
-        );
-        
-        $handler = CustomModule::where('client_no', Auth::user()->companyid);
+        if(Auth::user()->userrole == 2){
+            $columns = array( 
+                0 =>'custom_module.id', 
+                1 => 'company_info.company_name',
+                2 =>'mfr',
+                3 =>'model',
+                4 =>'rating',
+                5 =>'length',
+                6 =>'width',
+                7 =>'depth',
+                8 =>'Mtg_Hole_1',
+                9 =>'url'
+            );
+            $handler = new CustomModule;
+        } else {
+            $columns = array( 
+                0 =>'custom_module.id', 
+                1 =>'mfr',
+                2 =>'model',
+                3 =>'rating',
+                4 =>'length',
+                5 =>'width',
+                6 =>'depth',
+                7 =>'Mtg_Hole_1',
+                8 =>'url'
+            );
+            $handler = CustomModule::where('client_no', Auth::user()->companyid);
+        }
+
+        $handler = $handler->leftjoin('company_info', "company_info.id", "=", "custom_module.client_no");
         
         $totalData = $handler->count();
         $totalFiltered = $totalData; 
@@ -82,11 +99,16 @@ class EquipmentController extends Controller
             $modules = $handler->offset($start)
                 ->limit($limit)
                 ->orderBy($order,$dir)
-                ->get();
+                ->get(
+                    array(
+                        'custom_module.id as id', 'company_info.company_name as companyname', 'mfr', 'model', 'rating', 'length', 'width', 'depth', 'weight', 'Voc', 'Vmp', 'Isc', 'Imp', 'Mtg_Hole_1', 'Mtg_Hole_2', 'lead_len', 'lead_guage', 'Vdc_max', 'Tmp_Factor_Pmax', 'Tmp_Factor_Voc', 'Tmp_Factor_Isc', 'Fuse_Size_max', 'efficiency', 'rev_date', 'product_literature', 'url',
+                    )
+                );
         }
         else {
             $search = $request->input('search.value'); 
-            $modules =  $handler->where('mfr', 'LIKE',"%{$search}%")
+            $modules =  $handler->where('company_info.company_name', 'LIKE',"%{$search}%")
+                        ->orwhere('mfr', 'LIKE',"%{$search}%")
                         ->orWhere('model', 'LIKE',"%{$search}%")
                         ->orWhere('rating', 'LIKE',"%{$search}%")
                         ->orWhere('length', 'LIKE',"%{$search}%")
@@ -97,9 +119,14 @@ class EquipmentController extends Controller
                         ->offset($start)
                         ->limit($limit)
                         ->orderBy($order,$dir)
-                        ->get();
+                        ->get(
+                            array(
+                                'custom_module.id as id', 'company_info.company_name as companyname', 'mfr', 'model', 'rating', 'length', 'width', 'depth', 'weight', 'Voc', 'Vmp', 'Isc', 'Imp', 'Mtg_Hole_1', 'Mtg_Hole_2', 'lead_len', 'lead_guage', 'Vdc_max', 'Tmp_Factor_Pmax', 'Tmp_Factor_Voc', 'Tmp_Factor_Isc', 'Fuse_Size_max', 'efficiency', 'rev_date', 'product_literature', 'url',
+                            )
+                        );
 
-            $totalFiltered = $handler->where('mfr', 'LIKE',"%{$search}%")
+            $totalFiltered = $handler->where('company_info.company_name', 'LIKE',"%{$search}%")
+                        ->orWhere('mfr', 'LIKE',"%{$search}%")
                         ->orWhere('model', 'LIKE',"%{$search}%")
                         ->orWhere('rating', 'LIKE',"%{$search}%")
                         ->orWhere('length', 'LIKE',"%{$search}%")
@@ -125,12 +152,9 @@ class EquipmentController extends Controller
                     <button type='button' class='btn btn-primary' 
                         onclick='showEditModule(this,{$module['id']})'>
                         <i class='fa fa-pencil-alt'></i>
-                    </button>
-                    <button type='button' class='js-swal-confirm btn btn-danger' onclick='delModule(this,{$module['id']})'>
-                        <i class='fa fa-trash'></i>
-                    </button>
-                    
-                </div>";
+                    </button>" . 
+                    (Auth::user()->userrole == 2 ? "<button type='button' class='js-swal-confirm btn btn-danger' style='margin-left:5px;' onclick='delModule(this,{$module['id']})'><i class='fa fa-trash'></i></button>" : "")
+                    . "</div>";
                 $module['id'] = $id; $id ++;
                 $data[] = $module;
             }
@@ -182,17 +206,19 @@ class EquipmentController extends Controller
      * @return JSON
      */
     public function deleteModule(Request $request){
-        if(!empty($request['moduleId'])){
-            $module = CustomModule::where('id', $request['moduleId'])->first();
-            if($module){
-                $module->delete();
-                return response()->json(['success' => true]);
-            } else {
-                return response()->json(['success' => false, 'message' => 'Cannot find module.']);
-            }
-        } else {
-            return response()->json(['success' => false, 'message' => 'Empty moduleId.']);
-        }
+        if(Auth::user()->userrole == 2){
+            if(!empty($request['moduleId'])){
+                $module = CustomModule::where('id', $request['moduleId'])->first();
+                if($module){
+                    $module->delete();
+                    return response()->json(['success' => true]);
+                } else {
+                    return response()->json(['success' => false, 'message' => 'Cannot find module.']);
+                }
+            } else
+                return response()->json(['success' => false, 'message' => 'Empty moduleId.']);
+        } else
+            return response()->json(['success' => false, 'message' => 'You do not have any role to delete this product.']);
     }
 
     /**
@@ -235,14 +261,26 @@ class EquipmentController extends Controller
      * @return JSON
      */
     public function getCustomInverters(Request $request){
-        $columns = array( 
-            0 =>'id', 
-            1 =>'mfr',
-            2 =>'model',
-            3 =>'rating',
-        );
-        
-        $handler = CustomInverter::where('client_no', Auth::user()->companyid);
+        if(Auth::user()->userrole == 2){
+            $columns = array( 
+                0 =>'custom_inverter.id', 
+                1 => 'company_info.company_name',
+                2 =>'mfr',
+                3 =>'model',
+                4 =>'rating',
+            );
+            $handler = new CustomInverter;
+        } else {
+            $columns = array( 
+                0 =>'custom_inverter.id', 
+                1 =>'mfr',
+                2 =>'model',
+                3 =>'rating',
+            );
+            $handler = CustomInverter::where('client_no', Auth::user()->companyid);
+        }
+
+        $handler = $handler->leftjoin('company_info', "company_info.id", "=", "custom_inverter.client_no");
         
         $totalData = $handler->count();
         $totalFiltered = $totalData; 
@@ -257,19 +295,25 @@ class EquipmentController extends Controller
             $inverters = $handler->offset($start)
                 ->limit($limit)
                 ->orderBy($order,$dir)
-                ->get();
+                ->get(
+                    array('custom_inverter.id', 'company_info.company_name as companyname', 'mfr', 'model', 'rating', 'MPPT_Channels', 'kW_MPPT_max', 'Sys_Vol_max', 'Oper_DC_Vol_min', 'Oper_DC_Vol_max', 'Imp_max', 'Input_MPPT_max', 'Isc_max', 'Isc_MPPT_max', 'DC_Input_max', 'DC_Input_MPPT', 'DC_Wire_max', 'BiPolar', 'Rated_Out_Power', 'AC_Power_max', 'Rated_Out_Volt', 'AC_Low_Vol', 'AC_High_Vol', 'Out_Calc_max', 'Out_max', 'Inverter_Phasing', 'AC_Phases', 'AC_Wires', 'Neut_Ref_Vol', 'AC_max_Wires', 'AC_Wire_Size_max', 'Efficiency_max', 'CEC_Efficiency', 'Power_Factor_Lead', 'Power_Factor_Lag', 'Breaker_min', 'Breaker_max', 'Wire_Ins_Vol_min', 'Lug_Temp', 'xForm_VA_Multiplier', 'AC_Volt_Drop_max', 'Oper_Temp_min', 'Oper_Temp_max', 'Available_Fault', 'Install_Angle_Horiz_min', 'height', 'width', 'depth', 'weight', 'url', 'status', 'product_literature', 'cost', 'rev_date', 'DC_Start_Vol', 'MPPT2_Input_max', 'MPPT2_Short_Circuit_max', 'Input_kW_min', 'MPP_Vol_Low', 'MPP_Vol_High')
+                );
         }
         else {
             $search = $request->input('search.value'); 
-            $inverters =  $handler->where('mfr', 'LIKE',"%{$search}%")
+            $inverters =  $handler->orWhere('company_info.company_name', 'LIKE',"%{$search}%")
+                        ->orWhere('mfr', 'LIKE',"%{$search}%")
                         ->orWhere('model', 'LIKE',"%{$search}%")
                         ->orWhere('rating', 'LIKE',"%{$search}%")
                         ->offset($start)
                         ->limit($limit)
                         ->orderBy($order,$dir)
-                        ->get();
+                        ->get(
+                            array('custom_inverter.id', 'company_info.company_name as companyname', 'mfr', 'model', 'rating', 'MPPT_Channels', 'kW_MPPT_max', 'Sys_Vol_max', 'Oper_DC_Vol_min', 'Oper_DC_Vol_max', 'Imp_max', 'Input_MPPT_max', 'Isc_max', 'Isc_MPPT_max', 'DC_Input_max', 'DC_Input_MPPT', 'DC_Wire_max', 'BiPolar', 'Rated_Out_Power', 'AC_Power_max', 'Rated_Out_Volt', 'AC_Low_Vol', 'AC_High_Vol', 'Out_Calc_max', 'Out_max', 'Inverter_Phasing', 'AC_Phases', 'AC_Wires', 'Neut_Ref_Vol', 'AC_max_Wires', 'AC_Wire_Size_max', 'Efficiency_max', 'CEC_Efficiency', 'Power_Factor_Lead', 'Power_Factor_Lag', 'Breaker_min', 'Breaker_max', 'Wire_Ins_Vol_min', 'Lug_Temp', 'xForm_VA_Multiplier', 'AC_Volt_Drop_max', 'Oper_Temp_min', 'Oper_Temp_max', 'Available_Fault', 'Install_Angle_Horiz_min', 'height', 'width', 'depth', 'weight', 'url', 'status', 'product_literature', 'cost', 'rev_date', 'DC_Start_Vol', 'MPPT2_Input_max', 'MPPT2_Short_Circuit_max', 'Input_kW_min', 'MPP_Vol_Low', 'MPP_Vol_High')
+                        );
 
-            $totalFiltered = $handler->where('mfr', 'LIKE',"%{$search}%")
+            $totalFiltered = $handler->orWhere('company_info.company_name', 'LIKE',"%{$search}%")
+                        ->orWhere('mfr', 'LIKE',"%{$search}%")
                         ->orWhere('model', 'LIKE',"%{$search}%")
                         ->orWhere('rating', 'LIKE',"%{$search}%")
                         ->count();
@@ -290,12 +334,11 @@ class EquipmentController extends Controller
                     <button type='button' class='btn btn-primary' 
                         onclick='showEditInverter(this,{$inverter['id']})'>
                         <i class='fa fa-pencil-alt'></i>
-                    </button>
-                    <button type='button' class='js-swal-confirm btn btn-danger' onclick='delInverter(this,{$inverter['id']})'>
+                    </button>" . 
+                    (Auth::user()->userrole == 2 ? "<button type='button' class='js-swal-confirm btn btn-danger' style='margin-left:5px;' onclick='delInverter(this,{$inverter['id']})'>
                         <i class='fa fa-trash'></i>
-                    </button>
-                    
-                </div>";
+                    </button>" : "")
+                . "</div>";
                 $inverter['id'] = $id; $id ++;
                 $data[] = $inverter;
             }
@@ -348,17 +391,19 @@ class EquipmentController extends Controller
      * @return JSON
      */
     public function deleteInverter(Request $request){
-        if(!empty($request['inverterId'])){
-            $inverter = CustomInverter::where('id', $request['inverterId'])->first();
-            if($inverter){
-                $inverter->delete();
-                return response()->json(['success' => true]);
-            } else {
-                return response()->json(['success' => false, 'message' => 'Cannot find inverter.']);
-            }
-        } else {
-            return response()->json(['success' => false, 'message' => 'Empty inverterId.']);
-        }
+        if(Auth::user()->userrole == 2){
+            if(!empty($request['inverterId'])){
+                $inverter = CustomInverter::where('id', $request['inverterId'])->first();
+                if($inverter){
+                    $inverter->delete();
+                    return response()->json(['success' => true]);
+                } else {
+                    return response()->json(['success' => false, 'message' => 'Cannot find inverter.']);
+                }
+            } else
+                return response()->json(['success' => false, 'message' => 'Empty inverterId.']);
+        } else
+            return response()->json(['success' => false, 'message' => 'You do not have any role to delete this product.']);
     }
 
     /**
@@ -373,12 +418,10 @@ class EquipmentController extends Controller
                 $inverter->favorite = !$inverter->favorite;
                 $inverter->save();
                 return response()->json(['success' => true]);
-            } else {
+            } else
                 return response()->json(['success' => false, 'message' => 'Cannot find inverter.']);
-            }
-        } else {
+        } else
             return response()->json(['success' => false, 'message' => 'Empty inverterId.']);
-        }
     }
     
     /**
@@ -401,14 +444,41 @@ class EquipmentController extends Controller
      * @return JSON
      */
     public function getCustomRacking(Request $request){
-        $columns = array( 
-            0 =>'id', 
-            1 =>'mfr',
-            2 =>'model',
-            3 =>'rating',
-        );
-        
-        $handler = CustomRacking::where('client_no', Auth::user()->companyid);
+        if(Auth::user()->userrole == 2){
+            $columns = array( 
+                0 =>'custom_solar_racking.id', 
+                1 => 'company_info.company_name',
+                2 =>'mfr',
+                3 =>'model',
+                4 =>'style',
+                5 =>'angle',
+                6 =>'rack_weight',
+                7 =>'width',
+                8 =>'depth',
+                9 =>'lowest_height',
+                10 =>'module_spacing_EW',
+                11 =>'module_spacing_NS',
+                12 =>'url'
+            );
+            $handler = new CustomRacking;
+        } else {
+            $columns = array( 
+                0 =>'custom_solar_racking.id', 
+                1 =>'mfr',
+                2 =>'model',
+                3 =>'style',
+                4 =>'angle',
+                5 =>'rack_weight',
+                6 =>'width',
+                7 =>'depth',
+                8 =>'lowest_height',
+                9 =>'module_spacing_EW',
+                10 =>'module_spacing_NS',
+                11 =>'url',
+            );
+            $handler = CustomRacking::where('client_no', Auth::user()->companyid);
+        }
+        $handler = $handler->leftjoin('company_info', "company_info.id", "=", "custom_solar_racking.client_no");
         
         $totalData = $handler->count();
         $totalFiltered = $totalData; 
@@ -423,11 +493,14 @@ class EquipmentController extends Controller
             $rackings = $handler->offset($start)
                 ->limit($limit)
                 ->orderBy($order,$dir)
-                ->get();
+                ->get(
+                    array('custom_solar_racking.id', 'company_info.company_name as companyname', 'mfr', 'model', 'style', 'angle', 'rack_weight', 'width', 'depth', 'lowest_height', 'module_spacing_EW', 'module_spacing_NS', 'url')
+                );
         }
         else {
             $search = $request->input('search.value'); 
-            $rackings =  $handler->where('mfr', 'LIKE',"%{$search}%")
+            $rackings =  $handler->where('company_info.company_name', 'LIKE',"%{$search}%")
+                        ->orWhere('mfr', 'LIKE',"%{$search}%")
                         ->orWhere('model', 'LIKE',"%{$search}%")
                         ->orWhere('style', 'LIKE',"%{$search}%")
                         ->orWhere('angle', 'LIKE',"%{$search}%")
@@ -441,9 +514,12 @@ class EquipmentController extends Controller
                         ->offset($start)
                         ->limit($limit)
                         ->orderBy($order,$dir)
-                        ->get();
+                        ->get(
+                            array('custom_solar_racking.id', 'company_info.company_name as companyname', 'mfr', 'model', 'style', 'angle', 'rack_weight', 'width', 'depth', 'lowest_height', 'module_spacing_EW', 'module_spacing_NS', 'url')
+                        );
 
-            $totalFiltered = $handler->where('mfr', 'LIKE',"%{$search}%")
+            $totalFiltered = $handler->where('company_info.company_name', 'LIKE',"%{$search}%")
+                        ->orWhere('mfr', 'LIKE',"%{$search}%")
                         ->orWhere('model', 'LIKE',"%{$search}%")
                         ->orWhere('style', 'LIKE',"%{$search}%")
                         ->orWhere('angle', 'LIKE',"%{$search}%")
@@ -472,12 +548,12 @@ class EquipmentController extends Controller
                     <button type='button' class='btn btn-primary' 
                         onclick='showEditRacking(this,{$racking['id']})'>
                         <i class='fa fa-pencil-alt'></i>
-                    </button>
-                    <button type='button' class='js-swal-confirm btn btn-danger' onclick='delRacking(this,{$racking['id']})'>
+                    </button>" . 
+                    (Auth::user()->userrole == 2 ? "<button type='button' class='js-swal-confirm btn btn-danger' style='margin-left: 5px;' onclick='delRacking(this,{$racking['id']})'>
                         <i class='fa fa-trash'></i>
-                    </button>
+                    </button>" : "")
                     
-                </div>";
+                . "</div>";
                 $racking['id'] = $id; $id ++;
                 $data[] = $racking;
             }
@@ -531,17 +607,19 @@ class EquipmentController extends Controller
      * @return JSON
      */
     public function deleteRacking(Request $request){
-        if(!empty($request['rackingId'])){
-            $racking = CustomRacking::where('id', $request['rackingId'])->first();
-            if($racking){
-                $racking->delete();
-                return response()->json(['success' => true]);
-            } else {
-                return response()->json(['success' => false, 'message' => 'Cannot find racking.']);
-            }
-        } else {
-            return response()->json(['success' => false, 'message' => 'Empty rackingId.']);
-        }
+        if(Auth::user()->userrole == 2){
+            if(!empty($request['rackingId'])){
+                $racking = CustomRacking::where('id', $request['rackingId'])->first();
+                if($racking){
+                    $racking->delete();
+                    return response()->json(['success' => true]);
+                } else {
+                    return response()->json(['success' => false, 'message' => 'Cannot find racking.']);
+                }
+            } else
+                return response()->json(['success' => false, 'message' => 'Empty rackingId.']);
+        } else
+            return response()->json(['success' => false, 'message' => 'You do not have any role to delete this product.']);
     }
 
     /**
@@ -584,14 +662,29 @@ class EquipmentController extends Controller
      * @return JSON
      */
     public function getCustomStanchion(Request $request){
-        $columns = array( 
-            0 =>'id', 
-            1 =>'mfr',
-            2 =>'model',
-            3 =>'rating',
-        );
-        
-        $handler = CustomStanchion::where('client_no', Auth::user()->companyid);
+        if(Auth::user()->userrole == 2){
+            $columns = array( 
+                0 =>'custom_stanchions.id', 
+                1 =>'company_info.company_name',
+                2 =>'mfr',
+                3 =>'model',
+                4 =>'pullout',
+                5 =>'weight',
+                6 =>'url',
+            );
+            $handler = new CustomStanchion;
+        } else {
+            $columns = array( 
+                0 =>'custom_stanchions.id', 
+                1 =>'mfr',
+                2 =>'model',
+                3 =>'pullout',
+                4 =>'weight',
+                5 =>'url',
+            );
+            $handler = CustomStanchion::where('client_no', Auth::user()->companyid);
+        }
+        $handler = $handler->leftjoin('company_info', "company_info.id", "=", "custom_stanchions.client_no");
         
         $totalData = $handler->count();
         $totalFiltered = $totalData; 
@@ -606,11 +699,14 @@ class EquipmentController extends Controller
             $stanchions = $handler->offset($start)
                 ->limit($limit)
                 ->orderBy($order,$dir)
-                ->get();
+                ->get(
+                    array('custom_stanchions.id', 'company_info.company_name as companyname', 'mfr', 'model', 'pullout', 'Z_moment_max', 'Lateral_Pullout', 'Plate_X', 'Plate_Y', 'Height_z', 'Bolt_Holes_Total', 'X1_Bolts', 'X1_Dist_Edge', 'X2_Bolts', 'X2_Dist_Edge', 'X3_Bolts', 'X3_Dist_Edge', 'X4_Bolts', 'X4_Dist_Edge', 'Y1_Bolts', 'Y1_Dist_Edge', 'Y2_Bolts', 'Y2_Dist_Edge', 'Y3_Bolts', 'Y3_Dist_Edge', 'Y4_Bolts', 'Y4_Dist_Edge', 'material', 'weight', 'url')
+                );
         }
         else {
             $search = $request->input('search.value'); 
-            $stanchions =  $handler->where('mfr', 'LIKE',"%{$search}%")
+            $stanchions =  $handler->where('company_info.company_name', 'LIKE',"%{$search}%")
+                        ->orWhere('mfr', 'LIKE',"%{$search}%")
                         ->orWhere('model', 'LIKE',"%{$search}%")
                         ->orWhere('pullout', 'LIKE',"%{$search}%")
                         ->orWhere('weight', 'LIKE',"%{$search}%")
@@ -618,9 +714,12 @@ class EquipmentController extends Controller
                         ->offset($start)
                         ->limit($limit)
                         ->orderBy($order,$dir)
-                        ->get();
+                        ->get(
+                            array('custom_stanchions.id', 'company_info.company_name as companyname', 'mfr', 'model', 'pullout', 'Z_moment_max', 'Lateral_Pullout', 'Plate_X', 'Plate_Y', 'Height_z', 'Bolt_Holes_Total', 'X1_Bolts', 'X1_Dist_Edge', 'X2_Bolts', 'X2_Dist_Edge', 'X3_Bolts', 'X3_Dist_Edge', 'X4_Bolts', 'X4_Dist_Edge', 'Y1_Bolts', 'Y1_Dist_Edge', 'Y2_Bolts', 'Y2_Dist_Edge', 'Y3_Bolts', 'Y3_Dist_Edge', 'Y4_Bolts', 'Y4_Dist_Edge', 'material', 'weight', 'url')
+                        );
 
-            $totalFiltered = $handler->where('mfr', 'LIKE',"%{$search}%")
+            $totalFiltered = $handler->where('company_info.company_name', 'LIKE',"%{$search}%")
+                        ->orWhere('mfr', 'LIKE',"%{$search}%")
                         ->orWhere('model', 'LIKE',"%{$search}%")
                         ->orWhere('pullout', 'LIKE',"%{$search}%")
                         ->orWhere('weight', 'LIKE',"%{$search}%")
@@ -643,12 +742,12 @@ class EquipmentController extends Controller
                     <button type='button' class='btn btn-primary' 
                         onclick='showEditStanchion(this,{$stanchion['id']})'>
                         <i class='fa fa-pencil-alt'></i>
-                    </button>
-                    <button type='button' class='js-swal-confirm btn btn-danger' onclick='delStanchion(this,{$stanchion['id']})'>
+                    </button>" . 
+                    (Auth::user()->userrole == 2 ? "<button type='button' class='js-swal-confirm btn btn-danger' style='margin-left: 5px;' onclick='delStanchion(this,{$stanchion['id']})'>
                         <i class='fa fa-trash'></i>
-                    </button>
+                    </button>" : "")
                     
-                </div>";
+                . "</div>";
                 $stanchion['id'] = $id; $id ++;
                 $data[] = $stanchion;
             }
@@ -702,17 +801,20 @@ class EquipmentController extends Controller
      * @return JSON
      */
     public function deleteStanchion(Request $request){
-        if(!empty($request['stanchionId'])){
-            $stanchion = CustomStanchion::where('id', $request['stanchionId'])->first();
-            if($stanchion){
-                $stanchion->delete();
-                return response()->json(['success' => true]);
-            } else {
-                return response()->json(['success' => false, 'message' => 'Cannot find stanchion.']);
-            }
-        } else {
-            return response()->json(['success' => false, 'message' => 'Empty stanchionId.']);
-        }
+        if(Auth::user()->userrole == 2){
+            if(!empty($request['stanchionId'])){
+                $stanchion = CustomStanchion::where('id', $request['stanchionId'])->first();
+                if($stanchion){
+                    $stanchion->delete();
+                    return response()->json(['success' => true]);
+                } else {
+                    return response()->json(['success' => false, 'message' => 'Cannot find stanchion.']);
+                }
+            } else
+                return response()->json(['success' => false, 'message' => 'Empty stanchionId.']);
+        } else
+            return response()->json(['success' => false, 'message' => 'You do not have any role to delete this product.']);
+        
     }
 
     /**

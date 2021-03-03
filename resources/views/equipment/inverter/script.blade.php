@@ -82,7 +82,7 @@ function submitInverter(){
         }
     });
 }
-
+@if(Auth::user()->userrole == 2)
 function delInverter(obj, id){
     swal.fire({
         title: 'Are you sure?',
@@ -135,7 +135,7 @@ function delInverter(obj, id){
         }
     });
 }
-
+@endif
 function toggleFavourite(obj, id){
     $.ajax({
         url:"inverterToggleFavorite",

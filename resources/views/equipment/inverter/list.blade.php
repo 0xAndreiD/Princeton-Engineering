@@ -37,11 +37,20 @@
                 <table id="equipments" class="table table-bordered table-striped table-vcenter text-center" style="width:100%;">
                     <thead>
                         <tr>
+                            @if(Auth::user()->userrole == 2)
+                            <th class="text-center" style="width: 10%;">ID</th>
+                            <th class="text-center" style="width: 20%;">Company</th>
+                            <th style="width:18%">Manufacturer</th>
+                            <th style="width:18%;">Model</th>
+                            <th style="width:18%;">Rating</th>
+                            <th style="min-width: 150px;">Actions</th>
+                            @else
                             <th class="text-center" style="width: 10%;">ID</th>
                             <th style="width:25%">Manufacturer</th>
                             <th style="width:25%;">Model</th>
                             <th style="width:25%;">Rating</th>
                             <th style="min-width: 150px;">Actions</th>
+                            @endif
                         </tr>
                     </thead>
                 </table>
@@ -342,6 +351,9 @@
                 },
             "columns": [
                 { "data": "id" },
+                @if(Auth::user()->userrole == 2)
+                { "data": "companyname" },
+                @endif
                 { "data": "mfr" },
                 { "data": "model" },
                 { "data": "rating" },
