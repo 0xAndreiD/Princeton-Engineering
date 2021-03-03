@@ -15,7 +15,7 @@ class CustomRacking extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'id', 'mfr', 'model', 'style', 'angle', 'rack_weight', 'width', 'depth', 'lowest_height', 'module_spacing_EW', 'module_spacing_NS', 'url', 'favorite', 'client_no'
+        'id', 'mfr', 'model', 'style', 'angle', 'rack_weight', 'width', 'depth', 'lowest_height', 'module_spacing_EW', 'module_spacing_NS', 'url', 'favorite', 'client_no', 'crc32'
     ];
 
     protected $table = 'custom_solar_racking';
