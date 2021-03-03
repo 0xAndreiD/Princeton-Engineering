@@ -323,12 +323,17 @@ class EquipmentController extends Controller
                 
                 foreach($request['data'] as $fieldKey => $value)
                     $inverter[$fieldKey] = $value;
+
+                $tmp = unpack("l", pack("l", crc32($inverter['mfr'] . $inverter['model'])));
+                $inverter['crc32'] = reset($tmp);
                 
                 $inverter->save();
                 return response()->json(['success' => true]);
             } else {
                 $data = $request['data'];
                 $data['client_no'] = Auth::user()->companyid;
+                $tmp = unpack("l", pack("l", crc32($data['mfr'] . $data['model'])));
+                $data['crc32'] = reset($tmp);
                 $newInverter = CustomInverter::create($data);
                 return response()->json(['success' => true]);
             }
@@ -501,11 +506,17 @@ class EquipmentController extends Controller
                 foreach($request['data'] as $fieldKey => $value)
                     $racking[$fieldKey] = $value;
                 
+                $tmp = unpack("l", pack("l", crc32($racking['mfr'] . $racking['model'])));
+                $racking['crc32'] = reset($tmp);
+                
                 $racking->save();
                 return response()->json(['success' => true]);
             } else {
                 $data = $request['data'];
                 $data['client_no'] = Auth::user()->companyid;
+                $tmp = unpack("l", pack("l", crc32($data['mfr'] . $data['model'])));
+                $data['crc32'] = reset($tmp);
+
                 $newRacking = CustomRacking::create($data);
                 return response()->json(['success' => true]);
             }
@@ -665,12 +676,18 @@ class EquipmentController extends Controller
                 
                 foreach($request['data'] as $fieldKey => $value)
                     $stanchion[$fieldKey] = $value;
+
+                $tmp = unpack("l", pack("l", crc32($stanchion['mfr'] . $stanchion['model'])));
+                $stanchion['crc32'] = reset($tmp);
                 
                 $stanchion->save();
                 return response()->json(['success' => true]);
             } else {
                 $data = $request['data'];
                 $data['client_no'] = Auth::user()->companyid;
+                $tmp = unpack("l", pack("l", crc32($data['mfr'] . $data['model'])));
+                $data['crc32'] = reset($tmp);
+                
                 $newStanchion = CustomStanchion::create($data);
                 return response()->json(['success' => true]);
             }
