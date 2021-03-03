@@ -82,7 +82,7 @@ function submitModule(){
         }
     });
 }
-
+@if(Auth::user()->userrole == 2)
 function delModule(obj, id){
     swal.fire({
         title: 'Are you sure?',
@@ -135,7 +135,7 @@ function delModule(obj, id){
         }
     });
 }
-
+@endif
 function toggleFavourite(obj, id){
     $.ajax({
         url:"moduleToggleFavorite",

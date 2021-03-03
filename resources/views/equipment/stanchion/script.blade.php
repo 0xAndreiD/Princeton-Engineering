@@ -82,7 +82,7 @@ function submitStanchion(){
         }
     });
 }
-
+@if(Auth::user()->userrole == 2)
 function delStanchion(obj, id){
     swal.fire({
         title: 'Are you sure?',
@@ -135,7 +135,7 @@ function delStanchion(obj, id){
         }
     });
 }
-
+@endif
 function toggleFavourite(obj, id){
     $.ajax({
         url:"stanchionToggleFavorite",

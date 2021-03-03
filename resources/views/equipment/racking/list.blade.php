@@ -37,6 +37,22 @@
                 <table id="equipments" class="table table-bordered table-striped table-vcenter text-center" style="width:100%;">
                     <thead>
                         <tr>
+                            @if(Auth::user()->userrole == 2)
+                            <th class="text-center" style="width: 7%;">ID</th>
+                            <th class="text-center" style="width: 10%;">Company</th>
+                            <th style="width:10%">Manufacturer</th>
+                            <th style="width:10%;">Model</th>
+                            <th style="width:6%;">Rack Style</th>
+                            <th style="width:6%;">Tilt Angle</th>
+                            <th style="width:6%;">Rack Weight per Module</th>
+                            <th style="width:6%;">Rack Width</th>
+                            <th style="width:6%;">Rack Depth</th>
+                            <th style="width:6%;">Rack Lowest Height</th>
+                            <th style="width:6%;">EW Module Spacing</th>
+                            <th style="width:6%;">NS Module Spacing</th>
+                            <th style="width:8%;">URL</th>
+                            <th style="min-width: 150px;">Actions</th>
+                            @else
                             <th class="text-center" style="width: 7%;">ID</th>
                             <th style="width:10%">Manufacturer</th>
                             <th style="width:10%;">Model</th>
@@ -50,6 +66,7 @@
                             <th style="width:7%;">NS Module Spacing</th>
                             <th style="width:10%;">URL</th>
                             <th style="min-width: 150px;">Actions</th>
+                            @endif
                         </tr>
                     </thead>
                 </table>
@@ -162,6 +179,9 @@
                 },
             "columns": [
                 { "data": "id" },
+                @if(Auth::user()->userrole == 2)
+                { "data": "companyname" },
+                @endif
                 { "data": "mfr" },
                 { "data": "model" },
                 { "data": "style" },

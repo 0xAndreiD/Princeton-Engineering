@@ -82,7 +82,7 @@ function submitRacking(){
         }
     });
 }
-
+@if(Auth::user()->userrole == 2)
 function delRacking(obj, id){
     swal.fire({
         title: 'Are you sure?',
@@ -135,7 +135,7 @@ function delRacking(obj, id){
         }
     });
 }
-
+@endif
 function toggleFavourite(obj, id){
     $.ajax({
         url:"rackingToggleFavorite",
