@@ -101,7 +101,7 @@ class EquipmentController extends Controller
                 ->orderBy($order,$dir)
                 ->get(
                     array(
-                        'custom_module.id as id', 'company_info.company_name as companyname', 'mfr', 'model', 'rating', 'length', 'width', 'depth', 'weight', 'Voc', 'Vmp', 'Isc', 'Imp', 'Mtg_Hole_1', 'Mtg_Hole_2', 'lead_len', 'lead_guage', 'Vdc_max', 'Tmp_Factor_Pmax', 'Tmp_Factor_Voc', 'Tmp_Factor_Isc', 'Fuse_Size_max', 'efficiency', 'rev_date', 'product_literature', 'url',
+                        'custom_module.id as id', 'company_info.company_name as companyname', 'mfr', 'model', 'rating', 'length', 'width', 'depth', 'weight', 'Voc', 'Vmp', 'Isc', 'Imp', 'Mtg_Hole_1', 'Mtg_Hole_2', 'lead_len', 'lead_guage', 'Vdc_max', 'Tmp_Factor_Pmax', 'Tmp_Factor_Voc', 'Tmp_Factor_Isc', 'Fuse_Size_max', 'efficiency', 'rev_date', 'product_literature', 'url', 'favorite'
                     )
                 );
         }
@@ -121,7 +121,7 @@ class EquipmentController extends Controller
                         ->orderBy($order,$dir)
                         ->get(
                             array(
-                                'custom_module.id as id', 'company_info.company_name as companyname', 'mfr', 'model', 'rating', 'length', 'width', 'depth', 'weight', 'Voc', 'Vmp', 'Isc', 'Imp', 'Mtg_Hole_1', 'Mtg_Hole_2', 'lead_len', 'lead_guage', 'Vdc_max', 'Tmp_Factor_Pmax', 'Tmp_Factor_Voc', 'Tmp_Factor_Isc', 'Fuse_Size_max', 'efficiency', 'rev_date', 'product_literature', 'url',
+                                'custom_module.id as id', 'company_info.company_name as companyname', 'mfr', 'model', 'rating', 'length', 'width', 'depth', 'weight', 'Voc', 'Vmp', 'Isc', 'Imp', 'Mtg_Hole_1', 'Mtg_Hole_2', 'lead_len', 'lead_guage', 'Vdc_max', 'Tmp_Factor_Pmax', 'Tmp_Factor_Voc', 'Tmp_Factor_Isc', 'Fuse_Size_max', 'efficiency', 'rev_date', 'product_literature', 'url', 'favorite'
                             )
                         );
 
@@ -296,7 +296,7 @@ class EquipmentController extends Controller
                 ->limit($limit)
                 ->orderBy($order,$dir)
                 ->get(
-                    array('custom_inverter.id', 'company_info.company_name as companyname', 'mfr', 'model', 'rating', 'MPPT_Channels', 'kW_MPPT_max', 'Sys_Vol_max', 'Oper_DC_Vol_min', 'Oper_DC_Vol_max', 'Imp_max', 'Input_MPPT_max', 'Isc_max', 'Isc_MPPT_max', 'DC_Input_max', 'DC_Input_MPPT', 'DC_Wire_max', 'BiPolar', 'Rated_Out_Power', 'AC_Power_max', 'Rated_Out_Volt', 'AC_Low_Vol', 'AC_High_Vol', 'Out_Calc_max', 'Out_max', 'Inverter_Phasing', 'AC_Phases', 'AC_Wires', 'Neut_Ref_Vol', 'AC_max_Wires', 'AC_Wire_Size_max', 'Efficiency_max', 'CEC_Efficiency', 'Power_Factor_Lead', 'Power_Factor_Lag', 'Breaker_min', 'Breaker_max', 'Wire_Ins_Vol_min', 'Lug_Temp', 'xForm_VA_Multiplier', 'AC_Volt_Drop_max', 'Oper_Temp_min', 'Oper_Temp_max', 'Available_Fault', 'Install_Angle_Horiz_min', 'height', 'width', 'depth', 'weight', 'url', 'status', 'product_literature', 'cost', 'rev_date', 'DC_Start_Vol', 'MPPT2_Input_max', 'MPPT2_Short_Circuit_max', 'Input_kW_min', 'MPP_Vol_Low', 'MPP_Vol_High')
+                    array('custom_inverter.id', 'company_info.company_name as companyname', 'mfr', 'model', 'rating', 'MPPT_Channels', 'kW_MPPT_max', 'Sys_Vol_max', 'Oper_DC_Vol_min', 'Oper_DC_Vol_max', 'Imp_max', 'Input_MPPT_max', 'Isc_max', 'Isc_MPPT_max', 'DC_Input_max', 'DC_Input_MPPT', 'DC_Wire_max', 'BiPolar', 'Rated_Out_Power', 'AC_Power_max', 'Rated_Out_Volt', 'AC_Low_Vol', 'AC_High_Vol', 'Out_Calc_max', 'Out_max', 'Inverter_Phasing', 'AC_Phases', 'AC_Wires', 'Neut_Ref_Vol', 'AC_max_Wires', 'AC_Wire_Size_max', 'Efficiency_max', 'CEC_Efficiency', 'Power_Factor_Lead', 'Power_Factor_Lag', 'Breaker_min', 'Breaker_max', 'Wire_Ins_Vol_min', 'Lug_Temp', 'xForm_VA_Multiplier', 'AC_Volt_Drop_max', 'Oper_Temp_min', 'Oper_Temp_max', 'Available_Fault', 'Install_Angle_Horiz_min', 'height', 'width', 'depth', 'weight', 'url', 'status', 'product_literature', 'cost', 'rev_date', 'DC_Start_Vol', 'MPPT2_Input_max', 'MPPT2_Short_Circuit_max', 'Input_kW_min', 'MPP_Vol_Low', 'MPP_Vol_High', 'favorite')
                 );
         }
         else {
@@ -309,7 +309,7 @@ class EquipmentController extends Controller
                         ->limit($limit)
                         ->orderBy($order,$dir)
                         ->get(
-                            array('custom_inverter.id', 'company_info.company_name as companyname', 'mfr', 'model', 'rating', 'MPPT_Channels', 'kW_MPPT_max', 'Sys_Vol_max', 'Oper_DC_Vol_min', 'Oper_DC_Vol_max', 'Imp_max', 'Input_MPPT_max', 'Isc_max', 'Isc_MPPT_max', 'DC_Input_max', 'DC_Input_MPPT', 'DC_Wire_max', 'BiPolar', 'Rated_Out_Power', 'AC_Power_max', 'Rated_Out_Volt', 'AC_Low_Vol', 'AC_High_Vol', 'Out_Calc_max', 'Out_max', 'Inverter_Phasing', 'AC_Phases', 'AC_Wires', 'Neut_Ref_Vol', 'AC_max_Wires', 'AC_Wire_Size_max', 'Efficiency_max', 'CEC_Efficiency', 'Power_Factor_Lead', 'Power_Factor_Lag', 'Breaker_min', 'Breaker_max', 'Wire_Ins_Vol_min', 'Lug_Temp', 'xForm_VA_Multiplier', 'AC_Volt_Drop_max', 'Oper_Temp_min', 'Oper_Temp_max', 'Available_Fault', 'Install_Angle_Horiz_min', 'height', 'width', 'depth', 'weight', 'url', 'status', 'product_literature', 'cost', 'rev_date', 'DC_Start_Vol', 'MPPT2_Input_max', 'MPPT2_Short_Circuit_max', 'Input_kW_min', 'MPP_Vol_Low', 'MPP_Vol_High')
+                            array('custom_inverter.id', 'company_info.company_name as companyname', 'mfr', 'model', 'rating', 'MPPT_Channels', 'kW_MPPT_max', 'Sys_Vol_max', 'Oper_DC_Vol_min', 'Oper_DC_Vol_max', 'Imp_max', 'Input_MPPT_max', 'Isc_max', 'Isc_MPPT_max', 'DC_Input_max', 'DC_Input_MPPT', 'DC_Wire_max', 'BiPolar', 'Rated_Out_Power', 'AC_Power_max', 'Rated_Out_Volt', 'AC_Low_Vol', 'AC_High_Vol', 'Out_Calc_max', 'Out_max', 'Inverter_Phasing', 'AC_Phases', 'AC_Wires', 'Neut_Ref_Vol', 'AC_max_Wires', 'AC_Wire_Size_max', 'Efficiency_max', 'CEC_Efficiency', 'Power_Factor_Lead', 'Power_Factor_Lag', 'Breaker_min', 'Breaker_max', 'Wire_Ins_Vol_min', 'Lug_Temp', 'xForm_VA_Multiplier', 'AC_Volt_Drop_max', 'Oper_Temp_min', 'Oper_Temp_max', 'Available_Fault', 'Install_Angle_Horiz_min', 'height', 'width', 'depth', 'weight', 'url', 'status', 'product_literature', 'cost', 'rev_date', 'DC_Start_Vol', 'MPPT2_Input_max', 'MPPT2_Short_Circuit_max', 'Input_kW_min', 'MPP_Vol_Low', 'MPP_Vol_High', 'favorite')
                         );
 
             $totalFiltered = $handler->orWhere('company_info.company_name', 'LIKE',"%{$search}%")
@@ -494,7 +494,7 @@ class EquipmentController extends Controller
                 ->limit($limit)
                 ->orderBy($order,$dir)
                 ->get(
-                    array('custom_solar_racking.id', 'company_info.company_name as companyname', 'mfr', 'model', 'style', 'angle', 'rack_weight', 'width', 'depth', 'lowest_height', 'module_spacing_EW', 'module_spacing_NS', 'url')
+                    array('custom_solar_racking.id', 'company_info.company_name as companyname', 'mfr', 'model', 'style', 'angle', 'rack_weight', 'width', 'depth', 'lowest_height', 'module_spacing_EW', 'module_spacing_NS', 'url', 'favorite')
                 );
         }
         else {
@@ -515,7 +515,7 @@ class EquipmentController extends Controller
                         ->limit($limit)
                         ->orderBy($order,$dir)
                         ->get(
-                            array('custom_solar_racking.id', 'company_info.company_name as companyname', 'mfr', 'model', 'style', 'angle', 'rack_weight', 'width', 'depth', 'lowest_height', 'module_spacing_EW', 'module_spacing_NS', 'url')
+                            array('custom_solar_racking.id', 'company_info.company_name as companyname', 'mfr', 'model', 'style', 'angle', 'rack_weight', 'width', 'depth', 'lowest_height', 'module_spacing_EW', 'module_spacing_NS', 'url', 'favorite')
                         );
 
             $totalFiltered = $handler->where('company_info.company_name', 'LIKE',"%{$search}%")
@@ -700,7 +700,7 @@ class EquipmentController extends Controller
                 ->limit($limit)
                 ->orderBy($order,$dir)
                 ->get(
-                    array('custom_stanchions.id', 'company_info.company_name as companyname', 'mfr', 'model', 'pullout', 'Z_moment_max', 'Lateral_Pullout', 'Plate_X', 'Plate_Y', 'Height_z', 'Bolt_Holes_Total', 'X1_Bolts', 'X1_Dist_Edge', 'X2_Bolts', 'X2_Dist_Edge', 'X3_Bolts', 'X3_Dist_Edge', 'X4_Bolts', 'X4_Dist_Edge', 'Y1_Bolts', 'Y1_Dist_Edge', 'Y2_Bolts', 'Y2_Dist_Edge', 'Y3_Bolts', 'Y3_Dist_Edge', 'Y4_Bolts', 'Y4_Dist_Edge', 'material', 'weight', 'url')
+                    array('custom_stanchions.id', 'company_info.company_name as companyname', 'mfr', 'model', 'pullout', 'Z_moment_max', 'Lateral_Pullout', 'Plate_X', 'Plate_Y', 'Height_z', 'Bolt_Holes_Total', 'X1_Bolts', 'X1_Dist_Edge', 'X2_Bolts', 'X2_Dist_Edge', 'X3_Bolts', 'X3_Dist_Edge', 'X4_Bolts', 'X4_Dist_Edge', 'Y1_Bolts', 'Y1_Dist_Edge', 'Y2_Bolts', 'Y2_Dist_Edge', 'Y3_Bolts', 'Y3_Dist_Edge', 'Y4_Bolts', 'Y4_Dist_Edge', 'material', 'weight', 'url', 'favorite')
                 );
         }
         else {
@@ -715,7 +715,7 @@ class EquipmentController extends Controller
                         ->limit($limit)
                         ->orderBy($order,$dir)
                         ->get(
-                            array('custom_stanchions.id', 'company_info.company_name as companyname', 'mfr', 'model', 'pullout', 'Z_moment_max', 'Lateral_Pullout', 'Plate_X', 'Plate_Y', 'Height_z', 'Bolt_Holes_Total', 'X1_Bolts', 'X1_Dist_Edge', 'X2_Bolts', 'X2_Dist_Edge', 'X3_Bolts', 'X3_Dist_Edge', 'X4_Bolts', 'X4_Dist_Edge', 'Y1_Bolts', 'Y1_Dist_Edge', 'Y2_Bolts', 'Y2_Dist_Edge', 'Y3_Bolts', 'Y3_Dist_Edge', 'Y4_Bolts', 'Y4_Dist_Edge', 'material', 'weight', 'url')
+                            array('custom_stanchions.id', 'company_info.company_name as companyname', 'mfr', 'model', 'pullout', 'Z_moment_max', 'Lateral_Pullout', 'Plate_X', 'Plate_Y', 'Height_z', 'Bolt_Holes_Total', 'X1_Bolts', 'X1_Dist_Edge', 'X2_Bolts', 'X2_Dist_Edge', 'X3_Bolts', 'X3_Dist_Edge', 'X4_Bolts', 'X4_Dist_Edge', 'Y1_Bolts', 'Y1_Dist_Edge', 'Y2_Bolts', 'Y2_Dist_Edge', 'Y3_Bolts', 'Y3_Dist_Edge', 'Y4_Bolts', 'Y4_Dist_Edge', 'material', 'weight', 'url', 'favorite')
                         );
 
             $totalFiltered = $handler->where('company_info.company_name', 'LIKE',"%{$search}%")

@@ -652,8 +652,8 @@ var getPVModuleSubTypes = function(mainType) {
             }
         }
         if (bFound == false){
-            if(equipShowSetting == 0 || (equipShowSetting == 1 && !availablePVModules[index][7]) || (equipShowSetting == 2 && availablePVModules[index][7]) || (equipShowSetting == 3 && availablePVModules[index][8]))
-            subTypes.push(availablePVModules[index]);
+            if(moduleSetting == 0 || (moduleSetting == 1 && !availablePVModules[index][7]) || (moduleSetting == 2 && availablePVModules[index][8]))
+                subTypes.push(availablePVModules[index]);
         }
     }
 
@@ -741,7 +741,7 @@ var getPVInvertorSubTypes = function(mainType) {
             }
         }
         if (bFound == false){
-            if(equipShowSetting == 0 || (equipShowSetting == 1 && !availablePVInverters[index][4]) || (equipShowSetting == 2 && availablePVInverters[index][4]) || (equipShowSetting == 3 && availablePVInverters[index][5]))
+            if(inverterSetting == 0 || (inverterSetting == 1 && !availablePVInverters[index][4]) || (inverterSetting == 2 && availablePVInverters[index][5]))
                 subTypes.push(availablePVInverters[index]);
         }
     }
@@ -840,7 +840,7 @@ var getStanchionSubTypes = function(mainType) {
             }
         }
         if (bFound == false){
-            if(equipShowSetting == 0 || (equipShowSetting == 1 && !availableStanchions[index][4]) || (equipShowSetting == 2 && availableStanchions[index][4]) || (equipShowSetting == 3 && availableStanchions[index][5]))
+            if(stanchionSetting == 0 || (stanchionSetting == 1 && !availableStanchions[index][4]) || (stanchionSetting == 2 && availableStanchions[index][5]))
                 subTypes.push(availableStanchions[index]);
         }
     }
@@ -939,7 +939,7 @@ var getRailSupportSubTypes = function(mainType) {
             }
         }
         if (bFound == false){
-            if(equipShowSetting == 0 || (equipShowSetting == 1 && !availableRailSupports[index][4]) || (equipShowSetting == 2 && availableRailSupports[index][4]) || (equipShowSetting == 3 && availableRailSupports[index][5]))
+            if(railSetting == 0 || (railSetting == 1 && !availableRailSupports[index][4]) || (railSetting == 2 && availableRailSupports[index][5]))
                 subTypes.push(availableRailSupports[index]);
         }
     }
@@ -1008,12 +1008,137 @@ var updateRailSupportSubField = function(mainType, subType = "") {
     $('#option-railsupport-option2').html(option2RailSupport(mainType, subType));
 }
 
-var equipShowSetting = 0;
-function updateEquipmentSetting(setting){
-    equipShowSetting = setting;
+var moduleSetting = 0, inverterSetting = 0, railSetting = 0, stanchionSetting = 0;
+function updateModuleSetting(setting){
+    moduleSetting = setting;
+    $('#option-module-type').find('option').remove();
+    var tmpMainTypes = getPVModuleTypes();
+    var mainTypes = [];
+    tmpMainTypes.forEach(type => {
+        if(moduleSetting == 0)
+            mainTypes.push(type);
+        else if(moduleSetting == 1){
+            let checkModule = availablePVModules.filter(item => item[0] == type && !item[7])
+            if(checkModule[0]) mainTypes.push(type);
+        } else {
+            let checkModule = availablePVModules.filter(item => item[0] == type && item[8])
+            if(checkModule[0]) mainTypes.push(type);
+        }
+    })
+
+    // load selected from preloaded_data
+    selectedMainType = mainTypes[0];
+
+    for (index=0; index<mainTypes.length; index++) 
+    {
+        if (mainTypes[index] == selectedMainType) {
+            $('#option-module-type').append(`<option data-value="${mainTypes[index]}" selected> ${mainTypes[index]}</option>`);
+        }
+        else {
+            $('#option-module-type').append(`<option data-value="${mainTypes[index]}"> ${mainTypes[index]} </option>`);
+        }
+    }
+
     updatePVSubmoduleField($('#option-module-type').children("option:selected").val());
+}
+
+function updateInverterSetting(setting){
+    inverterSetting = setting;
+    $('#option-inverter-type').find('option').remove();
+    var tmpMainTypes = getPVInvertorTypes();
+    var mainTypes = [];
+    tmpMainTypes.forEach(type => {
+        if(inverterSetting == 0)
+            mainTypes.push(type);
+        else if(inverterSetting == 1){
+            let checkModule = availablePVInverters.filter(item => item[0] == type && !item[4])
+            if(checkModule[0]) mainTypes.push(type);
+        } else {
+            let checkModule = availablePVInverters.filter(item => item[0] == type && item[5])
+            if(checkModule[0]) mainTypes.push(type);
+        }
+    })
+
+    // load selected from preloaded_data
+    selectedMainType = mainTypes[0];
+
+    for (index=0; index<mainTypes.length; index++) 
+    {
+        if (mainTypes[index] == selectedMainType) {
+            $('#option-inverter-type').append(`<option data-value="${mainTypes[index]}" selected> ${mainTypes[index]}</option>`);
+        }
+        else {
+            $('#option-inverter-type').append(`<option data-value="${mainTypes[index]}"> ${mainTypes[index]} </option>`);
+        }
+    }
     updatePVInvertorSubField($('#option-inverter-type').children("option:selected").val());
     updateStanchionSubField($('#option-stanchion-type').children("option:selected").val());
+    updateRailSupportSubField($('#option-railsupport-type').children("option:selected").val());
+}
+
+function updateStanchionSetting(setting){
+    stanchionSetting = setting;
+    $('#option-stanchion-type').find('option').remove();
+    var tmpMainTypes = getStanchionTypes();
+    var mainTypes = [];
+    tmpMainTypes.forEach(type => {
+        if(stanchionSetting == 0)
+            mainTypes.push(type);
+        else if(stanchionSetting == 1){
+            let checkModule = availableStanchions.filter(item => item[0] == type && !item[4])
+            if(checkModule[0]) mainTypes.push(type);
+        } else {
+            let checkModule = availableStanchions.filter(item => item[0] == type && item[5])
+            if(checkModule[0]) mainTypes.push(type);
+        }
+    })
+
+    // load selected from preloaded_data
+    selectedMainType = mainTypes[0];
+
+    for (index=0; index<mainTypes.length; index++) 
+    {
+        if (mainTypes[index] == selectedMainType) {
+            $('#option-stanchion-type').append(`<option data-value="${mainTypes[index]}" selected> ${mainTypes[index]}</option>`);
+        }
+        else {
+            $('#option-stanchion-type').append(`<option data-value="${mainTypes[index]}"> ${mainTypes[index]} </option>`);
+        }
+    }
+
+    updateStanchionSubField($('#option-stanchion-type').children("option:selected").val());
+}
+
+function updateRailSetting(setting){
+    railSetting = setting;
+    $('#option-railsupport-type').find('option').remove();
+    var tmpMainTypes = getRailSupportTypes();
+    var mainTypes = [];
+    tmpMainTypes.forEach(type => {
+        if(railSetting == 0)
+            mainTypes.push(type);
+        else if(railSetting == 1){
+            let checkModule = availableRailSupports.filter(item => item[0] == type && !item[4])
+            if(checkModule[0]) mainTypes.push(type);
+        } else {
+            let checkModule = availableRailSupports.filter(item => item[0] == type && item[5])
+            if(checkModule[0]) mainTypes.push(type);
+        }
+    })
+
+    // load selected from preloaded_data
+    selectedMainType = mainTypes[0];
+
+    for (index=0; index<mainTypes.length; index++) 
+    {
+        if (mainTypes[index] == selectedMainType) {
+            $('#option-railsupport-type').append(`<option data-value="${mainTypes[index]}" selected> ${mainTypes[index]}</option>`);
+        }
+        else {
+            $('#option-railsupport-type').append(`<option data-value="${mainTypes[index]}"> ${mainTypes[index]} </option>`);
+        }
+    }
+
     updateRailSupportSubField($('#option-railsupport-type').children("option:selected").val());
 }
 

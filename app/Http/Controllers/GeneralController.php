@@ -689,9 +689,15 @@ class GeneralController extends Controller
      */
     public function getPVModules(Request $request){
         $pv_modules = PVModule::all();
-        $custom_modules = CustomModule::where('client_no', Auth::user()->companyid)->get(
-            array('mfr', 'model', 'rating', 'length', 'width', 'depth', 'weight', 'favorite')
-        );
+        if(Auth::user()->userrole != 2){
+            $custom_modules = CustomModule::where('client_no', Auth::user()->companyid)->get(
+                array('mfr', 'model', 'rating', 'length', 'width', 'depth', 'weight', 'favorite')
+            );
+        } else {
+            $custom_modules = CustomModule::get(
+                array('mfr', 'model', 'rating', 'length', 'width', 'depth', 'weight', 'favorite')
+            );
+        }
         foreach($custom_modules as $module){
             $module['custom'] = true;
             $pv_modules[] = $module;
@@ -707,9 +713,15 @@ class GeneralController extends Controller
      */
     public function getPVInverters(Request $request){
         $pv_inverters = PVInverter::all();
-        $custom_inverters = CustomInverter::where('client_no', Auth::user()->companyid)->get(
-            array('mfr as module', 'model as submodule', 'rating as option1', 'favorite')
-        );
+        if(Auth::user()->userrole != 2){
+            $custom_inverters = CustomInverter::where('client_no', Auth::user()->companyid)->get(
+                array('mfr as module', 'model as submodule', 'rating as option1', 'favorite')
+            );
+        } else {
+            $custom_inverters = CustomInverter::get(
+                array('mfr as module', 'model as submodule', 'rating as option1', 'favorite')
+            );
+        }
         foreach($custom_inverters as $inverter){
             $inverter['option2'] = 'w';
             $inverter['custom'] = true;
@@ -726,9 +738,15 @@ class GeneralController extends Controller
      */
     public function getStanchions(Request $request){
         $stanchions = Stanchion::all();
-        $custom_stanchions = CustomStanchion::where('client_no', Auth::user()->companyid)->get(
-            array('mfr as module', 'model as submodule', 'weight as option1', 'favorite')
-        );
+        if(Auth::user()->userrole != 2){
+            $custom_stanchions = CustomStanchion::where('client_no', Auth::user()->companyid)->get(
+                array('mfr as module', 'model as submodule', 'weight as option1', 'favorite')
+            );
+        } else {
+            $custom_stanchions = CustomStanchion::get(
+                array('mfr as module', 'model as submodule', 'weight as option1', 'favorite')
+            );
+        }
         foreach($custom_stanchions as $stanchion){
             $stanchion['option2'] = 'lb';
             $stanchion['custom'] = true;
@@ -745,9 +763,15 @@ class GeneralController extends Controller
      */
     public function getRailsupport(Request $request){
         $railsupport = RailSupport::all();
-        $custom_supports = CustomRacking::where('client_no', Auth::user()->companyid)->get(
-            array('mfr as module', 'model as submodule', 'rack_weight as option1', 'favorite')
-        );
+        if(Auth::user()->userrole != 2){
+            $custom_supports = CustomRacking::where('client_no', Auth::user()->companyid)->get(
+                array('mfr as module', 'model as submodule', 'rack_weight as option1', 'favorite')
+            );
+        } else {
+            $custom_supports = CustomRacking::get(
+                array('mfr as module', 'model as submodule', 'rack_weight as option1', 'favorite')
+            );
+        }
         foreach($custom_supports as $support){
             $support['option2'] = 'lb';
             $support['custom'] = true;
