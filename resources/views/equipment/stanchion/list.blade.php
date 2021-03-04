@@ -39,13 +39,10 @@
                         @if(Auth::user()->userrole == 2)
                         <tr>
                             <th class="text-center" style="width: 10%;">ID</th>
-                            <th class="text-center" style="width: 13%;">Company</th>
-                            <th style="width:13%">Manufacturer</th>
-                            <th style="width:12%;">Model</th>
-                            <th style="width:12%;">Pullout</th>
-                            <th style="width:12%;">Weight</th>
-                            <th style="width:12%;">URL</th>
-                            <th style="min-width: 150px;">Actions</th>
+                            <th class="text-center" style="width: 20%;">Company</th>
+                            <th style="width:30%">Manufacturer</th>
+                            <th style="width:30%;">Model</th>
+                            <th style="min-width: 200px;">Actions</th>
                         </tr>
                         <tr>
                             <th></th>
@@ -60,19 +57,13 @@
                             <th></th>
                             <th></th>
                             <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
                         </tr>
                         @else
                         <tr>
                             <th class="text-center" style="width: 10%;">ID</th>
-                            <th style="width:15%">Manufacturer</th>
-                            <th style="width:15%;">Model</th>
-                            <th style="width:15%;">Pullout</th>
-                            <th style="width:15%;">Weight</th>
-                            <th style="width:15%;">URL</th>
-                            <th style="min-width: 150px;">Actions</th>
+                            <th style="width:40%">Manufacturer</th>
+                            <th style="width:40%;">Model</th>
+                            <th style="min-width: 200px;">Actions</th>
                         </tr>
                         @endif
                     </thead>
@@ -259,9 +250,6 @@
                 @endif
                 { "data": "mfr" },
                 { "data": "model" },
-                { "data": "pullout" },
-                { "data": "weight" },
-                { "data": "url" },
                 { "data": "actions", "orderable": false }
             ]	 
         });

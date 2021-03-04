@@ -61,26 +61,14 @@ class EquipmentController extends Controller
                 0 =>'custom_module.id', 
                 1 => 'company_info.company_name',
                 2 =>'mfr',
-                3 =>'model',
-                4 =>'rating',
-                5 =>'length',
-                6 =>'width',
-                7 =>'depth',
-                8 =>'Mtg_Hole_1',
-                9 =>'url'
+                3 =>'model'
             );
             $handler = new CustomModule;
         } else {
             $columns = array( 
                 0 =>'custom_module.id', 
                 1 =>'mfr',
-                2 =>'model',
-                3 =>'rating',
-                4 =>'length',
-                5 =>'width',
-                6 =>'depth',
-                7 =>'Mtg_Hole_1',
-                8 =>'url'
+                2 =>'model'
             );
             $handler = CustomModule::where('client_no', Auth::user()->companyid);
         }
@@ -114,12 +102,6 @@ class EquipmentController extends Controller
             $modules =  $handler->where('company_info.company_name', 'LIKE',"%{$search}%")
                         ->orwhere('mfr', 'LIKE',"%{$search}%")
                         ->orWhere('model', 'LIKE',"%{$search}%")
-                        ->orWhere('rating', 'LIKE',"%{$search}%")
-                        ->orWhere('length', 'LIKE',"%{$search}%")
-                        ->orWhere('width', 'LIKE',"%{$search}%")
-                        ->orWhere('depth', 'LIKE',"%{$search}%")
-                        ->orWhere('Mtg_Hole_1', 'LIKE',"%{$search}%")
-                        ->orWhere('url', 'LIKE',"%{$search}%")
                         ->offset($start)
                         ->limit($limit)
                         ->orderBy($order,$dir)
@@ -132,12 +114,6 @@ class EquipmentController extends Controller
             $totalFiltered = $handler->where('company_info.company_name', 'LIKE',"%{$search}%")
                         ->orWhere('mfr', 'LIKE',"%{$search}%")
                         ->orWhere('model', 'LIKE',"%{$search}%")
-                        ->orWhere('rating', 'LIKE',"%{$search}%")
-                        ->orWhere('length', 'LIKE',"%{$search}%")
-                        ->orWhere('width', 'LIKE',"%{$search}%")
-                        ->orWhere('depth', 'LIKE',"%{$search}%")
-                        ->orWhere('Mtg_Hole_1', 'LIKE',"%{$search}%")
-                        ->orWhere('url', 'LIKE',"%{$search}%")
                         ->count();
         }
 
@@ -272,7 +248,6 @@ class EquipmentController extends Controller
                 1 => 'company_info.company_name',
                 2 =>'mfr',
                 3 =>'model',
-                4 =>'rating',
             );
             $handler = new CustomInverter;
         } else {
@@ -280,7 +255,6 @@ class EquipmentController extends Controller
                 0 =>'custom_inverter.id', 
                 1 =>'mfr',
                 2 =>'model',
-                3 =>'rating',
             );
             $handler = CustomInverter::where('client_no', Auth::user()->companyid);
         }
@@ -312,7 +286,6 @@ class EquipmentController extends Controller
             $inverters =  $handler->orWhere('company_info.company_name', 'LIKE',"%{$search}%")
                         ->orWhere('mfr', 'LIKE',"%{$search}%")
                         ->orWhere('model', 'LIKE',"%{$search}%")
-                        ->orWhere('rating', 'LIKE',"%{$search}%")
                         ->offset($start)
                         ->limit($limit)
                         ->orderBy($order,$dir)
@@ -323,7 +296,6 @@ class EquipmentController extends Controller
             $totalFiltered = $handler->orWhere('company_info.company_name', 'LIKE',"%{$search}%")
                         ->orWhere('mfr', 'LIKE',"%{$search}%")
                         ->orWhere('model', 'LIKE',"%{$search}%")
-                        ->orWhere('rating', 'LIKE',"%{$search}%")
                         ->count();
         }
 
@@ -459,15 +431,6 @@ class EquipmentController extends Controller
                 1 => 'company_info.company_name',
                 2 =>'mfr',
                 3 =>'model',
-                4 =>'style',
-                5 =>'angle',
-                6 =>'rack_weight',
-                7 =>'width',
-                8 =>'depth',
-                9 =>'lowest_height',
-                10 =>'module_spacing_EW',
-                11 =>'module_spacing_NS',
-                12 =>'url'
             );
             $handler = new CustomRacking;
         } else {
@@ -475,15 +438,6 @@ class EquipmentController extends Controller
                 0 =>'custom_solar_racking.id', 
                 1 =>'mfr',
                 2 =>'model',
-                3 =>'style',
-                4 =>'angle',
-                5 =>'rack_weight',
-                6 =>'width',
-                7 =>'depth',
-                8 =>'lowest_height',
-                9 =>'module_spacing_EW',
-                10 =>'module_spacing_NS',
-                11 =>'url',
             );
             $handler = CustomRacking::where('client_no', Auth::user()->companyid);
         }
@@ -514,15 +468,6 @@ class EquipmentController extends Controller
             $rackings =  $handler->where('company_info.company_name', 'LIKE',"%{$search}%")
                         ->orWhere('mfr', 'LIKE',"%{$search}%")
                         ->orWhere('model', 'LIKE',"%{$search}%")
-                        ->orWhere('style', 'LIKE',"%{$search}%")
-                        ->orWhere('angle', 'LIKE',"%{$search}%")
-                        ->orWhere('rack_weight', 'LIKE',"%{$search}%")
-                        ->orWhere('width', 'LIKE',"%{$search}%")
-                        ->orWhere('depth', 'LIKE',"%{$search}%")
-                        ->orWhere('lowest_height', 'LIKE',"%{$search}%")
-                        ->orWhere('module_spacing_EW', 'LIKE',"%{$search}%")
-                        ->orWhere('module_spacing_NS', 'LIKE',"%{$search}%")
-                        ->orWhere('url', 'LIKE',"%{$search}%")
                         ->offset($start)
                         ->limit($limit)
                         ->orderBy($order,$dir)
@@ -533,15 +478,6 @@ class EquipmentController extends Controller
             $totalFiltered = $handler->where('company_info.company_name', 'LIKE',"%{$search}%")
                         ->orWhere('mfr', 'LIKE',"%{$search}%")
                         ->orWhere('model', 'LIKE',"%{$search}%")
-                        ->orWhere('style', 'LIKE',"%{$search}%")
-                        ->orWhere('angle', 'LIKE',"%{$search}%")
-                        ->orWhere('rack_weight', 'LIKE',"%{$search}%")
-                        ->orWhere('width', 'LIKE',"%{$search}%")
-                        ->orWhere('depth', 'LIKE',"%{$search}%")
-                        ->orWhere('lowest_height', 'LIKE',"%{$search}%")
-                        ->orWhere('module_spacing_EW', 'LIKE',"%{$search}%")
-                        ->orWhere('module_spacing_NS', 'LIKE',"%{$search}%")
-                        ->orWhere('url', 'LIKE',"%{$search}%")
                         ->count();
         }
 
@@ -681,9 +617,6 @@ class EquipmentController extends Controller
                 1 =>'company_info.company_name',
                 2 =>'mfr',
                 3 =>'model',
-                4 =>'pullout',
-                5 =>'weight',
-                6 =>'url',
             );
             $handler = new CustomStanchion;
         } else {
@@ -691,9 +624,6 @@ class EquipmentController extends Controller
                 0 =>'custom_stanchions.id', 
                 1 =>'mfr',
                 2 =>'model',
-                3 =>'pullout',
-                4 =>'weight',
-                5 =>'url',
             );
             $handler = CustomStanchion::where('client_no', Auth::user()->companyid);
         }
@@ -724,9 +654,6 @@ class EquipmentController extends Controller
             $stanchions =  $handler->where('company_info.company_name', 'LIKE',"%{$search}%")
                         ->orWhere('mfr', 'LIKE',"%{$search}%")
                         ->orWhere('model', 'LIKE',"%{$search}%")
-                        ->orWhere('pullout', 'LIKE',"%{$search}%")
-                        ->orWhere('weight', 'LIKE',"%{$search}%")
-                        ->orWhere('url', 'LIKE',"%{$search}%")
                         ->offset($start)
                         ->limit($limit)
                         ->orderBy($order,$dir)
@@ -737,9 +664,6 @@ class EquipmentController extends Controller
             $totalFiltered = $handler->where('company_info.company_name', 'LIKE',"%{$search}%")
                         ->orWhere('mfr', 'LIKE',"%{$search}%")
                         ->orWhere('model', 'LIKE',"%{$search}%")
-                        ->orWhere('pullout', 'LIKE',"%{$search}%")
-                        ->orWhere('weight', 'LIKE',"%{$search}%")
-                        ->orWhere('url', 'LIKE',"%{$search}%")
                         ->count();
         }
 

@@ -38,20 +38,11 @@
                     <thead>
                         @if(Auth::user()->userrole == 2)
                         <tr>
-                            <th class="text-center" style="width: 7%;">ID</th>
-                            <th class="text-center" style="width: 10%;">Company</th>
-                            <th style="width:10%">Manufacturer</th>
-                            <th style="width:10%;">Model</th>
-                            <th style="width:6%;">Rack Style</th>
-                            <th style="width:6%;">Tilt Angle</th>
-                            <th style="width:6%;">Rack Weight per Module</th>
-                            <th style="width:6%;">Rack Width</th>
-                            <th style="width:6%;">Rack Depth</th>
-                            <th style="width:6%;">Rack Lowest Height</th>
-                            <th style="width:6%;">EW Module Spacing</th>
-                            <th style="width:6%;">NS Module Spacing</th>
-                            <th style="width:8%;">URL</th>
-                            <th style="min-width: 150px;">Actions</th>
+                            <th class="text-center" style="width: 10%;">ID</th>
+                            <th class="text-center" style="width: 20%;">Company</th>
+                            <th style="width:30%">Manufacturer</th>
+                            <th style="width:30%;">Model</th>
+                            <th style="min-width: 200px;">Actions</th>
                         </tr>
                         <tr>
                             <th></th>
@@ -66,31 +57,13 @@
                             <th></th>
                             <th></th>
                             <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
                         </tr>
                         @else
                         <tr>
-                            <th class="text-center" style="width: 7%;">ID</th>
-                            <th style="width:10%">Manufacturer</th>
-                            <th style="width:10%;">Model</th>
-                            <th style="width:7%;">Rack Style</th>
-                            <th style="width:7%;">Tilt Angle</th>
-                            <th style="width:7%;">Rack Weight per Module</th>
-                            <th style="width:7%;">Rack Width</th>
-                            <th style="width:7%;">Rack Depth</th>
-                            <th style="width:7%;">Rack Lowest Height</th>
-                            <th style="width:7%;">EW Module Spacing</th>
-                            <th style="width:7%;">NS Module Spacing</th>
-                            <th style="width:10%;">URL</th>
-                            <th style="min-width: 150px;">Actions</th>
+                            <th class="text-center" style="width: 10%;">ID</th>
+                            <th style="width:40%">Manufacturer</th>
+                            <th style="width:40%;">Model</th>
+                            <th style="min-width: 200px;">Actions</th>
                         </tr>
                         @endif
                     </thead>
@@ -209,15 +182,6 @@
                 @endif
                 { "data": "mfr" },
                 { "data": "model" },
-                { "data": "style" },
-                { "data": "angle" },
-                { "data": "rack_weight" },
-                { "data": "width" },
-                { "data": "depth" },
-                { "data": "lowest_height" },
-                { "data": "module_spacing_EW" },
-                { "data": "module_spacing_NS" },
-                { "data": "url" },
                 { "data": "actions", "orderable": false }
             ]	 
         });

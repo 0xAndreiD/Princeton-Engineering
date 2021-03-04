@@ -40,10 +40,9 @@
                         <tr>
                             <th class="text-center" style="width: 10%;">ID</th>
                             <th class="text-center" style="width: 20%;">Company</th>
-                            <th style="width:18%">Manufacturer</th>
-                            <th style="width:18%;">Model</th>
-                            <th style="width:18%;">Rating</th>
-                            <th style="min-width: 150px;">Actions</th>
+                            <th style="width:30%">Manufacturer</th>
+                            <th style="width:30%;">Model</th>
+                            <th style="min-width: 200px;">Actions</th>
                         </tr>
                         <tr>
                             <th></th>
@@ -58,15 +57,13 @@
                             <th></th>
                             <th></th>
                             <th></th>
-                            <th></th>
                         </tr>
                         @else
                         <tr>
                             <th class="text-center" style="width: 10%;">ID</th>
-                            <th style="width:25%">Manufacturer</th>
-                            <th style="width:25%;">Model</th>
-                            <th style="width:25%;">Rating</th>
-                            <th style="min-width: 150px;">Actions</th>
+                            <th style="width:40%">Manufacturer</th>
+                            <th style="width:40%;">Model</th>
+                            <th style="min-width: 200px;">Actions</th>
                         </tr>
                         @endif
                     </thead>
@@ -373,7 +370,6 @@
                 @endif
                 { "data": "mfr" },
                 { "data": "model" },
-                { "data": "rating" },
                 { "data": "actions", "orderable": false }
             ]	 
         });
