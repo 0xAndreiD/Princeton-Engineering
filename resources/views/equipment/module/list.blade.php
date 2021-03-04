@@ -38,17 +38,11 @@
                     <thead>
                         @if(Auth::user()->userrole == 2)
                         <tr>
-                            <th class="text-center" style="width: 5%;">ID</th>
-                            <th class="text-center" style="width: 15%;">Company</th>
-                            <th style="width:12%">Manufacturer</th>
-                            <th style="width:12%;">Model</th>
-                            <th style="width:8%;">Rating</th>
-                            <th style="width:8%;">Length</th>
-                            <th style="width:8%;">Width</th>
-                            <th style="width:8%;">Depth</th>
-                            <th style="width:10%;">Mtg Hole dist(1)</th>
-                            <th style="width:10%;">Url</th>
-                            <th style="min-width: 150px;">Actions</th>
+                            <th class="text-center" style="width: 10%;">ID</th>
+                            <th class="text-center" style="width: 20%;">Company</th>
+                            <th style="width:30%">Manufacturer</th>
+                            <th style="width:30%;">Model</th>
+                            <th class="text-center" style="min-width: 200px;">Actions</th>
                         </tr>
                         <tr>
                             <th></th>
@@ -63,25 +57,13 @@
                             <th></th>
                             <th></th>
                             <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
                         </tr>
                         @else
                         <tr>
-                            <th class="text-center" style="width: 5%;">ID</th>
-                            <th style="width:15%">Manufacturer</th>
-                            <th style="width:15%;">Model</th>
-                            <th style="width:8%;">Rating</th>
-                            <th style="width:8%;">Length</th>
-                            <th style="width:8%;">Width</th>
-                            <th style="width:8%;">Depth</th>
-                            <th style="width:12%;">Mtg Hole dist(1)</th>
-                            <th style="width:12%;">Url</th>
-                            <th style="min-width: 150px;">Actions</th>
+                            <th class="text-center" style="width: 10%;">ID</th>
+                            <th style="width:40%">Manufacturer</th>
+                            <th style="width:40%;">Model</th>
+                            <th style="min-width: 200px;">Actions</th>
                         </tr>
                         @endif
                     </thead>
@@ -252,12 +234,6 @@
                 @endif
                 { "data": "mfr" },
                 { "data": "model" },
-                { "data": "rating" },
-                { "data": "length" },
-                { "data": "width" },
-                { "data": "depth" },
-                { "data": "Mtg_Hole_1" },
-                { "data": "url" },
                 { "data": "actions", "orderable": false }
             ]	 
         });

@@ -17,7 +17,12 @@ function showEditStanchion(obj, id){
     $(".form-control").val("");
     $(".form-control").css('background-color', '#FFFFFF');
     
-    var data = $('#equipments').DataTable().row($(obj).parents("tr")).data();
+    var current_row = $(obj).parents('tr');
+    if (current_row.hasClass('child')) {
+        current_row = current_row.prev();
+    }
+    var data = $('#equipments').DataTable().row(current_row).data();
+    
     for(let key in data){
         if(key != 'id' && key != 'actions' && key != 'client_no')
             $(`#${key}`).val(data[key]);
