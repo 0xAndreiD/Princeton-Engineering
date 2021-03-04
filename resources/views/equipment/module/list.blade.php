@@ -50,6 +50,26 @@
                             <th style="width:10%;">Url</th>
                             <th style="min-width: 150px;">Actions</th>
                         </tr>
+                        <tr>
+                            <th></th>
+                            <th class="searchHead">
+                                <select placeholder="Search Company" class="searchBox" id="companyFilter">
+                                    <option value="">All</option>
+                                    @foreach($companyList as $company)
+                                        <option value="{{ $company['company_name'] }}">{{ $company['company_name'] }}</option>
+                                    @endforeach
+                                </select>
+                            </th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
                         @else
                         <tr>
                             <th class="text-center" style="width: 5%;">ID</th>
@@ -247,6 +267,11 @@
             { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
         });
 
+        @if(Auth::user()->userrole == 2)
+        $("#companyFilter").on('change', function() {
+            table.column($(this).parent().index() + ':visible').search(this.value).draw();
+        });
+        @endif
     });
 </script>
 

@@ -36,8 +36,8 @@
             <div class="table-responsive">
                 <table id="equipments" class="table table-bordered table-striped table-vcenter text-center" style="width:100%;">
                     <thead>
+                        @if(Auth::user()->userrole == 2)
                         <tr>
-                            @if(Auth::user()->userrole == 2)
                             <th class="text-center" style="width: 7%;">ID</th>
                             <th class="text-center" style="width: 10%;">Company</th>
                             <th style="width:10%">Manufacturer</th>
@@ -52,7 +52,32 @@
                             <th style="width:6%;">NS Module Spacing</th>
                             <th style="width:8%;">URL</th>
                             <th style="min-width: 150px;">Actions</th>
-                            @else
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <th class="searchHead">
+                                <select placeholder="Search Company" class="searchBox" id="companyFilter">
+                                    <option value="">All</option>
+                                    @foreach($companyList as $company)
+                                        <option value="{{ $company['company_name'] }}">{{ $company['company_name'] }}</option>
+                                    @endforeach
+                                </select>
+                            </th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                        @else
+                        <tr>
                             <th class="text-center" style="width: 7%;">ID</th>
                             <th style="width:10%">Manufacturer</th>
                             <th style="width:10%;">Model</th>
@@ -66,8 +91,8 @@
                             <th style="width:7%;">NS Module Spacing</th>
                             <th style="width:10%;">URL</th>
                             <th style="min-width: 150px;">Actions</th>
-                            @endif
                         </tr>
+                        @endif
                     </thead>
                 </table>
             </div>
@@ -202,6 +227,11 @@
             { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
         });
 
+        @if(Auth::user()->userrole == 2)
+        $("#companyFilter").on('change', function() {
+            table.column($(this).parent().index() + ':visible').search(this.value).draw();
+        });
+        @endif
     });
 </script>
 

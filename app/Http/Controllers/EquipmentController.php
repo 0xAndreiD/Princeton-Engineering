@@ -43,7 +43,8 @@ class EquipmentController extends Controller
     public function customModule()
     {
         if(Auth::user()->userrole == 2 || Auth::user()->userrole == 1){
-            return view('equipment.module.list');
+            $companyList = Company::orderBy('company_name', 'asc')->get();
+            return view('equipment.module.list')->with('companyList', $companyList);
         }
         else
             return redirect('home');
@@ -85,6 +86,9 @@ class EquipmentController extends Controller
         }
 
         $handler = $handler->leftjoin('company_info', "company_info.id", "=", "custom_module.client_no");
+
+        if(Auth::user()->userrole == 2 && !empty($request->input("columns.1.search.value")))
+            $handler = $handler->where('company_info.company_name', 'LIKE', "%{$request->input("columns.1.search.value")}%");
         
         $totalData = $handler->count();
         $totalFiltered = $totalData; 
@@ -249,7 +253,8 @@ class EquipmentController extends Controller
     public function customInverter()
     {
         if(Auth::user()->userrole == 2 || Auth::user()->userrole == 1){
-            return view('equipment.inverter.list');
+            $companyList = Company::orderBy('company_name', 'asc')->get();
+            return view('equipment.inverter.list')->with('companyList', $companyList);
         }
         else
             return redirect('home');
@@ -281,6 +286,9 @@ class EquipmentController extends Controller
         }
 
         $handler = $handler->leftjoin('company_info', "company_info.id", "=", "custom_inverter.client_no");
+
+        if(Auth::user()->userrole == 2 && !empty($request->input("columns.1.search.value")))
+            $handler = $handler->where('company_info.company_name', 'LIKE', "%{$request->input("columns.1.search.value")}%");
         
         $totalData = $handler->count();
         $totalFiltered = $totalData; 
@@ -432,7 +440,8 @@ class EquipmentController extends Controller
     public function customRacking()
     {
         if(Auth::user()->userrole == 2 || Auth::user()->userrole == 1){
-            return view('equipment.racking.list');
+            $companyList = Company::orderBy('company_name', 'asc')->get();
+            return view('equipment.racking.list')->with('companyList', $companyList);
         }
         else
             return redirect('home');
@@ -479,6 +488,9 @@ class EquipmentController extends Controller
             $handler = CustomRacking::where('client_no', Auth::user()->companyid);
         }
         $handler = $handler->leftjoin('company_info', "company_info.id", "=", "custom_solar_racking.client_no");
+
+        if(Auth::user()->userrole == 2 && !empty($request->input("columns.1.search.value")))
+            $handler = $handler->where('company_info.company_name', 'LIKE', "%{$request->input("columns.1.search.value")}%");
         
         $totalData = $handler->count();
         $totalFiltered = $totalData; 
@@ -650,7 +662,8 @@ class EquipmentController extends Controller
     public function customStanchion()
     {
         if(Auth::user()->userrole == 2 || Auth::user()->userrole == 1){
-            return view('equipment.stanchion.list');
+            $companyList = Company::orderBy('company_name', 'asc')->get();
+            return view('equipment.stanchion.list')->with('companyList', $companyList);
         }
         else
             return redirect('home');
@@ -685,6 +698,9 @@ class EquipmentController extends Controller
             $handler = CustomStanchion::where('client_no', Auth::user()->companyid);
         }
         $handler = $handler->leftjoin('company_info', "company_info.id", "=", "custom_stanchions.client_no");
+
+        if(Auth::user()->userrole == 2 && !empty($request->input("columns.1.search.value")))
+            $handler = $handler->where('company_info.company_name', 'LIKE', "%{$request->input("columns.1.search.value")}%");
         
         $totalData = $handler->count();
         $totalFiltered = $totalData; 
