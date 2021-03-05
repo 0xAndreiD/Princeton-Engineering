@@ -199,5 +199,5 @@
     });
 </script>
 
-@include('equipment.racking.script')
+@include('customequipment.racking.script')
 @endsection

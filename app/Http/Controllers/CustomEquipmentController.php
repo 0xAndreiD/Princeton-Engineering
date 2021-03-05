@@ -13,7 +13,7 @@ use App\CustomInverter;
 use App\CustomRacking;
 use App\CustomStanchion;
 
-class EquipmentController extends Controller
+class CustomEquipmentController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -44,7 +44,7 @@ class EquipmentController extends Controller
     {
         if(Auth::user()->userrole == 2 || Auth::user()->userrole == 1){
             $companyList = Company::orderBy('company_name', 'asc')->get();
-            return view('equipment.module.list')->with('companyList', $companyList);
+            return view('customequipment.module.list')->with('companyList', $companyList);
         }
         else
             return redirect('home');
@@ -230,7 +230,7 @@ class EquipmentController extends Controller
     {
         if(Auth::user()->userrole == 2 || Auth::user()->userrole == 1){
             $companyList = Company::orderBy('company_name', 'asc')->get();
-            return view('equipment.inverter.list')->with('companyList', $companyList);
+            return view('customequipment.inverter.list')->with('companyList', $companyList);
         }
         else
             return redirect('home');
@@ -413,7 +413,7 @@ class EquipmentController extends Controller
     {
         if(Auth::user()->userrole == 2 || Auth::user()->userrole == 1){
             $companyList = Company::orderBy('company_name', 'asc')->get();
-            return view('equipment.racking.list')->with('companyList', $companyList);
+            return view('customequipment.racking.list')->with('companyList', $companyList);
         }
         else
             return redirect('home');
@@ -599,7 +599,7 @@ class EquipmentController extends Controller
     {
         if(Auth::user()->userrole == 2 || Auth::user()->userrole == 1){
             $companyList = Company::orderBy('company_name', 'asc')->get();
-            return view('equipment.stanchion.list')->with('companyList', $companyList);
+            return view('customequipment.stanchion.list')->with('companyList', $companyList);
         }
         else
             return redirect('home');

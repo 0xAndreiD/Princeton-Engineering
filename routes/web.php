@@ -98,26 +98,26 @@ Route::post('/getUserSetting', 'UserController@getUserSetting')->name('getUserSe
 Route::post('/updateUserSetting', 'UserController@updateUserSetting')->name('updateUserSetting');
 
 //Custom Equipment
-Route::get('/customModule', 'EquipmentController@customModule')->name('customModule');
-Route::post('/getCustomModules', 'EquipmentController@getCustomModules')->name('getCustomModules');
-Route::post('/submitModule', 'EquipmentController@submitModule')->name('submitModule');
-Route::post('/deleteModule', 'EquipmentController@deleteModule')->name('deleteModule');
-Route::post('/moduleToggleFavorite', 'EquipmentController@moduleToggleFavorite')->name('moduleToggleFavorite');
+Route::get('/customModule', 'CustomEquipmentController@customModule')->name('customModule');
+Route::post('/getCustomModules', 'CustomEquipmentController@getCustomModules')->name('getCustomModules');
+Route::post('/submitModule', 'CustomEquipmentController@submitModule')->name('submitModule');
+Route::post('/deleteModule', 'CustomEquipmentController@deleteModule')->name('deleteModule');
+Route::post('/moduleToggleFavorite', 'CustomEquipmentController@moduleToggleFavorite')->name('moduleToggleFavorite');
 
-Route::get('/customInverter', 'EquipmentController@customInverter')->name('customInverter');
-Route::post('/getCustomInverters', 'EquipmentController@getCustomInverters')->name('getCustomInverters');
-Route::post('/submitInverter', 'EquipmentController@submitInverter')->name('submitInverter');
-Route::post('/deleteInverter', 'EquipmentController@deleteInverter')->name('deleteInverter');
-Route::post('/inverterToggleFavorite', 'EquipmentController@inverterToggleFavorite')->name('inverterToggleFavorite');
+Route::get('/customInverter', 'CustomEquipmentController@customInverter')->name('customInverter');
+Route::post('/getCustomInverters', 'CustomEquipmentController@getCustomInverters')->name('getCustomInverters');
+Route::post('/submitInverter', 'CustomEquipmentController@submitInverter')->name('submitInverter');
+Route::post('/deleteInverter', 'CustomEquipmentController@deleteInverter')->name('deleteInverter');
+Route::post('/inverterToggleFavorite', 'CustomEquipmentController@inverterToggleFavorite')->name('inverterToggleFavorite');
 
-Route::get('/customRacking', 'EquipmentController@customRacking')->name('customRacking');
-Route::post('/getCustomRacking', 'EquipmentController@getCustomRacking')->name('getCustomRacking');
-Route::post('/submitRacking', 'EquipmentController@submitRacking')->name('submitRacking');
-Route::post('/deleteRacking', 'EquipmentController@deleteRacking')->name('deleteRacking');
-Route::post('/rackingToggleFavorite', 'EquipmentController@rackingToggleFavorite')->name('rackingToggleFavorite');
+Route::get('/customRacking', 'CustomEquipmentController@customRacking')->name('customRacking');
+Route::post('/getCustomRacking', 'CustomEquipmentController@getCustomRacking')->name('getCustomRacking');
+Route::post('/submitRacking', 'CustomEquipmentController@submitRacking')->name('submitRacking');
+Route::post('/deleteRacking', 'CustomEquipmentController@deleteRacking')->name('deleteRacking');
+Route::post('/rackingToggleFavorite', 'CustomEquipmentController@rackingToggleFavorite')->name('rackingToggleFavorite');
 
-Route::get('/customStanchion', 'EquipmentController@customStanchion')->name('customStanchion');
-Route::post('/getCustomStanchion', 'EquipmentController@getCustomStanchion')->name('getCustomStanchion');
-Route::post('/submitStanchion', 'EquipmentController@submitStanchion')->name('submitStanchion');
-Route::post('/deleteStanchion', 'EquipmentController@deleteStanchion')->name('deleteStanchion');
-Route::post('/stanchionToggleFavorite', 'EquipmentController@stanchionToggleFavorite')->name('stanchionToggleFavorite');
+Route::get('/customStanchion', 'CustomEquipmentController@customStanchion')->name('customStanchion');
+Route::post('/getCustomStanchion', 'CustomEquipmentController@getCustomStanchion')->name('getCustomStanchion');
+Route::post('/submitStanchion', 'CustomEquipmentController@submitStanchion')->name('submitStanchion');
+Route::post('/deleteStanchion', 'CustomEquipmentController@deleteStanchion')->name('deleteStanchion');
+Route::post('/stanchionToggleFavorite', 'CustomEquipmentController@stanchionToggleFavorite')->name('stanchionToggleFavorite');
