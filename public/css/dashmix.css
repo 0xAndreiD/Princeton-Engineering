@@ -13154,7 +13154,7 @@ a.badge-secondary:focus, a.badge-secondary.focus {
 
 @media (min-width: 992px) {
   #side-overlay {
-    width: 320px;
+    width: 620px;
     box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.15);
     -webkit-transform: translateX(110%) translateY(0) translateZ(0);
             transform: translateX(110%) translateY(0) translateZ(0);
@@ -13338,7 +13338,7 @@ a.badge-secondary:focus, a.badge-secondary.focus {
   }
   #page-container.side-scroll #side-overlay .content-header,
   #page-container.side-scroll #side-overlay .content-side {
-    width: 320px !important;
+    width: 620px !important;
   }
 }
 
