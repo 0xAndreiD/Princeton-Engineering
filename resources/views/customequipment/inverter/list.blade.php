@@ -387,5 +387,5 @@
     });
 </script>
 
-@include('equipment.inverter.script')
+@include('customequipment.inverter.script')
 @endsection

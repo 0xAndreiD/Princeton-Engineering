@@ -9,10 +9,10 @@
         <div class="content content-full content-top">
             <div class="pt-5 pb-4 text-center">
                 <h1 class="h2 font-w700 mb-2 text-white">
-                    Custom PV Modules
+                    Custom Stanchions
                 </h1>
                 <h2 class="h5 text-white-75 mb-0">
-                    Manage your modules here
+                    Manage your stanchions here
                 </h2>
             </div>
         </div>
@@ -23,12 +23,12 @@
 <div class="content" style="text-align:left">
     <div class="block block-rounded block-bordered">
         <div class="block-header block-header-default">
-            <h3 class="block-title">Module List</h3>
+            <h3 class="block-title">Stanchions List</h3>
             <div class="block-options">
                 <button type="button" class="btn-block-option" 
                     data-toggle='modal' data-target='#modal-block-normal'
-                    onclick="showAddModule()">
-                    <i class="fa fa-plus"></i> Add Module
+                    onclick="showAddStanchion()">
+                    <i class="fa fa-plus"></i> Add Stanchion
                 </button>
             </div>
         </div>
@@ -42,7 +42,7 @@
                             <th class="text-center" style="width: 20%;">Company</th>
                             <th style="width:30%">Manufacturer</th>
                             <th style="width:30%;">Model</th>
-                            <th class="text-center" style="min-width: 200px;">Actions</th>
+                            <th style="min-width: 200px;">Actions</th>
                         </tr>
                         <tr>
                             <th></th>
@@ -80,7 +80,7 @@
             <div class="content-header">
                 <!-- User Info -->
                 <div class="ml-2">
-                    <a class="text-white font-w600" href="#" id="sidebar-title">Edit Module</a>
+                    <a class="text-white font-w600" href="#" id="sidebar-title">Edit Stanchion</a>
                     <div class="text-white-75 font-size-sm">Input your data here</div>
                 </div>
                 <!-- END User Info -->
@@ -102,104 +102,120 @@
         <div class="block block-transparent pull-x pull-t">
             <div class="block-content tab-content overflow-hidden side-view">
                 <div class="form-group">
-                    <label for="mfr">Solar Module Manufacturer</label>
+                    <label for="mfr">Manufacturer</label>
                     <input type="text" class="form-control" id="mfr" value="">
                 </div>
                 <div class="form-group">
-                    <label for="module">Module</label>
+                    <label for="model">Model</label>
                     <input type="text" class="form-control" id="model" value="">
                 </div>
                 <div class="form-group">
-                    <label for="rating">Power Rating(Watts)</label>
-                    <input type="text" class="form-control" id="rating" value="">
+                    <label for="pullout">Vertical Pullout</label>
+                    <input type="text" class="form-control" id="pullout" value="">
                 </div>
                 <div class="form-group">
-                    <label for="Voc">Voc per Module(Vdc)</label>
-                    <input type="text" class="form-control" id="Voc" value="">
+                    <label for="Z_moment_max">Max Z moment (lb ft)</label>
+                    <input type="text" class="form-control" id="Z_moment_max" value="">
                 </div>
                 <div class="form-group">
-                    <label for="Voc">Vmp per Module(Vdc)</label>
-                    <input type="text" class="form-control" id="Vmp" value="">
+                    <label for="Lateral_Pullout">Lateral Pullout</label>
+                    <input type="text" class="form-control" id="Lateral_Pullout" value="">
                 </div>
                 <div class="form-group">
-                    <label for="Isc">Isc per Module(Adc)</label>
-                    <input type="text" class="form-control" id="Isc" value="">
+                    <label for="Plate_X">Plate X"</label>
+                    <input type="text" class="form-control" id="Plate_X" value="">
                 </div>
                 <div class="form-group">
-                    <label for="Imp">Imp per Module(Adc)</label>
-                    <input type="text" class="form-control" id="Imp" value="">
+                    <label for="Plate_Y">Plate Y"</label>
+                    <input type="text" class="form-control" id="Plate_Y" value="">
                 </div>
                 <div class="form-group">
-                    <label for="length">Length(Inch)</label>
-                    <input type="text" class="form-control" id="length" value="">
+                    <label for="Height_z">Height z inches</label>
+                    <input type="text" class="form-control" id="Height_z" value="">
                 </div>
                 <div class="form-group">
-                    <label for="width">Width(Inch)</label>
-                    <input type="text" class="form-control" id="width" value="">
+                    <label for="Bolt_Holes_Total"># Bolt Holes Total</label>
+                    <input type="text" class="form-control" id="Bolt_Holes_Total" value="">
                 </div>
                 <div class="form-group">
-                    <label for="depth">Depth(Inch)</label>
-                    <input type="text" class="form-control" id="depth" value="">
+                    <label for="X1_Bolts">X1 # Bolts</label>
+                    <input type="text" class="form-control" id="X1_Bolts" value="">
                 </div>
                 <div class="form-group">
-                    <label for="weight">Weight(lb)</label>
+                    <label for="X1_Dist_Edge">X1 Dist from Edge</label>
+                    <input type="text" class="form-control" id="X1_Dist_Edge" value="">
+                </div>
+                <div class="form-group">
+                    <label for="X2_Bolts">X2 # Bolts</label>
+                    <input type="text" class="form-control" id="X2_Bolts" value="">
+                </div>
+                <div class="form-group">
+                    <label for="X2_Dist_Edge">X2 Dist from Edge</label>
+                    <input type="text" class="form-control" id="X2_Dist_Edge" value="">
+                </div>
+                <div class="form-group">
+                    <label for="X3_Bolts">X3 # Bolts</label>
+                    <input type="text" class="form-control" id="X3_Bolts" value="">
+                </div>
+                <div class="form-group">
+                    <label for="X3_Dist_Edge">X3 Dist from Edge</label>
+                    <input type="text" class="form-control" id="X3_Dist_Edge" value="">
+                </div>
+                <div class="form-group">
+                    <label for="X4_Bolts">X4 # Bolts</label>
+                    <input type="text" class="form-control" id="X4_Bolts" value="">
+                </div>
+                <div class="form-group">
+                    <label for="X4_Dist_Edge">X4 Dist from Edge</label>
+                    <input type="text" class="form-control" id="X4_Dist_Edge" value="">
+                </div>
+                <div class="form-group">
+                    <label for="Y1_Bolts">Y1 # Bolts</label>
+                    <input type="text" class="form-control" id="Y1_Bolts" value="">
+                </div>
+                <div class="form-group">
+                    <label for="Y1_Dist_Edge">Y1 Dist from Edge</label>
+                    <input type="text" class="form-control" id="Y1_Dist_Edge" value="">
+                </div>
+                <div class="form-group">
+                    <label for="Y2_Bolts">Y2 # Bolts</label>
+                    <input type="text" class="form-control" id="Y2_Bolts" value="">
+                </div>
+                <div class="form-group">
+                    <label for="Y2_Dist_Edge">Y2 Dist from Edge</label>
+                    <input type="text" class="form-control" id="Y2_Dist_Edge" value="">
+                </div>
+                <div class="form-group">
+                    <label for="Y3_Bolts">Y3 # Bolts</label>
+                    <input type="text" class="form-control" id="Y3_Bolts" value="">
+                </div>
+                <div class="form-group">
+                    <label for="Y3_Dist_Edge">Y3 Dist from Edge</label>
+                    <input type="text" class="form-control" id="Y3_Dist_Edge" value="">
+                </div>
+                <div class="form-group">
+                    <label for="Y4_Bolts">Y4 # Bolts</label>
+                    <input type="text" class="form-control" id="Y4_Bolts" value="">
+                </div>
+                <div class="form-group">
+                    <label for="Y4_Dist_Edge">Y4 Dist from Edge</label>
+                    <input type="text" class="form-control" id="Y4_Dist_Edge" value="">
+                </div>
+                <div class="form-group">
+                    <label for="material">Material</label>
+                    <input type="text" class="form-control" id="material" value="">
+                </div>
+                <div class="form-group">
+                    <label for="weight">Weight</label>
                     <input type="text" class="form-control" id="weight" value="">
                 </div>
                 <div class="form-group">
-                    <label for="Mtg_Hole_1">Mtg Hole dist from end (1)(Inch)</label>
-                    <input type="text" class="form-control" id="Mtg_Hole_1" value="">
-                </div>
-                <div class="form-group">
-                    <label for="Mtg_Hole_2">Mtg Hole dist from end (2)(Inch)</label>
-                    <input type="text" class="form-control" id="Mtg_Hole_2" value="">
-                </div>
-                <div class="form-group">
-                    <label for="lead_len">Lead Length(Inch)</label>
-                    <input type="text" class="form-control" id="lead_len" value="">
-                </div>
-                <div class="form-group">
-                    <label for="lead_guage">Lead Gauge</label>
-                    <input type="text" class="form-control" id="lead_guage" value="">
-                </div>
-                <div class="form-group">
-                    <label for="Vdc_max">Maximum System Voltage(Vdc)</label>
-                    <input type="text" class="form-control" id="Vdc_max" value="">
-                </div>
-                <div class="form-group">
-                    <label for="Tmp_Factor_Pmax">Pmax Temp Factor(%/°C)</label>
-                    <input type="text" class="form-control" id="Tmp_Factor_Pmax" value="">
-                </div>
-                <div class="form-group">
-                    <label for="Tmp_Factor_Voc">Voc Temp Factor(%/°C)</label>
-                    <input type="text" class="form-control" id="Tmp_Factor_Voc" value="">
-                </div>
-                <div class="form-group">
-                    <label for="Tmp_Factor_Isc">Isc Temp Factor(%/°C)</label>
-                    <input type="text" class="form-control" id="Tmp_Factor_Isc" value="">
-                </div>
-                <div class="form-group">
-                    <label for="Fuse_Size_max">Max Fuse Size(Adc)</label>
-                    <input type="text" class="form-control" id="Fuse_Size_max" value="">
-                </div>
-                <div class="form-group">
-                    <label for="efficiency">Module Efficiency(%)</label>
-                    <input type="text" class="form-control" id="efficiency" value="">
-                </div>
-                <div class="form-group">
-                    <label for="rev_date">Revision Date</label>
-                    <input type="date" class="form-control" id="rev_date" value="" >
-                </div>
-                <div class="form-group">
-                    <label for="product_literature">Product Literature</label>
-                    <input type="text" class="form-control" id="product_literature" value="">
-                </div>
-                <div class="form-group">
-                    <label for="url">Url</label>
+                    <label for="url">URL</label>
                     <input type="text" class="form-control" id="url" value="">
                 </div>
                 <div class="block-content row justify-content-center border-top">
                     <div class="col-9">
-                        <button type="btn" class="btn btn-block btn-hero-primary" onclick="submitModule()">
+                        <button type="btn" class="btn btn-block btn-hero-primary" onclick="submitStanchion()">
                             <i class="fa fa-fw fa-save mr-1"></i> Save
                         </button>
                     </div>
@@ -222,7 +238,7 @@
             "orderCellsTop": true,
             "pageLength" : 50,
             "ajax":{
-                    "url": "{{ url('getCustomModules') }}",
+                    "url": "{{ url('getCustomStanchion') }}",
                     "dataType": "json",
                     "type": "POST",
                     "data":{ _token: "{{csrf_token()}}"}
@@ -248,8 +264,9 @@
             table.column($(this).parent().index() + ':visible').search(this.value).draw();
         });
         @endif
+
     });
 </script>
 
-@include('equipment.module.script')
+@include('customequipment.stanchion.script')
 @endsection
