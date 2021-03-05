@@ -98,7 +98,7 @@
                     <a class="font-w600 text-dual" href="javascript:void(0)">
                         @ {{ Auth::user()->username }}
                     </a>
-                    <span class="badge badge-pill badge-danger">Admin</span>
+                    <span class="badge badge-pill badge-danger">Super Admin</span>
                 </div>
                 <!-- END User Info -->
 
