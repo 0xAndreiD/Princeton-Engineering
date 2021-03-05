@@ -414,10 +414,18 @@ html, body {
     pointer-events: none;
 }
 
+.side-view > .form-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
 .side-view > .form-group > .form-control{
     border: 1px solid #f1dfd2;
+    width: 50%;
 }
 
 .side-view > .form-group > label{
-    text-align: left !important;
+    text-align: right !important;
+    width: 45%;
 }
