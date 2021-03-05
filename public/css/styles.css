@@ -422,10 +422,10 @@ html, body {
 
 .side-view > .form-group > .form-control{
     border: 1px solid #f1dfd2;
-    width: 50%;
+    width: 40%;
 }
 
 .side-view > .form-group > label{
     text-align: right !important;
-    width: 45%;
+    width: 55%;
 }
