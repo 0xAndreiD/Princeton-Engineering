@@ -227,14 +227,12 @@
         <col width="80">
         <col width="80">
         <col width="80">
-        <col width="50">
-        <col width="150">
-        <col width="150">
-        <col width="150">
+        <col width="80">
+        <col width="80">
+        <col width="80">
     </colgroup>
 <tbody>
     <tr class="h13">
-        <td><div style="overflow:hidden"></td>
         <td><div style="overflow:hidden"></td>
         <td><div style="overflow:hidden"></td>
         <td><div style="overflow:hidden"></td>
@@ -247,7 +245,7 @@
     <tr class="h13">
         <td><div style="overflow:hidden"></div></td>
         <td class="iw400-bdr" colspan="6">Equipment section</td>
-        <td class="iw400-bdr" colspan="4">Product Menu Filters</td>
+        <td class="iw400-bdr" colspan="4">Product Selection Filters</td>
     </tr>
     <tr class="h13">
         <td ><div style="overflow:hidden"></div></td>
@@ -257,10 +255,9 @@
         <td class="iw400-bdr">Value</td>
         <td class="iw400-bdr">Unit</td>
         <td class="iw400-bdr">Quantity</td>
-        <td><div style="overflow:hidden"></div></td>
-        <td><div style="overflow:hidden"></div></td>
-        <td><div style="overflow:hidden"></div></td>
-        <td class="right-bdr"><div style="overflow:hidden"></div></td>
+        <td class="iw400-bdr">Mixed</td>
+        <td class="iw400-bdr">Standard</td>
+        <td class="iw400-bdr">Favorite</td>
     </tr>
     <tr class="h13">
         <td><div style="overflow:hidden"></div></td>
@@ -276,23 +273,22 @@
         <td class="w400-bdr" id="option-module-option1"></td>
         <td class="w400-bdr" id="option-module-option2">watts</td>
         <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="option-module-quantity" tabindex="19" value="0"></td>
-        <td><div style="overflow:hidden"></div></td>
-        <td>
+        <td class="text-center">
             <div class="custom-control custom-radio custom-control-dark">
                 <input type="radio" class="custom-control-input" id="module-mixed" name="module-settings" onclick="updateModuleSetting(0)" checked>
-                <label class="custom-control-label" for="module-mixed">Mixed</label>
+                <label class="custom-control-label" for="module-mixed"></label>
             </div>
         </td>
-        <td>
+        <td class="text-center">
             <div class="custom-control custom-radio custom-control-info">
                 <input type="radio" class="custom-control-input" id="module-standard" name="module-settings" onclick="updateModuleSetting(1)">
-                <label class="custom-control-label" for="module-standard">Standard</label>
+                <label class="custom-control-label" for="module-standard"></label>
             </div>
         </td>
-        <td class="right-bdr">
+        <td class="text-center right-bdr">
             <div class="custom-control custom-radio custom-control-success">
                 <input type="radio" class="custom-control-input" id="module-favorite" name="module-settings" onclick="updateModuleSetting(2)">
-                <label class="custom-control-label" for="module-favorite">Favorite</label>
+                <label class="custom-control-label" for="module-favorite"></label>
             </div>
         </td>
         <input class="w400-bdr" id="pv-module-length" hidden>
@@ -312,23 +308,22 @@
         <td class="w400-bdr" id="option-inverter-option1"></td>
         <td class="w400-bdr" id="option-inverter-option2"></td>
         <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="option-inverter-quantity" tabindex="20" value="0"></td>
-        <td><div style="overflow:hidden"></div></td>
-        <td>
+        <td class="text-center">
             <div class="custom-control custom-radio custom-control-dark">
                 <input type="radio" class="custom-control-input" id="inverter-mixed" name="inverter-settings" onclick="updateInverterSetting(0)" checked>
-                <label class="custom-control-label" for="inverter-mixed">Mixed</label>
+                <label class="custom-control-label" for="inverter-mixed"></label>
             </div>
         </td>
-        <td>
+        <td class="text-center">
             <div class="custom-control custom-radio custom-control-info">
                 <input type="radio" class="custom-control-input" id="inverter-standard" name="inverter-settings" onclick="updateInverterSetting(1)">
-                <label class="custom-control-label" for="inverter-standard">Standard</label>
+                <label class="custom-control-label" for="inverter-standard"></label>
             </div>
         </td>
-        <td class="right-bdr">
+        <td class="text-center right-bdr">
             <div class="custom-control custom-radio custom-control-success">
                 <input type="radio" class="custom-control-input" id="inverter-favorite" name="inverter-settings" onclick="updateInverterSetting(2)">
-                <label class="custom-control-label" for="inverter-favorite">Favorite</label>
+                <label class="custom-control-label" for="inverter-favorite"></label>
             </div>
         </td>
     </tr>
@@ -346,23 +341,22 @@
         <td class="w400-bdr" id="option-stanchion-option1"></td>
         <td class="w400-bdr" id="option-stanchion-option2"></td>
         <td><div style="overflow:hidden"></div></td>
-        <td><div style="overflow:hidden"></div></td>
-        <td>
+        <td class="text-center">
             <div class="custom-control custom-radio custom-control-dark">
                 <input type="radio" class="custom-control-input" id="stanchion-mixed" name="stanchion-settings" onclick="updateStanchionSetting(0)" checked>
-                <label class="custom-control-label" for="stanchion-mixed">Mixed</label>
+                <label class="custom-control-label" for="stanchion-mixed"></label>
             </div>
         </td>
-        <td>
+        <td class="text-center">
             <div class="custom-control custom-radio custom-control-info">
                 <input type="radio" class="custom-control-input" id="stanchion-standard" name="stanchion-settings" onclick="updateStanchionSetting(1)">
-                <label class="custom-control-label" for="stanchion-standard">Standard</label>
+                <label class="custom-control-label" for="stanchion-standard"></label>
             </div>
         </td>
-        <td class="right-bdr">
+        <td class="text-center right-bdr">
             <div class="custom-control custom-radio custom-control-success">
                 <input type="radio" class="custom-control-input" id="stanchion-favorite" name="stanchion-settings" onclick="updateStanchionSetting(2)">
-                <label class="custom-control-label" for="stanchion-favorite">Favorite</label>
+                <label class="custom-control-label" for="stanchion-favorite"></label>
             </div>
         </td>
     </tr>
@@ -380,23 +374,22 @@
         <td class="w400-bdr" id="option-railsupport-option1"></td>
         <td class="w400-bdr" id="option-railsupport-option2"></td>
         <td class="bottom-bdr"><div style="overflow:hidden"></div></td>
-        <td class="bottom-bdr"><div style="overflow:hidden"></div></td>
-        <td class="bottom-bdr">
+        <td class="text-center bottom-bdr">
             <div class="custom-control custom-radio custom-control-dark">
                 <input type="radio" class="custom-control-input" id="rail-mixed" name="rail-settings" onclick="updateRailSetting(0)" checked>
-                <label class="custom-control-label" for="rail-mixed">Mixed</label>
+                <label class="custom-control-label" for="rail-mixed"></label>
             </div>
         </td>
-        <td class="bottom-bdr">
+        <td class="text-center bottom-bdr">
             <div class="custom-control custom-radio custom-control-info">
                 <input type="radio" class="custom-control-input" id="rail-standard" name="rail-settings" onclick="updateRailSetting(1)">
-                <label class="custom-control-label" for="rail-standard">Standard</label>
+                <label class="custom-control-label" for="rail-standard"></label>
             </div>
         </td>
-        <td class="right-bdr bottom-bdr">
+        <td class="text-center right-bdr bottom-bdr">
             <div class="custom-control custom-radio custom-control-success">
                 <input type="radio" class="custom-control-input" id="rail-favorite" name="rail-settings" onclick="updateRailSetting(2)">
-                <label class="custom-control-label" for="rail-favorite">Favorite</label>
+                <label class="custom-control-label" for="rail-favorite"></label>
             </div>
         </td>
     </tr>
