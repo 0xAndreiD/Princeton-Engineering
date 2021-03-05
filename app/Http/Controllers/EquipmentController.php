@@ -163,7 +163,7 @@ class EquipmentController extends Controller
                 foreach($request['data'] as $fieldKey => $value)
                     $module[$fieldKey] = $value;
                 
-                $tmp = unpack("l", pack("l", crc32($module['mfr'] . $module['model'] . $module['Voc'] . $module['Isc'] . $module['Mtg_Hole_1'] . $module['lead_len'])));
+                $tmp = unpack("l", pack("l", crc32($module['mfr'] . $module['model'] . $module['Voc'] . $module['Isc'] . $module['Mtg_Hole_1'] . $module['lead_len'] . $module['client_no'])));
                 $module['crc32'] = reset($tmp);
                 $module->save();
                 return response()->json(['success' => true]);
@@ -347,7 +347,7 @@ class EquipmentController extends Controller
                 foreach($request['data'] as $fieldKey => $value)
                     $inverter[$fieldKey] = $value;
 
-                $tmp = unpack("l", pack("l", crc32($inverter['mfr'] . $inverter['model'])));
+                $tmp = unpack("l", pack("l", crc32($inverter['mfr'] . $inverter['model'] . $inverter['client_no'])));
                 $inverter['crc32'] = reset($tmp);
                 
                 $inverter->save();
@@ -530,7 +530,7 @@ class EquipmentController extends Controller
                 foreach($request['data'] as $fieldKey => $value)
                     $racking[$fieldKey] = $value;
                 
-                $tmp = unpack("l", pack("l", crc32($racking['mfr'] . $racking['model'])));
+                $tmp = unpack("l", pack("l", crc32($racking['mfr'] . $racking['model'] . $racking['client_no'])));
                 $racking['crc32'] = reset($tmp);
                 
                 $racking->save();
@@ -716,7 +716,7 @@ class EquipmentController extends Controller
                 foreach($request['data'] as $fieldKey => $value)
                     $stanchion[$fieldKey] = $value;
 
-                $tmp = unpack("l", pack("l", crc32($stanchion['mfr'] . $stanchion['model'])));
+                $tmp = unpack("l", pack("l", crc32($stanchion['mfr'] . $stanchion['model'] . $stanchion['client_no'])));
                 $stanchion['crc32'] = reset($tmp);
                 
                 $stanchion->save();
