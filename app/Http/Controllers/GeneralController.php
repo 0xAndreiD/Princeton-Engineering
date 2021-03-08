@@ -22,6 +22,7 @@ use App\CustomModule;
 use App\CustomInverter;
 use App\CustomStanchion;
 use App\CustomRacking;
+use App\StandardFavorite;
 use Kunnu\Dropbox\DropboxApp;
 use Kunnu\Dropbox\Dropbox;
 use Kunnu\Dropbox\DropboxFile;
@@ -689,6 +690,18 @@ class GeneralController extends Controller
      */
     public function getPVModules(Request $request){
         $pv_modules = PVModule::all();
+        $favorite = StandardFavorite::where('client_no', Auth::user()->companyid)->where('type', 0)->first();
+        if(!$favorite)
+            $favorite_ids = '';
+        else
+            $favorite_ids = $favorite->crc32_ids;
+        $favorites = explode(",", $favorite_ids);
+        foreach($pv_modules as $module){
+            if(in_array(strval($module['crc32']), $favorites))
+                $module['favorite'] = true;
+        }
+
+        //Custom
         if(Auth::user()->userrole != 2){
             $custom_modules = CustomModule::where('client_no', Auth::user()->companyid)->get(
                 array('mfr', 'model', 'rating', 'length', 'width', 'depth', 'weight', 'favorite')
@@ -713,6 +726,19 @@ class GeneralController extends Controller
      */
     public function getPVInverters(Request $request){
         $pv_inverters = PVInverter::all();
+        $favorite = StandardFavorite::where('client_no', Auth::user()->companyid)->where('type', 1)->first();
+        if(!$favorite)
+            $favorite_ids = '';
+        else
+            $favorite_ids = $favorite->crc32_ids;
+        $favorites = explode(",", $favorite_ids);
+        foreach($pv_inverters as $inverter){
+            if(in_array(strval($inverter['crc32']), $favorites))
+                $inverter['favorite'] = true;
+        }
+
+        //Custom
+
         if(Auth::user()->userrole != 2){
             $custom_inverters = CustomInverter::where('client_no', Auth::user()->companyid)->get(
                 array('mfr as module', 'model as submodule', 'rating as option1', 'favorite')
@@ -738,6 +764,18 @@ class GeneralController extends Controller
      */
     public function getStanchions(Request $request){
         $stanchions = Stanchion::all();
+        $favorite = StandardFavorite::where('client_no', Auth::user()->companyid)->where('type', 3)->first();
+        if(!$favorite)
+            $favorite_ids = '';
+        else
+            $favorite_ids = $favorite->crc32_ids;
+        $favorites = explode(",", $favorite_ids);
+        foreach($stanchions as $stanchion){
+            if(in_array(strval($stanchion['crc32']), $favorites))
+                $stanchion['favorite'] = true;
+        }
+
+        //Custom
         if(Auth::user()->userrole != 2){
             $custom_stanchions = CustomStanchion::where('client_no', Auth::user()->companyid)->get(
                 array('mfr as module', 'model as submodule', 'weight as option1', 'favorite')
@@ -763,6 +801,18 @@ class GeneralController extends Controller
      */
     public function getRailsupport(Request $request){
         $railsupport = RailSupport::all();
+        $favorite = StandardFavorite::where('client_no', Auth::user()->companyid)->where('type', 2)->first();
+        if(!$favorite)
+            $favorite_ids = '';
+        else
+            $favorite_ids = $favorite->crc32_ids;
+        $favorites = explode(",", $favorite_ids);
+        foreach($railsupport as $support){
+            if(in_array(strval($support['crc32']), $favorites))
+                $support['favorite'] = true;
+        }
+
+        //Custom
         if(Auth::user()->userrole != 2){
             $custom_supports = CustomRacking::where('client_no', Auth::user()->companyid)->get(
                 array('mfr as module', 'model as submodule', 'rack_weight as option1', 'favorite')

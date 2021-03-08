@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Stanchion extends Authenticatable
+class StandardFavorite extends Authenticatable
 {
     use Notifiable;
 
@@ -15,10 +15,10 @@ class Stanchion extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'id', 'module', 'submodule', 'option1', 'option2', 'crc32'
+        'id', 'client_no', 'type', 'crc32_ids'
     ];
 
-    protected $table = 'stanchion';
+    protected $table = 'standard_favorite';
 
     public $timestamps = false;
 }

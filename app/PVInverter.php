@@ -15,8 +15,10 @@ class PVInverter extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'id', 'module', 'submodule', 'option1', 'option2'
+        'id', 'module', 'submodule', 'option1', 'option2', 'crc32'
     ];
 
     protected $table = 'pv_inverter';
+
+    public $timestamps = false;
 }
