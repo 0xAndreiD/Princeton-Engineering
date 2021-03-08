@@ -157,7 +157,7 @@ class UserController extends Controller
                 switch ($user->userrole){
                     case 2:
                         $nestedData['userrole'] = "
-                            <span class='badge badge-danger'> Admin </span>
+                            <span class='badge badge-danger'> Supe Admin </span>
                         ";
                         break;
                     case 1:

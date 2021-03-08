@@ -97,27 +97,58 @@ Route::get('/settings', 'UserController@settings')->name('settings');
 Route::post('/getUserSetting', 'UserController@getUserSetting')->name('getUserSetting');
 Route::post('/updateUserSetting', 'UserController@updateUserSetting')->name('updateUserSetting');
 
-//Custom Equipment
+//Custom Module
 Route::get('/customModule', 'CustomEquipmentController@customModule')->name('customModule');
 Route::post('/getCustomModules', 'CustomEquipmentController@getCustomModules')->name('getCustomModules');
 Route::post('/submitModule', 'CustomEquipmentController@submitModule')->name('submitModule');
 Route::post('/deleteModule', 'CustomEquipmentController@deleteModule')->name('deleteModule');
 Route::post('/moduleToggleFavorite', 'CustomEquipmentController@moduleToggleFavorite')->name('moduleToggleFavorite');
 
+//Custom Inverter
 Route::get('/customInverter', 'CustomEquipmentController@customInverter')->name('customInverter');
 Route::post('/getCustomInverters', 'CustomEquipmentController@getCustomInverters')->name('getCustomInverters');
 Route::post('/submitInverter', 'CustomEquipmentController@submitInverter')->name('submitInverter');
 Route::post('/deleteInverter', 'CustomEquipmentController@deleteInverter')->name('deleteInverter');
 Route::post('/inverterToggleFavorite', 'CustomEquipmentController@inverterToggleFavorite')->name('inverterToggleFavorite');
 
+//Custom Solar Racking(Rail Support)
 Route::get('/customRacking', 'CustomEquipmentController@customRacking')->name('customRacking');
 Route::post('/getCustomRacking', 'CustomEquipmentController@getCustomRacking')->name('getCustomRacking');
 Route::post('/submitRacking', 'CustomEquipmentController@submitRacking')->name('submitRacking');
 Route::post('/deleteRacking', 'CustomEquipmentController@deleteRacking')->name('deleteRacking');
 Route::post('/rackingToggleFavorite', 'CustomEquipmentController@rackingToggleFavorite')->name('rackingToggleFavorite');
 
+//Custom Stanchions
 Route::get('/customStanchion', 'CustomEquipmentController@customStanchion')->name('customStanchion');
 Route::post('/getCustomStanchion', 'CustomEquipmentController@getCustomStanchion')->name('getCustomStanchion');
 Route::post('/submitStanchion', 'CustomEquipmentController@submitStanchion')->name('submitStanchion');
 Route::post('/deleteStanchion', 'CustomEquipmentController@deleteStanchion')->name('deleteStanchion');
 Route::post('/stanchionToggleFavorite', 'CustomEquipmentController@stanchionToggleFavorite')->name('stanchionToggleFavorite');
+
+//Standard Module
+Route::get('/standardModule', 'StandardEquipmentController@standardModule')->name('standardModule');
+Route::post('/getStandardModules', 'StandardEquipmentController@getStandardModules')->name('getStandardModules');
+Route::post('/submitStandardModule', 'StandardEquipmentController@submitModule')->name('submitStandardModule');
+Route::post('/deleteStandardModule', 'StandardEquipmentController@deleteModule')->name('deleteStandardModule');
+Route::post('/standardModuleToggleFavorite', 'StandardEquipmentController@moduleToggleFavorite')->name('standardModuleToggleFavorite');
+
+//Standard Inverter
+Route::get('/standardInverter', 'StandardEquipmentController@standardInverter')->name('standardInverter');
+Route::post('/getStandardInverters', 'StandardEquipmentController@getStandardInverters')->name('getStandardInverters');
+Route::post('/submitStandardInverter', 'StandardEquipmentController@submitInverter')->name('submitStandardInverter');
+Route::post('/deleteStandardInverter', 'StandardEquipmentController@deleteInverter')->name('deleteStandardInverter');
+Route::post('/standardInverterToggleFavorite', 'StandardEquipmentController@inverterToggleFavorite')->name('inverterToggleFavorite');
+
+//Standard Solar Racking(Rail Support)
+Route::get('/standardRacking', 'StandardEquipmentController@standardRacking')->name('standardRacking');
+Route::post('/getStandardRacking', 'StandardEquipmentController@getStandardRacking')->name('getStandardRacking');
+Route::post('/submitStandardRacking', 'StandardEquipmentController@submitRacking')->name('submitStandardRacking');
+Route::post('/deleteStandardRacking', 'StandardEquipmentController@deleteRacking')->name('deleteStandardRacking');
+Route::post('/standardRackingToggleFavorite', 'StandardEquipmentController@rackingToggleFavorite')->name('standardRackingToggleFavorite');
+
+//Standard Stanchions
+Route::get('/standardStanchion', 'StandardEquipmentController@standardStanchion')->name('standardStanchion');
+Route::post('/getStandardStanchion', 'StandardEquipmentController@getStandardStanchion')->name('getStandardStanchion');
+Route::post('/submitStandardStanchion', 'StandardEquipmentController@submitStanchion')->name('submitStandardStanchion');
+Route::post('/deleteStandardStanchion', 'StandardEquipmentController@deleteStanchion')->name('deleteStandardStanchion');
+Route::post('/standardStanchionToggleFavorite', 'StandardEquipmentController@stanchionToggleFavorite')->name('standardStanchionToggleFavorite');

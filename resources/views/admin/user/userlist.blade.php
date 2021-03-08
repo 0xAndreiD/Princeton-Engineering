@@ -59,7 +59,7 @@
                             <th class="searchHead">
                                 <select placeholder="Search Role" class="searchBox" id="roleFilter">
                                     <option value="">All</option>
-                                    <option value="2">Admin</option>
+                                    <option value="2">Super Admin</option>
                                     <option value="1">Client</option>
                                     <option value="0">User</option>
                                 </select>
@@ -117,7 +117,7 @@
                                     <select class="form-control" id="userrole" name="userrole">
                                         <option value="0"><span class='badge badge-info'> User </span></option>
                                         <option value="1"><span class='badge badge-primary'> Client </span></option>
-                                        <option value="2"><span class='badge badge-danger'> Admin </span></option>
+                                        <option value="2"><span class='badge badge-danger'> Super Admin </span></option>
                                     </select>
                                 </div>
                                 <div class="form-group">

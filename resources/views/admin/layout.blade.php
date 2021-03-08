@@ -138,10 +138,29 @@
                                 <span class="nav-main-link-name">Project list</span>
                             </a>
                         </li>
+                        <li class="nav-main-heading">Standard Products</li>
                         <li class="nav-main-item">
-                            <a class="nav-main-link" href="#">
-                                <i class="nav-main-link-icon fa fa-lock"></i>
-                                <span class="nav-main-link-name">Manage Project Data File</span>
+                            <a class="nav-main-link" href="{{ route('standardModule') }}">
+                                <i class="nav-main-link-icon fa fa-solar-panel"></i>
+                                <span class="nav-main-link-name">Modules</span>
+                            </a>
+                        </li>
+                        <li class="nav-main-item">
+                            <a class="nav-main-link" href="{{ route('standardInverter') }}">
+                                <i class="nav-main-link-icon fa fa-dharmachakra"></i>
+                                <span class="nav-main-link-name">Inverters</span>
+                            </a>
+                        </li>
+                        <li class="nav-main-item">
+                            <a class="nav-main-link" href="{{ route('standardRacking') }}">
+                                <i class="nav-main-link-icon fab fa-resolving"></i>
+                                <span class="nav-main-link-name">Rail Support</span>
+                            </a>
+                        </li>
+                        <li class="nav-main-item">
+                            <a class="nav-main-link" href="{{ route('standardStanchion') }}">
+                                <i class="nav-main-link-icon fa fa-wrench"></i>
+                                <span class="nav-main-link-name">Stanchions</span>
                             </a>
                         </li>
                         <li class="nav-main-heading">Custom Products</li>
