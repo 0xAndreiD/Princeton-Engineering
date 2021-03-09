@@ -12,7 +12,7 @@
                     Standard Rail Supports
                 </h1>
                 <h2 class="h5 text-white-75 mb-0">
-                    Standard Rail Support from Super Admin
+                    To select / deselect equipment as a favorite, click the star.
                 </h2>
             </div>
         </div>
