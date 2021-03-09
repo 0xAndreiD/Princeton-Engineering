@@ -139,6 +139,21 @@ class StandardEquipmentController extends Controller
     }
 
     /**
+     * Generate Random String.
+     *
+     * @return String
+     */
+    function generateRandomString($length = 10) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
+
+    /**
      * Create / Update standard module data.
      *
      * @return JSON
@@ -153,15 +168,29 @@ class StandardEquipmentController extends Controller
                 foreach($request['data'] as $fieldKey => $value)
                     $module[$fieldKey] = $value;
                 
-                $tmp = unpack("l", pack("l", crc32($module['mfr'] . $module['model'])));
-                $module['crc32'] = reset($tmp);
+                $base_str = $module['mfr'] . $module['model'];
+                do{
+                    $tmp = unpack("l", pack("l", crc32($base_str)));
+                    $crc32 = reset($tmp);
+                    $check = PVModule::where('id', '!=', $module->id)->where('crc32', $crc32)->first();
+                    $base_str .= $this->generateRandomString();
+                }while($check);
+
+                $module->crc32 = $crc32;
                 $module->save();
                 return response()->json(['success' => true]);
             } else {
                 $data = $request['data'];
-                $tmp = unpack("l", pack("l", crc32($data['mfr'] . $data['model'])));
-                $data['crc32'] = reset($tmp);
+
+                $base_str = $data['mfr'] . $data['model'];
+                do{
+                    $tmp = unpack("l", pack("l", crc32($base_str)));
+                    $crc32 = reset($tmp);
+                    $check = PVModule::where('crc32', $crc32)->first();
+                    $base_str .= $this->generateRandomString();
+                }while($check);
                 
+                $data['crc32'] = $crc32;
                 $newModule = PVModule::create($data);
                 return response()->json(['success' => true]);
             }
