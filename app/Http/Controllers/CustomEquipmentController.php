@@ -74,12 +74,12 @@ class CustomEquipmentController extends Controller
         }
 
         $handler = $handler->leftjoin('company_info', "company_info.id", "=", "custom_module.client_no");
-
-        if(Auth::user()->userrole == 2 && !empty($request->input("columns.1.search.value")))
-            $handler = $handler->where('company_info.company_name', 'LIKE', "%{$request->input("columns.1.search.value")}%");
         
         $totalData = $handler->count();
         $totalFiltered = $totalData; 
+
+        if(Auth::user()->userrole == 2 && !empty($request->input("columns.1.search.value")))
+            $handler = $handler->where('company_info.company_name', 'LIKE', "%{$request->input("columns.1.search.value")}%");
 
         $limit = $request->input('length');
         $start = $request->input('start');
@@ -88,6 +88,7 @@ class CustomEquipmentController extends Controller
 
         if(empty($request->input('search.value')))
         {            
+            $totalFiltered = $handler->count();
             $modules = $handler->offset($start)
                 ->limit($limit)
                 ->orderBy($order,$dir)
@@ -260,12 +261,12 @@ class CustomEquipmentController extends Controller
         }
 
         $handler = $handler->leftjoin('company_info', "company_info.id", "=", "custom_inverter.client_no");
-
-        if(Auth::user()->userrole == 2 && !empty($request->input("columns.1.search.value")))
-            $handler = $handler->where('company_info.company_name', 'LIKE', "%{$request->input("columns.1.search.value")}%");
         
         $totalData = $handler->count();
         $totalFiltered = $totalData; 
+
+        if(Auth::user()->userrole == 2 && !empty($request->input("columns.1.search.value")))
+            $handler = $handler->where('company_info.company_name', 'LIKE', "%{$request->input("columns.1.search.value")}%");
 
         $limit = $request->input('length');
         $start = $request->input('start');
@@ -274,6 +275,7 @@ class CustomEquipmentController extends Controller
 
         if(empty($request->input('search.value')))
         {            
+            $totalFiltered = $handler->count();
             $inverters = $handler->offset($start)
                 ->limit($limit)
                 ->orderBy($order,$dir)
@@ -442,12 +444,12 @@ class CustomEquipmentController extends Controller
             $handler = CustomRacking::where('client_no', Auth::user()->companyid);
         }
         $handler = $handler->leftjoin('company_info', "company_info.id", "=", "custom_solar_racking.client_no");
-
-        if(Auth::user()->userrole == 2 && !empty($request->input("columns.1.search.value")))
-            $handler = $handler->where('company_info.company_name', 'LIKE', "%{$request->input("columns.1.search.value")}%");
         
         $totalData = $handler->count();
         $totalFiltered = $totalData; 
+
+        if(Auth::user()->userrole == 2 && !empty($request->input("columns.1.search.value")))
+            $handler = $handler->where('company_info.company_name', 'LIKE', "%{$request->input("columns.1.search.value")}%");
 
         $limit = $request->input('length');
         $start = $request->input('start');
@@ -456,6 +458,7 @@ class CustomEquipmentController extends Controller
 
         if(empty($request->input('search.value')))
         {            
+            $totalFiltered = $handler->count();
             $rackings = $handler->offset($start)
                 ->limit($limit)
                 ->orderBy($order,$dir)
@@ -628,12 +631,12 @@ class CustomEquipmentController extends Controller
             $handler = CustomStanchion::where('client_no', Auth::user()->companyid);
         }
         $handler = $handler->leftjoin('company_info', "company_info.id", "=", "custom_stanchions.client_no");
-
-        if(Auth::user()->userrole == 2 && !empty($request->input("columns.1.search.value")))
-            $handler = $handler->where('company_info.company_name', 'LIKE', "%{$request->input("columns.1.search.value")}%");
         
         $totalData = $handler->count();
         $totalFiltered = $totalData; 
+
+        if(Auth::user()->userrole == 2 && !empty($request->input("columns.1.search.value")))
+            $handler = $handler->where('company_info.company_name', 'LIKE', "%{$request->input("columns.1.search.value")}%");
 
         $limit = $request->input('length');
         $start = $request->input('start');
@@ -642,6 +645,7 @@ class CustomEquipmentController extends Controller
 
         if(empty($request->input('search.value')))
         {            
+            $totalFiltered = $handler->count();
             $stanchions = $handler->offset($start)
                 ->limit($limit)
                 ->orderBy($order,$dir)
