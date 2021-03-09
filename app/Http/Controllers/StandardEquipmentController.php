@@ -66,6 +66,9 @@ class StandardEquipmentController extends Controller
         $totalData = $handler->count();
         $totalFiltered = $totalData; 
 
+        if(Auth::user()->userrole == 2 && !empty($request->input("columns.1.search.value")))
+            $handler = $handler->where('mfr', 'LIKE', "%{$request->input("columns.1.search.value")}%");
+
         $limit = $request->input('length');
         $start = $request->input('start');
         $order = $columns[$request->input('order.0.column')];
@@ -73,6 +76,7 @@ class StandardEquipmentController extends Controller
 
         if(empty($request->input('search.value')))
         {            
+            $totalFiltered = $handler->count();
             $modules = $handler->offset($start)
                 ->limit($limit)
                 ->orderBy($order,$dir)
@@ -256,6 +260,9 @@ class StandardEquipmentController extends Controller
         $totalData = $handler->count();
         $totalFiltered = $totalData; 
 
+        if(Auth::user()->userrole == 2 && !empty($request->input("columns.1.search.value")))
+            $handler = $handler->where('module', 'LIKE', "%{$request->input("columns.1.search.value")}%");
+
         $limit = $request->input('length');
         $start = $request->input('start');
         $order = $columns[$request->input('order.0.column')];
@@ -263,6 +270,7 @@ class StandardEquipmentController extends Controller
 
         if(empty($request->input('search.value')))
         {            
+            $totalFiltered = $handler->count();
             $inverters = $handler->offset($start)
                 ->limit($limit)
                 ->orderBy($order,$dir)
@@ -437,6 +445,9 @@ class StandardEquipmentController extends Controller
         $totalData = $handler->count();
         $totalFiltered = $totalData; 
 
+        if(Auth::user()->userrole == 2 && !empty($request->input("columns.1.search.value")))
+            $handler = $handler->where('module', 'LIKE', "%{$request->input("columns.1.search.value")}%");
+
         $limit = $request->input('length');
         $start = $request->input('start');
         $order = $columns[$request->input('order.0.column')];
@@ -444,6 +455,7 @@ class StandardEquipmentController extends Controller
 
         if(empty($request->input('search.value')))
         {            
+            $totalFiltered = $handler->count();
             $rackings = $handler->offset($start)
                 ->limit($limit)
                 ->orderBy($order,$dir)
@@ -629,6 +641,9 @@ class StandardEquipmentController extends Controller
         $totalData = $handler->count();
         $totalFiltered = $totalData; 
 
+        if(Auth::user()->userrole == 2 && !empty($request->input("columns.1.search.value")))
+            $handler = $handler->where('module', 'LIKE', "%{$request->input("columns.1.search.value")}%");
+
         $limit = $request->input('length');
         $start = $request->input('start');
         $order = $columns[$request->input('order.0.column')];
@@ -636,6 +651,7 @@ class StandardEquipmentController extends Controller
 
         if(empty($request->input('search.value')))
         {            
+            $totalFiltered = $handler->count();
             $stanchions = $handler->offset($start)
                 ->limit($limit)
                 ->orderBy($order,$dir)

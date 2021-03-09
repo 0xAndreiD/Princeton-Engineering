@@ -44,6 +44,14 @@
                             <th style="width:40%;">Model</th>
                             <th style="min-width: 200px;">Actions</th>
                         </tr>
+                        @if(Auth::user()->userrole == 2)
+                        <tr>
+                            <th></th>
+                            <th class="searchHead"> <input type="text" placeholder="Search Manufacturer" class="searchBox" id="mfrFilter"> </th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                        @endif
                     </thead>
                 </table>
             </div>
@@ -139,7 +147,7 @@
         });
 
         @if(Auth::user()->userrole == 2)
-        $("#companyFilter").on('change', function() {
+        $("#mfrFilter").on('keyup change', function() {
             table.column($(this).parent().index() + ':visible').search(this.value).draw();
         });
         @endif
