@@ -264,10 +264,10 @@ class GeneralController extends Controller
         
         //Equipment
         $data['Equipment'] = array();
-        $data['Equipment']['PVModule'] = array('Type' => $input['option-module-type'], 'SubType' => $input['option-module-subtype'], 'Option1' => number_format(floatval($input['option-module-option1']), 2), 'Option2' => $input['option-module-option2'], 'Quantity' => $input['option-module-quantity']);
-        $data['Equipment']['PVInverter'] = array('Type' => $input['option-inverter-type'], 'SubType' => $input['option-inverter-subtype'], 'Option1' => number_format(floatval($input['option-inverter-option1']), 2), 'Option2' => $input['option-inverter-option2'], 'Quantity' => $input['option-inverter-quantity']);
-        $data['Equipment']['Stanchion'] = array('Type' => $input['option-stanchion-type'], 'SubType' => $input['option-stanchion-subtype'], 'Option1' => number_format(floatval($input['option-stanchion-option1']), 2), 'Option2' => $input['option-stanchion-option2']);
-        $data['Equipment']['RailSupportSystem'] = array('Type' => $input['option-railsupport-type'], 'SubType' => $input['option-railsupport-subtype'], 'Option1' => number_format(floatval($input['option-railsupport-option1']), 2), 'Option2' => $input['option-railsupport-option2']);
+        $data['Equipment']['PVModule'] = array('Type' => $input['option-module-type'], 'SubType' => $input['option-module-subtype'], 'Option1' => number_format(floatval($input['option-module-option1']), 2), 'Option2' => $input['option-module-option2'], 'Quantity' => $input['option-module-quantity'], 'Custom' => $input['pv-module-custom'], 'CRC32' => $input['pv-module-crc32']);
+        $data['Equipment']['PVInverter'] = array('Type' => $input['option-inverter-type'], 'SubType' => $input['option-inverter-subtype'], 'Option1' => number_format(floatval($input['option-inverter-option1']), 2), 'Option2' => $input['option-inverter-option2'], 'Quantity' => $input['option-inverter-quantity'], 'Custom' => $input['inverter-custom'], 'CRC32' => $input['inverter-crc32']);
+        $data['Equipment']['Stanchion'] = array('Type' => $input['option-stanchion-type'], 'SubType' => $input['option-stanchion-subtype'], 'Option1' => number_format(floatval($input['option-stanchion-option1']), 2), 'Option2' => $input['option-stanchion-option2'], 'Custom' => $input['stanchion-custom'], 'CRC32' => $input['stanchion-crc32']);
+        $data['Equipment']['RailSupportSystem'] = array('Type' => $input['option-railsupport-type'], 'SubType' => $input['option-railsupport-subtype'], 'Option1' => number_format(floatval($input['option-railsupport-option1']), 2), 'Option2' => $input['option-railsupport-option2'], 'Custom' => $input['railsupport-custom'], 'CRC32' => $input['railsupport-crc32']);
 
         //NumberLoadingConditions = CaseCount
         $data['NumberLoadingConditions'] = $caseCount;
@@ -704,11 +704,11 @@ class GeneralController extends Controller
         //Custom
         if(Auth::user()->userrole != 2){
             $custom_modules = CustomModule::where('client_no', Auth::user()->companyid)->get(
-                array('mfr', 'model', 'rating', 'length', 'width', 'depth', 'weight', 'favorite')
+                array('mfr', 'model', 'rating', 'length', 'width', 'depth', 'weight', 'favorite', 'crc32')
             );
         } else {
             $custom_modules = CustomModule::get(
-                array('mfr', 'model', 'rating', 'length', 'width', 'depth', 'weight', 'favorite')
+                array('mfr', 'model', 'rating', 'length', 'width', 'depth', 'weight', 'favorite', 'crc32')
             );
         }
         foreach($custom_modules as $module){
@@ -741,11 +741,11 @@ class GeneralController extends Controller
 
         if(Auth::user()->userrole != 2){
             $custom_inverters = CustomInverter::where('client_no', Auth::user()->companyid)->get(
-                array('mfr as module', 'model as submodule', 'rating as option1', 'favorite')
+                array('mfr as module', 'model as submodule', 'rating as option1', 'favorite', 'crc32')
             );
         } else {
             $custom_inverters = CustomInverter::get(
-                array('mfr as module', 'model as submodule', 'rating as option1', 'favorite')
+                array('mfr as module', 'model as submodule', 'rating as option1', 'favorite', 'crc32')
             );
         }
         foreach($custom_inverters as $inverter){
@@ -778,11 +778,11 @@ class GeneralController extends Controller
         //Custom
         if(Auth::user()->userrole != 2){
             $custom_stanchions = CustomStanchion::where('client_no', Auth::user()->companyid)->get(
-                array('mfr as module', 'model as submodule', 'weight as option1', 'favorite')
+                array('mfr as module', 'model as submodule', 'weight as option1', 'favorite', 'crc32')
             );
         } else {
             $custom_stanchions = CustomStanchion::get(
-                array('mfr as module', 'model as submodule', 'weight as option1', 'favorite')
+                array('mfr as module', 'model as submodule', 'weight as option1', 'favorite', 'crc32')
             );
         }
         foreach($custom_stanchions as $stanchion){
@@ -815,11 +815,11 @@ class GeneralController extends Controller
         //Custom
         if(Auth::user()->userrole != 2){
             $custom_supports = CustomRacking::where('client_no', Auth::user()->companyid)->get(
-                array('mfr as module', 'model as submodule', 'rack_weight as option1', 'favorite')
+                array('mfr as module', 'model as submodule', 'rack_weight as option1', 'favorite', 'crc32')
             );
         } else {
             $custom_supports = CustomRacking::get(
-                array('mfr as module', 'model as submodule', 'rack_weight as option1', 'favorite')
+                array('mfr as module', 'model as submodule', 'rack_weight as option1', 'favorite', 'crc32')
             );
         }
         foreach($custom_supports as $support){
