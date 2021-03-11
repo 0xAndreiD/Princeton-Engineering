@@ -12,6 +12,10 @@ use App\JobRequest;
 use App\Company;
 use App\DataCheck;
 use App\BackupSetting;
+use App\CustomModule;
+use App\CustomInverter;
+use App\CustomRacking;
+use App\CustomStanchion;
 use Kunnu\Dropbox\DropboxApp;
 use Kunnu\Dropbox\Dropbox;
 use Kunnu\Dropbox\DropboxFile;
@@ -263,5 +267,42 @@ class APIController extends Controller
             }
         } else 
             return response()->json(['success' => false, 'message' => 'Today is not a cron setted day.']);
+    }
+
+    /**
+     * Return Custom Equipment Data according to two filters: type & crc32.
+     *
+     * @return JSON
+     */
+    public function getCustomEquipment(Request $request){
+        if(isset($request['username']) && isset($request['password'])){
+            $user = User::where('username', '=', $request['username'])->where('password', '=', $request['password'])->first();
+            if($user && $user->userrole == 2)
+            {
+                if(isset($request['type'])){
+                    if($request['type'] == 'module')
+                        $handler = new CustomModule;
+                    else if($request['type'] == 'inverter')
+                        $handler = new CustomInverter;
+                    else if($request['type'] == 'racking')
+                        $handler = new CustomRacking;
+                    else if($request['type'] == 'stanchion')
+                        $handler = new CustomStanchion;
+                    else
+                        return response()->json(['success' => false, 'message' => 'Wrong Type.']);
+
+                    if(isset($request['crc32']))
+                        $handler = $handler->where('crc32', $request['crc32']);
+                    
+                    $data = $handler->get();
+                    return response()->json(['success' => true, 'data' => $data]);
+                } else 
+                    return response()->json(['success' => false, 'message' => 'Type Required.']);
+            }
+            else
+                return response()->json(['success' => false, 'message' => 'Auth failed.']);
+        }
+        else
+            return response()->json(['success' => false, 'message' => 'Auth required.']);
     }
 }
