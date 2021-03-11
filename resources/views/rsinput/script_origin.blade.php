@@ -663,10 +663,8 @@ var getPVModuleSubTypes = function(mainType) {
 var optionPVModule = function(mainType, subType, idx) {
     for (index = 0; index < availablePVModules.length; index++) {
         if ((availablePVModules[index][0] == mainType) 
-            && (availablePVModules[index][1] == subType)) {
-                console.log(availablePVModules[index]);
+            && (availablePVModules[index][1] == subType))
             return availablePVModules[index][idx];
-        }
     }
 
     return "N/A";
