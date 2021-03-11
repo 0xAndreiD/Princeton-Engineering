@@ -293,6 +293,8 @@
         </td>
         <input class="w400-bdr" id="pv-module-length" hidden>
         <input class="w400-bdr" id="pv-module-width" hidden>
+        <input class="w400-bdr" id="pv-module-custom" hidden>
+        <input class="w400-bdr" id="pv-module-crc32" hidden>
     </tr>
     <tr class="h13">
         <td><div style="overflow:hidden"></div></td>
@@ -326,6 +328,8 @@
                 <label class="custom-control-label" for="inverter-favorite"></label>
             </div>
         </td>
+        <input class="w400-bdr" id="inverter-custom" hidden>
+        <input class="w400-bdr" id="inverter-crc32" hidden>
     </tr>
     <tr class="h13">
         <td><div style="overflow:hidden"></div></td>
@@ -359,6 +363,8 @@
                 <label class="custom-control-label" for="stanchion-favorite"></label>
             </div>
         </td>
+        <input class="w400-bdr" id="stanchion-custom" hidden>
+        <input class="w400-bdr" id="stanchion-crc32" hidden>
     </tr>
     <tr class="h13">
         <td><div style="overflow:hidden"></div></td>
@@ -392,6 +398,8 @@
                 <label class="custom-control-label" for="rail-favorite"></label>
             </div>
         </td>
+        <input class="w400-bdr" id="railsupport-custom" hidden>
+        <input class="w400-bdr" id="railsupport-crc32" hidden>
     </tr>
     <tr class="h13">
         <td><div style="overflow:hidden"></div></td>
