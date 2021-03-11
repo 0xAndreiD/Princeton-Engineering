@@ -36,6 +36,21 @@ class CustomEquipmentController extends Controller
     }
 
     /**
+     * Generate Random String.
+     *
+     * @return String
+     */
+    function generateRandomString($length = 10) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
+
+    /**
      * Show the custom modules page.
      *
      * @return \Illuminate\Contracts\Support\Renderable
@@ -163,16 +178,31 @@ class CustomEquipmentController extends Controller
                 
                 foreach($request['data'] as $fieldKey => $value)
                     $module[$fieldKey] = $value;
+
+                $base_str = $module['mfr'] . $module['model'] . $module['Voc'] . $module['Isc'] . $module['Mtg_Hole_1'] . $module['lead_len'] . $module['client_no'];
+                do{
+                    $tmp = unpack("l", pack("l", crc32($base_str)));
+                    $crc32 = reset($tmp);
+                    $check = CustomModule::where('id', '!=', $module->id)->where('crc32', $crc32)->first();
+                    $base_str .= $this->generateRandomString();
+                }while($check);
                 
-                $tmp = unpack("l", pack("l", crc32($module['mfr'] . $module['model'] . $module['Voc'] . $module['Isc'] . $module['Mtg_Hole_1'] . $module['lead_len'] . $module['client_no'])));
-                $module['crc32'] = reset($tmp);
+                $module['crc32'] = $crc32;
                 $module->save();
                 return response()->json(['success' => true]);
             } else {
                 $data = $request['data'];
                 $data['client_no'] = Auth::user()->companyid;
-                $tmp = unpack("l", pack("l", crc32($data['mfr'] . $data['model'] . $data['Voc'] . $data['Isc'] . $data['Mtg_Hole_1'] . $data['lead_len'] . $data['client_no'])));
-                $data['crc32'] = reset($tmp);
+
+                $base_str = $data['mfr'] . $data['model'] . $data['Voc'] . $data['Isc'] . $data['Mtg_Hole_1'] . $data['lead_len'] . $data['client_no'];
+                do{
+                    $tmp = unpack("l", pack("l", crc32($base_str)));
+                    $crc32 = reset($tmp);
+                    $check = CustomModule::where('crc32', $crc32)->first();
+                    $base_str .= $this->generateRandomString();
+                }while($check);
+
+                $data['crc32'] = $crc32;
                 $newModule = CustomModule::create($data);
                 return response()->json(['success' => true]);
             }
@@ -349,16 +379,30 @@ class CustomEquipmentController extends Controller
                 foreach($request['data'] as $fieldKey => $value)
                     $inverter[$fieldKey] = $value;
 
-                $tmp = unpack("l", pack("l", crc32($inverter['mfr'] . $inverter['model'] . $inverter['client_no'])));
-                $inverter['crc32'] = reset($tmp);
+                $base_str = $inverter['mfr'] . $inverter['model'] . $inverter['client_no'];
+                do{
+                    $tmp = unpack("l", pack("l", crc32($base_str)));
+                    $crc32 = reset($tmp);
+                    $check = CustomInverter::where('id', '!=', $inverter->id)->where('crc32', $crc32)->first();
+                    $base_str .= $this->generateRandomString();
+                }while($check);
                 
+                $inverter['crc32'] = $crc32;
                 $inverter->save();
                 return response()->json(['success' => true]);
             } else {
                 $data = $request['data'];
                 $data['client_no'] = Auth::user()->companyid;
-                $tmp = unpack("l", pack("l", crc32($data['mfr'] . $data['model'] . $data['client_no'])));
-                $data['crc32'] = reset($tmp);
+
+                $base_str = $data['mfr'] . $data['model'] . $data['client_no'];
+                do{
+                    $tmp = unpack("l", pack("l", crc32($base_str)));
+                    $crc32 = reset($tmp);
+                    $check = CustomInverter::where('crc32', $crc32)->first();
+                    $base_str .= $this->generateRandomString();
+                }while($check);
+
+                $data['crc32'] = $crc32;
                 $newInverter = CustomInverter::create($data);
                 return response()->json(['success' => true]);
             }
@@ -533,17 +577,31 @@ class CustomEquipmentController extends Controller
                 foreach($request['data'] as $fieldKey => $value)
                     $racking[$fieldKey] = $value;
                 
-                $tmp = unpack("l", pack("l", crc32($racking['mfr'] . $racking['model'] . $racking['client_no'])));
-                $racking['crc32'] = reset($tmp);
+                $base_str = $racking['mfr'] . $racking['model'] . $racking['client_no'];
+                do{
+                    $tmp = unpack("l", pack("l", crc32($base_str)));
+                    $crc32 = reset($tmp);
+                    $check = CustomRacking::where('id', '!=', $racking->id)->where('crc32', $crc32)->first();
+                    $base_str .= $this->generateRandomString();
+                }while($check);
+                
+                $racking['crc32'] = $crc32;
                 
                 $racking->save();
                 return response()->json(['success' => true]);
             } else {
                 $data = $request['data'];
                 $data['client_no'] = Auth::user()->companyid;
-                $tmp = unpack("l", pack("l", crc32($data['mfr'] . $data['model'] . $data['client_no'])));
-                $data['crc32'] = reset($tmp);
 
+                $base_str = $data['mfr'] . $data['model'] . $data['client_no'];
+                do{
+                    $tmp = unpack("l", pack("l", crc32($base_str)));
+                    $crc32 = reset($tmp);
+                    $check = CustomRacking::where('crc32', $crc32)->first();
+                    $base_str .= $this->generateRandomString();
+                }while($check);
+
+                $data['crc32'] = $crc32;
                 $newRacking = CustomRacking::create($data);
                 return response()->json(['success' => true]);
             }
@@ -720,17 +778,30 @@ class CustomEquipmentController extends Controller
                 foreach($request['data'] as $fieldKey => $value)
                     $stanchion[$fieldKey] = $value;
 
-                $tmp = unpack("l", pack("l", crc32($stanchion['mfr'] . $stanchion['model'] . $stanchion['client_no'])));
-                $stanchion['crc32'] = reset($tmp);
-                
+                $base_str = $stanchion['mfr'] . $stanchion['model'] . $stanchion['client_no'];
+                do{
+                    $tmp = unpack("l", pack("l", crc32($base_str)));
+                    $crc32 = reset($tmp);
+                    $check = CustomStanchion::where('id', '!=', $stanchion->id)->where('crc32', $crc32)->first();
+                    $base_str .= $this->generateRandomString();
+                }while($check);
+
+                $stanchion['crc32'] = $crc32;
                 $stanchion->save();
                 return response()->json(['success' => true]);
             } else {
                 $data = $request['data'];
                 $data['client_no'] = Auth::user()->companyid;
-                $tmp = unpack("l", pack("l", crc32($data['mfr'] . $data['model'] . $data['client_no'])));
-                $data['crc32'] = reset($tmp);
                 
+                $base_str = $data['mfr'] . $data['model'] . $data['client_no'];
+                do{
+                    $tmp = unpack("l", pack("l", crc32($base_str)));
+                    $crc32 = reset($tmp);
+                    $check = CustomStanchion::where('crc32', $crc32)->first();
+                    $base_str .= $this->generateRandomString();
+                }while($check);
+
+                $data['crc32'] = $crc32;
                 $newStanchion = CustomStanchion::create($data);
                 return response()->json(['success' => true]);
             }
