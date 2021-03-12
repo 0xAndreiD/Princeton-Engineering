@@ -117,6 +117,12 @@
                                 <span class="nav-main-link-name">Data Input</span>
                             </a>
                         </li>
+                        <li class="nav-main-item">
+                            <a class="nav-main-link" href="{{ route('reference') }}">
+                            <i class="nav-main-link-icon fas fa-info-circle"></i>
+                                <span class="nav-main-link-name">Reference</span>
+                            </a>
+                        </li>
                         <li class="nav-main-heading">Users</li>
                         <li class="nav-main-item">
                             <a class="nav-main-link" href="{{ route('userList') }}">
