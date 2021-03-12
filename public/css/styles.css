@@ -429,3 +429,8 @@ html, body {
     text-align: right !important;
     width: 55%;
 }
+
+.pdfViewer{
+    width: 100%;
+    height: 900px;
+}

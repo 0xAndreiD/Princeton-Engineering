@@ -94,6 +94,15 @@ class GeneralController extends Controller
     }
 
     /**
+     * Show the rf multiple input form.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function reference(Request $request){
+        return view('reference.body');
+    }
+
+    /**
      * Get the same company member data
      *
      * @return JSON
