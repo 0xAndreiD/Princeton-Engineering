@@ -25,7 +25,7 @@
     </div>
 
     <div id="user-guide" class="pdfTabContent">
-        <iframe src="{{ asset('pdf/Users Guide.pdf') }}" type='application/pdf' frameborder="0" class="pdfViewer"></iframe>
+        <iframe src="{{ asset('pdf/Users Guide.pdf') }}" type='application/pdf' frameborder="0" class="userGuideViewer"></iframe>
     </div>
     
     <div id="framing-graphic" class="pdfTabContent">
