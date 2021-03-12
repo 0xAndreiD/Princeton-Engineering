@@ -13,5 +13,5 @@ function openTab(evt, tabName) {
   evt.currentTarget.className += " active";
 }
 
-document.getElementById("framing-tab").click();
+document.getElementById("user-tab").click();
 </script>

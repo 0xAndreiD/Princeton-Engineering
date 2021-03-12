@@ -19,16 +19,21 @@
 <div class="rfdContainer">
     <div class="rfdTab">
         <!-- <button class="tablinks" onclick="openRfdTab(event, 'tab_first')" id="defaultOpen">Common Data Entry</button> -->
+        <button class="tablinks" onclick="openTab(event, 'user-guide')" style="display: block;" id="user-tab">User's Guide</button>
         <button class="tablinks" onclick="openTab(event, 'framing-graphic')" style="display: block;" id="framing-tab">Framing Graphic</button>
         <button class="tablinks" onclick="openTab(event, 'truss-graphic')" style="display: block;" id="truss-tab">Truss Graphic</button>
     </div>
 
+    <div id="user-guide" class="pdfTabContent">
+        <iframe src="{{ asset('pdf/Users Guide.pdf') }}" type='application/pdf' frameborder="0" class="pdfViewer"></iframe>
+    </div>
+    
     <div id="framing-graphic" class="pdfTabContent">
-        <iframe src="{{ asset('pdf/Princeton Input Drawing 20210305-Standard.pdf') }}" type='application/pdf' frameborder="0" class="pdfViewer"></iframe>
+        <iframe src="{{ asset('pdf/Princeton Input Drawing Standard.pdf') }}" type='application/pdf' frameborder="0" class="pdfViewer"></iframe>
     </div>
 
     <div id="truss-graphic" class="pdfTabContent">
-        <iframe src="{{ asset('pdf/Princeton Input Drawing 20210305-Truss.pdf') }}" type='application/pdf' frameborder="0" class="pdfViewer"></iframe>
+        <iframe src="{{ asset('pdf/Princeton Input Drawing Truss.pdf') }}" type='application/pdf' frameborder="0" class="pdfViewer"></iframe>
     </div>
     
 </div>
