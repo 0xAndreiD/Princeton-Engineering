@@ -3880,14 +3880,14 @@ var loadPreloadedData = function() {
 
     var loadASCEOptions = function(state){
         for(let j = 0; j < 10; j ++){
-            $(`#a-12-${j + 1}`).empty();
+            $(`#a-12-${j + 1}`).find('option').remove();
         }
         $.ajax({
             url:"getASCEOptions",
             type:'post',
             data:{state: state},
             success: function(res){
-                if(res.success && res.data){
+                if(res.success && res.data && state == $('#option-state').val()){
                     for(let i = 0; i < res.data.length; i ++){
                         for(let j = 0; j < 10; j ++){
                             if(preloaded_data && preloaded_data['LoadingCase'] && preloaded_data['LoadingCase'][j] && preloaded_data['LoadingCase'][j]['RoofDataInput']
