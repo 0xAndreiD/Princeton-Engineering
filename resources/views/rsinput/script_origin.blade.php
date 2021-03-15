@@ -2215,9 +2215,9 @@ var drawStickGraph = function( condId ) {
             stick_ctx[condId].rotate(- moduleTilt);
             stick_ctx[condId].strokeRect(0, 0, curModuleWidth * stick_grid_size[condId], moduleDepth * stick_grid_size[condId]);
             // Left Support
-            stick_ctx[condId].fillRect(supportStart * stick_grid_size[condId] - 1, moduleDepth * stick_grid_size[condId], stick_grid_size[condId] / 12, stick_grid_size[condId] / 4 / Math.cos(moduleTilt) - moduleDepth * stick_grid_size[condId] + 4 + supportStart * Math.tan(moduleTilt) * stick_grid_size[condId]);
+            stick_ctx[condId].fillRect(supportStart * stick_grid_size[condId] - 1, moduleDepth * stick_grid_size[condId], stick_grid_size[condId] / 12, stick_grid_size[condId] / 4 / Math.cos(moduleTilt) - moduleDepth * stick_grid_size[condId] + Math.max(1, 1 / 12 * Math.tan(moduleTilt) * stick_grid_size[condId]) + supportStart * Math.tan(moduleTilt) * stick_grid_size[condId]);
             // Right Support
-            stick_ctx[condId].fillRect(curModuleWidth * stick_grid_size[condId] - stick_grid_size[condId] * (1 / 12 + supportStart) + 1, moduleDepth * stick_grid_size[condId], stick_grid_size[condId] / 12, stick_grid_size[condId] / 4 / Math.cos(moduleTilt) - moduleDepth * stick_grid_size[condId] + curModuleWidth * Math.tan(moduleTilt) * stick_grid_size[condId] + 1 - supportStart * Math.tan(moduleTilt) * stick_grid_size[condId]);
+            stick_ctx[condId].fillRect(curModuleWidth * stick_grid_size[condId] - stick_grid_size[condId] * (1 / 12 + supportStart) + 1, moduleDepth * stick_grid_size[condId], stick_grid_size[condId] / 12, stick_grid_size[condId] / 4 / Math.cos(moduleTilt) - moduleDepth * stick_grid_size[condId] + curModuleWidth * Math.tan(moduleTilt) * stick_grid_size[condId] +  Math.max(1, 1 / 12 * Math.tan(moduleTilt) * stick_grid_size[condId]) - supportStart * Math.tan(moduleTilt) * stick_grid_size[condId]);
             stick_ctx[condId].rotate(moduleTilt);
             stick_ctx[condId].translate(- moduleStartX * stick_grid_size[condId], 0);
         }
@@ -2226,9 +2226,9 @@ var drawStickGraph = function( condId ) {
             stick_ctx[condId].rotate(- moduleTilt);
             stick_ctx[condId].strokeRect(0, 0, - curModuleWidth * stick_grid_size[condId], moduleDepth * stick_grid_size[condId]);
             // Left Support
-            stick_ctx[condId].fillRect(- curModuleWidth * stick_grid_size[condId] + supportStart * stick_grid_size[condId] - 1, moduleDepth * stick_grid_size[condId], stick_grid_size[condId] / 12, stick_grid_size[condId] / 4 / Math.cos(moduleTilt) - moduleDepth * stick_grid_size[condId] + 1 - curModuleWidth * Math.tan(moduleTilt) * stick_grid_size[condId] + supportStart * Math.tan(moduleTilt) * stick_grid_size[condId]);
+            stick_ctx[condId].fillRect(- curModuleWidth * stick_grid_size[condId] + supportStart * stick_grid_size[condId] - 1, moduleDepth * stick_grid_size[condId], stick_grid_size[condId] / 12, stick_grid_size[condId] / 4 / Math.cos(moduleTilt) - moduleDepth * stick_grid_size[condId] + Math.max(1, - 1 / 12 * Math.tan(moduleTilt) * stick_grid_size[condId]) - curModuleWidth * Math.tan(moduleTilt) * stick_grid_size[condId] + supportStart * Math.tan(moduleTilt) * stick_grid_size[condId]);
             // Right Support
-            stick_ctx[condId].fillRect(- stick_grid_size[condId] * (1 / 12 + supportStart) + 1, moduleDepth * stick_grid_size[condId], stick_grid_size[condId] / 12, stick_grid_size[condId] / 4 / Math.cos(moduleTilt) - moduleDepth * stick_grid_size[condId] + 4 - supportStart * Math.tan(moduleTilt) * stick_grid_size[condId]);
+            stick_ctx[condId].fillRect(- stick_grid_size[condId] * (1 / 12 + supportStart) + 1, moduleDepth * stick_grid_size[condId], stick_grid_size[condId] / 12, stick_grid_size[condId] / 4 / Math.cos(moduleTilt) - moduleDepth * stick_grid_size[condId] + Math.max(1, - 1 / 12 * Math.tan(moduleTilt) * stick_grid_size[condId]) - supportStart * Math.tan(moduleTilt) * stick_grid_size[condId]);
             stick_ctx[condId].rotate(moduleTilt);
             stick_ctx[condId].translate(- moduleStartX * stick_grid_size[condId] - curModuleWidth * stick_grid_size[condId], 0);
         }
