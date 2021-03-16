@@ -204,11 +204,11 @@ class CompanyController extends Controller
                 try{
                     $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
                     $dropbox = new Dropbox($app);
-                    $listFolderContents = $dropbox->listFolder(env('DROPBOX_JSON_INPUT') . $oldName);
-                    $files = $listFolderContents->getItems()->all();
-                    foreach($files as $file)
-                        $dropbox->move(env('DROPBOX_JSON_INPUT') . $oldName . $file->getName(), env('DROPBOX_JSON_INPUT') . $newName . $file->getName());
-                    $dropbox->delete(env('DROPBOX_JSON_INPUT') . $oldName);
+                    // $listFolderContents = $dropbox->listFolder(env('DROPBOX_JSON_INPUT') . $oldName);
+                    // $files = $listFolderContents->getItems()->all();
+                    // foreach($files as $file)
+                        $dropbox->move(env('DROPBOX_JSON_INPUT') . sprintf("%06d", $res->company_number). '. ' . $res->company_name, env('DROPBOX_JSON_INPUT') . sprintf("%06d", $data['number']). '. ' . $data['name']);
+                    // $dropbox->delete(env('DROPBOX_JSON_INPUT') . $oldName);
                 } catch (DropboxClientException $e) { }
 
                 $jobs = JobRequest::where('companyId', $data['id'])->where('companyName', '!=', $data['name'])->get();
