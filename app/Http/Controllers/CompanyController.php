@@ -201,13 +201,15 @@ class CompanyController extends Controller
                 if(file_exists(storage_path('/input/') . $oldName))
                     rename(storage_path('/input/') . $oldName, storage_path('/input/') . $newName);
 
-                $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
-                $dropbox = new Dropbox($app);
-                $listFolderContents = $dropbox->listFolder(env('DROPBOX_JSON_INPUT') . $oldName);
-                $files = $listFolderContents->getItems()->all();
-                foreach($files as $file)
-                    $dropbox->move(env('DROPBOX_JSON_INPUT') . $oldName . $file->getName(), env('DROPBOX_JSON_INPUT') . $newName . $file->getName());
-                $dropbox->delete(env('DROPBOX_JSON_INPUT') . $oldName);
+                try{
+                    $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
+                    $dropbox = new Dropbox($app);
+                    $listFolderContents = $dropbox->listFolder(env('DROPBOX_JSON_INPUT') . $oldName);
+                    $files = $listFolderContents->getItems()->all();
+                    foreach($files as $file)
+                        $dropbox->move(env('DROPBOX_JSON_INPUT') . $oldName . $file->getName(), env('DROPBOX_JSON_INPUT') . $newName . $file->getName());
+                    $dropbox->delete(env('DROPBOX_JSON_INPUT') . $oldName);
+                } catch (DropboxClientException $e) { }
 
                 $jobs = JobRequest::where('companyId', $data['id'])->where('companyName', '!=', $data['name'])->get();
                 foreach($jobs as $job){
