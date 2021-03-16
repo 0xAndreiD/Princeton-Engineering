@@ -111,8 +111,11 @@ function updateCompany() {
             $('#companys').DataTable().ajax.reload();
         });
     } else { // Update company
+        swal.fire({ title: "Please wait...", showConfirmButton: false });
+        swal.showLoading();
         $.post("updateCompany", {data: data}, function(result){
             if (result){
+                swal.close();
                 toast.fire('Updated!', 'Company has been updated.', 'success');
             }
             $('#modal-block-normal').modal('toggle');
