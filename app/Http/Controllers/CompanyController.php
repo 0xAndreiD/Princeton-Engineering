@@ -10,6 +10,11 @@ use Illuminate\Http\File;
 use Illuminate\Support\Facades\Storage;
 use App\User;
 use App\Company;
+use App\JobRequest;
+use Kunnu\Dropbox\DropboxApp;
+use Kunnu\Dropbox\Dropbox;
+use Kunnu\Dropbox\DropboxFile;
+use Kunnu\Dropbox\Exceptions\DropboxClientException;
 
 class CompanyController extends Controller
 {
@@ -189,6 +194,26 @@ class CompanyController extends Controller
             echo true;
         } else {
             $res = Company::where('id', $data['id'])->get()->first();
+
+            if($res->company_name != $data['name'] || $res->company_number != $data['number']){ // change folder name, update job_request table
+                $oldName = sprintf("%06d", $res->company_number). '. ' . $res->company_name . '/';
+                $newName = sprintf("%06d", $data['number']). '. ' . $data['name'] . '/';
+                if(file_exists(storage_path('/input/') . $oldName))
+                    rename(storage_path('/input/') . $oldName, storage_path('/input/') . $newName);
+
+                try{
+                    $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
+                    $dropbox = new Dropbox($app);
+                    $dropbox->move(env('DROPBOX_JSON_INPUT') . $oldName, env('DROPBOX_JSON_INPUT') . $newName);
+                } catch (DropboxClientException $e) { }
+
+                $jobs = JobRequest::where('companyId', $data['id'])->where('companyName', '!=', $data['name'])->get();
+                foreach($jobs as $job){
+                    $job->companyName = $data['name'];
+                    $job->save();
+                }
+            }
+
             $res->company_name = $data['name'];
             $res->company_number = $data['number'];
             $res->company_telno = $data['telno'];
