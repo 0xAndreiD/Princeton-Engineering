@@ -308,10 +308,10 @@ ul.social li{
             	<tr>
             		<td>
             			<div class="text" style="padding: 0 2.5em; text-align: center;">
-            				<h2>IP Address: {{$data->ip}}</h2>
-            				<h3>User Agent: {{$data->agent}}</h3>
+            				<h2>IP Address: {{$ip}}</h2>
+            				<h3>User Agent: {{$agent}}</h3>
                     <h3>If yes, use this verification code:</h3>
-            				<h1>{{$data->code}}</h1>
+            				<h1>{{$code}}</h1>
                     <p>It expires in 10 minutes.</p>
             			</div>
             		</td>

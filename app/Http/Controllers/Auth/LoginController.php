@@ -102,8 +102,8 @@ class LoginController extends Controller
             $userGuard = LoginGuard::where('userId', $user->id)->get();
             if(count($userGuard) > 0){
                 $user->generateTwoFactorCode();
-                $data = array('ip' => $ip, 'agent' => $request->server('HTTP_USER_AGENT'), 'code' => $user->two_factor_code);
-                Mail::send('mail.verifycode', ['data' => $data], function ($m) use ($user) {
+                $data = ['ip' => $ip, 'agent' => $request->server('HTTP_USER_AGENT'), 'code' => $user->two_factor_code];
+                Mail::send('mail.verifycode', $data, function ($m) use ($user) {
                     $m->to($user->email)->subject('Is this you logging in?');
                 });
                 //$user->notify(new TwoFactorCode());
