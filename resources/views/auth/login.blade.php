@@ -22,7 +22,7 @@
 
                         <div class="row no-gutters justify-content-center">
                             <div class="col-sm-8 col-xl-6">
-                                <form class="js-validation-signin" action="{{ route('login') }}" method="POST">
+                                <form class="js-validation-signin" action="{{ route('login') }}" method="POST" id="loginform">
                                     @csrf
 
                                     <div class="py-3">
@@ -96,5 +96,29 @@
     </main>
     <!-- END Main Container -->
     </div>
+
+<script>
+    var visitorId = 0;
+    
+    function initIdentity(){
+        FingerprintJS.load().then(fp => {
+            fp.get().then(result => {
+                visitorId = result.visitorId;
+                console.log(visitorId);
+            });
+        });
+    }
+
+    $(document).ready(function() {
+        $("#loginform").submit( function(eventObj) {
+        $("<input />").attr("type", "hidden")
+            .attr("name", "identity")
+            .attr("value", visitorId)
+            .appendTo("#loginform");
+        return true;
+        });
+    })
+</script>
+<script async src="{{ asset('js/fp.min.js') }}" onload="initIdentity()"></script>
 
 @endsection
