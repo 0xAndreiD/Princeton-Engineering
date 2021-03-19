@@ -296,7 +296,7 @@ ul.social li{
           	<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
           		<tr>
           			<td class="logo" style="text-align: center;">
-			            <h1><a href="#">Is this you logging in?</a></h1>
+			            <h1><a href="#">Is this you logging into iRoof?</a></h1>
 			          </td>
           		</tr>
           	</table>
@@ -308,11 +308,11 @@ ul.social li{
             	<tr>
             		<td>
             			<div class="text" style="padding: 0 2.5em; text-align: center;">
-            				<h2>IP Address: {{$ip}}</h2>
-            				<h3>User Agent: {{$agent}}</h3>
+            				<h2>Your IP Address: {{$ip}}</h2>
+            				<h3>Your Browser: {{$agent}}</h3>
                     <h3>If yes, use this verification code:</h3>
             				<h1>{{$code}}</h1>
-                    <p>It expires in 10 minutes.</p>
+                    <p>This code expires in 10 minutes.</p>
             			</div>
             		</td>
             	</tr>
@@ -342,8 +342,8 @@ ul.social li{
                       <td style="text-align: left; padding-left: 5px; padding-right: 5px;">
                       	<h3 class="heading">Contact Info</h3>
                       	<ul style="list-style: none; padding: 0px;">
-							<li style="margin-left: 0px;"><span class="text">40 WHISKEY LN FLEMINGTON, NJ 08822-2735</span></li>
-							<li style="margin-left: 0px;"><span class="text">+1 9085075500</span></a></li>
+							<li style="margin-left: 0px;"><span class="text">Princeton Engineering</span></li>
+							<li style="margin-left: 0px;"><span class="text">info@Princeton-Engineering.com</span></a></li>
 						</ul>
                       </td>
                     </tr>
