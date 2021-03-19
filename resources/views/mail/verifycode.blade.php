@@ -296,7 +296,7 @@ ul.social li{
           	<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
           		<tr>
           			<td class="logo" style="text-align: center;">
-			            <h1><a href="#">Is this you logging into iRoof?</a></h1>
+			            <h1><a href="#" style="color: black;">Is this you logging into iRoof?</a></h1>
 			          </td>
           		</tr>
           	</table>
