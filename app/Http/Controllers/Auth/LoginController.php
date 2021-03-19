@@ -104,7 +104,7 @@ class LoginController extends Controller
                 $user->generateTwoFactorCode();
                 $data = ['ip' => $ip, 'agent' => $request->server('HTTP_USER_AGENT'), 'code' => $user->two_factor_code];
                 Mail::send('mail.verifycode', $data, function ($m) use ($user) {
-                    $m->to($user->email)->subject('Is this you logging in?');
+                    $m->from(env('MAIL_FROM_ADDRESS'), 'Princeton Engineering')->to($user->email)->subject('Please verify the code.');
                 });
                 //$user->notify(new TwoFactorCode());
             } else {

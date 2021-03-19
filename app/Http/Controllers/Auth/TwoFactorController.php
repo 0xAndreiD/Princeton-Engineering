@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+use Mail;
 use App\LoginGuard;
 use App\Notifications\TwoFactorCode;
 
@@ -53,11 +54,17 @@ class TwoFactorController extends Controller
         }
     }
 
-    public function resend()
+    public function resend(Request $request)
     {
         $user = auth()->user();
         $user->generateTwoFactorCode();
-        $user->notify(new TwoFactorCode());
+
+        $data = ['ip' => $request->ip(), 'agent' => $request->server('HTTP_USER_AGENT'), 'code' => $user->two_factor_code];
+        Mail::send('mail.verifycode', $data, function ($m) use ($user) {
+            $m->from(env('MAIL_FROM_ADDRESS'), 'Princeton Engineering')->to($user->email)->subject('Please verify the code.');
+        });
+
+        //$user->notify(new TwoFactorCode());
 
         return redirect()->back()->withMessage('The two factor code has been sent again.');
     }
