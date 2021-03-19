@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\User;
 use App\LandingPage;
+use App\LoginGuard;
+use App\Notifications\TwoFactorCode;
 
 class LoginController extends Controller
 {
@@ -63,7 +65,8 @@ class LoginController extends Controller
         if($user)
         {
             auth()->loginUsingId($user->id);
-            return redirect()->route('home');
+            return $this->sendLoginResponse($request);
+            //return redirect()->route('home');
         }else{
             $validator->errors()->add('username', 'These credentials do not match our records.');
             return redirect()->route('login')->withErrors($validator)->withInput();
@@ -78,5 +81,35 @@ class LoginController extends Controller
             return redirect($target->landingPage);
         else
             return redirect('https://www.princeton-engineering.com/framinganalysis.html');
+    }
+
+    protected function sendLoginResponse(Request $request)
+    {
+        $request->session()->regenerate();
+
+        $this->clearLoginAttempts($request);
+
+        return $this->authenticated($request, $this->guard()->user())
+                ?: redirect()->intended($this->redirectPath());
+    }
+
+    protected function authenticated(Request $request, $user)
+    {
+        $ip = $request->ip();
+        $checkGuard = LoginGuard::where('userId', $user->id)->where('ipAddress', $ip)->where('identity', $request['identity'])->first();
+        if(!$checkGuard) {
+            $userGuard = LoginGuard::where('userId', $user->id)->get();
+            if(count($userGuard) > 0){
+                $user->generateTwoFactorCode();
+                $user->notify(new TwoFactorCode());
+            } else {
+                LoginGuard::create([
+                    'userId' => $user->id,
+                    'ipAddress' => $ip,
+                    'identity' => $request['identity'],
+                    'allowed' => 0
+                ]);
+            }
+        }
     }
 }
