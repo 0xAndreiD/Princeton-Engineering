@@ -10,6 +10,7 @@ use App\User;
 use App\LandingPage;
 use App\LoginGuard;
 use App\Notifications\TwoFactorCode;
+use Mail;
 
 class LoginController extends Controller
 {
@@ -101,7 +102,11 @@ class LoginController extends Controller
             $userGuard = LoginGuard::where('userId', $user->id)->get();
             if(count($userGuard) > 0){
                 $user->generateTwoFactorCode();
-                $user->notify(new TwoFactorCode());
+                $data = array('ip' => $ip, 'agent' => $request->server('HTTP_USER_AGENT'), 'code' => $user->two_factor_code);
+                Mail::send('mail.verifycode', ['data' => $data], function ($m) use ($user) {
+                    $m->to($user->email)->subject('Is this you logging in?');
+                });
+                //$user->notify(new TwoFactorCode());
             } else {
                 LoginGuard::create([
                     'userId' => $user->id,
