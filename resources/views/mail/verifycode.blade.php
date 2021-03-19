@@ -172,7 +172,7 @@ table{
 	margin: 0;
 }
 .logo h1 a{
-	color: #30e3ca;
+	color: black;
 	font-size: 24px;
 	font-weight: 700;
 	font-family: 'Lato', sans-serif;
@@ -309,7 +309,6 @@ ul.social li{
             		<td>
             			<div class="text" style="padding: 0 2.5em; text-align: center;">
             				<h2>Your IP Address: {{$ip}}</h2>
-            				<h3>Your Browser: {{$agent}}</h3>
                     <h3>If yes, use this verification code:</h3>
             				<h1>{{$code}}</h1>
                     <p>This code expires in 10 minutes.</p>
