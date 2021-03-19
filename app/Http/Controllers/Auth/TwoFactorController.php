@@ -61,7 +61,7 @@ class TwoFactorController extends Controller
 
         $data = ['ip' => $request->ip(), 'agent' => $request->server('HTTP_USER_AGENT'), 'code' => $user->two_factor_code];
         Mail::send('mail.verifycode', $data, function ($m) use ($user) {
-            $m->from(env('MAIL_FROM_ADDRESS'), 'Princeton Engineering')->to($user->email)->subject('Please verify the code.');
+            $m->from(env('MAIL_FROM_ADDRESS'), 'Princeton Engineering')->to($user->email)->subject('Please verify the iRoof access code.');
         });
 
         //$user->notify(new TwoFactorCode());
