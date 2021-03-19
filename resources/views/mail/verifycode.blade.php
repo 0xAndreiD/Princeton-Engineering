@@ -341,9 +341,9 @@ ul.social li{
                     <tr>
                       <td style="text-align: left; padding-left: 5px; padding-right: 5px;">
                       	<h3 class="heading">Contact Info</h3>
-                      	<ul>
-							<li><span class="text">40 WHISKEY LN FLEMINGTON, NJ 08822-2735 US</span></li>
-							<li><span class="text">+1 9085075500</span></a></li>
+                      	<ul style="list-style: none; padding: 0px;">
+							<li style="margin-left: 0px;"><span class="text">40 WHISKEY LN FLEMINGTON, NJ 08822-2735</span></li>
+							<li style="margin-left: 0px;"><span class="text">+1 9085075500</span></a></li>
 						</ul>
                       </td>
                     </tr>
