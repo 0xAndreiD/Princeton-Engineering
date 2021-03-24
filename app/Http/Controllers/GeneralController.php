@@ -1008,9 +1008,9 @@ class GeneralController extends Controller
                 $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
                 $dropbox = new Dropbox($app);
                 $dropboxFile = new DropboxFile($localpath);
-                $dropfile = $dropbox->upload($dropboxFile, $filepath . env('DROPBOX_PREFIX_IN') . $file->getClientOriginalName(), ['autorename' => TRUE]);
+                $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_PROJECTS_PATH') . $filepath . env('DROPBOX_PREFIX_IN') . $file->getClientOriginalName(), ['autorename' => TRUE]);
                 
-                return response()->json(['success' => true, 'message' => 'Multiple Image File Has Been uploaded Successfully', 'filename' => $file->getClientOriginalName(), 'id' => $dropfile->getId(), 'path' => $filepath . env('DROPBOX_PREFIX_IN') . $file->getClientOriginalName()]);
+                return response()->json(['success' => true, 'message' => 'Multiple Image File Has Been uploaded Successfully', 'filename' => $file->getClientOriginalName(), 'id' => $dropfile->getId(), 'path' => env('DROPBOX_PROJECTS_PATH') . $filepath . env('DROPBOX_PREFIX_IN') . $file->getClientOriginalName()]);
             } else {
                 return response()->json(['success' => false, 'message' => 'Cannot find the project.']);
             }
@@ -1046,13 +1046,13 @@ class GeneralController extends Controller
                 $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
                 $dropbox = new Dropbox($app);
                 try{
-                    $filelist['IN'] = $this->iterateFolder($dropbox, $filepath . env('DROPBOX_PREFIX_IN'), 'IN', 'IN');
+                    $filelist['IN'] = $this->iterateFolder($dropbox, env('DROPBOX_PROJECTS_PATH') . $filepath . env('DROPBOX_PREFIX_IN'), 'IN', 'IN');
                 } catch (DropboxClientException $e) { 
                     $filelist['IN'] = array();
                 }
 
                 try{
-                    $filelist['OUT'] = $this->iterateFolder($dropbox, $filepath . env('DROPBOX_PREFIX_OUT'), 'OUT', 'OUT');
+                    $filelist['OUT'] = $this->iterateFolder($dropbox, env('DROPBOX_PROJECTS_PATH') . $filepath . env('DROPBOX_PREFIX_OUT'), 'OUT', 'OUT');
                 } catch (DropboxClientException $e) {
                     $filelist['OUT'] = array();
                  }
@@ -1105,7 +1105,7 @@ class GeneralController extends Controller
                     $state = $jobData['ProjectInfo']['State'];
                 }
                 
-                $filepath = $folderPrefix . sprintf("%06d", $job['clientProjectNumber']) . '. ' . $job['clientProjectName'] . ' ' . $state . env('DROPBOX_PREFIX_IN') . $request->input('filename');
+                $filepath = env('DROPBOX_PROJECTS_PATH') . $folderPrefix . sprintf("%06d", $job['clientProjectNumber']) . '. ' . $job['clientProjectName'] . ' ' . $state . env('DROPBOX_PREFIX_IN') . $request->input('filename');
                     
                 $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
                 $dropbox = new Dropbox($app);
@@ -1230,7 +1230,7 @@ class GeneralController extends Controller
                 $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
                 $dropbox = new Dropbox($app);
                 
-                $filepath = $folderPrefix . sprintf("%06d", $job['clientProjectNumber']) . '. ' . $job['clientProjectName'] . ' ' . $state . env('DROPBOX_PREFIX_IN') ;
+                $filepath = env('DROPBOX_PROJECTS_PATH') . $folderPrefix . sprintf("%06d", $job['clientProjectNumber']) . '. ' . $job['clientProjectName'] . ' ' . $state . env('DROPBOX_PREFIX_IN') ;
                 $dropbox->move($filepath . $request->input('filename'), $filepath . $request->input('newname'));
                 return response()->json(['success' => true]);
             } else
