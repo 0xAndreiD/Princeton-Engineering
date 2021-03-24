@@ -143,10 +143,10 @@ class GeneralController extends Controller
                     Storage::disk('input')->put($folderPrefix . $project['requestFile'], json_encode($data));
                     
                     //Backup json file to dropbox
-                    $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
-                    $dropbox = new Dropbox($app);
-                    $dropboxFile = new DropboxFile(storage_path('/input/') . sprintf("%06d", $companyNumber). '. ' . $project['companyName'] . '/' . $project['requestFile']);
-                    $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_JSON_INPUT') . sprintf("%06d", $companyNumber). '. ' . $project['companyName'] . '/' . $project['requestFile'], ['mode' => 'overwrite']);
+                    // $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
+                    // $dropbox = new Dropbox($app);
+                    // $dropboxFile = new DropboxFile(storage_path('/input/') . sprintf("%06d", $companyNumber). '. ' . $project['companyName'] . '/' . $project['requestFile']);
+                    // $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_JSON_INPUT') . sprintf("%06d", $companyNumber). '. ' . $project['companyName'] . '/' . $project['requestFile'], ['mode' => 'overwrite']);
                     
                     $projectState = 0;
                     if($request['status'] == 'Saved')
@@ -160,6 +160,9 @@ class GeneralController extends Controller
                     $project->clientProjectNumber = $request['data']['txt-project-number'];
                     $project->submittedTime = gmdate("Y-m-d\TH:i:s", time());
                     $project->save();
+
+                    $company->last_accessed = gmdate("Y-m-d", time());
+                    $company->save();
 
                     return response()->json(["message" => "Success!", "status" => true, "projectId" => $project->id, "directory" => $folderPrefix . sprintf("%06d", $project['clientProjectNumber']) . '. ' . $project['clientProjectName'] . ' ' . $request['data']['option-state'] . '/']);
                 }
@@ -184,10 +187,10 @@ class GeneralController extends Controller
                 Storage::disk('input')->put($folderPrefix . $filename, json_encode($data));
 
                 //Backup json file to dropbox
-                $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
-                $dropbox = new Dropbox($app);
-                $dropboxFile = new DropboxFile(storage_path('/input/') . sprintf("%06d", $companyNumber). '. ' . $company['company_name'] . '/' . $filename);
-                $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_JSON_INPUT') . sprintf("%06d", $companyNumber). '. ' . $company['company_name'] . '/' . $filename, ['autorename' => TRUE]);
+                // $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
+                // $dropbox = new Dropbox($app);
+                // $dropboxFile = new DropboxFile(storage_path('/input/') . sprintf("%06d", $companyNumber). '. ' . $company['company_name'] . '/' . $filename);
+                // $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_JSON_INPUT') . sprintf("%06d", $companyNumber). '. ' . $company['company_name'] . '/' . $filename, ['autorename' => TRUE]);
 
                 $projectState = 0;
                 if($request['status'] == 'Saved')
@@ -213,6 +216,9 @@ class GeneralController extends Controller
                     'timesComputed' => 0
                 ]);
                 $projectId = $project->id;
+
+                $company->last_accessed = gmdate("Y-m-d", time());
+                $company->save();
             }
             catch(Exception $e) {
                 return response()->json(["message" => "Failed to generate RS json data file", "status" => false]);
