@@ -410,7 +410,7 @@
             <input type="button" name="rs-datacheck" id="rs-datacheck" class="btn btn-hero-primary {{ $projectState > 2 ? 'disabled' : '' }}" tabindex="26" value="Data Check" style="width:100%;"></input>
         </td>
         <td style="padding: 10px;">
-            <input type="button" name="rs-submit" id="rs-submit" class="btn btn-hero-primary {{ $projectState != 3 ? 'disabled' : '' }}" tabindex="27" value="Submit" style="width:100%;">
+            <input type="button" name="rs-submit" id="rs-submit" class="btn btn-hero-primary {{ $projectState != 3 ? 'disabled' : '' }}" tabindex="27" value="Resubmit" style="width:100%;">
         </td>
         @if($projectState > 3)
         <td style="padding: 10px;">
