@@ -1179,10 +1179,9 @@ class GeneralController extends Controller
                         try {
                             $file = $dropbox->download($filepath);
                             //$path = str_contains($filepath, env('DROPBOX_PREFIX_IN')) ? substr($filepath, strpos($filepath, env('DROPBOX_PREFIX_IN')) + 1) : substr($filepath, strpos($filepath, env('DROPBOX_PREFIX_OUT')) + 1);
-                            $info = pathinfo($filepath);
-                            $path = str_contains($filepath, env('DROPBOX_PREFIX_IN')) ? env('DROPBOX_PREFIX_IN') . '/' . $info['filename'] : env('DROPBOX_PREFIX_OUT') . '/' . $info['filename'];
+                            $path = str_contains($filepath, env('DROPBOX_PREFIX_IN')) ? env('DROPBOX_PREFIX_IN') . '/' . basename($filepath) : env('DROPBOX_PREFIX_OUT') . '/' . basename($filepath);
                             if($setting)
-                                $path = sprintf("%06d", $job['clientProjectNumber']) . '. ' . $job['clientProjectName'] . ' ' . $state . '/' . $path;
+                                $path = sprintf("%06d", $job['clientProjectNumber']) . '. ' . $job['clientProjectName'] . ' ' . $state . $path;
                             $zip->addFromString($path, $file->getContents());
                         }
                         catch (DropboxClientException $e){}
