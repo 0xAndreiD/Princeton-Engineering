@@ -2970,13 +2970,40 @@ $(document).ready(function() {
         return hasWarnings;
     }
 
-    var submitData = function(e, status) {
+    var ignoreDuplicateNum = function(){
+        return new Promise((resolve, reject) => {
+            var numComment = $("#project-id-comment").html();
+            if(numComment.includes("duplicated.")){
+                swal.fire({
+                    title: "Warning",
+                    html: "You should really check the project number duplicate. Continue?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: `Yes`,
+                    cancelButtonText: `No`,
+                })
+                .then(( result ) => {
+                    if ( result.value )
+                        resolve(true);
+                    else
+                        resolve(false);
+                });
+            } else
+                resolve(true);
+        })
+    }
+
+    var submitData = async function(e, status) {
         e.preventDefault();
         e.stopPropagation(); 
 
         if (isEmptyInputBox() == true) { 
             swal.fire({ title: "Warning", text: "Please fill blank fields.", icon: "warning", confirmButtonText: `OK` });
             return; 
+        }
+
+        if(await ignoreDuplicateNum() == false){
+            return;
         }
 
         var caseCount = $("#option-number-of-conditions").val();
