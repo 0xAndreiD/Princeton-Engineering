@@ -12,7 +12,7 @@
         "fideloper/proxy": "^4.0",
         "ifsnop/mysqldump-php": "^2.9",
         "kunalvarma05/dropbox-php-sdk": "^0.2.1",
-        "laravel/framework": "6.2.*",
+        "laravel/framework": "6.20.14",
         "laravel/tinker": "^1.0",
         "s-ichikawa/laravel-sendgrid-driver": "~2.1.1"
     },
