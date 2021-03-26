@@ -244,9 +244,9 @@ class UserController extends Controller
             $res = User::where('id', $data['id'])->get()->first();
             $res->username = $data['name'];
             $res->email = $data['email'];
-            if ($data['password']) $res->password = $data['password'];
+            if (isset($data['password'])) $res->password = $data['password'];
             $res->companyid = isset($data['companyid']) ? $data['companyid'] : Auth::user()->companyid;
-            if ($data['userrole'] && $data['userrole'] != '') $res->userrole = $data['userrole'];
+            if (isset($data['userrole'])) $res->userrole = $data['userrole']; 
             $res->usernumber = $data['usernumber'];
             $res->updated_at = date('Y-m-d h:i:s',strtotime(now()));
             $res->save();
