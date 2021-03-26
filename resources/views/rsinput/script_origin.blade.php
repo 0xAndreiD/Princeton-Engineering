@@ -2976,7 +2976,7 @@ $(document).ready(function() {
             if(numComment.includes("duplicated.")){
                 swal.fire({
                     title: "Warning",
-                    html: "You should really check the project number duplicate. Continue?",
+                    html: "This project number has already been used.  Please verify that you intend to use project number " + $("#txt-project-number").val() +".<br/>Hit YES to save the project, NO to go back and revise the project number.",
                     icon: "warning",
                     showCancelButton: true,
                     confirmButtonText: `Yes`,
