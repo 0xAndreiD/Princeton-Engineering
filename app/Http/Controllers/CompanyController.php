@@ -197,8 +197,8 @@ class CompanyController extends Controller
             $res = Company::where('id', $data['id'])->get()->first();
 
             if($res->company_name != $data['name'] || $res->company_number != $data['number']){ // change folder name, update job_request table
-                $oldName = sprintf("%06d", $res->company_number). '. ' . $res->company_name . '/';
-                $newName = sprintf("%06d", $data['number']). '. ' . $data['name'] . '/';
+                $oldName = $res->company_number. '. ' . $res->company_name . '/';
+                $newName = $data['number']. '. ' . $data['name'] . '/';
                 if(file_exists(storage_path('/input/') . $oldName))
                     rename(storage_path('/input/') . $oldName, storage_path('/input/') . $newName);
 
@@ -208,7 +208,7 @@ class CompanyController extends Controller
                     // $listFolderContents = $dropbox->listFolder(env('DROPBOX_JSON_INPUT') . $oldName);
                     // $files = $listFolderContents->getItems()->all();
                     // foreach($files as $file)
-                        $dropbox->move(env('DROPBOX_JSON_INPUT') . sprintf("%06d", $res->company_number). '. ' . $res->company_name, env('DROPBOX_JSON_INPUT') . sprintf("%06d", $data['number']). '. ' . $data['name']);
+                        $dropbox->move(env('DROPBOX_JSON_INPUT') . $res->company_number. '. ' . $res->company_name, env('DROPBOX_JSON_INPUT') . $data['number']. '. ' . $data['name']);
                     // $dropbox->delete(env('DROPBOX_JSON_INPUT') . $oldName);
                 } catch (DropboxClientException $e) { }
 
