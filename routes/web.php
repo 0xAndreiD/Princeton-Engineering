@@ -83,7 +83,7 @@ Route::post('/getDownloadLink', 'GeneralController@getDownloadLink')->name('getD
 Route::post('/renameFile', 'GeneralController@renameFile')->name('renameFile');
 Route::get('/downloadZip', 'GeneralController@downloadZip')->name('downloadZip');
 
-// Backup JSON Inputs on Admin
+// Admin-use-only APIs
 Route::get('/backupInput', 'AdminController@backupInput')->name('backupInput');
 Route::post('/getProjectFiles', 'AdminController@getProjectFiles')->name('getProjectFiles');
 Route::post('/backupJSON', 'AdminController@backupJSON')->name('backupJSON');
@@ -93,6 +93,10 @@ Route::post('/updateDBSetting', 'AdminController@updateDBSetting')->name('update
 Route::post('/manualDBBackup', 'AdminController@manualDBBackup')->name('manualDBBackup');
 Route::post('/delBackup', 'AdminController@delBackup')->name('delBackup');
 Route::post('/restoreBackup', 'AdminController@restoreBackup')->name('restoreBackup');
+Route::get('/guardlist', 'AdminController@guardlist')->name('guardlist');
+Route::post('/getGuardList', 'AdminController@getGuardList')->name('getGuardList');
+Route::post('/toggleBlock', 'AdminController@toggleBlock')->name('toggleBlock');
+Route::post('/deleteGuard', 'AdminController@deleteGuard')->name('deleteGuard');
 
 // User configuration
 Route::get('/settings', 'UserController@settings')->name('settings');

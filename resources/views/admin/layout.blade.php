@@ -207,6 +207,12 @@
                                 <span class="nav-main-link-name">DB Backup / Restore</span>
                             </a>
                         </li>
+                        <li class="nav-main-item">
+                            <a class="nav-main-link" href="{{ route('guardlist') }}">
+                                <i class="nav-main-link-icon fa fa-tablet-alt"></i>
+                                <span class="nav-main-link-name">Allowed Logins</span>
+                            </a>
+                        </li>
                         <li class="nav-main-heading">Configuration</li>
                         <li class="nav-main-item">
                             <a class="nav-main-link" href="{{ route('settings') }}">

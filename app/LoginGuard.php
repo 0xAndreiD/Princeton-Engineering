@@ -15,7 +15,7 @@ class LoginGuard extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'id', 'userId', 'ipAddress', 'identity', 'created_at', 'allowed'
+        'id', 'userId', 'ipAddress', 'identity', 'created_at', 'allowed', 'blocked'
     ];
 
     protected $table = 'login_guard';

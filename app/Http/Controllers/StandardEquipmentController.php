@@ -59,8 +59,8 @@ class StandardEquipmentController extends Controller
     public function getStandardModules(Request $request){
         $columns = array( 
             0 =>'id', 
-            2 =>'mfr',
-            3 =>'model'
+            1 =>'mfr',
+            2 =>'model'
         );
         $handler = new PVModule;
 

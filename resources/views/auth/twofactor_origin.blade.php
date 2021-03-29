@@ -104,7 +104,25 @@
 <!-- END Page Content -->
 
 <script>
-    var _0x4cd7=['440300GLKTzZ','5tMzjsW','198851LCsmFg','47468FoNSwJ','ready','23lwXogi','<input\x20/>','3613wJCjLs','value','load','then','2cXyuXS','#twofactorform','881215kVEPSF','attr','name','type','get','129633zPqiSk','21gDtKyQ','30274tOKoGv','identity','2wYvlPx'];var _0x2120=function(_0x1a9b15,_0x520423){_0x1a9b15=_0x1a9b15-0x114;var _0x4cd792=_0x4cd7[_0x1a9b15];return _0x4cd792;};var _0x51b6bc=_0x2120;(function(_0x292516,_0xda1790){var _0x55dfe3=_0x2120;while(!![]){try{var _0x5b3e65=parseInt(_0x55dfe3(0x121))+parseInt(_0x55dfe3(0x11b))*-parseInt(_0x55dfe3(0x123))+parseInt(_0x55dfe3(0x125))*parseInt(_0x55dfe3(0x11a))+-parseInt(_0x55dfe3(0x11e))+parseInt(_0x55dfe3(0x11d))*parseInt(_0x55dfe3(0x120))+parseInt(_0x55dfe3(0x11f))*-parseInt(_0x55dfe3(0x119))+parseInt(_0x55dfe3(0x114))*parseInt(_0x55dfe3(0x129));if(_0x5b3e65===_0xda1790)break;else _0x292516['push'](_0x292516['shift']());}catch(_0x179cd9){_0x292516['push'](_0x292516['shift']());}}}(_0x4cd7,0x79c12));var visitorId=0x0;function initIdentity(){var _0x14a1f4=_0x2120;FingerprintJS[_0x14a1f4(0x127)]()[_0x14a1f4(0x128)](_0x190281=>{var _0xc64d3d=_0x14a1f4;_0x190281[_0xc64d3d(0x118)]()[_0xc64d3d(0x128)](_0x28ee86=>{visitorId=_0x28ee86['visitorId'];});});}$(document)[_0x51b6bc(0x122)](function(){$('#twofactorform')['submit'](function(_0xa272b8){var _0x16f41b=_0x2120;return $(_0x16f41b(0x124))[_0x16f41b(0x115)](_0x16f41b(0x117),'hidden')[_0x16f41b(0x115)](_0x16f41b(0x116),_0x16f41b(0x11c))[_0x16f41b(0x115)](_0x16f41b(0x126),visitorId)['appendTo'](_0x16f41b(0x12a)),!![];});});
+    var visitorId = 0;
+    
+    function initIdentity(){
+        FingerprintJS.load().then(fp => {
+            fp.get().then(result => {
+                visitorId = result.visitorId;
+            });
+        });
+    }
+
+    $(document).ready(function() { 
+        $("#twofactorform").submit( function(eventObj) {
+        $("<input />").attr("type", "hidden")
+            .attr("name", "identity")
+            .attr("value", visitorId)
+            .appendTo("#twofactorform");
+        return true;
+        });
+    });
 </script>
 <script async src="{{ asset('js/fp.min.js') }}" onload="initIdentity()"></script>
 @endsection
