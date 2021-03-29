@@ -12,6 +12,7 @@ use App\User;
 use App\Company;
 use App\JobRequest;
 use App\BackupSetting;
+use App\LoginGuard;
 use Kunnu\Dropbox\DropboxApp;
 use Kunnu\Dropbox\Dropbox;
 use Kunnu\Dropbox\DropboxFile;
@@ -316,6 +317,155 @@ class AdminController extends Controller
                 return response()->json(['success' => true]);
             } else 
                 return response()->json(['success' => false, 'message' => 'Missing filename parameter.']);
+        } else {
+            return response()->json(['success' => false, 'message' => 'You do not have any role to pass this API.']);
+        }
+    }
+
+    /**
+     * Show the list of guard list
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function guardlist()
+    {
+        if(Auth::user()->userrole == 2)
+            return view('admin.loginguard.guardlist');
+        else
+            return redirect('home');
+    }
+
+    /**
+     * Return the list of login guards.
+     *
+     * @return JSON
+     */
+    public function getGuardList(Request $request){
+        $columns = array( 
+            0 =>'login_guard.id', 
+            1 =>'company_info.company_name',
+            2 =>'users.username',
+            3 =>'ipAddress',
+            4 =>'identity',
+            5 =>'login_guard.created_at',
+            6 =>'allowed'
+        );
+        $handler = new LoginGuard;
+
+        $totalData = $handler->count();
+        $totalFiltered = $totalData; 
+
+        $handler = $handler->leftjoin('users', "users.id", "=", "login_guard.userId");
+        $handler = $handler->leftjoin('company_info', "company_info.id", "=", "users.companyid");
+        // if(Auth::user()->userrole == 2 && !empty($request->input("columns.1.search.value")))
+        //     $handler = $handler->where('mfr', 'LIKE', "%{$request->input("columns.1.search.value")}%");
+
+        $limit = $request->input('length');
+        $start = $request->input('start');
+        $order = $columns[$request->input('order.0.column')];
+        $dir = $request->input('order.0.dir');
+
+        if(empty($request->input('search.value')))
+        {            
+            $totalFiltered = $handler->count();
+            $data = $handler->offset($start)
+                ->limit($limit)
+                ->orderBy($order,$dir)
+                ->get(
+                    array(
+                        'login_guard.id as id', 'company_info.company_name as company', 'users.username as username', 'ipAddress as ip', 'identity as device', 'login_guard.created_at as created_at', 'allowed', 'blocked'
+                    )
+                );
+        }
+        else {
+            $search = $request->input('search.value'); 
+            $data =  $handler->where('login_guard.id', 'LIKE',"%{$search}%")
+                        ->orWhere('company_info.company_name', 'LIKE',"%{$search}%")
+                        ->orWhere('users.username', 'LIKE',"%{$search}%")
+                        ->orWhere('ipAddress', 'LIKE',"%{$search}%")
+                        ->orWhere('identity', 'LIKE',"%{$search}%")
+                        ->orWhere('login_guard.created_at', 'LIKE',"%{$search}%")
+                        ->offset($start)
+                        ->limit($limit)
+                        ->orderBy($order,$dir)
+                        ->get(
+                            array(
+                                'login_guard.id as id', 'company_info.company_name as company', 'users.username as username', 'ipAddress as ip', 'identity as device', 'login_guard.created_at as created_at', 'allowed', 'blocked'
+                            )
+                        );
+
+            $totalFiltered = $handler->where('mfr', 'LIKE',"%{$search}%")
+                        ->orWhere('model', 'LIKE',"%{$search}%")
+                        ->count();
+        }
+
+        if(!empty($data))
+        {
+            foreach ($data as $item)
+            {
+                if($item['allowed'] == 0){
+                    $item['state'] = "<span class='badge badge-warning'>First Login</span>";
+                } else if($item['allowed'] == 1){
+                    $item['state'] = "<span class='badge badge-primary'>Code Verified</span>";
+                } else if($item['allowed'] == 2){
+                    $item['state'] = "<span class='badge badge-success'>Added by Admin</span>";
+                }
+                if($item['blocked'] == 1)
+                    $item['state'] = "<span class='badge badge-danger'>Blocked</span>";
+                $item['actions'] = "
+                <div class='text-center'>" . 
+                    ($item['blocked'] == 0 ? "<button type='button' class='btn btn-danger mr-1' onclick='toggleBlock({$item['id']}, 1)'>Block</button>" : "<button type='button' class='btn btn-primary' onclick='toggleBlock({$item['id']}, 0)'>Allow</button>")
+                    . "<button type='button' class='btn btn-danger' onclick='delGuard({$item['id']})'><i class='fa fa-trash'></i></button>"
+                    . "</div>";
+            }
+        }
+        $json_data = array(
+            "draw"            => intval($request->input('draw')),  
+            "recordsTotal"    => intval($totalData),  
+            "recordsFiltered" => intval($totalFiltered), 
+            "data"            => $data   
+            );
+        echo json_encode($json_data);
+    }
+
+    /**
+     * Block/Allow guard item
+     *
+     * @return JSON
+     */
+    public function toggleBlock(Request $request){
+        if(Auth::user()->userrole == 2){
+            if(!empty($request['id'])){
+               $guard = LoginGuard::where('id', $request['id'])->first();
+               if($guard){
+                $guard->blocked = !$guard->blocked;
+                $guard->save();
+                return response()->json(['success' => true]);
+               } else 
+                return response()->json(['success' => false, 'message' => 'Guard not found.']);
+            } else 
+                return response()->json(['success' => false, 'message' => 'Missing id parameter.']);
+        } else {
+            return response()->json(['success' => false, 'message' => 'You do not have any role to pass this API.']);
+        }
+    }
+
+    /**
+     * Delete guard item
+     *
+     * @return JSON
+     */
+    public function deleteGuard(Request $request){
+        if(Auth::user()->userrole == 2){
+            if(!empty($request['id'])){
+               $guard = LoginGuard::where('id', $request['id'])->first();
+               if($guard){
+                $guard->delete();
+                return response()->json(['success' => true]);
+               } else 
+                return response()->json(['success' => false, 'message' => 'Guard not found.']);
+            } else 
+                return response()->json(['success' => false, 'message' => 'Missing id parameter.']);
         } else {
             return response()->json(['success' => false, 'message' => 'You do not have any role to pass this API.']);
         }
