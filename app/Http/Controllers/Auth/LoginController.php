@@ -133,25 +133,25 @@ class LoginController extends Controller
             if($checkGuard->blocked == 1){
                 Session::put('blocked', 1);
             }
-            
-            if($checkGuard->allowed != 2){
-                // IP address check with company IP
-                $company = Company::where('id', $user->companyid)->first();
-                if($company && $company->company_ip && $company->company_ip != $ip){
-                    $usergeo = unserialize( file_get_contents('http://www.geoplugin.net/php.gp?ip=' . $ip) );
-                    if($usergeo['geoplugin_countryName'] != $company['country_name'] || $usergeo['geoplugin_regionName'] != $company['region_name'] || $usergeo['geoplugin_city'] != $company['city']){
-                        $this->performLogout($request);
-                        $supers = User::where('userrole', 2)->get();
-                        $data = ['ip' => $ip, 'device' => $request['identity'], 'username' => $user->username, 'company' => $company->company_name];
-                        foreach($supers as $super){
-                            Mail::send('mail.geonotification', $data, function ($m) use ($super) {
-                                $m->from(env('MAIL_FROM_ADDRESS'), 'Princeton Engineering')->to($super->email)->subject('iRoof Notification.');
-                            });
-                        }
-                        return redirect()->route('verify.geolocation');
+        } 
+
+        if(!$checkGuard || $checkGuard->allowed != 2){
+            // IP address check with company IP
+            $company = Company::where('id', $user->companyid)->first();
+            if($company && $company->company_ip && $company->company_ip != $ip){
+                $usergeo = unserialize( file_get_contents('http://www.geoplugin.net/php.gp?ip=' . $ip) );
+                if($usergeo['geoplugin_countryName'] != $company['country_name'] || $usergeo['geoplugin_regionName'] != $company['region_name'] || $usergeo['geoplugin_city'] != $company['city']){
+                    $this->performLogout($request);
+                    $supers = User::where('userrole', 2)->get();
+                    $data = ['ip' => $ip, 'device' => $request['identity'], 'username' => $user->username, 'company' => $company->company_name];
+                    foreach($supers as $super){
+                        Mail::send('mail.geonotification', $data, function ($m) use ($super) {
+                            $m->from(env('MAIL_FROM_ADDRESS'), 'Princeton Engineering')->to($super->email)->subject('iRoof Notification.');
+                        });
                     }
+                    return redirect()->route('verify.geolocation');
                 }
             }
-        } 
+        }
     }
 }
