@@ -408,7 +408,7 @@ class AdminController extends Controller
                 } else if($item['allowed'] == 1){
                     $item['state'] = "<span class='badge badge-primary'>Code Verified</span>";
                 } else if($item['allowed'] == 2){
-                    $item['state'] = "<span class='badge badge-success'>Added by Admin</span>";
+                    $item['state'] = "<span class='badge' style='background-color: rgb(60, 144, 223);'>Allowed by Super</span>";
                 }
                 if($item['blocked'] == 1)
                     $item['state'] = "<span class='badge badge-danger'>Blocked</span>";
