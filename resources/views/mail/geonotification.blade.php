@@ -308,7 +308,9 @@ ul.social li{
             	<tr>
             		<td>
             			<div class="text" style="padding: 0 2.5em; text-align: center;">
-            				<h2>IP Address: {{$ip}}</h2>
+                            <h2>Username: {{$username}}</h2>
+                            <h2>Company: {{$company}}</h2>
+                            <h2>IP Address: {{$ip}}</h2>
                             <h2>Device: {{$device}}</h2>
             			</div>
             		</td>
