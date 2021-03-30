@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use Mail;
+use Session;
 use App\LoginGuard;
 use App\Notifications\TwoFactorCode;
 
@@ -67,5 +68,9 @@ class TwoFactorController extends Controller
         //$user->notify(new TwoFactorCode());
 
         return redirect()->back()->withMessage('The two factor code has been sent again.');
+    }
+
+    public function blocked(){
+        return view('auth.unavailable')->with(['reason' => 'Your IP / Device is blocked. Please contact admin.']);
     }
 }

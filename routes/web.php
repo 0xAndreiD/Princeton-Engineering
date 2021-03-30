@@ -162,3 +162,4 @@ Route::post('/standardStanchionToggleFavorite', 'StandardEquipmentController@sta
 //Two Factor Authentication
 Route::get('verify/resend', 'Auth\TwoFactorController@resend')->name('verify.resend');
 Route::resource('verify', 'Auth\TwoFactorController')->only(['index', 'store']);
+Route::get('verify/blocked', 'Auth\TwoFactorController@blocked')->name('verify.blocked');

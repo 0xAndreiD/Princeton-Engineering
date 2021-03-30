@@ -11,6 +11,7 @@ use App\LandingPage;
 use App\LoginGuard;
 use App\Notifications\TwoFactorCode;
 use Mail;
+use Session;
 
 class LoginController extends Controller
 {
@@ -115,6 +116,8 @@ class LoginController extends Controller
                     'allowed' => 0
                 ]);
             }
+        } else if($checkGuard->blocked == 1){
+            Session::put('blocked', 1);
         }
     }
 }
