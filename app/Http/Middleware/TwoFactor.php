@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Session;
 
 class TwoFactor
 {
@@ -17,6 +18,9 @@ class TwoFactor
     {
         $user = auth()->user();
 
+        if(auth()->check() && Session::get('blocked') == 1){
+            return redirect()->route('verify.blocked');
+        }
         if(auth()->check() && $user->two_factor_code)
         {
             if($user->two_factor_expires_at->lt(now()))
