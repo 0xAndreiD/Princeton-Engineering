@@ -144,7 +144,7 @@ class LoginController extends Controller
                         $supers = User::where('userrole', 2)->get();
                         $data = ['ip' => $ip, 'device' => $request['identity']];
                         foreach($supers as $super){
-                            Mail::send('mail.geonotification', $data, function ($m) use ($user) {
+                            Mail::send('mail.geonotification', $data, function ($m) use ($super) {
                                 $m->from(env('MAIL_FROM_ADDRESS'), 'Princeton Engineering')->to($super->email)->subject('iRoof Notification.');
                             });
                         }
