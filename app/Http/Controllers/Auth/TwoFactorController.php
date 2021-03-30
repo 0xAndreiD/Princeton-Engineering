@@ -73,4 +73,8 @@ class TwoFactorController extends Controller
     public function blocked(){
         return view('auth.unavailable')->with(['reason' => 'Your IP / Device is blocked. Please contact admin.']);
     }
+
+    public function geolocation(){
+        return view('auth.unavailablegeo')->with(['reason' => 'Your location is too far away from your company. Please contact admin.']);
+    }
 }

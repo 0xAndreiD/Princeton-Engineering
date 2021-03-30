@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use App\User;
 use App\LandingPage;
 use App\LoginGuard;
+use App\Company;
 use App\Notifications\TwoFactorCode;
 use Mail;
 use Session;
@@ -115,9 +116,42 @@ class LoginController extends Controller
                     'identity' => $request['identity'],
                     'allowed' => 0
                 ]);
+                if($user->userrole == 1) // Client Admin company update
+                {
+                    $company = Company::where('id', $user->companyid)->first();
+                    if($company){
+                        $usergeo = unserialize( file_get_contents('http://www.geoplugin.net/php.gp?ip=' . $ip) );
+                        $company['company_ip'] = $ip;
+                        $company['country_name'] = $usergeo['geoplugin_countryName'];
+                        $company['region_name'] = $usergeo['geoplugin_regionName'];
+                        $company['city'] = $usergeo['geoplugin_city'];
+                        $company->save();
+                    }
+                }
             }
-        } else if($checkGuard->blocked == 1){
-            Session::put('blocked', 1);
-        }
+        } else{
+            if($checkGuard->blocked == 1){
+                Session::put('blocked', 1);
+            }
+            
+            if($checkGuard->allowed != 2){
+                // IP address check with company IP
+                $company = Company::where('id', $user->companyid)->first();
+                if($company && $company->company_ip && $company->company_ip != $ip){
+                    $usergeo = unserialize( file_get_contents('http://www.geoplugin.net/php.gp?ip=' . $ip) );
+                    if($usergeo['geoplugin_countryName'] != $company['country_name'] || $usergeo['geoplugin_regionName'] != $company['region_name'] || $usergeo['geoplugin_city'] != $company['city']){
+                        $this->performLogout($request);
+                        $supers = User::where('userrole', 2)->get();
+                        $data = ['ip' => $ip, 'device' => $request['identity']];
+                        foreach($supers as $super){
+                            Mail::send('mail.geonotification', $data, function ($m) use ($user) {
+                                $m->from(env('MAIL_FROM_ADDRESS'), 'Princeton Engineering')->to($super->email)->subject('iRoof Notification.');
+                            });
+                        }
+                        return redirect()->route('verify.geolocation');
+                    }
+                }
+            }
+        } 
     }
 }

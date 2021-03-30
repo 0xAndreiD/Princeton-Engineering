@@ -15,7 +15,7 @@ class Company extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'id', 'company_name', 'company_number', 'company_telno', 'company_address', 'company_email', 'company_website', 'offset', 'last_accessed'
+        'id', 'company_name', 'company_number', 'company_telno', 'company_address', 'company_email', 'company_website', 'offset', 'last_accessed', 'company_ip', 'country_name', 'region_name', 'city'
     ];
 
     protected $table = 'company_info';
