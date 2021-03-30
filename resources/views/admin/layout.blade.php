@@ -315,7 +315,7 @@
                 <div class="modal-content">
                     <div class="block block-themed block-transparent mb-0">
                         <div class="block-header bg-primary-dark">
-                            <h3 class="block-title">Terms / Conditions / Privacy Policies / Copyright</h3>
+                            <h3 class="block-title">Terms and Conditions of Use</h3>
                             <div class="block-options">
                                 <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
                                     <i class="fa fa-fw fa-times"></i>
@@ -351,7 +351,19 @@
                             <h6>Contacting us</h6>
                             <p>If you have any questions about this Privacy Policy, the practices of this site, or your dealings with this site, please contact us at: info@Princeton-Engineering.com or you can call us at 908-507-5500.</p>
                             
-                            <h5>2. Copyright</h5>
+                            <h5>2. Refunds</h5>
+                            <p>Customers using a credit card are entitled to a refund if the cardholder is unhappy with the services rendered by Princeton Engineering. Refund requests must be sent to info@Princeton-Engineering.com with the subject line "REFUND REQUESTED".  Provide identification of the project and the reason for the refund request.  Refund requests made after 7 calendar days of the provision of services will be declined. Approved refund requests shall be processed and a refund will be issued.</p>
+
+                            <h5>3. NDA</h5>
+                            <p>You or a company representative has signed the MUTUAL NONDISCLOSURE AGREEMENT [a copy of which can be found <a href="{{ asset('pdf/Princeton NDA Form.pdf') }}">HERE</a>] and you and your company agree to be bound by its terms.</p>
+
+                            <h5>4. Authorized Use of iRoof.</h5>
+                            <p>By using iRoof, you agree that use of iRoof is limited to the registered client and its employees.  iRoof report distribution will be limited to provision to AHJ's and for internal record storage.  You are prohibited from providing copies of iRoof reports or allowing access into the online portal of iRoof to any unauthorized users or competitors of Princeton Engineering.  You agree that Princeton Engineering and Richard Pantel have made substantial intellectual and monetary investments into iRoof and any unauthorized use of iRoof or distribution of iRoof reports or copying or reverse engineering of any parts of the iRoof web site will result in financial damages to Princeton Engineering and Richard Pantel.  Breaches of this agreement will be pursued through litigation.  All parties related to said unauthorized access or document distribution will be enjoined in such litigation.</p>
+
+                            <h5>5. Cancellation</h5>
+                            <p>Princeton Engineering reserves the right to cancel client accounts or user access for any reason, including the client or the client's employees allowing unauthorized access into iRoof.  Unauthorized access includes access by persons who are not direct employees of a registered client.</p>
+
+                            <h5>6. Copyright</h5>
                             <p>Copyright © 2020 Richard Pantel. All Rights Reserved.</p>
                             <p>No parts of this data input form or related calculation reports may be copied in format,
                             content or intent, or reproduced in any form or by any electronic or mechanical
