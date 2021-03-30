@@ -142,7 +142,7 @@ class LoginController extends Controller
                     if($usergeo['geoplugin_countryName'] != $company['country_name'] || $usergeo['geoplugin_regionName'] != $company['region_name'] || $usergeo['geoplugin_city'] != $company['city']){
                         $this->performLogout($request);
                         $supers = User::where('userrole', 2)->get();
-                        $data = ['ip' => $ip, 'device' => $request['identity']];
+                        $data = ['ip' => $ip, 'device' => $request['identity'], 'username' => $user->username, 'company' => $company->company_name];
                         foreach($supers as $super){
                             Mail::send('mail.geonotification', $data, function ($m) use ($super) {
                                 $m->from(env('MAIL_FROM_ADDRESS'), 'Princeton Engineering')->to($super->email)->subject('iRoof Notification.');
