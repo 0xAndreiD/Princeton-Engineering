@@ -98,7 +98,27 @@
     </div>
 
 <script>
-    var _0x4e58=['1515154qluIVG','2751vbcWpm','submit','then','identity','1424428jWmUTu','appendTo','name','37297kilGJN','visitorId','get','attr','651458MyZGbr','type','hidden','806224nJAHPH','#btnSubmit','346586rrcLwY','#twofactorform','14yXsAaQ','load','1YcEobb','450ZhjeNh','ready','<input\x20/>'];var _0x2110=function(_0xed4959,_0x150649){_0xed4959=_0xed4959-0x106;var _0x4e5862=_0x4e58[_0xed4959];return _0x4e5862;};var _0xb5f907=_0x2110;(function(_0x4be9dc,_0x3064d8){var _0x4a669a=_0x2110;while(!![]){try{var _0x225b70=-parseInt(_0x4a669a(0x11c))*-parseInt(_0x4a669a(0x107))+parseInt(_0x4a669a(0x117))+parseInt(_0x4a669a(0x11e))*parseInt(_0x4a669a(0x113))+parseInt(_0x4a669a(0x110))+-parseInt(_0x4a669a(0x10b))+parseInt(_0x4a669a(0x11a))+-parseInt(_0x4a669a(0x108))*parseInt(_0x4a669a(0x10c));if(_0x225b70===_0x3064d8)break;else _0x4be9dc['push'](_0x4be9dc['shift']());}catch(_0x2aa0ae){_0x4be9dc['push'](_0x4be9dc['shift']());}}}(_0x4e58,0xf3976));var visitorId=0x0;function initIdentity(){var _0x29aa5e=_0x2110;FingerprintJS[_0x29aa5e(0x106)]()[_0x29aa5e(0x10e)](_0x12fead=>{var _0x20b17d=_0x29aa5e;_0x12fead[_0x20b17d(0x115)]()[_0x20b17d(0x10e)](_0x4e3ead=>{var _0x5b0a93=_0x20b17d;visitorId=_0x4e3ead[_0x5b0a93(0x114)],$(_0x5b0a93(0x11b))[_0x5b0a93(0x116)]('disabled',![]);});});}$(document)[_0xb5f907(0x109)](function(){var _0xd52249=_0xb5f907;$(_0xd52249(0x11d))[_0xd52249(0x10d)](function(_0x5294ad){var _0x5a685f=_0xd52249;return $(_0x5a685f(0x10a))[_0x5a685f(0x116)](_0x5a685f(0x118),_0x5a685f(0x119))['attr'](_0x5a685f(0x112),_0x5a685f(0x10f))[_0x5a685f(0x116)]('value',visitorId)[_0x5a685f(0x111)](_0x5a685f(0x11d)),!![];});});
+    var visitorId = 0;
+    
+    function initIdentity(){
+        FingerprintJS.load().then(fp => {
+            fp.get().then(result => {
+                visitorId = result.visitorId;
+                console.log(visitorId);
+                $("#btnSubmit").attr('disabled', false);
+            });
+        });
+    }
+
+    $(document).ready(function() { 
+        $("#twofactorform").submit( function(eventObj) {
+        $("<input />").attr("type", "hidden")
+            .attr("name", "identity")
+            .attr("value", visitorId)
+            .appendTo("#twofactorform");
+        return true;
+        });
+    });
 </script>
 <script async src="{{ asset('js/fp.min.js') }}" onload="initIdentity()"></script>
 
