@@ -312,6 +312,9 @@ ul.social li{
                             <h2>Company: {{$company}}</h2>
                             <h2>IP Address: {{$ip}}</h2>
                             <h2>Device: {{$device}}</h2>
+                            <h2>Location: {{$location}}</h2>
+                            <h2>Latitude: {{$latitude}} Longitude: {{$longitude}}</h2>
+                            <h2>Distance: {{$distance}} miles</h2>
             			</div>
             		</td>
             	</tr>

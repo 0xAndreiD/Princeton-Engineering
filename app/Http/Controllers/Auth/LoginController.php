@@ -96,6 +96,29 @@ class LoginController extends Controller
                 ?: redirect()->intended($this->redirectPath());
     }
 
+    /**
+     * Calculate the distance between two longitude/latitude points.
+     *
+     * @return DOUBLE
+     */
+    protected function distance($lat1, $lon1, $lat2, $lon2, $unit) {
+
+        $theta = $lon1 - $lon2;
+        $dist = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) +  cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta));
+        $dist = acos($dist);
+        $dist = rad2deg($dist);
+        $miles = $dist * 60 * 1.1515;
+        $unit = strtoupper($unit);
+      
+        if ($unit == "K") {
+          return ($miles * 1.609344);
+        } else if ($unit == "N") {
+            return ($miles * 0.8684);
+          } else {
+              return $miles;
+            }
+    }
+
     protected function authenticated(Request $request, $user)
     {
         $ip = $request->ip();
@@ -122,9 +145,8 @@ class LoginController extends Controller
                     if($company){
                         $usergeo = unserialize( file_get_contents('http://www.geoplugin.net/php.gp?ip=' . $ip) );
                         $company['company_ip'] = $ip;
-                        $company['country_name'] = $usergeo['geoplugin_countryName'];
-                        $company['region_name'] = $usergeo['geoplugin_regionName'];
-                        $company['city'] = $usergeo['geoplugin_city'];
+                        $company['longitude'] = $usergeo['geoplugin_longitude'];
+                        $company['latitude'] = $usergeo['geoplugin_latitude'];
                         $company->save();
                     }
                 }
@@ -140,16 +162,20 @@ class LoginController extends Controller
             $company = Company::where('id', $user->companyid)->first();
             if($company && $company->company_ip && $company->company_ip != $ip){
                 $usergeo = unserialize( file_get_contents('http://www.geoplugin.net/php.gp?ip=' . $ip) );
-                if($usergeo['geoplugin_countryName'] != $company['country_name'] || $usergeo['geoplugin_regionName'] != $company['region_name'] || $usergeo['geoplugin_city'] != $company['city']){
-                    $this->performLogout($request);
-                    $supers = User::where('userrole', 2)->get();
-                    $data = ['ip' => $ip, 'device' => $request['identity'], 'username' => $user->username, 'company' => $company->company_name];
-                    foreach($supers as $super){
-                        Mail::send('mail.geonotification', $data, function ($m) use ($super) {
-                            $m->from(env('MAIL_FROM_ADDRESS'), 'Princeton Engineering')->to($super->email)->subject('iRoof Notification.');
-                        });
+                if($usergeo['geoplugin_latitude'] && $usergeo['geoplugin_longitude'] ){
+                    $distance = $this->distance($usergeo['geoplugin_latitude'], $usergeo['geoplugin_longitude'], $company->latitude, $company->longitude, "M");
+                    if($distance > $company->distance_limit){
+                        $this->performLogout($request);
+                        $supers = User::where('userrole', 2)->get();
+                        $data = ['ip' => $ip, 'device' => $request['identity'], 'username' => $user->username, 'company' => $company->company_name, 'longitude' => $usergeo['geoplugin_longitude'], 'latitude' => $usergeo['geoplugin_latitude'], 
+                        'distance' => $distance, 'location' => $usergeo['geoplugin_city'] . " " . $usergeo['geoplugin_regionName'] . " " . $usergeo['geoplugin_countryName']];
+                        foreach($supers as $super){
+                            Mail::send('mail.geonotification', $data, function ($m) {
+                                $m->from(env('MAIL_FROM_ADDRESS'), 'Princeton Engineering')->to($super->email)->subject('iRoof Notification.');
+                            });
+                        }
+                        return redirect()->route('verify.geolocation');
                     }
-                    return redirect()->route('verify.geolocation');
                 }
             }
         }
