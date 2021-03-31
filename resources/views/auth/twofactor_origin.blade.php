@@ -77,7 +77,7 @@
                                 @endif
                             </div>
                             <div class="form-group text-center">
-                                <button type="submit" class="btn btn-block btn-hero-warning">
+                                <button type="submit" class="btn btn-block btn-hero-warning" id="btnSubmit" disabled>
                                     <i class="fa fa-fw fa-lock mr-1"></i> Verify
                                 </button>
                             </div>
@@ -110,6 +110,7 @@
         FingerprintJS.load().then(fp => {
             fp.get().then(result => {
                 visitorId = result.visitorId;
+                $("#btnSubmit").attr('disabled', false);
             });
         });
     }
