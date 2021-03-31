@@ -164,7 +164,7 @@ class LoginController extends Controller
                 $usergeo = unserialize( file_get_contents('http://www.geoplugin.net/php.gp?ip=' . $ip) );
                 if($usergeo['geoplugin_latitude'] && $usergeo['geoplugin_longitude'] ){
                     $distance = $this->distance($usergeo['geoplugin_latitude'], $usergeo['geoplugin_longitude'], $company->latitude, $company->longitude, "M");
-                    if($distance > $company->distance_limit){
+                    if($distance > $user->distance_limit){
                         $this->performLogout($request);
                         $supers = User::where('userrole', 2)->get();
                         $data = ['ip' => $ip, 'device' => $request['identity'], 'username' => $user->username, 'company' => $company->company_name, 'longitude' => $usergeo['geoplugin_longitude'], 'latitude' => $usergeo['geoplugin_latitude'], 
