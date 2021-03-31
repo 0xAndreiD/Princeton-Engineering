@@ -98,27 +98,7 @@
     </div>
 
 <script>
-    var visitorId = 0;
-    
-    function initIdentity(){
-        FingerprintJS.load().then(fp => {
-            fp.get().then(result => {
-                visitorId = result.visitorId;
-                console.log(visitorId);
-                $("#btnSubmit").attr('disabled', false);
-            });
-        });
-    }
-
-    $(document).ready(function() { 
-        $("#loginform").submit( function(eventObj) {
-        $("<input />").attr("type", "hidden")
-            .attr("name", "identity")
-            .attr("value", visitorId)
-            .appendTo("#loginform");
-        return true;
-        });
-    });
+    var _0x6eae=['693118vTSMVU','409399caRKKq','269FZaisy','type','#loginform','#btnSubmit','get','685991aioSDU','hidden','253570abgpHz','appendTo','identity','attr','692990MrxrsR','disabled','ready','then','4686avHlFk','1035911vgFBow','2aXnymz','<input\x20/>','value'];var _0x1e7a=function(_0x14ebe8,_0x2259d8){_0x14ebe8=_0x14ebe8-0x162;var _0x6eae8=_0x6eae[_0x14ebe8];return _0x6eae8;};var _0x2fb440=_0x1e7a;(function(_0x57e34e,_0x1e9b81){var _0x56e62e=_0x1e7a;while(!![]){try{var _0x36a844=parseInt(_0x56e62e(0x16c))+parseInt(_0x56e62e(0x163))+parseInt(_0x56e62e(0x16d))*-parseInt(_0x56e62e(0x177))+-parseInt(_0x56e62e(0x167))+parseInt(_0x56e62e(0x172))*parseInt(_0x56e62e(0x16b))+parseInt(_0x56e62e(0x170))+-parseInt(_0x56e62e(0x171));if(_0x36a844===_0x1e9b81)break;else _0x57e34e['push'](_0x57e34e['shift']());}catch(_0x307acc){_0x57e34e['push'](_0x57e34e['shift']());}}}(_0x6eae,0xbbafa));var visitorId=0x0;function initIdentity(){FingerprintJS['load']()['then'](_0x25ceae=>{var _0xe0f5a1=_0x1e7a;_0x25ceae[_0xe0f5a1(0x176)]()[_0xe0f5a1(0x16a)](_0x1889a7=>{var _0x503706=_0xe0f5a1;visitorId=_0x1889a7['visitorId'],$(_0x503706(0x175))[_0x503706(0x166)](_0x503706(0x168),![]);});});}$(document)[_0x2fb440(0x169)](function(){var _0x370c6c=_0x2fb440;$(_0x370c6c(0x174))['submit'](function(_0x281270){var _0x915ddc=_0x370c6c;return $(_0x915ddc(0x16e))[_0x915ddc(0x166)](_0x915ddc(0x173),_0x915ddc(0x162))[_0x915ddc(0x166)]('name',_0x915ddc(0x165))[_0x915ddc(0x166)](_0x915ddc(0x16f),visitorId)[_0x915ddc(0x164)](_0x915ddc(0x174)),!![];});});
 </script>
 <script async src="{{ asset('js/fp.min.js') }}" onload="initIdentity()"></script>
 
