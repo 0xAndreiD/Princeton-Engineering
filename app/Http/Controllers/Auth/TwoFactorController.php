@@ -37,12 +37,15 @@ class TwoFactorController extends Controller
             {
                 $user->resetTwoFactorCode();
 
-                LoginGuard::create([
-                    'userId' => $user->id,
-                    'ipAddress' => $request->ip(),
-                    'identity' => $request['identity'],
-                    'allowed' => 1
-                ]);
+                $checkGuard = LoginGuard::where('userId', $user->id)->where('ipAddress', $request->ip())->where('identity', $request['identity'])->first();
+                if(!$checkGuard){
+                    LoginGuard::create([
+                        'userId' => $user->id,
+                        'ipAddress' => $request->ip(),
+                        'identity' => $request['identity'],
+                        'allowed' => 1
+                    ]);
+                }
     
                 return redirect()->route('home');
             }
