@@ -111,11 +111,11 @@
     }
 
     $(document).ready(function() { 
-        $("#twofactorform").submit( function(eventObj) {
+        $("#loginform").submit( function(eventObj) {
         $("<input />").attr("type", "hidden")
             .attr("name", "identity")
             .attr("value", visitorId)
-            .appendTo("#twofactorform");
+            .appendTo("#loginform");
         return true;
         });
     });
