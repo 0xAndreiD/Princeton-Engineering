@@ -170,7 +170,7 @@ class LoginController extends Controller
                         $data = ['ip' => $ip, 'device' => $request['identity'], 'username' => $user->username, 'company' => $company->company_name, 'longitude' => $usergeo['geoplugin_longitude'], 'latitude' => $usergeo['geoplugin_latitude'], 
                         'distance' => $distance, 'location' => $usergeo['geoplugin_city'] . " " . $usergeo['geoplugin_regionName'] . " " . $usergeo['geoplugin_countryName']];
                         foreach($supers as $super){
-                            Mail::send('mail.geonotification', $data, function ($m) use ($user) {
+                            Mail::send('mail.geonotification', $data, function ($m) use ($super) {
                                 $m->from(env('MAIL_FROM_ADDRESS'), 'Princeton Engineering')->to($super->email)->subject('iRoof Notification.');
                             });
                         }
