@@ -439,6 +439,8 @@ class AdminController extends Controller
                $guard = LoginGuard::where('id', $request['id'])->first();
                if($guard){
                 $guard->blocked = !$guard->blocked;
+                if($guard->blocked == 0) // Set allowed=2, which means super allowed and doesn't do any distance check.
+                    $guard->allowed = 2;
                 $guard->save();
                 return response()->json(['success' => true]);
                } else 
