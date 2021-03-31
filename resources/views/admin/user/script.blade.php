@@ -103,6 +103,7 @@ function updateUser() {
     data.companyid = $('select#company').val();
     data.usernumber = $('input#usernumber').val();
     data.userrole = $('select#userrole').val();
+    data.distance_limit = $('input#distance_limit').val();
 
     if (data.id == 0) { // Create user
         if (data.password == ''){
@@ -150,6 +151,7 @@ function showEditUser(obj, id) {
             $('select#userrole').val(result.userrole.toString()).trigger('change');
             $('input#usernumber').val(result.usernumber);
             $('input#membership').val(result.membershipid);
+            $('input#distance_limit').val(result.distance_limit);
             $('button#updateButton').html('Update');
             $.post("recommendUserNum", {companyid: result.companyid}, function(userNum){
                 $('input#usernumber').attr('placeholder', 'Recommended User Number: ' + userNum);
