@@ -114,7 +114,8 @@ class UserController extends Controller
                         'users.email as email',
                         'company_info.company_name as companyname',
                         'users.userrole as userrole',
-                        'users.usernumber as usernumber'
+                        'users.usernumber as usernumber',
+                        'users.distance_limit as distance'
                     )
                 );
         }
@@ -133,7 +134,8 @@ class UserController extends Controller
                                 'users.email as email',
                                 'company_info.company_name as companyname',
                                 'users.userrole as userrole',
-                                'users.usernumber as usernumber'
+                                'users.usernumber as usernumber',
+                                'users.distance_limit as distance'
                             )
                         );
 
@@ -154,6 +156,8 @@ class UserController extends Controller
                 $nestedData['email'] = $user->email;
                 $nestedData['companyname'] = $user->companyname;
                 $nestedData['usernumber'] = $user->usernumber;
+                if(Auth::user()->userrole == 2)
+                    $nestedData['distance'] = $user->distance;
                 
                 switch ($user->userrole){
                     case 2:
@@ -249,6 +253,7 @@ class UserController extends Controller
             if (isset($data['userrole'])) $res->userrole = $data['userrole']; 
             $res->usernumber = $data['usernumber'];
             $res->updated_at = date('Y-m-d h:i:s',strtotime(now()));
+            if (isset($data['distance_limit'])) $res->distance_limit = $data['distance_limit']; 
             $res->save();
             echo true;
         }

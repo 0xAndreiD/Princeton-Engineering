@@ -39,9 +39,10 @@
                             <th class="text-center" style="width: 5%;">ID</th>
                             <th style="width:20%">Name</th>
                             <th style="width:20%;">Email</th>
-                            <th style="width:30%;">Company</th>
+                            <th style="width:20%;">Company</th>
                             <th style="width:5%;">UserRole</th>
                             <th style="width:5%;">UserNumber</th>
+                            <th style="width:10%;">Distance Limit(Miles)</th>
                             <th style="min-width: 150px;">Action</th>
                         </tr>
                         <tr>
@@ -65,6 +66,7 @@
                                 </select>
                             </th>
                             <th class="searchHead"> <input type="text" placeholder="Search Number" class="searchBox" id="userNumFilter"> </th>
+                            <th></th>
                             <th></th>
                         </tr>
                     </thead>
@@ -98,7 +100,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="email">Email <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="email" name="email" placeholder="Type Your Email">
+                                    <input type="text" class="form-control" id="email" name="email" placeholder="Type Email">
                                 </div>
                                 <div class="form-group">
                                     <label for="password">Password <span class="text-danger">*</span></label>
@@ -122,7 +124,11 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="userrole">User Number (1: Administrator) <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="usernumber" name="usernumber" placeholder="Type Your User Number">
+                                    <input type="text" class="form-control" id="usernumber" name="usernumber" placeholder="Type User Number">
+                                </div>
+                                <div class="form-group">
+                                    <label for="distance_limit">Distance Limit(Miles) <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="distance_limit" name="distance_limit" placeholder="Type Email">
                                 </div>
                             </div>
                         </div>
@@ -161,6 +167,7 @@
                 { "data": "companyname" },
                 { "data": "userrole" },
                 { "data": "usernumber" },
+                { "data": "distance" },
                 { "data": "actions", "orderable": false }
             ]	 
         });
