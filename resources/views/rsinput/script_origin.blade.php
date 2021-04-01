@@ -2726,6 +2726,8 @@ $(document).ready(function() {
 
         });
         $("#uploadStatus").html("Uploading...");
+        swal.fire({ title: "Please wait...", showConfirmButton: false });
+        swal.showLoading();
         window.totalCount ++;
         if(window.finishedCount == 0)
             $("#progressBar-value").css("width", "0%");
