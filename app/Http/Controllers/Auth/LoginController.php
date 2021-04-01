@@ -155,7 +155,7 @@ class LoginController extends Controller
             if($checkGuard->blocked == 1){
                 Session::put('blocked', 1);
             }
-            if($user->userrole != 0 && $checkGuard->allowed == 1){ // Generate code verification for super admin/client admin if it's code verified
+            if($user->userrole == 1 && $checkGuard->allowed == 1){ // Generate code verification for super admin/client admin if it's code verified
                 $user->generateTwoFactorCode();
                 $data = ['ip' => $ip, 'code' => $user->two_factor_code];
                 Mail::send('mail.verifycode', $data, function ($m) use ($user) {
