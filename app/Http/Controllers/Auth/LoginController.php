@@ -79,6 +79,9 @@ class LoginController extends Controller
 
     public function logout(Request $request)
     {
+        $user = auth()->user();
+        if($user && $user->two_factor_code)
+            $user->resetTwoFactorCode();
         $this->performLogout($request);
         $target = LandingPage::where('active_lp', '=', '1')->first();
         if($target)
@@ -124,7 +127,7 @@ class LoginController extends Controller
     {
         $ip = $request->ip();
         $checkGuard = LoginGuard::where('userId', $user->id)->where('ipAddress', $ip)->where('identity', $request['identity'])->first();
-        if(!$checkGuard) {
+        if(!$checkGuard && $user->ask_two_factor) {
             $userGuard = LoginGuard::where('userId', $user->id)->get();
             if(count($userGuard) > 0){
                 $user->generateTwoFactorCode();
@@ -153,16 +156,16 @@ class LoginController extends Controller
                 }
             }
         } else{
-            if($checkGuard->blocked == 1){
+            if($checkGuard && $checkGuard->blocked == 1){
                 Session::put('blocked', 1);
             }
-            if($user->userrole == 1 && $checkGuard->allowed == 1){ // Generate code verification for super admin/client admin if it's code verified
-                $user->generateTwoFactorCode();
-                $data = ['ip' => $ip, 'code' => $user->two_factor_code];
-                Mail::send('mail.verifycode', $data, function ($m) use ($user) {
-                    $m->from(env('MAIL_FROM_ADDRESS'), 'Princeton Engineering')->to($user->email)->subject('Please verify the iRoof access code.');
-                });
-            }
+            // if($user->userrole == 1 && $checkGuard->allowed == 1){ // Generate code verification for super admin/client admin if it's code verified
+            //     $user->generateTwoFactorCode();
+            //     $data = ['ip' => $ip, 'code' => $user->two_factor_code];
+            //     Mail::send('mail.verifycode', $data, function ($m) use ($user) {
+            //         $m->from(env('MAIL_FROM_ADDRESS'), 'Princeton Engineering')->to($user->email)->subject('Please verify the iRoof access code.');
+            //     });
+            // }
         } 
 
         if(!$checkGuard || $checkGuard->allowed != 2){

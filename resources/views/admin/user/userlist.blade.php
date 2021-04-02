@@ -38,11 +38,12 @@
                         <tr>
                             <th class="text-center" style="width: 5%;">ID</th>
                             <th style="width:20%">Name</th>
-                            <th style="width:20%;">Email</th>
+                            <th style="width:15%;">Email</th>
                             <th style="width:20%;">Company</th>
                             <th style="width:5%;">UserRole</th>
                             <th style="width:5%;">UserNumber</th>
                             <th style="width:10%;">Distance Limit(Miles)</th>
+                            <th style="width:5%;">Ask Two Factor</th>
                             <th style="min-width: 150px;">Action</th>
                         </tr>
                         <tr>
@@ -67,6 +68,13 @@
                             </th>
                             <th class="searchHead"> <input type="text" placeholder="Search Number" class="searchBox" id="userNumFilter"> </th>
                             <th></th>
+                            <th class="searchHead">
+                                <select placeholder="Search Role" class="searchBox" id="verifyFilter">
+                                    <option value="">All</option>
+                                    <option value="1">Yes</option>
+                                    <option value="0">No</option>
+                                </select>
+                            </th>
                             <th></th>
                         </tr>
                     </thead>
@@ -130,6 +138,13 @@
                                     <label for="distance_limit">Distance Limit(Miles) <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="distance_limit" name="distance_limit" placeholder="Type Email">
                                 </div>
+                                <div class="form-group">
+                                    <label for="userrole">Ask Two Factor Verification <span class="text-danger">*</span></label><br/>
+                                    <select class="form-control" id="ask_two_factor" name="ask_two_factor">
+                                        <option value="1"><span class='badge badge-primary'> Yes </span></option>
+                                        <option value="0"><span class='badge badge-danger'> No </span></option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -168,6 +183,7 @@
                 { "data": "userrole" },
                 { "data": "usernumber" },
                 { "data": "distance" },
+                { "data": "ask_two_factor" },
                 { "data": "actions", "orderable": false }
             ]	 
         });
@@ -184,7 +200,7 @@
             table.column($(this).parent().index() + ':visible').search(this.value).draw();
         });
 
-        $("#companyFilter, #roleFilter").on('change', function() {
+        $("#companyFilter, #roleFilter, #verifyFilter").on('change', function() {
             table.column($(this).parent().index() + ':visible').search(this.value).draw();
         });
     });
