@@ -79,9 +79,9 @@ class LoginController extends Controller
 
     public function logout(Request $request)
     {
-        $user = auth()->user();
-        if($user && $user->two_factor_code)
-            $user->resetTwoFactorCode();
+        // $user = auth()->user();
+        // if($user && $user->two_factor_code)
+        //     $user->resetTwoFactorCode();
         $this->performLogout($request);
         $target = LandingPage::where('active_lp', '=', '1')->first();
         if($target)
