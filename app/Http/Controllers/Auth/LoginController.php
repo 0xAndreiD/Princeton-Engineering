@@ -10,6 +10,7 @@ use App\User;
 use App\LandingPage;
 use App\LoginGuard;
 use App\Company;
+use App\SessionHistory;
 use App\Notifications\TwoFactorCode;
 use Mail;
 use Session;
@@ -186,5 +187,14 @@ class LoginController extends Controller
                 }
             }
         }
+
+        $mySession = SessionHistory::create([
+            'userId' => $user->id,
+            'ipAddress' => $ip,
+            'device' => $request['identity'],
+            'created_at' => gmdate("Y-m-d\TH:i:s", time()),
+            'last_accessed' => gmdate("Y-m-d\TH:i:s", time()),
+        ]);
+        Session::put('mySessionId', $mySession->id);
     }
 }
