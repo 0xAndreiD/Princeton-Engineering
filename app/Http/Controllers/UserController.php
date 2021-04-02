@@ -91,6 +91,8 @@ class UserController extends Controller
             $handler = $handler->where('users.userrole', 'LIKE', "%{$request->input("columns.4.search.value")}%");
             if(!empty($request->input("columns.5.search.value")))
                 $handler = $handler->where('users.usernumber', 'LIKE', "%{$request->input("columns.5.search.value")}%");
+            if(isset($request["columns.7.search.value"]))
+                $handler = $handler->where('users.ask_two_factor', 'LIKE', "%{$request->input("columns.7.search.value")}%");
         } else {
             if(!empty($request->input("columns.1.search.value")))
                 $handler = $handler->where('users.username', 'LIKE', "%{$request->input("columns.1.search.value")}%");
@@ -115,7 +117,8 @@ class UserController extends Controller
                         'company_info.company_name as companyname',
                         'users.userrole as userrole',
                         'users.usernumber as usernumber',
-                        'users.distance_limit as distance'
+                        'users.distance_limit as distance',
+                        'users.ask_two_factor as ask_two_factor'
                     )
                 );
         }
@@ -135,7 +138,8 @@ class UserController extends Controller
                                 'company_info.company_name as companyname',
                                 'users.userrole as userrole',
                                 'users.usernumber as usernumber',
-                                'users.distance_limit as distance'
+                                'users.distance_limit as distance',
+                                'users.ask_two_factor as ask_two_factor'
                             )
                         );
 
@@ -162,7 +166,7 @@ class UserController extends Controller
                 switch ($user->userrole){
                     case 2:
                         $nestedData['userrole'] = "
-                            <span class='badge badge-danger'> Supe Admin </span>
+                            <span class='badge badge-danger'> Super Admin </span>
                         ";
                         break;
                     case 1:
@@ -176,6 +180,10 @@ class UserController extends Controller
                         ";
                         break;
                 }
+                if($user->ask_two_factor == 1)
+                    $nestedData['ask_two_factor'] = "<span class='badge badge-primary'> Yes </span>";
+                else 
+                    $nestedData['ask_two_factor'] = "<span class='badge badge-danger'> No </span>";
 
                 $nestedData['actions'] = "
                 <div class='text-center'>
@@ -231,6 +239,7 @@ class UserController extends Controller
             $res->membershipid = 0;
             $res->membershiprole = 0;
             $res->created_at = date('Y-m-d h:i:s',strtotime(now()));
+            $res->ask_two_factor = $data['ask_two_factor'];
             $res->save();
             echo true;
         } else {
@@ -254,6 +263,7 @@ class UserController extends Controller
             $res->usernumber = $data['usernumber'];
             $res->updated_at = date('Y-m-d h:i:s',strtotime(now()));
             if (isset($data['distance_limit'])) $res->distance_limit = $data['distance_limit']; 
+            $res->ask_two_factor = $data['ask_two_factor'];
             $res->save();
             echo true;
         }
