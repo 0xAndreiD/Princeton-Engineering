@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Session;
+use App\SessionHistory;
 
 class TwoFactor
 {
@@ -20,6 +21,13 @@ class TwoFactor
 
         if(auth()->check() && Session::get('blocked') == 1){
             return redirect()->route('verify.blocked');
+        }
+        if(auth()->check() && Session::get('mySessionId')){
+            $mySession = SessionHistory::where('id', Session::get('mySessionId'))->first();
+            if($mySession){
+                $mySession->last_accessed = gmdate("Y-m-d\TH:i:s", time());
+                $mySession->save();
+            }
         }
         if(auth()->check() && $user->two_factor_code)
         {
