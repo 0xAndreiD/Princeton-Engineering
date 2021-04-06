@@ -35,7 +35,7 @@ class UserController extends Controller
         $companyList = Company::orderBy('company_name', 'asc')->get();
         if(Auth::user()->userrole == 2)
             return view('admin.user.userlist')->with('companyList', $companyList);
-        else if(Auth::user()->userrole == 1)
+        else if(Auth::user()->userrole == 1 || Auth::user()->userrole == 3)
             return view('clientadmin.user.userlist')->with('companyList', $companyList);
         else
             return redirect('home');
@@ -59,7 +59,7 @@ class UserController extends Controller
             );
             $handler = new User;
         }
-        else if(Auth::user()->userrole == 1)
+        else if(Auth::user()->userrole == 1 || Auth::user()->userrole == 3)
         {
             $columns = array( 
                 0 =>'id', 
@@ -69,7 +69,7 @@ class UserController extends Controller
                 4 =>'userrole',
                 5 =>'usernumber'
             );
-            $handler = User::where('companyid', Auth::user()->companyid);
+            $handler = User::where('companyid', Auth::user()->companyid)->where('userrole', '<', 2);
         }
         $totalData = $handler->count();
         $totalFiltered = $totalData; 
@@ -165,19 +165,16 @@ class UserController extends Controller
                 
                 switch ($user->userrole){
                     case 2:
-                        $nestedData['userrole'] = "
-                            <span class='badge badge-danger'> Super Admin </span>
-                        ";
+                        $nestedData['userrole'] = "<span class='badge badge-danger'> Super Admin </span>";
                         break;
                     case 1:
-                        $nestedData['userrole'] = "
-                            <span class='badge badge-primary'> Client </span>
-                        ";
+                        $nestedData['userrole'] = "<span class='badge badge-primary'> Client </span>";
                         break;
                     case 0:
-                        $nestedData['userrole'] = "
-                            <span class='badge badge-info'> User </span>
-                        ";
+                        $nestedData['userrole'] = "<span class='badge badge-info'> User </span>";
+                        break;
+                    case 3:
+                        $nestedData['userrole'] = "<span class='badge badge-warning'> Junior Super </span>";
                         break;
                 }
                 if($user->ask_two_factor == 1)
@@ -234,7 +231,10 @@ class UserController extends Controller
             $res->password = $data['password'];
             $res->userrole = 0;
             $res->companyid = isset($data['companyid']) ? $data['companyid'] : Auth::user()->companyid;
-            $res->userrole = $data['userrole'];
+            if(Auth::user()->userrole == 2 || $data['userrole'] < 2)
+                $res->userrole = $data['userrole'];
+            else
+                $res->userrole = 0;
             $res->usernumber = $data['usernumber'];
             $res->membershipid = 0;
             $res->membershiprole = 0;
@@ -248,7 +248,7 @@ class UserController extends Controller
                 echo "exist";
                 return;
             }
-            $idExist = User::where('companyid', $data['companyid'])->where('usernumber', $data['usernumber'])->where('id', '!=', $data['id'])->get()->first();
+            $idExist = User::where('companyid', isset($data['companyid']) ? $data['companyid'] : Auth::user()->companyid)->where('usernumber', $data['usernumber'])->where('id', '!=', $data['id'])->get()->first();
             if ($idExist) {
                 echo "idexist";
                 return;
@@ -257,13 +257,19 @@ class UserController extends Controller
             $res = User::where('id', $data['id'])->get()->first();
             $res->username = $data['name'];
             $res->email = $data['email'];
-            if (isset($data['password'])) $res->password = $data['password'];
+            if (isset($data['password'])){
+                if(Auth::user()->userrole == 2 || $res->userrole < 2)
+                    $res->password = $data['password'];
+            } 
             $res->companyid = isset($data['companyid']) ? $data['companyid'] : Auth::user()->companyid;
-            if (isset($data['userrole'])) $res->userrole = $data['userrole']; 
+            if (isset($data['userrole'])){
+                if(Auth::user()->userrole == 2 || ($res->userrole < 2 && $data['userrole'] < 2))
+                    $res->userrole = $data['userrole']; 
+            } 
             $res->usernumber = $data['usernumber'];
             $res->updated_at = date('Y-m-d h:i:s',strtotime(now()));
             if (isset($data['distance_limit'])) $res->distance_limit = $data['distance_limit']; 
-            $res->ask_two_factor = $data['ask_two_factor'];
+            if (isset($data['ask_two_factor'])) $res->ask_two_factor = $data['ask_two_factor'];
             $res->save();
             echo true;
         }

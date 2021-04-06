@@ -44,7 +44,7 @@ class StandardEquipmentController extends Controller
      */
     public function standardModule()
     {
-        if(Auth::user()->userrole == 2 || Auth::user()->userrole == 1){
+        if(Auth::user()->userrole == 2 || Auth::user()->userrole == 1 || Auth::user()->userrole == 3){
             return view('standardequipment.module.list');
         }
         else
@@ -267,7 +267,7 @@ class StandardEquipmentController extends Controller
      */
     public function standardInverter()
     {
-        if(Auth::user()->userrole == 2 || Auth::user()->userrole == 1){
+        if(Auth::user()->userrole == 2 || Auth::user()->userrole == 1 || Auth::user()->userrole == 3){
             return view('standardequipment.inverter.list');
         }
         else
@@ -452,7 +452,7 @@ class StandardEquipmentController extends Controller
      */
     public function standardRacking()
     {
-        if(Auth::user()->userrole == 2 || Auth::user()->userrole == 1){
+        if(Auth::user()->userrole == 2 || Auth::user()->userrole == 1 || Auth::user()->userrole == 3){
             return view('standardequipment.racking.list');
         }
         else
@@ -648,7 +648,7 @@ class StandardEquipmentController extends Controller
      */
     public function standardStanchion()
     {
-        if(Auth::user()->userrole == 2 || Auth::user()->userrole == 1){
+        if(Auth::user()->userrole == 2 || Auth::user()->userrole == 1 || Auth::user()->userrole == 3){
             return view('standardequipment.stanchion.list');
         }
         else

@@ -55,7 +55,7 @@ class GeneralController extends Controller
     {
         if( Auth::user()->userrole == 2 )
             return view('admin.home');
-        else if( Auth::user()->userrole == 1 )
+        else if( Auth::user()->userrole == 1 || Auth::user()->userrole == 3)
             return view('clientadmin.home');
         else if( Auth::user()->userrole == 0 )
             return view('user.home');
@@ -130,7 +130,7 @@ class GeneralController extends Controller
         if($request['data'] && $request['data']['projectId'] && $request['data']['projectId'] > 0){
             $project = JobRequest::where('id', '=', $request['data']['projectId'])->first();
             if($project){
-                if(Auth::user()->userrole == 2 || $project->companyId == Auth::user()->companyid)
+                if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || $project->companyId == Auth::user()->companyid)
                 {
                     $company = Company::where('id', $project->companyId)->first();
                     $companyNumber = $company ? $company['company_number'] : 0;
@@ -460,7 +460,10 @@ class GeneralController extends Controller
         }
         else
         {
-            $handler = JobRequest::where('job_request.companyId', Auth::user()->companyid);
+            if(Auth::user()->userrole != 3)
+                $handler = JobRequest::where('job_request.companyId', Auth::user()->companyid);
+            else
+                $handler = new JobRequest;
             $columns = array( 
                 0 =>'id', 
                 1 =>'userId',
@@ -613,7 +616,7 @@ class GeneralController extends Controller
             foreach ($jobs as $job)
             {
                 $nestedData['id'] = $job->id;
-                if(Auth::user()->userrole == 2)
+                if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3)
                 {
                     $nestedData['companyname'] = $job->companyname;
                     $nestedData['requestfile'] = $job->requestfile;
