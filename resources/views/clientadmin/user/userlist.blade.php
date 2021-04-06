@@ -94,11 +94,11 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="password">Password <span class="text-danger">*</span></label>
-                                    <input type="password" class="form-control" id="password" name="password">
+                                    <input type="text" class="form-control" id="password" name="password">
                                 </div>
                                 <div class="form-group">
                                     <label for="userrole">User Role <span class="text-danger">*</span></label><br/>
-                                    <select class="js-select2 form-control" id="userrole" name="userrole">
+                                    <select class="js-select2 form-control" id="userrole" name="userrole" style="width:100%;">
                                         <option value="1"><span class='badge badge-primary'> Company Admin </span></option>
                                         <option value="0"><span class='badge badge-info'> User </span></option>
                                     </select>

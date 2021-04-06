@@ -1,4 +1,4 @@
-@extends((Auth::user()->userrole == 2)? 'admin.layout': ((Auth::user()->userrole == 1) ? 'clientadmin.layout' : 'user.layout'))
+@extends((Auth::user()->userrole == 2)? 'admin.layout': ((Auth::user()->userrole == 1 || Auth::user()->userrole == 3) ? 'clientadmin.layout' : 'user.layout'))
 
 @section('content')
 
@@ -35,7 +35,7 @@
                 <table id="projects" class="table table-bordered table-striped table-vcenter text-center" style="width:100%; min-height: 350px;">
                     <thead>
                         <tr>
-                            @if(Auth::user()->userrole == 2)
+                            @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3)
                             <th class="text-center" style="width: 7%;">ID</th>
                             <th style="width:10%">Company Name</th>
                             <th style="width:10%;">User</th>
@@ -60,7 +60,7 @@
                             @endif
                         </tr>
                         <tr>
-                            @if(Auth::user()->userrole == 2)
+                            @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3)
                             <th></th>
                             <th class="searchHead">
                                 <select placeholder="Search Company" class="searchBox" id="companyFilter">
@@ -166,7 +166,7 @@
                     }
                 },
             "columns": [
-                @if(Auth::user()->userrole == 2)
+                @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3)
                 { "data": "id" },
                 { "data": "companyname" },
                 { "data": "username" },

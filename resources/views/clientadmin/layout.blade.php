@@ -97,7 +97,11 @@
                     <a class="font-w600 text-dual" href="javascript:void(0)">
                         @ {{ Auth::user()->username }}
                     </a>
+                    @if(Auth::user()->userrole == 1)
                     <span class="badge badge-pill badge-danger">Client Admin</span>
+                    @elseif(Auth::user()->userrole == 3)
+                    <span class="badge badge-pill badge-danger">Junior Super</span>
+                    @endif
                 </div>
                 <!-- END User Info -->
 

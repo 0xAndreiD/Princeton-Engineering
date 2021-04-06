@@ -62,6 +62,7 @@
                                 <select placeholder="Search Role" class="searchBox" id="roleFilter">
                                     <option value="">All</option>
                                     <option value="2">Super Admin</option>
+                                    <option value="3">Junior Super Admin</option>
                                     <option value="1">Client</option>
                                     <option value="0">User</option>
                                 </select>
@@ -127,6 +128,7 @@
                                     <select class="form-control" id="userrole" name="userrole">
                                         <option value="0"><span class='badge badge-info'> User </span></option>
                                         <option value="1"><span class='badge badge-primary'> Client </span></option>
+                                        <option value="3"><span class='badge badge-warning'> Junior Super Admin </span></option>
                                         <option value="2"><span class='badge badge-danger'> Super Admin </span></option>
                                     </select>
                                 </div>
@@ -136,7 +138,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="distance_limit">Distance Limit(Miles) <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="distance_limit" name="distance_limit" placeholder="Type Email">
+                                    <input type="text" class="form-control" id="distance_limit" name="distance_limit" placeholder="Type Distance Limit">
                                 </div>
                                 <div class="form-group">
                                     <label for="userrole">Ask Two Factor Verification <span class="text-danger">*</span></label><br/>

@@ -58,7 +58,7 @@ class CustomEquipmentController extends Controller
      */
     public function customModule()
     {
-        if(Auth::user()->userrole == 2 || Auth::user()->userrole == 1){
+        if(Auth::user()->userrole == 2 || Auth::user()->userrole == 1 || Auth::user()->userrole == 3){
             $companyList = Company::orderBy('company_name', 'asc')->get();
             return view('customequipment.module.list')->with('companyList', $companyList);
         }
@@ -260,7 +260,7 @@ class CustomEquipmentController extends Controller
      */
     public function customInverter()
     {
-        if(Auth::user()->userrole == 2 || Auth::user()->userrole == 1){
+        if(Auth::user()->userrole == 2 || Auth::user()->userrole == 1 || Auth::user()->userrole == 3){
             $companyList = Company::orderBy('company_name', 'asc')->get();
             return view('customequipment.inverter.list')->with('companyList', $companyList);
         }
@@ -458,7 +458,7 @@ class CustomEquipmentController extends Controller
      */
     public function customRacking()
     {
-        if(Auth::user()->userrole == 2 || Auth::user()->userrole == 1){
+        if(Auth::user()->userrole == 2 || Auth::user()->userrole == 1 || Auth::user()->userrole == 3){
             $companyList = Company::orderBy('company_name', 'asc')->get();
             return view('customequipment.racking.list')->with('companyList', $companyList);
         }
@@ -659,7 +659,7 @@ class CustomEquipmentController extends Controller
      */
     public function customStanchion()
     {
-        if(Auth::user()->userrole == 2 || Auth::user()->userrole == 1){
+        if(Auth::user()->userrole == 2 || Auth::user()->userrole == 1 || Auth::user()->userrole == 3){
             $companyList = Company::orderBy('company_name', 'asc')->get();
             return view('customequipment.stanchion.list')->with('companyList', $companyList);
         }
