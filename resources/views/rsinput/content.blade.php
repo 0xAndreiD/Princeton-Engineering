@@ -12,7 +12,8 @@
         </div>
     </div>
     <div>
-        <input type="button" class="btn btn-info duplicateBtn" id="duplicate-{{ $conditionId }}" value="Duplicate"></input>
+        <button type="button" class="btn btn-info mr-1" id="duplicate-{{ $conditionId }}"><i class="far fa-clone mr-1"></i>Duplicate</button>
+        <button type="button" class="btn btn-danger mr-5" id="delete-{{ $conditionId }}"><i class="fa fa-trash mr-1"></i>Delete</button>
     </div>
 </div>
 <p class="txt-collar-warning" id="collartie-warning-{{ $conditionId }}">Framing modification required.  Add collar tie / knee wall at xx.yy ft.</p>
