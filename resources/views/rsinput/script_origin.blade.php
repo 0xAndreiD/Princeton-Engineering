@@ -2692,6 +2692,9 @@ $(document).ready(function() {
         $(`#duplicate-${i}`).click(function() {
             duplicateTab(window.conditionId);
         });
+        $(`#delete-${i}`).click(function() {
+            deleteTab(window.conditionId);
+        });
     }
 
     $(`#upload`).on("dragover", function(){
@@ -3371,6 +3374,69 @@ var duplicateTab = function(curTabId) {
                 }
             }
         }))
+    }
+}
+
+var deleteTab = function(curTabId) {
+    var caseCount = parseInt($("#option-number-of-conditions").val());
+    if(caseCount == 1){
+        swal.fire({ title: "Warning", text: "You are reached to minimum FC cases limit.", icon: "warning", confirmButtonText: `OK` });
+    } else {
+        swal.fire({title: "Warning", text: "Are you sure to delete this FC Tab?", icon: "warning", showCancelButton: true, confirmButtonText: `Yes`, cancelButtonText: `No`})
+        .then(( result ) => {
+            if ( result.value ){
+                let targetTabId;
+                for(targetTabId = curTabId; targetTabId < caseCount; targetTabId ++){
+                    sourceTabId = targetTabId + 1;
+                    $(`#trussFlagOption-${targetTabId}-1`).prop('checked', $(`#trussFlagOption-${sourceTabId}-1`)[0].checked);
+                    $(`#trussFlagOption-${targetTabId}-2`).prop('checked', $(`#trussFlagOption-${sourceTabId}-2`)[0].checked);
+                    fcChangeType(targetTabId, $(`#trussFlagOption-${sourceTabId}-2`)[0].checked);
+                    $(`#inputform-${sourceTabId} input:text:enabled, #inputform-${sourceTabId} select:enabled`).each(function() { 
+                        let elementId = $(this).attr('id');
+                        elementId = elementId.slice(0, elementId.length  - 2) + '-' + targetTabId;
+                        $(`#${elementId}`).val($(this).val());
+                    });
+                    $(`#inputform-${sourceTabId} input:checkbox:enabled`).each(function() { 
+                        let elementId = $(this).attr('id');
+                        elementId = elementId.slice(0, elementId.length  - 2) + '-' + targetTabId;
+                        $(`#${elementId}`).prop('checked', $(this)[0].checked);
+                    });
+                    maxModuleNumChange(targetTabId);
+                    updateRoofMemberType(targetTabId, $(`#option-roof-member-type-${sourceTabId}`).val());
+                    updateNumberSegment1(targetTabId, $(`#option-number-segments1-${sourceTabId}`).val());
+                    updateFloorMemberType(targetTabId, $(`#option-floor-member-type-${sourceTabId}`).val());
+                    updateNumberSegment2(targetTabId, $(`#option-number-segments2-${sourceTabId}`).val());
+
+                    drawTrussGraph(targetTabId);
+                    drawStickGraph(targetTabId);
+                    stick_input_changed[targetTabId] = stick_input_changed[sourceTabId];
+                    stick_right_input[targetTabId] = stick_right_input[sourceTabId];
+                    checkRoofInput(targetTabId);
+                } 
+
+                targetTabId = (caseCount != curTabId ? curTabId : curTabId - 1);
+                var i, tabcontent, tablinks, tabName = 'fc-' + targetTabId;
+                tabcontent = document.getElementsByClassName("rfdTabContent");
+                for (i = 0; i < tabcontent.length; i++) {
+                    tabcontent[i].style.display = "none";
+                }
+                tablinks = document.getElementsByClassName("tablinks");
+                for (i = 0; i < tablinks.length; i++) {
+                    tablinks[i].className = tablinks[i].className.replace(" active", "");
+                }
+                document.getElementById(tabName).style.display = "block";
+                //console.log(caseCount, curTabId, 'fcTab-' + caseCount == curTabId ? curTabId : curTabId - 1);
+                document.getElementById('fcTab-' + targetTabId).className += " active";
+                
+                window.conditionId = parseInt(tabName.slice(3));
+                document.getElementById('subPageTitle').innerHTML = 'Framing Data Input';
+
+                $("#option-number-of-conditions").val(caseCount - 1);
+                updateNumberOfConditions(caseCount - 1);
+                
+                console.log('Tab No:', window.conditionId);  
+            }
+        });
     }
 }
 

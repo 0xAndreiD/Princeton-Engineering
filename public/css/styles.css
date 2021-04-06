@@ -128,10 +128,6 @@ html, body {
     align-items: center;
 }
 
-.duplicateBtn{
-    margin-right: 50px;
-}
-
 .trussInputPane{
     display: none;
     margin-top: 30px;
