@@ -22,13 +22,13 @@
     <div class="block block-rounded block-bordered">
         <div class="block-header block-header-default">
             <h3 class="block-title">Project List</h3>
-            <div class="block-options">
+            <!-- <div class="block-options">
                 <a type="button" class="btn-block-option" 
                     data-toggle='modal' data-target='#modal-block-normal'
                     href="{{ route('rsinput') }}">
                     <i class="fa fa-plus"></i> Add Project
                 </a>
-            </div>
+            </div> -->
         </div>
         <div class="block-content block-content-full">
             <div class="table-responsive">
@@ -207,7 +207,7 @@
             table.draw();
         });
 
-        @if(Auth::user()->userrole == 2)
+        @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3)
         $("#companyFilter").on('keyup change', function() {
             table.column($(this).parent().index() + ':visible').search(this.value).draw();
         });
