@@ -442,7 +442,7 @@ class GeneralController extends Controller
      * @return JSON
      */
     public function getProjectList(Request $request){
-        if(Auth::user()->userrole == 2)
+        if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3)
         {
             $handler = new JobRequest;
             $columns = array( 
@@ -460,10 +460,10 @@ class GeneralController extends Controller
         }
         else
         {
-            if(Auth::user()->userrole != 3)
-                $handler = JobRequest::where('job_request.companyId', Auth::user()->companyid);
-            else
-                $handler = new JobRequest;
+            //if(Auth::user()->userrole != 3)
+            $handler = JobRequest::where('job_request.companyId', Auth::user()->companyid);
+            //else
+                //$handler = new JobRequest;
             $columns = array( 
                 0 =>'id', 
                 1 =>'userId',
@@ -528,7 +528,7 @@ class GeneralController extends Controller
         }
 
         // admin filter company name, user, project name, project number, project state, plan status
-        if(Auth::user()->userrole == 2){
+        if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3){
             if(!empty($request->input("columns.1.search.value")))
                 $handler = $handler->where('company_info.company_name', 'LIKE', "%{$request->input("columns.1.search.value")}%");
             if(!empty($request->input("columns.2.search.value")))
