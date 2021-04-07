@@ -113,20 +113,26 @@ class APIController extends Controller
                     if($job){
                         $jobCols = Schema::getColumnListing('job_request');
                         foreach($jobCols as $column){
-                            if($column != 'requestFile' && isset($request[$column]))
-                                $job[$column] = $request[$column];
+                            if($column != 'requestFile' && !empty($request->input($column)))
+                                $job[$column] = $request->input($column);
                         }
                         $update = false;
                         $dataCheckCols = Schema::getColumnListing('data_check');
                         foreach($dataCheckCols as $column){
-                            if(isset($request[$column]))
+                            if(!empty($request->input($column)))
                                 $update = true;
                         }
                         if($update){
-                            $dataCheck = DataCheck::firstOrNew(array('jobId' => $job['id']));
+                            $dataCheck = DataCheck::where('jobId', $job['id'])->first();
+                            if(!$dataCheck){
+                                $dataCheck = DataCheck::create([
+                                    'jobId' => $job['id'],
+                                    'collarHeights' => null
+                                ]);
+                            }
                             foreach($dataCheckCols as $column){
-                                if($column != 'jobId' && isset($request[$column]))
-                                    $dataCheck[$column] = $request[$column];
+                                if($column != 'jobId' && !empty($request->input($column)))
+                                    $dataCheck[$column] = $request->input($column);
                             }
                             $dataCheck->save();
                             $today = new DateTime('now', new DateTimeZone('UTC'));
