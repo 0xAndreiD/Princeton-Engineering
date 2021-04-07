@@ -135,7 +135,9 @@ class APIController extends Controller
                                     $dataCheck[$column] = $request->input($column);
                             }
                             $dataCheck->save();
-                            Storage::disk('local')->append('ping_'.$request['requestFile'], $request->fullUrl()."\n");
+                            $today = new DateTime('now', new DateTimeZone('UTC'));
+                            $today->setTimezone(new DateTimeZone('EST'));
+                            Storage::disk('local')->append('ping_'.$request['requestFile'], $request->fullUrl() . ": " . $today->format("Y-m-d H:i:s") . "\n");
                         }
                         if($job->save())
                             return response()->json(['success' => true, 'message' => 'Success']);
