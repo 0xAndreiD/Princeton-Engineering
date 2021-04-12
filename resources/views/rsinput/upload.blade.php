@@ -21,8 +21,6 @@
         <input type="text" value="{{ $projectId }}" id="uploadJobId" name="uploadProjectId" hidden>
     </div>
     
-    <ul></ul>
-
     <div id="progress">
         <div class="progressBar">
             <div id="progressBar-value" ></div>
@@ -32,6 +30,9 @@
             <span id="uploadPercent"> 0% </span>
         </div>
     </div>
+    
+    <ul></ul>
+
 </form>
 </div>
 
