@@ -988,7 +988,7 @@ class GeneralController extends Controller
     }
     
     /**
-     * Upload the files of the project.
+     * Upload the files of the project to GoDaddy.
      *
      * @return JSON
      */
@@ -1008,24 +1008,42 @@ class GeneralController extends Controller
                     $jobData = json_decode(Storage::disk('input')->get($folderPrefix . $job['requestFile']), true);
                     $state = $jobData['ProjectInfo']['State'];
                 }
-
                 
                 $filepath = $folderPrefix . $job['clientProjectNumber'] . '. ' . $job['clientProjectName'] . ' ' . $state;
                 $file->move(storage_path('upload') . $filepath, $file->getClientOriginalName());
                 $localpath = storage_path('upload') . $filepath . '/' . $file->getClientOriginalName();
                     
-                $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
-                $dropbox = new Dropbox($app);
-                $dropboxFile = new DropboxFile($localpath);
-                $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_IN') . $filepath . '/' . $file->getClientOriginalName(), ['autorename' => TRUE]);
+                // $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
+                // $dropbox = new Dropbox($app);
+                // $dropboxFile = new DropboxFile($localpath);
+                // $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_IN') . $filepath . '/' . $file->getClientOriginalName(), ['autorename' => TRUE]);
                 
-                return response()->json(['success' => true, 'message' => 'Multiple Image File Has Been uploaded Successfully', 'filename' => $file->getClientOriginalName(), 'id' => $dropfile->getId(), 'path' => env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_IN') . $filepath . '/' . $file->getClientOriginalName()]);
+                return response()->json(['success' => true, 'message' => 'Uploaded Successfully', 'filename' => $file->getClientOriginalName(), 'path' => $filepath]);
             } else {
                 return response()->json(['success' => false, 'message' => 'Cannot find the project.']);
             }
         }
         else
             return response()->json(['success' => false, 'message' => 'Empty Id or file.']);
+    }
+
+    /**
+     * Upload the files of the project to Dropbox.
+     *
+     * @return JSON
+     */
+    public function jobFilePush(Request $request) {
+        if(!empty($request->input('path')) && !empty($request->input('filename')))
+        {            
+            $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
+            $dropbox = new Dropbox($app);
+            $dropboxFile = new DropboxFile(storage_path('upload') . $request->input('path') . '/' . $request->input('filename'));
+            $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_IN') . $request->input('path') . '/' . $request->input('filename'), ['autorename' => TRUE]);
+            
+            return response()->json(['success' => true, 'message' => 'Uploaded Successfully', 'filename' => $request->input('filename'), 'id' => $dropfile->getId(), 'path' => env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_IN') . $request->input('path') . '/' . $request->input('filename')]);
+        }
+        else
+            return response()->json(['success' => false, 'message' => 'Empty file.']);
     }
 
     /**
