@@ -2247,6 +2247,7 @@ var drawStickGraph = function( condId ) {
 window.totalCount = 0; // file uploads count
 window.finishedCount = 0; // file uploads count
 window.uploadError = false; // file uploads count
+window.uploadList = []; // file uploads
 
 $(document).ready(function() {
     $.ajaxSetup({
@@ -2756,7 +2757,7 @@ $(document).ready(function() {
         if(data.result && data.result.success){
             data.context.removeClass('working');
             data.context.addClass('success');
-            $("#filetree").jstree('create_node', '#IN', {"text": data.result.filename, "id": data.result.id, "type": "infile", "path": data.result.path}, 'last');
+            window.uploadList.push({filename: data.result.filename, path: data.result.path});
             setTotalProgress(true);
         }
         else{
@@ -2787,19 +2788,56 @@ $(document).ready(function() {
         return (bytes / 1000).toFixed(2) + ' KB';
     }
 
-    var setTotalProgress = function(status){
+    var jobFilePush = function(uploadData){
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url:"jobFilePush",
+                type:'post',
+                data: uploadData,
+                success:function(res){
+                    if(res.success){
+                        $("#filetree").jstree('create_node', '#IN', {"text": res.filename, "id": res.id, "type": "infile", "path": res.path}, 'last');
+                        resolve(true);
+                    } else {
+                        console.log(res);
+                        resolve(false);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    res = JSON.parse(xhr.responseText);
+                    message = res.message;
+                    swal.fire({ title: "Error",
+                            text: message == "" ? "Error happened while processing. Please try again later." : message,
+                            icon: "error",
+                            confirmButtonText: `OK` });
+                    resolve(false);
+                }
+            });
+        });
+    }
+
+    var setTotalProgress = async function(status){
         window.finishedCount ++;
-        var progress = (window.finishedCount * 100 / window.totalCount).toFixed(2);
-        $("#progressBar-value").css("width", progress + "%");
-        $("#uploadPercent").html(progress + "%");
-        if(status == false)
-            window.uploadError = true;
+        // if(status == false)
+        //     window.uploadError = true;
         if(window.finishedCount >= window.totalCount){
+            for(let i = 0; i < window.uploadList.length; i ++){
+                let uploadResult = await jobFilePush(window.uploadList[i]);
+                if(!uploadResult){
+                    window.uploadError = true;
+                }
+                let progress = ((i + 1) * 100 / window.uploadList.length).toFixed(2);
+                $("#progressBar-value").css("width", progress + "%");
+                $("#uploadPercent").html(progress + "%");
+            }
+
             if(window.uploadError)
                 swal.fire({ title: "Warning", text: "Upload Failed.", icon: "warning", confirmButtonText: `OK` });
             else
                 swal.fire({ title: "Success", text: "Upload Done.", icon: "success", confirmButtonText: `OK` });
+
             window.finishedCount = 0;
+            window.uploadList = [];
             window.totalCount = 0;
             window.uploadError = false;
             $("#uploadStatus").html("Done");
