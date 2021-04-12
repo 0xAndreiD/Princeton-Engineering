@@ -2761,6 +2761,7 @@ $(document).ready(function() {
         }
         else{
             data.context.addClass('error');
+            console.log('upload failed', data);
             setTotalProgress(false);
         }
     }
