@@ -3154,6 +3154,20 @@ $(document).ready(function() {
             });
         }
         else{
+            swal.fire({
+                title: "Warning",
+                html: "Have you changed any iRoof data that will require recalculation of this job?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: `Yes`,
+                cancelButtonText: `No`,
+            })
+            .then(( result ) => {
+                if ( result.value ) {
+                    $('#projectState').val("4");
+                    submitData(e, 'Submitted');
+                } 
+            });
             submitData(e, 'Submitted');
         }
     });
