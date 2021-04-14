@@ -41,9 +41,9 @@
                             <th style="width:10%;">User</th>
                             <th style="width:10%;">Project Name</th>
                             <th style="width:7%;">Project Number</th>
-                            <th style="width:10%;">File Name</th>
-                            <th style="width:10%;">Created Time</th>
-                            <th style="width:10%;">Submitted Time</th>
+                            <th style="width:8%;">File Name</th>
+                            <th style="width:8%;">Created Time</th>
+                            <th style="width:8%;">Submitted Time</th>
                             <th style="width:8%;">Project Status</th>
                             <th style="width:8%;">Plan Status</th>
                             <th style="min-width: 120px;">Action</th>
@@ -52,9 +52,9 @@
                             <th style="width:15%;">User</th>
                             <th style="width:15%;">Project Name</th>
                             <th style="width:7%;">Project Number</th>
-                            <th style="width:15%;">Created Time</th>
-                            <th style="width:12%;">Submitted Time</th>
-                            <th style="width:12%;">Project Status</th>
+                            <th style="width:10%;">Created Time</th>
+                            <th style="width:10%;">Submitted Time</th>
+                            <th style="width:10%;">Project Status</th>
                             <th style="width:10%;">Plan Status</th>
                             <th style="min-width: 100px;">Action</th>
                             @endif
