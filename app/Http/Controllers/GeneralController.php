@@ -23,6 +23,7 @@ use App\CustomInverter;
 use App\CustomStanchion;
 use App\CustomRacking;
 use App\StandardFavorite;
+use App\JobChat;
 use Kunnu\Dropbox\DropboxApp;
 use Kunnu\Dropbox\Dropbox;
 use Kunnu\Dropbox\DropboxFile;
@@ -660,12 +661,15 @@ class GeneralController extends Controller
 
                 $nestedData['actions'] = "
                 <div class='text-center'>
-                    <a href='rsinput?projectId={$nestedData['id']}' class='btn btn-primary'>
+                    <a href='rsinput?projectId={$nestedData['id']}' class='btn btn-primary mr-1'>
                         <i class='fa fa-pencil-alt'></i>
                     </a>" . 
-                    (Auth::user()->userrole == 2 ? "<button type='button' class='js-swal-confirm btn btn-danger' onclick='delProject(this,{$nestedData['id']})'>
+                    (Auth::user()->userrole == 2 ? "<button type='button' class='js-swal-confirm btn btn-danger mr-1' onclick='delProject(this,{$nestedData['id']})'>
                         <i class='fa fa-trash'></i>
-                    </button>" : "") . "</div>";
+                    </button>" : "") .
+                    "<a href='jobchat?projectId={$nestedData['id']}' class='btn btn-warning'>
+                        <i class='fab fa-rocketchat'></i>
+                    </a>". "</div>";
                 $data[] = $nestedData;
             }
         }
@@ -861,7 +865,7 @@ class GeneralController extends Controller
             $project = JobRequest::where('id', '=', $request['projectId'])->first();
             if($project)
             {
-                if(Auth::user()->userrole == 2 || Auth::user()->companyid == $project['companyId'])
+                if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->companyid == $project['companyId'])
                 {
                     $company = Company::where('id', $project->companyId)->first();
                     $companyNumber = $company ? $company['company_number'] : 0;
@@ -894,7 +898,7 @@ class GeneralController extends Controller
             $project = JobRequest::where('id', '=', $request['projectId'])->first();
             if($project)
             {
-                if(Auth::user()->userrole == 2 || Auth::user()->companyid == $project['companyId'])
+                if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->companyid == $project['companyId'])
                 {
                     $datacheck = DataCheck::where('jobId', $request['projectId'])->first();
                     if($datacheck)
@@ -1314,5 +1318,82 @@ class GeneralController extends Controller
             return response()->json(['success' => true, 'duplicated' => $duplicated, 'maxId' => $max]);
         } else
             return response()->json(['success' => false, 'message' => 'Empty Project Number or Id.']);
+    }
+
+    // /**
+    //  * Return elapsed time between now and timestamp.
+    //  *
+    //  * @return JSON
+    //  */
+    // protected function time_elapsed_string($timestamp, $full = false) {
+    //     $now = new DateTime;
+    //     $ago = new DateTime;
+    //     $ago->setTimestamp(intval($timestamp));
+    //     $diff = $now->diff($ago);
+    
+    //     $diff->w = floor($diff->d / 7);
+    //     $diff->d -= $diff->w * 7;
+    
+    //     $string = array(
+    //         'y' => 'year',
+    //         'm' => 'month',
+    //         'w' => 'week',
+    //         'd' => 'day',
+    //         'h' => 'hour',
+    //         'i' => 'minute',
+    //         's' => 'second',
+    //     );
+    //     foreach ($string as $k => &$v) {
+    //         if ($diff->$k) {
+    //             $v = $diff->$k . ' ' . $v . ($diff->$k > 1 ? 's' : '');
+    //         } else {
+    //             unset($string[$k]);
+    //         }
+    //     }
+    
+    //     if (!$full) $string = array_slice($string, 0, 1);
+    //     return $string ? implode(', ', $string) . ' ago' : 'just now';
+    // }
+
+    /**
+     * Return project job chat details.
+     *
+     * @return JSON
+     */
+    public function jobChat(Request $request){
+        if(!empty($request['projectId'])){
+            $messages = JobChat::leftjoin('users', "users.id", "=", "job_chat.userId")
+                        ->where('job_chat.jobId', $request['projectId'])
+                        ->get(array('users.username as username', 'users.userrole as userrole', 'job_chat.text as text', 'job_chat.datetime as datetime'));
+            // foreach($messages as $msg){
+            //     $msg['ago'] = $this->time_elapsed_string($msg['datetime']);
+            // }
+            return view('rsinput.chat')->with('messages', $messages)->with('projectId', $request['projectId']);
+        } else 
+            return redirect('projectlist');
+    }
+
+    /**
+     * Add chat message to job_chat table.
+     *
+     * @return JSON
+     */
+    public function submitChat(Request $request){
+        $project = JobRequest::where('id', '=', $request['projectId'])->first();
+            if($project){
+                if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || $project->companyId == Auth::user()->companyid)
+                {
+                    JobChat::create([
+                        'jobId' => $request['projectId'],
+                        'userId' => Auth::user()->id,
+                        'text' => $request['message']
+                    ]);
+                    return response()->json(["message" => "Success!", "status" => true]);
+                }
+                else
+                    return response()->json(["message" => "You don't have permission to edit this project.", "status" => false]);
+            }
+            else
+                return response()->json(["message" => "Cannot find project.", "status" => false]);
     }
 }
