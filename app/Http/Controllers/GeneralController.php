@@ -1408,4 +1408,24 @@ class GeneralController extends Controller
             else
                 return response()->json(["message" => "Cannot find project.", "status" => false]);
     }
+
+    public function setStates(Request $request){
+        $jobs = JobRequest::get();
+        foreach($jobs as $job){
+            $company = Company::where('id', $job['companyId'])->first();
+            $companyNumber = $company ? $company['company_number'] : 0;
+            $folderPrefix = '/' . $companyNumber. '. ' . $job['companyName'] . '/';
+            $file = $request->file('upl');
+            
+            $state = '';
+            if(Storage::disk('input')->exists($folderPrefix . $job['requestFile']))
+            {
+                $jobData = json_decode(Storage::disk('input')->get($folderPrefix . $job['requestFile']), true);
+                $state = $jobData['ProjectInfo']['State'];
+            }
+            $job->state = $state;
+            $job->save();
+        }
+        return response()->json(["message" => "Success!"]);
+    }
 }
