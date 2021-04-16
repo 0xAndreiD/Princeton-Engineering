@@ -168,4 +168,4 @@ Route::resource('verify', 'Auth\TwoFactorController')->only(['index', 'store']);
 Route::get('verify/blocked', 'Auth\TwoFactorController@blocked')->name('verify.blocked');
 Route::get('verify/geolocation', 'Auth\TwoFactorController@geolocation')->name('verify.geolocation');
 
-Route::get('/setStates', 'GeneralController@setStates')->name('setStates');
+// Route::get('/setStates', 'GeneralController@setStates')->name('setStates');
