@@ -659,6 +659,15 @@ class GeneralController extends Controller
                     $nestedData['planstatus'] = "<span class='badge badge-{$this->statusColors[intval($job->planstatus)]}' style='white-space: pre-wrap;'> {$this->globalStatus[intval($job->planstatus)]} </span>";                
                 }
 
+                $lastchat = JobChat::leftjoin('users', "users.id", "=", "job_chat.userId")->where('job_chat.jobId', $job->id)->orderBy('job_chat.id', 'desc')->get(array('users.userrole as userrole'))->first();
+                if($lastchat){
+                    if($lastchat['userrole'] == 3 || $lastchat['userrole'] == 2)
+                        $chatbadge = 'info';
+                    else
+                        $chatbadge = 'alt-warning';
+                } else 
+                    $chatbadge = 'warning';
+
                 $nestedData['actions'] = "
                 <div class='text-center'>
                     <a href='rsinput?projectId={$nestedData['id']}' class='btn btn-primary mr-1'>
@@ -667,7 +676,7 @@ class GeneralController extends Controller
                     (Auth::user()->userrole == 2 ? "<button type='button' class='js-swal-confirm btn btn-danger mr-1' onclick='delProject(this,{$nestedData['id']})'>
                         <i class='fa fa-trash'></i>
                     </button>" : "") .
-                    "<a href='jobchat?projectId={$nestedData['id']}' class='btn btn-warning'>
+                    "<a href='jobchat?projectId={$nestedData['id']}' class='btn btn-" . $chatbadge . "'>
                         <i class='fab fa-rocketchat'></i>
                     </a>". "</div>";
                 $data[] = $nestedData;
