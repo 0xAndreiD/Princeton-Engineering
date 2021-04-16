@@ -1016,6 +1016,9 @@ class GeneralController extends Controller
                 $filepath = $folderPrefix . $job['clientProjectNumber'] . '. ' . $job['clientProjectName'] . ' ' . $state;
                 $file->move(storage_path('upload') . $filepath, $file->getClientOriginalName());
                 $localpath = storage_path('upload') . $filepath . '/' . $file->getClientOriginalName();
+
+                $job->planStatus = 1;
+                $job->save();
                     
                 // $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
                 // $dropbox = new Dropbox($app);
