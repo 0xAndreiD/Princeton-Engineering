@@ -160,6 +160,7 @@ class GeneralController extends Controller
                     $project->clientProjectName = $request['data']['txt-project-name'];
                     $project->clientProjectNumber = $request['data']['txt-project-number'];
                     $project->submittedTime = gmdate("Y-m-d\TH:i:s", time());
+                    $project->state = $request['data']['option-state'];
                     $project->save();
 
                     $company->last_accessed = gmdate("Y-m-d", time());
@@ -214,7 +215,8 @@ class GeneralController extends Controller
                     'submittedTime' => gmdate("Y-m-d\TH:i:s", $current_time),
                     'timesDownloaded' => 0,
                     'timesEmailed' => 0,
-                    'timesComputed' => 0
+                    'timesComputed' => 0,
+                    'state' => $request['data']['option-state']
                 ]);
                 $projectId = $project->id;
 
@@ -456,7 +458,8 @@ class GeneralController extends Controller
                 6 =>'createdTime',
                 7 =>'submittedTime',
                 8 =>'projectState',
-                9 =>'planStatus'
+                9 =>'planStatus',
+                10 => 'state'
             );
         }
         else
@@ -473,7 +476,8 @@ class GeneralController extends Controller
                 4 =>'createdTime',
                 5 =>'submittedTime',
                 6 =>'projectState',
-                7 =>'planStatus'
+                7 =>'planStatus',
+                8 => 'state'
             );
         }
         
@@ -542,6 +546,8 @@ class GeneralController extends Controller
                 $handler = $handler->where('job_request.projectState', 'LIKE', "%{$request->input('columns.8.search.value')}%");
             if(isset($request["columns.9.search.value"]))
                 $handler = $handler->where('job_request.planStatus', 'LIKE', "%{$request->input('columns.9.search.value')}%");
+            if(isset($request["columns.10.search.value"]))
+                $handler = $handler->where('job_request.state', 'LIKE', "%{$request->input('columns.10.search.value')}%");
         }
         else{ // client filter user, project name, project number
             if(!empty($request->input("columns.1.search.value")))
@@ -550,6 +556,8 @@ class GeneralController extends Controller
                 $handler = $handler->where('job_request.clientProjectName', 'LIKE', "%{$request->input('columns.2.search.value')}%");
             if(!empty($request->input("columns.3.search.value")))
                 $handler = $handler->where('job_request.clientProjectNumber', 'LIKE', "%{$request->input('columns.3.search.value')}%");
+            if(isset($request["columns.8.search.value"]))
+                $handler = $handler->where('job_request.state', 'LIKE', "%{$request->input('columns.8.search.value')}%");
         }
 
         if(empty($request->input('search.value')))
@@ -569,6 +577,7 @@ class GeneralController extends Controller
                         'job_request.submittedTime as submittedtime',
                         'job_request.projectState as projectstate',
                         'job_request.planStatus as planstatus',
+                        'job_request.state as state',
                     )
                 );
             //if($handler->offset($start)->count() > 0)
@@ -597,6 +606,7 @@ class GeneralController extends Controller
                                 'job_request.submittedTime as submittedtime',
                                 'job_request.projectState as projectstate',
                                 'job_request.planStatus as planstatus',
+                                'job_request.state as state',
                             )
                         );
 
@@ -625,6 +635,7 @@ class GeneralController extends Controller
                 $nestedData['username'] = $job->username;
                 $nestedData['projectname'] = $job->projectname;
                 $nestedData['projectnumber'] = $job->projectnumber;
+                $nestedData['state'] = $job->state;
                 $date = new DateTime($job->createdtime, new DateTimeZone('UTC'));
                 $date->setTimezone(new DateTimeZone('EST'));
                 $nestedData['createdtime'] = $date->format("Y-m-d H:i:s");
@@ -1409,23 +1420,28 @@ class GeneralController extends Controller
                 return response()->json(["message" => "Cannot find project.", "status" => false]);
     }
 
-    public function setStates(Request $request){
-        $jobs = JobRequest::get();
-        foreach($jobs as $job){
-            $company = Company::where('id', $job['companyId'])->first();
-            $companyNumber = $company ? $company['company_number'] : 0;
-            $folderPrefix = '/' . $companyNumber. '. ' . $job['companyName'] . '/';
-            $file = $request->file('upl');
+    /**
+     * Get method to set previous jobs' state value
+     *
+     * @return JSON
+     */
+    // public function setStates(Request $request){
+    //     $jobs = JobRequest::get();
+    //     foreach($jobs as $job){
+    //         $company = Company::where('id', $job['companyId'])->first();
+    //         $companyNumber = $company ? $company['company_number'] : 0;
+    //         $folderPrefix = '/' . $companyNumber. '. ' . $job['companyName'] . '/';
+    //         $file = $request->file('upl');
             
-            $state = '';
-            if(Storage::disk('input')->exists($folderPrefix . $job['requestFile']))
-            {
-                $jobData = json_decode(Storage::disk('input')->get($folderPrefix . $job['requestFile']), true);
-                $state = $jobData['ProjectInfo']['State'];
-            }
-            $job->state = $state;
-            $job->save();
-        }
-        return response()->json(["message" => "Success!"]);
-    }
+    //         $state = '';
+    //         if(Storage::disk('input')->exists($folderPrefix . $job['requestFile']))
+    //         {
+    //             $jobData = json_decode(Storage::disk('input')->get($folderPrefix . $job['requestFile']), true);
+    //             $state = $jobData['ProjectInfo']['State'];
+    //         }
+    //         $job->state = $state;
+    //         $job->save();
+    //     }
+    //     return response()->json(["message" => "Success!"]);
+    // }
 }
