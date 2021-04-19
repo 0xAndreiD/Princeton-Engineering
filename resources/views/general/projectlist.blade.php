@@ -303,9 +303,9 @@
                 @endif
             ],
             @if(Auth::user()->userrole == 2)
-            "order": [[ 6, "desc" ]]
+            "order": [[ 8, "desc" ]]
             @else
-            "order": [[ 4, "desc" ]]
+            "order": [[ 6, "desc" ]]
             @endif
         });
         
