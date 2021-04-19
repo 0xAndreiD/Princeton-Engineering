@@ -1355,6 +1355,9 @@ var getData = function(caseCount = 10) {
     alldata['wind-speed-override'] = $('#wind-speed-override')[0].checked;
     alldata['ground-snow'] = $('#ground-snow').val();
     alldata['ground-snow-override'] = $('#ground-snow-override')[0].checked;
+    alldata['ibc-year'] = $('#ibc-year').val();
+    alldata['asce-year'] = $('#asce-year').val();
+    alldata['nec-year'] = $('#nec-year').val();
     alldata['wind-exposure'] = $('#wind-exposure').val();
     alldata['override-unit'] = $('#override-unit').val();
 

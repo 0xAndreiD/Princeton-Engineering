@@ -57,6 +57,6 @@
 <script src="{{ asset('/js/plugins/jquery.iframe-transport.js') }}"></script>
 <script src="{{ asset('/js/plugins/jquery.fileupload.js') }}"></script>
 <script src="{{ asset('/js/plugins/jstree/jstree.min.js') }}"></script>
-@include('rsinput.script_obfuscate')
+@include('rsinput.script_origin')
 
 @endsection
