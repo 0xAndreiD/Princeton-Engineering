@@ -39,25 +39,25 @@
                             <th class="text-center" style="width: 7%;">ID</th>
                             <th style="width:10%">Company Name</th>
                             <th style="width:8%;">User</th>
-                            <th style="width:8%;">Project Name</th>
                             <th style="width:7%;">Project Number</th>
+                            <th style="width:8%;">Project Name</th>
+                            <th style="width:4%;">State</th>
                             <th style="width:8%;">File Name</th>
                             <th style="width:8%;">Created Time</th>
                             <th style="width:8%;">Submitted Time</th>
                             <th style="width:8%;">Project Status</th>
                             <th style="width:8%;">Plan Status</th>
-                            <th style="width:4%;">State</th>
                             <th style="min-width: 120px;">Action</th>
                             @else
                             <th class="text-center" style="width: 7%;">ID</th>
                             <th style="width:13%;">User</th>
-                            <th style="width:13%;">Project Name</th>
                             <th style="width:7%;">Project Number</th>
+                            <th style="width:13%;">Project Name</th>
+                            <th style="width:4%;">State</th>
                             <th style="width:10%;">Created Time</th>
                             <th style="width:10%;">Submitted Time</th>
                             <th style="width:10%;">Project Status</th>
                             <th style="width:10%;">Plan Status</th>
-                            <th style="width:4%;">State</th>
                             <th style="min-width: 100px;">Action</th>
                             @endif
                         </tr>
@@ -74,8 +74,62 @@
                                 <!-- <input type="text" placeholder="Search Company" class="searchBox" id="companyFilter">  -->
                             </th>
                             <th class="searchHead"> <input type="text" placeholder="Search User" class="searchBox" id="userFilter"> </th>
-                            <th class="searchHead"> <input type="text" placeholder="Search Name" class="searchBox" id="projectNameFilter"> </th>
                             <th class="searchHead"> <input type="text" placeholder="Search Number" class="searchBox" id="projectNumberFilter"> </th>
+                            <th class="searchHead"> <input type="text" placeholder="Search Name" class="searchBox" id="projectNameFilter"> </th>
+                            <th class="searchHead">
+                                <select placeholder="State" class="searchBox" id="usStateFilter">
+                                    <option value="">All</option>
+                                    <option value="AL">AL</option>
+                                    <option value="AZ">AZ</option>
+                                    <option value="AR">AR</option>
+                                    <option value="CA">CA</option>
+                                    <option value="CO">CO</option>
+                                    <option value="CT">CT</option>
+                                    <option value="DE">DE</option>
+                                    <option value="FL">FL</option>
+                                    <option value="GA">GA</option>
+                                    <option value="HI">HI</option>
+                                    <option value="ID">ID</option>
+                                    <option value="IL">IL</option>
+                                    <option value="IN">IN</option>
+                                    <option value="IA">IA</option>
+                                    <option value="KS">KS</option>
+                                    <option value="KY">KY</option>
+                                    <option value="LA">LA</option>
+                                    <option value="ME">ME</option>
+                                    <option value="MD">MD</option>
+                                    <option value="MA">MA</option>
+                                    <option value="MI">MI</option>
+                                    <option value="MN">MN</option>
+                                    <option value="MS">MS</option>
+                                    <option value="MO">MO</option>
+                                    <option value="MT">MT</option>
+                                    <option value="NE">NE</option>
+                                    <option value="NV">NV</option>
+                                    <option value="NH">NH</option>
+                                    <option value="NJ">NJ</option>
+                                    <option value="NM">NM</option>
+                                    <option value="NY">NY</option>
+                                    <option value="NC">NC</option>
+                                    <option value="ND">ND</option>
+                                    <option value="OH">OH</option>
+                                    <option value="OK">OK</option>
+                                    <option value="OR">OR</option>
+                                    <option value="PA">PA</option>
+                                    <option value="RI">RI</option>
+                                    <option value="SC">SC</option>
+                                    <option value="SD">SD</option>
+                                    <option value="TN">TN</option>
+                                    <option value="TX">TX</option>
+                                    <option value="UT">UT</option>
+                                    <option value="VT">VT</option>
+                                    <option value="VA">VA</option>
+                                    <option value="WA">WA</option>
+                                    <option value="WV">WV</option>
+                                    <option value="WI">WI</option>
+                                    <option value="WY">WY</option>
+                                </select>
+                            </th>
                             <th></th>
                             <th class="searchHead">
                                 <input type="text" class="js-flatpickr bg-white searchBox" id="created_from" name="created_from_datetime" placeholder="From" style="margin-bottom: 5px;">
@@ -115,6 +169,12 @@
                                     <a class="dropdown-item" href="javascript:changeStateFilter('7')">PE sealed plans link sent</a>
                                 </div>
                             </th>
+                            <th></th>
+                            @else
+                            <th></th>
+                            <th class="searchHead"> <input type="text" placeholder="Search User" class="searchBox" id="userFilter"> </th>
+                            <th class="searchHead"> <input type="text" placeholder="Search Number" class="searchBox" id="projectNumberFilter"> </th>
+                            <th class="searchHead"> <input type="text" placeholder="Search Name" class="searchBox" id="projectNameFilter"> </th>
                             <th class="searchHead">
                                 <select placeholder="State" class="searchBox" id="usStateFilter">
                                     <option value="">All</option>
@@ -169,12 +229,6 @@
                                     <option value="WY">WY</option>
                                 </select>
                             </th>
-                            <th></th>
-                            @else
-                            <th></th>
-                            <th class="searchHead"> <input type="text" placeholder="Search User" class="searchBox" id="userFilter"> </th>
-                            <th class="searchHead"> <input type="text" placeholder="Search Name" class="searchBox" id="projectNameFilter"> </th>
-                            <th class="searchHead"> <input type="text" placeholder="Search Number" class="searchBox" id="projectNumberFilter"> </th>
                             <th class="searchHead">
                                 <input type="text" class="js-flatpickr bg-white searchBox" id="created_from" name="created_from_datetime" placeholder="From" style="margin-bottom: 5px;">
                                 <input type="text" class="js-flatpickr bg-white searchBox" id="created_to" name="created_to_datetime" placeholder="To">
@@ -185,60 +239,6 @@
                             </th>
                             <th></th>
                             <th></th>
-                            <th class="searchHead">
-                                <select placeholder="State" class="searchBox" id="usStateFilter">
-                                    <option value="">All</option>
-                                    <option value="AL">AL</option>
-                                    <option value="AZ">AZ</option>
-                                    <option value="AR">AR</option>
-                                    <option value="CA">CA</option>
-                                    <option value="CO">CO</option>
-                                    <option value="CT">CT</option>
-                                    <option value="DE">DE</option>
-                                    <option value="FL">FL</option>
-                                    <option value="GA">GA</option>
-                                    <option value="HI">HI</option>
-                                    <option value="ID">ID</option>
-                                    <option value="IL">IL</option>
-                                    <option value="IN">IN</option>
-                                    <option value="IA">IA</option>
-                                    <option value="KS">KS</option>
-                                    <option value="KY">KY</option>
-                                    <option value="LA">LA</option>
-                                    <option value="ME">ME</option>
-                                    <option value="MD">MD</option>
-                                    <option value="MA">MA</option>
-                                    <option value="MI">MI</option>
-                                    <option value="MN">MN</option>
-                                    <option value="MS">MS</option>
-                                    <option value="MO">MO</option>
-                                    <option value="MT">MT</option>
-                                    <option value="NE">NE</option>
-                                    <option value="NV">NV</option>
-                                    <option value="NH">NH</option>
-                                    <option value="NJ">NJ</option>
-                                    <option value="NM">NM</option>
-                                    <option value="NY">NY</option>
-                                    <option value="NC">NC</option>
-                                    <option value="ND">ND</option>
-                                    <option value="OH">OH</option>
-                                    <option value="OK">OK</option>
-                                    <option value="OR">OR</option>
-                                    <option value="PA">PA</option>
-                                    <option value="RI">RI</option>
-                                    <option value="SC">SC</option>
-                                    <option value="SD">SD</option>
-                                    <option value="TN">TN</option>
-                                    <option value="TX">TX</option>
-                                    <option value="UT">UT</option>
-                                    <option value="VT">VT</option>
-                                    <option value="VA">VA</option>
-                                    <option value="WA">WA</option>
-                                    <option value="WV">WV</option>
-                                    <option value="WI">WI</option>
-                                    <option value="WY">WY</option>
-                                </select>
-                            </th>
                             <th></th>
                             @endif
                         </tr>
@@ -280,25 +280,25 @@
                 { "data": "id" },
                 { "data": "companyname" },
                 { "data": "username" },
-                { "data": "projectname" },
                 { "data": "projectnumber" },
+                { "data": "projectname" },
+                { "data": "state" },
                 { "data": "requestfile" },
                 { "data": "createdtime" },
                 { "data": "submittedtime" },
                 { "data": "projectstate" },
                 { "data": "planstatus" },
-                { "data": "state" },
                 { "data": "actions", "orderable": false }
                 @else
                 { "data": "id" },
                 { "data": "username" },
-                { "data": "projectname" },
                 { "data": "projectnumber" },
+                { "data": "projectname" },
+                { "data": "state" },
                 { "data": "createdtime" },
                 { "data": "submittedtime" },
                 { "data": "projectstate" },
                 { "data": "planstatus" },
-                { "data": "state" },
                 { "data": "actions", "orderable": false }
                 @endif
             ],
@@ -329,7 +329,7 @@
         });
 
         changeStatusFilter = function(status){
-            table.column('8:visible').search(status).draw();
+            table.column('9:visible').search(status).draw();
             $(`#statusFilter`).css('color', '#FFFFFF');
             if(status == ''){ $(`#statusFilter`).css('color', '#495057'); $(`#statusFilter`).html('All');  $(`#statusFilter`).css('background-color', '#FFFFFF'); }
             else if(status == '0'){ $(`#statusFilter`).html('None');  $(`#statusFilter`).css('background-color', '#e04f1a'); }
@@ -345,7 +345,7 @@
         }
 
         changeStateFilter = function(status){
-            table.column('9:visible').search(status).draw();
+            table.column('10:visible').search(status).draw();
             $(`#stateFilter`).css('color', '#FFFFFF');
             if(status == ''){ $(`#stateFilter`).css('color', '#495057'); $(`#stateFilter`).html('All');  $(`#stateFilter`).css('background-color', '#FFFFFF'); }
             else if(status == '0'){ $(`#stateFilter`).html('No action');  $(`#stateFilter`).css('background-color', '#e04f1a'); }
