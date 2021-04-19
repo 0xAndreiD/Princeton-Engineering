@@ -16,6 +16,7 @@ use App\CustomModule;
 use App\CustomInverter;
 use App\CustomRacking;
 use App\CustomStanchion;
+use App\JobChat;
 use Kunnu\Dropbox\DropboxApp;
 use Kunnu\Dropbox\Dropbox;
 use Kunnu\Dropbox\DropboxFile;
@@ -300,6 +301,33 @@ class APIController extends Controller
                     return response()->json(['success' => true, 'data' => $data]);
                 } else 
                     return response()->json(['success' => false, 'message' => 'Type Required.']);
+            }
+            else
+                return response()->json(['success' => false, 'message' => 'Auth failed.']);
+        }
+        else
+            return response()->json(['success' => false, 'message' => 'Auth required.']);
+    }
+
+    /**
+     * Add chat to job_chat table automatically
+     *
+     * @return JSON
+     */
+    public function addChat(Request $request){
+        if(isset($request['username']) && isset($request['password'])){
+            $user = User::where('username', '=', $request['username'])->where('password', '=', $request['password'])->first();
+            if($user && $user->userrole == 2)
+            {
+                if(isset($request['message']) && isset($request['jobId'])){
+                    JobChat::create([
+                        'jobId' => $request['jobId'],
+                        'userId' => $user->id,
+                        'text' => $request['message']
+                    ]);
+                    return response()->json(['success' => true]);
+                } else 
+                    return response()->json(['success' => false, 'message' => 'Wrong Parameters.']);
             }
             else
                 return response()->json(['success' => false, 'message' => 'Auth failed.']);

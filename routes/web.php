@@ -67,6 +67,7 @@ Route::get('/getUserInfo', 'APIController@getUserInfo')->name('getUserInfo');
 Route::get('/getCompanyList', 'APIController@getCompanyList')->name('getCompanyList');
 Route::get('/cronDBBackup', 'APIController@cronDBBackup')->name('cronDBBackup');
 Route::get('/getCustomEquipment', 'APIController@getCustomEquipment')->name('getCustomEquipment');
+Route::get('/addChat', 'APIController@addChat')->name('addChat');
 
 // PV Modules
 Route::post('/getPVModules', 'GeneralController@getPVModules')->name('getPVModules');
