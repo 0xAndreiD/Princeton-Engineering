@@ -452,14 +452,14 @@ class GeneralController extends Controller
                 0 =>'id', 
                 1 =>'job_request.companyId',
                 2 =>'userId',
-                3 =>'clientProjectName',
-                4 =>'clientProjectNumber',
-                5 =>'requestFile',
-                6 =>'createdTime',
-                7 =>'submittedTime',
-                8 =>'projectState',
-                9 =>'planStatus',
-                10 => 'state'
+                3 =>'clientProjectNumber',
+                4 =>'clientProjectName',
+                5 => 'state',
+                6 =>'requestFile',
+                7 =>'createdTime',
+                8 =>'submittedTime',
+                9 =>'projectState',
+                10 =>'planStatus',
             );
         }
         else
@@ -471,13 +471,13 @@ class GeneralController extends Controller
             $columns = array( 
                 0 =>'id', 
                 1 =>'userId',
-                2 =>'clientProjectName',
-                3 =>'clientProjectNumber',
-                4 =>'createdTime',
-                5 =>'submittedTime',
-                6 =>'projectState',
-                7 =>'planStatus',
-                8 => 'state'
+                2 =>'clientProjectNumber',
+                3 =>'clientProjectName',
+                4 => 'state',
+                5 =>'createdTime',
+                6 =>'submittedTime',
+                7 =>'projectState',
+                8 =>'planStatus',
             );
         }
         
@@ -539,25 +539,25 @@ class GeneralController extends Controller
             if(!empty($request->input("columns.2.search.value")))
                 $handler = $handler->where('users.username', 'LIKE', "%{$request->input('columns.2.search.value')}%");
             if(!empty($request->input("columns.3.search.value")))
-                $handler = $handler->where('job_request.clientProjectName', 'LIKE', "%{$request->input('columns.3.search.value')}%");
+                $handler = $handler->where('job_request.clientProjectNumber', 'LIKE', "%{$request->input('columns.3.search.value')}%");
             if(!empty($request->input("columns.4.search.value")))
-                $handler = $handler->where('job_request.clientProjectNumber', 'LIKE', "%{$request->input('columns.4.search.value')}%");
-            if(isset($request["columns.8.search.value"]))
-                $handler = $handler->where('job_request.projectState', 'LIKE', "%{$request->input('columns.8.search.value')}%");
+                $handler = $handler->where('job_request.clientProjectName', 'LIKE', "%{$request->input('columns.4.search.value')}%");
+            if(isset($request["columns.5.search.value"]))
+                $handler = $handler->where('job_request.state', 'LIKE', "%{$request->input('columns.5.search.value')}%");
             if(isset($request["columns.9.search.value"]))
-                $handler = $handler->where('job_request.planStatus', 'LIKE', "%{$request->input('columns.9.search.value')}%");
+                $handler = $handler->where('job_request.projectState', 'LIKE', "%{$request->input('columns.9.search.value')}%");
             if(isset($request["columns.10.search.value"]))
-                $handler = $handler->where('job_request.state', 'LIKE', "%{$request->input('columns.10.search.value')}%");
+                $handler = $handler->where('job_request.planStatus', 'LIKE', "%{$request->input('columns.10.search.value')}%");
         }
         else{ // client filter user, project name, project number
             if(!empty($request->input("columns.1.search.value")))
                 $handler = $handler->where('users.username', 'LIKE', "%{$request->input('columns.1.search.value')}%");
             if(!empty($request->input("columns.2.search.value")))
-                $handler = $handler->where('job_request.clientProjectName', 'LIKE', "%{$request->input('columns.2.search.value')}%");
+                $handler = $handler->where('job_request.clientProjectNumber', 'LIKE', "%{$request->input('columns.2.search.value')}%");
             if(!empty($request->input("columns.3.search.value")))
-                $handler = $handler->where('job_request.clientProjectNumber', 'LIKE', "%{$request->input('columns.3.search.value')}%");
-            if(isset($request["columns.8.search.value"]))
-                $handler = $handler->where('job_request.state', 'LIKE', "%{$request->input('columns.8.search.value')}%");
+                $handler = $handler->where('job_request.clientProjectName', 'LIKE', "%{$request->input('columns.3.search.value')}%");
+            if(isset($request["columns.4.search.value"]))
+                $handler = $handler->where('job_request.state', 'LIKE', "%{$request->input('columns.4.search.value')}%");
         }
 
         if(empty($request->input('search.value')))
