@@ -49,6 +49,51 @@
         </tr>
         <tr class="h13">
             <td><div style="overflow:hidden"></td>
+            <td class="iw400-right-bdr">IBC Years</td>
+            <td class="w400-green-bdr">
+                <select id="ibc-year">
+                    <option data-value="Default" selected="">Default</option>
+                    <option data-value="2009">2009</option>
+                    <option data-value="2012">2012</option>
+                    <option data-value="2015">2015</option>
+                    <option data-value="2015">2018</option>
+                    <option data-value="2015">2020</option>
+                </select>
+            </td>
+        </tr>
+        <tr class="h13">
+            <td><div style="overflow:hidden"></td>
+            <td class="iw400-right-bdr">ASCE 7- Years</td>
+            <td class="w400-green-bdr">
+                <select id="asce-year">
+                    <option data-value="Default" selected="">Default</option>
+                    <option data-value="ASCE 7-05">ASCE 7-05</option>
+                    <option data-value="ASCE 7-10">ASCE 7-10</option>
+                    <option data-value="ASCE 7-16">ASCE 7-16</option>
+                </select>
+            </td>
+        </tr>
+        <tr class="h13">
+            <td><div style="overflow:hidden"></td>
+            <td class="iw400-right-bdr">NEC Years</td>
+            <td class="w400-green-bdr">
+                <select id="nec-year">
+                    <option data-value="2008" selected="">2008</option>
+                    <option data-value="2011">2011</option>
+                    <option data-value="2014">2014</option>
+                    <option data-value="2017">2017</option>
+                </select>
+            </td>
+        </tr>
+        <tr class="h13">
+            <td><div style="overflow:hidden"></td>
+            <td><div style="overflow:hidden"></td>
+            <td><div style="overflow:hidden"></td>
+            <td><div style="overflow:hidden"></td>
+            <td><div style="overflow:hidden"></td>
+        </tr>
+        <tr class="h13">
+            <td><div style="overflow:hidden"></td>
             <td class="iw400-right-bdr">Wind Exposure Category</td>
             <td class="w400-green-bdr">
                 <select id="wind-exposure">

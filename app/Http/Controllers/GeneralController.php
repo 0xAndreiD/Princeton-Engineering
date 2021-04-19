@@ -418,6 +418,9 @@ class GeneralController extends Controller
         $data['WindCheckbox'] = $input['wind-speed-override'] == "true" ? true : false;
         $data['Snow'] = number_format(floatval($input['ground-snow']), 1);
         $data['SnowCheckbox'] = $input['ground-snow-override'] == "true" ? true : false;
+        $data['IBC'] = $input['ibc-year'];
+        $data['ASCE'] = $input['asce-year'];
+        $data['NEC'] = $input['nec-year'];
         $data['WindExposure'] = $input['wind-exposure'];
         $data['Units'] = $input['override-unit'];
 
@@ -681,13 +684,13 @@ class GeneralController extends Controller
 
                 $nestedData['actions'] = "
                 <div class='text-center'>
-                    <a href='rsinput?projectId={$nestedData['id']}' class='btn btn-primary mr-1'>
+                    <a href='rsinput?projectId={$nestedData['id']}' class='btn btn-primary mr-1' style='padding: 4.5px 9px;'>
                         <i class='fa fa-pencil-alt'></i>
                     </a>" . 
-                    (Auth::user()->userrole == 2 ? "<button type='button' class='js-swal-confirm btn btn-danger mr-1' onclick='delProject(this,{$nestedData['id']})'>
+                    (Auth::user()->userrole == 2 ? "<button type='button' class='js-swal-confirm btn btn-danger mr-1' onclick='delProject(this,{$nestedData['id']})' style='padding: 4.5px 9px;'>
                         <i class='fa fa-trash'></i>
                     </button>" : "") .
-                    "<a href='jobchat?projectId={$nestedData['id']}' class='btn btn-" . $chatbadge . "'>
+                    "<a href='jobchat?projectId={$nestedData['id']}' class='btn btn-" . $chatbadge . "' style='padding: 4.5px 9px;'>
                         <i class='fab fa-rocketchat'></i>
                     </a>". "</div>";
                 $data[] = $nestedData;
