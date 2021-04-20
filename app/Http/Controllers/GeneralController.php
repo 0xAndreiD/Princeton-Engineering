@@ -534,6 +534,10 @@ class GeneralController extends Controller
             $date->setTimezone(new DateTimeZone('UTC'));
             $handler = $handler->where('job_request.submittedTime', '<=', $date->format("Y-m-d H:i:s"));
         }
+        // filter plancheck
+        if(!empty($request->input("plancheck")) && $request["plancheck"] == 1){
+            $handler = $handler->where('job_request.planCheck', 1);
+        }
 
         // admin filter company name, user, project name, project number, project state, plan status
         if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3){
@@ -581,6 +585,8 @@ class GeneralController extends Controller
                         'job_request.projectState as projectstate',
                         'job_request.planStatus as planstatus',
                         'job_request.state as state',
+                        'job_request.planCheck as plancheck',
+                        'job_request.chatCompleted as chatcompleted',
                     )
                 );
             //if($handler->offset($start)->count() > 0)
@@ -610,6 +616,8 @@ class GeneralController extends Controller
                                 'job_request.projectState as projectstate',
                                 'job_request.planStatus as planstatus',
                                 'job_request.state as state',
+                                'job_request.planCheck as plancheck',
+                                'job_request.chatCompleted as chatcompleted',
                             )
                         );
 
@@ -673,26 +681,32 @@ class GeneralController extends Controller
                     $nestedData['planstatus'] = "<span class='badge badge-{$this->statusColors[intval($job->planstatus)]}' style='white-space: pre-wrap;'> {$this->globalStatus[intval($job->planstatus)]} </span>";                
                 }
 
-                $lastchat = JobChat::leftjoin('users', "users.id", "=", "job_chat.userId")->where('job_chat.jobId', $job->id)->orderBy('job_chat.id', 'desc')->get(array('users.userrole as userrole'))->first();
-                if($lastchat){
-                    if($lastchat['userrole'] == 3 || $lastchat['userrole'] == 2)
-                        $chatbadge = 'info';
-                    else
-                        $chatbadge = 'alt-warning';
-                } else 
-                    $chatbadge = 'warning';
+                if($job->chatcompleted == 1){
+                    $chatbadge = 'success';
+                } else {
+                    $lastchat = JobChat::leftjoin('users', "users.id", "=", "job_chat.userId")->where('job_chat.jobId', $job->id)->orderBy('job_chat.id', 'desc')->get(array('users.userrole as userrole'))->first();
+                    if($lastchat){
+                        if($lastchat['userrole'] == 3 || $lastchat['userrole'] == 2)
+                            $chatbadge = 'info';
+                        else
+                            $chatbadge = 'alt-warning';
+                    } else 
+                        $chatbadge = 'warning';
+                }
 
                 $nestedData['actions'] = "
-                <div class='text-center'>
+                <div class='text-center' style='display: flex; align-items: center; justify-content: center;'>
                     <a href='rsinput?projectId={$nestedData['id']}' class='btn btn-primary mr-1' style='padding: 4.5px 9px;'>
                         <i class='fa fa-pencil-alt'></i>
                     </a>" . 
                     (Auth::user()->userrole == 2 ? "<button type='button' class='js-swal-confirm btn btn-danger mr-1' onclick='delProject(this,{$nestedData['id']})' style='padding: 4.5px 9px;'>
                         <i class='fa fa-trash'></i>
                     </button>" : "") .
-                    "<a href='jobchat?projectId={$nestedData['id']}' class='btn btn-" . $chatbadge . "' style='padding: 4.5px 9px;'>
+                    "<a href='jobchat?projectId={$nestedData['id']}' class='mr-2 btn btn-" . $chatbadge . "' style='padding: 4.5px 9px;'>
                         <i class='fab fa-rocketchat'></i>
-                    </a>". "</div>";
+                    </a>". 
+                    "<input type='checkbox' onchange='togglePlanCheck({$job['id']})'" . ($job['plancheck'] == 1 ? "checked" : "") . ">" . 
+                    "";
                 $data[] = $nestedData;
             }
         }
@@ -1447,4 +1461,28 @@ class GeneralController extends Controller
     //     }
     //     return response()->json(["message" => "Success!"]);
     // }
+
+    /**
+     * Toggle the plan check value of job.
+     *
+     * @return JSON
+     */
+    public function togglePlanCheck(Request $request){
+        $project = JobRequest::where('id', '=', $request['jobId'])->first();
+            if($project){
+                if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || $project->companyId == Auth::user()->companyid)
+                {
+                    if($project->planCheck == 1)
+                        $project->planCheck = 0;
+                    else
+                        $project->planCheck = 1;
+                    $project->save();
+                    return response()->json(["message" => "Success!", "success" => true]);
+                }
+                else
+                    return response()->json(["message" => "You don't have permission to edit this project.", "success" => false]);
+            }
+            else
+                return response()->json(["message" => "Cannot find project.", "success" => false]);
+    }
 }

@@ -35,7 +35,6 @@ function delProject(obj, id) {
                     toast.fire('Deleted!', 'Project has been deleted.', 'success');
                 }
             });
-
         } else if (result.dismiss === 'cancel') {
             toast.fire('Cancelled', 'Project is safe :)', 'error');
         }

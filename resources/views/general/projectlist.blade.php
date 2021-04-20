@@ -37,17 +37,17 @@
                         <tr>
                             @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3)
                             <th class="text-center" style="width: 7%;">ID</th>
-                            <th style="width:10%">Company Name</th>
+                            <th style="width:8%">Company Name</th>
                             <th style="width:8%;">User</th>
                             <th style="width:7%;">Project Number</th>
                             <th style="width:8%;">Project Name</th>
                             <th style="width:4%;">State</th>
-                            <th style="width:8%;">File Name</th>
+                            <th style="width:6%;">File Name</th>
                             <th style="width:8%;">Created Time</th>
                             <th style="width:8%;">Submitted Time</th>
                             <th style="width:8%;">Project Status</th>
                             <th style="width:8%;">Plan Status</th>
-                            <th style="min-width: 120px;">Action</th>
+                            <th style="min-width: 160px;">Action</th>
                             @else
                             <th class="text-center" style="width: 7%;">ID</th>
                             <th style="width:13%;">User</th>
@@ -169,7 +169,12 @@
                                     <a class="dropdown-item" href="javascript:changeStateFilter('7')">PE sealed plans link sent</a>
                                 </div>
                             </th>
-                            <th></th>
+                            <th style="display: flex; align-items: center; justify-content: center;">
+                                <span class="mr-1" style='writing-mode: tb-rl;width: 36px;'>Edit</span>
+                                <span class="mr-1" style='writing-mode: tb-rl;width: 34px;'>Delete</span>
+                                <span class="mr-2" style='writing-mode: tb-rl;width: 38px;'>Chat</span>
+                                <span class="pt-1" style='writing-mode: tb-rl;display:flex;align-items:center;'>Review <input type='checkbox' id="planCheckFilter"></span>
+                            </th>
                             @else
                             <th></th>
                             <th class="searchHead"> <input type="text" placeholder="Search User" class="searchBox" id="userFilter"> </th>
@@ -239,7 +244,11 @@
                             </th>
                             <th></th>
                             <th></th>
-                            <th></th>
+                            <th style="display: flex; align-items: center; justify-content: center;">
+                                <span class="mr-1" style='writing-mode: tb-rl;width: 36px;'>Edit</span>
+                                <span class="mr-2" style='writing-mode: tb-rl;width: 38px;'>Chat</span>
+                                <span class="pt-1" style='writing-mode: tb-rl;display:flex;align-items:center;'>Review <input type='checkbox' id="planCheckFilter"></span>
+                            </th>
                             @endif
                         </tr>
                     </thead>
@@ -273,6 +282,7 @@
                         data.created_to = $("#created_to").val();
                         data.submitted_from = $("#submitted_from").val();
                         data.submitted_to = $("#submitted_to").val();
+                        data.plancheck = $("#planCheckFilter")[0].checked ? 1 : 0;
                     }
                 },
             "columns": [
@@ -315,7 +325,7 @@
             table.column($(this).parent().index() + ':visible').search(this.value).draw();
         });
 
-        $("#created_from, #created_to, #submitted_from, #submitted_to").on('change', function() {
+        $("#created_from, #created_to, #submitted_from, #submitted_to, #planCheckFilter").on('change', function() {
             table.draw();
         });
 
@@ -360,6 +370,28 @@
         @endif
 
     });
+
+    function togglePlanCheck(jobId){
+        $.ajax({
+            url:"togglePlanCheck",
+            type:'post',
+            data:{jobId: jobId},
+            success: function(res){
+                if(res.success){
+                    $('#projects').DataTable().draw();
+                }else
+                    swal.fire({ title: "Error", text: res.message, icon: "error", confirmButtonText: `OK` });
+            },
+            error: function(xhr, status, error) {
+                res = JSON.parse(xhr.responseText);
+                message = res.message;
+                swal.fire({ title: "Error",
+                    text: message == "" ? "Error happened while processing. Please try again later." : message,
+                    icon: "error",
+                    confirmButtonText: `OK` });
+            }
+        });
+    }
 </script>
 
 @if (Auth::user()->userrole == 2)

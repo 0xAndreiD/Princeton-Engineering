@@ -58,6 +58,7 @@ Route::post('/getASCEOptions', 'GeneralController@getASCEOptions')->name('getASC
 Route::post('/getProjectNumComment', 'GeneralController@getProjectNumComment')->name('getProjectNumComment');
 Route::get('/jobchat', 'GeneralController@jobChat')->name('jobchat');
 Route::post('/submitChat', 'GeneralController@submitChat')->name('submitChat');
+Route::post('/togglePlanCheck', 'GeneralController@togglePlanCheck')->name('togglePlanCheck');
 
 // APIs for list, update, download, db backup
 Route::get('/getJobList', 'APIController@getJobList')->name('getJobList');
