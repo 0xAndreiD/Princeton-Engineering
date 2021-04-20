@@ -18,7 +18,7 @@
 </div>
 
 <!-- Dynamic Table Full -->
-<div class="content" style="text-align:left">
+<div class="content" style="text-align:left; width: 100%; padding: 5px;">
     <div class="block block-rounded block-bordered">
         <div class="block-header block-header-default">
             <h3 class="block-title">Project List</h3>
@@ -37,14 +37,14 @@
                         <tr>
                             @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3)
                             <th class="text-center" style="width: 7%;">ID</th>
-                            <th style="width:8%">Company Name</th>
+                            <th style="width:10%">Company Name</th>
                             <th style="width:8%;">User</th>
                             <th style="width:7%;">Project Number</th>
                             <th style="width:8%;">Project Name</th>
                             <th style="width:4%;">State</th>
                             <th style="width:6%;">File Name</th>
-                            <th style="width:8%;">Created Time</th>
-                            <th style="width:8%;">Submitted Time</th>
+                            <th style="width:10%;">Created Time</th>
+                            <th style="width:10%;">Submitted Time</th>
                             <th style="width:8%;">Project Status</th>
                             <th style="width:8%;">Plan Status</th>
                             <th style="min-width: 160px;">Action</th>
@@ -170,10 +170,10 @@
                                 </div>
                             </th>
                             <th style="display: flex; align-items: center; justify-content: center;">
-                                <span class="mr-1" style='writing-mode: tb-rl;width: 36px;'>Edit</span>
-                                <span class="mr-1" style='writing-mode: tb-rl;width: 34px;'>Delete</span>
-                                <span class="mr-2" style='writing-mode: tb-rl;width: 38px;'>Chat</span>
-                                <span class="pt-1" style='writing-mode: tb-rl;display:flex;align-items:center;'>Review <input type='checkbox' id="planCheckFilter"></span>
+                                <span class="ml-1" style='writing-mode: vertical-lr;width: 30px;transform: rotateZ(180deg);'>Edit</span>
+                                <span class="ml-1" style='writing-mode: tb-rl;width: 28px;transform: rotateZ(180deg);'>Delete</span>
+                                <span class="ml-2" style='writing-mode: tb-rl;width: 32px;transform: rotateZ(180deg);'>Chat</span>
+                                <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);'><input type='checkbox' id="planCheckFilter" style="transform: rotateZ(180deg);"> Review</span>
                             </th>
                             @else
                             <th></th>
@@ -245,9 +245,9 @@
                             <th></th>
                             <th></th>
                             <th style="display: flex; align-items: center; justify-content: center;">
-                                <span class="mr-1" style='writing-mode: tb-rl;width: 36px;'>Edit</span>
-                                <span class="mr-2" style='writing-mode: tb-rl;width: 38px;'>Chat</span>
-                                <span class="pt-1" style='writing-mode: tb-rl;display:flex;align-items:center;'>Review <input type='checkbox' id="planCheckFilter"></span>
+                                <span class="ml-1" style='writing-mode: vertical-lr;width: 30px;transform: rotateZ(180deg);'>Edit</span>
+                                <span class="ml-2" style='writing-mode: tb-rl;width: 32px;transform: rotateZ(180deg);'>Chat</span>
+                                <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);'><input type='checkbox' id="planCheckFilter" style="transform: rotateZ(180deg);"> Review</span>
                             </th>
                             @endif
                         </tr>
@@ -270,7 +270,7 @@
         var table = $('#projects').DataTable({
             "processing": true,
             "serverSide": true,
-            "responsive": true,
+            // "responsive": true,
             "orderCellsTop": true,
             "pageLength" : 50,
             "ajax":{

@@ -696,13 +696,13 @@ class GeneralController extends Controller
 
                 $nestedData['actions'] = "
                 <div class='text-center' style='display: flex; align-items: center; justify-content: center;'>
-                    <a href='rsinput?projectId={$nestedData['id']}' class='btn btn-primary mr-1' style='padding: 4.5px 9px;'>
+                    <a href='rsinput?projectId={$nestedData['id']}' class='btn btn-primary mr-1' style='padding: 3px 6px;'>
                         <i class='fa fa-pencil-alt'></i>
                     </a>" . 
-                    (Auth::user()->userrole == 2 ? "<button type='button' class='js-swal-confirm btn btn-danger mr-1' onclick='delProject(this,{$nestedData['id']})' style='padding: 4.5px 9px;'>
+                    (Auth::user()->userrole == 2 ? "<button type='button' class='js-swal-confirm btn btn-danger mr-1' onclick='delProject(this,{$nestedData['id']})' style='padding: 3px 6px;'>
                         <i class='fa fa-trash'></i>
                     </button>" : "") .
-                    "<a href='jobchat?projectId={$nestedData['id']}' class='mr-2 btn btn-" . $chatbadge . "' style='padding: 4.5px 9px;'>
+                    "<a href='jobchat?projectId={$nestedData['id']}' class='mr-2 btn btn-" . $chatbadge . "' style='padding: 3px 6px;'>
                         <i class='fab fa-rocketchat'></i>
                     </a>". 
                     "<input type='checkbox' onchange='togglePlanCheck({$job['id']})'" . ($job['plancheck'] == 1 ? "checked" : "") . ">" . 
