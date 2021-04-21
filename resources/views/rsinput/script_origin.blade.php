@@ -3049,8 +3049,13 @@ $(document).ready(function() {
             return; 
         }
 
-        if(await ignoreDuplicateNum() == false){
-            return;
+        // if(await ignoreDuplicateNum() == false){
+        //     return;
+        // }
+        var numComment = $("#project-id-comment").html();
+        if(numComment.includes("duplicated.")){
+            swal.fire({ title: "Warning", text: "This project number has already been used. Please use another one.", icon: "warning", confirmButtonText: `OK` });
+            return; 
         }
 
         var caseCount = $("#option-number-of-conditions").val();
