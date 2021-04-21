@@ -1402,13 +1402,19 @@ class GeneralController extends Controller
      */
     public function jobChat(Request $request){
         if(!empty($request['projectId'])){
-            $messages = JobChat::leftjoin('users', "users.id", "=", "job_chat.userId")
-                        ->where('job_chat.jobId', $request['projectId'])
-                        ->get(array('users.username as username', 'users.userrole as userrole', 'job_chat.text as text', 'job_chat.datetime as datetime'));
-            // foreach($messages as $msg){
-            //     $msg['ago'] = $this->time_elapsed_string($msg['datetime']);
-            // }
-            return view('rsinput.chat')->with('messages', $messages)->with('projectId', $request['projectId']);
+            $project = JobRequest::where('id', '=', $request['projectId'])->first();
+            if($project){
+                if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || $project->companyId == Auth::user()->companyid)
+                {
+                    $messages = JobChat::leftjoin('users', "users.id", "=", "job_chat.userId")
+                                ->where('job_chat.jobId', $request['projectId'])
+                                ->orderBy('job_chat.id', 'desc')
+                                ->get(array('users.username as username', 'users.userrole as userrole', 'job_chat.text as text', 'job_chat.datetime as datetime'));
+                    return view('rsinput.chat')->with('messages', $messages)->with('projectId', $request['projectId']);
+                } else
+                    return redirect('projectlist');
+            } else
+                return redirect('projectlist');    
         } else 
             return redirect('projectlist');
     }
@@ -1428,7 +1434,7 @@ class GeneralController extends Controller
                         'userId' => Auth::user()->id,
                         'text' => $request['message']
                     ]);
-                    return response()->json(["message" => "Success!", "status" => true]);
+                    return response()->json(["status" => true, "user" => Auth::user()->username, "role" => Auth::user()->userrole, "message" => $request["message"], "datetime" => date('Y-m-d H:i:s', strtotime("-5 hours"))]);
                 }
                 else
                     return response()->json(["message" => "You don't have permission to edit this project.", "status" => false]);
@@ -1484,5 +1490,31 @@ class GeneralController extends Controller
             }
             else
                 return response()->json(["message" => "Cannot find project.", "success" => false]);
+    }
+
+    /**
+     * Check job chat messages count and return updated ones
+     *
+     * @return JSON
+     */
+    public function checkChatList(Request $request){
+        if(!empty($request['jobId']) || !empty($request['msgCount'])){
+            $project = JobRequest::where('id', '=', $request['jobId'])->first();
+            if($project){
+                if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || $project->companyId == Auth::user()->companyid)
+                {
+                    $messages = JobChat::leftjoin('users', "users.id", "=", "job_chat.userId")
+                            ->where('job_chat.jobId', $request['jobId'])
+                            ->orderBy('job_chat.id', 'desc')
+                            ->get(array('users.username as user', 'users.userrole as role', 'job_chat.text as message', 'job_chat.datetime as datetime'))->toArray();
+                    $messages = array_slice($messages, 0, count($messages) - $request['msgCount']);
+                    return response()->json(["success" => true, "msgCount" => count($messages), "msgs" => $messages]);
+                }
+                else
+                    return response()->json(["message" => "You don't have permission to edit this project.", "success" => false]);
+            } else
+                return response()->json(["message" => "Cannot find project.", "success" => false]);
+        } else 
+            return response()->json(["message" => "Wrong Parameters.", "success" => false]);
     }
 }

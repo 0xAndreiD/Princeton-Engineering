@@ -21,12 +21,12 @@
 <h2 class="content-heading">
     Messages
     @if(!$messages || count($messages) == 0)
-    <small>
+    <small id="noMessage">
         (No messages yet.)
     </small>
     @endif
 </h2>
-
+<div id="chatPane">
 @foreach($messages as $msg)	
     <div class="col-md-10 col-sm-10">
         <div class="block block-bordered">
@@ -78,7 +78,7 @@
         </div>            
     </article> 		 -->
 @endforeach
-
+</div>
 </div>
 
 <form method="post" id="submitChat" class="ml-3">
@@ -100,12 +100,65 @@
 </form>
 
 <script>
+    window.msgCount = "{{ count($messages) }}";
+
+    function addChat(user, role, message, datetime){
+        let userrole;
+        if(role == 0) userrole = 'User';
+        else if(role == 1) userrole = 'Client Admin';
+        else if(role == 2) userrole = 'Super Admin';
+        else if(role == 3) userrole = 'Junior Super';
+        let html = "<div class='col-md-10 col-sm-10'>" + 
+            "<div class='block block-bordered'>" +
+                "<div class='block-header' style='background-color: #e9eaec; display: block;'>" +
+                    "<i class='fa fa-user'></i> " + user + " " + 
+                        "<i class='fa fa-user-secret'></i> " + userrole + 
+                "</div>" + 
+                "<div class='block-content'>" + 
+                    "<p>" + message + "</p>" +
+                "</div>" +
+                "<div class='block-content block-content-full block-content-sm bg-body-light font-size-sm'>" +
+                    "<i class='fa fa-clock'></i> " + datetime +
+                "</div>" + 
+            "</div>" + 
+        "</div>";
+        $("#chatPane").prepend(html);
+        window.msgCount ++;
+        $("#noMessage").css("display", "none");
+    }
+
+    function updateChat(){
+        setTimeout(
+            function() {
+                checkChatUpdated();
+        }, 5000);
+    }
+
+    function checkChatUpdated(){
+        $.ajax({
+			url:"checkChatList",
+			method:"POST",
+			data:{jobId: $("#projectId").val(), msgCount: window.msgCount},
+			success:function(data){
+                if(data && data.success){
+                    console.log(data);
+                    if(data.msgCount > 0){
+                        for(let i = 0; i < data.msgs.length; i ++)
+                            addChat(data.msgs[i].user, data.msgs[i].role, data.msgs[i].message, data.msgs[i].datetime);
+                    }
+                }
+                updateChat();
+			}
+		})
+    }
+
     $(document).ready(function() {
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
+        updateChat();
     });
 
     $(document).on('submit','#submitChat', function(event){
@@ -121,8 +174,9 @@
                     swal.fire({ title: "Warning", text: data && data.message ? data.message : "Failed to submit your message.", icon: "warning", confirmButtonText: `OK` });
                 } else {
                     $("#message")[0].value = "";
-                    $('#reply').attr('disabled', false);
-                    location.reload();
+                    $('#send').attr('disabled', false);
+                    //location.reload();
+                    addChat(data.user, data.role, data.message, data.datetime);
                 }
 			}
 		})
