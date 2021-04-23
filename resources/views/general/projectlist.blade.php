@@ -63,7 +63,14 @@
                         </tr>
                         <tr>
                             @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3)
-                            <th></th>
+                            <th class="searchHead">
+                                <select placeholder="Chat Filter" class="searchBox" id="chatFilter">
+                                    <option value="">All</option>
+                                    <option value="1">User/Client Admin</option>
+                                    <option value="2">Junior/Super Admin</option>
+                                    <option value="3">Error chat</option>
+                                </select>
+                            </th>
                             <th class="searchHead">
                                 <select placeholder="Search Company" class="searchBox" id="companyFilter">
                                     <option value="">All</option>
@@ -283,6 +290,7 @@
                         data.submitted_from = $("#submitted_from").val();
                         data.submitted_to = $("#submitted_to").val();
                         data.plancheck = $("#planCheckFilter")[0].checked ? 1 : 0;
+                        data.chat = $("#chatFilter").val();
                     }
                 },
             "columns": [
@@ -325,7 +333,7 @@
             table.column($(this).parent().index() + ':visible').search(this.value).draw();
         });
 
-        $("#created_from, #created_to, #submitted_from, #submitted_to, #planCheckFilter").on('change', function() {
+        $("#created_from, #created_to, #submitted_from, #submitted_to, #planCheckFilter, #chatFilter").on('change', function() {
             table.draw();
         });
 
