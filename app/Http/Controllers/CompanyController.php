@@ -281,7 +281,7 @@ class CompanyController extends Controller
             {
                 $permit = PermitInfo::where('company_id', $request['id'])->where('state', $request['state'])->first();
                 if($permit)
-                    return response()->json(["success" => true, "construction_email" => $permit->construction_email, "registration" => $permit->registration, "exp_date" => $permit->exp_date, "ein" => $permit->EIN, "fax" => $permit->FAX]);
+                    return response()->json(["success" => true, "construction_email" => $permit->construction_email, "registration" => $permit->registration, "exp_date" => $permit->exp_date, "ein" => $permit->EIN, "fax" => $permit->FAX, "contact_person" => $permit->contact_person, "contact_phone" => $permit->contact_phone]);
                 else
                     return response()->json(["success" => false]);
             }
@@ -308,6 +308,8 @@ class CompanyController extends Controller
                         $permit->registration = $data['registration'];
                         $permit->exp_date = $data['exp_date'];
                         $permit->EIN = $data['ein'];
+                        $permit->contact_person = $data['contact_person'];
+                        $permit->contact_phone = $data['contact_phone'];
                         $permit->FAX = $data['fax'];
                         $permit->save();
                     }
@@ -319,6 +321,8 @@ class CompanyController extends Controller
                             'registration' => $data['registration'],
                             'exp_date' => $data['exp_date'],
                             'EIN' => $data['ein'],
+                            'contact_person' => $data['contact_person'],
+                            'contact_phone' => $data['contact_phone'],
                             'FAX' => $data['fax']
                         ]);
                     }
