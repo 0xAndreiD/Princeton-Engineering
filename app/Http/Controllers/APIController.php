@@ -331,7 +331,11 @@ class APIController extends Controller
                         if(isset($request['chatIcon'])){
                             $job->chatIcon = $request['chatIcon'];
                             $job->save();
+                        } else {
+                            $job->chatIcon = 2;
+                            $job->save();
                         }
+
                         return response()->json(['success' => true]);
                     } else 
                         return response()->json(['success' => false, 'message' => 'Cannot find the project.']);
