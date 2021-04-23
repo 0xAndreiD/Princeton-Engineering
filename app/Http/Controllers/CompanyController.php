@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Storage;
 use App\User;
 use App\Company;
 use App\JobRequest;
+use App\PermitInfo;
 use Kunnu\Dropbox\DropboxApp;
 use Kunnu\Dropbox\Dropbox;
 use Kunnu\Dropbox\DropboxFile;
@@ -267,5 +268,67 @@ class CompanyController extends Controller
         return view('clientadmin.companyProfile.companyprofile')->with('company', $company);
 
         // return response()->json($company);
+    }
+
+    /**
+     * Return Company Permit Info By state
+     *
+     * @return JSON
+     */
+    function getPermitInfo(Request $request){
+        if(!empty($request['state']) && !empty($request['id'])){
+            if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || $request['id'] == Auth::user()->companyid)
+            {
+                $permit = PermitInfo::where('company_id', $request['id'])->where('state', $request['state'])->first();
+                if($permit)
+                    return response()->json(["success" => true, "construction_email" => $permit->construction_email, "registration" => $permit->registration, "exp_date" => $permit->exp_date, "ein" => $permit->EIN, "fax" => $permit->FAX]);
+                else
+                    return response()->json(["success" => false]);
+            }
+            else
+                return response()->json(["message" => "You don't have permission to edit this project.", "success" => false]);
+        } else 
+            return response()->json(["message" => "Wrong Parameters.", "success" => false]);
+    }
+
+    /**
+     * Create Company Permit Info By company_id, state
+     *
+     * @return JSON
+     */
+    function updatePermitInfo(Request $request){
+        if(!empty($request['data'])){
+            $data = $request['data'];
+            if(isset($data['state'])){
+                if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || $data['id'] == Auth::user()->companyid)
+                {
+                    $permit = PermitInfo::where('company_id', $data['id'])->where('state', $data['state'])->first();
+                    if($permit){
+                        $permit->construction_email = $data['construction_email'];
+                        $permit->registration = $data['registration'];
+                        $permit->exp_date = $data['exp_date'];
+                        $permit->EIN = $data['ein'];
+                        $permit->FAX = $data['fax'];
+                        $permit->save();
+                    }
+                    else{
+                        PermitInfo::create([
+                            'company_id' => Auth::user()->companyid,
+                            'state' => $data['state'],
+                            'construction_email' => $data['construction_email'],
+                            'registration' => $data['registration'],
+                            'exp_date' => $data['exp_date'],
+                            'EIN' => $data['ein'],
+                            'FAX' => $data['fax']
+                        ]);
+                    }
+                    return response()->json(["success" => true]);
+                }
+                else
+                    return response()->json(["message" => "You don't have permission to edit this project.", "success" => false]);
+            } else
+                return response()->json(["message" => "Please select the state.", "success" => false]);
+        } else 
+            return response()->json(["message" => "Wrong Parameters.", "success" => false]);
     }
 }
