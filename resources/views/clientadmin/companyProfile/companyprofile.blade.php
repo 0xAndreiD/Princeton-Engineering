@@ -172,9 +172,19 @@
                                     name="EIN" placeholder="EIN">
                                 </div>
                                 <div class="form-group">
+                                    <label for="fax">Responsible Person in Charge once Work has Begun <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="contact_person" 
+                                    name="responsible_person" placeholder="Enter Person Name..">
+                                </div>
+                                <div class="form-group">
+                                    <label for="fax">Contact Tel <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="contact_phone" 
+                                    name="contact_phone" placeholder="212-999-0000">
+                                </div>
+                                <div class="form-group">
                                     <label for="fax">FAX <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="fax" 
-                                    name="website" placeholder="Enter Fax Number..">
+                                    name="contact_fax" placeholder="Enter Fax Number..">
                                 </div>
                             </div>
                         </div>

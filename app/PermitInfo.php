@@ -15,7 +15,7 @@ class PermitInfo extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'id', 'company_id', 'state', 'construction_email', 'registration', 'exp_date', 'EIN', 'FAX'
+        'id', 'company_id', 'state', 'construction_email', 'registration', 'exp_date', 'EIN', 'FAX', 'contact_person', 'contact_phone'
     ];
 
     protected $table = 'permit_info';

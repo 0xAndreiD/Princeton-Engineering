@@ -58,6 +58,13 @@ $(document).ready(function(){
             required: false,
             number: true
         },
+        'contact_person': {
+            required: false,
+        },
+        'contact_phone': {
+            required: false,
+            phoneUS: true
+        },
         'fax': {
             required: false,
         }
@@ -93,6 +100,8 @@ function updatePermitInfo(){
     data.registration = $('input#registration').val();
     data.exp_date = $('input#exp_date').val();
     data.ein = $('input#EIN').val();
+    data.contact_person = $('input#contact_person').val();
+    data.contact_phone = $('input#contact_phone').val();
     data.fax = $('input#fax').val();
     
     $.post("updatePermitInfo", {data: data}, function(result){
@@ -146,12 +155,16 @@ function pullPermit(){
                 $('#registration').val(res.registration);
                 $('#exp_date').val(res.exp_date);
                 $('#EIN').val(res.ein);
+                $('#contact_person').val(res.contact_person);
+                $('#contact_phone').val(res.contact_phone);
                 $('#fax').val(res.fax);
             } else {
                 $('#construction_email').val("");
                 $('#registration').val("");
                 $('#exp_date').val("");
                 $('#EIN').val("");
+                $('#contact_person').val("");
+                $('#contact_phone').val("");
                 $('#fax').val("");
             }
         },
