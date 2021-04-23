@@ -591,7 +591,6 @@ class GeneralController extends Controller
                         'job_request.planStatus as planstatus',
                         'job_request.state as state',
                         'job_request.planCheck as plancheck',
-                        'job_request.chatCompleted as chatcompleted',
                         'job_request.chatIcon as chatIcon',
                     )
                 );
@@ -623,7 +622,6 @@ class GeneralController extends Controller
                                 'job_request.planStatus as planstatus',
                                 'job_request.state as state',
                                 'job_request.planCheck as plancheck',
-                                'job_request.chatCompleted as chatcompleted',
                                 'job_request.chatIcon as chatIcon',
                             )
                         );
@@ -688,18 +686,16 @@ class GeneralController extends Controller
                     $nestedData['planstatus'] = "<span class='badge badge-{$this->statusColors[intval($job->planstatus)]}' style='white-space: pre-wrap;'> {$this->globalStatus[intval($job->planstatus)]} </span>";                
                 }
 
-                if($job->chatcompleted == 1){
+                if($job->chatIcon == 0)
+                    $chatbadge = 'warning';
+                else if($job->chatIcon == 1)
+                    $chatbadge = 'alt-warning';
+                else if($job->chatIcon == 2)
+                    $chatbadge = 'info';
+                else if($job->chatIcon == 3)
+                    $chatbadge = 'danger';
+                else if($job->chatIcon == 4)
                     $chatbadge = 'success';
-                } else {
-                    if($job->chatIcon == 0)
-                        $chatbadge = 'warning';
-                    else if($job->chatIcon == 1)
-                        $chatbadge = 'alt-warning';
-                    else if($job->chatIcon == 2)
-                        $chatbadge = 'info';
-                    else if($job->chatIcon == 3)
-                        $chatbadge = 'danger';
-                }
 
                 $nestedData['actions'] = "
                 <div class='text-center' style='display: flex; align-items: center; justify-content: center;'>
