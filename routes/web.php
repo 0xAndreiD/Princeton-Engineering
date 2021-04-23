@@ -39,6 +39,8 @@ Route::post('/getCompanyData', 'CompanyController@getCompanyData')->name('getCom
 Route::post('/getCompany', 'CompanyController@getCompany')->name('getCompany');
 Route::post('/updateCompany', 'CompanyController@updateCompany')->name('updateCompany');
 Route::post('/delCompany', 'CompanyController@delete')->name('delCompany');
+Route::post('/getPermitInfo', 'CompanyController@getPermitInfo')->name('getPermitInfo');
+Route::post('/updatePermitInfo', 'CompanyController@updatePermitInfo')->name('updatePermitInfo');
 
 // Company Profile
 Route::get('/companyProfile', 'CompanyController@companyProfile')->name('companyProfile');

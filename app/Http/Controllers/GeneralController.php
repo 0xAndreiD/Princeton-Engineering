@@ -1506,7 +1506,7 @@ class GeneralController extends Controller
      * @return JSON
      */
     public function checkChatList(Request $request){
-        if(!empty($request['jobId']) || !empty($request['msgCount'])){
+        if(!empty($request['jobId']) && !empty($request['msgCount'])){
             $project = JobRequest::where('id', '=', $request['jobId'])->first();
             if($project){
                 if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || $project->companyId == Auth::user()->companyid)
