@@ -320,12 +320,21 @@ class APIController extends Controller
             if($user && $user->userrole == 2)
             {
                 if(isset($request['message']) && isset($request['jobId'])){
-                    JobChat::create([
-                        'jobId' => $request['jobId'],
-                        'userId' => $user->id,
-                        'text' => $request['message']
-                    ]);
-                    return response()->json(['success' => true]);
+                    $job = JobRequest::where('id', $request['jobId'])->first();
+                    if($job){
+                        JobChat::create([
+                            'jobId' => $request['jobId'],
+                            'userId' => $user->id,
+                            'text' => $request['message']
+                        ]);
+                        
+                        if(isset($request['chatIcon'])){
+                            $job->chatIcon = $request['chatIcon'];
+                            $job->save();
+                        }
+                        return response()->json(['success' => true]);
+                    } else 
+                        return response()->json(['success' => false, 'message' => 'Cannot find the project.']);
                 } else 
                     return response()->json(['success' => false, 'message' => 'Wrong Parameters.']);
             }

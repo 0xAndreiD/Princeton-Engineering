@@ -538,6 +538,11 @@ class GeneralController extends Controller
         if(!empty($request->input("plancheck")) && $request["plancheck"] == 1){
             $handler = $handler->where('job_request.planCheck', 1);
         }
+        // filter chatIcon
+        if(!empty($request->input("chat")) && $request->input("chat") != "")
+        {
+            $handler = $handler->where('job_request.chatIcon', 'LIKE', "%{$request->input("chat")}%");
+        }
 
         // admin filter company name, user, project name, project number, project state, plan status
         if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3){
@@ -587,6 +592,7 @@ class GeneralController extends Controller
                         'job_request.state as state',
                         'job_request.planCheck as plancheck',
                         'job_request.chatCompleted as chatcompleted',
+                        'job_request.chatIcon as chatIcon',
                     )
                 );
             //if($handler->offset($start)->count() > 0)
@@ -618,6 +624,7 @@ class GeneralController extends Controller
                                 'job_request.state as state',
                                 'job_request.planCheck as plancheck',
                                 'job_request.chatCompleted as chatcompleted',
+                                'job_request.chatIcon as chatIcon',
                             )
                         );
 
@@ -684,14 +691,14 @@ class GeneralController extends Controller
                 if($job->chatcompleted == 1){
                     $chatbadge = 'success';
                 } else {
-                    $lastchat = JobChat::leftjoin('users', "users.id", "=", "job_chat.userId")->where('job_chat.jobId', $job->id)->orderBy('job_chat.id', 'desc')->get(array('users.userrole as userrole'))->first();
-                    if($lastchat){
-                        if($lastchat['userrole'] == 3 || $lastchat['userrole'] == 2)
-                            $chatbadge = 'info';
-                        else
-                            $chatbadge = 'alt-warning';
-                    } else 
+                    if($job->chatIcon == 0)
                         $chatbadge = 'warning';
+                    else if($job->chatIcon == 1)
+                        $chatbadge = 'alt-warning';
+                    else if($job->chatIcon == 2)
+                        $chatbadge = 'info';
+                    else if($job->chatIcon == 3)
+                        $chatbadge = 'danger';
                 }
 
                 $nestedData['actions'] = "
@@ -1434,6 +1441,11 @@ class GeneralController extends Controller
                         'userId' => Auth::user()->id,
                         'text' => $request['message']
                     ]);
+                    if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3)
+                        $project->chatIcon = 2;
+                    else
+                        $project->chatIcon = 1;
+                    $project->save();
                     return response()->json(["status" => true, "user" => Auth::user()->username, "role" => Auth::user()->userrole, "message" => $request["message"], "datetime" => date('Y-m-d H:i:s', strtotime("-5 hours"))]);
                 }
                 else
