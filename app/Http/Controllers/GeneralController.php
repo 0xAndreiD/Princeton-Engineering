@@ -24,6 +24,7 @@ use App\CustomStanchion;
 use App\CustomRacking;
 use App\StandardFavorite;
 use App\JobChat;
+use App\PermitFiles;
 use Kunnu\Dropbox\DropboxApp;
 use Kunnu\Dropbox\Dropbox;
 use Kunnu\Dropbox\DropboxFile;
@@ -1522,6 +1523,23 @@ class GeneralController extends Controller
                     return response()->json(["message" => "You don't have permission to edit this project.", "success" => false]);
             } else
                 return response()->json(["message" => "Cannot find project.", "success" => false]);
+        } else 
+            return response()->json(["message" => "Wrong Parameters.", "success" => false]);
+    }
+
+    /**
+     * Check job chat messages count and return updated ones
+     *
+     * @return JSON
+     */
+    public function getPermitList(Request $request){
+        if(!empty($request['state'])){
+            if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->allow_permit == 1){
+                $list = PermitFiles::where('state', $request['state'])->get();
+                return response()->json(["data" => $list, "success" => true]);
+            } else {
+                return response()->json(["message" => "You don't have permission to permit tab.", "success" => false]);
+            }
         } else 
             return response()->json(["message" => "Wrong Parameters.", "success" => false]);
     }

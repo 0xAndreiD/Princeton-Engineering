@@ -441,3 +441,17 @@ html, body {
     max-height: 700px;
     overflow: auto;
 }
+
+.pdfIcon{
+    width: 64px;
+    height: 64px;
+}
+
+#defaultPermitContent{
+    margin: auto;
+    height: 200px;
+    align-items: center;
+    display: flex;
+    justify-content: space-around;
+    font-size: 1.5rem;
+}

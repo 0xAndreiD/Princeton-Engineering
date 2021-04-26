@@ -62,6 +62,8 @@ Route::get('/jobchat', 'GeneralController@jobChat')->name('jobchat');
 Route::post('/submitChat', 'GeneralController@submitChat')->name('submitChat');
 Route::post('/togglePlanCheck', 'GeneralController@togglePlanCheck')->name('togglePlanCheck');
 Route::post('/checkChatList', 'GeneralController@checkChatList')->name('checkChatList');
+Route::post('/getPermitList', 'GeneralController@getPermitList')->name('getPermitList');
+Route::get('/permitForm', 'GeneralController@permitForm')->name('permitForm');
 
 // APIs for list, update, download, db backup
 Route::get('/getJobList', 'APIController@getJobList')->name('getJobList');
