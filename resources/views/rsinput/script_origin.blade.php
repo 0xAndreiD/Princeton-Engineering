@@ -4114,8 +4114,8 @@ var loadPreloadedData = function() {
                         $("#permitContent").html("");
                         for(let i = 0; i < res.data.length; i ++){
                             let html ='<div class="row mb-3" style="align-items: center;">' + 
-                                "<img class='mr-3 pdfIcon' src='{{asset('img/pdf.png')}}'></img>" + 
-                                '<a class="link-fx font-size-base" href="{{route("permitForm")}}?formId=' + res.data[i]['id'] + "&jobId=" + $('#projectId').val() + '">' + res.data[i].description + '</a>' + 
+                                "<img class='mr-3 pdfIcon' src='public/img/avatar.jpg'></img>" + 
+                                '<a class="link-fx font-size-base" href="http://princeton.engineering/iRoof/permitForm?formId=' + res.data[i]['id'] + "&jobId=" + $('#projectId').val() + '">' + res.data[i].description + '</a>' + 
                             '</div>';
                             $("#permitContent").append(html);
                         }
