@@ -20,6 +20,8 @@ function openRfdTab(evt, tabName) {
     document.getElementById('subPageTitle').innerHTML = 'Custom Program Data Overrides';
   else if( tabName == "tab_upload" )
     document.getElementById('subPageTitle').innerHTML = 'Multiple Documents Upload';
+  else if( tabName == "tab_permit" )
+    document.getElementById('subPageTitle').innerHTML = 'Permit Info Filling';
   else 
   {
     window.conditionId = parseInt(tabName.slice(3));
@@ -2547,6 +2549,7 @@ $(document).ready(function() {
     $('#option-state').on('change', function() {
         detectCorrectTownForMA();
         loadASCEOptions($(this).val());
+        loadPermitList($(this).val());
     });
     $('#option-user-id').on('change', function() {
         updateUserOption($(this).children("option:selected").attr('data-userid'));
@@ -3052,6 +3055,7 @@ $(document).ready(function() {
         // if(await ignoreDuplicateNum() == false){
         //     return;
         // }
+        await setProjectIdComment();
         var numComment = $("#project-id-comment").html();
         if(numComment.includes("duplicated.")){
             swal.fire({ title: "Warning", text: "This project number has already been used. Please use another one.", icon: "warning", confirmButtonText: `OK` });
@@ -3948,6 +3952,7 @@ var loadPreloadedData = function() {
                                 }
                             }
                             loadASCEOptions(preloaded_data['ProjectInfo']['State']);
+                            loadPermitList(preloaded_data['ProjectInfo']['State']);
 
                             $(`#wind-speed`).val(preloaded_data['Wind']);
                             $(`#wind-speed-override`).prop('checked', preloaded_data['WindCheckbox']);
@@ -3984,6 +3989,7 @@ var loadPreloadedData = function() {
         }
         else{
             loadASCEOptions("MA");
+            loadPermitList("MA");
             resolve(true);
         }
 
@@ -4097,26 +4103,56 @@ var loadPreloadedData = function() {
         });
     }
 
-    var setProjectIdComment = function(){
-        $.ajax({
-            url:"getProjectNumComment",
-            type:'post',
-            data:{projectNumber: $("#txt-project-number").val(), projectId: $('#projectId').val()},
-            success: function(res){
-                if(res.success){
-                    var comment = '&nbsp;&nbsp;';
-                    if(res.duplicated)
-                    {
-                        comment += $("#txt-project-number").val() + ' is duplicated. ';
-                        $("#project-id-comment").css('color', '#FF0000');
+    var loadPermitList = function(state){
+        if($("#permitCheck").val() == 1){
+            $.ajax({
+                url:"getPermitList",
+                type:'post',
+                data:{state: state},
+                success: function(res){
+                    if(res.success && res.data && res.data.length > 0 && state == $('#option-state').val()){
+                        $("#permitContent").html("");
+                        for(let i = 0; i < res.data.length; i ++){
+                            let html ='<div class="row mb-3" style="align-items: center;">' + 
+                                "<img class='mr-3 pdfIcon' src='{{asset('img/pdf.png')}}'></img>" + 
+                                '<a class="link-fx font-size-base" href="{{route("permitForm")}}?formId=' + res.data[i]['id'] + "&jobId=" + $('#projectId').val() + '">' + res.data[i].description + '</a>' + 
+                            '</div>';
+                            $("#permitContent").append(html);
+                        }
+                    } else {
+                        $("#permitContent").html('<div id="defaultPermitContent">No state forms available at this time</div>');
                     }
-                    else
-                        $("#project-id-comment").css('color', '#000000');
-                    if(res.maxId)
-                        comment += ('Highest Project Number Used: ' + res.maxId);
-                    $("#project-id-comment").html(comment);
                 }
-            }
+            });
+        }
+    }
+
+    var setProjectIdComment = function(){
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url:"getProjectNumComment",
+                type:'post',
+                data:{projectNumber: $("#txt-project-number").val(), projectId: $('#projectId').val()},
+                success: function(res){
+                    if(res.success){
+                        var comment = '&nbsp;&nbsp;';
+                        if(res.duplicated)
+                        {
+                            comment += $("#txt-project-number").val() + ' is duplicated. ';
+                            $("#project-id-comment").css('color', '#FF0000');
+                        }
+                        else
+                            $("#project-id-comment").css('color', '#000000');
+                        if(res.maxId)
+                            comment += ('Highest Project Number Used: ' + res.maxId);
+                        $("#project-id-comment").html(comment);
+                        resolve(true);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    resolve(false);
+                }
+            });
         });
     }
 
@@ -4127,7 +4163,7 @@ var loadPreloadedData = function() {
         loadStateOptions();
         loadEquipmentSection();
         await loadDataCheck();
-        setProjectIdComment();
+        await setProjectIdComment();
 
         var i;
         for(i = 1; i <= 10; i ++)
