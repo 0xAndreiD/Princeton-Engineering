@@ -204,7 +204,14 @@ class APIController extends Controller
             {
                 $data = array();
                 if(isset($request['companyId'])){
-                    $data['ClientAdmin'] = User::select('username', 'email')->where('userrole', '=', '1')->where('companyid', '=', $request['companyId'])->get();
+                    $clients = User::select('username', 'email')->where('userrole', '=', '1')->where('companyid', '=', $request['companyId'])->get();
+                    $usernames = array();
+                    $emails = array();
+                    foreach($clients as $client){
+                        array_push($usernames, $client->username);
+                        array_push($emails, $client->email);
+                    }
+                    $data['ClientAdmin'] = array("username" => implode("; ", $usernames), "email" => implode("; ", $emails));
                 }
                 else
                     return response()->json(['success' => false, 'message' => 'Fail', 'message' => 'Wrong Company Id.']);
