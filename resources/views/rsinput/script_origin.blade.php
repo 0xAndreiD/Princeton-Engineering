@@ -4114,8 +4114,8 @@ var loadPreloadedData = function() {
                         $("#permitContent").html("");
                         for(let i = 0; i < res.data.length; i ++){
                             let html ='<div class="row mb-3" style="align-items: center;">' + 
-                                "<img class='mr-3 pdfIcon' src='public/img/avatar.jpg'></img>" + 
-                                '<a class="link-fx font-size-base" href="http://princeton.engineering/iRoof/permitForm?formId=' + res.data[i]['id'] + "&jobId=" + $('#projectId').val() + '">' + res.data[i].description + '</a>' + 
+                                "<img class='mr-3 pdfIcon' src='public/img/pdf.png'></img>" + 
+                                '<a class="link-fx font-size-base" style="cursor:pointer;" onclick="openPermitTab(\'' + res.data[i].id + '\', \'' + res.data[i].filename + '\', \'' + res.data[i].tabname + '\')">' + res.data[i].description + '</a>' + 
                             '</div>';
                             $("#permitContent").append(html);
                         }
@@ -4342,5 +4342,87 @@ function editFile(){
                 });
         })
     }
+}
+
+function openPermitTab(id, filename, tabname){
+    if($("#permitTab_" + id).length)
+        $("#permitTab_" + id).remove();
+    if($("#tab_permit" + id).length)
+        $("#tab_permit" + id).remove();
+    $("#permitTab").after('<button class="tablinks" onclick="openRfdTab(event, \'tab_permit_' + id + '\')" id="permitTab_' + id + '">' + tabname + '</button>');
+    $("#tab_permit").after('<div id="tab_permit_' + id + '" class="rfdTabContent"></div>');
+    
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("rfdTabContent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById("tab_permit_" + id).style.display = "block";
+    document.getElementById("permitTab_" + id).className += " active";
+
+    $("#tab_permit_" + id).html('<iframe id="permitViewer_' + id + '" src="" type="application/pdf" class="pdfViewer">');
+
+    $.ajax({
+        url:"getCompanyInfo",
+        type:'post',
+        data:{state: $('#option-state').val()},
+        success: function(res){
+            if(res.success){
+                var companyInfo = res.company;
+                var permitInfo = res.permit;
+
+                var pdfsrc = "/public/pdf/" + filename;
+
+                var script = $("<script>");
+
+                fetch(pdfsrc)
+                .then(function(response) {
+                    return response.arrayBuffer()
+                })
+                .then(function(data) {
+                    var fields = {
+                        'Address Site': [$("#txt-street-address").val() + ", " +  $("#txt-city").val() + ", " + $("#txt-zip").val()],
+                        'Proposed Work Site': [$("#txt-street-address").val() + ", " +  $("#txt-city").val() + ", " + $("#txt-zip").val()],
+                        'Owner in Fee': [$("#txt-project-name").val()],
+                        'Owner Address': [$("#txt-street-address").val() + ", " +  $("#txt-city").val() + ", " + $("#txt-zip").val()],
+                        'Princ Contractor': [companyInfo.company_name],
+                        'Contractor Phone': [companyInfo.company_telno],
+                        'Contractor Address 1': [companyInfo.company_address],
+                        'Architect-Engineer': ['Richard Pantel, P.E.'],
+                        'Architect Address': ['35091 Paxson Road, Round Hill, VA 20141'],
+                        'Architect eMail': ['rpantel@princeton-engineering.com'],
+                        'Architect Tel': ['908-507-5500'],
+                        'Architect Fax': ['877-455-5641'],
+                        'Alteration': [1],
+                        'Check Box16': [1],
+                        'Check Box29': [1],
+                        'Agent Name': [companyInfo.company_name],
+                        'Agent Address': [companyInfo.company_address],
+                        'Agent Tel': [companyInfo.company_telno],
+                    };
+                    if(permitInfo){
+                        fields['Contractor eMail'] = [permitInfo.construction_email];
+                        fields['Contractor License'] = [permitInfo.registration];
+                        fields['License Expire'] = [permitInfo.exp_date];
+                        fields['FEID'] = [permitInfo.EIN];
+                        fields['Contractor Fax'] = [permitInfo.FAX];
+                    }
+                    
+                    var out_buf = pdfform().transform(data, fields);
+                    $("#permitViewer_" + id).attr("src", URL.createObjectURL(new Blob([out_buf], {
+                        type: "application/pdf"
+                    })))
+                }, function(err) {
+                    console.log(err);
+                });
+            }
+        }
+    });
+    
+    
 }
 </script>
