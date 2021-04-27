@@ -4375,7 +4375,7 @@ function openPermitTab(id, filename, tabname){
                 var companyInfo = res.company;
                 var permitInfo = res.permit;
 
-                var pdfsrc = "/public/pdf/" + filename;
+                var pdfsrc = "/iRoof/public/pdf/" + filename;
 
                 var script = $("<script>");
 
