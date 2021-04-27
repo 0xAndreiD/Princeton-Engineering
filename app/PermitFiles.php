@@ -15,7 +15,7 @@ class PermitFiles extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'id', 'state', 'description', 'type', 'filename'
+        'id', 'state', 'description', 'type', 'filename', 'tabname'
     ];
 
     protected $table = 'permit_files';

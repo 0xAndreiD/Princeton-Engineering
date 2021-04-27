@@ -25,6 +25,7 @@ use App\CustomRacking;
 use App\StandardFavorite;
 use App\JobChat;
 use App\PermitFiles;
+use App\PermitInfo;
 use Kunnu\Dropbox\DropboxApp;
 use Kunnu\Dropbox\Dropbox;
 use Kunnu\Dropbox\DropboxFile;
@@ -1430,26 +1431,26 @@ class GeneralController extends Controller
      */
     public function submitChat(Request $request){
         $project = JobRequest::where('id', '=', $request['projectId'])->first();
-            if($project){
-                if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || $project->companyId == Auth::user()->companyid)
-                {
-                    JobChat::create([
-                        'jobId' => $request['projectId'],
-                        'userId' => Auth::user()->id,
-                        'text' => $request['message']
-                    ]);
-                    if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3)
-                        $project->chatIcon = 2;
-                    else
-                        $project->chatIcon = 1;
-                    $project->save();
-                    return response()->json(["status" => true, "user" => Auth::user()->username, "role" => Auth::user()->userrole, "message" => $request["message"], "datetime" => date('Y-m-d H:i:s', strtotime("-5 hours"))]);
-                }
+        if($project){
+            if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || $project->companyId == Auth::user()->companyid)
+            {
+                JobChat::create([
+                    'jobId' => $request['projectId'],
+                    'userId' => Auth::user()->id,
+                    'text' => $request['message']
+                ]);
+                if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3)
+                    $project->chatIcon = 2;
                 else
-                    return response()->json(["message" => "You don't have permission to edit this project.", "status" => false]);
+                    $project->chatIcon = 1;
+                $project->save();
+                return response()->json(["status" => true, "user" => Auth::user()->username, "role" => Auth::user()->userrole, "message" => $request["message"], "datetime" => date('Y-m-d H:i:s', strtotime("-5 hours"))]);
             }
             else
-                return response()->json(["message" => "Cannot find project.", "status" => false]);
+                return response()->json(["message" => "You don't have permission to edit this project.", "status" => false]);
+        }
+        else
+            return response()->json(["message" => "Cannot find project.", "status" => false]);
     }
 
     /**
@@ -1540,6 +1541,28 @@ class GeneralController extends Controller
             } else {
                 return response()->json(["message" => "You don't have permission to permit tab.", "success" => false]);
             }
+        } else 
+            return response()->json(["message" => "Wrong Parameters.", "success" => false]);
+    }
+
+    /**
+     * Return Company Info + Company Permit Info
+     *
+     * @return JSON
+     */
+    public function getCompanyInfo(Request $request){
+        if(!empty($request['state'])){
+            $company = Company::where('id', Auth::user()->companyid)->first();
+            if($company){
+                $companyPermit = PermitInfo::where('state', $request['state'])->where('company_id', Auth::user()->companyid)->first();
+                if($companyPermit){
+                    return response()->json(["company" => $company, "permit" => $companyPermit, "success" => true]);
+                }
+                else    
+                    return response()->json(["company" => $company, "permit" => $companyPermit, "success" => true]);
+                
+            } else 
+                return response()->json(["message" => "Cannot find the company.", "success" => false]);
         } else 
             return response()->json(["message" => "Wrong Parameters.", "success" => false]);
     }
