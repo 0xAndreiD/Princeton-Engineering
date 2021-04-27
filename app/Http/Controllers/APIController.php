@@ -204,10 +204,10 @@ class APIController extends Controller
             {
                 $data = array();
                 if(isset($request['companyId'])){
-                    $data['ClientAdmin'] = User::select('username', 'email')->where('userrole', '=', '1')->where('companyid', '=', $request['companyId'])->first();
+                    $data['ClientAdmin'] = User::select('username', 'email')->where('userrole', '=', '1')->where('companyid', '=', $request['companyId'])->get();
                 }
                 else
-                    return response()->json(['success' => false, 'message' => 'Fail', 'message' => 'Wrong File Name.']);
+                    return response()->json(['success' => false, 'message' => 'Fail', 'message' => 'Wrong Company Id.']);
 
                 if(isset($request['userId'])){
                     $data['Client'] = User::select('username', 'email')->where('usernumber', '=', $request['userId'])->where('companyid', '=', $request['companyId'])->first();
