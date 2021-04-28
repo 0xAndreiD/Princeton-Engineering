@@ -36,6 +36,12 @@ $(document).ready(function(){
         updateUser();
     }
     });
+
+    $('select#company').on('change', function(){
+        $.post("recommendUserNum", {companyid: $(this).val()}, function(result){
+            $('input#usernumber').attr('placeholder', 'Recommended User Number: ' + result);
+        });
+    })
 })
 
 function delUser(obj, id) {
@@ -75,7 +81,7 @@ function delUser(obj, id) {
             });
 
         } else if (result.dismiss === 'cancel') {
-            toast.fire('Cancelled', 'User is safe :)', 'error');
+            toast.fire('Cancelled', 'User is safe :)', 'info');
         }
     });
 }
@@ -97,6 +103,8 @@ function updateUser() {
     data.companyid = $('select#company').val();
     data.usernumber = $('input#usernumber').val();
     data.userrole = $('select#userrole').val();
+    data.distance_limit = $('input#distance_limit').val();
+    data.ask_two_factor = $('select#ask_two_factor').val();
 
     if (data.id == 0) { // Create user
         if (data.password == ''){
@@ -109,14 +117,23 @@ function updateUser() {
             } else if (result == "exist") {
                 toast.fire('Error!', 'User already exists with the same name', 'error');
                 return;
+            } else if (result == "idexist") {
+                toast.fire('Error!', 'User number already exists in the company', 'error');
+                return;
             }
             $('#modal-block-normal').modal('toggle');
             $('#users').DataTable().ajax.reload();
         });
     } else { // Update User
         $.post("updateUser", {data: data}, function(result){
-            if (result){
+            if (result == true){
                 toast.fire('Updated!', 'User has been updated.', 'success');
+            } else if (result == "exist") {
+                toast.fire('Error!', 'User already exists with the same name', 'error');
+                return;
+            } else if (result == "idexist") {
+                toast.fire('Error!', 'User number already exists in the company', 'error');
+                return;
             }
             $('#modal-block-normal').modal('toggle');
             $('#users').DataTable().ajax.reload();
@@ -129,12 +146,14 @@ function showEditUser(obj, id) {
         if (result){
             $('input#userid').val(result.id);
             $('input#name').val(result.username);
+            $('input#password').val(result.password);
             $('input#email').val(result.email);
-            $('select#company').val(result.companyid);
+            $('select#userrole').val(result.userrole.toString()).trigger('change');
             $('input#usernumber').val(result.usernumber);
-            $('input#membership').val(result.membershipid);
-            $('input#membership').val(result.membershipid);
             $('button#updateButton').html('Update');
+            $.post("recommendUserNum", {}, function(userNum){
+                $('input#usernumber').attr('placeholder', 'Recommended User Number: ' + userNum);
+            });
         }
     });
 }
@@ -143,9 +162,12 @@ function showAddUser() {
     $('input#userid').val(0);
     $('input#name').val('');
     $('input#email').val('');
-    $('select#company').val(1);
-    $('select#userrole').val(0);
+    $('select#company').val("1").trigger('change');
+    $('select#userrole').val("0").trigger('change');
     $('input#usernumber').val('');
     $('button#updateButton').html('Add');
+    $.post("recommendUserNum", {}, function(result){
+        $('input#usernumber').attr('placeholder', 'Recommended User Number: ' + result);
+    });
 }
 </script>

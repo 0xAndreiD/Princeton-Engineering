@@ -160,5 +160,5 @@
         });
     });
 </script>
-@include('admin.user.script')
+@include('clientadmin.user.script')
 @endsection

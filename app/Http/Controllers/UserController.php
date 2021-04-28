@@ -219,7 +219,7 @@ class UserController extends Controller
                 echo "exist";
                 return;
             }
-            $idExist = User::where('companyid', $data['companyid'])->where('usernumber', $data['usernumber'])->get()->first();
+            $idExist = User::where('companyid', isset($data['companyid']) ? $data['companyid'] : Auth::user()->companyid)->where('usernumber', $data['usernumber'])->get()->first();
             if ($idExist) {
                 echo "idexist";
                 return;
@@ -239,7 +239,8 @@ class UserController extends Controller
             $res->membershipid = 0;
             $res->membershiprole = 0;
             $res->created_at = date('Y-m-d h:i:s',strtotime(now()));
-            $res->ask_two_factor = $data['ask_two_factor'];
+            if (isset($data['distance_limit'])) $res->distance_limit = $data['distance_limit']; 
+            if (isset($data['ask_two_factor'])) $res->ask_two_factor = $data['ask_two_factor'];
             $res->save();
             echo true;
         } else {
@@ -310,8 +311,13 @@ class UserController extends Controller
             else
                 return 1;
         }
-        else
-            return 1;
+        else{
+            $user = User::where('companyid', Auth::user()->companyid)->orderBy('usernumber', 'desc')->first();
+            if($user)
+                return $user['usernumber'] + 1;
+            else
+                return 1;
+        }
     }
 
     /**
