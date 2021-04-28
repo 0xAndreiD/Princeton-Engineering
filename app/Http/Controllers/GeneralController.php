@@ -540,6 +540,10 @@ class GeneralController extends Controller
         if(!empty($request->input("plancheck")) && $request["plancheck"] == 1){
             $handler = $handler->where('job_request.planCheck', 1);
         }
+        // filter asbuilt
+        if(!empty($request->input("asbuilt")) && $request["asbuilt"] == 1){
+            $handler = $handler->where('job_request.asBuilt', 1);
+        }
         // filter chatIcon
         if(!empty($request->input("chat")) && $request->input("chat") != "")
         {
@@ -594,6 +598,7 @@ class GeneralController extends Controller
                         'job_request.state as state',
                         'job_request.planCheck as plancheck',
                         'job_request.chatIcon as chatIcon',
+                        'job_request.asBuilt as asbuilt',
                     )
                 );
             //if($handler->offset($start)->count() > 0)
@@ -625,6 +630,7 @@ class GeneralController extends Controller
                                 'job_request.state as state',
                                 'job_request.planCheck as plancheck',
                                 'job_request.chatIcon as chatIcon',
+                                'job_request.asBuilt as asbuilt',
                             )
                         );
 
@@ -710,7 +716,8 @@ class GeneralController extends Controller
                     "<a href='jobchat?projectId={$nestedData['id']}' class='mr-2 btn btn-" . $chatbadge . "' style='padding: 3px 6px;'>
                         <i class='fab fa-rocketchat'></i>
                     </a>". 
-                    "<input type='checkbox' onchange='togglePlanCheck({$job['id']})'" . ($job['plancheck'] == 1 ? "checked" : "") . ">" . 
+                    "<input class='mr-1' type='checkbox' onchange='togglePlanCheck({$job['id']})'" . ($job['plancheck'] == 1 ? "checked" : "") . ">" . 
+                    "<input type='checkbox' onchange='toggleAsBuilt({$job['id']})'" . ($job['asbuilt'] == 1 ? "checked" : "") . ">" . 
                     "";
                 $data[] = $nestedData;
             }
@@ -1492,6 +1499,30 @@ class GeneralController extends Controller
                         $project->planCheck = 0;
                     else
                         $project->planCheck = 1;
+                    $project->save();
+                    return response()->json(["message" => "Success!", "success" => true]);
+                }
+                else
+                    return response()->json(["message" => "You don't have permission to edit this project.", "success" => false]);
+            }
+            else
+                return response()->json(["message" => "Cannot find project.", "success" => false]);
+    }
+
+    /**
+     * Toggle the as built value of job.
+     *
+     * @return JSON
+     */
+    public function toggleAsBuilt(Request $request){
+        $project = JobRequest::where('id', '=', $request['jobId'])->first();
+            if($project){
+                if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || $project->companyId == Auth::user()->companyid)
+                {
+                    if($project->asBuilt == 1)
+                        $project->asBuilt = 0;
+                    else
+                        $project->asBuilt = 1;
                     $project->save();
                     return response()->json(["message" => "Success!", "success" => true]);
                 }

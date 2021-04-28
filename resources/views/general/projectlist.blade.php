@@ -180,7 +180,8 @@
                                 <span class="ml-1" style='writing-mode: vertical-lr;width: 30px;transform: rotateZ(180deg);'>Edit</span>
                                 <span class="ml-1" style='writing-mode: tb-rl;width: 28px;transform: rotateZ(180deg);'>Delete</span>
                                 <span class="ml-2" style='writing-mode: tb-rl;width: 32px;transform: rotateZ(180deg);'>Chat</span>
-                                <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);'><input type='checkbox' id="planCheckFilter" style="transform: rotateZ(180deg);"> Review</span>
+                                <span class="pl-1" style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 17px;'><input type='checkbox' id="planCheckFilter" style="transform: rotateZ(180deg);"> Review</span>
+                                <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 13px;'><input type='checkbox' id="asBuiltFilter" style="transform: rotateZ(180deg);"> As-built</span>
                             </th>
                             @else
                             <th></th>
@@ -254,7 +255,8 @@
                             <th style="display: flex; align-items: center; justify-content: center;">
                                 <span class="ml-1" style='writing-mode: vertical-lr;width: 30px;transform: rotateZ(180deg);'>Edit</span>
                                 <span class="ml-2" style='writing-mode: tb-rl;width: 32px;transform: rotateZ(180deg);'>Chat</span>
-                                <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);'><input type='checkbox' id="planCheckFilter" style="transform: rotateZ(180deg);"> Review</span>
+                                <span class="pl-1" style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 17px;'><input type='checkbox' id="planCheckFilter" style="transform: rotateZ(180deg);"> Review</span>
+                                <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 13px;'><input type='checkbox' id="asBuiltFilter" style="transform: rotateZ(180deg);"> As-built</span>
                             </th>
                             @endif
                         </tr>
@@ -290,6 +292,7 @@
                         data.submitted_from = $("#submitted_from").val();
                         data.submitted_to = $("#submitted_to").val();
                         data.plancheck = $("#planCheckFilter")[0].checked ? 1 : 0;
+                        data.asbuilt = $("#asBuiltFilter")[0].checked ? 1 : 0;
                         data.chat = $("#chatFilter").val();
                     }
                 },
@@ -333,7 +336,7 @@
             table.column($(this).parent().index() + ':visible').search(this.value).draw();
         });
 
-        $("#created_from, #created_to, #submitted_from, #submitted_to, #planCheckFilter, #chatFilter").on('change', function() {
+        $("#created_from, #created_to, #submitted_from, #submitted_to, #planCheckFilter, #asBuiltFilter, #chatFilter").on('change', function() {
             table.draw();
         });
 
@@ -382,6 +385,28 @@
     function togglePlanCheck(jobId){
         $.ajax({
             url:"togglePlanCheck",
+            type:'post',
+            data:{jobId: jobId},
+            success: function(res){
+                if(res.success){
+                    $('#projects').DataTable().draw();
+                }else
+                    swal.fire({ title: "Error", text: res.message, icon: "error", confirmButtonText: `OK` });
+            },
+            error: function(xhr, status, error) {
+                res = JSON.parse(xhr.responseText);
+                message = res.message;
+                swal.fire({ title: "Error",
+                    text: message == "" ? "Error happened while processing. Please try again later." : message,
+                    icon: "error",
+                    confirmButtonText: `OK` });
+            }
+        });
+    }
+
+    function toggleAsBuilt(jobId){
+        $.ajax({
+            url:"toggleAsBuilt",
             type:'post',
             data:{jobId: jobId},
             success: function(res){

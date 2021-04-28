@@ -61,6 +61,7 @@ Route::post('/getProjectNumComment', 'GeneralController@getProjectNumComment')->
 Route::get('/jobchat', 'GeneralController@jobChat')->name('jobchat');
 Route::post('/submitChat', 'GeneralController@submitChat')->name('submitChat');
 Route::post('/togglePlanCheck', 'GeneralController@togglePlanCheck')->name('togglePlanCheck');
+Route::post('/toggleAsBuilt', 'GeneralController@toggleAsBuilt')->name('toggleAsBuilt');
 Route::post('/checkChatList', 'GeneralController@checkChatList')->name('checkChatList');
 Route::post('/getPermitList', 'GeneralController@getPermitList')->name('getPermitList');
 Route::post('/getCompanyInfo', 'GeneralController@getCompanyInfo')->name('getCompanyInfo');
