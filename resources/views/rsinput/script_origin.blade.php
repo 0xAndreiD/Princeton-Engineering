@@ -4104,27 +4104,25 @@ var loadPreloadedData = function() {
     }
 
     var loadPermitList = function(state){
-        if($("#permitCheck").val() == 1){
-            $.ajax({
-                url:"getPermitList",
-                type:'post',
-                data:{state: state},
-                success: function(res){
-                    if(res.success && res.data && res.data.length > 0 && state == $('#option-state').val()){
-                        $("#permitContent").html("");
-                        for(let i = 0; i < res.data.length; i ++){
-                            let html ='<div class="row mb-3" style="align-items: center;">' + 
-                                "<img class='mr-3 pdfIcon' src='public/img/pdf.png'></img>" + 
-                                '<a class="link-fx font-size-base" style="cursor:pointer;" onclick="openPermitTab(\'' + res.data[i].id + '\', \'' + res.data[i].filename + '\', \'' + res.data[i].tabname + '\')">' + res.data[i].description + '</a>' + 
-                            '</div>';
-                            $("#permitContent").append(html);
-                        }
-                    } else {
-                        $("#permitContent").html('<div id="defaultPermitContent">No state forms available at this time</div>');
+        $.ajax({
+            url:"getPermitList",
+            type:'post',
+            data:{state: state},
+            success: function(res){
+                if(res.success && res.data && res.data.length > 0 && state == $('#option-state').val()){
+                    $("#permitContent").html("");
+                    for(let i = 0; i < res.data.length; i ++){
+                        let html ='<div class="row mb-3" style="align-items: center;">' + 
+                            "<img class='mr-3 pdfIcon' src='public/img/pdf.png'></img>" + 
+                            '<a class="link-fx font-size-base" style="cursor:pointer;" onclick="openPermitTab(\'' + res.data[i].id + '\', \'' + res.data[i].filename + '\', \'' + res.data[i].tabname + '\')">' + res.data[i].description + '</a>' + 
+                        '</div>';
+                        $("#permitContent").append(html);
                     }
+                } else {
+                    $("#permitContent").html('<div id="defaultPermitContent">No state forms available at this time</div>');
                 }
-            });
-        }
+            }
+        });
     }
 
     var setProjectIdComment = function(){
@@ -4375,7 +4373,7 @@ function openPermitTab(id, filename, tabname){
                 var companyInfo = res.company;
                 var permitInfo = res.permit;
 
-                var pdfsrc = "/iRoof/public/pdf/" + filename;
+                var pdfsrc = $("#assetPdfLink").val() + '/' + filename;
 
                 var script = $("<script>");
 
