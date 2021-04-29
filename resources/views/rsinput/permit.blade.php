@@ -8,4 +8,4 @@
     </div> -->
 </div>
 
-<input id="permitCheck" value="1" hidden>
+<input id="assetPdfLink" value="{{asset('/pdf/')}}" hidden>
