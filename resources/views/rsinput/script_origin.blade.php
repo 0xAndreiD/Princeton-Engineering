@@ -3060,6 +3060,9 @@ $(document).ready(function() {
         if(numComment.includes("duplicated.")){
             swal.fire({ title: "Warning", text: "This project number has already been used. Please use another one.", icon: "warning", confirmButtonText: `OK` });
             return; 
+        } else if(numComment.includes("more than")){
+            swal.fire({ title: "Warning", text: "This project number is too high. Please use another one.", icon: "warning", confirmButtonText: `OK` });
+            return; 
         }
 
         var caseCount = $("#option-number-of-conditions").val();
@@ -4137,6 +4140,9 @@ var loadPreloadedData = function() {
                         if(res.duplicated)
                         {
                             comment += $("#txt-project-number").val() + ' is duplicated. ';
+                            $("#project-id-comment").css('color', '#FF0000');
+                        } else if(res.biggerthanmax){
+                            comment += ($("#txt-project-number").val() + " is " + ($("#txt-project-number").val() - res.maxId) + " more than the last job number used. Consider using a job number of " + (res.maxId + 1) + ". ");
                             $("#project-id-comment").css('color', '#FF0000');
                         }
                         else
