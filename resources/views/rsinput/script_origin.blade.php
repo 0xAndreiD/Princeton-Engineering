@@ -4142,7 +4142,7 @@ var loadPreloadedData = function() {
                             comment += $("#txt-project-number").val() + ' is duplicated. ';
                             $("#project-id-comment").css('color', '#FF0000');
                         } else if(res.biggerthanmax){
-                            comment += ($("#txt-project-number").val() + " is " + ($("#txt-project-number").val() - res.maxId) + " more than the last job number used. Consider using a job number of " + (res.maxId + 1) + ". ");
+                            comment += ($("#txt-project-number").val() + " is " + ($("#txt-project-number").val() - res.maxId) + " more than the last job number used. Consider using a job number of " + (parseInt(res.maxId) + 1) + ". ");
                             $("#project-id-comment").css('color', '#FF0000');
                         }
                         else
