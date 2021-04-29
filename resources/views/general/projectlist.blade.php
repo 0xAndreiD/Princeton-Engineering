@@ -49,15 +49,14 @@
                             <th style="width:8%;">Plan Status</th>
                             <th style="min-width: 160px;">Action</th>
                             @else
-                            <th class="text-center" style="width: 7%;">ID</th>
-                            <th style="width:13%;">User</th>
-                            <th style="width:7%;">Project Number</th>
-                            <th style="width:13%;">Project Name</th>
-                            <th style="width:4%;">State</th>
+                            <th style="width:14%;">User</th>
+                            <th style="width:8%;">Project Number</th>
+                            <th style="width:14%;">Project Name</th>
+                            <th style="width:6%;">State</th>
                             <th style="width:10%;">Created Time</th>
                             <th style="width:10%;">Submitted Time</th>
-                            <th style="width:10%;">Project Status</th>
-                            <th style="width:10%;">Plan Status</th>
+                            <th style="width:11%;">Project Status</th>
+                            <th style="width:11%;">Plan Status</th>
                             <th style="min-width: 100px;">Action</th>
                             @endif
                         </tr>
@@ -184,7 +183,6 @@
                                 <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 13px;'><input type='checkbox' id="asBuiltFilter" style="transform: rotateZ(180deg);"> As-built</span>
                             </th>
                             @else
-                            <th></th>
                             <th class="searchHead"> <input type="text" placeholder="Search User" class="searchBox" id="userFilter"> </th>
                             <th class="searchHead"> <input type="text" placeholder="Search Number" class="searchBox" id="projectNumberFilter"> </th>
                             <th class="searchHead"> <input type="text" placeholder="Search Name" class="searchBox" id="projectNameFilter"> </th>
@@ -250,8 +248,36 @@
                                 <input type="text" class="js-flatpickr bg-white searchBox" id="submitted_from" name="submitted_from_datetime" placeholder="From" style="margin-bottom: 5px;">
                                 <input type="text" class="js-flatpickr bg-white searchBox" id="submitted_to" name="submitted_to_datetime" placeholder="To">
                             </th>
-                            <th></th>
-                            <th></th>
+                            <th class="searchHead">
+                                <span class="badge dropdown-toggle job-dropdown" id="statusFilter" data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>All</span>
+                                <div class="dropdown-menu"  aria-labelledby="statusFilter">
+                                    <a class="dropdown-item" href="javascript:changeStatusFilter('')">All</a>
+                                    <a class="dropdown-item" href="javascript:changeStatusFilter('0')">None</a>
+                                    <a class="dropdown-item" href="javascript:changeStatusFilter('1')">Saved</a>
+                                    <a class="dropdown-item" href="javascript:changeStatusFilter('2')">Check Requested</a>
+                                    <a class="dropdown-item" href="javascript:changeStatusFilter('3')">Reviewed</a>
+                                    <a class="dropdown-item" href="javascript:changeStatusFilter('4')">Submitted</a>
+                                    <a class="dropdown-item" href="javascript:changeStatusFilter('5')">Report Prepared</a>
+                                    <a class="dropdown-item" href="javascript:changeStatusFilter('6')">Plan Requested</a>
+                                    <a class="dropdown-item" href="javascript:changeStatusFilter('7')">Plan Reviewed</a>
+                                    <a class="dropdown-item" href="javascript:changeStatusFilter('8')">Link Sent</a>
+                                    <a class="dropdown-item" href="javascript:changeStatusFilter('9')">Completed</a>
+                                </div>
+                            </th>
+                            <th class="searchHead">
+                                <span class="badge dropdown-toggle job-dropdown" id="stateFilter" data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>All</span>
+                                <div class="dropdown-menu"  aria-labelledby="stateFilter">
+                                    <a class="dropdown-item" href="javascript:changeStateFilter('')">All</a>
+                                    <a class="dropdown-item" href="javascript:changeStateFilter('0')">No action</a>
+                                    <a class="dropdown-item" href="javascript:changeStateFilter('1')">Plans uploaded to portal</a>
+                                    <a class="dropdown-item" href="javascript:changeStateFilter('2')">Plans reviewed</a>
+                                    <a class="dropdown-item" href="javascript:changeStateFilter('3')">Comments issued</a>
+                                    <a class="dropdown-item" href="javascript:changeStateFilter('4')">Updated plans uploaded to portal</a>
+                                    <a class="dropdown-item" href="javascript:changeStateFilter('5')">Revised comments issued</a>
+                                    <a class="dropdown-item" href="javascript:changeStateFilter('6')">Final plans uploaded to portal</a>
+                                    <a class="dropdown-item" href="javascript:changeStateFilter('7')">PE sealed plans link sent</a>
+                                </div>
+                            </th>
                             <th style="display: flex; align-items: center; justify-content: center;">
                                 <span class="ml-1" style='writing-mode: vertical-lr;width: 30px;transform: rotateZ(180deg);'>Edit</span>
                                 <span class="ml-2" style='writing-mode: tb-rl;width: 32px;transform: rotateZ(180deg);'>Chat</span>
@@ -311,7 +337,6 @@
                 { "data": "planstatus" },
                 { "data": "actions", "orderable": false }
                 @else
-                { "data": "id" },
                 { "data": "username" },
                 { "data": "projectnumber" },
                 { "data": "projectname" },
@@ -326,7 +351,7 @@
             @if(Auth::user()->userrole == 2)
             "order": [[ 8, "desc" ]]
             @else
-            "order": [[ 6, "desc" ]]
+            "order": [[ 5, "desc" ]]
             @endif
         });
         
@@ -344,13 +369,12 @@
             table.column($(this).parent().index() + ':visible').search(this.value).draw();
         });
 
-        @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3)
-        $("#companyFilter").on('keyup change', function() {
-            table.column($(this).parent().index() + ':visible').search(this.value).draw();
-        });
-
         changeStatusFilter = function(status){
+            @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3)
             table.column('9:visible').search(status).draw();
+            @else
+            table.column('6:visible').search(status).draw();
+            @endif
             $(`#statusFilter`).css('color', '#FFFFFF');
             if(status == ''){ $(`#statusFilter`).css('color', '#495057'); $(`#statusFilter`).html('All');  $(`#statusFilter`).css('background-color', '#FFFFFF'); }
             else if(status == '0'){ $(`#statusFilter`).html('None');  $(`#statusFilter`).css('background-color', '#e04f1a'); }
@@ -366,7 +390,11 @@
         }
 
         changeStateFilter = function(status){
+            @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3)
             table.column('10:visible').search(status).draw();
+            @else
+            table.column('7:visible').search(status).draw();
+            @endif
             $(`#stateFilter`).css('color', '#FFFFFF');
             if(status == ''){ $(`#stateFilter`).css('color', '#495057'); $(`#stateFilter`).html('All');  $(`#stateFilter`).css('background-color', '#FFFFFF'); }
             else if(status == '0'){ $(`#stateFilter`).html('No action');  $(`#stateFilter`).css('background-color', '#e04f1a'); }
@@ -378,6 +406,11 @@
             else if(status == '6'){ $(`#stateFilter`).html('Final plans uploaded to portal');  $(`#stateFilter`).css('background-color', 'rgba(0, 0, 0, 0.33)'); }
             else if(status == '7'){ $(`#stateFilter`).html('PE sealed plans link sent');  $(`#stateFilter`).css('background-color', '#82b54b'); }
         }
+
+        @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3)
+        $("#companyFilter").on('keyup change', function() {
+            table.column($(this).parent().index() + ':visible').search(this.value).draw();
+        });
         @endif
 
     });
