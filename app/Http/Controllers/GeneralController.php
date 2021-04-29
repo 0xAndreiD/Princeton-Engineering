@@ -713,14 +713,14 @@ class GeneralController extends Controller
                     <a href='rsinput?projectId={$nestedData['id']}' class='btn btn-primary mr-1' style='padding: 3px 6px;'>
                         <i class='fa fa-pencil-alt'></i>
                     </a>" . 
-                    (Auth::user()->userrole == 2 ? "<button type='button' class='js-swal-confirm btn btn-danger mr-1' onclick='delProject(this,{$nestedData['id']})' style='padding: 3px 6px;'>
-                        <i class='fa fa-trash'></i>
-                    </button>" : "") .
                     "<a href='jobchat?projectId={$nestedData['id']}' class='mr-2 btn btn-" . $chatbadge . "' style='padding: 3px 6px;'>
                         <i class='fab fa-rocketchat'></i>
                     </a>". 
                     "<input class='mr-1' type='checkbox' onchange='togglePlanCheck({$job['id']})'" . ($job['plancheck'] == 1 ? "checked" : "") . ">" . 
-                    "<input type='checkbox' onchange='toggleAsBuilt({$job['id']})'" . ($job['asbuilt'] == 1 ? "checked" : "") . ">" . 
+                    "<input class='mr-2' type='checkbox' onchange='toggleAsBuilt({$job['id']})'" . ($job['asbuilt'] == 1 ? "checked" : "") . ">" . 
+                    (Auth::user()->userrole == 2 ? "<button type='button' class='js-swal-confirm btn btn-danger mr-1' onclick='delProject(this,{$nestedData['id']})' style='padding: 3px 6px;'>
+                    <i class='fa fa-trash'></i>
+                </button>" : "") .
                     "";
                 $data[] = $nestedData;
             }
