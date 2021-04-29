@@ -49,7 +49,7 @@
         <col width="160">
         <col width="200">
         <col width="300">
-        <col width="80">
+        <col width="800">
     </colgroup>
 <tbody>
     <tr class="h13">

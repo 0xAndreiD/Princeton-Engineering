@@ -1370,7 +1370,17 @@ class GeneralController extends Controller
                 $max = $maxProject->maxNumber;
             else
                 $max = 0;
-            return response()->json(['success' => true, 'duplicated' => $duplicated, 'maxId' => $max]);
+            
+            $biggerthanmax = false;
+            $maxrange = 0;
+            if($request['projectNumber'] > $max){
+                $users = User::where('companyid', Auth::user()->companyid)->get();
+                if($request['projectNumber'] > $max + count($users)){
+                    $biggerthanmax = true;
+                    $maxrange = $max + count($users);
+                }
+            }
+            return response()->json(['success' => true, 'duplicated' => $duplicated, 'maxId' => $max, 'biggerthanmax' => $biggerthanmax, 'maxrange' => $maxrange + 1]);
         } else
             return response()->json(['success' => false, 'message' => 'Empty Project Number or Id.']);
     }
