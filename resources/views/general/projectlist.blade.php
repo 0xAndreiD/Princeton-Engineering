@@ -176,11 +176,11 @@
                                 </div>
                             </th>
                             <th style="display: flex; align-items: center; justify-content: center;">
-                                <span class="ml-1" style='writing-mode: vertical-lr;width: 30px;transform: rotateZ(180deg);'>Edit</span>
-                                <span class="ml-1" style='writing-mode: tb-rl;width: 28px;transform: rotateZ(180deg);'>Delete</span>
+                                <span class="ml-1" style='writing-mode: vertical-lr;width: 22px;transform: rotateZ(180deg);'>Edit</span>
                                 <span class="ml-2" style='writing-mode: tb-rl;width: 32px;transform: rotateZ(180deg);'>Chat</span>
-                                <span class="pl-1" style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 17px;'><input type='checkbox' id="planCheckFilter" style="transform: rotateZ(180deg);"> Review</span>
-                                <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 13px;'><input type='checkbox' id="asBuiltFilter" style="transform: rotateZ(180deg);"> As-built</span>
+                                <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 17px;'><input type='checkbox' id="planCheckFilter" style="transform: rotateZ(180deg);"> Review</span>
+                                <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 22px;'><input type='checkbox' id="asBuiltFilter" style="transform: rotateZ(180deg);"> As-built</span>
+                                <span class="pr-1" style='writing-mode: tb-rl;width: 28px;transform: rotateZ(180deg);'>Delete</span>
                             </th>
                             @else
                             <th class="searchHead"> <input type="text" placeholder="Search User" class="searchBox" id="userFilter"> </th>
@@ -279,10 +279,10 @@
                                 </div>
                             </th>
                             <th style="display: flex; align-items: center; justify-content: center;">
-                                <span class="ml-1" style='writing-mode: vertical-lr;width: 30px;transform: rotateZ(180deg);'>Edit</span>
+                            <span class="ml-1" style='writing-mode: vertical-lr;width: 22px;transform: rotateZ(180deg);'>Edit</span>
                                 <span class="ml-2" style='writing-mode: tb-rl;width: 32px;transform: rotateZ(180deg);'>Chat</span>
-                                <span class="pl-1" style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 17px;'><input type='checkbox' id="planCheckFilter" style="transform: rotateZ(180deg);"> Review</span>
-                                <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 13px;'><input type='checkbox' id="asBuiltFilter" style="transform: rotateZ(180deg);"> As-built</span>
+                                <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 17px;'><input type='checkbox' id="planCheckFilter" style="transform: rotateZ(180deg);"> Review</span>
+                                <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 22px;'><input type='checkbox' id="asBuiltFilter" style="transform: rotateZ(180deg);"> As-built</span>
                             </th>
                             @endif
                         </tr>
