@@ -474,15 +474,14 @@ class GeneralController extends Controller
             //else
                 //$handler = new JobRequest;
             $columns = array( 
-                0 =>'id', 
-                1 =>'userId',
-                2 =>'clientProjectNumber',
-                3 =>'clientProjectName',
-                4 => 'state',
-                5 =>'createdTime',
-                6 =>'submittedTime',
-                7 =>'projectState',
-                8 =>'planStatus',
+                0 =>'userId',
+                1 =>'clientProjectNumber',
+                2 =>'clientProjectName',
+                3 => 'state',
+                4 =>'createdTime',
+                5 =>'submittedTime',
+                6 =>'projectState',
+                7 =>'planStatus',
             );
         }
         
@@ -576,6 +575,10 @@ class GeneralController extends Controller
                 $handler = $handler->where('job_request.clientProjectName', 'LIKE', "%{$request->input('columns.3.search.value')}%");
             if(isset($request["columns.4.search.value"]))
                 $handler = $handler->where('job_request.state', 'LIKE', "%{$request->input('columns.4.search.value')}%");
+            if(isset($request["columns.6.search.value"]))
+                $handler = $handler->where('job_request.projectState', 'LIKE', "%{$request->input('columns.6.search.value')}%");
+            if(isset($request["columns.7.search.value"]))
+                $handler = $handler->where('job_request.planStatus', 'LIKE', "%{$request->input('columns.7.search.value')}%");
         }
 
         if(empty($request->input('search.value')))
