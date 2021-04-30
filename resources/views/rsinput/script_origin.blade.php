@@ -4354,7 +4354,7 @@ function openPermitTab(id, filename, tabname){
     if($("#tab_permit" + id).length)
         $("#tab_permit" + id).remove();
     $("#permitTab").after('<button class="tablinks" onclick="openRfdTab(event, \'tab_permit_' + id + '\')" id="permitTab_' + id + '">' + tabname + '</button>');
-    $("#tab_permit").after('<div id="tab_permit_' + id + '" class="rfdTabContent"></div>');
+    $("#tab_permit").after('<div id="tab_permit_' + id + '" class="rfdTabContent" style="position:relative;"></div>');
     
     var i, tabcontent, tablinks;
     tabcontent = document.getElementsByClassName("rfdTabContent");
@@ -4369,6 +4369,7 @@ function openPermitTab(id, filename, tabname){
     document.getElementById("permitTab_" + id).className += " active";
 
     $("#tab_permit_" + id).html('<iframe id="permitViewer_' + id + '" src="" type="application/pdf" class="pdfViewer">');
+    $("#tab_permit_" + id).append('<div class="permitCtrlBtns mt-2"><button class="mr-2 btn btn-info" onclick="savePermit(' + id + ', \'' + filename + '\')"><i class="far fa-save mr-1"></i>Save</button><button class="mr-4 btn btn-danger"><i class="fa fa-trash mr-1"></i>Delete</button></div>')
 
     $.ajax({
         url:"getCompanyInfo",
@@ -4388,6 +4389,7 @@ function openPermitTab(id, filename, tabname){
                     return response.arrayBuffer()
                 })
                 .then(function(data) {
+                    console.log(data);
                     var fields = {
                         'Address Site': [$("#txt-street-address").val() + ", " +  $("#txt-city").val() + ", " + $("#txt-zip").val()],
                         'Proposed Work Site': [$("#txt-street-address").val() + ", " +  $("#txt-city").val() + ", " + $("#txt-zip").val()],
@@ -4419,14 +4421,28 @@ function openPermitTab(id, filename, tabname){
                     var out_buf = pdfform().transform(data, fields);
                     $("#permitViewer_" + id).attr("src", URL.createObjectURL(new Blob([out_buf], {
                         type: "application/pdf"
-                    })))
+                    })) + "#toolbar=0");
                 }, function(err) {
                     console.log(err);
                 });
             }
         }
     });
-    
-    
+}
+
+function savePermit(id, filename){
+    var pdfsrc = $("#permitViewer_" + id).attr('src');
+    fetch(pdfsrc)
+    .then(function(response) {
+        return response.arrayBuffer()
+    })
+    .then(function(data) {
+        var jsonBlob = new Blob([data], {
+                        type: "application/pdf"
+                    });
+        var url = window.URL.createObjectURL(jsonBlob);
+        download(url, filename);
+
+    });
 }
 </script>
