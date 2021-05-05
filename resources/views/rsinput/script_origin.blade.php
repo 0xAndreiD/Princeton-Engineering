@@ -2,33 +2,35 @@
 window.conditionId = 1;
 
 function openRfdTab(evt, tabName) {
-  var i, tabcontent, tablinks;
-  tabcontent = document.getElementsByClassName("rfdTabContent");
-  for (i = 0; i < tabcontent.length; i++) {
-    tabcontent[i].style.display = "none";
-  }
-  tablinks = document.getElementsByClassName("tablinks");
-  for (i = 0; i < tablinks.length; i++) {
-    tablinks[i].className = tablinks[i].className.replace(" active", "");
-  }
-  document.getElementById(tabName).style.display = "block";
-  evt.currentTarget.className += " active";
-  
-  if( tabName == "tab_first" )
-    document.getElementById('subPageTitle').innerHTML = 'Site and Equipment Data Input';
-  else if( tabName == "tab_override" )
-    document.getElementById('subPageTitle').innerHTML = 'Custom Program Data Overrides';
-  else if( tabName == "tab_upload" )
-    document.getElementById('subPageTitle').innerHTML = 'Multiple Documents Upload';
-  else if( tabName == "tab_permit" )
-    document.getElementById('subPageTitle').innerHTML = 'Permit Info Filling';
-  else 
-  {
-    window.conditionId = parseInt(tabName.slice(3));
-    document.getElementById('subPageTitle').innerHTML = 'Framing Data Input';
-  }
-  
-  console.log('Tab No:', window.conditionId);
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("rfdTabContent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(tabName).style.display = "block";
+    evt.currentTarget.className += " active";
+    
+    if (tabName == "tab_test")
+        document.getElementById('subPageTitle').innerHTML = 'test';
+    else if( tabName == "tab_first" )
+        document.getElementById('subPageTitle').innerHTML = 'Site and Equipment Data Input';
+    else if( tabName == "tab_override" )
+        document.getElementById('subPageTitle').innerHTML = 'Custom Program Data Overrides';
+    else if( tabName == "tab_upload" )
+        document.getElementById('subPageTitle').innerHTML = 'Multiple Documents Upload';
+    else if( tabName == "tab_permit" )
+        document.getElementById('subPageTitle').innerHTML = 'Permit Info Filling';
+    else 
+    {
+        window.conditionId = parseInt(tabName.slice(3));
+        document.getElementById('subPageTitle').innerHTML = 'Framing Data Input';
+    }
+    
+    console.log('Tab No:', window.conditionId);
 }
 
 // Get the element with id="defaultOpen" and click on it
@@ -4260,7 +4262,9 @@ function delFile(){
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-const download = async (url, name) => {
+// const download = async (url, name) => {
+
+async function download(url, name) {
 	const a = document.createElement('a');
 	a.download = name;
 	a.href = url;
@@ -4349,12 +4353,24 @@ function editFile(){
 }
 
 function openPermitTab(id, filename, tabname){
+    if (filename == "ucc_f100_cpa.pdf") {
+        id = 1;
+    }
+
     if($("#permitTab_" + id).length)
         $("#permitTab_" + id).remove();
     if($("#tab_permit" + id).length)
         $("#tab_permit" + id).remove();
     $("#permitTab").after('<button class="tablinks" onclick="openRfdTab(event, \'tab_permit_' + id + '\')" id="permitTab_' + id + '">' + tabname + '</button>');
+
     $("#tab_permit").after('<div id="tab_permit_' + id + '" class="rfdTabContent" style="position:relative;"></div>');
+    if (filename == "ucc_f100_cpa.pdf") {
+        $("#tab_permit_" + id).append($("#ucc_f100"));
+        document.getElementById("ucc_f100").style.display = "block";
+    }
+
+    // else if (filename == "ucc_f110_bldg.pdf")
+    // else if (filename == "ucc_f120_elec.pdf")
     
     var i, tabcontent, tablinks;
     tabcontent = document.getElementsByClassName("rfdTabContent");
@@ -4367,14 +4383,20 @@ function openPermitTab(id, filename, tabname){
     }
     document.getElementById("tab_permit_" + id).style.display = "block";
     document.getElementById("permitTab_" + id).className += " active";
+}
 
-    $("#tab_permit_" + id).html('<iframe id="permitViewer_' + id + '" src="" type="application/pdf" class="pdfViewer">');
-    $("#tab_permit_" + id).append('<div class="permitCtrlBtns mt-2"><button class="mr-2 btn btn-info" onclick="savePermit(' + id + ', \'' + filename + '\')"><i class="far fa-save mr-1"></i>Save</button><button class="mr-4 btn btn-danger"><i class="fa fa-trash mr-1"></i>Delete</button></div>')
+function updateUccF100(id, filename) {
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
 
     $.ajax({
         url:"getCompanyInfo",
         type:'post',
         data:{state: $('#option-state').val()},
+        // data:{state: 31},
         success: function(res){
             if(res.success){
                 var companyInfo = res.company;
@@ -4409,6 +4431,11 @@ function openPermitTab(id, filename, tabname){
                         'Agent Name': [companyInfo.company_name],
                         'Agent Address': [companyInfo.company_address],
                         'Agent Tel': [companyInfo.company_telno],
+                        'Block': [$("#txt-block").val()],
+                        'Lot': [$("#txt-lot").val()],
+                        'Qualifier':[$("#txt-qualifier").val()],
+                        'Owner Address Combined':[$("#txt-owner-address-combined").val()],
+                        'Permit No':[$("#txt-permit-no").val()],
                     };
                     if(permitInfo){
                         fields['Contractor eMail'] = [permitInfo.construction_email];
@@ -4430,6 +4457,10 @@ function openPermitTab(id, filename, tabname){
     });
 }
 
+function updatePermit(id, filename){
+    updateUccF100(id, filename);
+}
+
 function savePermit(id, filename){
     var pdfsrc = $("#permitViewer_" + id).attr('src');
     fetch(pdfsrc)
@@ -4442,7 +4473,6 @@ function savePermit(id, filename){
                     });
         var url = window.URL.createObjectURL(jsonBlob);
         download(url, filename);
-
     });
 }
 </script>

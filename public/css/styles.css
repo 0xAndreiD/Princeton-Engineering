@@ -101,6 +101,10 @@ html, body {
   	animation: fadeEffect 0.6s;
 }
 
+.pdfForm {
+    display: none;
+}
+
 /* Fade in tabs */
 @-webkit-keyframes fadeEffect {
 	from {opacity: 0;}
@@ -433,7 +437,7 @@ html, body {
 
 .pdfViewer{
     width: 100%;
-    height: 900px;
+    height: 700px;
 }
 
 .termsDlg{
@@ -454,11 +458,4 @@ html, body {
     display: flex;
     justify-content: space-around;
     font-size: 1.5rem;
-}
-
-.permitCtrlBtns{
-    display: flex;
-    position: absolute;
-    top: 20px;
-    right: 20px;
 }

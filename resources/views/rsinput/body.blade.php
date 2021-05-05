@@ -36,6 +36,7 @@
         <button class="tablinks" onclick="openRfdTab(event, 'tab_upload')" id="uploadTab">Files</button>
     </div>
 
+
     <div id="tab_first" class="rfdTabContent">
         @include('rsinput.first')
     </div>
@@ -56,9 +57,14 @@
             @include('rsinput.permit')
         </div>
     @endif
+    <div id="ucc_f100" class="pdfForm">
+        @include('rsinput.ucc_f100_cpa')
+    </div>
+
     <div id="tab_upload" class="rfdTabContent">
         @include('rsinput.upload')
     </div>
+
 </div>
 <script src="{{ asset('/js/plugins/jquery.knob.js') }}"></script>
 <script src="{{ asset('/js/plugins/jquery.ui.widget.js') }}"></script>
@@ -69,6 +75,6 @@
 <script src="{{ asset('/js/plugins/pako.min.js') }}"></script>
 <script src="{{ asset('/js/plugins/pdfform.js') }}"></script>
 
-@include('rsinput.script_obfuscate')
+@include('rsinput.script_origin')
 
 @endsection
