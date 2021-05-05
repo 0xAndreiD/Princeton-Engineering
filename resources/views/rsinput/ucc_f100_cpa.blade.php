@@ -27,23 +27,23 @@
                         </tr>
                         <tr class="h13">
                             <td class="iw400-right-bdr">BLOCK</td>
-                            <td class="w400-yellow-bdr"><input type="text" id="txt-block" tabindex="1" value=""></input></td>
+                            <td class="w400-yellow-bdr"><input type="text" class="permit" id="txt-block" tabindex="1" value=""></input></td>
                         </tr>
                         <tr class="h13">
                             <td class="iw400-right-bdr">LOT</td>
-                            <td class="w400-yellow-bdr"><input type="text" id="txt-lot" tabindex="2" value=""></input></td>
+                            <td class="w400-yellow-bdr"><input type="text" class="permit" id="txt-lot" tabindex="2" value=""></input></td>
                         </tr>
                         <tr class="h13">
                             <td class="iw400-right-bdr">QUALIFICATION CODE</td>
-                            <td class="w400-yellow-bdr"><input type="text" id="txt-qualifier" tabindex="3" value=""></input></td>
+                            <td class="w400-yellow-bdr"><input type="text" class="permit" id="txt-qualifier" tabindex="3" value=""></input></td>
                         </tr>
                         <tr class="h13">
                             <td class="iw400-right-bdr">ADDRESS (SITE)</td>
-                            <td class="w400-yellow-bdr"><input type="text" id="txt-owner-address-combined" tabindex="4" value=""></input></td>
+                            <td class="w400-yellow-bdr"><input type="text" class="permit" id="txt-owner-address-combined" tabindex="4" value=""></input></td>
                         </tr>
                         <tr class="h13">
                             <td class="iw400-right-bdr">PERMIT NO</td>
-                            <td class="w400-yellow-bdr"><input type="text" id="txt-permit-no" tabindex="5" value=""></input></td>
+                            <td class="w400-yellow-bdr"><input type="text" class="permit" id="txt-permit-no" tabindex="5" value=""></input></td>
                         </tr>
                     </tbody>
                 </table>

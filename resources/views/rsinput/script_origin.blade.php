@@ -1254,6 +1254,10 @@ var isEmptyInputBox = function() {
         // skip sweet alert
         if(typeof $(this).attr('class') == "string" && $(this).attr('class').includes('swal2-input'))
             return;
+
+        if(typeof $(this).attr('class') == "string" && $(this).attr('class').includes('permit'))
+            return;
+        
         // skip feet / inch pair input
         if(typeof $(this).attr('id') == "string" && ($(this).attr('id').includes("f-") && $('#' + $(this).attr('id').replace('f-', 'i-')).val() != ""))
             return;
