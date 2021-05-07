@@ -4357,10 +4357,6 @@ function editFile(){
 }
 
 function openPermitTab(id, filename, tabname){
-    if (filename == "ucc_f100_cpa.pdf") {
-        id = 1;
-    }
-
     if($("#permitTab_" + id).length)
         $("#permitTab_" + id).remove();
     if($("#tab_permit" + id).length)
@@ -4405,9 +4401,7 @@ function updateUccF100(id, filename) {
             if(res.success){
                 var companyInfo = res.company;
                 var permitInfo = res.permit;
-
                 var pdfsrc = $("#assetPdfLink").val() + '/' + filename;
-
                 var script = $("<script>");
 
                 fetch(pdfsrc)
@@ -4416,40 +4410,79 @@ function updateUccF100(id, filename) {
                 })
                 .then(function(data) {
                     console.log(data);
+                    var buildingCost = 0;
+                    var elecCost = 0;
+                    
+                    if ($("#txt-building-cost").val()!="") buildingCost = parseFloat($("#txt-building-cost").val());
+                    if ($("#txt-elec-cost").val()!="") elecCost = parseFloat($("#txt-elec-cost").val());
+
+                    var totalCost = parseFloat(buildingCost + elecCost);
+
                     var fields = {
+                        'Block': [$("#txt-block").val()],
+                        'Lot': [$("#txt-lot").val()],
+                        'Qualifier':[$("#txt-qualifier").val()],
+                        'Permit No':[$("#txt-permit-no").val()],
                         'Address Site': [$("#txt-street-address").val() + ", " +  $("#txt-city").val() + ", " + $("#txt-zip").val()],
                         'Proposed Work Site': [$("#txt-street-address").val() + ", " +  $("#txt-city").val() + ", " + $("#txt-zip").val()],
                         'Owner in Fee': [$("#txt-project-name").val()],
                         'Owner Address': [$("#txt-street-address").val() + ", " +  $("#txt-city").val() + ", " + $("#txt-zip").val()],
+                        'Owner Telephone':[$("#txt-project-tel").val()],
+                        'Owner eMail':[$("#txt-project-email").val()],
+
                         'Princ Contractor': [companyInfo.company_name],
                         'Contractor Phone': [companyInfo.company_telno],
                         'Contractor Address 1': [companyInfo.company_address],
+
+                        'No. Stories':[$("#txt-character-stories").val()],
+                        'Height':[$("#txt-character-height").val()],
+                        'Area Lgst Fl':[$("#txt-character-area").val()],
+                        'New Bldg Area':[$("#txt-character-newarea").val()],
+                        'Volume':[$("#txt-character-volume").val()],
+                        'Max Live Load':[$("#txt-character-maxlive").val()],
+                        'Max Occupancy':[$("#txt-character-maxoccupancy").val()],
+                        'Indus Bldg -IBC':[$("#txt-character-approved").val()],
+                        'Indus Bldg -HUD':[$("#txt-character-hud").val()],
+                        'Land Area Disturbed':[$("#txt-character-disturbed").val()],
+                        'Flood Haz Zone':[$("#txt-character-flood").val()],
+                        'Base Flood Elev':[$("#txt-character-base").val()],
+                        'Wetlands -Yes':[$("#character-wetlands").val()],
+                        'Wetlands -No':[Math.abs($("#character-wetlands").val() - 1)],
+
                         'Architect-Engineer': ['Richard Pantel, P.E.'],
                         'Architect Address': ['35091 Paxson Road, Round Hill, VA 20141'],
                         'Architect eMail': ['rpantel@princeton-engineering.com'],
                         'Architect Tel': ['908-507-5500'],
                         'Architect Fax': ['877-455-5641'],
+
                         'Alteration': [1],
                         'Check Box16': [1],
                         'Check Box29': [1],
+                        'Bldg Est Cost':[$("#txt-building-cost").val()],
+                        'Elec Est Cost':[$("#txt-elec-cost").val()],
+                        'Total Est Cost':["$" + totalCost],
+
+                        'Res Use Descrip':[$("#txt-state-specific").val()],
+                        'Res Use Proposed':[$("#txt-use-group").val()],
+
                         'Agent Name': [companyInfo.company_name],
                         'Agent Address': [companyInfo.company_address],
                         'Agent Tel': [companyInfo.company_telno],
-                        'Block': [$("#txt-block").val()],
-                        'Lot': [$("#txt-lot").val()],
-                        'Qualifier':[$("#txt-qualifier").val()],
-                        'Owner Address Combined':[$("#txt-owner-address-combined").val()],
-                        'Permit No':[$("#txt-permit-no").val()],
                     };
+
                     if(permitInfo){
+                        fields['Responsible Person'] = [permitInfo.contact_person],
+                        fields['Resp Pers Tel'] = [permitInfo.contact_phone],
+                        fields['Resp Pers Fax'] = [permitInfo.FAX],
+
                         fields['Contractor eMail'] = [permitInfo.construction_email];
                         fields['Contractor License'] = [permitInfo.registration];
                         fields['License Expire'] = [permitInfo.exp_date];
                         fields['FEID'] = [permitInfo.EIN];
                         fields['Contractor Fax'] = [permitInfo.FAX];
                     }
-                    
                     var out_buf = pdfform().transform(data, fields);
+
                     $("#permitViewer_" + id).attr("src", URL.createObjectURL(new Blob([out_buf], {
                         type: "application/pdf"
                     })) + "#toolbar=0");
@@ -4459,10 +4492,6 @@ function updateUccF100(id, filename) {
             }
         }
     });
-}
-
-function updatePermit(id, filename){
-    updateUccF100(id, filename);
 }
 
 function savePermit(id, filename){
