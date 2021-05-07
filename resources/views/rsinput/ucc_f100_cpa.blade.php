@@ -32,19 +32,19 @@
                         </tr>
                         <tr class="h13">
                             <td class="iw400-right-bdr">BLOCK</td>
-                            <td class="w400-yellow-bdr"><input type="text" class="permit" id="txt-block" tabindex="1" value=""></input></td>
+                            <td class="w400-yellow-bdr"><input type="text" class="permit txt-block" id="txt-block" tabindex="1" value=""></input></td>
                         </tr>
                         <tr class="h13">
                             <td class="iw400-right-bdr">LOT</td>
-                            <td class="w400-yellow-bdr"><input type="text" class="permit" id="txt-lot" tabindex="2" value=""></input></td>
+                            <td class="w400-yellow-bdr"><input type="text" class="permit txt-lot" id="txt-lot" tabindex="2" value=""></input></td>
                         </tr>
                         <tr class="h13">
                             <td class="iw400-right-bdr">QUALIFICATION CODE</td>
-                            <td class="w400-yellow-bdr"><input type="text" class="permit" id="txt-qualifier" tabindex="3" value=""></input></td>
+                            <td class="w400-yellow-bdr"><input type="text" class="permit txt-qualifier" id="txt-qualifier" tabindex="3" value=""></input></td>
                         </tr>
                         <tr class="h13">
                             <td class="iw400-right-bdr">PERMIT NO</td>
-                            <td class="w400-yellow-bdr"><input type="text" class="permit" id="txt-permit-no" tabindex="4" value=""></input></td>
+                            <td class="w400-yellow-bdr"><input type="text" class="permit txt-permit-no" id="txt-permit-no" tabindex="4" value=""></input></td>
                         </tr>
                         <tr class="h13">
                             <td colspan="2">
@@ -57,11 +57,11 @@
                         </tr> --}}
                         <tr class="h13">
                             <td class="iw400-right-bdr">Tel</td>
-                            <td class="w400-yellow-bdr"><input type="text" class="permit" id="txt-owner-tel" tabindex="5" value=""></input></td>
+                            <td class="w400-yellow-bdr"><input type="text" class="permit txt-owner-tel" id="txt-owner-tel" tabindex="5" value=""></input></td>
                         </tr>
                         <tr class="h13">
                             <td class="iw400-right-bdr">E-MAIL</td>
-                            <td class="w400-yellow-bdr"><input type="text" class="permit" id="txt-owner-email" tabindex="6" value=""></input></td>
+                            <td class="w400-yellow-bdr"><input type="text" class="permit txt-owner-email" id="txt-owner-email" tabindex="6" value=""></input></td>
                         </tr>
                         {{-- <tr class="h13">
                             <td colspan="2">
@@ -87,56 +87,56 @@
                         </tr>
                         <tr class="h13">
                             <td class="iw400-right-bdr">Number of Stories</td>
-                            <td class="w400-yellow-bdr"><input type="text" class="permit" id="txt-character-stories" tabindex="6" value=""></input></td>
+                            <td class="w400-yellow-bdr"><input type="text" class="permit txt-character-stories" id="txt-character-stories" tabindex="7" value=""></input></td>
                         </tr>
                         <tr class="h13">
                             <td class="iw400-right-bdr">Height of Structure</td>
-                            <td class="w400-yellow-bdr"><input type="text" class="permit" id="txt-character-height" tabindex="6" value=""></input></td>
+                            <td class="w400-yellow-bdr"><input type="text" class="permit txt-character-height" id="txt-character-height" tabindex="8" value=""></input></td>
                         </tr>
                         <tr class="h13">
                             <td class="iw400-right-bdr">Area — Largest Floor</td>
-                            <td class="w400-yellow-bdr"><input type="text" class="permit" id="txt-character-area" tabindex="6" value=""></input></td>
+                            <td class="w400-yellow-bdr"><input type="text" class="permit txt-character-area" id="txt-character-area" tabindex="9" value=""></input></td>
                         </tr>
                         <tr class="h13">
                             <td class="iw400-right-bdr">New Building Area</td>
-                            <td class="w400-yellow-bdr"><input type="text" class="permit" id="txt-character-newarea" tabindex="6" value=""></input></td>
+                            <td class="w400-yellow-bdr"><input type="text" class="permit txt-character-newarea" id="txt-character-newarea" tabindex="10" value=""></input></td>
                         </tr>
                         <tr class="h13">
                             <td class="iw400-right-bdr">Volume of New Structure</td>
-                            <td class="w400-yellow-bdr"><input type="text" class="permit" id="txt-character-volume" tabindex="6" value=""></input></td>
+                            <td class="w400-yellow-bdr"><input type="text" class="permit txt-character-volume" id="txt-character-volume" tabindex="11" value=""></input></td>
                         </tr>
                         <tr class="h13">
                             <td class="iw400-right-bdr">Max. Live Load</td>
-                            <td class="w400-yellow-bdr"><input type="text" class="permit" id="txt-character-maxlive" tabindex="6" value=""></input></td>
+                            <td class="w400-yellow-bdr"><input type="text" class="permit txt-character-maxlive" id="txt-character-maxlive" tabindex="12" value=""></input></td>
                         </tr>
                         <tr class="h13">
                             <td class="iw400-right-bdr">Max. Occupancy Load</td>
-                            <td class="w400-yellow-bdr"><input type="text" class="permit" id="txt-character-maxoccupancy" tabindex="6" value=""></input></td>
+                            <td class="w400-yellow-bdr"><input type="text" class="permit txt-character-maxoccupancy" id="txt-character-maxoccupancy" tabindex="13" value=""></input></td>
                         </tr>
                         <tr class="h13">
                             <td class="iw400-right-bdr">Industialized Building State Approved</td>
-                            <td class="w400-yellow-bdr"><input type="text" class="permit" id="txt-character-approved" tabindex="6" value=""></input></td>
+                            <td class="w400-yellow-bdr"><input type="text" class="permit txt-character-approved" id="txt-character-approved" tabindex="14" value=""></input></td>
                         </tr>
                         <tr class="h13">
                             <td class="iw400-right-bdr">Industialized Building HUD</td>
-                            <td class="w400-yellow-bdr"><input type="text" class="permit" id="txt-character-hud" tabindex="6" value=""></input></td>
+                            <td class="w400-yellow-bdr"><input type="text" class="permit txt-character-hud" id="txt-character-hud" tabindex="15" value=""></input></td>
                         </tr>
                         <tr class="h13">
                             <td class="iw400-right-bdr">Total Land Area Disturbed</td>
-                            <td class="w400-yellow-bdr"><input type="text" class="permit" id="txt-character-disturbed" tabindex="6" value=""></input></td>
+                            <td class="w400-yellow-bdr"><input type="text" class="permit txt-character-disturbed" id="txt-character-disturbed" tabindex="16" value=""></input></td>
                         </tr>
                         <tr class="h13">
                             <td class="iw400-right-bdr">Flood Hazard Zone</td>
-                            <td class="w400-yellow-bdr"><input type="text" class="permit" id="txt-character-flood" tabindex="6" value=""></input></td>
+                            <td class="w400-yellow-bdr"><input type="text" class="permit txt-character-flood" id="txt-character-flood" tabindex="17" value=""></input></td>
                         </tr>
                         <tr class="h13">
                             <td class="iw400-right-bdr">Base Flood Elevation</td>
-                            <td class="w400-yellow-bdr"><input type="text" class="permit" id="txt-character-base" tabindex="6" value=""></input></td>
+                            <td class="w400-yellow-bdr"><input type="text" class="permit txt-character-base" id="txt-character-base" tabindex="18" value=""></input></td>
                         </tr>
                         <tr class="h13">
                             <td class="iw400-right-bdr">Wetlands</td>
                             <td class="w400-green-bdr">
-                                <select id="character-wetlands" class="permit" tabindex="10">
+                                <select id="character-wetlands" class="permit" tabindex="19">
                                     <option value="1" selected>YES</option>
                                     <option value="0">No</option>
                                 </select>
@@ -150,11 +150,11 @@
                         
                         <tr class="h13">
                             <td class="iw400-right-bdr">Building Est.Cost</td>
-                            <td class="w400-yellow-bdr"><input type="text" class="permit" id="txt-building-cost" tabindex="6" value=""></input></td>
+                            <td class="w400-yellow-bdr"><input type="text" class="permit txt-building-cost" id="txt-building-cost" tabindex="20" value=""></input></td>
                         </tr>
                         <tr class="h13">
                             <td class="iw400-right-bdr">Electrical Est.Cost</td>
-                            <td class="w400-yellow-bdr"><input type="text" class="permit" id="txt-elec-cost" tabindex="6" value=""></input></td>
+                            <td class="w400-yellow-bdr"><input type="text" class="permit txt-elec-cost" id="txt-elec-cost" tabindex="21" value=""></input></td>
                         </tr>
                         <tr class="h13">
                             <td colspan="2">
@@ -163,12 +163,12 @@
                         </tr>
                         <tr class="h13">
                             <td class="iw400-right-bdr">State Specific Use</td>
-                            <td class="w400-yellow-bdr"><input type="text" class="permit" id="txt-state-specific" tabindex="6" value=""></input></td>
+                            <td class="w400-yellow-bdr"><input type="text" class="permit txt-state-specific" id="txt-state-specific" tabindex="22" value=""></input></td>
                         </tr>
                         <tr class="h13">
                             <td class="iw400-right-bdr">Use Group, Proposed</td>
                             <td class="w400-green-bdr">
-                                <select id="txt-use-group" class="permit" tabindex="10">
+                                <select id="txt-use-group" class="permit" tabindex="23">
                                     <option value="Select Group" selected>Select Group</option>
                                     <option value="R-1">R-1</option>
                                     <option value="R-2">R-2</option>

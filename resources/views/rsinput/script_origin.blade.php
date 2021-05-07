@@ -2611,6 +2611,16 @@ $(document).ready(function() {
         $(this).css('background-color', 'transparent');
     });
 
+    $(".permit").on('change', function(obj) {
+        var classes = $(obj.target).attr('class').split(' ');
+        var className = "." + classes[1];
+        console.log(className);
+        $(className).each(function() {
+            console.log("aaa");
+            $(this).val($(obj.target).val());
+        });
+    });
+
     var i = 0;
     for(i = 1; i <= 10; i ++)
     {
@@ -4369,6 +4379,11 @@ function openPermitTab(id, filename, tabname){
         document.getElementById("ucc_f100").style.display = "block";
     }
 
+    if (filename == "ucc_f110_bldg.pdf") {
+        $("#tab_permit_" + id).append($("#ucc_f110"));
+        document.getElementById("ucc_f110").style.display = "block";
+    }
+
     // else if (filename == "ucc_f110_bldg.pdf")
     // else if (filename == "ucc_f120_elec.pdf")
     
@@ -4427,8 +4442,8 @@ function updateUccF100(id, filename) {
                         'Proposed Work Site': [$("#txt-street-address").val() + ", " +  $("#txt-city").val() + ", " + $("#txt-zip").val()],
                         'Owner in Fee': [$("#txt-project-name").val()],
                         'Owner Address': [$("#txt-street-address").val() + ", " +  $("#txt-city").val() + ", " + $("#txt-zip").val()],
-                        'Owner Telephone':[$("#txt-project-tel").val()],
-                        'Owner eMail':[$("#txt-project-email").val()],
+                        'Owner Telephone':[$("#txt-owner-tel").val()],
+                        'Owner eMail':[$("#txt-owner-email").val()],
 
                         'Princ Contractor': [companyInfo.company_name],
                         'Contractor Phone': [companyInfo.company_telno],
@@ -4494,6 +4509,101 @@ function updateUccF100(id, filename) {
     });
 }
 
+function updateUccF110(id, filename) {
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    $.ajax({
+        url:"getCompanyInfo",
+        type:'post',
+        data:{state: $('#option-state').val()},
+        // data:{state: 31},
+        success: function(res){
+            if(res.success){
+                var companyInfo = res.company;
+                var permitInfo = res.permit;
+                var pdfsrc = $("#assetPdfLink").val() + '/' + filename;
+                var script = $("<script>");
+
+                fetch(pdfsrc)
+                .then(function(response) {
+                    return response.arrayBuffer()
+                })
+                .then(function(data) {
+                    console.log(data);
+                    var buildingCost = 0;
+                    var elecCost = 0;
+                    
+                    if ($("#txt-bldg-cost").val()!="") buildingCost = parseFloat($("#txt-bldg-cost").val());
+                    if ($("#txt-rehabil-cost").val()!="") elecCost = parseFloat($("#txt-rehabil-cost").val());
+
+                    var totalCost = parseFloat(buildingCost + elecCost);
+
+                    var fields = {
+                        'Block': [$("#txt-block").val()],
+                        'Lot': [$("#txt-lot").val()],
+                        'Qualifier':[$("#txt-qualifier").val()],
+                        'Address Site': [$("#txt-street-address").val() + ", " +  $("#txt-city").val() + ", " + $("#txt-zip").val()],
+                        'Proposed Work Site': [$("#txt-street-address").val() + ", " +  $("#txt-city").val() + ", " + $("#txt-zip").val()],
+
+                        'Owner in Fee': [$("#txt-project-name").val()],
+                        'Work Site1': [$("#txt-street-address").val() + ", " +  $("#txt-city").val() + ", " + $("#txt-zip").val()],
+                        'Owner Tel':[$("#txt-owner-tel").val()],
+                        'Owner eMail':[$("#txt-owner-email").val()],
+
+                        'Contractor Name': [companyInfo.company_name],
+                        'Contractor Tel': [companyInfo.company_telno],
+                        'Contractor Address': [companyInfo.company_address],
+
+                        'Use Grp -Pres':[$("#txt-use-group-present").val()],
+                        'Use Grp -Prop':[$("#txt-use-group-proposed").val()],
+                        'No Stories':[$("#txt-character-stories").val()],
+                        'Height':[$("#txt-character-height").val()],
+                        'Area -Lgst Fl':[$("#txt-character-area").val()],
+                        'Area -New Bldg':[$("#txt-character-newarea").val()],
+                        'Volume':[$("#txt-character-volume").val()],
+                        'Max Live Load':[$("#txt-character-maxlive").val()],
+                        'Max Occupancy':[$("#txt-character-maxoccupancy").val()],
+
+                        'Constr Class -Pres':[$("#txt-const-group-present").val()],
+                        'Constr Class -Prop':[$("#txt-const-group-proposed").val()],
+                        'Indus Bldg -State': [$("#txt-character-approved").val()],
+                        'Indus Bldg -HUD':[$("#txt-character-hud").val()],
+                        'Est Val -New Bldg':[$("#txt-bldg-cost").val()],
+                        'Est Val -Rehab':[$("#txt-rehabil-cost").val()],
+                        'Est Val Total':["$" + totalCost],
+                        'Description of Work' : [$("#txt-site-data").val()],
+
+                        'Other': [1],
+                        'Other Descrip': ['Solar System'],
+                    };
+
+                    if(permitInfo){
+                        fields['Responsible Person'] = [permitInfo.contact_person],
+                        fields['Resp Pers Tel'] = [permitInfo.contact_phone],
+                        fields['Resp Pers Fax'] = [permitInfo.FAX],
+
+                        fields['Contractor eMail'] = [permitInfo.construction_email];
+                        fields['License or Bldr Reg'] = [permitInfo.registration];
+                        fields['Expiration'] = [permitInfo.exp_date];
+                        fields['FEID'] = [permitInfo.EIN];
+                        fields['Contractor Fax'] = [permitInfo.FAX];
+                    }
+                    var out_buf = pdfform().transform(data, fields);
+
+                    $("#permitViewer_" + id).attr("src", URL.createObjectURL(new Blob([out_buf], {
+                        type: "application/pdf"
+                    })) + "#toolbar=0");
+                }, function(err) {
+                    console.log(err);
+                });
+            }
+        }
+    });
+}
 function savePermit(id, filename){
     var pdfsrc = $("#permitViewer_" + id).attr('src');
     fetch(pdfsrc)

@@ -60,6 +60,9 @@
     <div id="ucc_f100" class="pdfForm">
         @include('rsinput.ucc_f100_cpa')
     </div>
+    <div id="ucc_f110" class="pdfForm">
+        @include('rsinput.ucc_f110_bldg')
+    </div>
 
     <div id="tab_upload" class="rfdTabContent">
         @include('rsinput.upload')
