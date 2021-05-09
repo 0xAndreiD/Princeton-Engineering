@@ -4364,6 +4364,70 @@ function editFile(){
     }
 }
 
+var submitPdfData = async function(filename, data, status) {
+        var message = '';
+        // swal.fire({ title: "Please wait...", showConfirmButton: false });
+        // swal.showLoading();
+        var fd = new FormData();
+        fd.append("projectId", $('#projectId').val());
+        fd.append("status", status);
+        fd.append("filename", filename);
+        fd.append("data", data);
+
+        $.ajax({
+            url:"submitPDF",
+            data:fd,
+            processData: false,
+            contentType: false,
+            type:'POST',
+            
+            success:function(res){
+                // swal.close();
+                if (res.status == true) {
+                    $("#projectId").val(res.projectId);
+                    console.log(res);
+                    return;
+                    // $("#uploadJobId").val(res.projectId);
+                    loadFileList();
+
+                    // if(res.directory)
+                    //     $("#filetree").jstree('rename_node', '#root', 'Root(' + res.directory + ')');
+
+                    message = 'Succeeded to send pdf data!';
+
+                    swal.fire({
+                        title: "Success",
+                        text: message,
+                        icon: "success",
+                        showCancelButton: true,
+                        confirmButtonText: `Yes`,
+                        cancelButtonText: `No`,
+                    })
+                    .then(( result ) => {
+                        return;
+                    });
+                } else {
+                    // error handling
+                    swal.fire({ title: "Error",
+                        text: "Error happened while processing. Please try again later.",
+                        icon: "error",
+                        confirmButtonText: `OK` });
+                }
+            },
+            error: function(xhr, status, error) {
+                swal.close();
+                res = JSON.parse(xhr.responseText);
+                message = res.message;
+                swal.fire({ title: "Error",
+                        text: message == "" ? "Error happened while processing. Please try again later." : message,
+                        icon: "error",
+                        confirmButtonText: `OK` });
+            }
+        });
+        
+        //}
+    }
+
 function openPermitTab(id, filename, tabname){
     if($("#permitTab_" + id).length)
         $("#permitTab_" + id).remove();
@@ -4808,6 +4872,9 @@ function savePermit(id, filename){
                     });
         var url = window.URL.createObjectURL(jsonBlob);
         download(url, filename);
+
+        submitPdfData (filename, jsonBlob, 0);
     });
 }
+
 </script>

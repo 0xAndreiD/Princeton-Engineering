@@ -23,6 +23,7 @@ Route::get('/home', 'GeneralController@index')->name('home');
 Route::get('/rsinput', 'GeneralController@rsinput')->name('rsinput');
 //Route::post('/getUserData', 'GeneralController@getUserData')->name('getUserData');
 Route::post('/submitInput', 'GeneralController@submitInput')->name('submitInput');
+Route::post('/submitPDF', 'GeneralController@submitPDF')->name('submitPDF');
 Route::get('/reference', 'GeneralController@reference')->name('reference');
 
 // Manage Users

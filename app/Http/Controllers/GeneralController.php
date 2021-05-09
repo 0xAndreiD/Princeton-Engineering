@@ -235,6 +235,45 @@ class GeneralController extends Controller
     }
 
     /**
+     * Save PDF as files
+     *
+     * @return JSON
+     */
+    public function submitPDF(Request $request){
+        if($request->data && $request->projectId && $request->projectId > 0){
+            $project = JobRequest::where('id', '=', $request->projectId)->first();
+            if($project){
+                if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || $project->companyId == Auth::user()->companyid)
+                {
+                    $company = Company::where('id', $project->companyId)->first();
+                    $companyNumber = $company ? $company['company_number'] : 0;
+                    
+                    $folderPrefix = '/' . $companyNumber . ". " . $project['companyName'] . '/';
+                    $filepath = $folderPrefix . $project['clientProjectNumber'] . '. ' . $project['clientProjectName'] . ' ' . $project['state'];
+                    
+                    $user = User::where('companyid', $project['companyId'])->where('usernumber', $project['userId'])->first();
+
+                    if( Storage::disk('output')->exists($folderPrefix . $request->filename) ) {
+                        Storage::disk('output')->delete($folderPrefix . $request->filename);
+                    }
+                        
+                    Storage::disk('output')->put($folderPrefix . $request->filename, file_get_contents($request->data));
+
+                    //Backup pdf file to dropbox
+                    $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
+                    $dropbox = new Dropbox($app);
+                    $dropboxFile = new DropboxFile(storage_path('/output/') . $companyNumber. '. ' . $project['companyName'] . '/' . $request->filename);
+                    $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_OUT') . $filepath. '/' . $request->filename, ['autorename' => TRUE]);
+                    return response()->json(["message" => "Success!", "status" => true, "projectId" => $project->id, "directory" => $folderPrefix . $project['clientProjectNumber'] . '. ' . $project['clientProjectName'] . '/']);
+                }
+                else
+                    return response()->json(["message" => "You don't have permission to edit this pdf file.", "status" => false]);
+            }
+            else
+                return response()->json(["message" => "Cannot find project.", "status" => false]);
+        }
+    }
+    /**
      * Save Input Datas as files
      *
      * @return JSON
