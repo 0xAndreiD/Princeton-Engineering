@@ -4386,10 +4386,11 @@ function openPermitTab(id, filename, tabname){
         $("#tab_permit_" + id).append($("#ucc_f120"));
         document.getElementById("ucc_f120").style.display = "block";
     }
-    
 
-    // else if (filename == "ucc_f110_bldg.pdf")
-    // else if (filename == "ucc_f120_elec.pdf")
+    if (filename == "PA ucc-3.pdf") {
+        $("#tab_permit_" + id).append($("#pa_ucc3"));
+        document.getElementById("pa_ucc3").style.display = "block";
+    }
     
     var i, tabcontent, tablinks;
     tabcontent = document.getElementsByClassName("rfdTabContent");
@@ -4428,7 +4429,6 @@ function updateUccF100(id, filename) {
                     return response.arrayBuffer()
                 })
                 .then(function(data) {
-                    console.log(data);
                     var buildingCost = 0;
                     var elecCost = 0;
                     
@@ -4620,7 +4620,6 @@ function updateUccF120(id, filename) {
         url:"getCompanyInfo",
         type:'post',
         data:{state: $('#option-state').val()},
-        // data:{state: 31},
         success: function(res){
             if(res.success){
                 var companyInfo = res.company;
@@ -4633,7 +4632,6 @@ function updateUccF120(id, filename) {
                     return response.arrayBuffer()
                 })
                 .then(function(data) {
-                    console.log(data);
                     var buildingCost = 0;
                     var elecCost = 0;
                     
@@ -4679,6 +4677,111 @@ function updateUccF120(id, filename) {
                         fields['License Expire'] = [permitInfo.exp_date];
                         fields['FEID'] = [permitInfo.EIN];
                         fields['Contractor Fax'] = [permitInfo.FAX];
+                    }
+                    var out_buf = pdfform().transform(data, fields);
+
+                    $("#permitViewer_" + id).attr("src", URL.createObjectURL(new Blob([out_buf], {
+                        type: "application/pdf"
+                    })) + "#toolbar=0");
+                }, function(err) {
+                    console.log(err);
+                });
+            }
+        }
+    });
+}
+
+function updateUcc3(id, filename) {
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    $.ajax({
+        url:"getCompanyInfo",
+        type:'post',
+        data:{state: $('#option-state').val()},
+        success: function(res){
+            if(res.success){
+                var companyInfo = res.company;
+                var permitInfo = res.permit;
+                var pdfsrc = $("#assetPdfLink").val() + '/' + filename;
+                var script = $("<script>");
+
+                fetch(pdfsrc)
+                .then(function(response) {
+                    return response.arrayBuffer()
+                })
+                .then(function(data) {
+                    var fee1 = 0, fee2 = 0, fee3=0, fee4 = 0, totalFee = 0;
+                    if ($("#txt-fee-1").val()!="") fee1 = parseFloat($("#txt-fee-1").val());
+                    if ($("#txt-fee-2").val()!="") fee2 = parseFloat($("#txt-fee-2").val());
+                    if ($("#txt-fee-3").val()!="") fee3 = parseFloat($("#txt-fee-3").val());
+                    if ($("#txt-fee-4").val()!="") fee4 = parseFloat($("#txt-fee-4").val());
+                    totalFee = parseFloat(fee1 + fee2 + fee3 + fee4);
+
+                    var fields = {
+                        'Site Facility name':[companyInfo.company_name],
+                        'Site Building and or Tenant Name':[$("#txt-project-name").val()],
+                        'Site Street Number and Name': [$("#txt-street-address").val()],
+                        'Site City': [$("#txt-city").val()],
+                        'Site State': [$('#option-state').val()],
+                        'Site ZIP Code': [$("#txt-zip").val()],
+                        'Site Political Subdivision': [$("#txt-political-subdivision").val()],
+                        'Site County': [$("#txt-county").val()],
+
+                        'Application Type - Alteration or Renovation':[1],
+                        'Mandatory Documents - Four 4 site plans':[1],
+                        'Mandatory Documents - One 1 completed copy of the UCC2 UCC PLAN REVIEW CHECKLIST': [1],
+                        'Mandatory Documents - One 1 set of specifications only if Addition Alteration New BuildingStructureFacility': [1],
+                        'Does this construction involve modular units built in a factory' : [0,1],
+                        'Is this construction exempt from energy code requirements': [1,0],
+                        'Is project in flood harard area':[0,1],
+                        'Are International Building Code (Chapter 17) special inspections or structural observations required':[0,1],
+                        'Will an alternative construction method or material be used on this project':[0,1],
+                        'Is this application for "phased approval"':[0,1],
+
+                        'Number of stories above grade':[$("#txt-character-stories").val()],
+                        'total floor area':[$("#txt-character-area").val()],
+                        'Floor area new construction sq ft':[$("#txt-character-newarea").val()],
+                        'Floor area of addition sq ft':[$("#txt-character-volume").val()],
+                        'Floor area renovated sq ft':[$("#txt-character-renovated").val()],
+                        'Estimated cost of construction':[$("#txt-building-cost").val()],
+                        
+                        'Design Professional Name': ['Richard Pantel, P.E.'],
+                        'Design Professional Address': ['35091 Paxson Road, Round Hill, VA 20141'],
+                        'Design Professional License#': ['PE039453R'],
+                        'Design Professional Email': ['rpantel@princeton-engineering.com'],
+                        'Design Professional Phone': ['908-507-5500'],
+                        'Design Professional FAX - include area code': ['877-455-5641'],
+
+                        'Owner Name': [$("#txt-project-name").val()],
+                        'Owner Street Address': [$("#txt-street-address").val()],
+                        'Owner City': [$("#txt-city").val()],
+                        'Owner State': [$('#option-state').val()],
+                        'Owner ZIP Code': [$("#txt-zip").val()],
+                        'Owner Phone - include area code':[$("#txt-owner-tel").val()],
+
+                        'List total sq ft of floor area': [$("#txt-total-floor-area").val()],
+                        'List estimated construction cost':[$("#txt-fee-1").val()],
+                        "If expedited review pay $1,048.74":[$("#txt-fee-2").val()],
+                        "If alteration or renovation of existing building, pay $336.65 base fee":[$("#txt-fee-3").val()],
+                        "Plus, pay $68.17 per each $1000 of estimated construction cost":[$("#txt-fee-4").val()],
+                        'Total Fees Owed':[totalFee],
+
+                        'Applicant City': [$("#txt-city").val()],
+                        'Contractor Tel': [companyInfo.company_telno],
+                        'Applicant State':[$('#option-state').val()],
+                        'Applicant ZIP Code':[$("#txt-zip").val()],
+                        'Applicant Street Address': [companyInfo.company_address],
+                    };
+
+                    if(permitInfo){
+                        fields['Applicant Name'] = [permitInfo.contact_person],
+                        fields['Applicant Phone - include area code'] = [permitInfo.contact_phone],
+                        fields['Resp Pers Fax'] = [permitInfo.FAX],
+                        fields['Applicant Email'] = [permitInfo.construction_email];
                     }
                     var out_buf = pdfform().transform(data, fields);
 
