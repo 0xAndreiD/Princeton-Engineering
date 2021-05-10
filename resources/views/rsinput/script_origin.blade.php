@@ -2556,6 +2556,10 @@ $(document).ready(function() {
         detectCorrectTownForMA();
         loadASCEOptions($(this).val());
         loadPermitList($(this).val());
+
+        $("button.permit").hide();
+        $("div.permit").hide();
+        //aaaa
     });
     $('#option-user-id').on('change', function() {
         updateUserOption($(this).children("option:selected").attr('data-userid'));
@@ -2617,6 +2621,10 @@ $(document).ready(function() {
         $(className).each(function() {
             $(this).val($(obj.target).val());
         });
+        updateUccF100(1, "ucc_f100_cpa.pdf");
+        updateUccF110(2, "ucc_f110_bldg.pdf");
+        updateUccF120(3, "ucc_f120_elec.pdf");
+        updateUcc3(4, "PA ucc-3.pdf");
     });
 
     var i = 0;
@@ -4079,6 +4087,60 @@ var loadPreloadedData = function() {
         // $('#td-diag-2-6').html(preloaded_data['td-diag-2-6']);
     });
 }
+    var loadPreloadedPermitData = function() {
+        return new Promise((resolve, reject) => {
+            var projectId = $('#projectId').val();
+            if(projectId >= 0){
+                $.ajax({
+                    url:"getProjectPermitJson",
+                    type:'post',
+                    data:{projectId: projectId},
+                    success:function(res){
+                        console.log(res);
+                        if(res && res.success == true) {
+                            for (var i=0; i<res.data.length; i++) {
+                                preloaded_data = JSON.parse(res.data[i].data);
+                                try{ 
+                                    if (res.data[i].filename == "ucc_f100_cpa.pdf") {
+                                        updateUccForm(preloaded_data, res.data[i].filename);
+                                        openPermitTab(1, res.data[i].filename,'Form Const');
+                                    }
+                                    if (res.data[i].filename == "ucc_f110_bldg.pdf") {
+                                        updateUccForm(preloaded_data, res.data[i].filename);
+                                        openPermitTab(2, res.data[i].filename,'Form Bldg');
+                                    }
+                                    if (res.data[i].filename == "ucc_f120_elec.pdf") {
+                                        updateUccForm(preloaded_data, res.data[i].filename);
+                                        openPermitTab(3, res.data[i].filename,'Form Elec');
+                                    }
+                                    if (res.data[i].filename == "PA ucc-3.pdf") {
+                                        updateUccForm(preloaded_data, res.data[i].filename);
+                                        openPermitTab(4, res.data[i].filename,'Form UCC Bldg');
+                                    }
+                                }
+                                catch(e){
+                                    resolve(false);
+                                    console.log(e);
+                                }    
+                            }
+                            resolve(true);
+                        } 
+                        else{
+                            swal.fire({ title: "Error", text: res.message, icon: "error", confirmButtonText: `OK` });
+                            resolve(false);
+                        }
+                        resolve(true);
+                    },
+                    error: function(xhr, status, error) {
+                        res = JSON.parse(xhr.responseText);
+                        swal.fire({ title: "Error", text: res.message, icon: "error", confirmButtonText: `OK` });
+                        resolve(false);
+                    }
+                });
+            }
+            resolve(true);
+        });
+    }
 
     var applyUserSetting = function(){
         $.ajax({
@@ -4178,6 +4240,7 @@ var loadPreloadedData = function() {
     var initializeSpreadSheet = async function() {
         applyUserSetting();
         await loadPreloadedData();
+        await loadPreloadedPermitData();
         loadStateOptions();
         loadEquipmentSection();
         await loadDataCheck();
@@ -4364,6 +4427,52 @@ function editFile(){
     }
 }
 
+function updateUccForm(data, filename){
+    if (filename == "ucc_f100_cpa.pdf") {
+        $('#ucc_f100 input:text:enabled').each(function() { 
+            var property = $(this).attr('id');
+            $(this).val(data[property]);
+        });
+        $('#ucc_f100 select:enabled').each(function() { 
+            var property = $(this).attr('id');
+            $(this).val(data.property);
+        });
+    }
+
+    if (filename == "ucc_f110_bldg.pdf") {
+        $('#ucc_f110 input:text:enabled').each(function() { 
+            var property = $(this).attr('id');
+            $(this).val(data.property);
+        });
+        $('#ucc_f110 select:enabled').each(function() { 
+            var property = $(this).attr('id');
+            $(this).val(data.property);
+        });
+    }
+
+    if (filename == "ucc_f120_elec.pdf") {
+        $('#ucc_f120 input:text:enabled').each(function() { 
+            var property = $(this).attr('id');
+            $(this).val(data.property);
+        });
+        $('#ucc_f120 select:enabled').each(function() { 
+            var property = $(this).attr('id');
+        $(this).val(data.property);
+        });
+    }
+
+    if (filename == "PA ucc-3.pdf") {
+        $('#pa_ucc3 input:text:enabled').each(function() {
+            var property = $(this).attr('id'); 
+            $(this).val(data.property);
+        });
+        $('#pa_ucc3 select:enabled').each(function() { 
+            var property = $(this).attr('id');
+            $(this).val(data.property);
+        });
+    }
+}
+
 var submitPdfData = async function(filename, data, status) {
         var message = '';
         // swal.fire({ title: "Please wait...", showConfirmButton: false });
@@ -4433,27 +4542,31 @@ function openPermitTab(id, filename, tabname){
         $("#permitTab_" + id).remove();
     if($("#tab_permit" + id).length)
         $("#tab_permit" + id).remove();
-    $("#permitTab").after('<button class="tablinks" onclick="openRfdTab(event, \'tab_permit_' + id + '\')" id="permitTab_' + id + '">' + tabname + '</button>');
+    $("#permitTab").after('<button class="tablinks permit" onclick="openRfdTab(event, \'tab_permit_' + id + '\')" id="permitTab_' + id + '">' + tabname + '</button>');
 
-    $("#tab_permit").after('<div id="tab_permit_' + id + '" class="rfdTabContent" style="position:relative;"></div>');
+    $("#tab_permit").after('<div id="tab_permit_' + id + '" class="rfdTabContent permit" style="position:relative;"></div>');
     if (filename == "ucc_f100_cpa.pdf") {
         $("#tab_permit_" + id).append($("#ucc_f100"));
         document.getElementById("ucc_f100").style.display = "block";
+        updateUccF100(1, "ucc_f100_cpa.pdf");
     }
 
     if (filename == "ucc_f110_bldg.pdf") {
         $("#tab_permit_" + id).append($("#ucc_f110"));
         document.getElementById("ucc_f110").style.display = "block";
+        updateUccF110(2, "ucc_f110_bldg.pdf");
     }
 
     if (filename == "ucc_f120_elec.pdf") {
         $("#tab_permit_" + id).append($("#ucc_f120"));
         document.getElementById("ucc_f120").style.display = "block";
+        updateUccF120(3, "ucc_f120_elec.pdf");
     }
 
     if (filename == "PA ucc-3.pdf") {
         $("#tab_permit_" + id).append($("#pa_ucc3"));
         document.getElementById("pa_ucc3").style.display = "block";
+        updateUcc3(4, "PA ucc-3.pdf");
     }
     
     var i, tabcontent, tablinks;
@@ -4480,7 +4593,6 @@ function updateUccF100(id, filename) {
         url:"getCompanyInfo",
         type:'post',
         data:{state: $('#option-state').val()},
-        // data:{state: 31},
         success: function(res){
             if(res.success){
                 var companyInfo = res.company;
@@ -4495,9 +4607,16 @@ function updateUccF100(id, filename) {
                 .then(function(data) {
                     var buildingCost = 0;
                     var elecCost = 0;
-                    
+                    var wetlands = ['', ''], ownerShipFee = ['', ''];
+
                     if ($("#txt-building-cost").val()!="") buildingCost = parseFloat($("#txt-building-cost").val());
                     if ($("#txt-elec-cost").val()!="") elecCost = parseFloat($("#txt-elec-cost").val());
+
+                    if ($("#owner-ship-fee").val() == 1) ownerShipFee[0] = 'X';
+                    else ownerShipFee[1] = 'X';
+
+                    if ($("#character-wetlands").val() == 1) wetlands[0] = 'X';
+                    else wetlands[1] = 'X';
 
                     var totalCost = parseFloat(buildingCost + elecCost);
 
@@ -4508,10 +4627,14 @@ function updateUccF100(id, filename) {
                         'Permit No':[$("#txt-permit-no").val()],
                         'Address Site': [$("#txt-street-address").val() + ", " +  $("#txt-city").val() + ", " + $("#txt-zip").val()],
                         'Proposed Work Site': [$("#txt-street-address").val() + ", " +  $("#txt-city").val() + ", " + $("#txt-zip").val()],
+
                         'Owner in Fee': [$("#txt-project-name").val()],
                         'Owner Address': [$("#txt-street-address").val() + ", " +  $("#txt-city").val() + ", " + $("#txt-zip").val()],
                         'Owner Telephone':[$("#txt-owner-tel").val()],
                         'Owner eMail':[$("#txt-owner-email").val()],
+
+                        'Public':[ownerShipFee[0]],
+                        'Private':[ownerShipFee[1]],
 
                         'Princ Contractor': [companyInfo.company_name],
                         'Contractor Phone': [companyInfo.company_telno],
@@ -4529,9 +4652,9 @@ function updateUccF100(id, filename) {
                         'Land Area Disturbed':[$("#txt-character-disturbed").val()],
                         'Flood Haz Zone':[$("#txt-character-flood").val()],
                         'Base Flood Elev':[$("#txt-character-base").val()],
-                        'Wetlands -Yes':[$("#character-wetlands").val()],
-                        'Wetlands -No':[Math.abs($("#character-wetlands").val() - 1)],
-
+                        'Wetlands -Yes':[wetlands[0]],
+                        'Wetlands -No':[wetlands[1]],
+                        
                         'Architect-Engineer': ['Richard Pantel, P.E.'],
                         'Architect Address': ['35091 Paxson Road, Round Hill, VA 20141'],
                         'Architect eMail': ['rpantel@princeton-engineering.com'],
@@ -4601,11 +4724,10 @@ function updateUccF110(id, filename) {
                     return response.arrayBuffer()
                 })
                 .then(function(data) {
-                    console.log(data);
                     var buildingCost = 0;
                     var elecCost = 0;
                     
-                    if ($("#txt-bldg-cost").val()!="") buildingCost = parseFloat($("#txt-bldg-cost").val());
+                    if ($("#txt-building-cost").val()!="") buildingCost = parseFloat($("#txt-building-cost").val());
                     if ($("#txt-rehabil-cost").val()!="") elecCost = parseFloat($("#txt-rehabil-cost").val());
 
                     var totalCost = parseFloat(buildingCost + elecCost);
@@ -4643,6 +4765,7 @@ function updateUccF110(id, filename) {
                         'Est Val -New Bldg':[$("#txt-bldg-cost").val()],
                         'Est Val -Rehab':[$("#txt-rehabil-cost").val()],
                         'Est Val Total':["$" + totalCost],
+                        'Contractor Print Name':[$("#txt-print-name").val()],
                         'Description of Work' : [$("#txt-site-data").val()],
 
                         'Other': [1],
@@ -4726,6 +4849,18 @@ function updateUccF120(id, filename) {
                         'Utility Co.0':[$("#txt-utility-co").val()],
                         "Est'd Cost of Wk":[$("#txt-elec-cost").val()],
                         'Total': [0],
+
+                        'Qty -Trans-Gen':[$("#txt-kw-qty").val()],
+                        'Sz -Trans-Gen':[$("#txt-kw-size").val()],
+                        'Qty -Service':[$("#txt-amp-qty").val()],
+                        'Sz -Service':[$("#txt-amp-size").val()],
+                        'Qty -SubPanels':[$("#txt-subpanels-qty").val()],
+                        'Sz -Subpanels':[$("#txt-subpanels-size").val()],
+                        'Qty -Motor Cntrl Cntr':[$("#txt-motor-qty").val()],
+                        'Sz -Motor Cntrl Cntr':[$("#txt-motor-size").val()],
+                        'Qty -Elec Sign':[$("#txt-light-qty").val()],
+                        'Sz -Elec Sign':[$("#txt-light-size").val()],
+
                         'Qty -Other3':[$("#option-module-quantity").val()],
                         'Sz -Other3':[$("#option-module-quantity").val()],
                         'Other3 Descrip': ["Solar Panels"],
@@ -4872,9 +5007,95 @@ function savePermit(id, filename){
                     });
         var url = window.URL.createObjectURL(jsonBlob);
         download(url, filename);
-
+        
+        submitPermitJson (filename);
         submitPdfData (filename, jsonBlob, 0);
     });
 }
+
+var getPermitData = function(filename) {
+    var alldata = {};
+
+    $('#inputform-first input:text:enabled').each(function() { 
+        alldata[$(this).attr('id')] = $(this).val();
+    });
+
+    if (filename == "ucc_f100_cpa.pdf") {
+        $('#ucc_f100 input:text:enabled').each(function() { 
+            alldata[$(this).attr('id')] = $(this).val();
+        });
+        $('#ucc_f100 select:enabled').each(function() { 
+            alldata[$(this).attr('id')] = $(this).val();
+        });
+    }
+
+    if (filename == "ucc_f110_bldg.pdf") {
+        $('#ucc_f110 input:text:enabled').each(function() { 
+            alldata[$(this).attr('id')] = $(this).val();
+        });
+        $('#ucc_f110 select:enabled').each(function() { 
+            alldata[$(this).attr('id')] = $(this).val();
+        });
+    }
+
+    if (filename == "ucc_f120_elec.pdf") {
+        $('#ucc_f120 input:text:enabled').each(function() { 
+            alldata[$(this).attr('id')] = $(this).val();
+        });
+        $('#ucc_f120 select:enabled').each(function() { 
+            alldata[$(this).attr('id')] = $(this).val();
+        });
+    }
+
+    if (filename == "PA ucc-3.pdf") {
+        $('#pa_ucc3 input:text:enabled').each(function() { 
+            alldata[$(this).attr('id')] = $(this).val();
+        });
+        $('#pa_ucc3 select:enabled').each(function() { 
+            alldata[$(this).attr('id')] = $(this).val();
+        });
+    }
+    return alldata;
+}
+
+function submitPermitJson(filename) {
+    var data = getPermitData(filename);
+    swal.fire({ title: "Please wait...", showConfirmButton: false });
+    swal.showLoading();
+    $.ajax({
+        url:"submitPermitInput",
+        type:'post',
+        data:{data: data, filename: filename},
+        success:function(res){
+            swal.close();
+            if (res.status == true) {
+                swal.fire({
+                    title: "Success",
+                    text: message,
+                    icon: "success",
+                    showCancelButton: true,
+                })
+                .then(( result ) => {
+                });
+            } else {
+                // error handling
+                swal.fire({ title: "Error",
+                    text: "Error happened while processing. Please try again later.",
+                    icon: "error",
+                    confirmButtonText: `OK` });
+            }
+        },
+        error: function(xhr, status, error) {
+            swal.close();
+            res = JSON.parse(xhr.responseText);
+            message = res.message;
+            swal.fire({ title: "Error",
+                    text: message == "" ? "Error happened while processing. Please try again later." : message,
+                    icon: "error",
+                    confirmButtonText: `OK` });
+        }
+    });
+}
+
 
 </script>

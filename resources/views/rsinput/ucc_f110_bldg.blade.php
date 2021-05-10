@@ -151,15 +151,21 @@
                         </tr>
                         <tr class="h13">
                             <td class="iw400-right-bdr">Est.Cost of New Bldg</td>
-                            <td class="w400-yellow-bdr"><input type="text" class="permit txt-bldg-cost" id="txt-bldg-cost" tabindex="6" value=""></input></td>
+                            <td class="w400-yellow-bdr"><input type="text" class="permit txt-building-cost" id="txt-building-cost" tabindex="6" value=""></input></td>
                         </tr>
                         <tr class="h13">
                             <td class="iw400-right-bdr">Est.Cost of Rehabilitation</td>
                             <td class="w400-yellow-bdr"><input type="text" class="permit txt-rehabil-cost" id="txt-rehabil-cost" tabindex="6" value=""></input></td>
                         </tr>
                         <tr class="h13">
-                            <td class="iw400-right-bdr">Technical Site Data</td>
-                            <td class="w400-yellow-bdr"><textarea type="text" class="permit txt-site-data" id="txt-site-data" tabindex="6" value=""></textarea></td>
+                            <td class="iw400-right-bdr">Print name here</td>
+                            <td class="w400-yellow-bdr"><input type="text" class="permit txt-print-name" id="txt-print-name" tabindex="6" value=""></input></td>
+                        </tr>
+                        <tr class="h13">
+                            <td class="iw400-right-bdr">Technical Site Data (Desc of Work)</td>
+                            <td class="w400-yellow-bdr" style="height:160px">
+                                <textarea type="text" class="permit txt-site-data" id="txt-site-data" tabindex="6" value=""></textarea>
+                            </td>
                         </tr>
                     </tbody>
                 </table>

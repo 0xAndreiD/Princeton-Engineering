@@ -23,6 +23,7 @@ Route::get('/home', 'GeneralController@index')->name('home');
 Route::get('/rsinput', 'GeneralController@rsinput')->name('rsinput');
 //Route::post('/getUserData', 'GeneralController@getUserData')->name('getUserData');
 Route::post('/submitInput', 'GeneralController@submitInput')->name('submitInput');
+Route::post('/submitPermitInput', 'GeneralController@submitPermitInput')->name('submitPermitInput');
 Route::post('/submitPDF', 'GeneralController@submitPDF')->name('submitPDF');
 Route::get('/reference', 'GeneralController@reference')->name('reference');
 
@@ -53,6 +54,7 @@ Route::get('/projectlist', 'GeneralController@projectList')->name('projectlist')
 Route::get('/requestFile', 'GeneralController@requestFile')->name('requestFile');
 Route::post('/getProjectList', 'GeneralController@getProjectList')->name('getProjectList');
 Route::post('/getProjectJson', 'GeneralController@getProjectJson')->name('getProjectJson');
+Route::post('/getProjectPermitJson', 'GeneralController@getProjectPermitJson')->name('getProjectPermitJson');
 Route::post('/getDataCheck', 'GeneralController@getDataCheck')->name('getDataCheck');
 Route::post('/delProject', 'GeneralController@delProject')->name('delProject');
 Route::post('/setProjectState', 'GeneralController@setProjectState')->name('setProjectState');

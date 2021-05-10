@@ -80,6 +80,71 @@
                             <td class="iw400-right-bdr">Est.Cost of Elec</td>
                             <td class="w400-yellow-bdr"><input type="text" class="permit txt-elec-cost" id="txt-elec-cost" tabindex="6" value=""></input></td>
                         </tr>
+                        <tr class="h13">
+                            <td colspan="2">
+                                Technical Site Data
+                            </td>
+                        </tr>
+                        <tr class="h13">
+                            <td class="iw400-right-bdr">KW Transformer/Generator QTY</td>
+                            <td class="w400-yellow-bdr">
+                                <input type="text" class="permit txt-kw-qty" id="txt-kw-qty" tabindex="6" value=""></input>
+                            </td>
+                        </tr>
+                        <tr class="h13">
+                            <td class="iw400-right-bdr">KW Transformer/Generator Size</td>
+                            <td class="w400-yellow-bdr">
+                                <input type="text" class="permit txt-kw-size" id="txt-kw-size" tabindex="6" value=""></input>
+                            </td>
+                        </tr>
+                        <tr class="h13">
+                            <td class="iw400-right-bdr">AMP Service QTY</td>
+                            <td class="w400-yellow-bdr">
+                                <input type="text" class="permit txt-amp-qty" id="txt-amp-qty" tabindex="6" value=""></input>
+                            </td>
+                        </tr>
+                        <tr class="h13">
+                            <td class="iw400-right-bdr">AMP Service Size</td>
+                            <td class="w400-yellow-bdr">
+                                <input type="text" class="permit txt-amp-size" id="txt-amp-size" tabindex="6" value=""></input>
+                            </td>
+                        </tr>
+                        <tr class="h13">
+                            <td class="iw400-right-bdr">AMP Subpanels QTY</td>
+                            <td class="w400-yellow-bdr">
+                                <input type="text" class="permit txt-subpanels-qty" id="txt-subpanels-qty" tabindex="6" value=""></input>
+                            </td>
+                        </tr>
+                        <tr class="h13">
+                            <td class="iw400-right-bdr">AMP Subpanels Size</td>
+                            <td class="w400-yellow-bdr">
+                                <input type="text" class="permit txt-subpanels-size" id="txt-subpanels-size" tabindex="6" value=""></input>
+                            </td>
+                        </tr>
+                        <tr class="h13">
+                            <td class="iw400-right-bdr">AMP Motor Control Center QTY</td>
+                            <td class="w400-yellow-bdr">
+                                <input type="text" class="permit txt-motor-qty" id="txt-motor-qty" tabindex="6" value=""></input>
+                            </td>
+                        </tr>
+                        <tr class="h13">
+                            <td class="iw400-right-bdr">AMP Motor Control Center Size</td>
+                            <td class="w400-yellow-bdr">
+                                <input type="text" class="permit txt-motor-size" id="txt-motor-size" tabindex="6" value=""></input>
+                            </td>
+                        </tr>
+                        <tr class="h13">
+                            <td class="iw400-right-bdr">KW Elec. Sign/Outline Light QTY</td>
+                            <td class="w400-yellow-bdr">
+                                <input type="text" class="permit txt-light-qty" id="txt-light-qty" tabindex="6" value=""></input>
+                            </td>
+                        </tr>
+                        <tr class="h13">
+                            <td class="iw400-right-bdr">KW Elec. Sign/Outline Light Size</td>
+                            <td class="w400-yellow-bdr">
+                                <input type="text" class="permit txt-light-size" id="txt-light-size" tabindex="6" value=""></input>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>

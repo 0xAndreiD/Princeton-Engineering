@@ -51,6 +51,15 @@
                                 Name of Owner in Fee
                             </td>
                         </tr>
+                        <tr class="h13">
+                            <td class="iw400-right-bdr">Ownership in Fee</td>
+                            <td class="w400-green-bdr">
+                                <select id="owner-ship-fee" class="permit" tabindex="19">
+                                    <option value="0" selected>Private</option>
+                                    <option value="1">Public</option>
+                                </select>
+                            </td>
+                        </tr>
                         {{-- <tr class="h13">
                             <td class="iw400-right-bdr">Project Name</td>
                             <td class="w400-yellow-bdr"><input type="text" class="permit" id="txt-permit-tel" tabindex="5" value=""></input></td>
@@ -137,8 +146,8 @@
                             <td class="iw400-right-bdr">Wetlands</td>
                             <td class="w400-green-bdr">
                                 <select id="character-wetlands" class="permit" tabindex="19">
-                                    <option value="1" selected>YES</option>
-                                    <option value="0">No</option>
+                                    <option value="1">YES</option>
+                                    <option value="0" selected>No</option>
                                 </select>
                             </td>
                         </tr>

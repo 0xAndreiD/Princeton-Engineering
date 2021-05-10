@@ -2,15 +2,15 @@
     <div class="col-3">
         <div class="row">
             <div class="col-12">
-                <h5 class="mt-2 ml-2">Electrical Subcode Technical Section</h5>
+                <h5 class="mt-2 ml-2">Application For UCC Building Permit</h5>
                 <h6 class="mt-2 ml-2">After you input the data below then click Update PDF button, don't input to the pdf directly.</h6>
             </div>
             <div class="col-12">
                 <div class="permitCtrlBtns mt-2">
-                    <button class="mr-4 btn btn-danger" onclick="updateUcc3(3, 'PA ucc-3.pdf')">
+                    <button class="mr-4 btn btn-danger" onclick="updateUcc3(4, 'PA ucc-3.pdf')">
                         <i class="fa fa-file-pdf mr-1" aria-hidden="true"></i>Update PDF
                     </button>
-                    <button class="mr-2 btn btn-info" onclick="savePermit(3, 'PA ucc-3.pdf')">
+                    <button class="mr-2 btn btn-info" onclick="savePermit(4, 'PA ucc-3.pdf')">
                         <i class="far fa-save mr-1"></i>Save
                     </button>
                 </div>
@@ -120,7 +120,7 @@
 
                         <tr class="h13">
                             <td colspan="2">
-                                Name of Owner in Fee
+                                Owner Information
                             </td>
                         </tr>
                         <tr class="h13">
@@ -133,6 +133,6 @@
         </div>
     </div>
     <div class="col-9">
-        <iframe id="permitViewer_3" src="" type="application/pdf" class="pdfViewer" disabled></iframe>
+        <iframe id="permitViewer_4" src="" type="application/pdf" class="pdfViewer" disabled></iframe>
     </div>
 </div>

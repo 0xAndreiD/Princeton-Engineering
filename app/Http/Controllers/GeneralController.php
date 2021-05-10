@@ -14,6 +14,7 @@ use App\PVInverter;
 use App\Stanchion;
 use App\RailSupport;
 use App\JobRequest;
+use App\JobPermit;
 use App\DataCheck;
 use App\UserSetting;
 use App\ASCERoofTypes;
@@ -233,7 +234,41 @@ class GeneralController extends Controller
             return response()->json(["message" => "Success!", "status" => true, "projectId" => $projectId, "directory" => "/" . $companyNumber. '. ' . $project['companyName'] . '/' . $project['clientProjectNumber'] . '. ' . $project['clientProjectName'] . ' ' . $request['data']['option-state'] . '/']);
         }
     }
-
+/**
+     * Save Input Datas as files
+     *
+     * @return JSON
+     */
+    public function submitPermitInput(Request $request){
+        if($request['data'] && $request['data']['projectId'] && $request['data']['projectId'] > 0){
+            $project = JobPermit::where('job_id', '=', $request['data']['projectId'])->where('filename', '=', $request['filename'])->first();
+            if($project){
+                if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || $project->companyId == Auth::user()->companyid)
+                {
+                    $project->data = json_encode($request['data']);
+                    $project->save();
+                    return response()->json(["message" => "Success!", "status" => true, "projectId" => $project->id]);
+                }
+                else
+                    return response()->json(["message" => "You don't have permission to edit this project.", "status" => false]);
+            }
+            else
+            {
+                $filename = $request['filename'];
+                try {
+                    $project = JobPermit::create([
+                        'job_id' => $request['data']['projectId'],
+                        'filename' => $request['filename'],
+                        'data'=> json_encode($request['data'])
+                    ]);
+                }
+                catch(Exception $e) {
+                    return response()->json(["message" => "Failed to generate Permit json data file", "status" => false]);
+                }
+                return response()->json(["message" => "Success!", "status" => true, "projectId" => $project->id]);
+            }
+        }
+    }
     /**
      * Save PDF as files
      *
@@ -965,6 +1000,33 @@ class GeneralController extends Controller
                         return response()->json(['success' => true, 'data' => Storage::disk('input')->get($folderPrefix . $project['requestFile'])]);
                     else
                         return response()->json(['success' => false, 'message' => "Cannot find the project file."] );
+                }
+                else
+                {
+                    return response()->json(['success' => false, 'message' => "You don't have any permission to view this project."] );
+                }
+            }
+            else
+                return response()->json(['success' => false, 'message' => 'Cannot find the project.'] );
+        }
+        else
+            return response()->json(['success' => false, 'message' => 'Wrong Project Id.'] );
+    }
+
+    /**
+     * Return the json contents of project permit.
+     *
+     * @return JSON
+     */
+    public function getProjectPermitJson(Request $request){
+        if($request['projectId'])
+        {
+            $project = JobPermit::where('job_id', '=', $request['projectId'])->get();
+            if($project)
+            {
+                if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3)
+                {
+                    return response()->json(['success' => true, 'data' => $project] );
                 }
                 else
                 {
