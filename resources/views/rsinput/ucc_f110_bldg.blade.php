@@ -163,7 +163,7 @@
                         </tr>
                         <tr class="h13">
                             <td class="iw400-right-bdr">Technical Site Data (Desc of Work)</td>
-                            <td class="w400-yellow-bdr" style="height:160px">
+                            <td class="w400-yellow-bdr" style="height:200px">
                                 <textarea type="text" class="permit txt-site-data" id="txt-site-data" tabindex="6" value=""></textarea>
                             </td>
                         </tr>

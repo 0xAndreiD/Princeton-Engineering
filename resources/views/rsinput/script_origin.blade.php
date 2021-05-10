@@ -4640,7 +4640,7 @@ function updateUccF100(id, filename) {
                         'Contractor Phone': [companyInfo.company_telno],
                         'Contractor Address 1': [companyInfo.company_address],
 
-                        'No. Stories':[$("#txt-character-stories").val()],
+                        'Number Stories':[$("#txt-character-stories").val()],
                         'Height':[$("#txt-character-height").val()],
                         'Area Lgst Fl':[$("#txt-character-area").val()],
                         'New Bldg Area':[$("#txt-character-newarea").val()],
@@ -4711,7 +4711,6 @@ function updateUccF110(id, filename) {
         url:"getCompanyInfo",
         type:'post',
         data:{state: $('#option-state').val()},
-        // data:{state: 31},
         success: function(res){
             if(res.success){
                 var companyInfo = res.company;
@@ -4736,6 +4735,7 @@ function updateUccF110(id, filename) {
                         'Block': [$("#txt-block").val()],
                         'Lot': [$("#txt-lot").val()],
                         'Qualifier':[$("#txt-qualifier").val()],
+                        'Work Site1': [$("#txt-street-address").val() + ", " +  $("#txt-city").val() + ", " + $("#txt-zip").val()],
                         'Address Site': [$("#txt-street-address").val() + ", " +  $("#txt-city").val() + ", " + $("#txt-zip").val()],
                         'Proposed Work Site': [$("#txt-street-address").val() + ", " +  $("#txt-city").val() + ", " + $("#txt-zip").val()],
 
@@ -4743,7 +4743,7 @@ function updateUccF110(id, filename) {
                         'Owner Address': [$("#txt-street-address").val() + ", " +  $("#txt-city").val() + ", " + $("#txt-zip").val()],
                         'Owner Tel':[$("#txt-owner-tel").val()],
                         'Owner eMail':[$("#txt-owner-email").val()],
-
+                        
                         'Contractor Name': [companyInfo.company_name],
                         'Contractor Tel': [companyInfo.company_telno],
                         'Contractor Address': [companyInfo.company_address],
@@ -4762,7 +4762,7 @@ function updateUccF110(id, filename) {
                         'Constr Class -Prop':[$("#txt-const-group-proposed").val()],
                         'Indus Bldg -State': [$("#txt-character-approved").val()],
                         'Indus Bld -HUD':[$("#txt-character-hud").val()],
-                        'Est Val -New Bldg':[$("#txt-bldg-cost").val()],
+                        'Est Val -New Bldg':[$("#txt-building-cost").val()],
                         'Est Val -Rehab':[$("#txt-rehabil-cost").val()],
                         'Est Val Total':["$" + totalCost],
                         'Contractor Print Name':[$("#txt-print-name").val()],
@@ -4840,13 +4840,14 @@ function updateUccF120(id, filename) {
                         'Owner eMail':[$("#txt-owner-email").val()],
 
                         'Contractor': [companyInfo.company_name],
+                        'Print Name': [companyInfo.company_name],
                         'Contractor Tel': [companyInfo.company_telno],
                         'Contractor Address 1': [companyInfo.company_address],
 
                         'Res Use Present':[$("#txt-use-group-present").val()],
                         'Res Use Proposed':[$("#txt-use-group-proposed").val()],
                         'Occupied':[$("#txt-building-occupied").val()],
-                        'Utility Co.0':[$("#txt-utility-co").val()],
+                        'utilityco':[$("#txt-utility-co").val()],
                         "Est'd Cost of Wk":[$("#txt-elec-cost").val()],
                         'Total': [0],
 
@@ -4930,17 +4931,18 @@ function updateUcc3(id, filename) {
                         'Site Political Subdivision': [$("#txt-political-subdivision").val()],
                         'Site County': [$("#txt-county").val()],
 
-                        'Application Type - Alteration or Renovation':[1],
-                        'Mandatory Documents - Four 4 site plans':[1],
-                        'Mandatory Documents - One 1 completed copy of the UCC2 UCC PLAN REVIEW CHECKLIST': [1],
-                        'Mandatory Documents - One 1 set of specifications only if Addition Alteration New BuildingStructureFacility': [1],
-                        'Does this construction involve modular units built in a factory' : [0,1],
-                        'Is this construction exempt from energy code requirements': [1,0],
-                        'Is project in flood harard area':[0,1],
-                        'Are International Building Code (Chapter 17) special inspections or structural observations required':[0,1],
-                        'Will an alternative construction method or material be used on this project':[0,1],
-                        'Is this application for "phased approval"':[0,1],
+                        'AppType02':['Yes'],
+                        'ManDocs01':['Yes'],
+                        'ManDocs02': ['Yes'],
+                        'ManDocs03': ['Yes'],
 
+                        'CB01N':['Yes'],
+                        'CB03Y':['Yes'],
+                        'CB04N':['Yes'],
+                        'CB05N':['Yes'],
+                        'CB06N':['Yes'],
+                        'CB07N':['Yes'],
+                        
                         'Number of stories above grade':[$("#txt-character-stories").val()],
                         'total floor area':[$("#txt-character-area").val()],
                         'Floor area new construction sq ft':[$("#txt-character-newarea").val()],
@@ -4963,11 +4965,11 @@ function updateUcc3(id, filename) {
                         'Owner Phone - include area code':[$("#txt-owner-tel").val()],
 
                         'List total sq ft of floor area': [$("#txt-total-floor-area").val()],
-                        'List estimated construction cost':[$("#txt-fee-1").val()],
-                        "If expedited review pay $1,048.74":[$("#txt-fee-2").val()],
-                        "If alteration or renovation of existing building, pay $336.65 base fee":[$("#txt-fee-3").val()],
-                        "Plus, pay $68.17 per each $1000 of estimated construction cost":[$("#txt-fee-4").val()],
-                        'Total Fees Owed':[totalFee],
+                        'cost 1':[$("#txt-fee-1").val()],
+                        'cost 2':[$("#txt-fee-2").val()],
+                        'cost 6':[$("#txt-fee-3").val()],
+                        'cost  7':[$("#txt-fee-4").val()],
+                        'Total Fees':[totalFee],
 
                         'Applicant City': [$("#txt-city").val()],
                         'Contractor Tel': [companyInfo.company_telno],

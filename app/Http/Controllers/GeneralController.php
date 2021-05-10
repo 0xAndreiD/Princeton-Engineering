@@ -1024,17 +1024,17 @@ class GeneralController extends Controller
             $project = JobPermit::where('job_id', '=', $request['projectId'])->get();
             if($project)
             {
-                if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3)
-                {
+                // if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3)
+                // {
                     return response()->json(['success' => true, 'data' => $project] );
-                }
-                else
-                {
-                    return response()->json(['success' => false, 'message' => "You don't have any permission to view this project."] );
-                }
+                // }
+                // else
+                // {
+                //     return response()->json(['success' => false, 'message' => "You don't have any permission to view this project."] );
+                // }
             }
             else
-                return response()->json(['success' => false, 'message' => 'Cannot find the project.'] );
+                return response()->json(['success' => true, 'message' => 'Cannot find the project.'] );
         }
         else
             return response()->json(['success' => false, 'message' => 'Wrong Project Id.'] );
