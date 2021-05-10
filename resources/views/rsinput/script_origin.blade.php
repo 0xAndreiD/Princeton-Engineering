@@ -5071,7 +5071,7 @@ function submitPermitJson(filename) {
             if (res.status == true) {
                 swal.fire({
                     title: "Success",
-                    text: message,
+                    text: res.message,
                     icon: "success",
                     showCancelButton: true,
                 })
