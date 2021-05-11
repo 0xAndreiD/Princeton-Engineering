@@ -65,11 +65,11 @@
                             <td class="w400-yellow-bdr"><input type="text" class="permit" id="txt-permit-tel" tabindex="5" value=""></input></td>
                         </tr> --}}
                         <tr class="h13">
-                            <td class="iw400-right-bdr">Tel</td>
+                            <td class="iw400-right-bdr">Owner's Tel</td>
                             <td class="w400-yellow-bdr"><input type="text" class="permit txt-owner-tel" id="txt-owner-tel" tabindex="5" value=""></input></td>
                         </tr>
                         <tr class="h13">
-                            <td class="iw400-right-bdr">E-MAIL</td>
+                            <td class="iw400-right-bdr">Owner's EMAIL</td>
                             <td class="w400-yellow-bdr"><input type="text" class="permit txt-owner-email" id="txt-owner-email" tabindex="6" value=""></input></td>
                         </tr>
                         {{-- <tr class="h13">

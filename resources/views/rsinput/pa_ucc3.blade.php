@@ -73,23 +73,23 @@
                         </tr>
                         <tr class="h13">
                             <td class="iw400-right-bdr">List total sq. ft. of floor area</td>
-                            <td class="w400-yellow-bdr"><input type="text" class="permit txt-total-floor-area" id="txt-total-floor-area" tabindex="20" value=""></input></td>
+                            <td class="w400-yellow-bdr"><input type="text" class="permit txt-total-floor-area" id="txt-total-floor-area" placeholder="Enter values" tabindex="20" value=""></input></td>
                         </tr>
                         <tr class="h13">
                             <td class="iw400-right-bdr">List estimated construction cost</td>
-                            <td class="w400-yellow-bdr"><input type="text" class="permit txt-fee-1" id="txt-fee-1" tabindex="20" value=""></input></td>
+                            <td class="w400-yellow-bdr"><input type="text" class="permit txt-fee-1" id="txt-fee-1" placeholder="Enter values" tabindex="20" value=""></input></td>
                         </tr>
                         <tr class="h13">
                             <td class="iw400-right-bdr">pay $1,048.74</td>
-                            <td class="w400-yellow-bdr"><input type="text" class="permit txt-fee-2" id="txt-fee-2" tabindex="20" value=""></input></td>
+                            <td class="w400-yellow-bdr"><input type="text" class="permit txt-fee-2" id="txt-fee-2" placeholder="Enter values" tabindex="20" value=""></input></td>
                         </tr>
                         <tr class="h13">
                             <td class="iw400-right-bdr">pay $336.65 base fee</td>
-                            <td class="w400-yellow-bdr"><input type="text" class="permit txt-fee-3" id="txt-fee-3" tabindex="20" value=""></input></td>
+                            <td class="w400-yellow-bdr"><input type="text" class="permit txt-fee-3" id="txt-fee-3" placeholder="Enter values" tabindex="20" value=""></input></td>
                         </tr>
                         <tr class="h13">
                             <td class="iw400-right-bdr">Plus, pay $68.17 per each $1000 of est. construction cost</td>
-                            <td class="w400-yellow-bdr"><input type="text" class="permit txt-fee-4" id="txt-fee-4" tabindex="20" value=""></input></td>
+                            <td class="w400-yellow-bdr"><input type="text" class="permit txt-fee-4" id="txt-fee-4" placeholder="Enter values" tabindex="20" value=""></input></td>
                         </tr>
 
                         <tr class="h13">

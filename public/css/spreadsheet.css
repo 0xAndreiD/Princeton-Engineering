@@ -142,7 +142,11 @@
     padding-right: 1px;
     padding-top: 1px;
     text-align: center;
-    vertical-align: bottom;
+    vertical-align: center;
+}
+
+input.permit {
+    height: 30px;
 }
 
 *.w400-blue-bdr {
