@@ -422,7 +422,8 @@
             data:{jobId: jobId},
             success: function(res){
                 if(res.success){
-                    $('#projects').DataTable().draw();
+                    return;
+                    // $('#projects').DataTable().draw();
                 }else
                     swal.fire({ title: "Error", text: res.message, icon: "error", confirmButtonText: `OK` });
             },
@@ -444,7 +445,8 @@
             data:{jobId: jobId},
             success: function(res){
                 if(res.success){
-                    $('#projects').DataTable().draw();
+                    return;
+                    // $('#projects').DataTable().draw();
                 }else
                     swal.fire({ title: "Error", text: res.message, icon: "error", confirmButtonText: `OK` });
             },
