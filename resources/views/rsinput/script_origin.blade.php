@@ -4931,7 +4931,7 @@ function updateUcc3(id, filename) {
                         'Site Political Subdivision': [$("#txt-political-subdivision").val()],
                         'Site County': [$("#txt-county").val()],
 
-                        'AppType02':['Yes'],
+                        'App Alteration':['Yes'],
                         'ManDocs01':['Yes'],
                         'ManDocs02': ['Yes'],
                         'ManDocs03': ['Yes'],
@@ -4969,7 +4969,7 @@ function updateUcc3(id, filename) {
                         'cost 2':[$("#txt-fee-2").val()],
                         'cost 6':[$("#txt-fee-3").val()],
                         'cost  7':[$("#txt-fee-4").val()],
-                        'Total Fees':[totalFee],
+                        'Total Fees':[$("#txt-fee-5").val()],
 
                         'Applicant City': [$("#txt-city").val()],
                         'Contractor Tel': [companyInfo.company_telno],
