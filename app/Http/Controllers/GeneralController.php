@@ -1053,7 +1053,9 @@ class GeneralController extends Controller
             {
                 if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->companyid == $project['companyId'])
                 {
-                    $datacheck = DataCheck::where('jobId', $request['projectId'])->first();
+                    $datacheck = DataCheck::leftjoin('structural_notes', "structural_notes.id", "=", "data_check.structural_notes")
+                    ->where('jobId', $request['projectId'])->first();
+
                     if($datacheck)
                         return response()->json(['success' => true, 'data' => $datacheck]);
                     else

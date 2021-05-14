@@ -2528,9 +2528,10 @@ $(document).ready(function() {
                             }
 
                             var structural_notes = res.data.structural_notes;
-                            if (structural_notes){
+                            if (structural_notes!=0){
                                 $(`tr#structural-notes`).css('display', "table-row");
                                 $(`td#structural-notes`).css('display', 'block');
+                                $('td#structural-notes').html(res.data.note);
                             }
                             $('#site-check-table').css('display', 'table');
                             $('#code-check-table').css('display', 'table');
