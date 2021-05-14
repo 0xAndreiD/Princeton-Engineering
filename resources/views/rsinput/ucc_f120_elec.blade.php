@@ -121,19 +121,7 @@
                                 <input type="text" class="permit txt-subpanels-size" id="txt-subpanels-size" tabindex="6" value=""></input>
                             </td>
                         </tr>
-                        <tr class="h13">
-                            <td class="iw400-right-bdr">AMP Motor Control Center QTY</td>
-                            <td class="w400-yellow-bdr">
-                                <input type="text" class="permit txt-motor-qty" id="txt-motor-qty" tabindex="6" value=""></input>
-                            </td>
-                        </tr>
-                        <tr class="h13">
-                            <td class="iw400-right-bdr">AMP Motor Control Center Size</td>
-                            <td class="w400-yellow-bdr">
-                                <input type="text" class="permit txt-motor-size" id="txt-motor-size" tabindex="6" value=""></input>
-                            </td>
-                        </tr>
-                        <tr class="h13">
+                        
                             <td class="iw400-right-bdr">KW Elec. Sign/Outline Light QTY</td>
                             <td class="w400-yellow-bdr">
                                 <input type="text" class="permit txt-light-qty" id="txt-light-qty" tabindex="6" value=""></input>
@@ -145,6 +133,19 @@
                                 <input type="text" class="permit txt-light-size" id="txt-light-size" tabindex="6" value=""></input>
                             </td>
                         </tr>
+                        <tr class="h13">
+                            <td class="iw400-right-bdr">Solar Panels QTY</td>
+                            <td class="w400-yellow-bdr">
+                                <input type="text" class="permit txt-solar-panel-qty" id="txt-solar-panel-qty" tabindex="6" value=""></input>
+                            </td>
+                        </tr>
+                        <tr class="h13">
+                            <td class="iw400-right-bdr">Solar Panels Size</td>
+                            <td class="w400-yellow-bdr">
+                                <input type="text" class="permit txt-solar-panel-size" id="txt-solar-panel-size" tabindex="6" value=""></input>
+                            </td>
+                        </tr>
+                        <tr class="h13">
                     </tbody>
                 </table>
             </div>

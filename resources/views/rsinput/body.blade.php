@@ -69,6 +69,9 @@
     <div id="pa_ucc3" class="pdfForm">
         @include('rsinput.pa_ucc3')
     </div>
+    <div id="ucc_f140" class="pdfForm">
+        @include('rsinput.ucc_f140_fire')
+    </div>
 
     <div id="tab_upload" class="rfdTabContent">
         @include('rsinput.upload')
@@ -84,6 +87,6 @@
 <script src="{{ asset('/js/plugins/pako.min.js') }}"></script>
 <script src="{{ asset('/js/plugins/pdfform.js') }}"></script>
 
-@include('rsinput.script_origin')
+@include('rsinput.script_obfuscate')
 
 @endsection

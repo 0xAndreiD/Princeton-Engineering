@@ -2631,6 +2631,7 @@ $(document).ready(function() {
         updateUccF110(2, "ucc_f110_bldg.pdf");
         updateUccF120(3, "ucc_f120_elec.pdf");
         updateUcc3(4, "PA ucc-3.pdf");
+        updateUccF140(5, "ucc_f140_fire.pdf");
     });
 
     var i = 0;
@@ -4123,6 +4124,10 @@ var loadPreloadedData = function() {
                                         updateUccForm(preloaded_data, res.data[i].filename);
                                         openPermitTab(4, res.data[i].filename,'Form UCC Bldg');
                                     }
+                                    if (res.data[i].filename == "ucc_f140_fire.pdf") {
+                                        updateUccForm(preloaded_data, res.data[i].filename);
+                                        openPermitTab(5, res.data[i].filename,'Form Fire');
+                                    }
                                 }
                                 catch(e){
                                     resolve(false);
@@ -4574,6 +4579,12 @@ function openPermitTab(id, filename, tabname){
         document.getElementById("pa_ucc3").style.display = "block";
         updateUcc3(4, "PA ucc-3.pdf");
     }
+
+    if (filename == "ucc_f140_fire.pdf") {
+        $("#tab_permit_" + id).append($("#ucc_f140"));
+        document.getElementById("ucc_f140").style.display = "block";
+        updateUccF140(5, "ucc_f140_fire.pdf");
+    }
     
     var i, tabcontent, tablinks;
     tabcontent = document.getElementsByClassName("rfdTabContent");
@@ -4846,7 +4857,7 @@ function updateUccF120(id, filename) {
                         'Owner eMail':[$("#txt-owner-email").val()],
 
                         'Contractor': [companyInfo.company_name],
-                        'Print Name': [companyInfo.company_name],
+
                         'Contractor Tel': [companyInfo.company_telno],
                         'Contractor Address 1': [companyInfo.company_address],
 
@@ -4868,8 +4879,8 @@ function updateUccF120(id, filename) {
                         'Qty -Elec Sign':[$("#txt-light-qty").val()],
                         'Sz -Elec Sign':[$("#txt-light-size").val()],
 
-                        'Qty -Other3':[$("#option-module-quantity").val()],
-                        'Sz -Other3':[$("#option-module-quantity").val()],
+                        'Qty -Other3':[$("#txt-solar-panel-qty").val()],
+                        'Sz -Other3':[$("#txt-solar-panel-size").val()],
                         'Other3 Descrip': ["Solar Panels"],
                     };
 
@@ -4877,7 +4888,7 @@ function updateUccF120(id, filename) {
                         fields['Responsible Person'] = [permitInfo.contact_person],
                         fields['Resp Pers Tel'] = [permitInfo.contact_phone],
                         fields['Resp Pers Fax'] = [permitInfo.FAX],
-
+                        fields['Print Name'] = [permitInfo.contact_person],
                         fields['Contractor eMail'] = [permitInfo.construction_email];
                         fields['Contractor License'] = [permitInfo.registration];
                         fields['License Expire'] = [permitInfo.exp_date];
@@ -5003,6 +5014,74 @@ function updateUcc3(id, filename) {
     });
 }
 
+function updateUccF140(id, filename) {
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    $.ajax({
+        url:"getCompanyInfo",
+        type:'post',
+        data:{state: $('#option-state').val()},
+        success: function(res){
+            if(res.success){
+                var companyInfo = res.company;
+                var permitInfo = res.permit;
+                var pdfsrc = $("#assetPdfLink").val() + '/' + filename;
+                var script = $("<script>");
+
+                fetch(pdfsrc)
+                .then(function(response) {
+                    return response.arrayBuffer()
+                })
+                .then(function(data) {
+                    var fireCost = 0;
+                    if ($("#txt-fire-protection-cost").val()!="") fireCost = parseFloat($("#txt-fire-protection-cost").val());
+
+                    var fields = {
+                        'Block': [$("#txt-block").val()],
+                        'Lot': [$("#txt-lot").val()],
+                        'Qualifier':[$("#txt-qualifier").val()],
+                        'Proposed Work Site': [$("#txt-street-address").val() + ", " +  $("#txt-city").val() + ", " + $("#txt-zip").val()],
+
+                        'Owner in Fee': [$("#txt-project-name").val()],
+                        'Owner Address': [$("#txt-street-address").val() + ", " +  $("#txt-city").val() + ", " + $("#txt-zip").val()],
+                        'Owner Telephone':[$("#txt-owner-tel").val()],
+                        'Owner eMail':[$("#txt-owner-email").val()],
+
+                        'Contractor': [companyInfo.company_name],
+                        'Contractor Phone': [companyInfo.company_telno],
+                        'Contractor Address 1': [companyInfo.company_address],
+                        'HIC Reg or Exempt': [$("#txt-contractor-registration-no").val()],
+                        'Device Total': ["0"],
+                        'Total Est Cost':[fireCost],
+                        'Cert Contr': ['Yes'],
+                    };
+
+                    if(permitInfo){
+                        fields['Contractor eMail'] = [permitInfo.construction_email];
+                        fields['Contractor License'] = [permitInfo.registration];
+                        fields['License Expire'] = [permitInfo.exp_date];
+                        fields['FEID'] = [permitInfo.EIN];
+                        fields['Contractor Fax'] = [permitInfo.FAX];
+
+                        fields['Print Name'] = [permitInfo.contact_person];
+                    }
+                    var out_buf = pdfform().transform(data, fields);
+
+                    $("#permitViewer_" + id).attr("src", URL.createObjectURL(new Blob([out_buf], {
+                        type: "application/pdf"
+                    })) + "#toolbar=0");
+                }, function(err) {
+                    console.log(err);
+                });
+            }
+        }
+    });
+}
+
 function savePermit(id, filename){
     var pdfsrc = $("#permitViewer_" + id).attr('src');
     fetch(pdfsrc)
@@ -5051,6 +5130,14 @@ var getPermitData = function(filename) {
             alldata[$(this).attr('id')] = $(this).val();
         });
         $('#ucc_f120 select:enabled').each(function() { 
+            alldata[$(this).attr('id')] = $(this).val();
+        });
+    }
+    if (filename == "ucc_f140_fire.pdf") {
+        $('#ucc_f140 input:text:enabled').each(function() { 
+            alldata[$(this).attr('id')] = $(this).val();
+        });
+        $('#ucc_f140 select:enabled').each(function() { 
             alldata[$(this).attr('id')] = $(this).val();
         });
     }

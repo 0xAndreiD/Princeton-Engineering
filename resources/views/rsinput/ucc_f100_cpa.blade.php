@@ -158,12 +158,12 @@
                         </tr>
                         
                         <tr class="h13">
-                            <td class="iw400-right-bdr">Building Est.Cost</td>
-                            <td class="w400-yellow-bdr"><input type="text" class="permit txt-building-cost" id="txt-building-cost" placeholder="Enter Value" tabindex="20" value=""></input></td>
+                            <td class="iw400-right-bdr">Building Est.Cost($)</td>
+                            <td class="w400-yellow-bdr"><input type="text" class="permit txt-building-cost" id="txt-building-cost" tabindex="20" value=""></input></td>
                         </tr>
                         <tr class="h13">
-                            <td class="iw400-right-bdr">Electrical Est.Cost</td>
-                            <td class="w400-yellow-bdr"><input type="text" class="permit txt-elec-cost" id="txt-elec-cost" placeholder="Enter Value" tabindex="21" value=""></input></td>
+                            <td class="iw400-right-bdr">Electrical Est.Cost($)</td>
+                            <td class="w400-yellow-bdr"><input type="text" class="permit txt-elec-cost" id="txt-elec-cost" tabindex="21" value=""></input></td>
                         </tr>
                         <tr class="h13">
                             <td colspan="2">
