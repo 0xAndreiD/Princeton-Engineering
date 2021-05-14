@@ -2526,6 +2526,12 @@ $(document).ready(function() {
                                 $('#requiredNotes').css('color', 'black');
                                 $('#requiredNotes').html(' *************** No Roof Framing Changes are Required *************** ');
                             }
+
+                            var structural_notes = res.data.structural_notes;
+                            if (structural_notes){
+                                $(`tr#structural-notes`).css('display', "table-row");
+                                $(`td#structural-notes`).css('display', 'block');
+                            }
                             $('#site-check-table').css('display', 'table');
                             $('#code-check-table').css('display', 'table');
                             $('#environment-check-table').css('display', 'table');

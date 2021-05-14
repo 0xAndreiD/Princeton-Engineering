@@ -596,47 +596,64 @@
     </tr>
 </tbody>
 </table>
+<div>
+    <!-- Error table -->
+    <table cellspacing="0" cellpadding="0" style="border-spacing:0; display:inline-block; vertical-align: top;" >    
+        <colgroup>
+            <col width="80">
+            <col width="160">
+            <col width="200">
+        </colgroup>
+    <tbody>
+        <tr class="h13">
+            <td><div style="overflow:hidden"></td>
+            <td><div style="overflow:hidden"></td>
+            <td><div style="overflow:hidden"></td>
+            <td><div style="overflow:hidden"></td>
+            <td><div style="overflow:hidden"></td>
+            <td><div style="overflow:hidden"></td>
+            <td><div style="overflow:hidden"></td>
+        </tr>
+        <tr class="h13" style="display: none;" id="collartie-header">
+            <td><div style="overflow:hidden"></div></td>
+            <td class="iw400-bdr" colspan="2">Required Framing Changes</td>
+            <td><div style="overflow:hidden"></div></td>
+        </tr>
+        <tr class="h13" style="display: none;" id="collartie-headers">
+            <td><div style="overflow:hidden"></div></td>
+            <td class="iw400-bdr">Framing Condition # and Name</td>
+            <td class="iw400-bdr">Collar Tie Height (ft)</td>
+        </tr>
+        @for($j = 1; $j <= 10; $j ++)
+        <tr class="h13" style="display: none;" id="collartie-{{$j}}">
+            <td><div style="overflow:hidden"></div></td>
+            <td class="iw400-bdr" id="collartie-title-{{$j}}" style="color:red;">{{$j}}: MP{{$j}}</td>
+            <td class="iw400-bdr" id="collartie-height-{{$j}}" style="color:red;">0.00</td>
+        </tr>
+        @endfor
+    </tbody>
+    </table>
 
-<!-- Error table -->
-<table cellspacing="0" cellpadding="0" style="border-spacing:0;" >    
-    <colgroup>
-        <col width="80">
-        <col width="160">
-        <col width="200">
-        <col width="200">
-        <col width="80">
-        <col width="80">
-        <col width="80">
-    </colgroup>
-<tbody>
-    <tr class="h13">
-        <td><div style="overflow:hidden"></td>
-        <td><div style="overflow:hidden"></td>
-        <td><div style="overflow:hidden"></td>
-        <td><div style="overflow:hidden"></td>
-        <td><div style="overflow:hidden"></td>
-        <td><div style="overflow:hidden"></td>
-        <td><div style="overflow:hidden"></td>
-    </tr>
-    <tr class="h13" style="display: none;" id="collartie-header">
-        <td><div style="overflow:hidden"></div></td>
-        <td class="iw400-bdr" colspan="2">Required Framing Changes</td>
-        <td><div style="overflow:hidden"></div></td>
-    </tr>
-    <tr class="h13" style="display: none;" id="collartie-headers">
-        <td><div style="overflow:hidden"></div></td>
-        <td class="iw400-bdr">Framing Condition # and Name</td>
-        <td class="iw400-bdr">Collar Tie Height (ft)</td>
-    </tr>
-    @for($j = 1; $j <= 10; $j ++)
-    <tr class="h13" style="display: none;" id="collartie-{{$j}}">
-        <td><div style="overflow:hidden"></div></td>
-        <td class="iw400-bdr" id="collartie-title-{{$j}}" style="color:red;">{{$j}}: MP{{$j}}</td>
-        <td class="iw400-bdr" id="collartie-height-{{$j}}" style="color:red;">0.00</td>
-    </tr>
-    @endfor
-</tbody>
-</table>
+    <table cellspacing="0" cellpadding="0" style="border-spacing:0; display:inline-block" >    
+        <colgroup>
+            <col width="30">
+            <col width="400">
+        </colgroup>
+        <tbody>
+            <tr class="h13">
+                <td><div style="overflow:hidden"></td>
+                <td><div style="overflow:hidden"></td>
+            </tr>
+            <tr class="h13" style="display:none" id="structural-notes">
+                <td><div style="overflow:hidden"></div></td>
+                <td class="iw400-bdr" id="structural-notes" style="align:left">
+                    Rafters upon which stanchions will be placed, require collar ties or knee walls. Collar tie / knee wall locations either exist or will be added at the heights indicated herein. All new collar tiles shall be 2x6 material and shall be fastened at each end with (8) 12D common nails, (4) per side. If knee walls are to be used, stud framing to match rafter locations. Install top and bottom plate. All material to be 2x4 fastened w/10D common nails.
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
 <input type="text" value="{{ $projectId }}" id="projectId" hidden>
 <input type="text" value="{{ $projectState }}" id="projectState" hidden>
 <input type="text" value="{{ $offset }}" id="companyOffset" hidden>
