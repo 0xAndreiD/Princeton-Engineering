@@ -355,4 +355,34 @@ class APIController extends Controller
         else
             return response()->json(['success' => false, 'message' => 'Auth required.']);
     }
+
+    /**
+     * Get chat history by job_id
+     *
+     * @return JSON
+     */
+    public function getChat(Request $request){
+        if(isset($request['username']) && isset($request['password'])){
+            $user = User::where('username', '=', $request['username'])->where('password', '=', $request['password'])->first();
+            if($user && $user->userrole == 2)
+            {
+                if(isset($request['jobId'])){
+                    $job = JobRequest::where('id', $request['jobId'])->first();
+                    if($job){
+                        $messages = JobChat::leftjoin('users', "users.id", "=", "job_chat.userId")
+                        ->where('job_chat.jobId', $request['jobId'])
+                        ->orderBy('job_chat.id', 'desc')
+                        ->get(array('users.username as username', 'users.userrole as userrole', 'job_chat.text as text', 'job_chat.datetime as datetime'));
+                        return response()->json(['success' => true, 'data' => $messages]);
+                    } else 
+                        return response()->json(['success' => false, 'message' => 'Cannot find the project.']);
+                } else 
+                    return response()->json(['success' => false, 'message' => 'Wrong Parameters.']);
+            }
+            else
+                return response()->json(['success' => false, 'message' => 'Auth failed.']);
+        }
+        else
+            return response()->json(['success' => false, 'message' => 'Auth required.']);
+    }
 }

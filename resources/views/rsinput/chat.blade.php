@@ -17,68 +17,70 @@
 </div>
 
 <div class="mt-3 ml-3">
-
-<h2 class="content-heading">
-    Messages
-    @if(!$messages || count($messages) == 0)
-    <small id="noMessage">
-        (No messages yet.)
-    </small>
-    @endif
-</h2>
-<div id="chatPane">
-@foreach($messages as $msg)	
-    <div class="col-md-10 col-sm-10">
-        <div class="block block-bordered">
-            <div class="block-header" style="background-color: #e9eaec; display: block;">
-                <i class="fa fa-user"></i> <?php echo $msg['username']; ?>
-                    @if($msg['userrole'] == 0)
-                        <i class="fa fa-user-secret"></i> User
-                    @elseif($msg['userrole'] == 1)
-                        <i class="fa fa-user-secret"></i> Client Admin
-                    @elseif($msg['userrole'] == 2)
-                        <i class="fa fa-user-secret"></i> Super Admin
-                    @elseif($msg['userrole'] == 3)
-                        <i class="fa fa-user-secret"></i> Junior Super
-                    @endif
-            </div>
-            <div class="block-content">
-                <p>{{ $msg['text'] }}</p>
-            </div>
-            <div class="block-content block-content-full block-content-sm bg-body-light font-size-sm">
-                <i class="fa fa-clock"></i> {{ $msg['datetime'] }}
+    {{-- <h2 class="content-heading">
+        Project Number:1, Project Name: Tim Smith, State:MA, Created Time:2020-12-12 16:46:07, Project Status: Saved, Plan Status: No action
+    </h2> --}}
+    <h2 class="content-heading">
+        Messages
+        @if(!$messages || count($messages) == 0)
+        <small id="noMessage">
+            (No messages yet.)
+        </small>
+        @endif
+    </h2>
+    <div id="chatPane">
+    @foreach($messages as $msg)	
+        <div class="col-md-10 col-sm-10">
+            <div class="block block-bordered">
+                <div class="block-header" style="background-color: #e9eaec; display: block;">
+                    <i class="fa fa-user"></i> <?php echo $msg['username']; ?>
+                        @if($msg['userrole'] == 0)
+                            <i class="fa fa-user-secret"></i> User
+                        @elseif($msg['userrole'] == 1)
+                            <i class="fa fa-user-secret"></i> Client Admin
+                        @elseif($msg['userrole'] == 2)
+                            <i class="fa fa-user-secret"></i> Super Admin
+                        @elseif($msg['userrole'] == 3)
+                            <i class="fa fa-user-secret"></i> Junior Super
+                        @endif
+                </div>
+                <div class="block-content">
+                    <p>{{ $msg['text'] }}</p>
+                </div>
+                <div class="block-content block-content-full block-content-sm bg-body-light font-size-sm">
+                    <i class="fa fa-clock"></i> {{ $msg['datetime'] }}
+                </div>
             </div>
         </div>
+        <!-- <article class="row ml-3 mr-0">
+            <div class="col-md-10 col-sm-10">
+                <div class="panel panel-default arrow right">
+                    <div class="panel-heading">
+                        <i class="fa fa-user"></i> <?php echo $msg['username']; ?>
+                        @if($msg['userrole'] == 0)
+                            <i class="fa fa-user-secret"></i> User
+                        @elseif($msg['userrole'] == 1)
+                            <i class="fa fa-user-secret"></i> Client Admin
+                        @elseif($msg['userrole'] == 2)
+                            <i class="fa fa-user-secret"></i> Super Admin
+                        @elseif($msg['userrole'] == 3)
+                            <i class="fa fa-user-secret"></i> Junior Super
+                        @endif
+                        &nbsp;&nbsp;<i class="fa fa-clock"></i> {{ $msg['datetime'] }}
+                    </div>
+                    <div class="panel-body">						
+                        <div class="comment-post">
+                        <p>
+                        {{ $msg['text'] }}
+                        </p>
+                        </div>                  
+                    </div>
+                    
+                </div>
+            </div>            
+        </article> 		 -->
+    @endforeach
     </div>
-    <!-- <article class="row ml-3 mr-0">
-        <div class="col-md-10 col-sm-10">
-            <div class="panel panel-default arrow right">
-                <div class="panel-heading">
-                    <i class="fa fa-user"></i> <?php echo $msg['username']; ?>
-                    @if($msg['userrole'] == 0)
-                        <i class="fa fa-user-secret"></i> User
-                    @elseif($msg['userrole'] == 1)
-                        <i class="fa fa-user-secret"></i> Client Admin
-                    @elseif($msg['userrole'] == 2)
-                        <i class="fa fa-user-secret"></i> Super Admin
-                    @elseif($msg['userrole'] == 3)
-                        <i class="fa fa-user-secret"></i> Junior Super
-                    @endif
-                    &nbsp;&nbsp;<i class="fa fa-clock"></i> {{ $msg['datetime'] }}
-                </div>
-                <div class="panel-body">						
-                    <div class="comment-post">
-                    <p>
-                    {{ $msg['text'] }}
-                    </p>
-                    </div>                  
-                </div>
-                
-            </div>
-        </div>            
-    </article> 		 -->
-@endforeach
-</div>
 </div>
 
 <form method="post" id="submitChat" class="ml-3">
