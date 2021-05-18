@@ -545,7 +545,9 @@
                 <td class="w400-yellow-bdr" colspan="2">
                     <input type="text" id="txt-roof-degree-{{ $conditionId }}" class="txt-center-align" tabindex="57" value="45.00"></input>
                 </td>
-                <td colspan="8"><div style="overflow:hidden"></div></td>
+                <td class="iw400" style="color:red; font-weight:500; text-align:left"  colspan="8">
+                    <p id="warning-roof-degree-{{ $conditionId }}" style="display:none">Zero is not acceptable</p>
+                </td>
             </tr>
             <tr class="h13">
                 <td class="iw400" colspan="3" id="txt-roof-slope-another-{{ $conditionId }}" style="text-align:center !important;">Top ridge height above floor plane</td>

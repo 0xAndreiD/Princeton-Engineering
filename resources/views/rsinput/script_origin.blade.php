@@ -1674,6 +1674,21 @@ var updateNumberSegment1 = function (condId, roofPlane, keepStatus = true) {
 
     $(`#td-sum-of-length-entered-${condId}`).html(totalLength.toFixed(2));
 
+    var checkZero = false;
+    for (index = 0; index < roofPlane; index++) {
+        var val = parseFloat($(`#txt-roof-segment${index + 1}-length-${condId}`).val());
+        if (val.toFixed(2) == 0.00) {
+            $(`#td-checksum-of-segment1-${condId}`).html("Zero value is not acceptable for each segment length");
+            $(`#td-checksum-of-segment1-${condId}`).css('background-color', '#FFC7CE');
+            checkZero = true;
+        }
+    }
+
+    if (checkZero){
+        updateTrussAndComments(condId, keepStatus);
+        return;
+    }
+
     var lengthRoofPlane = parseFloat($(`#txt-length-of-roof-plane-${condId}`).val());
     if (Math.abs(lengthRoofPlane.toFixed(2) - totalLength.toFixed(2)) <= parseFloat($('#companyOffset').val())) {
         $(`#td-checksum-of-segment1-${condId}`).html("OK");
@@ -1721,6 +1736,21 @@ var updateNumberSegment2 = function (condId, floorPlane, keepStatus = true) {
 
     $(`#td-total-length-entered-${condId}`).html(totalLength.toFixed(2));
 
+    var checkZero = false;
+    for (index = 0; index < floorPlane; index++) {
+        var val = parseFloat($(`#txt-floor-segment${index + 1}-length-${condId}`).val());
+        if (val.toFixed(2) == 0.00) {
+            $(`#td-checksum-of-segment2-${condId}`).html("Zero value is not acceptable for each segment length");
+            $(`#td-checksum-of-segment2-${condId}`).css('background-color', '#FFC7CE');
+            checkZero = true;
+        }
+    }
+
+    if (checkZero){
+        updateTrussAndComments(condId, keepStatus);
+        return;
+    }
+        
     var lengthFloorPlane = parseFloat($(`#txt-length-of-floor-plane-${condId}`).val());
     if (Math.abs(lengthFloorPlane.toFixed(2) - totalLength.toFixed(2)) <= parseFloat($('#companyOffset').val())) {
         $(`#td-checksum-of-segment2-${condId}`).html("OK");
@@ -2643,6 +2673,11 @@ $(document).ready(function() {
         });
         $(`#txt-roof-degree-${i}`).change(function(){
             $(this).val(parseFloat($(this).val()).toFixed(2));
+            if (parseFloat($(this).val()).toFixed(2) == 0.00) {
+                $(`#warning-roof-degree-${i}`).css("display", "block");
+            } else {
+                $(`#warning-roof-degree-${i}`).css("display", "none");
+            }
             updateRoofSlopeAnotherField(window.conditionId);
         });
         $(`#option-number-segments1-${i}`).on('change', function() {
@@ -3045,6 +3080,11 @@ $(document).ready(function() {
                     hasWarnings = true;
                 if($(`#stick-module-alert-${i}`)[0].style.display == "block")
                     hasWarnings = true;
+            }
+            var roofDegreeVal = parseFloat($(`#txt-roof-degree-${i}`).val());
+            if(roofDegreeVal.toFixed(2) == 0.00) {
+                hasWarnings = true;
+                $(`#warning-roof-degree-${i}`).css("display", "block");
             }
         }
         return hasWarnings;
