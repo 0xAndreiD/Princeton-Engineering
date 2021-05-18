@@ -17,172 +17,107 @@
 </div>
 
 <div class="mt-3 ml-3">
-    {{-- <h2 class="content-heading">
-        Project Number:1, Project Name: Tim Smith, State:MA, Created Time:2020-12-12 16:46:07, Project Status: Saved, Plan Status: No action
-    </h2> --}}
     <h2 class="content-heading">
-        Messages
+        Project Number:{{$project->clientProjectNumber}}, Project Name: {{$project->clientProjectName}}, State:{{$project->state}}
+        <br/>
         @if(!$messages || count($messages) == 0)
         <small id="noMessage">
             (No messages yet.)
         </small>
         @endif
     </h2>
-    <div id="chatPane">
-    @foreach($messages as $msg)	
-        <div class="col-md-10 col-sm-10">
-            <div class="block block-bordered">
-                <div class="block-header" style="background-color: #e9eaec; display: block;">
-                    <i class="fa fa-user"></i> <?php echo $msg['username']; ?>
-                        @if($msg['userrole'] == 0)
-                            <i class="fa fa-user-secret"></i> User
-                        @elseif($msg['userrole'] == 1)
-                            <i class="fa fa-user-secret"></i> Client Admin
-                        @elseif($msg['userrole'] == 2)
-                            <i class="fa fa-user-secret"></i> Super Admin
-                        @elseif($msg['userrole'] == 3)
-                            <i class="fa fa-user-secret"></i> Junior Super
-                        @endif
-                </div>
-                <div class="block-content">
-                    <p>{{ $msg['text'] }}</p>
-                </div>
-                <div class="block-content block-content-full block-content-sm bg-body-light font-size-sm">
-                    <i class="fa fa-clock"></i> {{ $msg['datetime'] }}
+    <form method="post" id="submitChat">
+        <article class="row ml-0 mr-0">
+            <div class="col-md-10 col-sm-10">				
+                <div class="form-group">							
+                    <textarea class="form-control" rows="3" id="message" name="message" placeholder="Enter your message..." required></textarea>	
+                </div>				
+            </div>
+        </article>  
+        <article class="row ml-0 mr-0">
+            <div class="col-md-10 col-sm-10">
+                <div class="form-group">							
+                    <input type="submit" name="send" id="send" class="btn btn-success" value="Send Message" />		
                 </div>
             </div>
-        </div>
-        <!-- <article class="row ml-3 mr-0">
+        </article> 
+        <input type="hidden" name="projectId" id="projectId" value="{{ $projectId }}" />	
+    </form>
+    <div id="chatPane">
+        @foreach($messages as $msg)	
             <div class="col-md-10 col-sm-10">
-                <div class="panel panel-default arrow right">
-                    <div class="panel-heading">
+                <div class="block block-bordered">
+                    <div class="block-header" style="background-color: #e9eaec; display: block;">
                         <i class="fa fa-user"></i> <?php echo $msg['username']; ?>
-                        @if($msg['userrole'] == 0)
-                            <i class="fa fa-user-secret"></i> User
-                        @elseif($msg['userrole'] == 1)
-                            <i class="fa fa-user-secret"></i> Client Admin
-                        @elseif($msg['userrole'] == 2)
-                            <i class="fa fa-user-secret"></i> Super Admin
-                        @elseif($msg['userrole'] == 3)
-                            <i class="fa fa-user-secret"></i> Junior Super
-                        @endif
-                        &nbsp;&nbsp;<i class="fa fa-clock"></i> {{ $msg['datetime'] }}
+                            @if($msg['userrole'] == 0)
+                                <i class="fa fa-user-secret"></i> User
+                            @elseif($msg['userrole'] == 1)
+                                <i class="fa fa-user-secret"></i> Client Admin
+                            @elseif($msg['userrole'] == 2)
+                                <i class="fa fa-user-secret"></i> Super Admin
+                                <button type="button" class="btn btn-primary ml-1 mr-1" onclick="updateChatHistory(this,{{ $msg['id'] }})" style="padding: 3px 6px;">
+                                    <i class="fa fa-save"></i>
+                                </button>
+                                <button type="button" class="btn btn-danger ml-1 mr-1" onclick="delChatHistory(this,{{ $msg['id'] }})" style="padding: 3px 6px;">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            @elseif($msg['userrole'] == 3)
+                                <i class="fa fa-user-secret"></i> Junior Super
+                                <button type="button" class="btn btn-primary ml-1 mr-1" onclick="updateChatHistory(this,{{ $msg['id'] }})" style="padding: 3px 6px;">
+                                    <i class="fa fa-save"></i>
+                                </button>
+                                <button type="button" class="btn btn-danger ml-1 mr-1" onclick="delChatHistory(this,{{ $msg['id'] }})" style="padding: 3px 6px;">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            @endif
+
                     </div>
-                    <div class="panel-body">						
-                        <div class="comment-post">
-                        <p>
-                        {{ $msg['text'] }}
-                        </p>
-                        </div>                  
+                    @if ($userrole == 2 || $userrole == 3)
+                    <div class="block-content">
+                        <input id="chat_id" type="hidden" value="{{ $msg['id'] }}"></input>
+                        <textarea rows="3" style="width:100%; border: 1px solid gray;">{{ $msg['text'] }}</textarea>
                     </div>
-                    
+                    @else
+                    <div class="block-content">
+                        <p>{{ $msg['text'] }}</p>
+                    </div>
+                    @endif
+                    <div class="block-content block-content-full block-content-sm bg-body-light font-size-sm">
+                        <i class="fa fa-clock"></i> {{ $msg['datetime'] }}
+                    </div>
                 </div>
-            </div>            
-        </article> 		 -->
-    @endforeach
+            </div>
+            <!-- <article class="row ml-3 mr-0">
+                <div class="col-md-10 col-sm-10">
+                    <div class="panel panel-default arrow right">
+                        <div class="panel-heading">
+                            <i class="fa fa-user"></i> <?php echo $msg['username']; ?>
+                            @if($msg['userrole'] == 0)
+                                <i class="fa fa-user-secret"></i> User
+                            @elseif($msg['userrole'] == 1)
+                                <i class="fa fa-user-secret"></i> Client Admin
+                            @elseif($msg['userrole'] == 2)
+                                <i class="fa fa-user-secret"></i> Super Admin
+                            @elseif($msg['userrole'] == 3)
+                                <i class="fa fa-user-secret"></i> Junior Super
+                            @endif
+                            &nbsp;&nbsp;<i class="fa fa-clock"></i> {{ $msg['datetime'] }}
+                        </div>
+                        <div class="panel-body">						
+                            <div class="comment-post">
+                            <p>
+                            {{ $msg['text'] }}
+                            </p>
+                            </div>                  
+                        </div>
+                        
+                    </div>
+                </div>            
+            </article> 		 -->
+        @endforeach
     </div>
 </div>
 
-<form method="post" id="submitChat" class="ml-3">
-    <article class="row ml-0 mr-0">
-        <div class="col-md-10 col-sm-10">				
-            <div class="form-group">							
-                <textarea class="form-control" rows="5" id="message" name="message" placeholder="Enter your message..." required></textarea>	
-            </div>				
-        </div>
-    </article>  
-    <article class="row ml-0 mr-0">
-        <div class="col-md-10 col-sm-10">
-            <div class="form-group">							
-                <input type="submit" name="send" id="send" class="btn btn-success" value="Send Message" />		
-            </div>
-        </div>
-    </article> 
-    <input type="hidden" name="projectId" id="projectId" value="{{ $projectId }}" />	
-</form>
-
-<script>
-    window.msgCount = "{{ count($messages) }}";
-
-    function addChat(user, role, message, datetime){
-        let userrole;
-        if(role == 0) userrole = 'User';
-        else if(role == 1) userrole = 'Client Admin';
-        else if(role == 2) userrole = 'Super Admin';
-        else if(role == 3) userrole = 'Junior Super';
-        let html = "<div class='col-md-10 col-sm-10'>" + 
-            "<div class='block block-bordered'>" +
-                "<div class='block-header' style='background-color: #e9eaec; display: block;'>" +
-                    "<i class='fa fa-user'></i> " + user + " " + 
-                        "<i class='fa fa-user-secret'></i> " + userrole + 
-                "</div>" + 
-                "<div class='block-content'>" + 
-                    "<p>" + message + "</p>" +
-                "</div>" +
-                "<div class='block-content block-content-full block-content-sm bg-body-light font-size-sm'>" +
-                    "<i class='fa fa-clock'></i> " + datetime +
-                "</div>" + 
-            "</div>" + 
-        "</div>";
-        $("#chatPane").prepend(html);
-        window.msgCount ++;
-        $("#noMessage").css("display", "none");
-    }
-
-    function updateChat(){
-        setTimeout(
-            function() {
-                checkChatUpdated();
-        }, 5000);
-    }
-
-    function checkChatUpdated(){
-        $.ajax({
-			url:"checkChatList",
-			method:"POST",
-			data:{jobId: $("#projectId").val(), msgCount: window.msgCount},
-			success:function(data){
-                if(data && data.success){
-                    console.log(data);
-                    if(data.msgCount > 0){
-                        for(let i = 0; i < data.msgs.length; i ++)
-                            addChat(data.msgs[i].user, data.msgs[i].role, data.msgs[i].message, data.msgs[i].datetime);
-                    }
-                }
-                updateChat();
-			}
-		})
-    }
-
-    $(document).ready(function() {
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        updateChat();
-    });
-
-    $(document).on('submit','#submitChat', function(event){
-        event.preventDefault();
-		$('#send').attr('disabled','disabled');
-		var formData = $(this).serialize();
-		$.ajax({
-			url:"submitChat",
-			method:"POST",
-			data:formData,
-			success:function(data){
-                if(!data || !data.status){
-                    swal.fire({ title: "Warning", text: data && data.message ? data.message : "Failed to submit your message.", icon: "warning", confirmButtonText: `OK` });
-                } else {
-                    $("#message")[0].value = "";
-                    $('#send').attr('disabled', false);
-                    //location.reload();
-                    addChat(data.user, data.role, data.message, data.datetime);
-                }
-			}
-		})
-	});
-</script>
+@include('rsinput.chatscript')
 
 @endsection

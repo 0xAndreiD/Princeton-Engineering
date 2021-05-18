@@ -385,4 +385,64 @@ class APIController extends Controller
         else
             return response()->json(['success' => false, 'message' => 'Auth required.']);
     }
+
+        /**
+     * Update the chat history of the project.
+     *
+     * @return JSON
+     */
+    public function updateChat(Request $request){
+        if(isset($request['username']) && isset($request['password'])){
+            $user = User::where('username', '=', $request['username'])->where('password', '=', $request['password'])->first();
+            if($user && $user->userrole == 2)
+            {
+                if($request['chatId'])
+                {
+                    $chatItem = JobChat::where('id', '=', $request['chatId'])->first();
+                    if($chatItem)
+                    {
+                        if( isset($request['text']) )
+                        {
+                            $chatItem->text = $request['text'];
+                            $chatItem->save();
+                            return response()->json(['success' => true]);
+                        }
+                        else
+                            return response()->json(['success' => false] );
+                    }
+                    else
+                        return response()->json(['success' => false, 'message' => 'Cannot find the chat.'] );
+                }
+                else
+                    return response()->json(['success' => false, 'message' => 'Wrong Chat Id.'] );
+            }
+            else
+                return response()->json(['success' => false, 'message' => 'Auth failed.']);
+        }
+        else
+            return response()->json(['success' => false, 'message' => 'Auth required.']);
+    }
+    /**
+     * Delete Chat
+     *
+     * @return JSON
+     */
+    function delChat(Request $request){
+        if(isset($request['username']) && isset($request['password'])){
+            $user = User::where('username', '=', $request['username'])->where('password', '=', $request['password'])->first();
+            if($user && $user->userrole == 2) {
+                if($request['chatId'])
+                {
+                    $res = JobChat::where('id', $request['chatId'])->delete();
+                    return response()->json(['success' => true]);
+                }
+                else
+                    return response()->json(['success' => false] );
+            }
+            else
+                return response()->json(['success' => false, 'message' => 'Auth failed.']);
+        }
+        else
+            return response()->json(['success' => false, 'message' => 'Auth required.']);
+    }
 }

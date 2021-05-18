@@ -1537,8 +1537,9 @@ class GeneralController extends Controller
                     $messages = JobChat::leftjoin('users', "users.id", "=", "job_chat.userId")
                                 ->where('job_chat.jobId', $request['projectId'])
                                 ->orderBy('job_chat.id', 'desc')
-                                ->get(array('users.username as username', 'users.userrole as userrole', 'job_chat.text as text', 'job_chat.datetime as datetime'));
-                    return view('rsinput.chat')->with('messages', $messages)->with('projectId', $request['projectId']);
+                                ->get(array('job_chat.id as id', 'users.username as username', 'users.userrole as userrole', 'job_chat.text as text', 'job_chat.datetime as datetime'));
+                    return view('rsinput.chat')->with('messages', $messages)->with('project', $project)->with('projectId', $request['projectId'])
+                    ->with('userrole', Auth::user()->userrole);
                 } else
                     return redirect('projectlist');
             } else
@@ -1557,7 +1558,7 @@ class GeneralController extends Controller
         if($project){
             if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || $project->companyId == Auth::user()->companyid)
             {
-                JobChat::create([
+                $chatItem = JobChat::create([
                     'jobId' => $request['projectId'],
                     'userId' => Auth::user()->id,
                     'text' => $request['message']
@@ -1567,7 +1568,9 @@ class GeneralController extends Controller
                 else
                     $project->chatIcon = 1;
                 $project->save();
-                return response()->json(["status" => true, "user" => Auth::user()->username, "role" => Auth::user()->userrole, "message" => $request["message"], "datetime" => date('Y-m-d H:i:s', strtotime("-5 hours"))]);
+
+                $chatId = $chatItem->id;
+                return response()->json(["status" => true, "user" => Auth::user()->username, "role" => Auth::user()->userrole, "message" => $request["message"], "datetime" => date('Y-m-d H:i:s', strtotime("-5 hours")), "id" => $chatId]);
             }
             else
                 return response()->json(["message" => "You don't have permission to edit this project.", "status" => false]);
@@ -1575,7 +1578,47 @@ class GeneralController extends Controller
         else
             return response()->json(["message" => "Cannot find project.", "status" => false]);
     }
-
+    /**
+     * Update the chat history of the project.
+     *
+     * @return JSON
+     */
+    public function updateChat(Request $request){
+        if($request['chatId'])
+        {
+            $chatItem = JobChat::where('id', '=', $request['chatId'])->first();
+            if($chatItem)
+            {
+                if(Auth::user()->userrole == 2)
+                {
+                    if( isset($request['text']) )
+                    {
+                        $chatItem->text = $request['text'];
+                        $chatItem->save();
+                        return response()->json(['success' => true]);
+                    }
+                    else
+                        return response()->json(['success' => false] );
+                }
+                else
+                    return response()->json(['success' => false, 'message' => "You don't have any permission to set text of this project."] );
+            }
+            else
+                return response()->json(['success' => false, 'message' => 'Cannot find the chat.'] );
+        }
+        else
+            return response()->json(['success' => false, 'message' => 'Wrong Chat Id.'] );
+    }
+    /**
+     * Delete Chat
+     *
+     * @return JSON
+     */
+    function delChat(Request $request){
+        $id = $request->input('data');
+        $res = JobChat::where('id', $id)->delete();
+        return $res;
+    }
     /**
      * Get method to set previous jobs' state value
      *
@@ -1663,7 +1706,7 @@ class GeneralController extends Controller
                     $messages = JobChat::leftjoin('users', "users.id", "=", "job_chat.userId")
                             ->where('job_chat.jobId', $request['jobId'])
                             ->orderBy('job_chat.id', 'desc')
-                            ->get(array('users.username as user', 'users.userrole as role', 'job_chat.text as message', 'job_chat.datetime as datetime'))->toArray();
+                            ->get(array('job_chat.id as id', 'users.username as user', 'users.userrole as role', 'job_chat.text as message', 'job_chat.datetime as datetime'))->toArray();
                     $messages = array_slice($messages, 0, count($messages) - $request['msgCount']);
                     return response()->json(["success" => true, "msgCount" => count($messages), "msgs" => $messages]);
                 }

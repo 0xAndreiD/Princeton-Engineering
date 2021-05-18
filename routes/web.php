@@ -47,8 +47,6 @@ Route::post('/updatePermitInfo', 'CompanyController@updatePermitInfo')->name('up
 // Company Profile
 Route::get('/companyProfile', 'CompanyController@companyProfile')->name('companyProfile');
 
-Route::post('/submitInput', 'GeneralController@submitInput')->name('submitInput');
-
 // Project List Page
 Route::get('/projectlist', 'GeneralController@projectList')->name('projectlist');
 Route::get('/requestFile', 'GeneralController@requestFile')->name('requestFile');
@@ -63,6 +61,8 @@ Route::post('/getASCEOptions', 'GeneralController@getASCEOptions')->name('getASC
 Route::post('/getProjectNumComment', 'GeneralController@getProjectNumComment')->name('getProjectNumComment');
 Route::get('/jobchat', 'GeneralController@jobChat')->name('jobchat');
 Route::post('/submitChat', 'GeneralController@submitChat')->name('submitChat');
+Route::post('/delChat', 'GeneralController@delChat')->name('delChat');
+Route::post('/updateChat', 'GeneralController@updateChat')->name('updateChat');
 Route::post('/togglePlanCheck', 'GeneralController@togglePlanCheck')->name('togglePlanCheck');
 Route::post('/toggleAsBuilt', 'GeneralController@toggleAsBuilt')->name('toggleAsBuilt');
 Route::post('/checkChatList', 'GeneralController@checkChatList')->name('checkChatList');
@@ -79,7 +79,8 @@ Route::get('/cronDBBackup', 'APIController@cronDBBackup')->name('cronDBBackup');
 Route::get('/getCustomEquipment', 'APIController@getCustomEquipment')->name('getCustomEquipment');
 Route::get('/getChat', 'APIController@getChat')->name('getChat');
 Route::get('/addChat', 'APIController@addChat')->name('addChat');
-
+Route::post('/delChat', 'APIController@delChat')->name('delChat');
+Route::post('/updateChat', 'APIController@updateChat')->name('updateChat');
 // PV Modules
 Route::post('/getPVModules', 'GeneralController@getPVModules')->name('getPVModules');
 // PV Inverters
