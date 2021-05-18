@@ -156,6 +156,11 @@ class CompanyController extends Controller
                         data-toggle='modal' data-target='#modal-block-normal'>
                         <i class='fa fa-pencil-alt'></i>
                     </button>
+                    <button type='button' class='btn btn-warning' 
+                        onclick='showPermitInfoCompany(this,{$nestedData['id']})'
+                        data-toggle='modal' data-target='#modal-permit-normal'>
+                        <i class='fa fa-pencil-alt'></i>
+                    </button>
                     <button type='button' class='js-swal-confirm btn btn-danger' onclick='delCompany(this,{$nestedData['id']})'>
                         <i class='fa fa-trash'></i>
                     </button>

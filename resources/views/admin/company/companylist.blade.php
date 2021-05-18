@@ -119,6 +119,122 @@
             </div>
         </div>
         <!-- END Normal Block Modal -->
+
+        <!-- Permit Info Normal Block Modal -->
+        <div class="modal" id="modal-permit-normal" tabindex="-1" role="dialog" aria-labelledby="modal-permit-normal" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <form class="js-validation" onsubmit="return false;" method="POST" id="permitForm">
+                        <div class="block block-themed block-transparent mb-0">
+                            <div class="block-header bg-primary-dark">
+                                <h3 class="block-title">Building Permit Related Information</h3>
+                            </div>
+                            <div class="block-content">
+                                <div class="row items-push">
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <label for="usState">State <span class="text-danger">*</span></label>
+                                            <input type="hidden" class="form-control" id="permitId" name="id">
+                                            <select id="usState" onchange="pullPermit()">
+                                                <option value="" selected>Select state</option>
+                                                <option value="AL">AL</option>
+                                                <option value="AZ">AZ</option>
+                                                <option value="AR">AR</option>
+                                                <option value="CA">CA</option>
+                                                <option value="CO">CO</option>
+                                                <option value="CT">CT</option>
+                                                <option value="DE">DE</option>
+                                                <option value="FL">FL</option>
+                                                <option value="GA">GA</option>
+                                                <option value="HI">HI</option>
+                                                <option value="ID">ID</option>
+                                                <option value="IL">IL</option>
+                                                <option value="IN">IN</option>
+                                                <option value="IA">IA</option>
+                                                <option value="KS">KS</option>
+                                                <option value="KY">KY</option>
+                                                <option value="LA">LA</option>
+                                                <option value="ME">ME</option>
+                                                <option value="MD">MD</option>
+                                                <option value="MA">MA</option>
+                                                <option value="MI">MI</option>
+                                                <option value="MN">MN</option>
+                                                <option value="MS">MS</option>
+                                                <option value="MO">MO</option>
+                                                <option value="MT">MT</option>
+                                                <option value="NE">NE</option>
+                                                <option value="NV">NV</option>
+                                                <option value="NH">NH</option>
+                                                <option value="NJ">NJ</option>
+                                                <option value="NM">NM</option>
+                                                <option value="NY">NY</option>
+                                                <option value="NC">NC</option>
+                                                <option value="ND">ND</option>
+                                                <option value="OH">OH</option>
+                                                <option value="OK">OK</option>
+                                                <option value="OR">OR</option>
+                                                <option value="PA">PA</option>
+                                                <option value="RI">RI</option>
+                                                <option value="SC">SC</option>
+                                                <option value="SD">SD</option>
+                                                <option value="TN">TN</option>
+                                                <option value="TX">TX</option>
+                                                <option value="UT">UT</option>
+                                                <option value="VT">VT</option>
+                                                <option value="VA">VA</option>
+                                                <option value="WA">WA</option>
+                                                <option value="WV">WV</option>
+                                                <option value="WI">WI</option>
+                                                <option value="WY">WY</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="construction_email">Construction Email <span class="text-danger">*</span></label>
+                                            <input type="email" class="form-control" id="construction_email" 
+                                                name="construction_email" placeholder="Enter Construction Email..">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="registration">License No. OR, if new home, Builder Reg. No. <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="registration" 
+                                            name="registration" placeholder="Registration #">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exp_date">Expire date <span class="text-danger">*</span></label>
+                                            <input type="date" class="form-control" id="exp_date" 
+                                            name="exp_date" >
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="EIN">Federal Emp. ID No.(EIN) <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="EIN" 
+                                            name="EIN" placeholder="EIN">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="fax">Responsible Person in Charge once Work has Begun <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="contact_person" 
+                                            name="responsible_person" placeholder="Enter Person Name..">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="fax">Contact Tel <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="contact_phone" 
+                                            name="contact_phone" placeholder="212-999-0000">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="fax">FAX <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="fax" 
+                                            name="contact_fax" placeholder="Enter Fax Number..">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="block-content block-content-full text-right bg-light">
+                                <button type="submit" class="btn btn-sm btn-primary">Update</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- END Permit Info Normal Block Modal -->
         <script src="{{ asset('js/pages/common.js') }}"></script>
 
         <script>
