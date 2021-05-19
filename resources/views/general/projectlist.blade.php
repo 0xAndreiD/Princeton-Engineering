@@ -296,11 +296,21 @@
 <script src="{{ asset('js/pages/common.js') }}"></script>
 
 <script>
+    var filterJson;
     $(document).ready(function () {
         $.ajaxSetup({
             headers:
             { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
         });
+
+        if (localStorage.getItem('projectFilterJson')!=undefined){
+            filterJson = JSON.parse(localStorage.getItem('projectFilterJson'));
+        } else {
+            filterJson = {};
+            localStorage.setItem('projectFilterJson', JSON.stringify(filterJson));
+        }
+
+
 
         var table = $('#projects').DataTable({
             "processing": true,
@@ -308,6 +318,7 @@
             // "responsive": true,
             "orderCellsTop": true,
             "pageLength" : 50,
+            "stateSave" : true,
             "ajax":{
                     "url": "{{ url('getProjectList') }}",
                     "dataType": "json",
@@ -354,22 +365,39 @@
             "order": [[ 5, "desc" ]]
             @endif
         });
-        
+
+
         //console.log(table.column("2:visible"));
 
         $("#userFilter, #projectNameFilter, #projectNumberFilter").on('keyup change', function() {
             table.column($(this).parent().index() + ':visible').search(this.value).draw();
+            let key = $(this).attr('id');
+            filterJson[key] = $(this).val();
+            localStorage.setItem('projectFilterJson', JSON.stringify(filterJson));
         });
 
         $("#created_from, #created_to, #submitted_from, #submitted_to, #planCheckFilter, #asBuiltFilter, #chatFilter").on('change', function() {
+            let key = $(this).attr('id');
+            if (key == 'planCheckFilter' || key == 'asBuiltFilter') {
+                filterJson[key] = $("#"+key)[0].checked ? $(this).val(1) : $(this).val(0);
+            }
+            filterJson[key] = $(this).val();
+            localStorage.setItem('projectFilterJson', JSON.stringify(filterJson));
             table.draw();
         });
 
         $("#usStateFilter").on('change', function() {
+            let key = $(this).attr('id');
+            filterJson[key] = $(this).val();
+            localStorage.setItem('projectFilterJson', JSON.stringify(filterJson));
             table.column($(this).parent().index() + ':visible').search(this.value).draw();
         });
 
         changeStatusFilter = function(status){
+            //"statusFilter" - status
+            filterJson.statusFilter = status;
+            localStorage.setItem('projectFilterJson', JSON.stringify(filterJson));
+
             @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3)
             table.column('9:visible').search(status).draw();
             @else
@@ -390,6 +418,10 @@
         }
 
         changeStateFilter = function(status){
+            //"stateFilter" - status
+            filterJson.stateFilter = status;
+            localStorage.setItem('projectFilterJson', JSON.stringify(filterJson));
+
             @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3)
             table.column('10:visible').search(status).draw();
             @else
@@ -413,7 +445,29 @@
         });
         @endif
 
+        Object.keys(filterJson).forEach(function(k) {
+            $("#" + k).val(filterJson[k]);
+            switch (k) {
+                case 'stateFilter':
+                    changeStateFilter(filterJson[k]);
+                    break;
+                case 'statusFilter':
+                    changeStatusFilter(filterJson[k]);
+                    break;
+                case 'planCheckFilter':
+                    if (filterJson[k] == 1) $("#planCheckFilter").prop("checked", true);
+                    else $("#planCheckFilter").prop("checked", false);
+                    break;
+                case 'asBuiltFilter':
+                    if (filterJson[k] == 1) $("#asBuiltFilter").prop("checked", true);
+                    else $("#asBuiltFilter").prop("checked", false);
+                    break;
+            }
+            $("#" + k).trigger("change");
+        });
     });
+
+
 
     function togglePlanCheck(jobId){
         $.ajax({
