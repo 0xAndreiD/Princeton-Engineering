@@ -79,8 +79,8 @@ Route::get('/cronDBBackup', 'APIController@cronDBBackup')->name('cronDBBackup');
 Route::get('/getCustomEquipment', 'APIController@getCustomEquipment')->name('getCustomEquipment');
 Route::get('/getChat', 'APIController@getChat')->name('getChat');
 Route::get('/addChat', 'APIController@addChat')->name('addChat');
-Route::post('/delChat', 'APIController@delChat')->name('delChat');
-Route::post('/updateChat', 'APIController@updateChat')->name('updateChat');
+Route::post('/delChatApi', 'APIController@delChat')->name('delChatApi');
+Route::post('/updateChatApi', 'APIController@updateChat')->name('updateChatApi');
 // PV Modules
 Route::post('/getPVModules', 'GeneralController@getPVModules')->name('getPVModules');
 // PV Inverters
