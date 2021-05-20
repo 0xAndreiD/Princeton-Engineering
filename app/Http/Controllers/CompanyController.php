@@ -99,13 +99,15 @@ class CompanyController extends Controller
         }
         else {
             $search = $request->input('search.value'); 
-            $companys =  $handler->where('company_info.id','LIKE',"%{$search}%")
-                        ->orWhere('company_info.company_name', 'LIKE',"%{$search}%")
-                        ->orWhere('company_info.company_number', 'LIKE',"%{$search}%")
-                        ->orWhere('company_info.company_telno', 'LIKE',"%{$search}%")
-                        ->orWhere('company_info.company_address', 'LIKE',"%{$search}%")
-                        ->orWhere('company_info.company_email', 'LIKE',"%{$search}%")
-                        ->orWhere('company_info.company_website', 'LIKE',"%{$search}%")
+            $companys =  $handler->where(function ($q) use ($search) {
+                            $q->where('company_info.id','LIKE',"%{$search}%")
+                            ->orWhere('company_info.company_name', 'LIKE',"%{$search}%")
+                            ->orWhere('company_info.company_number', 'LIKE',"%{$search}%")
+                            ->orWhere('company_info.company_telno', 'LIKE',"%{$search}%")
+                            ->orWhere('company_info.company_address', 'LIKE',"%{$search}%")
+                            ->orWhere('company_info.company_email', 'LIKE',"%{$search}%")
+                            ->orWhere('company_info.company_website', 'LIKE',"%{$search}%");
+                        })
                         ->offset($start)
                         ->limit($limit)
                         ->orderBy($order,$dir)
@@ -121,13 +123,15 @@ class CompanyController extends Controller
                             )
                         );
 
-            $totalFiltered = $handler->where('company_info.id','LIKE',"%{$search}%")
-                        ->orWhere('company_info.company_name', 'LIKE',"%{$search}%")
-                        ->orWhere('company_info.company_number', 'LIKE',"%{$search}%")
-                        ->orWhere('company_info.company_telno', 'LIKE',"%{$search}%")
-                        ->orWhere('company_info.company_address', 'LIKE',"%{$search}%")
-                        ->orWhere('company_info.company_email', 'LIKE',"%{$search}%")
-                        ->orWhere('company_info.company_website', 'LIKE',"%{$search}%")
+            $totalFiltered = $handler->where(function ($q) use ($search) {
+                            $q->where('company_info.id','LIKE',"%{$search}%")
+                            ->orWhere('company_info.company_name', 'LIKE',"%{$search}%")
+                            ->orWhere('company_info.company_number', 'LIKE',"%{$search}%")
+                            ->orWhere('company_info.company_telno', 'LIKE',"%{$search}%")
+                            ->orWhere('company_info.company_address', 'LIKE',"%{$search}%")
+                            ->orWhere('company_info.company_email', 'LIKE',"%{$search}%")
+                            ->orWhere('company_info.company_website', 'LIKE',"%{$search}%");
+                        })
                         ->count();
         }
 

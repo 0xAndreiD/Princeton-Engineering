@@ -47,6 +47,7 @@
         <link rel="stylesheet" href="{{ asset('js/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css') }}">
         <!-- END Stylesheets -->
 
+        {{-- <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script> --}}
         <script src="{{ asset('js/jquery.min.js') }}"></script>
         <script type="text/javascript" src="{{ asset('js/sweetalert.min.js') }}" ></script>
        
@@ -391,6 +392,7 @@
         <script src="{{ asset('js/pages/be_comp_dialogs.min.js') }}"></script>
 
         <!-- Page JS Plugins -->
+        {{-- <script src="https://cdn.datatables.net/download/build/nightly/jquery.dataTables.js"></script> --}}
         <script src="{{ asset('js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
         <script src="{{ asset('js/plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
         <script src="{{ asset('js/plugins/datatables/buttons/dataTables.buttons.min.js')}}"></script>

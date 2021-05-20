@@ -124,9 +124,11 @@ class UserController extends Controller
         }
         else {
             $search = $request->input('search.value'); 
-            $users =  $handler->where('users.id','LIKE',"%{$search}%")
+            $users =  $handler->where(function ($q) use ($search) {
+                        $q->where('users.id','LIKE',"%{$search}%")
                         ->orWhere('users.username', 'LIKE',"%{$search}%")
-                        ->orWhere('users.email', 'LIKE',"%{$search}%")
+                        ->orWhere('users.email', 'LIKE',"%{$search}%");
+                        })
                         ->offset($start)
                         ->limit($limit)
                         ->orderBy($order,$dir)
@@ -143,9 +145,11 @@ class UserController extends Controller
                             )
                         );
 
-            $totalFiltered = $handler->where('users.id','LIKE',"%{$search}%")
+            $totalFiltered = $handler->where(function ($q) use ($search) {
+                        $q->where('users.id','LIKE',"%{$search}%")
                         ->orWhere('users.username', 'LIKE',"%{$search}%")
-                        ->orWhere('users.email', 'LIKE',"%{$search}%")
+                        ->orWhere('users.email', 'LIKE',"%{$search}%");
+                        })
                         ->count();
         }
 

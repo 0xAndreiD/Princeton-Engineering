@@ -683,13 +683,16 @@ class GeneralController extends Controller
         }
         else {
             $search = $request->input('search.value'); 
-            $jobs =  $handler->offset($start)->where('job_request.id','LIKE',"%{$search}%")
-                        ->orWhere('company_info.company_name', 'LIKE',"%{$search}%")
-                        ->orWhere('users.username', 'LIKE',"%{$search}%")
-                        ->orWhere('job_request.clientProjectName', 'LIKE',"%{$search}%")
-                        ->orWhere('job_request.clientProjectNumber', 'LIKE',"%{$search}%")
-                        ->orWhere('job_request.createdTime', 'LIKE',"%{$search}%")
-                        ->orWhere('job_request.submittedTime', 'LIKE',"%{$search}%")
+            $jobs =  $handler->where(function($q) use ($search) {
+                            $q->where('job_request.id','LIKE',"%{$search}%")
+                                ->orWhere('company_info.company_name', 'LIKE',"%{$search}%")
+                                ->orWhere('users.username', 'LIKE',"%{$search}%")
+                                ->orWhere('job_request.clientProjectName', 'LIKE',"%{$search}%")
+                                ->orWhere('job_request.clientProjectNumber', 'LIKE',"%{$search}%")
+                                ->orWhere('job_request.createdTime', 'LIKE',"%{$search}%")
+                                ->orWhere('job_request.submittedTime', 'LIKE',"%{$search}%");
+                        })
+                        ->offset($start)
                         ->limit($limit)
                         ->orderBy($order,$dir)
                         ->get(
@@ -711,14 +714,15 @@ class GeneralController extends Controller
                             )
                         );
 
-            $totalFiltered = $handler->offset($start)->where('job_request.id','LIKE',"%{$search}%")
-                        ->orWhere('company_info.company_name', 'LIKE',"%{$search}%")
-                        ->orWhere('users.username', 'LIKE',"%{$search}%")
-                        ->orWhere('job_request.clientProjectName', 'LIKE',"%{$search}%")
-                        ->orWhere('job_request.clientProjectNumber', 'LIKE',"%{$search}%")
-                        ->orWhere('job_request.createdTime', 'LIKE',"%{$search}%")
-                        ->orWhere('job_request.submittedTime', 'LIKE',"%{$search}%")
-                        ->count();
+            $totalFiltered = $handler->where(function($q) use ($search) {
+                    $q->where('job_request.id','LIKE',"%{$search}%")
+                    ->orWhere('company_info.company_name', 'LIKE',"%{$search}%")
+                    ->orWhere('users.username', 'LIKE',"%{$search}%")
+                    ->orWhere('job_request.clientProjectName', 'LIKE',"%{$search}%")
+                    ->orWhere('job_request.clientProjectNumber', 'LIKE',"%{$search}%")
+                    ->orWhere('job_request.createdTime', 'LIKE',"%{$search}%")
+                    ->orWhere('job_request.submittedTime', 'LIKE',"%{$search}%");
+                })->count();
         }
 
         $data = array();

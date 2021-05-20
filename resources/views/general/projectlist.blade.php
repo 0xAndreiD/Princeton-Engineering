@@ -310,15 +310,116 @@
             localStorage.setItem('projectFilterJson', JSON.stringify(filterJson));
         }
 
+        changeStateFilterLabel = function(status){
+            $(`#stateFilter`).css('color', '#FFFFFF');
+            if(status == ''){ $(`#stateFilter`).css('color', '#495057'); $(`#stateFilter`).html('All');  $(`#stateFilter`).css('background-color', '#FFFFFF'); }
+            else if(status == '0'){ $(`#stateFilter`).html('No action');  $(`#stateFilter`).css('background-color', '#e04f1a'); }
+            else if(status == '1'){ $(`#stateFilter`).html('Plans uploaded to portal');  $(`#stateFilter`).css('background-color', '#689550'); }
+            else if(status == '2'){ $(`#stateFilter`).html('Plans reviewed');  $(`#stateFilter`).css('background-color', '#3c90df'); }
+            else if(status == '3'){ $(`#stateFilter`).html('Comments issued');  $(`#stateFilter`).css('background-color', '#ffb119'); }
+            else if(status == '4'){ $(`#stateFilter`).html('Updated plans uploaded to portal');  $(`#stateFilter`).css('background-color', '#689550'); }
+            else if(status == '5'){ $(`#stateFilter`).html('Revised comments issued');  $(`#stateFilter`).css('background-color', '#343a40'); }
+            else if(status == '6'){ $(`#stateFilter`).html('Final plans uploaded to portal');  $(`#stateFilter`).css('background-color', 'rgba(0, 0, 0, 0.33)'); }
+            else if(status == '7'){ $(`#stateFilter`).html('PE sealed plans link sent');  $(`#stateFilter`).css('background-color', '#82b54b'); }
+        }
 
+        changeStatusFilterLabel = function(status) {
+            $(`#statusFilter`).css('color', '#FFFFFF');
+            if(status == ''){ $(`#statusFilter`).css('color', '#495057'); $(`#statusFilter`).html('All');  $(`#statusFilter`).css('background-color', '#FFFFFF'); }
+            else if(status == '0'){ $(`#statusFilter`).html('None');  $(`#statusFilter`).css('background-color', '#e04f1a'); }
+            else if(status == '1'){ $(`#statusFilter`).html('Saved');  $(`#statusFilter`).css('background-color', '#689550'); }
+            else if(status == '2'){ $(`#statusFilter`).html('Check Requested');  $(`#statusFilter`).css('background-color', '#3c90df'); }
+            else if(status == '3'){ $(`#statusFilter`).html('Reviewed');  $(`#statusFilter`).css('background-color', '#ffb119'); }
+            else if(status == '4'){ $(`#statusFilter`).html('Submitted');  $(`#statusFilter`).css('background-color', '#689550'); }
+            else if(status == '5'){ $(`#statusFilter`).html('Report Prepared');  $(`#statusFilter`).css('background-color', '#3c90df'); }
+            else if(status == '6'){ $(`#statusFilter`).html('Plan Requested');  $(`#statusFilter`).css('background-color', '#689550'); }
+            else if(status == '7'){ $(`#statusFilter`).html('Plan Reviewed');  $(`#statusFilter`).css('background-color', '#343a40'); }
+            else if(status == '8'){ $(`#statusFilter`).html('Link Sent');  $(`#statusFilter`).css('background-color', 'rgba(0, 0, 0, 0.33)'); }
+            else if(status == '9'){ $(`#statusFilter`).html('Completed');  $(`#statusFilter`).css('background-color', '#82b54b'); }
+        }
+
+        Object.keys(filterJson).forEach(function(k) {
+            $("#" + k).val(filterJson[k]);
+            switch (k) {
+                case 'stateFilter':
+                    changeStateFilterLabel(filterJson[k]);
+                    break;
+                case 'statusFilter':
+                    changeStatusFilterLabel(filterJson[k]);
+                    break;
+                case 'planCheckFilter':
+                    if (filterJson[k] == 1) $("#planCheckFilter").prop("checked", true);
+                    else $("#planCheckFilter").prop("checked", false);
+                    break;
+                case 'asBuiltFilter':
+                    if (filterJson[k] == 1) $("#asBuiltFilter").prop("checked", true);
+                    else $("#asBuiltFilter").prop("checked", false);
+                    break;
+            }
+        });
+
+        $("#userFilter, #projectNameFilter, #projectNumberFilter").on('keyup change', function() {
+            table.column($(this).parent().index() + ':visible').search(this.value).draw();
+            let key = $(this).attr('id');
+            filterJson[key] = $(this).val();
+            localStorage.setItem('projectFilterJson', JSON.stringify(filterJson));
+        });
+
+        $("#created_from, #created_to, #submitted_from, #submitted_to, #planCheckFilter, #asBuiltFilter, #chatFilter").on('change', function() {
+            let key = $(this).attr('id');
+            if (key == 'planCheckFilter' || key == 'asBuiltFilter') {
+                filterJson[key] = $("#"+key)[0].checked ? $(this).val(1) : $(this).val(0);
+            }
+            filterJson[key] = $(this).val();
+            localStorage.setItem('projectFilterJson', JSON.stringify(filterJson));
+            table.draw();
+        });
+
+        $("#usStateFilter").on('change', function() {
+            let key = $(this).attr('id');
+            filterJson[key] = $(this).val();
+            localStorage.setItem('projectFilterJson', JSON.stringify(filterJson));
+            table.column($(this).parent().index() + ':visible').search(this.value).draw();
+        });
+
+        changeStatusFilter = function(status){
+            //"statusFilter" - status
+            filterJson.statusFilter = status;
+            localStorage.setItem('projectFilterJson', JSON.stringify(filterJson));
+
+            @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3)
+            table.column('9:visible').search(status).draw();
+            @else
+            table.column('6:visible').search(status).draw();
+            @endif
+            
+            changeStatusFilterLabel(status);
+        }
+
+        changeStateFilter = function(status){
+            //"stateFilter" - status
+            filterJson.stateFilter = status;
+            localStorage.setItem('projectFilterJson', JSON.stringify(filterJson));
+
+            @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3)
+            table.column('10:visible').search(status).draw();
+            @else
+            table.column('7:visible').search(status).draw();
+            @endif
+
+            changeStateFilterLabel(status);
+        }
 
         var table = $('#projects').DataTable({
             "processing": true,
             "serverSide": true,
-            // "responsive": true,
+            "responsive": true,
             "orderCellsTop": true,
             "pageLength" : 50,
             "stateSave" : true,
+            "paging":   true,
+            "ordering": true,
+            "info":     true,
             "ajax":{
                     "url": "{{ url('getProjectList') }}",
                     "dataType": "json",
@@ -366,108 +467,14 @@
             @endif
         });
 
-
-        //console.log(table.column("2:visible"));
-
-        $("#userFilter, #projectNameFilter, #projectNumberFilter").on('keyup change', function() {
-            table.column($(this).parent().index() + ':visible').search(this.value).draw();
-            let key = $(this).attr('id');
-            filterJson[key] = $(this).val();
-            localStorage.setItem('projectFilterJson', JSON.stringify(filterJson));
-        });
-
-        $("#created_from, #created_to, #submitted_from, #submitted_to, #planCheckFilter, #asBuiltFilter, #chatFilter").on('change', function() {
-            let key = $(this).attr('id');
-            if (key == 'planCheckFilter' || key == 'asBuiltFilter') {
-                filterJson[key] = $("#"+key)[0].checked ? $(this).val(1) : $(this).val(0);
-            }
-            filterJson[key] = $(this).val();
-            localStorage.setItem('projectFilterJson', JSON.stringify(filterJson));
-            table.draw();
-        });
-
-        $("#usStateFilter").on('change', function() {
-            let key = $(this).attr('id');
-            filterJson[key] = $(this).val();
-            localStorage.setItem('projectFilterJson', JSON.stringify(filterJson));
-            table.column($(this).parent().index() + ':visible').search(this.value).draw();
-        });
-
-        changeStatusFilter = function(status){
-            //"statusFilter" - status
-            filterJson.statusFilter = status;
-            localStorage.setItem('projectFilterJson', JSON.stringify(filterJson));
-
-            @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3)
-            table.column('9:visible').search(status).draw();
-            @else
-            table.column('6:visible').search(status).draw();
-            @endif
-            $(`#statusFilter`).css('color', '#FFFFFF');
-            if(status == ''){ $(`#statusFilter`).css('color', '#495057'); $(`#statusFilter`).html('All');  $(`#statusFilter`).css('background-color', '#FFFFFF'); }
-            else if(status == '0'){ $(`#statusFilter`).html('None');  $(`#statusFilter`).css('background-color', '#e04f1a'); }
-            else if(status == '1'){ $(`#statusFilter`).html('Saved');  $(`#statusFilter`).css('background-color', '#689550'); }
-            else if(status == '2'){ $(`#statusFilter`).html('Check Requested');  $(`#statusFilter`).css('background-color', '#3c90df'); }
-            else if(status == '3'){ $(`#statusFilter`).html('Reviewed');  $(`#statusFilter`).css('background-color', '#ffb119'); }
-            else if(status == '4'){ $(`#statusFilter`).html('Submitted');  $(`#statusFilter`).css('background-color', '#689550'); }
-            else if(status == '5'){ $(`#statusFilter`).html('Report Prepared');  $(`#statusFilter`).css('background-color', '#3c90df'); }
-            else if(status == '6'){ $(`#statusFilter`).html('Plan Requested');  $(`#statusFilter`).css('background-color', '#689550'); }
-            else if(status == '7'){ $(`#statusFilter`).html('Plan Reviewed');  $(`#statusFilter`).css('background-color', '#343a40'); }
-            else if(status == '8'){ $(`#statusFilter`).html('Link Sent');  $(`#statusFilter`).css('background-color', 'rgba(0, 0, 0, 0.33)'); }
-            else if(status == '9'){ $(`#statusFilter`).html('Completed');  $(`#statusFilter`).css('background-color', '#82b54b'); }
-        }
-
-        changeStateFilter = function(status){
-            //"stateFilter" - status
-            filterJson.stateFilter = status;
-            localStorage.setItem('projectFilterJson', JSON.stringify(filterJson));
-
-            @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3)
-            table.column('10:visible').search(status).draw();
-            @else
-            table.column('7:visible').search(status).draw();
-            @endif
-            $(`#stateFilter`).css('color', '#FFFFFF');
-            if(status == ''){ $(`#stateFilter`).css('color', '#495057'); $(`#stateFilter`).html('All');  $(`#stateFilter`).css('background-color', '#FFFFFF'); }
-            else if(status == '0'){ $(`#stateFilter`).html('No action');  $(`#stateFilter`).css('background-color', '#e04f1a'); }
-            else if(status == '1'){ $(`#stateFilter`).html('Plans uploaded to portal');  $(`#stateFilter`).css('background-color', '#689550'); }
-            else if(status == '2'){ $(`#stateFilter`).html('Plans reviewed');  $(`#stateFilter`).css('background-color', '#3c90df'); }
-            else if(status == '3'){ $(`#stateFilter`).html('Comments issued');  $(`#stateFilter`).css('background-color', '#ffb119'); }
-            else if(status == '4'){ $(`#stateFilter`).html('Updated plans uploaded to portal');  $(`#stateFilter`).css('background-color', '#689550'); }
-            else if(status == '5'){ $(`#stateFilter`).html('Revised comments issued');  $(`#stateFilter`).css('background-color', '#343a40'); }
-            else if(status == '6'){ $(`#stateFilter`).html('Final plans uploaded to portal');  $(`#stateFilter`).css('background-color', 'rgba(0, 0, 0, 0.33)'); }
-            else if(status == '7'){ $(`#stateFilter`).html('PE sealed plans link sent');  $(`#stateFilter`).css('background-color', '#82b54b'); }
-        }
-
         @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3)
         $("#companyFilter").on('keyup change', function() {
             table.column($(this).parent().index() + ':visible').search(this.value).draw();
         });
         @endif
 
-        Object.keys(filterJson).forEach(function(k) {
-            $("#" + k).val(filterJson[k]);
-            switch (k) {
-                case 'stateFilter':
-                    changeStateFilter(filterJson[k]);
-                    break;
-                case 'statusFilter':
-                    changeStatusFilter(filterJson[k]);
-                    break;
-                case 'planCheckFilter':
-                    if (filterJson[k] == 1) $("#planCheckFilter").prop("checked", true);
-                    else $("#planCheckFilter").prop("checked", false);
-                    break;
-                case 'asBuiltFilter':
-                    if (filterJson[k] == 1) $("#asBuiltFilter").prop("checked", true);
-                    else $("#asBuiltFilter").prop("checked", false);
-                    break;
-            }
-            $("#" + k).trigger("change");
-        });
+
     });
-
-
 
     function togglePlanCheck(jobId){
         $.ajax({
