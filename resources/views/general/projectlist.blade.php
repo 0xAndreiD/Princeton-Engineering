@@ -359,6 +359,15 @@
         });
 
         $("#userFilter, #projectNameFilter, #projectNumberFilter").on('keyup change', function() {
+            console.log("key changed");
+            table.column($(this).parent().index() + ':visible').search(this.value).draw();
+            let key = $(this).attr('id');
+            filterJson[key] = $(this).val();
+            localStorage.setItem('projectFilterJson', JSON.stringify(filterJson));
+        });
+
+        $("#userFilter, #projectNameFilter, #projectNumberFilter").on('change', function() {
+            console.log("changed");
             table.column($(this).parent().index() + ':visible').search(this.value).draw();
             let key = $(this).attr('id');
             filterJson[key] = $(this).val();
@@ -420,6 +429,10 @@
             "paging":   true,
             "ordering": true,
             "info":     true,
+            // "dom": '<"toolbar">frtip',
+            "fnInitComplete": function(){
+                $('div#projects_filter').append("<input type='button' class='btn btn-hero-primary' value='Clear Filter' style='line-height:0.8' onclick='clearFilter()'/>");
+            },
             "ajax":{
                     "url": "{{ url('getProjectList') }}",
                     "dataType": "json",
@@ -471,10 +484,33 @@
         $("#companyFilter").on('keyup change', function() {
             table.column($(this).parent().index() + ':visible').search(this.value).draw();
         });
+        $("#companyFilter").on('change', function() {
+            table.column($(this).parent().index() + ':visible').search(this.value).draw();
+        });
         @endif
 
+        clearFilter = function (){
+            $("#created_from").val('');
+            $("#created_to").val('');
+            $("#submitted_from").val('');
+            $("#submitted_to").val('');
+            $("#planCheckFilter").prop("checked", false);
+            $("#asBuiltFilter").prop("checked", false);
+            $("#chatFilter").val('');
+            $("#companyFilter").val('');
+            $("#userFilter").val('');
+            $("#projectNumberFilter").val('');
+            $("#projectNameFilter").val('');
+            $("#usStateFilter").val('');
+            changeStatusFilter('');
+            changeStateFilter('');
+            localStorage.setItem('projectFilterJson', JSON.stringify({}));
+            table.search('').columns().search('').draw();
+        }
 
     });
+
+
 
     function togglePlanCheck(jobId){
         $.ajax({

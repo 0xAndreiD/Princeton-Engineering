@@ -459,3 +459,7 @@ html, body {
     justify-content: space-around;
     font-size: 1.5rem;
 }
+
+.toolbar {
+    float: right;
+}
