@@ -149,30 +149,18 @@
                                 <span class="badge dropdown-toggle job-dropdown" id="statusFilter" data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>All</span>
                                 <div class="dropdown-menu"  aria-labelledby="statusFilter">
                                     <a class="dropdown-item" href="javascript:changeStatusFilter('')">All</a>
-                                    <a class="dropdown-item" href="javascript:changeStatusFilter('0')">None</a>
-                                    <a class="dropdown-item" href="javascript:changeStatusFilter('1')">Saved</a>
-                                    <a class="dropdown-item" href="javascript:changeStatusFilter('2')">Check Requested</a>
-                                    <a class="dropdown-item" href="javascript:changeStatusFilter('3')">Reviewed</a>
-                                    <a class="dropdown-item" href="javascript:changeStatusFilter('4')">Submitted</a>
-                                    <a class="dropdown-item" href="javascript:changeStatusFilter('5')">Report Prepared</a>
-                                    <a class="dropdown-item" href="javascript:changeStatusFilter('6')">Plan Requested</a>
-                                    <a class="dropdown-item" href="javascript:changeStatusFilter('7')">Plan Reviewed</a>
-                                    <a class="dropdown-item" href="javascript:changeStatusFilter('8')">Link Sent</a>
-                                    <a class="dropdown-item" href="javascript:changeStatusFilter('9')">Completed</a>
+                                    @foreach($projectStatusList as $item)
+                                        <a class="dropdown-item" href="javascript:changeStatusFilter({{ $item['id'] }})">{{ $item['notes'] }}</a>
+                                    @endforeach
                                 </div>
                             </th>
                             <th class="searchHead">
                                 <span class="badge dropdown-toggle job-dropdown" id="stateFilter" data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>All</span>
                                 <div class="dropdown-menu"  aria-labelledby="stateFilter">
                                     <a class="dropdown-item" href="javascript:changeStateFilter('')">All</a>
-                                    <a class="dropdown-item" href="javascript:changeStateFilter('0')">No action</a>
-                                    <a class="dropdown-item" href="javascript:changeStateFilter('1')">Plans uploaded to portal</a>
-                                    <a class="dropdown-item" href="javascript:changeStateFilter('2')">Plans reviewed</a>
-                                    <a class="dropdown-item" href="javascript:changeStateFilter('3')">Comments issued</a>
-                                    <a class="dropdown-item" href="javascript:changeStateFilter('4')">Updated plans uploaded to portal</a>
-                                    <a class="dropdown-item" href="javascript:changeStateFilter('5')">Revised comments issued</a>
-                                    <a class="dropdown-item" href="javascript:changeStateFilter('6')">Final plans uploaded to portal</a>
-                                    <a class="dropdown-item" href="javascript:changeStateFilter('7')">PE sealed plans link sent</a>
+                                    @foreach($planStatusList as $item)
+                                        <a class="dropdown-item" href="javascript:changeStateFilter({{ $item['id'] }})">{{ $item['notes'] }}</a>
+                                    @endforeach
                                 </div>
                             </th>
                             <th style="display: flex; align-items: center; justify-content: center;">

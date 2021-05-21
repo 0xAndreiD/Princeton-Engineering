@@ -9,6 +9,8 @@ use Illuminate\Http\File;
 use Illuminate\Support\Facades\Storage;
 use App\User;
 use App\Company;
+use App\JobProjectStatus;
+use App\JobPlanStatus;
 use App\PVModule;
 use App\PVInverter;
 use App\Stanchion;
@@ -510,7 +512,10 @@ class GeneralController extends Controller
      */
     public function projectList(){
         $companyList = Company::orderBy('company_name', 'asc')->get();
-        return view('general.projectlist')->with('companyList', $companyList);
+        $projectStatusList = JobProjectStatus::orderBy('id', 'asc')->get();
+        $planStatusList = JobPlanStatus::orderBy('id', 'asc')->get();
+        return view('general.projectlist')->with('companyList', $companyList)
+        ->with('planStatusList', $planStatusList)->with('projectStatusList', $projectStatusList);
     }
 
     protected $globalStates = array("None", "Saved", "Check Requested", "Reviewed", "Submitted", "Report Prepared", "Plan Requested", "Plan Reviewed", "Link Sent", "Completed");
