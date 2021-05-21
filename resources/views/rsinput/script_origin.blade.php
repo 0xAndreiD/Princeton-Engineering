@@ -3085,6 +3085,15 @@ $(document).ready(function() {
             if(roofDegreeVal.toFixed(2) == 0.00) {
                 hasWarnings = true;
                 $(`#warning-roof-degree-${i}`).css("display", "block");
+            } else {
+                $(`#warning-roof-degree-${i}`).css("display", "none");
+            }
+            var stickRoofDegreeVal = parseFloat($(`#a-7-${i}`).val());
+            if(stickRoofDegreeVal.toFixed(2) == 0.00) {
+                hasWarnings = true;
+                $(`#warning-stick-roof-degree-${i}`).css("display", "block");
+            } else {
+                $(`#warning-stick-roof-degree-${i}`).css("display", "none");
             }
         }
         return hasWarnings;

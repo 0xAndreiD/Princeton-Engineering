@@ -118,7 +118,10 @@
             <td class="iw400-right-bdr" >Roof Slope</td>
             <td class="iw400-bdr">deg</td>
             <td id="value-7-{{ $conditionId }}" class="w400-yellow-bdr" colspan="2"><input type="text" class="txt-center-align" id="a-7-{{ $conditionId }}" tabindex="31" value=""></input></td>
-            <td id="calced-7-{{ $conditionId }}" class="calcedCell right-bdr"></td>
+            <td id="calced-7-{{ $conditionId }}" class="calcedCell right-bdr">
+                <p style="margin-bottom:0; color:red; font-weight:500; text-align:left; display:none" id="warning-stick-roof-degree-{{ $conditionId }}">Zero is invalid</p>
+            </td>
+            
             <input type="text" class="txt-center-align" id="ac-7-{{ $conditionId }}" value="" hidden>
             <!-- <td class="w400-bdr"><input type="checkbox" id="aa-7-1" checked></input></td> -->
         </tr>
