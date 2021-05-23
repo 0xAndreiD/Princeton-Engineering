@@ -606,8 +606,8 @@
                 <td class="iw400" colspan="3" style="text-align:right !important;">Member type</td>
                 <td class="w400-green-bdr" colspan="2">
                     <select id="option-roof-member-type-{{ $conditionId }}" tabindex="58">
-                        <option data-value="2x4">2x4</option>
-                        <option data-value="2x6" selected="">2x6</option>
+                        <option data-value="2x4" selected="">2x4</option>
+                        <option data-value="2x6">2x6</option>
                         <option data-value="2x8">2x8</option>
                         <option data-value="2x10">2x10</option>
                         <option data-value="2x12">2x12</option>
@@ -618,11 +618,11 @@
                 <td class="iw400" colspan="3" style="text-align:right !important; border-left: 1.00pt solid windowtext;">Member type</td>
                 <td class="w400-green-bdr" colspan="2">
                     <select id="option-floor-member-type-{{ $conditionId }}" tabindex="67">
-                        <option data-value="2x4">2x4</option>
+                        <option data-value="2x4" selected>2x4</option>
                         <option data-value="2x6">2x6</option>
                         <option data-value="2x8">2x8</option>
                         <option data-value="2x10">2x10</option>
-                        <option data-value="2x12" selected>2x12</option>
+                        <option data-value="2x12">2x12</option>
                     </select>
                 </td>
                 <td class="right-bdr"><div style="overflow:hidden"></td>
