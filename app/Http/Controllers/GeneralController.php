@@ -1617,7 +1617,8 @@ class GeneralController extends Controller
                         $project = JobRequest::where('id', '=', $request['projectId'])->first();
                         $users = User::where('usernumber', $project->userId)->where('companyid', $project->companyId)->get();
                         //Mailing
-                        $data = ['projectName' => $project->clientProjectName, 'projectNumber' => $project->clientProjectNumber];
+                        $data = ['projectName' => $project->clientProjectName, 'projectNumber' => $project->clientProjectNumber, 
+                        'projectState' => $project->state];
 
                         foreach($users as $user){
                             if ($user) {
@@ -1649,10 +1650,11 @@ class GeneralController extends Controller
     function delChat(Request $request){
         $id = $request->input('data');
         $res = JobChat::where('id', $id)->delete();
-        
+
         $project = JobRequest::where('id', '=', $request->input('projectId'))->first();
         $users = User::where('usernumber', $project->userId)->where('companyid', $project->companyId)->get();
-        $data = ['projectName' => $project->clientProjectName, 'projectNumber' => $project->clientProjectNumber];
+        $data = ['projectName' => $project->clientProjectName, 'projectNumber' => $project->clientProjectNumber, 
+        'projectState' => $project->state];
 
         //Mailing
         foreach($users as $user){
