@@ -150,9 +150,15 @@ class GeneralController extends Controller
                     $companyNumber = $company ? $company['company_number'] : 0;
                     $folderPrefix = "/" . $companyNumber. '. ' . $project['companyName'] . '/';
                     
-                    $user = User::where('companyid', $project['companyId'])->where('usernumber', $request['data']['option-user-id'])->first();
-                    // $user = User::where('companyid', $project['companyId'])->where('usernumber', $project['userId'])->first();
-                    $data = $this->inputToJson($request['data'], $request['caseCount'], $user);
+                    $user = '';
+                    
+                    if (isset($request['data']['option-user-id'])) {
+                        $user = User::where('companyid', $project['companyId'])->where('usernumber', $request['data']['option-user-id'])->first();
+                    } else {
+                        $user = User::where('companyid', $project['companyId'])->where('usernumber', $project['userId'])->first();
+                    }
+                    
+                    $data = $this->inputToJson($request['data'], $request['caseCount'], $user);                    
                     
                     if( Storage::disk('input')->exists($folderPrefix . $project['requestFile']) )
                         Storage::disk('input')->delete($folderPrefix . $project['requestFile']);
