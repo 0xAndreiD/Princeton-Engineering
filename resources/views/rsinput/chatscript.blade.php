@@ -109,6 +109,7 @@
 	});
 
     function delChatHistory(obj, id) {
+        var projectId = $("#projectId").val();
         let toast = Swal.mixin({
             buttonsStyling: false,
             customClass: {
@@ -137,7 +138,7 @@
             }
         }).then(result => {
             if (result.value) {
-                $.post("delChat", {data: id}, function(result){
+                $.post("delChat", {data: id, projectId: projectId}, function(result){
                     if (result){
                         window.msgCount --;
                         $(obj).parent().parent().parent().remove().draw;
@@ -154,6 +155,8 @@
     
     function updateChatHistory(obj, id){
         var text = $(obj).parent().parent().find('textarea').val();
+        var projectId = $("#projectId").val();
+
         let toast = Swal.mixin({
             buttonsStyling: false,
             customClass: {
@@ -165,7 +168,7 @@
         $.ajax({
             url:"updateChat",
             type:'post',
-            data:{chatId: id, text: text},
+            data:{chatId: id, projectId: projectId, text: text},
             success:function(res){
                 if (res.success == true) {
                     toast.fire('Updated!', 'Chat has been updated.', 'success');

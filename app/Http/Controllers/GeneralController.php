@@ -38,6 +38,7 @@ use DateTime;
 use DateTimeZone;
 use ZipArchive;
 use DB;
+use Mail;
 
 class GeneralController extends Controller
 {
@@ -1612,6 +1613,20 @@ class GeneralController extends Controller
                     {
                         $chatItem->text = $request['text'];
                         $chatItem->save();
+
+                        $project = JobRequest::where('id', '=', $request['projectId'])->first();
+                        $users = User::where('usernumber', $project->userId)->where('companyid', $project->companyId)->get();
+                        //Mailing
+                        $data = ['projectName' => $project->clientProjectName, 'projectNumber' => $project->clientProjectNumber];
+
+                        foreach($users as $user){
+                            if ($user) {
+                                Mail::send('mail.chatnotification', $data, function ($m) use ($user) {
+                                    $m->from(env('MAIL_FROM_ADDRESS'), 'Princeton Engineering')->to($user->email)->subject('Chat is updated on the project');
+                                });
+                            }
+                        }
+                       
                         return response()->json(['success' => true]);
                     }
                     else
@@ -1634,6 +1649,19 @@ class GeneralController extends Controller
     function delChat(Request $request){
         $id = $request->input('data');
         $res = JobChat::where('id', $id)->delete();
+        
+        $project = JobRequest::where('id', '=', $request->input('projectId'))->first();
+        $users = User::where('usernumber', $project->userId)->where('companyid', $project->companyId)->get();
+        $data = ['projectName' => $project->clientProjectName, 'projectNumber' => $project->clientProjectNumber];
+
+        //Mailing
+        foreach($users as $user){
+            if ($user) {
+                Mail::send('mail.chatnotification', $data, function ($m) use ($user) {
+                    $m->from(env('MAIL_FROM_ADDRESS'), 'Princeton Engineering')->to($user->email)->subject('Chat is deleted on the project');
+                });
+            }
+        }
         return $res;
     }
     /**
