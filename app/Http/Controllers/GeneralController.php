@@ -151,7 +151,7 @@ class GeneralController extends Controller
                     $folderPrefix = "/" . $companyNumber. '. ' . $project['companyName'] . '/';
                     
                     $user = '';
-                    
+
                     if (isset($request['data']['option-user-id'])) {
                         $user = User::where('companyid', $project['companyId'])->where('usernumber', $request['data']['option-user-id'])->first();
                     } else {
@@ -182,7 +182,10 @@ class GeneralController extends Controller
                     $project->clientProjectNumber = $request['data']['txt-project-number'];
                     $project->submittedTime = gmdate("Y-m-d\TH:i:s", time());
                     $project->state = $request['data']['option-state'];
-                    $project->userId = $request['data']['option-user-id'];
+
+                    if (isset($request['data']['option-user-id'])) {
+                        $project->userId = $request['data']['option-user-id'];
+                    }
                     $project->save();
 
                     $company->last_accessed = gmdate("Y-m-d", time());
