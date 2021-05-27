@@ -65,7 +65,7 @@
         <td class="iw400-right-bdr">Project Manager</td>
         <td class="w400-yellow-bdr">
             <select id="option-user-id" tabindex="6">
-                <option value="">Select User</option>
+                <option value="0">Select User</option>
                 @foreach ($companyMembers as $item)
                 <option value="{{$item->id}}" {{ $item->id == $userId ? 'selected' : ''}}>
                     {{ $item->username }}
