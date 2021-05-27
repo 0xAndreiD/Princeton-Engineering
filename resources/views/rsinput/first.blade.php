@@ -68,7 +68,7 @@
     @if ($projectId!=-1)
     <tr class="h13">
         <td><div style="overflow:hidden"></div></td>
-        <td class="iw400-right-bdr">Project User</td>
+        <td class="iw400-right-bdr">Project Manager</td>
         <td class="w400-yellow-bdr">
             <select id="option-user-id" tabindex="6">
                 <option value="">Select User</option>
