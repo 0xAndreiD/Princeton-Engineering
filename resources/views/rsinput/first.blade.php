@@ -65,6 +65,23 @@
         <td class="w400-yellow-bdr"><input type="text" id="txt-project-number" tabindex="6" value="624"></input></td>
         <td class="iw400" id="project-id-comment" colspan="2" style="text-align: left;"></td>
     </tr>
+    @if ($projectId!=-1)
+    <tr class="h13">
+        <td><div style="overflow:hidden"></div></td>
+        <td class="iw400-right-bdr">Project User</td>
+        <td class="w400-yellow-bdr">
+            <select id="option-user-id" tabindex="6">
+                <option value="">Select User</option>
+                @foreach ($companyMembers as $item)
+                <option value="{{$item->id}}" {{ $item->id == $userId ? 'selected' : ''}}>
+                    {{ $item->username }}
+                </option>
+                @endforeach
+            </select>
+        </td>
+        <td><div style="overflow:hidden"></div></td>
+    </tr>
+    @endif
     <tr class="h13">
         <td><div style="overflow:hidden"></div></td>
         <td class="iw400-right-bdr">Project Name</td>

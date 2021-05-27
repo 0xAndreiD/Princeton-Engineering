@@ -85,6 +85,7 @@ class GeneralController extends Controller
                     ->with('companyMembers', $companymembers)
                     ->with('projectState', $project ? $project->projectState : 0)
                     ->with('projectId', $request['projectId'] ? $request['projectId'] : -1)
+                    ->with('userId', $project['userId'])
                     ->with('offset', $company['offset']);
         }
         else
@@ -96,6 +97,7 @@ class GeneralController extends Controller
                     ->with('companyMembers', $companymembers)
                     ->with('projectState', 0)
                     ->with('projectId', $request['projectId'] ? $request['projectId'] : -1)
+                    ->with('userId', 0)
                     ->with('offset', 0.5);
         }
     }
@@ -142,13 +144,15 @@ class GeneralController extends Controller
                     $companyNumber = $company ? $company['company_number'] : 0;
                     $folderPrefix = "/" . $companyNumber. '. ' . $project['companyName'] . '/';
                     
-                    $user = User::where('companyid', $project['companyId'])->where('usernumber', $project['userId'])->first();
+                    $user = User::where('companyid', $project['companyId'])->where('usernumber', $request['data']['option-user-id'])->first();
+                    // $user = User::where('companyid', $project['companyId'])->where('usernumber', $project['userId'])->first();
                     $data = $this->inputToJson($request['data'], $request['caseCount'], $user);
+                    
                     if( Storage::disk('input')->exists($folderPrefix . $project['requestFile']) )
                         Storage::disk('input')->delete($folderPrefix . $project['requestFile']);
                     Storage::disk('input')->put($folderPrefix . $project['requestFile'], json_encode($data));
                     
-                    //Backup json file to dropbox
+                    // //Backup json file to dropbox
                     $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
                     $dropbox = new Dropbox($app);
                     $dropboxFile = new DropboxFile(storage_path('/input/') . $companyNumber. '. ' . $project['companyName'] . '/' . $project['requestFile']);
@@ -166,6 +170,7 @@ class GeneralController extends Controller
                     $project->clientProjectNumber = $request['data']['txt-project-number'];
                     $project->submittedTime = gmdate("Y-m-d\TH:i:s", time());
                     $project->state = $request['data']['option-state'];
+                    $project->userId = $request['data']['option-user-id'];
                     $project->save();
 
                     $company->last_accessed = gmdate("Y-m-d", time());
@@ -344,6 +349,7 @@ class GeneralController extends Controller
         //ProjectInfo
         $data['ProjectInfo'] = array();
         $data['ProjectInfo']['Number'] = $input['txt-project-number'];
+        $data['ProjectInfo']['User'] = $input['option-user-id'];
         $data['ProjectInfo']['Name'] = $input['txt-project-name'];
         $data['ProjectInfo']['Street'] = $input['txt-street-address'];
         $data['ProjectInfo']['City'] = $input['txt-city'];

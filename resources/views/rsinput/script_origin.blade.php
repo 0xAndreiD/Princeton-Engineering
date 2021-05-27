@@ -1168,6 +1168,8 @@ var updateUserOption = function(userId) {
     });
 }
 
+
+
 var detectCorrectTownForMA = function() {
     var city_name = document.getElementById("txt-city").value;
     var option_state = document.getElementById("option-state");        
@@ -3644,6 +3646,7 @@ var loadPreloadedData = function() {
                             $('#txt-street-address').val(preloaded_data['ProjectInfo']['Street']);
                             $('#txt-city').val(preloaded_data['ProjectInfo']['City']);
                             $('#option-state').val(preloaded_data['ProjectInfo']['State']);
+                            $('#option-user-id').val(preloaded_data['ProjectInfo']['User']);
                             //detectCorrectTownForMA();
                             $('#txt-zip').val(preloaded_data['ProjectInfo']['Zip']);
 
