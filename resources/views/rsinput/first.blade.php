@@ -59,12 +59,6 @@
         <td><div style="overflow:hidden"></td>
         <td><div style="overflow:hidden"></td>
     </tr>
-    <tr class="h13">
-        <td><div style="overflow:hidden"></div></td>
-        <td class="iw400-right-bdr">Project Number</td>
-        <td class="w400-yellow-bdr"><input type="text" id="txt-project-number" tabindex="6" value="624"></input></td>
-        <td class="iw400" id="project-id-comment" colspan="2" style="text-align: left;"></td>
-    </tr>
     @if ($projectId!=-1)
     <tr class="h13">
         <td><div style="overflow:hidden"></div></td>
@@ -82,6 +76,12 @@
         <td><div style="overflow:hidden"></div></td>
     </tr>
     @endif
+    <tr class="h13">
+        <td><div style="overflow:hidden"></div></td>
+        <td class="iw400-right-bdr">Project Number</td>
+        <td class="w400-yellow-bdr"><input type="text" id="txt-project-number" tabindex="6" value="624"></input></td>
+        <td class="iw400" id="project-id-comment" colspan="2" style="text-align: left;"></td>
+    </tr>
     <tr class="h13">
         <td><div style="overflow:hidden"></div></td>
         <td class="iw400-right-bdr">Project Name</td>
