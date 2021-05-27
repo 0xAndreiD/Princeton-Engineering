@@ -352,7 +352,7 @@ class GeneralController extends Controller
         //ProjectInfo
         $data['ProjectInfo'] = array();
         $data['ProjectInfo']['Number'] = $input['txt-project-number'];
-        $data['ProjectInfo']['User'] = $input['option-user-id'];
+        // $data['ProjectInfo']['User'] = $input['option-user-id'];
         $data['ProjectInfo']['Name'] = $input['txt-project-name'];
         $data['ProjectInfo']['Street'] = $input['txt-street-address'];
         $data['ProjectInfo']['City'] = $input['txt-city'];

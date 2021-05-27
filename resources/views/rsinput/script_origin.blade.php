@@ -1305,7 +1305,6 @@ var getData = function(caseCount = 10) {
     alldata['txt-company-number'] = $('#txt-company-number').val();
     alldata['txt-user-name'] = $('#txt-user-name').val();
     alldata['txt-user-email'] = $('#txt-user-email').val();
-    alldata['option-user-id'] = $('#option-user-id').val();
     alldata['option-module-option1'] = $('#option-module-option1').html();
     alldata['option-module-option2'] = $('#option-module-option2').html();
     alldata['option-module-quantity'] = $('#option-module-quantity').val();
