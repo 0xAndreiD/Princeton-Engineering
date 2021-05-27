@@ -79,8 +79,11 @@ class GeneralController extends Controller
         if( $company )
         {
             $project = JobRequest::where('id', '=', $request['projectId'])->first();
-            $companymembers = User::where('companyid', $project['companyId'])->get();
-
+            if ($project){
+                $companymembers = User::where('companyid', $project['companyId'])->get();
+            } else {
+                $companymembers = "";
+            }
             return view('rsinput.body')
                     ->with('companyName', $company['company_name'])
                     ->with('companyNumber', $company['company_number'])
@@ -352,7 +355,6 @@ class GeneralController extends Controller
         //ProjectInfo
         $data['ProjectInfo'] = array();
         $data['ProjectInfo']['Number'] = $input['txt-project-number'];
-        // $data['ProjectInfo']['User'] = $input['option-user-id'];
         $data['ProjectInfo']['Name'] = $input['txt-project-name'];
         $data['ProjectInfo']['Street'] = $input['txt-street-address'];
         $data['ProjectInfo']['City'] = $input['txt-city'];

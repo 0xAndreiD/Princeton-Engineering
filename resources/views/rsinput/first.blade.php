@@ -63,7 +63,7 @@
     <tr class="h13">
         <td><div style="overflow:hidden"></div></td>
         <td class="iw400-right-bdr">Project Manager</td>
-        <td class="w400-yellow-bdr">
+        <td class="w400-green-bdr">
             <select id="option-user-id" tabindex="6">
                 <option value="0">Select User</option>
                 @foreach ($companyMembers as $item)

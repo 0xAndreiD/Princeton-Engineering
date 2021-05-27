@@ -2599,9 +2599,6 @@ $(document).ready(function() {
         $("div.permit").hide();
         //aaaa
     });
-    // $('#option-user-id').on('change', function() {
-    //     updateUserOption($(this).children("option:selected").attr('data-userid'));
-    // });
     $('#option-module-type').on('change', function() {
         updatePVSubmoduleField($(this).children("option:selected").val());
         for(let i = 1; i <= 10; i ++)
@@ -3645,7 +3642,6 @@ var loadPreloadedData = function() {
                             $('#txt-street-address').val(preloaded_data['ProjectInfo']['Street']);
                             $('#txt-city').val(preloaded_data['ProjectInfo']['City']);
                             $('#option-state').val(preloaded_data['ProjectInfo']['State']);
-                            // $('#option-user-id').val(preloaded_data['ProjectInfo']['User']);
                             //detectCorrectTownForMA();
                             $('#txt-zip').val(preloaded_data['ProjectInfo']['Zip']);
 
