@@ -67,7 +67,7 @@
             <select id="option-user-id" tabindex="6">
                 <option value="0">Select User</option>
                 @foreach ($companyMembers as $item)
-                <option value="{{$item->id}}" {{ $item->id == $userId ? 'selected' : ''}}>
+                <option value="{{$item->usernumber}}" {{ $item->usernumber == $userId ? 'selected' : ''}}>
                     {{ $item->username }}
                 </option>
                 @endforeach

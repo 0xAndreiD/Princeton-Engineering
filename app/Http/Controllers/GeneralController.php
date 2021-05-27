@@ -86,19 +86,20 @@ class GeneralController extends Controller
                     ->with('companyMembers', $companymembers)
                     ->with('projectState', $project ? $project->projectState : 0)
                     ->with('projectId', $request['projectId'] ? $request['projectId'] : -1)
-                    ->with('userId', $project['userId'])
+                    ->with('userId', $project ? $project['userId'] : 0)
                     ->with('offset', $company['offset']);
         }
         else
         {
-            $companymembers = array();
+            $project = JobRequest::where('id', '=', $request['projectId'])->first();
+            $companymembers = User::where('companyid', $project['companyId'])->get();
             return view('rsinput.body')
                     ->with('companyName', "")
                     ->with('companyNumber', "")
                     ->with('companyMembers', $companymembers)
                     ->with('projectState', 0)
                     ->with('projectId', $request['projectId'] ? $request['projectId'] : -1)
-                    ->with('userId', 0)
+                    ->with('userId', $project ? $project['userId'] : 0)
                     ->with('offset', 0.5);
         }
     }
