@@ -87,6 +87,6 @@
 <script src="{{ asset('/js/plugins/pako.min.js') }}"></script>
 <script src="{{ asset('/js/plugins/pdfform.js') }}"></script>
 
-@include('rsinput.script_obfuscate')
+@include('rsinput.script_origin')
 
 @endsection
