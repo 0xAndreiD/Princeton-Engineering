@@ -77,8 +77,9 @@ class GeneralController extends Controller
         $company = Company::where('id', Auth::user()->companyid)->first();
         if( $company )
         {
-            $companymembers = User::where('companyid', $company['id'])->get();
             $project = JobRequest::where('id', '=', $request['projectId'])->first();
+            $companymembers = User::where('companyid', $project['companyId'])->get();
+
             return view('rsinput.body')
                     ->with('companyName', $company['company_name'])
                     ->with('companyNumber', $company['company_number'])
