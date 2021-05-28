@@ -386,7 +386,42 @@ class APIController extends Controller
             return response()->json(['success' => false, 'message' => 'Auth required.']);
     }
 
-        /**
+    /**
+     * Update the chat history of the project.
+     *
+     * @return JSON
+     */
+    public function sendEmail(Request $request){
+        if(isset($request['username']) && isset($request['password'])){
+            $user = User::where('username', '=', $request['username'])->where('password', '=', $request['password'])->first();
+            if($user && $user->userrole == 2)
+            {
+                if( isset($request['cc']) && isset($request['bcc']) && isset($request['title']) && isset($request['text']) )
+                {
+                    $request['text'];
+                    $chatItem->save();
+
+                    //Mailing
+                    $data = ['cc' => $request['cc'], 'bcc' => $request['bcc'], 'title' => $request['title'], 'text' => $request['text']];
+        
+                    foreach($users as $user){
+                        if ($user) {
+                            Mail::send('mail.admintemplate', $data, function ($m) use ($user) {
+                                $m->from(env('MAIL_FROM_ADDRESS'), $request['title'])->to($user->email)->subject('Chat is updated on the project');
+                            });
+                        }
+                    }
+                    
+                    return response()->json(['success' => true, 'message'=> 'successfully sent!']);
+                }
+                else
+                    return response()->json(['success' => false, 'message' => 'No Text'] );
+            }
+        }
+        else
+            return response()->json(['success' => false, 'message' => 'Auth required.']);
+    }
+    /**
      * Update the chat history of the project.
      *
      * @return JSON

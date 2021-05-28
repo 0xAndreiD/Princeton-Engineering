@@ -256,7 +256,21 @@ class GeneralController extends Controller
             return response()->json(["message" => "Success!", "status" => true, "projectId" => $projectId, "directory" => "/" . $companyNumber. '. ' . $project['companyName'] . '/' . $project['clientProjectNumber'] . '. ' . $project['clientProjectName'] . ' ' . $request['data']['option-state'] . '/']);
         }
     }
-/**
+
+    public function submitProjectManager(Request $request){
+        if($request['projectId'] && $request['projectId'] > 0){
+            $project = JobRequest::where('id', '=', $request['projectId'])->first();
+            if($project){
+                $project->userId = $request['userId'];
+                $project->save();
+                return response()->json(["message" => "Success!", "status" => true]);
+            }
+            else
+                return response()->json(["message" => "Cannot find project.", "status" => false]);
+        }
+    }
+
+    /**
      * Save Input Datas as files
      *
      * @return JSON

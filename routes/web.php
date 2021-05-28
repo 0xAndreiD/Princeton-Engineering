@@ -23,6 +23,7 @@ Route::get('/home', 'GeneralController@index')->name('home');
 Route::get('/rsinput', 'GeneralController@rsinput')->name('rsinput');
 //Route::post('/getUserData', 'GeneralController@getUserData')->name('getUserData');
 Route::post('/submitInput', 'GeneralController@submitInput')->name('submitInput');
+Route::post('/submitProjectManager', 'GeneralController@submitProjectManager')->name('submitProjectManager');
 Route::post('/submitPermitInput', 'GeneralController@submitPermitInput')->name('submitPermitInput');
 Route::post('/submitPDF', 'GeneralController@submitPDF')->name('submitPDF');
 Route::get('/reference', 'GeneralController@reference')->name('reference');
@@ -81,6 +82,8 @@ Route::get('/getChat', 'APIController@getChat')->name('getChat');
 Route::get('/addChat', 'APIController@addChat')->name('addChat');
 Route::post('/delChatApi', 'APIController@delChat')->name('delChatApi');
 Route::post('/updateChatApi', 'APIController@updateChat')->name('updateChatApi');
+Route::post('/sendEmail', 'APIController@sendEmail')->name('sendEmail');
+
 // PV Modules
 Route::post('/getPVModules', 'GeneralController@getPVModules')->name('getPVModules');
 // PV Inverters

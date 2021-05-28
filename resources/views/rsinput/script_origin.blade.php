@@ -2587,9 +2587,50 @@ $(document).ready(function() {
     $("#txt-project-number").change(function(){
         setProjectIdComment();
     });
+
     $("#txt-city").change(function(){
         detectCorrectTownForMA();
     });
+
+    $('#option-user-id').on('change', function() {
+        $.ajax({
+            url:"submitProjectManager",
+            type:'post',
+            data:{
+                projectId: $('#projectId').val(),
+                userId: $('#option-user-id').val(),
+            },
+            success:function(res){
+                if (res.status == true) {
+                    message = 'Project Manager has been changed successfully';
+                    swal.fire({
+                        title: "Success",
+                        text: message,
+                        icon: "success",
+                        showCancelButton: true,
+                        confirmButtonText: `Ok`,
+                    })
+                } else {
+                    // error handling
+                    swal.fire({ title: "Error",
+                        text: "Error happened while changing project manager. Please try again later.",
+                        icon: "error",
+                        confirmButtonText: `OK` });
+                }
+            },
+            error: function(xhr, status, error) {
+                swal.close();
+                res = JSON.parse(xhr.responseText);
+                message = res.message;
+                swal.fire({ title: "Error",
+                        text: message == "" ? "Error happened while changing project manager. Please try again later." : message,
+                        icon: "error",
+                        confirmButtonText: `OK` });
+            }
+        });
+        //aaaa
+    });
+
     $('#option-state').on('change', function() {
         detectCorrectTownForMA();
         loadASCEOptions($(this).val());
@@ -2599,6 +2640,7 @@ $(document).ready(function() {
         $("div.permit").hide();
         //aaaa
     });
+    
     $('#option-module-type').on('change', function() {
         updatePVSubmoduleField($(this).children("option:selected").val());
         for(let i = 1; i <= 10; i ++)
