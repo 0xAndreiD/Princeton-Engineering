@@ -419,7 +419,20 @@ class APIController extends Controller
                 // print_r($request['title']);
                 
                 Mail::send('mail.admintemplate', $data, function ($m) use ($to, $from, $cc, $bcc, $subject, $title) {
-                    $m->from($from, $title)->to($to)->cc($cc)->bcc($bcc)->subject($subject);
+                    if ($cc) {
+                        if($bcc){
+                            $m->from($from, $title)->to($to)->cc($cc)->bcc($bcc)->subject($subject);
+                        } else {
+                            $m->from($from, $title)->to($to)->cc($cc)->subject($subject);
+                        }
+                    } else {
+                        if($bcc){
+                            $m->from($from, $title)->to($to)->bcc($bcc)->subject($subject);
+                        } else {
+                            $m->from($from, $title)->to($to)->subject($subject);
+                        }
+                    }
+                    
                 });
                 
                 // exit;
