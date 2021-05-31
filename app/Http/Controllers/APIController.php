@@ -413,7 +413,6 @@ class APIController extends Controller
                 $subject = $request['subject'];
                 $title = $request['title'];
 
-                // print_r($request['cc']);
                 // print_r($request['bcc']);
                 // print_r($request['subject']);
                 // print_r($request['title']);
