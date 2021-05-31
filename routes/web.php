@@ -122,6 +122,12 @@ Route::get('/settings', 'UserController@settings')->name('settings');
 Route::post('/getUserSetting', 'UserController@getUserSetting')->name('getUserSetting');
 Route::post('/updateUserSetting', 'UserController@updateUserSetting')->name('updateUserSetting');
 
+Route::get('/permit', 'PermitController@index')->name('permit');
+Route::get('/configPermit', 'PermitController@configPermit')->name('configPermit');
+Route::post('/getPermitFiles', 'PermitController@getPermitFiles')->name('getPermitFiles');
+Route::post('/submitPermit', 'PermitController@submitPermit')->name('submitPermit');
+Route::post('/deletePermit', 'PermitController@deletePermit')->name('deletePermit');
+
 //Custom Module
 Route::get('/customModule', 'CustomEquipmentController@customModule')->name('customModule');
 Route::post('/getCustomModules', 'CustomEquipmentController@getCustomModules')->name('getCustomModules');

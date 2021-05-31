@@ -216,6 +216,12 @@
                         </li>
                         <li class="nav-main-heading">Configuration</li>
                         <li class="nav-main-item">
+                            <a class="nav-main-link" href="{{ route('permit') }}">
+                                <i class="nav-main-link-icon fa fa-file-pdf"></i>
+                                <span class="nav-main-link-name">Permit PDF</span>
+                            </a>
+                        </li>
+                        <li class="nav-main-item">
                             <a class="nav-main-link" href="{{ route('settings') }}">
                                 <i class="nav-main-link-icon fa fa-cogs"></i>
                                 <span class="nav-main-link-name">Settings</span>

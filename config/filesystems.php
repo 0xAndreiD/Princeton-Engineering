@@ -74,6 +74,11 @@ return [
             'root' => storage_path('output'),
         ],
 
+        'pdf' => [
+            'driver' => 'local',
+            'root' => storage_path('pdf'),
+        ],
+
         'db' => [
             'driver' => 'local',
             'root' => storage_path('db'),
