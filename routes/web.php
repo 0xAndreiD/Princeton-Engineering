@@ -82,6 +82,7 @@ Route::get('/getChat', 'APIController@getChat')->name('getChat');
 Route::get('/addChat', 'APIController@addChat')->name('addChat');
 Route::post('/delChatApi', 'APIController@delChat')->name('delChatApi');
 Route::post('/updateChatApi', 'APIController@updateChat')->name('updateChatApi');
+Route::get('/getCsrfToken', 'APIController@getCsrfToken')->name('getCsrfToken');
 Route::post('/sendEmail', 'APIController@sendEmail')->name('sendEmail');
 
 // PV Modules

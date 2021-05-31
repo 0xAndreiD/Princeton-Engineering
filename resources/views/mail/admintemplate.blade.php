@@ -296,7 +296,7 @@ ul.social li{
           	<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
           		<tr>
           			<td class="logo" style="text-align: center;">
-			            <h1><a href="#" style="color: black;">Admin just updated the chat on this project</a></h1>
+			            <h1><a href="#" style="color: black;"> {{ $title }}</a></h1>
 			          </td>
           		</tr>
           	</table>
@@ -308,10 +308,17 @@ ul.social li{
             	<tr>
             		<td>
             			<div class="text" style="padding: 0 2.5em; text-align: center;">
-                            <h2>ProjectNumber: {{$projectNumber}}</h2>
-                            <h2>ProjectName: {{$projectName}}</h2>
-                            <h2>State: {{$projectState}}</h2>
+                            <h2>{{$text}}</h2>
                             <h2>Do not reply this email</h2>
+            			</div>
+            		</td>
+            	</tr>
+
+            	<tr>
+            		<td>
+            			<div class="text" style="padding: 0 2.5em; text-align: center;">
+                            <h2>Signature Block</h2>
+                            <h2>{{$signature}}</h2>
             			</div>
             		</td>
             	</tr>

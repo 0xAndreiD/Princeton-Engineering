@@ -25,6 +25,7 @@ use Ifsnop\Mysqldump as IMysqldump;
 
 use DateTime;
 use DateTimeZone;
+use Mail;
 
 class APIController extends Controller
 {
@@ -385,7 +386,15 @@ class APIController extends Controller
         else
             return response()->json(['success' => false, 'message' => 'Auth required.']);
     }
-
+    /**
+     * Retrieving CSRF Token
+     */
+    public function getCsrfToken(Request $request) {
+        if(isset($request['username']) && isset($request['password'])){
+            $user = User::where('username', '=', $request['username'])->where('password', '=', $request['password'])->first();
+            if ($user) return response()->json(['success' => true, 'token' => csrf_token()]);
+        }
+    }
     /**
      * Update the chat history of the project.
      *
@@ -394,29 +403,30 @@ class APIController extends Controller
     public function sendEmail(Request $request){
         if(isset($request['username']) && isset($request['password'])){
             $user = User::where('username', '=', $request['username'])->where('password', '=', $request['password'])->first();
-            if($user && $user->userrole == 2)
+            if( isset($request['to']) && isset($request['title']) && isset($request['text']) )
             {
-                if( isset($request['cc']) && isset($request['bcc']) && isset($request['title']) && isset($request['text']) )
-                {
-                    $request['text'];
-                    $chatItem->save();
+                $data = ['cc' => $request['cc'], 'bcc' => $request['bcc'], 'subject'=> $request['subject'], 'title' => $request['title'], 'text' => $request['text'], 'signature' => $request['signature']];
+                $to = $request['to'];
+                $from = $request['from'];
+                $cc = $request['cc'];
+                $bcc = $request['bcc'];
+                $subject = $request['subject'];
+                $title = $request['title'];
 
-                    //Mailing
-                    $data = ['cc' => $request['cc'], 'bcc' => $request['bcc'], 'title' => $request['title'], 'text' => $request['text']];
-        
-                    foreach($users as $user){
-                        if ($user) {
-                            Mail::send('mail.admintemplate', $data, function ($m) use ($user) {
-                                $m->from(env('MAIL_FROM_ADDRESS'), $request['title'])->to($user->email)->subject('Chat is updated on the project');
-                            });
-                        }
-                    }
-                    
-                    return response()->json(['success' => true, 'message'=> 'successfully sent!']);
-                }
-                else
-                    return response()->json(['success' => false, 'message' => 'No Text'] );
+                // print_r($request['cc']);
+                // print_r($request['bcc']);
+                // print_r($request['subject']);
+                // print_r($request['title']);
+                
+                Mail::send('mail.admintemplate', $data, function ($m) use ($to, $from, $cc, $bcc, $subject, $title) {
+                    $m->from($from, $title)->to($to)->cc($cc)->bcc($bcc)->subject($subject);
+                });
+                
+                // exit;
+                return response()->json(['success' => true, 'message'=> 'successfully sent!']);
             }
+            else
+                return response()->json(['success' => false, 'message' => 'No To User or No Title or No Text'] );
         }
         else
             return response()->json(['success' => false, 'message' => 'Auth required.']);
