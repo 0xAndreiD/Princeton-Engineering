@@ -408,8 +408,9 @@ class APIController extends Controller
                 $data = ['cc' => $request['cc'], 'bcc' => $request['bcc'], 'subject'=> $request['subject'], 'title' => $request['title'], 'text' => $request['text'], 'signature' => $request['signature']];
                 $to = $request['to'];
                 $from = $request['from'];
-                $cc = $request['cc'];
-                $bcc = $request['bcc'];
+                
+                $cc = explode(",", $request['cc']);
+                $bcc = explode(",", $request['bcc']);
                 $subject = $request['subject'];
                 $title = $request['title'];
 
