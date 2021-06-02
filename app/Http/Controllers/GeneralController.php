@@ -158,18 +158,8 @@ class GeneralController extends Controller
                         $user = User::where('companyid', $project['companyId'])->where('usernumber', $project['userId'])->first();
                     }
                     
-                    $data = $this->inputToJson($request['data'], $request['caseCount'], $user);                    
-                    
-                    if( Storage::disk('input')->exists($folderPrefix . $project['requestFile']) )
-                        Storage::disk('input')->delete($folderPrefix . $project['requestFile']);
-                    Storage::disk('input')->put($folderPrefix . $project['requestFile'], json_encode($data));
-                    
-                    // //Backup json file to dropbox
-                    $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
-                    $dropbox = new Dropbox($app);
-                    $dropboxFile = new DropboxFile(storage_path('/input/') . $companyNumber. '. ' . $project['companyName'] . '/' . $project['requestFile']);
-                    $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_JSON_INPUT') . $companyNumber. '. ' . $project['companyName'] . '/' . $project['requestFile'], ['mode' => 'overwrite']);
-                    
+                    $data = $this->inputToJson($request['data'], $request['caseCount'], $user);   
+
                     $projectState = 0;
                     if($request['status'] == 'Saved')
                         $projectState = 1;
@@ -191,6 +181,16 @@ class GeneralController extends Controller
                     $company->last_accessed = gmdate("Y-m-d", time());
                     $company->save();
 
+                    if( Storage::disk('input')->exists($folderPrefix . $project['requestFile']) )
+                        Storage::disk('input')->delete($folderPrefix . $project['requestFile']);
+                    Storage::disk('input')->put($folderPrefix . $project['requestFile'], json_encode($data));
+                    
+                    // //Backup json file to dropbox
+                    $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
+                    $dropbox = new Dropbox($app);
+                    $dropboxFile = new DropboxFile(storage_path('/input/') . $companyNumber. '. ' . $project['companyName'] . '/' . $project['requestFile']);
+                    $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_JSON_INPUT') . $companyNumber. '. ' . $project['companyName'] . '/' . $project['requestFile'], ['mode' => 'overwrite']);
+
                     return response()->json(["message" => "Success!", "status" => true, "projectId" => $project->id, "directory" => $folderPrefix . $project['clientProjectNumber'] . '. ' . $project['clientProjectName'] . ' ' . $request['data']['option-state'] . '/']);
                 }
                 else
@@ -210,15 +210,7 @@ class GeneralController extends Controller
                 $companyNumber = $company ? $company['company_number'] : 0;
                 $folderPrefix = "/" . $companyNumber. '. ' . $company['company_name'] . '/';
                 $data = $this->inputToJson($request['data'], $request['caseCount']);
-
-                Storage::disk('input')->put($folderPrefix . $filename, json_encode($data));
-
-                //Backup json file to dropbox
-                $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
-                $dropbox = new Dropbox($app);
-                $dropboxFile = new DropboxFile(storage_path('/input/') . $companyNumber. '. ' . $company['company_name'] . '/' . $filename);
-                $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_JSON_INPUT') . $companyNumber. '. ' . $company['company_name'] . '/' . $filename, ['autorename' => TRUE]);
-
+                
                 $projectState = 0;
                 if($request['status'] == 'Saved')
                     $projectState = 1;
@@ -247,6 +239,15 @@ class GeneralController extends Controller
 
                 $company->last_accessed = gmdate("Y-m-d", time());
                 $company->save();
+                Storage::disk('input')->put($folderPrefix . $filename, json_encode($data));
+
+                //Backup json file to dropbox
+                $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
+                $dropbox = new Dropbox($app);
+                $dropboxFile = new DropboxFile(storage_path('/input/') . $companyNumber. '. ' . $company['company_name'] . '/' . $filename);
+                $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_JSON_INPUT') . $companyNumber. '. ' . $company['company_name'] . '/' . $filename, ['autorename' => TRUE]);
+
+                
             }
             catch(Exception $e) {
                 return response()->json(["message" => "Failed to generate RS json data file", "status" => false]);

@@ -3276,6 +3276,8 @@ $(document).ready(function() {
         submitData(e, 'Data Check');
     });
     $("#rs-submit").click(function(e){
+        
+
         var projectState = $('#projectState').val();
         if(projectState < 3){
             swal.fire({
