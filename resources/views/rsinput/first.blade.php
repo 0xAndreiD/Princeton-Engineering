@@ -458,7 +458,11 @@
     <tr class="h13">
         <td><div style="overflow:hidden"></div></td>
         <td colspan="3" style="text-align:center;"><h4 style="margin:0">Data Input Check</h4></td>
-        <td><div style="overflow:hidden"></div></td>
+        <td style="color: black;">
+            <div class="text-center" style="display:flex; align-items: center; justify-content: center">
+                Review:<input id='togglePlanCheck' name='togglePlanCheck' class='mr-1' type='checkbox' {{ $planCheck == 1 ? 'checked' : '' }}/>
+            </div>
+        </td>
     </tr>
     <tr class="h13">
         <td><div style="overflow:hidden"></div></td>

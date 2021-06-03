@@ -89,6 +89,7 @@ class GeneralController extends Controller
                     ->with('companyNumber', $company['company_number'])
                     ->with('companyMembers', $companymembers)
                     ->with('projectState', $project ? $project->projectState : 0)
+                    ->with('planCheck', $project ? $project->planCheck : 0)
                     ->with('projectId', $request['projectId'] ? $request['projectId'] : -1)
                     ->with('userId', $project ? $project['userId'] : 0)
                     ->with('offset', $company['offset']);
@@ -102,6 +103,7 @@ class GeneralController extends Controller
                     ->with('companyNumber', "")
                     ->with('companyMembers', $companymembers)
                     ->with('projectState', 0)
+                    ->with('planCheck', 0)
                     ->with('projectId', $request['projectId'] ? $request['projectId'] : -1)
                     ->with('userId', $project ? $project['userId'] : 0)
                     ->with('offset', 0.5);
@@ -210,7 +212,7 @@ class GeneralController extends Controller
                 $companyNumber = $company ? $company['company_number'] : 0;
                 $folderPrefix = "/" . $companyNumber. '. ' . $company['company_name'] . '/';
                 $data = $this->inputToJson($request['data'], $request['caseCount']);
-                
+
                 $projectState = 0;
                 if($request['status'] == 'Saved')
                     $projectState = 1;

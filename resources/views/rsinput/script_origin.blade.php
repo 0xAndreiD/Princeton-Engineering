@@ -2481,6 +2481,32 @@ $(document).ready(function() {
             }
         });
     }
+    var togglePlanCheck = function (){
+        var jobId = $('#projectId').val();
+        $.ajax({
+            url:"togglePlanCheck",
+            type:'post',
+            data:{jobId: jobId},
+            success: function(res){
+                if(res.success){
+                    return;
+                }else
+                    swal.fire({ title: "Error", text: res.message, icon: "error", confirmButtonText: `OK` });
+            },
+            error: function(xhr, status, error) {
+                res = JSON.parse(xhr.responseText);
+                message = res.message;
+                swal.fire({ title: "Error",
+                    text: message == "" ? "Error happened while processing. Please try again later." : message,
+                    icon: "error",
+                    confirmButtonText: `OK` });
+            }
+        });
+    }
+
+    $("#togglePlanCheck").change(function(){
+        togglePlanCheck();
+    });
 
     var loadDataCheck = function(){
         return new Promise((resolve, reject) => {
@@ -3690,6 +3716,7 @@ var loadPreloadedData = function() {
                             $('#txt-project-number').val(preloaded_data['ProjectInfo']['Number']);
                             $('#txt-project-name').val(preloaded_data['ProjectInfo']['Name']);
                             $('#txt-street-address').val(preloaded_data['ProjectInfo']['Street']);
+                            
                             $('#txt-city').val(preloaded_data['ProjectInfo']['City']);
                             $('#option-state').val(preloaded_data['ProjectInfo']['State']);
                             //detectCorrectTownForMA();
