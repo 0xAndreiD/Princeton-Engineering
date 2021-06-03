@@ -1,6 +1,6 @@
 <script>
 window.conditionId = 1;
-
+var domChanged = false;
 function openRfdTab(evt, tabName) {
     var i, tabcontent, tablinks;
     tabcontent = document.getElementsByClassName("rfdTabContent");
@@ -1283,6 +1283,14 @@ var isEmptyInputBox = function() {
 
     return isEmpty;
 }
+
+$('.rfdTabContent').on('input', function() {
+    domChanged = true;
+});
+
+$('.rfdTabContent').on('select', function() {
+    domChanged = true;
+});
 
 var getData = function(caseCount = 10) {
     var i = 0;
@@ -3198,6 +3206,12 @@ $(document).ready(function() {
         e.preventDefault();
         e.stopPropagation(); 
 
+        if (domChanged == false) {
+            swal.fire({ title: "Warning", text: "No changes on this project data except drawings. So you don't need to submit.", icon: "warning", confirmButtonText: `OK` });
+            return;
+        }
+            
+
         if (isEmptyInputBox() == true) { 
             swal.fire({ title: "Warning", text: "Please fill blank fields.", icon: "warning", confirmButtonText: `OK` });
             return; 
@@ -3340,6 +3354,11 @@ $(document).ready(function() {
         }
     });
     $('#rs-initialize').click(function(e){
+        if (domChanged == false){
+            swal.fire({ title: "Warning", text: "This project number has already been used. Please use another one.", icon: "warning", confirmButtonText: `OK` });
+            return;
+        }
+        
         swal.fire({
             title: "Warning",
             html: "Warning - Your project state will be initialized.<br /> Continue?",
