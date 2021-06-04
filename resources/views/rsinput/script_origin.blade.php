@@ -1284,11 +1284,11 @@ var isEmptyInputBox = function() {
     return isEmpty;
 }
 
-$('.rfdTabContent').on('input', function() {
+$('.domChange').on('input', function() {
     domChanged = true;
 });
 
-$('.rfdTabContent').on('select', function() {
+$('.domChange').on('select', function() {
     domChanged = true;
 });
 
@@ -3205,7 +3205,6 @@ $(document).ready(function() {
     var submitData = async function(e, status) {
         e.preventDefault();
         e.stopPropagation(); 
-
         if (domChanged == false) {
             swal.fire({ title: "Warning", text: "No changes on this project data except drawings. So you don't need to submit.", icon: "warning", confirmButtonText: `OK` });
             return;

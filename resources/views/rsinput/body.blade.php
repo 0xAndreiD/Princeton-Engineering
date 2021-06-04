@@ -37,7 +37,7 @@
     </div>
 
 
-    <div id="tab_first" class="rfdTabContent">
+    <div id="tab_first" class="rfdTabContent domChange">
         @include('rsinput.first')
     </div>
     @for($i = 1; $i <= 10; $i ++)
@@ -45,11 +45,11 @@
             $conditionId = $i;    
         @endphp
     
-    <div id="fc-{{ $conditionId }}" class="rfdTabContent">
+    <div id="fc-{{ $conditionId }}" class="rfdTabContent domChange">
         @include('rsinput.content')
     </div>
     @endfor
-    <div id="tab_override" class="rfdTabContent">
+    <div id="tab_override" class="rfdTabContent domChange">
         @include('rsinput.override')
     </div>
     @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->allow_permit == 1)
