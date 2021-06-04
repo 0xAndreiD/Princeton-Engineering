@@ -128,6 +128,7 @@ Route::get('/configPermit', 'PermitController@configPermit')->name('configPermit
 Route::post('/getPermitFiles', 'PermitController@getPermitFiles')->name('getPermitFiles');
 Route::post('/submitPermit', 'PermitController@submitPermit')->name('submitPermit');
 Route::post('/deletePermit', 'PermitController@deletePermit')->name('deletePermit');
+Route::post('/submitPermitConfig', 'PermitController@submitPermitConfig')->name('submitPermitConfig');
 
 //Custom Module
 Route::get('/customModule', 'CustomEquipmentController@customModule')->name('customModule');

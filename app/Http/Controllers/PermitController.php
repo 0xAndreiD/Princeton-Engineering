@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Storage;
 use App\User;
 use App\Company;
 use App\PermitFiles;
+use App\PermitFields;
 
 class PermitController extends Controller
 {
@@ -121,6 +122,34 @@ class PermitController extends Controller
         echo json_encode($json_data);
     }
 
+    /**
+     * Create / Save Permit Config data.
+     *
+     * @return JSON
+     */
+    public function submitPermitConfig(Request $request){
+        if(!empty($request->filename)){
+            $data = $request->data;
+            PermitFields::where('filename', $request->filename)->delete();
+            
+            foreach ($data as $item) {
+                $field['filename'] = $request->filename;
+                $field['pdffield'] = $item[1];
+                if ($item[0] == 'on') $item[0] = 1; else $item[0] = 1;
+                $field['pdfcheck'] = $item[0];
+                $field['defaultvalue'] = $item[2];
+                $field['htmlfield'] = $item[4];
+                if ($item[3] == 'on') $item[3] = 1; else $item[3] = 0;
+                $field['htmlcheck'] = $item[3];
+                $field['label'] = $item[5];
+                $field['dbinfo'] = $item[6];
+                PermitFields::create($field);
+            }
+            return response()->json(['success' => true, 'status' => true]);
+        } else {
+            return response()->json(['success' => false, 'status' => false, 'message' => 'Empty filename.']);
+        }
+    }
     /**
      * Create / Update Permit data.
      *
