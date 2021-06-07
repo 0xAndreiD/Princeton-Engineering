@@ -3205,11 +3205,6 @@ $(document).ready(function() {
     var submitData = async function(e, status) {
         e.preventDefault();
         e.stopPropagation(); 
-        if (domChanged == false) {
-            swal.fire({ title: "Warning", text: "No changes on this project data except drawings. So you don't need to submit.", icon: "warning", confirmButtonText: `OK` });
-            return;
-        }
-            
 
         if (isEmptyInputBox() == true) { 
             swal.fire({ title: "Warning", text: "Please fill blank fields.", icon: "warning", confirmButtonText: `OK` });
@@ -3315,7 +3310,10 @@ $(document).ready(function() {
         submitData(e, 'Data Check');
     });
     $("#rs-submit").click(function(e){
-        
+        if (domChanged == false) {
+            swal.fire({ title: "Warning", text: "No changes on this project data except drawings. So you don't need to submit.", icon: "warning", confirmButtonText: `OK` });
+            return;
+        }
 
         var projectState = $('#projectState').val();
         if(projectState < 3){
@@ -3353,11 +3351,6 @@ $(document).ready(function() {
         }
     });
     $('#rs-initialize').click(function(e){
-        if (domChanged == false){
-            swal.fire({ title: "Warning", text: "This project number has already been used. Please use another one.", icon: "warning", confirmButtonText: `OK` });
-            return;
-        }
-        
         swal.fire({
             title: "Warning",
             html: "Warning - Your project state will be initialized.<br /> Continue?",
