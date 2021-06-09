@@ -651,11 +651,11 @@
             <td class="iw400-bdr" id="collartie-title-{{$j}}" style="color:red;">{{$j}}: MP{{$j}}</td>
             <td class="iw400-bdr" id="collartie-height-{{$j}}" style="color:red;">0.00</td>
         </tr>
+        @endfor
         <tr style="display: none;" id="collartie-note">
             <td><div style="overflow:hidden"></div></td>
             <td colspan="2" style="font-style: italic;font-size: 10pt;font-family: Arial;font-weight: 400;color: black;">* Note: Where two collar tie heights would be in conflict, use the lower height for both roofs. </td>
         </tr>
-        @endfor
     </tbody>
     </table>
 
