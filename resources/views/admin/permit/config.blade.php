@@ -28,7 +28,7 @@
     </div>
     <form id="permitForm">
     <div class="row">
-        <div class="col-8">
+        <div class="col-12">
             <table cellspacing="0" cellpadding="0" style="border-spacing:0;">
                 <thead>
                     <tr>
@@ -64,6 +64,11 @@
 
 <script>
     $(document).ready(function () {
+        
+        $.ajaxSetup({
+            headers:
+            { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
+        });
         function on_error(e) {
             console.error(e, e.stack);  // eslint-disable-line no-console
             var div = document.createElement('div');
@@ -72,98 +77,219 @@
         }
 
         var filename = $("#filename").val();
+        $.ajax({
+            url:"loadPermitConfig",
+            type:'post',
+            data:{filename: filename},
+            success:function(res){
+                if (res.status == true) {
+                    // error handling
+                    var index = 0;
+                    var pdfsrc = $("#assetPdfLink").val() + '/' + filename;
+                    var script = $("<script>");
+                    fetch(pdfsrc)
+                    .then(function(response) {
+                        return response.arrayBuffer()
+                    })
+                    .then(function(data) {
+                        var list_form = $('#list_form');
+                        var cnt = 1;
+                        var field_specs;
+                        try {
+                            field_specs = pdfform().list_fields(data);
+                        } catch (e) {
+                            on_error(e);
+                            return;
+                        }
 
-        var pdfsrc = $("#assetPdfLink").val() + '/' + filename;
-        var script = $("<script>");
+                        for (var field_key in field_specs) {
+                            var item;
+                            if (res.data[index] != undefined) { item = res.data[index] } else { item = res.data[0] }
+                            console.log(item);
+                            var key = field_key.replace(/ /g,"-");
+                            var row = "<tr class='h13'>";
+                            row += "<td class='iw400-right-bdr'><input type='checkbox' class='configPermit' id='" + key + "' value='" + item.pdfcheck + "'" + ((item.pdfcheck == 1) ? " checked" : "") +"></input></td>";
+                            row += "<td class='iw400-right-bdr'><input type='hidden' class='configPermit' value='" + field_key + "'></input>" + field_key + "</td>";
+                            row += "<td class='w400-green-bdr'>";
+                            field_specs[field_key].forEach(function(spec, i) {
+                                if ((spec.type === 'radio') && spec.options) {
+                                    var fieldset_el = document.createElement('fieldset');
+                                    spec.options.forEach(function(ostr) {
+                                        var label = document.createElement('label');
+                                        var radio = document.createElement('input');
+                                        radio.setAttribute('type', 'radio');
+                                        radio.setAttribute('value', ostr);
+                                        radio.setAttribute('name', key + '_' + i);
+                                        radio.setAttribute('data-idx', i);
+                                        radio.setAttribute('data-key', field_key);
+                                        radio.setAttribute('class', 'configPermit');
+                                        if (ostr == item.defaultvalue )
+                                            radio.setAttribute('checked', true);
+                                            
+                                        label.appendChild(radio);
+                                        label.appendChild(document.createTextNode(ostr));
+                                        fieldset_el.appendChild(label);
+                                    });
+                                    row += fieldset_el.outerHTML;
+                                    return;
+                                }
 
-        fetch(pdfsrc)
-        .then(function(response) {
-            return response.arrayBuffer()
-        })
-        .then(function(data) {
-            var list_form = $('#list_form');
+                                var input = document.createElement((spec.type === 'select') ? 'select' : 'input');
+                                input.setAttribute('data-idx', i);
+                                input.setAttribute('data-key', field_key);
+                                if (spec.type === 'boolean') {
+                                    input.setAttribute('type', 'checkbox');
+                                    if (item.defaultvalue == 'on')
+                                        input.setAttribute('checked', true);
+                                    input.setAttribute('class', 'configPermit');
+                                } else if (spec.type === 'string') {
+                                    input.setAttribute('value', item.defaultvalue);
+                                    input.setAttribute('class', 'configPermit');
+                                } else if ((spec.type === 'select') && spec.options) {
+                                    spec.options.forEach(function(ostr) {
+                                        var option_el = document.createElement('option');
+                                        option_el.appendChild(document.createTextNode(ostr));
+                                        option_el.setAttribute('value', ostr);
+                                        if (ostr == item.defaultvalue) option_el.setAttribute('selected', true);
+                                        option_el.setAttribute('class', 'configPermit');
+                                        input.appendChild(option_el);
+                                    });
+                                }
+                                row += input.outerHTML;
+                            });
+                            row += "</td>";
+                            if (item.htmlcheck == 1) row += "<td class='w400-green-bdr'><input type='checkbox' id='htmlTagCheck' checked class='configPermit' ></input></td>";
+                            else row += "<td class='w400-green-bdr'><input type='checkbox' id='htmlTagCheck' class='configPermit' ></input></td>";
+                            
 
-            var cnt = 1;
-            var field_specs;
-            try {
-                field_specs = pdfform().list_fields(data);
-            } catch (e) {
-                on_error(e);
-                return;
+                            row += "<td class='w400-yellow-bdr'><input type='text' id='htmlTagId' class='configPermit' disabled value='" + key + "'></input></td>";
+                            row += "<td class='w400-yellow-bdr'><input type='text' id='htmlTagLabel' class='configPermit' value='" + item.label + "'></input></td>";
+                            row += "<td class='w400-yellow-bdr'>\
+                                        <select id='dbTag' class='configPermit'>\
+                                            <option value='0' " + ((item.dbinfo == "0") ?  " selected" : "") + ">Select</option>\
+                                            <option value='company_name'" + ((item.dbinfo == "company_name") ? " selected" : "") + ">companyInfo.company_name</option>\
+                                            <option value='company_telno'" + ((item.dbinfo == "company_telno") ? " selected" : "") + ">companyInfo.company_telno</option>\
+                                            <option value='company_address'" + ((item.dbinfo == "company_address") ? " selected" : "") + ">companyInfo.company_address</option>\
+                                            <option value='contact_person'" + ((item.dbinfo == "contact_person") ? " selected" : "") + ">permitInfo.contact_person</option>\
+                                            <option value='contact_phone'" + ((item.dbinfo == "contact_phone") ? " selected": "") + ">permitInfo.contact_phone</option>\
+                                            <option value='construction_email'" + ((item.dbinfo == "construction_email") ? " selected" : "") +">permitInfo.construction_email</option>\
+                                            <option value='registration'" + ((item.dbinfo == "registration") ? " selected": "") + ">permitInfo.registration</option>\
+                                            <option value='exp_date'" + ((item.dbinfo == "exp_date") ? " selected": "") + ">permitInfo.exp_date</option>\
+                                            <option value='EIN'" + ((item.dbinfo == "EIN") ? " selected": "") + ">permitInfo.EIN</option>\
+                                            <option value='FAX'" + ((item.dbinfo == "FAX") ? " selected": "") + ">permitInfo.FAX</option>\
+                                        </select>\
+                                    </td>";
+
+                            row += "</tr>";
+                            list_form.append(row);
+                            index++;
+                        }
+                    }, function(err) {
+                        console.log(err);
+                    });
+                } else {
+                    var pdfsrc = $("#assetPdfLink").val() + '/' + filename;
+                    var script = $("<script>");
+                    // error handling
+                    fetch(pdfsrc)
+                    .then(function(response) {
+                        return response.arrayBuffer()
+                    })
+                    .then(function(data) {
+                        var list_form = $('#list_form');
+
+                        var cnt = 1;
+                        var field_specs;
+                        try {
+                            field_specs = pdfform().list_fields(data);
+                        } catch (e) {
+                            on_error(e);
+                            return;
+                        }
+
+                        for (var field_key in field_specs) {
+                            var key = field_key.replace(/ /g,"-");
+                            var row = "<tr class='h13'>";
+                            row += "<td class='iw400-right-bdr'><input type='checkbox' class='configPermit' id='" + key + "'></input></td>";
+                            row += "<td class='iw400-right-bdr'><input type='hidden' class='configPermit' value='" + field_key + "'></input>" + field_key + "</td>";
+                            row += "<td class='w400-green-bdr'>";
+                            field_specs[field_key].forEach(function(spec, i) {
+                                if ((spec.type === 'radio') && spec.options) {
+                                    var fieldset_el = document.createElement('fieldset');
+                                    spec.options.forEach(function(ostr) {
+                                        var label = document.createElement('label');
+                                        var radio = document.createElement('input');
+                                        radio.setAttribute('type', 'radio');
+                                        radio.setAttribute('value', ostr);
+                                        radio.setAttribute('name', key + '_' + i);
+                                        radio.setAttribute('data-idx', i);
+                                        radio.setAttribute('data-key', field_key);
+                                        radio.setAttribute('class', 'configPermit');
+                                        label.appendChild(radio);
+                                        label.appendChild(document.createTextNode(ostr));
+                                        fieldset_el.appendChild(label);
+                                    });
+                                    row += fieldset_el.outerHTML;
+                                    return;
+                                }
+
+                                var input = document.createElement((spec.type === 'select') ? 'select' : 'input');
+                                input.setAttribute('data-idx', i);
+                                input.setAttribute('data-key', field_key);
+                                if (spec.type === 'boolean') {
+                                    input.setAttribute('type', 'checkbox');
+                                    input.setAttribute('class', 'configPermit');
+                                } else if (spec.type === 'string') {
+                                    input.setAttribute('value', cnt++);
+                                    input.setAttribute('class', 'configPermit');
+                                } else if ((spec.type === 'select') && spec.options) {
+                                    spec.options.forEach(function(ostr) {
+                                        var option_el = document.createElement('option');
+                                        option_el.appendChild(document.createTextNode(ostr));
+                                        option_el.setAttribute('value', ostr);
+                                        option_el.setAttribute('class', 'configPermit');
+                                        input.appendChild(option_el);
+                                    });
+                                }
+                                row += input.outerHTML;
+                            });
+                            row += "</td>";
+                            row += "<td class='w400-green-bdr'><input type='checkbox' id='htmlTagCheck' class='configPermit' ></input></td>";
+                            row += "<td class='w400-yellow-bdr'><input type='text' id='htmlTagId' disabled class='configPermit' value='" + key + "'></input></td>";
+                            row += "<td class='w400-yellow-bdr'><input type='text' id='htmlTagLabel' class='configPermit' value='" + field_key + "'></input></td>";
+                            row += "<td class='w400-yellow-bdr'>\
+                                        <select id='dbTag' class='configPermit'>\
+                                            <option value='0' selected>Select</option>\
+                                            <option value='company_name'>companyInfo.company_name</option>\
+                                            <option value='company_telno'>companyInfo.company_telno</option>\
+                                            <option value='company_address'>companyInfo.company_address</option>\
+                                            <option value='contact_person'>permitInfo.contact_person</option>\
+                                            <option value='contact_phone'>permitInfo.contact_phone</option>\
+                                            <option value='construction_email'>permitInfo.construction_email</option>\
+                                            <option value='registration'>permitInfo.registration</option>\
+                                            <option value='exp_date'>permitInfo.exp_date</option>\
+                                            <option value='EIN'>permitInfo.EIN</option>\
+                                            <option value='FAX'>permitInfo.FAX</option>\
+                                        </select>\
+                                    </td>";
+
+                            row += "</tr>";
+                            list_form.append(row);
+                        }
+                    }, function(err) {
+                        console.log(err);
+                    });
+                }
+            },
+            error: function(xhr, status, error) {
+                swal.close();
+                res = JSON.parse(xhr.responseText);
+                message = res.message;
+                swal.fire({ title: "Error",
+                        text: message == "" ? "Error happened while processing. Please try again later." : message,
+                        icon: "error",
+                        confirmButtonText: `OK` });
             }
-
-            for (var field_key in field_specs) {
-                var key = field_key.replace(/ /g,"-");
-                var row = "<tr class='h13'>";
-                row += "<td class='iw400-right-bdr'><input type='checkbox' class='configPermit' id='" + key + "'></input></td>";
-                row += "<td class='iw400-right-bdr'><input type='hidden' class='configPermit' value='" + field_key + "'></input>" + field_key + "</td>";
-                row += "<td class='w400-green-bdr'>";
-                field_specs[field_key].forEach(function(spec, i) {
-                    if ((spec.type === 'radio') && spec.options) {
-                        var fieldset_el = document.createElement('fieldset');
-                        spec.options.forEach(function(ostr) {
-                            var label = document.createElement('label');
-                            var radio = document.createElement('input');
-                            radio.setAttribute('type', 'radio');
-                            radio.setAttribute('value', ostr);
-                            radio.setAttribute('name', key + '_' + i);
-                            radio.setAttribute('data-idx', i);
-                            radio.setAttribute('data-key', field_key);
-                            radio.setAttribute('class', 'configPermit');
-                            label.appendChild(radio);
-                            label.appendChild(document.createTextNode(ostr));
-                            fieldset_el.appendChild(label);
-                        });
-                        row += fieldset_el.outerHTML;
-                        return;
-                    }
-
-                    var input = document.createElement((spec.type === 'select') ? 'select' : 'input');
-                    input.setAttribute('data-idx', i);
-                    input.setAttribute('data-key', field_key);
-                    if (spec.type === 'boolean') {
-                        input.setAttribute('type', 'checkbox');
-                        input.setAttribute('class', 'configPermit');
-                    } else if (spec.type === 'string') {
-                        input.setAttribute('value', cnt++);
-                        input.setAttribute('class', 'configPermit');
-                    } else if ((spec.type === 'select') && spec.options) {
-                        spec.options.forEach(function(ostr) {
-                            var option_el = document.createElement('option');
-                            option_el.appendChild(document.createTextNode(ostr));
-                            option_el.setAttribute('value', ostr);
-                            option_el.setAttribute('class', 'configPermit');
-                            input.appendChild(option_el);
-                        });
-                    }
-                    row += input.outerHTML;
-                });
-                row += "</td>";
-                row += "<td class='w400-green-bdr'><input type='checkbox' id='htmlTagCheck' class='configPermit' ></input></td>";
-                row += "<td class='w400-yellow-bdr'><input type='text' id='htmlTagId' class='configPermit' value='" + key + "'></input></td>";
-                row += "<td class='w400-yellow-bdr'><input type='text' id='htmlTagLabel' class='configPermit' value='" + field_key + "'></input></td>";
-                row += "<td class='w400-yellow-bdr'>\
-                            <select id='dbTag' class='configPermit'>\
-                                <option value='0' selected>Select</option>\
-                                <option value='company_name'>companyInfo.company_name</option>\
-                                <option value='company_telno'>companyInfo.company_telno</option>\
-                                <option value='company_address'>companyInfo.company_address</option>\
-                                <option value='contact_person'>permitInfo.contact_person</option>\
-                                <option value='contact_phone'>permitInfo.contact_phone</option>\
-                                <option value='FAX'>permitInfo.FAX</option>\
-                                <option value='construction_email'>permitInfo.construction_email</option>\
-                                <option value='registration'>permitInfo.registration</option>\
-                                <option value='exp_date'>permitInfo.exp_date</option>\
-                                <option value='EIN'>permitInfo.EIN</option>\
-                                <option value='FAX'>permitInfo.FAX</option>\
-                            </select>\
-                        </td>";
-
-                row += "</tr>";
-                list_form.append(row);
-            }
-        }, function(err) {
-            console.log(err);
         });
 
         var submitData = async function(e) {
@@ -224,6 +350,8 @@
         });
 
         $('#permit-test').click(function(e) {
+            var pdfsrc = $("#assetPdfLink").val() + '/' + filename;
+            var script = $("<script>");
             fetch(pdfsrc)
             .then(function(response) {
                 return response.arrayBuffer()

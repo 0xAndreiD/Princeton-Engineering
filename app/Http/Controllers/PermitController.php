@@ -135,8 +135,9 @@ class PermitController extends Controller
             foreach ($data as $item) {
                 $field['filename'] = $request->filename;
                 $field['pdffield'] = $item[1];
-                if ($item[0] == 'on') $item[0] = 1; else $item[0] = 1;
+                if ($item[0] == 'on') $item[0] = 1; else $item[0] = 0;
                 $field['pdfcheck'] = $item[0];
+                if ($item[2] != 'on') $item[0] = 'off';
                 $field['defaultvalue'] = $item[2];
                 $field['htmlfield'] = $item[4];
                 if ($item[3] == 'on') $item[3] = 1; else $item[3] = 0;
@@ -150,15 +151,30 @@ class PermitController extends Controller
             return response()->json(['success' => false, 'status' => false, 'message' => 'Empty filename.']);
         }
     }
+
+    /**
+     * Load Permit Config data.
+     *
+     * @return JSON
+     */
+    public function loadPermitConfig(Request $request){
+        $data = PermitFields::where('filename', $request->filename)->get()->first();
+        if($data){
+            $data = PermitFields::where('filename', $request->filename)->get();
+            return response()->json(['success' => true, 'status' => true, 'data' => $data]);
+        } else {
+            return response()->json(['success' => false, 'status' => false, 'message' => 'Empty filename.']);
+        }
+    }
     /**
      * Create / Update Permit data.
      *
      * @return JSON
      */
     public function submitPermit(Request $request){
-        $request->validate([
-            'file' => 'required|mimes:pdf|max:4096',
-        ]);
+        // $request->validate([
+        //     'file' => 'required|mimes:pdf|max:4096',
+        // ]);
         
         if(!empty($request->permitId)){
             $permit = PermitFiles::where('id', $request->permitId)->first();
@@ -168,7 +184,7 @@ class PermitController extends Controller
                 $permit['description'] = $request->description;
                 $permit['tabname'] = $request->tabname;
                 $permit->save();
-                return response()->json(['success' => true]);
+                return response()->json(['success' => true, 'status' => true, 'message' => 'Updated Successfully']);
             } else {
                 $permit['filename'] = $request->filename;
                 $permit['state'] = $request->state;
@@ -182,7 +198,7 @@ class PermitController extends Controller
 
                 $list = PermitFiles::where('filename', $request->filename)->first(); //In the case of same name file is exist
                 if ($list) {
-
+                    $newPermit = PermitFiles::create($permit);    
                     return response()->json(['success' => true, 'status' => true, 'message' => 'Configuration is cloned with the same file that you already uploaded']);
                 }
 
