@@ -643,13 +643,17 @@
         <tr class="h13" style="display: none;" id="collartie-headers">
             <td><div style="overflow:hidden"></div></td>
             <td class="iw400-bdr">Framing Condition # and Name</td>
-            <td class="iw400-bdr">Collar Tie Height (ft)</td>
+            <td class="iw400-bdr">Collar Tie or Knee Wall Height (ft) *</td>
         </tr>
         @for($j = 1; $j <= 10; $j ++)
         <tr class="h13" style="display: none;" id="collartie-{{$j}}">
             <td><div style="overflow:hidden"></div></td>
             <td class="iw400-bdr" id="collartie-title-{{$j}}" style="color:red;">{{$j}}: MP{{$j}}</td>
             <td class="iw400-bdr" id="collartie-height-{{$j}}" style="color:red;">0.00</td>
+        </tr>
+        <tr style="display: none;" id="collartie-note">
+            <td><div style="overflow:hidden"></div></td>
+            <td colspan="2" style="font-style: italic;font-size: 10pt;font-family: Arial;font-weight: 400;color: black;">* Note: Where two collar tie heights would be in conflict, use the lower height for both roofs. </td>
         </tr>
         @endfor
     </tbody>
