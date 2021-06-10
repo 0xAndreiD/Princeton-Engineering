@@ -2585,6 +2585,7 @@ $(document).ready(function() {
                             if(haveChanges){
                                 $('#collartie-header').css('display', "table-row");
                                 $('#collartie-headers').css('display', "table-row");
+                                $('#collartie-note').css('display', "table-row");
                                 $('#requiredNotes').css('color', 'red');
                                 $('#requiredNotes').html(' *************** Roof Framing Changes are Required *************** ');
                             } else {
