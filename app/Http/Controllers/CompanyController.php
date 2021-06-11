@@ -369,21 +369,20 @@ class CompanyController extends Controller
     function extractImgFromPDF(Request $request){
         if(!empty($request->file('upl'))){
             $file = $request->file('upl');
-            $file->move(public_path() . '/sealfiles', $file->getClientOriginalName());
+            $filename = str_replace(' ', '', $file->getClientOriginalName());
+            $file->move(public_path() . '/sealfiles', $filename);
             $company = Company::where('id', Auth::user()->companyid)->first();
             if($company){
                 $im = new Imagick();
                 $im->setResolution(200, 200);
-                $im->readImage(public_path() . '/sealfiles/' . $file->getClientOriginalName() . "[0]");
-                
-                //$im->readImage(public_path() . '/sealfiles/' . $file->getClientOriginalName()); 
+                $im->readImage(public_path() . '/sealfiles/' . $filename . "[0]");
                 $im->setImageFormat('jpeg');
                 $im->setImageCompression(imagick::COMPRESSION_JPEG); 
                 $im->setImageCompressionQuality(100);
                 $im->writeImage(public_path() . '/sealfiles/' . $company->company_number . '_' . $company->company_name . '.jpg');
                 $im->clear();
                 $im->destroy();
-                unlink(public_path() . '/sealfiles/' . $file->getClientOriginalName());
+                unlink(public_path() . '/sealfiles/' . $filename);
                 return response()->json(["status" => true]);
             } else
                 return response()->json(["message" => "Cannot find the company.", "status" => false]);    
@@ -400,7 +399,7 @@ class CompanyController extends Controller
         if(Auth::user()->userrole != 0){
             $company = Company::where('id', Auth::user()->companyid)->first();
             if($company){
-                $url = public_path() . '\\sealfiles\\' . $company->company_number . '_' . $company->company_name . '.jpg';
+                $url = public_path() . '/sealfiles/' . $company->company_number . '_' . $company->company_name . '.jpg';
                 if(file_exists($url)){
                     return response()->json(["url" => asset('sealfiles'). '/' . $company->company_number . '_' . $company->company_name . '.jpg', "status" => true]);
                 } else
