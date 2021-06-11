@@ -193,3 +193,10 @@ Route::get('verify/blocked', 'Auth\TwoFactorController@blocked')->name('verify.b
 Route::get('verify/geolocation', 'Auth\TwoFactorController@geolocation')->name('verify.geolocation');
 
 // Route::get('/setStates', 'GeneralController@setStates')->name('setStates');
+
+// Seal Positioning
+Route::get('/sealpos', 'CompanyController@sealpos')->name('sealpos');
+Route::post('/extractImgFromPDF', 'CompanyController@extractImgFromPDF')->name('extractImgFromPDF');
+Route::post('/getSealImg', 'CompanyController@getSealImg')->name('getSealImg');
+Route::post('/saveSealData', 'CompanyController@saveSealData')->name('saveSealData');
+Route::post('/loadSealData', 'CompanyController@loadSealData')->name('loadSealData');
