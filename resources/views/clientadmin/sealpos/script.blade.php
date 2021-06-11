@@ -8,6 +8,7 @@ function drawBackground(){
             success:function(res){
                 if (res.status == true) {
                     fabric.Image.fromURL(res.url + '?' + new Date().getTime(), function(image) {
+                        swal.close();
                         canvas.setHeight(image.height * 900 / image.width);
                         image.set({
                             scaleX: canvas.width / image.width,
@@ -17,7 +18,8 @@ function drawBackground(){
                         canvas.setBackgroundImage(image);
                         canvas.renderAll();
                     });
-                }
+                } else
+                    swal.close();
             },
             error: function(xhr, status, error) {
                 res = JSON.parse(xhr.responseText);
@@ -161,10 +163,10 @@ $(document).ready(function() {
                     processData: false,
                     contentType: false,
                     success:function(res){
-                        swal.close();
                         if (res.status == true) {
                             drawBackground();
                         } else {
+                            swal.close();
                             // error handling
                             swal.fire({ title: "Error",
                                 text: "Error happened while processing. Please try again later.",
