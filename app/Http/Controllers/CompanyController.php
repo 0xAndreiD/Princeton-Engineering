@@ -374,16 +374,16 @@ class CompanyController extends Controller
             if($company){
                 $im = new Imagick();
                 $im->setResolution(200, 200);
-                $im->readImage(public_path() . '\\sealfiles\\' . $file->getClientOriginalName() . "[0]");
+                $im->readImage(public_path() . '/sealfiles/' . $file->getClientOriginalName() . "[0]");
                 
                 //$im->readImage(public_path() . '/sealfiles/' . $file->getClientOriginalName()); 
                 $im->setImageFormat('jpeg');
                 $im->setImageCompression(imagick::COMPRESSION_JPEG); 
                 $im->setImageCompressionQuality(100);
-                $im->writeImage(public_path() . '\\sealfiles\\' . $company->company_number . '_' . $company->company_name . '.jpg');
+                $im->writeImage(public_path() . '/sealfiles/' . $company->company_number . '_' . $company->company_name . '.jpg');
                 $im->clear();
                 $im->destroy();
-                unlink(public_path() . '\\sealfiles\\' . $file->getClientOriginalName());
+                unlink(public_path() . '/sealfiles/' . $file->getClientOriginalName());
                 return response()->json(["status" => true]);
             } else
                 return response()->json(["message" => "Cannot find the company.", "status" => false]);    
