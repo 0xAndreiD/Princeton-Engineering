@@ -103,7 +103,7 @@ function loadContent(){
                     canvas.renderAll();
                 });
                 if(data.backgroundImage && data.backgroundImage.src){
-                    fabric.Image.fromURL(data.backgroundImage.src + '?' + new Date().getTime(), function(image) {
+                    fabric.Image.fromURL(data.backgroundImage.src, function(image) {
                         canvas.setHeight(image.height * 900 / image.width);
                         canvas.renderAll();
                     });
