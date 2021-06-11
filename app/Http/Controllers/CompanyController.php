@@ -12,10 +12,14 @@ use App\User;
 use App\Company;
 use App\JobRequest;
 use App\PermitInfo;
+use App\SealData;
 use Kunnu\Dropbox\DropboxApp;
 use Kunnu\Dropbox\Dropbox;
 use Kunnu\Dropbox\DropboxFile;
 use Kunnu\Dropbox\Exceptions\DropboxClientException;
+
+use Imagick;
+
 
 class CompanyController extends Controller
 {
@@ -343,5 +347,117 @@ class CompanyController extends Controller
                 return response()->json(["message" => "Please select the state.", "success" => false]);
         } else 
             return response()->json(["message" => "Wrong Parameters.", "success" => false]);
+    }
+
+    /**
+     * Show the seal positioning page
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    function sealpos(Request $request){
+        if(Auth::user()->userrole != 0)
+            return view('clientadmin.sealpos.view');
+        else
+            return redirect('home');
+    }
+
+    /**
+     * Extract first page from PDF and save it as jpg
+     *
+     * @return JSON
+     */
+    function extractImgFromPDF(Request $request){
+        if(!empty($request->file('upl'))){
+            $file = $request->file('upl');
+            $file->move(public_path() . '/sealfiles', $file->getClientOriginalName());
+            $company = Company::where('id', Auth::user()->companyid)->first();
+            if($company){
+                $im = new Imagick();
+                $im->setResolution(200, 200);
+                $im->readImage(public_path() . '\\sealfiles\\' . $file->getClientOriginalName() . "[0]");
+                
+                //$im->readImage(public_path() . '/sealfiles/' . $file->getClientOriginalName()); 
+                $im->setImageFormat('jpeg');
+                $im->setImageCompression(imagick::COMPRESSION_JPEG); 
+                $im->setImageCompressionQuality(100);
+                $im->writeImage(public_path() . '\\sealfiles\\' . $company->company_number . '_' . $company->company_name . '.jpg');
+                $im->clear();
+                $im->destroy();
+                unlink(public_path() . '\\sealfiles\\' . $file->getClientOriginalName());
+                return response()->json(["status" => true]);
+            } else
+                return response()->json(["message" => "Cannot find the company.", "status" => false]);    
+        } else 
+            return response()->json(["message" => "Empty file.", "status" => false]);
+    }
+
+    /**
+     * Extract first page from PDF and save it as jpg
+     *
+     * @return JSON
+     */
+    function getSealImg(Request $request){
+        if(Auth::user()->userrole != 0){
+            $company = Company::where('id', Auth::user()->companyid)->first();
+            if($company){
+                $url = public_path() . '\\sealfiles\\' . $company->company_number . '_' . $company->company_name . '.jpg';
+                if(file_exists($url)){
+                    return response()->json(["url" => asset('sealfiles'). '/' . $company->company_number . '_' . $company->company_name . '.jpg', "status" => true]);
+                } else
+                    return response()->json(["message" => "File does not exist.", "status" => false]);
+            } else
+                return response()->json(["message" => "Cannot find the company.", "status" => false]);
+        }
+        else 
+            return response()->json(["message" => "You don't have permission.", "status" => false]);
+    }
+
+    /**
+     * Save seal canvas json data to db
+     *
+     * @return JSON
+     */
+    function saveSealData(Request $request){
+        if(Auth::user()->userrole != 0){
+            $company = Company::where('id', Auth::user()->companyid)->first();
+            if($company){
+                $sealdata = SealData::where('companyId', $company->id)->first();
+                if($sealdata){
+                    $sealdata->data = $request->data;
+                    $sealdata->save();
+                }
+                else{
+                    SealData::create([
+                        'companyId' => $company->id,
+                        'data' => $request->data
+                    ]);
+                }
+                return response()->json(["status" => true]);
+            } else
+                return response()->json(["message" => "Cannot find the company.", "status" => false]);
+        }
+        else 
+            return response()->json(["message" => "You don't have permission.", "status" => false]);
+    }
+
+    /**
+     * Save seal canvas json data to db
+     *
+     * @return JSON
+     */
+    function loadSealData(Request $request){
+        if(Auth::user()->userrole != 0){
+            $company = Company::where('id', Auth::user()->companyid)->first();
+            if($company){
+                $sealdata = SealData::where('companyId', $company->id)->first();
+                if($sealdata)
+                    return response()->json(["status" => true, "data" => $sealdata->data]);
+                else
+                    return response()->json(["message" => "Empty seal data.", "status" => false]);
+            } else
+                return response()->json(["message" => "Cannot find the company.", "status" => false]);
+        }
+        else 
+            return response()->json(["message" => "You don't have permission.", "status" => false]);
     }
 }
