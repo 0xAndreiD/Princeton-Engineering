@@ -369,7 +369,7 @@ class CompanyController extends Controller
     function extractImgFromPDF(Request $request){
         if(!empty($request->file('upl'))){
             $file = $request->file('upl');
-            $filename = str_replace(' ', '', $file->getClientOriginalName());
+            $filename = time() . '.pdf';
             $file->move(public_path() . '/sealfiles', $filename);
             $company = Company::where('id', Auth::user()->companyid)->first();
             if($company){
