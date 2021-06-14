@@ -4127,6 +4127,9 @@ var loadPreloadedData = function() {
                             $(`#wind-speed-override`).prop('checked', preloaded_data['WindCheckbox']);
                             $(`#ground-snow`).val(preloaded_data['Snow']);
                             $(`#ground-snow-override`).prop('checked', preloaded_data['SnowCheckbox']);
+                            $(`#ibc-year`).val(preloaded_data['IBC']);
+                            $(`#asce-year`).val(preloaded_data['ASCE']);
+                            $(`#nec-year`).val(preloaded_data['NEC']);
                             $(`#wind-exposure`).val(preloaded_data['WindExposure']);
                             $(`#override-unit`).val(preloaded_data['Units']);
 
