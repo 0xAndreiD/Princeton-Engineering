@@ -1,10 +1,11 @@
 <script>
 var canvas;
-function drawBackground(){
+function drawBackground(state){
     return new Promise((resolve, reject) => {
         $.ajax({
             url:"getSealImg",
             type:'post',
+            data: {state: state},
             success:function(res){
                 if (res.status == true) {
                     fabric.Image.fromURL(res.url + '?' + new Date().getTime(), function(image) {
@@ -61,13 +62,20 @@ function selectionHandler(){
 }
 
 function saveContent(){
+    let state = $("#state-dropdown").html();
+    if(!state || state.length != 2){
+        swal.fire({ title: "Warning", text: 'Please select the state.', icon: "info", confirmButtonText: `OK` });
+        return;
+    }
+
     swal.fire({ title: "Please wait...", showConfirmButton: false });
     swal.showLoading();
     $.ajax({
         url:"saveSealData",
         type:'post',
         data:{
-            data: JSON.stringify(canvas.toJSON())
+            data: JSON.stringify(canvas.toJSON()),
+            state: state
         },
         success:function(res){
             swal.close();
@@ -87,24 +95,110 @@ function saveContent(){
     });
 }
 
-function loadContent(){
+function updateTemplateList(){
+    $.ajax({
+        url:"getTemplateList",
+        type:'post',
+        success:function(res){
+            if (res.status == true && res.data) {
+                $("#template-list").html("");
+                res.data.forEach(template => {
+                    $("#template-list").append("<a class='dropdown-item' href='javascript:loadTemplate(\"" + template.state + "\")'>" + template.title + "</a>");
+                })
+            }
+        },
+        error: function(xhr, status, error) {
+            res = JSON.parse(xhr.responseText);
+            var message = res.message;
+            swal.fire({ title: "Error",
+                    text: message == "" ? "Error happened while processing. Please try again later." : message,
+                    icon: "error",
+                    confirmButtonText: `OK` });
+        }
+    });
+}
+
+function loadTemplate(wantedState){
+    let state = $("#state-dropdown").html();
+    if(!state || state.length != 2){
+        swal.fire({ title: "Warning", text: 'Please select the state.', icon: "info", confirmButtonText: `OK` });
+        return;
+    }
+    if(state == wantedState) return;
+    
+
+    loadContent(wantedState);
+}
+
+function saveAsTemplate(){
+    let state = $("#state-dropdown").html();
+    if(!state || state.length != 2){
+        swal.fire({ title: "Warning", text: 'Please select the state.', icon: "info", confirmButtonText: `OK` });
+        return;
+    }
+    swal.fire({ title: "Input the template title", input: 'text', confirmButtonText: `OK`, showCancelButton: true }).then((result => {
+        if(result && result.value){
+            swal.fire({ title: "Please wait...", showConfirmButton: false });
+            swal.showLoading();
+            $.ajax({
+                url:"saveAsTemplate",
+                type:'post',
+                data:{
+                    state: state,
+                    template: result.value
+                },
+                success:function(res){
+                    swal.close();
+                    if (res.status == true) {
+                        swal.fire({ title: "Success", text: "Successfully Saved!", icon: "success", confirmButtonText: `OK` });
+                        updateTemplateList();
+                    } else 
+                        swal.fire({ title: "Error", text: res.message, icon: "error", confirmButtonText: `OK` });
+                },
+                error: function(xhr, status, error) {
+                    res = JSON.parse(xhr.responseText);
+                    var message = res.message;
+                    swal.fire({ title: "Error",
+                            text: message == "" ? "Error happened while processing. Please try again later." : message,
+                            icon: "error",
+                            confirmButtonText: `OK` });
+                }
+            });
+        }
+    }));
+}
+
+function loadContent(state){
+    swal.fire({ title: "Please wait...", showConfirmButton: false });
+    swal.showLoading();
     $.ajax({
         url:"loadSealData",
         type:'post',
         data:{
-            data: JSON.stringify(canvas.toJSON())
+            state: state
         },
         success:function(res){
             swal.close();
             if (res.status == true) {
                 var data = JSON.parse(res.data);
                 canvas.loadFromJSON(data, function(){
-                    canvas.getObjects().forEach(object => { addEffect(object) });
+                    canvas.getObjects().forEach(object => { 
+                        addEffect(object);
+                        if(object.type == 'textbox')
+                            object.set({editable: false});
+                    });
                     canvas.renderAll();
                 });
                 if(data.backgroundImage && data.backgroundImage.src){
                     fabric.Image.fromURL(data.backgroundImage.src, function(image) {
                         canvas.setHeight(image.height * 900 / image.width);
+                        console.log(canvas.width, image.width, canvas.height, image.height);
+                        image.set({
+                            scaleX: canvas.width / image.width,
+                            scaleY: canvas.height / image.height
+                        })
+
+                        canvas.setBackgroundImage(image);
                         canvas.renderAll();
                     });
                 }
@@ -121,6 +215,12 @@ function loadContent(){
     });
 }
 
+function stateChange(state){
+    $("#state-dropdown").html(state);
+    canvas.clear();
+    loadContent(state);
+}
+
 $(document).ready(function() {
     $.ajaxSetup({
         headers: {
@@ -130,24 +230,29 @@ $(document).ready(function() {
 
     canvas = new fabric.Canvas('canvasPane');
     canvas.setWidth(900);
-    
-    loadContent();
+
+    updateTemplateList();
 
     var inputs = document.querySelectorAll( '.inputfile' );
     Array.prototype.forEach.call( inputs, function( input )
     {
-        var label	 = input.nextElementSibling,
-            labelVal = label.innerHTML;
+        // var label	 = input.nextElementSibling,
+        //     labelVal = label.innerHTML;
 
         input.addEventListener( 'change', function( e )
         {
-            var fileName = '';
-            fileName = e.target.value.split("\\").pop();
+            // var fileName = '';
+            // fileName = e.target.value.split("\\").pop();
 
-            if( fileName )
-                label.querySelector( 'span' ).innerHTML = fileName;
-            else
-                label.innerHTML = labelVal;
+            // if( fileName )
+            //     label.querySelector( 'span' ).innerHTML = fileName;
+            // else
+            //     label.innerHTML = labelVal;
+            let state = $("#state-dropdown").html();
+            if(!state || state.length != 2){
+                swal.fire({ title: "Warning", text: 'Please select the state.', icon: "info", confirmButtonText: `OK` });
+                return;
+            }
 
             if($('#file')[0].files && $('#file')[0].files[0]){
                 swal.fire({ title: "Please wait...", showConfirmButton: false });
@@ -155,6 +260,7 @@ $(document).ready(function() {
 
                 var formData = new FormData();
                 formData.append('upl', $('#file')[0].files[0]);
+                formData.append('state', state);
 
                 $.ajax({
                     url:"extractImgFromPDF",
@@ -163,8 +269,9 @@ $(document).ready(function() {
                     processData: false,
                     contentType: false,
                     success:function(res){
+                        $("#file")[0].value = "";
                         if (res.status == true) {
-                            drawBackground();
+                            drawBackground(state);
                         } else {
                             swal.close();
                             // error handling
@@ -200,32 +307,83 @@ $(document).ready(function() {
         activeClass: "canvashighlight",
         drop: function (event, ui) {
             if(ui && ui.draggable){
-                if(ui.draggable.prop('id') == 'sealImageBtn'){
-                    var imgTag = new Image();
-                    imgTag.src = "{{ asset('img/sampleseal.png') }}";
-                    imgTag.onload = (e) => {
-                        const image = new fabric.Image(imgTag, {
-                            left: ui.offset.left - $(this).offset().left,
-                            top: ui.offset.top - $(this).offset().top
-                        });
+                let elemId = ui.draggable.prop('id');
+                if(elemId){
+                    let checkObj;
+                    if(elemId == 'sealImage')
+                        checkObj = canvas.getObjects().filter(e => e.type == 'image');
+                    else if(elemId == 'sealText')
+                        checkObj = canvas.getObjects().filter(e => e.type == 'textbox' && e.text == 'Seal Text');
+                    else if(elemId == 'sealSupplement')
+                        checkObj = canvas.getObjects().filter(e => e.type == 'textbox' && e.text == 'Supplemental Seal Text');
+                    else if(elemId == 'eSign')
+                        checkObj = canvas.getObjects().filter(e => e.type == 'textbox' && e.text == 'eSign Text');
 
-                        addEffect(image);
-                        canvas.add(image);
-                        canvas.renderAll();
+                    if(checkObj && checkObj[0])
+                        swal.fire({ title: "Warning", text: 'You already have the element.', icon: "info", confirmButtonText: `OK` });
+                    else{
+                        if(elemId == 'sealImage'){
+                            var imgTag = new Image();
+                            imgTag.src = "{{ asset('img/sampleseal.png') }}";
+                            imgTag.onload = (e) => {
+                                const image = new fabric.Image(imgTag, {
+                                    left: ui.offset.left - $(this).offset().left,
+                                    top: ui.offset.top - $(this).offset().top,
+                                    type: 'image'
+                                });
+
+                                addEffect(image);
+                                canvas.add(image);
+                                canvas.renderAll();
+                            }
+                        }
+                        else if(elemId == 'sealText'){
+                            const text = new fabric.Textbox("Seal Text", {
+                                left: ui.offset.left - $(this).offset().left,
+                                top: ui.offset.top - $(this).offset().top,
+                                fontSize: 24,
+                                fontFamily: 'Verdana',
+                                width: 150,
+                                textAlign: 'center',
+                                editable: false,
+                                type: 'textbox'
+                            });
+
+                            addEffect(text);
+                            canvas.add(text);
+                            canvas.renderAll();
+                        } else if(elemId == 'sealSupplement'){
+                            const text = new fabric.Textbox("Supplemental Seal Text", {
+                                left: ui.offset.left - $(this).offset().left,
+                                top: ui.offset.top - $(this).offset().top,
+                                fontSize: 24,
+                                fontFamily: 'Verdana',
+                                width: 150,
+                                textAlign: 'center',
+                                editable: false,
+                                type: 'textbox'
+                            });
+
+                            addEffect(text);
+                            canvas.add(text);
+                            canvas.renderAll();
+                        } else if(elemId == 'eSign'){
+                            const text = new fabric.Textbox("eSign Text", {
+                                left: ui.offset.left - $(this).offset().left,
+                                top: ui.offset.top - $(this).offset().top,
+                                fontSize: 24,
+                                fontFamily: 'Verdana',
+                                width: 150,
+                                textAlign: 'center',
+                                editable: false,
+                                type: 'textbox'
+                            });
+
+                            addEffect(text);
+                            canvas.add(text);
+                            canvas.renderAll();
+                        }
                     }
-                }
-                if(ui.draggable.prop('id') == 'sealTextBtn'){
-                    const text = new fabric.Textbox("Sample Text", {
-                        left: ui.offset.left - $(this).offset().left,
-                        top: ui.offset.top - $(this).offset().top,
-                        fontSize: 24,
-                        fontFamily: 'Verdana',
-                        width: 150
-                    });
-
-                    addEffect(text);
-                    canvas.add(text);
-                    canvas.renderAll();
                 }
             }
         },
