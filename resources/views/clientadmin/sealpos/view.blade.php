@@ -123,8 +123,36 @@
         </div>
     </div>
 
-    <div style="display: flex; justify-content: space-around;" id="canvasContainer">
+    <div style="display: flex; justify-content: center;" id="canvasContainer">
         <canvas id="canvasPane" width="900" height="900" style="border: 1px solid black;"></canvas>
+        <div class="ml-5">
+            <div class="form-group mt-5">
+                <label for="page-width">Page Width (Inches)</label>
+                <input type="text" class="form-control" id="page-width" disabled="">
+            </div>
+            <div class="form-group">
+                <label for="page-height">Page Height (Inches)</label>
+                <input type="text" class="form-control" id="page-height" disabled="">
+            </div>
+            <div id="object-dimension-pane" style="display: none;">
+                <div class="form-group">
+                    <label for="object-left">Left (Inches)</label>
+                    <input type="text" class="form-control" id="object-left" style="border: 1px solid #82b54b;">
+                </div>
+                <div class="form-group">
+                    <label for="object-top">Top (Inches)</label>
+                    <input type="text" class="form-control" id="object-top" style="border: 1px solid #82b54b;">
+                </div>
+                <div class="form-group">
+                    <label for="object-width">Width (Inches)</label>
+                    <input type="text" class="form-control" id="object-width" style="border: 1px solid #82b54b;">
+                </div>
+                <div class="form-group">
+                    <label for="object-height">Height (Inches)</label>
+                    <input type="text" class="form-control" id="object-height" style="border: 1px solid #82b54b;">
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 

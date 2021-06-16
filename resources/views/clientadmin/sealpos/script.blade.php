@@ -1,5 +1,7 @@
 <script>
 var canvas;
+var pageWidth;
+var pageHeight;
 function drawBackground(state){
     return new Promise((resolve, reject) => {
         $.ajax({
@@ -14,7 +16,11 @@ function drawBackground(state){
                         image.set({
                             scaleX: canvas.width / image.width,
                             scaleY: canvas.height / image.height
-                        })
+                        });
+                        pageWidth = image.width / 200;
+                        pageHeight = image.height / 200;
+                        $("#page-width").val(pageWidth.toFixed(2));
+                        $("#page-height").val(pageHeight.toFixed(2));
 
                         canvas.setBackgroundImage(image);
                         canvas.renderAll();
@@ -59,6 +65,22 @@ function selectionHandler(){
     let object = canvas.getActiveObject();
     if(object)
         object.setControlsVisibility({tl: true, tr: true, bl: true, br: true, ml: true, mt: true, mr: true, mb: true, mtr: false });
+    if(canvas.getActiveObjects().length == 1){
+        $("#object-dimension-pane").css("display", "block");
+        dimUpdateHandler();
+    }
+    else
+        $("#object-dimension-pane").css("display", "none");
+}
+
+function dimUpdateHandler(){
+    if(canvas.getActiveObjects().length == 1){
+        let object = canvas.getActiveObject();
+        $("#object-left").val((object.left * pageWidth / canvas.width).toFixed(2));
+        $("#object-top").val((object.top * pageHeight / canvas.height).toFixed(2));
+        $("#object-width").val((object.width * object.scaleX * pageWidth / canvas.width).toFixed(2));
+        $("#object-height").val((object.height * object.scaleY * pageHeight / canvas.height).toFixed(2));
+    }
 }
 
 function saveContent(){
@@ -70,12 +92,23 @@ function saveContent(){
 
     swal.fire({ title: "Please wait...", showConfirmButton: false });
     swal.showLoading();
+    var objects = [];
+    canvas.getObjects().forEach(object => {
+        if(object.type == 'image') objects.push({type: object.type, scaleX: object.scaleX, left: object.left, top: object.top, width: object.width, height: object.height});
+        if(object.type == 'textbox') objects.push({type: object.type, fontSize: object.fontSize, text: object.text, left: object.left, top: object.top, width: object.width, height: object.height});
+    });
+
     $.ajax({
         url:"saveSealData",
         type:'post',
         data:{
             data: JSON.stringify(canvas.toJSON()),
-            state: state
+            state: state,
+            pageWidth: pageWidth,
+            pageHeight: pageHeight,
+            canvasWidth: canvas.width,
+            canvasHeight: canvas.height,
+            objects: objects
         },
         success:function(res){
             swal.close();
@@ -125,7 +158,7 @@ function loadTemplate(wantedState){
         return;
     }
     if(state == wantedState) return;
-    
+
 
     loadContent(wantedState);
 }
@@ -192,7 +225,11 @@ function loadContent(state){
                 if(data.backgroundImage && data.backgroundImage.src){
                     fabric.Image.fromURL(data.backgroundImage.src, function(image) {
                         canvas.setHeight(image.height * 900 / image.width);
-                        console.log(canvas.width, image.width, canvas.height, image.height);
+                        pageWidth = image.width / 200;
+                        pageHeight = image.height / 200;
+                        $("#page-width").val(pageWidth.toFixed(2));
+                        $("#page-height").val(pageHeight.toFixed(2));
+                        
                         image.set({
                             scaleX: canvas.width / image.width,
                             scaleY: canvas.height / image.height
@@ -250,6 +287,7 @@ $(document).ready(function() {
             //     label.innerHTML = labelVal;
             let state = $("#state-dropdown").html();
             if(!state || state.length != 2){
+                $(".inputfile").val('');
                 swal.fire({ title: "Warning", text: 'Please select the state.', icon: "info", confirmButtonText: `OK` });
                 return;
             }
@@ -269,7 +307,7 @@ $(document).ready(function() {
                     processData: false,
                     contentType: false,
                     success:function(res){
-                        $("#file")[0].value = "";
+                        $(".inputfile").val('');
                         if (res.status == true) {
                             drawBackground(state);
                         } else {
@@ -393,6 +431,33 @@ $(document).ready(function() {
     canvasWrapper.tabIndex = 1000;
     canvasWrapper.addEventListener("keydown", keyboardEvent, false);
 
-    canvas.on({ "selection:created" : selectionHandler, "selection:updated" : selectionHandler });
+    canvas.on({ "selection:created" : selectionHandler, "selection:updated" : selectionHandler, "selection:cleared" : selectionHandler });
+    canvas.on({ "object:moving" : dimUpdateHandler, "object:scaling": dimUpdateHandler });
+
+    $("#object-left").on('input', function(){
+        let object = canvas.getActiveObject();
+        object.left = $(this).val() * canvas.width / pageWidth;
+        canvas.renderAll();
+    });
+
+    $("#object-top").on('input', function(){
+        let object = canvas.getActiveObject();
+        object.top = $(this).val() * canvas.height / pageHeight;
+        canvas.renderAll();
+    });
+
+    $("#object-width").on('input', function(){
+        let object = canvas.getActiveObject();
+        let newWidth = $(this).val() * canvas.width / pageWidth;
+        object.scaleX = object.scaleX * (newWidth / (object.scaleX * object.width));
+        canvas.renderAll();
+    });
+
+    $("#object-height").on('input', function(){
+        let object = canvas.getActiveObject();
+        let newHeight = $(this).val() * canvas.height / pageHeight;
+        object.scaleY = object.scaleY * (newHeight / (object.scaleY * object.height));
+        canvas.renderAll();
+    });
 });
 </script>

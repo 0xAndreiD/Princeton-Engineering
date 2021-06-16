@@ -13,6 +13,7 @@ use App\Company;
 use App\JobRequest;
 use App\PermitInfo;
 use App\SealData;
+use App\SealObjects;
 use Kunnu\Dropbox\DropboxApp;
 use Kunnu\Dropbox\Dropbox;
 use Kunnu\Dropbox\DropboxFile;
@@ -436,6 +437,68 @@ class CompanyController extends Controller
                             'state' => $request->state
                         ]);
                     }
+                    if($request['objects']){
+                        foreach($request['objects'] as $object){
+                            if($object['type'] == 'image'){
+                                $sealobj = SealObjects::where('client_id', $company->id)->where('jurisdiction_abbrev', $request['state'])->where('Execute_Command', 'Graphics')->first();
+                                if(!$sealobj){
+                                    SealObjects::create([
+                                        'client_id' => $company->id,
+                                        'jurisdiction_abbrev' => $request['state'],
+                                        'Execute_Command' => 'Graphics',
+                                        'ImageScale' => $object['scaleX'],
+                                        'Page_X' => $request['pageWidth'],
+                                        'Page_Y' => $request['pageHeight'],
+                                        'Top_Lx_rel' => $object['left'] * $request['pageWidth'] / $request['canvasWidth'],
+                                        'Top_Ly_rel' => $object['top'] * $request['pageHeight'] / $request['canvasHeight'],
+                                        'Bot_Rx_rel' => ($object['left'] + $object['width']) * $request['pageWidth'] / $request['canvasWidth'],
+                                        'Bot_Ry_rel' => ($object['top'] + $object['height']) * $request['pageHeight'] / $request['canvasHeight']
+                                    ]);
+                                } else{
+                                    $sealobj->ImageScale = $object['scaleX'];
+                                    $sealobj->Page_X = $request['pageWidth'];
+                                    $sealobj->Page_Y = $request['pageHeight'];
+                                    $sealobj->Top_Lx_rel = $object['left'] * $request['pageWidth'] / $request['canvasWidth'];
+                                    $sealobj->Top_Ly_rel = $object['top'] * $request['pageHeight'] / $request['canvasHeight'];
+                                    $sealobj->Bot_Rx_rel = ($object['left'] + $object['width']) * $request['pageWidth'] / $request['canvasWidth'];
+                                    $sealobj->Bot_Ry_rel = ($object['top'] + $object['height']) * $request['pageHeight'] / $request['canvasHeight'];
+                                    $sealobj->save();
+                                }
+                            } else if($object['type'] == 'textbox'){
+                                $sealobj = SealObjects::where('client_id', $company->id)->where('jurisdiction_abbrev', $request['state'])->where('text', $object['text'])->first();
+                                if(!$sealobj){
+                                    if($object['text'] == 'eSign Text') 
+                                        $objType = 'eSeal';
+                                    else
+                                        $objType = 'Text';
+                                    SealObjects::create([
+                                        'client_id' => $company->id,
+                                        'jurisdiction_abbrev' => $request['state'],
+                                        'Execute_Command' => $objType,
+                                        'text' => $object['text'],
+                                        'FontSize' => $object['fontSize'],
+                                        'Page_X' => $request['pageWidth'],
+                                        'Page_Y' => $request['pageHeight'],
+                                        'Top_Lx_rel' => $object['left'] * $request['pageWidth'] / $request['canvasWidth'],
+                                        'Top_Ly_rel' => $object['top'] * $request['pageHeight'] / $request['canvasHeight'],
+                                        'Bot_Rx_rel' => ($object['left'] + $object['width']) * $request['pageWidth'] / $request['canvasWidth'],
+                                        'Bot_Ry_rel' => ($object['top'] + $object['height']) * $request['pageHeight'] / $request['canvasHeight']
+                                    ]);
+                                } else{
+                                    $sealobj->fontSize = $object['fontSize'];
+                                    $sealobj->Page_X = $request['pageWidth'];
+                                    $sealobj->Page_Y = $request['pageHeight'];
+                                    $sealobj->FontSize = $object['fontSize'];
+                                    $sealobj->Top_Lx_rel = $object['left'] * $request['pageWidth'] / $request['canvasWidth'];
+                                    $sealobj->Top_Ly_rel = $object['top'] * $request['pageHeight'] / $request['canvasHeight'];
+                                    $sealobj->Bot_Rx_rel = ($object['left'] + $object['width']) * $request['pageWidth'] / $request['canvasWidth'];
+                                    $sealobj->Bot_Ry_rel = ($object['top'] + $object['height']) * $request['pageHeight'] / $request['canvasHeight'];
+                                    $sealobj->save();
+                                }
+                            }
+                        }
+                    }
+
                     return response()->json(["status" => true]);
                 } else
                     return response()->json(["message" => "Cannot find the company.", "status" => false]);
