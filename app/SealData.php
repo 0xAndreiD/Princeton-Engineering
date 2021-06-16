@@ -15,7 +15,7 @@ class SealData extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'id', 'companyId', 'data'
+        'id', 'companyId', 'state', 'data', 'template'
     ];
 
     protected $table = 'seal_data';

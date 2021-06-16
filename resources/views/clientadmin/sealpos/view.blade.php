@@ -10,7 +10,7 @@
                     Seal Positioning
                 </h1>
                 <h2 class="h5 text-white-75 mb-0">
-                    Move your seal and texts to your correct position
+                    Move your required elements to your correct position
                 </h2>
             </div>
         </div>
@@ -19,8 +19,62 @@
 
 <div class="content" style="text-align:left">
     <div class="text-center">
+        <button type="button" class="btn btn-secondary dropdown-toggle mr-5" id="state-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Select State
+        </button>
+        <div class="dropdown-menu" aria-labelledby="state-dropdown" style="height: 300px; overflow: auto;">
+            <a class="dropdown-item" href="javascript:stateChange('AL')">AL</a>
+            <a class="dropdown-item" href="javascript:stateChange('AZ')">AZ</a>
+            <a class="dropdown-item" href="javascript:stateChange('AR')">AR</a>
+            <a class="dropdown-item" href="javascript:stateChange('CA')">CA</a>
+            <a class="dropdown-item" href="javascript:stateChange('CO')">CO</a>
+            <a class="dropdown-item" href="javascript:stateChange('CT')">CT</a>
+            <a class="dropdown-item" href="javascript:stateChange('DE')">DE</a>
+            <a class="dropdown-item" href="javascript:stateChange('FL')">FL</a>
+            <a class="dropdown-item" href="javascript:stateChange('GA')">GA</a>
+            <a class="dropdown-item" href="javascript:stateChange('HI')">HI</a>
+            <a class="dropdown-item" href="javascript:stateChange('ID')">ID</a>
+            <a class="dropdown-item" href="javascript:stateChange('IL')">IL</a>
+            <a class="dropdown-item" href="javascript:stateChange('IN')">IN</a>
+            <a class="dropdown-item" href="javascript:stateChange('IA')">IA</a>
+            <a class="dropdown-item" href="javascript:stateChange('KS')">KS</a>
+            <a class="dropdown-item" href="javascript:stateChange('KY')">KY</a>
+            <a class="dropdown-item" href="javascript:stateChange('LA')">LA</a>
+            <a class="dropdown-item" href="javascript:stateChange('ME')">ME</a>
+            <a class="dropdown-item" href="javascript:stateChange('MD')">MD</a>
+            <a class="dropdown-item" href="javascript:stateChange('MA')">MA</a>
+            <a class="dropdown-item" href="javascript:stateChange('MI')">MI</a>
+            <a class="dropdown-item" href="javascript:stateChange('MN')">MN</a>
+            <a class="dropdown-item" href="javascript:stateChange('MS')">MS</a>
+            <a class="dropdown-item" href="javascript:stateChange('MO')">MO</a>
+            <a class="dropdown-item" href="javascript:stateChange('MT')">MT</a>
+            <a class="dropdown-item" href="javascript:stateChange('NE')">NE</a>
+            <a class="dropdown-item" href="javascript:stateChange('NV')">NV</a>
+            <a class="dropdown-item" href="javascript:stateChange('NH')">NH</a>
+            <a class="dropdown-item" href="javascript:stateChange('NJ')">NJ</a>
+            <a class="dropdown-item" href="javascript:stateChange('NM')">NM</a>
+            <a class="dropdown-item" href="javascript:stateChange('NY')">NY</a>
+            <a class="dropdown-item" href="javascript:stateChange('NC')">NC</a>
+            <a class="dropdown-item" href="javascript:stateChange('ND')">ND</a>
+            <a class="dropdown-item" href="javascript:stateChange('OH')">OH</a>
+            <a class="dropdown-item" href="javascript:stateChange('OK')">OK</a>
+            <a class="dropdown-item" href="javascript:stateChange('OR')">OR</a>
+            <a class="dropdown-item" href="javascript:stateChange('PA')">PA</a>
+            <a class="dropdown-item" href="javascript:stateChange('RI')">RI</a>
+            <a class="dropdown-item" href="javascript:stateChange('SC')">SC</a>
+            <a class="dropdown-item" href="javascript:stateChange('SD')">SD</a>
+            <a class="dropdown-item" href="javascript:stateChange('TN')">TN</a>
+            <a class="dropdown-item" href="javascript:stateChange('TX')">TX</a>
+            <a class="dropdown-item" href="javascript:stateChange('UT')">UT</a>
+            <a class="dropdown-item" href="javascript:stateChange('VT')">VT</a>
+            <a class="dropdown-item" href="javascript:stateChange('VA')">VA</a>
+            <a class="dropdown-item" href="javascript:stateChange('WA')">WA</a>
+            <a class="dropdown-item" href="javascript:stateChange('WV')">WV</a>
+            <a class="dropdown-item" href="javascript:stateChange('WI')">WI</a>
+            <a class="dropdown-item" href="javascript:stateChange('WY')">WY</a>
+        </div>
         <input type="file" name="file" id="file" class="inputfile" accept=".pdf, .PDF|PDF Files/*"/>
-        <label for="file" class="btn btn-secondary">
+        <label for="file" class="btn btn-secondary mb-0">
             <i class="fa fa-upload"></i>&nbsp;
             <span>Choose a PDF...</span>
         </label>
@@ -29,20 +83,42 @@
     <div class="block mb-0">
         <div class="block-content text-center">
             <div class="btn-group push">
-                <button type="button" class="btn btn-secondary draggable" id="sealImageBtn" style="z-index: 1;">
+                <button type="button" class="btn btn-warning dropdown-toggle mr-5" id="template-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Copy From A Template
+                </button>
+                <div class="dropdown-menu" aria-labelledby="template-dropdown" style="max-height: 300px; overflow: auto;" id="template-list">
+                    <!-- <a class="dropdown-item" href="javascript:stateChange('AL')">AL</a> -->
+                </div>
+            </div>
+            <div class="btn-group push">
+                <button type="button" class="btn btn-secondary draggable" id="sealImage" style="z-index: 1;">
                     <i class="far fa-file-image"></i>
                     Seal Image
                 </button>
-                <button type="button" class="btn btn-secondary mr-5 draggable" id="sealTextBtn" style="z-index: 1;">
+                <button type="button" class="btn btn-secondary draggable" id="sealText" style="z-index: 1;">
                     <i class="fa fa-font"></i>
                     Seal Text
                 </button>
+                <button type="button" class="btn btn-secondary draggable" id="sealSupplement" style="z-index: 1;">
+                    <i class="fa fa-font"></i>
+                    Supplemental Seal Text
+                </button>
+                <button type="button" class="btn btn-secondary mr-5 draggable" id="eSign" style="z-index: 1;">
+                    <i class="fa fa-file-signature"></i>
+                    eSignature
+                </button>
+            </div>
+            <div class="btn-group push mr-2">
+                <button type="button" class="btn btn-primary" onclick="saveContent()">
+                    <i class="fa fa-save"></i>
+                    Save
+                </button>
             </div>
             <div class="btn-group push">
-            <button type="button" class="btn btn-primary" onclick="saveContent()">
-                <i class="fa fa-save"></i>
-                Save
-            </button>
+                <button type="button" class="btn btn-info" onclick="saveAsTemplate()">
+                    <i class="fa fa-save"></i>
+                    Save As A Template
+                </button>
             </div>
         </div>
     </div>

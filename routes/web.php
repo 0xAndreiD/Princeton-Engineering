@@ -200,3 +200,5 @@ Route::post('/extractImgFromPDF', 'CompanyController@extractImgFromPDF')->name('
 Route::post('/getSealImg', 'CompanyController@getSealImg')->name('getSealImg');
 Route::post('/saveSealData', 'CompanyController@saveSealData')->name('saveSealData');
 Route::post('/loadSealData', 'CompanyController@loadSealData')->name('loadSealData');
+Route::post('/saveAsTemplate', 'CompanyController@saveAsTemplate')->name('saveAsTemplate');
+Route::post('/getTemplateList', 'CompanyController@getTemplateList')->name('getTemplateList');

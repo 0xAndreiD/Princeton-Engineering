@@ -367,7 +367,7 @@ class CompanyController extends Controller
      * @return JSON
      */
     function extractImgFromPDF(Request $request){
-        if(!empty($request->file('upl'))){
+        if(!empty($request->file('upl')) && !empty($request['state'])){
             $file = $request->file('upl');
             $filename = time() . '.pdf';
             $file->move(public_path() . '/sealfiles', $filename);
@@ -379,7 +379,7 @@ class CompanyController extends Controller
                 $im->setImageFormat('jpeg');
                 $im->setImageCompression(imagick::COMPRESSION_JPEG); 
                 $im->setImageCompressionQuality(100);
-                $im->writeImage(public_path() . '/sealfiles/' . $company->company_number . '_' . $company->company_name . '.jpg');
+                $im->writeImage(public_path() . '/sealfiles/' . $company->company_number . '_' . $company->company_name . '_' . $request['state'] . '.jpg');
                 $im->clear();
                 $im->destroy();
                 unlink(public_path() . '/sealfiles/' . $filename);
@@ -387,7 +387,7 @@ class CompanyController extends Controller
             } else
                 return response()->json(["message" => "Cannot find the company.", "status" => false]);    
         } else 
-            return response()->json(["message" => "Empty file.", "status" => false]);
+            return response()->json(["message" => "Empty file or state.", "status" => false]);
     }
 
     /**
@@ -397,15 +397,18 @@ class CompanyController extends Controller
      */
     function getSealImg(Request $request){
         if(Auth::user()->userrole != 0){
-            $company = Company::where('id', Auth::user()->companyid)->first();
-            if($company){
-                $url = public_path() . '/sealfiles/' . $company->company_number . '_' . $company->company_name . '.jpg';
-                if(file_exists($url)){
-                    return response()->json(["url" => asset('sealfiles'). '/' . $company->company_number . '_' . $company->company_name . '.jpg', "status" => true]);
+            if(!empty($request['state'])){
+                $company = Company::where('id', (Auth::user()->userrole == 2 && !empty($request['companyId']) ? $request['companyId'] : Auth::user()->companyid))->first();
+                if($company){
+                    $url = public_path() . '/sealfiles/' . $company->company_number . '_' . $company->company_name . '_' . $request['state'] . '.jpg';
+                    if(file_exists($url)){
+                        return response()->json(["url" => asset('sealfiles'). '/' . $company->company_number . '_' . $company->company_name . '_' . $request['state'] . '.jpg', "status" => true]);
+                    } else
+                        return response()->json(["message" => "File does not exist.", "status" => false]);
                 } else
-                    return response()->json(["message" => "File does not exist.", "status" => false]);
+                    return response()->json(["message" => "Cannot find the company.", "status" => false]);
             } else
-                return response()->json(["message" => "Cannot find the company.", "status" => false]);
+                return response()->json(["message" => "Missing state.", "status" => false]);
         }
         else 
             return response()->json(["message" => "You don't have permission.", "status" => false]);
@@ -418,41 +421,97 @@ class CompanyController extends Controller
      */
     function saveSealData(Request $request){
         if(Auth::user()->userrole != 0){
-            $company = Company::where('id', Auth::user()->companyid)->first();
-            if($company){
-                $sealdata = SealData::where('companyId', $company->id)->first();
-                if($sealdata){
-                    $sealdata->data = $request->data;
-                    $sealdata->save();
-                }
-                else{
-                    SealData::create([
-                        'companyId' => $company->id,
-                        'data' => $request->data
-                    ]);
-                }
-                return response()->json(["status" => true]);
+            if(!empty($request['state'])){
+                $company = Company::where('id', (Auth::user()->userrole == 2 && !empty($request['companyId']) ? $request['companyId'] : Auth::user()->companyid))->first();
+                if($company){
+                    $sealdata = SealData::where('companyId', $company->id)->where('state', $request['state'])->first();
+                    if($sealdata){
+                        $sealdata->data = $request->data;
+                        $sealdata->save();
+                    }
+                    else{
+                        SealData::create([
+                            'companyId' => $company->id,
+                            'data' => $request->data,
+                            'state' => $request->state
+                        ]);
+                    }
+                    return response()->json(["status" => true]);
+                } else
+                    return response()->json(["message" => "Cannot find the company.", "status" => false]);
             } else
-                return response()->json(["message" => "Cannot find the company.", "status" => false]);
+                return response()->json(["message" => "Missing state.", "status" => false]);
         }
         else 
             return response()->json(["message" => "You don't have permission.", "status" => false]);
     }
 
     /**
-     * Save seal canvas json data to db
+     * Return seal canvas json data
      *
      * @return JSON
      */
     function loadSealData(Request $request){
         if(Auth::user()->userrole != 0){
-            $company = Company::where('id', Auth::user()->companyid)->first();
+            if(!empty($request['state'])){
+                $company = Company::where('id', (Auth::user()->userrole == 2 && !empty($request['companyId']) ? $request['companyId'] : Auth::user()->companyid))->first();
+                if($company){
+                    $sealdata = SealData::where('companyId', $company->id)->where('state', $request['state'])->first();
+                    if($sealdata)
+                        return response()->json(["status" => true, "data" => $sealdata->data]);
+                    else
+                        return response()->json(["message" => "Empty seal data.", "status" => false]);
+                } else
+                    return response()->json(["message" => "Cannot find the company.", "status" => false]);
+            } else 
+                return response()->json(["message" => "Missing state.", "status" => false]);
+        }
+        else 
+            return response()->json(["message" => "You don't have permission.", "status" => false]);
+    }
+
+    /**
+     * Save seal canvas data as a template
+     *
+     * @return JSON
+     */
+    function saveAsTemplate(Request $request){
+        if(Auth::user()->userrole != 0){
+            if(!empty($request['state']) && !empty($request['template'])){
+                $company = Company::where('id', (Auth::user()->userrole == 2 && !empty($request['companyId']) ? $request['companyId'] : Auth::user()->companyid))->first();
+                if($company){
+                    $sealdata = SealData::where('companyId', $company->id)->where('state', $request['state'])->first();
+                    if($sealdata){
+                        $sealdata->template = $request['template'];
+                        $sealdata->save();
+                        return response()->json(["status" => true]);
+                    }
+                    else
+                        return response()->json(["message" => "Cannot find the seal data. Please confirm you saved correctly before saving as a template.", "status" => false]);
+                } else
+                    return response()->json(["message" => "Cannot find the company.", "status" => false]);
+            } else
+                return response()->json(["message" => "Missing state.", "status" => false]);
+        }
+        else 
+            return response()->json(["message" => "You don't have permission.", "status" => false]);
+    }
+
+    /**
+     * Return template list
+     *
+     * @return JSON
+     */
+    function getTemplateList(Request $request){
+        if(Auth::user()->userrole != 0){
+            $company = Company::where('id', (Auth::user()->userrole == 2 && !empty($request['companyId']) ? $request['companyId'] : Auth::user()->companyid))->first();
             if($company){
-                $sealdata = SealData::where('companyId', $company->id)->first();
-                if($sealdata)
-                    return response()->json(["status" => true, "data" => $sealdata->data]);
-                else
-                    return response()->json(["message" => "Empty seal data.", "status" => false]);
+                $sealdata = SealData::where('companyId', $company->id)->get();
+                $templates = array();
+                foreach($sealdata as $item){
+                    $templates[] = array("state" => $item->state, "title" => $item->template);
+                }
+                return response()->json(["data" => $templates, "status" => true]);
             } else
                 return response()->json(["message" => "Cannot find the company.", "status" => false]);
         }
