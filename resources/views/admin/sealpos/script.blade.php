@@ -2,12 +2,18 @@
 var canvas;
 var pageWidth;
 var pageHeight;
-function drawBackground(state){
+var wantedCompany;
+var wantedState;
+
+function drawBackground(){
     return new Promise((resolve, reject) => {
         $.ajax({
             url:"getSealImg",
             type:'post',
-            data: {state: state},
+            data: {
+                companyId: wantedCompany,
+                state: wantedState
+            },
             success:function(res){
                 if (res.status == true) {
                     fabric.Image.fromURL(res.url + '?' + new Date().getTime(), function(image) {
@@ -85,8 +91,11 @@ function dimUpdateHandler(){
 }
 
 function saveContent(){
-    let state = $("#state-dropdown").html();
-    if(!state || state.length != 2){
+    if(!wantedCompany){
+        swal.fire({ title: "Warning", text: 'Please select the company.', icon: "info", confirmButtonText: `OK` });
+        return;
+    }
+    if(!wantedState || wantedState.length != 2){
         swal.fire({ title: "Warning", text: 'Please select the state.', icon: "info", confirmButtonText: `OK` });
         return;
     }
@@ -104,7 +113,8 @@ function saveContent(){
         type:'post',
         data:{
             data: JSON.stringify(canvas.toJSON()),
-            state: state,
+            companyId: wantedCompany,
+            state: wantedState,
             pageWidth: pageWidth,
             pageHeight: pageHeight,
             canvasWidth: canvas.width,
@@ -137,7 +147,7 @@ function updateTemplateList(){
             if (res.status == true && res.data) {
                 $("#template-list").html("");
                 res.data.forEach(template => {
-                    $("#template-list").append("<a class='dropdown-item' href='javascript:loadTemplate(\"" + template.state + "\")'>" + template.title + "</a>");
+                    $("#template-list").append("<a class='dropdown-item' href='javascript:loadTemplate(\"" + template.companyId + "\", \"" + template.state + "\")'>" + template.title + "</a>");
                 })
             }
         },
@@ -152,24 +162,30 @@ function updateTemplateList(){
     });
 }
 
-function loadTemplate(wantedState){
-    let state = $("#state-dropdown").html();
-    if(!state || state.length != 2){
+function loadTemplate(templateCompany, templateState){
+    if(!wantedCompany){
+        swal.fire({ title: "Warning", text: 'Please select the company.', icon: "info", confirmButtonText: `OK` });
+        return;
+    }
+    if(!wantedState || wantedState.length != 2){
         swal.fire({ title: "Warning", text: 'Please select the state.', icon: "info", confirmButtonText: `OK` });
         return;
     }
-    if(state == wantedState) return;
-
-
-    loadContent(wantedState);
+    if(wantedCompany == templateCompany && wantedState == templateState) return;
+    
+    loadContent(templateCompany, templateState);
 }
 
 function saveAsTemplate(){
-    let state = $("#state-dropdown").html();
-    if(!state || state.length != 2){
+    if(!wantedCompany){
+        swal.fire({ title: "Warning", text: 'Please select the company.', icon: "info", confirmButtonText: `OK` });
+        return;
+    }
+    if(!wantedState || wantedState.length != 2){
         swal.fire({ title: "Warning", text: 'Please select the state.', icon: "info", confirmButtonText: `OK` });
         return;
     }
+    
     swal.fire({ title: "Input the template title", input: 'text', confirmButtonText: `OK`, showCancelButton: true }).then((result => {
         if(result && result.value){
             swal.fire({ title: "Please wait...", showConfirmButton: false });
@@ -178,7 +194,8 @@ function saveAsTemplate(){
                 url:"saveAsTemplate",
                 type:'post',
                 data:{
-                    state: state,
+                    companyId: wantedCompany,
+                    state: wantedState,
                     template: result.value
                 },
                 success:function(res){
@@ -202,14 +219,15 @@ function saveAsTemplate(){
     }));
 }
 
-function loadContent(state){
+function loadContent(companyId, state){
     swal.fire({ title: "Please wait...", showConfirmButton: false });
     swal.showLoading();
     $.ajax({
         url:"loadSealData",
         type:'post',
         data:{
-            state: state
+            companyId: companyId ? companyId : wantedCompany,
+            state: state ? state : wantedState
         },
         success:function(res){
             swal.close();
@@ -235,7 +253,7 @@ function loadContent(state){
                             scaleX: canvas.width / image.width,
                             scaleY: canvas.height / image.height
                         })
-
+                        console.log(canvas.width / image.width);
                         canvas.setBackgroundImage(image);
                         fabric.Object.NUM_FRACTION_DIGITS = 17;
                         canvas.renderAll();
@@ -254,12 +272,22 @@ function loadContent(state){
     });
 }
 
+function companyChange(companyId, companyName){
+    $("#company-dropdown").html(companyName);
+    $("#page-width").val("");
+    $("#page-height").val("");
+    canvas.clear();
+    wantedCompany = companyId;
+    loadContent();
+}
+
 function stateChange(state){
     $("#state-dropdown").html(state);
     $("#page-width").val("");
     $("#page-height").val("");
     canvas.clear();
-    loadContent(state);
+    wantedState = state;
+    loadContent();
 }
 
 $(document).ready(function() {
@@ -290,8 +318,13 @@ $(document).ready(function() {
             //     label.querySelector( 'span' ).innerHTML = fileName;
             // else
             //     label.innerHTML = labelVal;
-            let state = $("#state-dropdown").html();
-            if(!state || state.length != 2){
+            
+            if(!wantedCompany){
+                $(".inputfile").val('');
+                swal.fire({ title: "Warning", text: 'Please select the company.', icon: "info", confirmButtonText: `OK` });
+                return;
+            }
+            if(!wantedState || wantedState.length != 2){
                 $(".inputfile").val('');
                 swal.fire({ title: "Warning", text: 'Please select the state.', icon: "info", confirmButtonText: `OK` });
                 return;
@@ -303,7 +336,8 @@ $(document).ready(function() {
 
                 var formData = new FormData();
                 formData.append('upl', $('#file')[0].files[0]);
-                formData.append('state', state);
+                formData.append('companyId', wantedCompany);
+                formData.append('state', wantedState);
 
                 $.ajax({
                     url:"extractImgFromPDF",
@@ -314,7 +348,7 @@ $(document).ready(function() {
                     success:function(res){
                         $(".inputfile").val('');
                         if (res.status == true) {
-                            drawBackground(state);
+                            drawBackground();
                         } else {
                             swal.close();
                             // error handling
