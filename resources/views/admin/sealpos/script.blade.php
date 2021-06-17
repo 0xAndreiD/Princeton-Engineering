@@ -58,13 +58,41 @@ function addEffect(object){
 }
 
 function keyboardEvent(event){
-    if(event.keyCode == 46){
+    if(event.keyCode == 46){ // Delete
         var activeObjects = canvas.getActiveObjects();
         canvas.discardActiveObject();
         for(let i = 0; i < activeObjects.length; i ++){
             canvas.remove(activeObjects[i]);
         }
         canvas.renderAll();
+    } else if(event.keyCode == 38){ // UP
+        var activeObjects = canvas.getActiveObjects();
+        for(let i = 0; i < activeObjects.length; i ++){
+            activeObjects[i].top -= (event.shiftKey ? 10 : 1);
+            canvas.renderAll();
+            dimUpdateHandler();
+        }
+    } else if(event.keyCode == 37){ // LEFT
+        var activeObjects = canvas.getActiveObjects();
+        for(let i = 0; i < activeObjects.length; i ++){
+            activeObjects[i].left -= (event.shiftKey ? 10 : 1);
+            canvas.renderAll();
+            dimUpdateHandler();
+        }
+    } else if(event.keyCode == 39){ // RIGHT
+        var activeObjects = canvas.getActiveObjects();
+        for(let i = 0; i < activeObjects.length; i ++){
+            activeObjects[i].left += (event.shiftKey ? 10 : 1);
+            canvas.renderAll();
+            dimUpdateHandler();
+        }
+    } else if(event.keyCode == 40){ // DOWN
+        var activeObjects = canvas.getActiveObjects();
+        for(let i = 0; i < activeObjects.length; i ++){
+            activeObjects[i].top += (event.shiftKey ? 10 : 1);
+            canvas.renderAll();
+            dimUpdateHandler();
+        }
     }
 }
 
@@ -253,7 +281,7 @@ function loadContent(companyId, state){
                             scaleX: canvas.width / image.width,
                             scaleY: canvas.height / image.height
                         })
-                        console.log(canvas.width / image.width);
+                        
                         canvas.setBackgroundImage(image);
                         fabric.Object.NUM_FRACTION_DIGITS = 17;
                         canvas.renderAll();
