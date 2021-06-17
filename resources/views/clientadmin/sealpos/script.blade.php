@@ -22,6 +22,7 @@ function drawBackground(state){
                         $("#page-width").val(pageWidth.toFixed(2));
                         $("#page-height").val(pageHeight.toFixed(2));
 
+                        fabric.Object.NUM_FRACTION_DIGITS = 17;
                         canvas.setBackgroundImage(image);
                         canvas.renderAll();
                     });
@@ -76,6 +77,7 @@ function selectionHandler(){
 function dimUpdateHandler(){
     if(canvas.getActiveObjects().length == 1){
         let object = canvas.getActiveObject();
+        console.log(object);
         $("#object-left").val((object.left * pageWidth / canvas.width).toFixed(2));
         $("#object-top").val((object.top * pageHeight / canvas.height).toFixed(2));
         $("#object-width").val((object.width * object.scaleX * pageWidth / canvas.width).toFixed(2));
@@ -236,6 +238,7 @@ function loadContent(state){
                         })
 
                         canvas.setBackgroundImage(image);
+                        fabric.Object.NUM_FRACTION_DIGITS = 17;
                         canvas.renderAll();
                     });
                 }
@@ -254,6 +257,8 @@ function loadContent(state){
 
 function stateChange(state){
     $("#state-dropdown").html(state);
+    $("#page-width").val("");
+    $("#page-height").val("");
     canvas.clear();
     loadContent(state);
 }
@@ -266,6 +271,7 @@ $(document).ready(function() {
     });
 
     canvas = new fabric.Canvas('canvasPane');
+    fabric.Object.NUM_FRACTION_DIGITS = 17;
     canvas.setWidth(900);
 
     updateTemplateList();
@@ -381,7 +387,7 @@ $(document).ready(function() {
                                 top: ui.offset.top - $(this).offset().top,
                                 fontSize: 24,
                                 fontFamily: 'Verdana',
-                                width: 150,
+                                width: 111,
                                 textAlign: 'center',
                                 editable: false,
                                 type: 'textbox'
@@ -411,7 +417,7 @@ $(document).ready(function() {
                                 top: ui.offset.top - $(this).offset().top,
                                 fontSize: 24,
                                 fontFamily: 'Verdana',
-                                width: 150,
+                                width: 128,
                                 textAlign: 'center',
                                 editable: false,
                                 type: 'textbox'
@@ -432,28 +438,60 @@ $(document).ready(function() {
     canvasWrapper.addEventListener("keydown", keyboardEvent, false);
 
     canvas.on({ "selection:created" : selectionHandler, "selection:updated" : selectionHandler, "selection:cleared" : selectionHandler });
-    canvas.on({ "object:moving" : dimUpdateHandler, "object:scaling": dimUpdateHandler });
+    canvas.on({ "object:moving" : dimUpdateHandler, "object:scaling": dimUpdateHandler, "object:modified": dimUpdateHandler });
 
-    $("#object-left").on('input', function(){
+    $("#object-left").on('keyup', function(e){
+        if(e.key == 'Enter' || e.keyCode == 13){
+            let object = canvas.getActiveObject();
+            object.left = $(this).val() * canvas.width / pageWidth;
+            canvas.renderAll();
+        }
+    });
+    $("#object-left").on('blur', function(e){
         let object = canvas.getActiveObject();
         object.left = $(this).val() * canvas.width / pageWidth;
         canvas.renderAll();
     });
 
-    $("#object-top").on('input', function(){
+    $("#object-top").on('keyup', function(e){
+        if(e.key == 'Enter' || e.keyCode == 13){
+            let object = canvas.getActiveObject();
+            object.top = $(this).val() * canvas.height / pageHeight;
+            canvas.renderAll();
+        }
+    });
+    $("#object-top").on('blur', function(){
         let object = canvas.getActiveObject();
         object.top = $(this).val() * canvas.height / pageHeight;
         canvas.renderAll();
     });
 
-    $("#object-width").on('input', function(){
+    $("#object-width").on('keyup', function(e){
+        console.log(e);
+        if(e.key == 'Enter' || e.keyCode == 13){
+            let object = canvas.getActiveObject();
+            let newWidth = $(this).val() * canvas.width / pageWidth;
+            object.scaleX = object.scaleX * (newWidth / (object.scaleX * object.width));
+            canvas.renderAll();
+        }
+    });
+    $("#object-width").on('blur', function(){
         let object = canvas.getActiveObject();
         let newWidth = $(this).val() * canvas.width / pageWidth;
         object.scaleX = object.scaleX * (newWidth / (object.scaleX * object.width));
         canvas.renderAll();
     });
 
-    $("#object-height").on('input', function(){
+    $("#object-height").on('keyup', function(e){
+        console.log(e);
+        if(e.key == 'Enter' || e.keyCode == 13){
+            let object = canvas.getActiveObject();
+            let newHeight = $(this).val() * canvas.height / pageHeight;
+            object.scaleY = object.scaleY * (newHeight / (object.scaleY * object.height));
+            canvas.renderAll();
+        }
+    });
+    $("#object-height").on('blur', function(){
         let object = canvas.getActiveObject();
         let newHeight = $(this).val() * canvas.height / pageHeight;
         object.scaleY = object.scaleY * (newHeight / (object.scaleY * object.height));

@@ -572,7 +572,8 @@ class CompanyController extends Controller
                 $sealdata = SealData::where('companyId', $company->id)->get();
                 $templates = array();
                 foreach($sealdata as $item){
-                    $templates[] = array("state" => $item->state, "title" => $item->template);
+                    if($item->template)
+                        $templates[] = array("state" => $item->state, "title" => $item->template);
                 }
                 return response()->json(["data" => $templates, "status" => true]);
             } else
