@@ -356,7 +356,11 @@ class CompanyController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     function sealpos(Request $request){
-        if(Auth::user()->userrole != 0)
+        if(Auth::user()->userrole == 2){
+            $companyList = Company::orderBy('company_name', 'asc')->get();
+            return view('admin.sealpos.view')->with('companyList', $companyList);
+        }
+        else if(Auth::user()->userrole != 0)
             return view('clientadmin.sealpos.view');
         else
             return redirect('home');
@@ -567,17 +571,27 @@ class CompanyController extends Controller
      */
     function getTemplateList(Request $request){
         if(Auth::user()->userrole != 0){
-            $company = Company::where('id', (Auth::user()->userrole == 2 && !empty($request['companyId']) ? $request['companyId'] : Auth::user()->companyid))->first();
-            if($company){
-                $sealdata = SealData::where('companyId', $company->id)->get();
+            if(Auth::user()->userrole == 2){
+                $sealdata = SealData::get(array('companyId', 'state', 'template'));
                 $templates = array();
                 foreach($sealdata as $item){
                     if($item->template)
-                        $templates[] = array("state" => $item->state, "title" => $item->template);
+                        $templates[] = array("companyId" => $item->companyId, "state" => $item->state, "title" => $item->template);
                 }
                 return response()->json(["data" => $templates, "status" => true]);
-            } else
-                return response()->json(["message" => "Cannot find the company.", "status" => false]);
+            } else {
+                $company = Company::where('id', Auth::user()->companyid)->first();
+                if($company){
+                    $sealdata = SealData::where('companyId', $company->id)->get(array('state', 'template'));
+                    $templates = array();
+                    foreach($sealdata as $item){
+                        if($item->template)
+                            $templates[] = array("state" => $item->state, "title" => $item->template);
+                    }
+                    return response()->json(["data" => $templates, "status" => true]);
+                } else
+                    return response()->json(["message" => "Cannot find the company.", "status" => false]);
+            }
         }
         else 
             return response()->json(["message" => "You don't have permission.", "status" => false]);
