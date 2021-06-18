@@ -68,6 +68,7 @@
                                     <option value="1">User/Client Admin</option>
                                     <option value="2">Junior/Super Admin</option>
                                     <option value="3">Error chat</option>
+                                    <option value="4">Completed</option>
                                 </select>
                             </th>
                             <th class="searchHead">

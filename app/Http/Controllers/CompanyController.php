@@ -12,10 +12,15 @@ use App\User;
 use App\Company;
 use App\JobRequest;
 use App\PermitInfo;
+use App\SealData;
+use App\SealObjects;
 use Kunnu\Dropbox\DropboxApp;
 use Kunnu\Dropbox\Dropbox;
 use Kunnu\Dropbox\DropboxFile;
 use Kunnu\Dropbox\Exceptions\DropboxClientException;
+
+use Imagick;
+
 
 class CompanyController extends Controller
 {
@@ -343,5 +348,252 @@ class CompanyController extends Controller
                 return response()->json(["message" => "Please select the state.", "success" => false]);
         } else 
             return response()->json(["message" => "Wrong Parameters.", "success" => false]);
+    }
+
+    /**
+     * Show the seal positioning page
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    function sealpos(Request $request){
+        if(Auth::user()->userrole == 2){
+            $companyList = Company::orderBy('company_name', 'asc')->get();
+            return view('admin.sealpos.view')->with('companyList', $companyList);
+        }
+        else if(Auth::user()->userrole != 0)
+            return view('clientadmin.sealpos.view');
+        else
+            return redirect('home');
+    }
+
+    /**
+     * Extract first page from PDF and save it as jpg
+     *
+     * @return JSON
+     */
+    function extractImgFromPDF(Request $request){
+        if(!empty($request->file('upl')) && !empty($request['state'])){
+            $file = $request->file('upl');
+            $filename = time() . '.pdf';
+            $file->move(public_path() . '/sealfiles', $filename);
+            $company = Company::where('id', Auth::user()->companyid)->first();
+            if($company){
+                $im = new Imagick();
+                $im->setResolution(200, 200);
+                $im->readImage(public_path() . '/sealfiles/' . $filename . "[0]");
+                $im->setImageFormat('jpeg');
+                $im->setImageCompression(imagick::COMPRESSION_JPEG); 
+                $im->setImageCompressionQuality(100);
+                $im->writeImage(public_path() . '/sealfiles/' . $company->company_number . '_' . $company->company_name . '_' . $request['state'] . '.jpg');
+                $im->clear();
+                $im->destroy();
+                unlink(public_path() . '/sealfiles/' . $filename);
+                return response()->json(["status" => true]);
+            } else
+                return response()->json(["message" => "Cannot find the company.", "status" => false]);    
+        } else 
+            return response()->json(["message" => "Empty file or state.", "status" => false]);
+    }
+
+    /**
+     * Extract first page from PDF and save it as jpg
+     *
+     * @return JSON
+     */
+    function getSealImg(Request $request){
+        if(Auth::user()->userrole != 0){
+            if(!empty($request['state'])){
+                $company = Company::where('id', (Auth::user()->userrole == 2 && !empty($request['companyId']) ? $request['companyId'] : Auth::user()->companyid))->first();
+                if($company){
+                    $url = public_path() . '/sealfiles/' . $company->company_number . '_' . $company->company_name . '_' . $request['state'] . '.jpg';
+                    if(file_exists($url)){
+                        return response()->json(["url" => asset('sealfiles'). '/' . $company->company_number . '_' . $company->company_name . '_' . $request['state'] . '.jpg', "status" => true]);
+                    } else
+                        return response()->json(["message" => "File does not exist.", "status" => false]);
+                } else
+                    return response()->json(["message" => "Cannot find the company.", "status" => false]);
+            } else
+                return response()->json(["message" => "Missing state.", "status" => false]);
+        }
+        else 
+            return response()->json(["message" => "You don't have permission.", "status" => false]);
+    }
+
+    /**
+     * Save seal canvas json data to db
+     *
+     * @return JSON
+     */
+    function saveSealData(Request $request){
+        if(Auth::user()->userrole != 0){
+            if(!empty($request['state'])){
+                $company = Company::where('id', (Auth::user()->userrole == 2 && !empty($request['companyId']) ? $request['companyId'] : Auth::user()->companyid))->first();
+                if($company){
+                    $sealdata = SealData::where('companyId', $company->id)->where('state', $request['state'])->first();
+                    if($sealdata){
+                        $sealdata->data = $request->data;
+                        $sealdata->save();
+                    }
+                    else{
+                        SealData::create([
+                            'companyId' => $company->id,
+                            'data' => $request->data,
+                            'state' => $request->state
+                        ]);
+                    }
+                    if($request['objects']){
+                        foreach($request['objects'] as $object){
+                            if($object['type'] == 'image'){
+                                $sealobj = SealObjects::where('client_id', $company->id)->where('jurisdiction_abbrev', $request['state'])->where('Execute_Command', 'Graphics')->first();
+                                if(!$sealobj){
+                                    SealObjects::create([
+                                        'client_id' => $company->id,
+                                        'jurisdiction_abbrev' => $request['state'],
+                                        'Execute_Command' => 'Graphics',
+                                        'ImageScale' => $object['scaleX'],
+                                        'Page_X' => $request['pageWidth'],
+                                        'Page_Y' => $request['pageHeight'],
+                                        'Top_Lx_rel' => $object['left'] * $request['pageWidth'] / $request['canvasWidth'],
+                                        'Top_Ly_rel' => $object['top'] * $request['pageHeight'] / $request['canvasHeight'],
+                                        'Bot_Rx_rel' => ($object['left'] + $object['width']) * $request['pageWidth'] / $request['canvasWidth'],
+                                        'Bot_Ry_rel' => ($object['top'] + $object['height']) * $request['pageHeight'] / $request['canvasHeight']
+                                    ]);
+                                } else{
+                                    $sealobj->ImageScale = $object['scaleX'];
+                                    $sealobj->Page_X = $request['pageWidth'];
+                                    $sealobj->Page_Y = $request['pageHeight'];
+                                    $sealobj->Top_Lx_rel = $object['left'] * $request['pageWidth'] / $request['canvasWidth'];
+                                    $sealobj->Top_Ly_rel = $object['top'] * $request['pageHeight'] / $request['canvasHeight'];
+                                    $sealobj->Bot_Rx_rel = ($object['left'] + $object['width']) * $request['pageWidth'] / $request['canvasWidth'];
+                                    $sealobj->Bot_Ry_rel = ($object['top'] + $object['height']) * $request['pageHeight'] / $request['canvasHeight'];
+                                    $sealobj->save();
+                                }
+                            } else if($object['type'] == 'textbox'){
+                                $sealobj = SealObjects::where('client_id', $company->id)->where('jurisdiction_abbrev', $request['state'])->where('text', $object['text'])->first();
+                                if(!$sealobj){
+                                    if($object['text'] == 'eSign Text') 
+                                        $objType = 'eSeal';
+                                    else
+                                        $objType = 'Text';
+                                    SealObjects::create([
+                                        'client_id' => $company->id,
+                                        'jurisdiction_abbrev' => $request['state'],
+                                        'Execute_Command' => $objType,
+                                        'text' => $object['text'],
+                                        'FontSize' => $object['fontSize'],
+                                        'Page_X' => $request['pageWidth'],
+                                        'Page_Y' => $request['pageHeight'],
+                                        'Top_Lx_rel' => $object['left'] * $request['pageWidth'] / $request['canvasWidth'],
+                                        'Top_Ly_rel' => $object['top'] * $request['pageHeight'] / $request['canvasHeight'],
+                                        'Bot_Rx_rel' => ($object['left'] + $object['width']) * $request['pageWidth'] / $request['canvasWidth'],
+                                        'Bot_Ry_rel' => ($object['top'] + $object['height']) * $request['pageHeight'] / $request['canvasHeight']
+                                    ]);
+                                } else{
+                                    $sealobj->fontSize = $object['fontSize'];
+                                    $sealobj->Page_X = $request['pageWidth'];
+                                    $sealobj->Page_Y = $request['pageHeight'];
+                                    $sealobj->FontSize = $object['fontSize'];
+                                    $sealobj->Top_Lx_rel = $object['left'] * $request['pageWidth'] / $request['canvasWidth'];
+                                    $sealobj->Top_Ly_rel = $object['top'] * $request['pageHeight'] / $request['canvasHeight'];
+                                    $sealobj->Bot_Rx_rel = ($object['left'] + $object['width']) * $request['pageWidth'] / $request['canvasWidth'];
+                                    $sealobj->Bot_Ry_rel = ($object['top'] + $object['height']) * $request['pageHeight'] / $request['canvasHeight'];
+                                    $sealobj->save();
+                                }
+                            }
+                        }
+                    }
+
+                    return response()->json(["status" => true]);
+                } else
+                    return response()->json(["message" => "Cannot find the company.", "status" => false]);
+            } else
+                return response()->json(["message" => "Missing state.", "status" => false]);
+        }
+        else 
+            return response()->json(["message" => "You don't have permission.", "status" => false]);
+    }
+
+    /**
+     * Return seal canvas json data
+     *
+     * @return JSON
+     */
+    function loadSealData(Request $request){
+        if(Auth::user()->userrole != 0){
+            if(!empty($request['state'])){
+                $company = Company::where('id', (Auth::user()->userrole == 2 && !empty($request['companyId']) ? $request['companyId'] : Auth::user()->companyid))->first();
+                if($company){
+                    $sealdata = SealData::where('companyId', $company->id)->where('state', $request['state'])->first();
+                    if($sealdata)
+                        return response()->json(["status" => true, "data" => $sealdata->data]);
+                    else
+                        return response()->json(["message" => "Empty seal data.", "status" => false]);
+                } else
+                    return response()->json(["message" => "Cannot find the company.", "status" => false]);
+            } else 
+                return response()->json(["message" => "Missing state.", "status" => false]);
+        }
+        else 
+            return response()->json(["message" => "You don't have permission.", "status" => false]);
+    }
+
+    /**
+     * Save seal canvas data as a template
+     *
+     * @return JSON
+     */
+    function saveAsTemplate(Request $request){
+        if(Auth::user()->userrole != 0){
+            if(!empty($request['state']) && !empty($request['template'])){
+                $company = Company::where('id', (Auth::user()->userrole == 2 && !empty($request['companyId']) ? $request['companyId'] : Auth::user()->companyid))->first();
+                if($company){
+                    $sealdata = SealData::where('companyId', $company->id)->where('state', $request['state'])->first();
+                    if($sealdata){
+                        $sealdata->template = $request['template'];
+                        $sealdata->save();
+                        return response()->json(["status" => true]);
+                    }
+                    else
+                        return response()->json(["message" => "Cannot find the seal data. Please confirm you saved correctly before saving as a template.", "status" => false]);
+                } else
+                    return response()->json(["message" => "Cannot find the company.", "status" => false]);
+            } else
+                return response()->json(["message" => "Missing state.", "status" => false]);
+        }
+        else 
+            return response()->json(["message" => "You don't have permission.", "status" => false]);
+    }
+
+    /**
+     * Return template list
+     *
+     * @return JSON
+     */
+    function getTemplateList(Request $request){
+        if(Auth::user()->userrole != 0){
+            if(Auth::user()->userrole == 2){
+                $sealdata = SealData::get(array('companyId', 'state', 'template'));
+                $templates = array();
+                foreach($sealdata as $item){
+                    if($item->template)
+                        $templates[] = array("companyId" => $item->companyId, "state" => $item->state, "title" => $item->template);
+                }
+                return response()->json(["data" => $templates, "status" => true]);
+            } else {
+                $company = Company::where('id', Auth::user()->companyid)->first();
+                if($company){
+                    $sealdata = SealData::where('companyId', $company->id)->get(array('state', 'template'));
+                    $templates = array();
+                    foreach($sealdata as $item){
+                        if($item->template)
+                            $templates[] = array("state" => $item->state, "title" => $item->template);
+                    }
+                    return response()->json(["data" => $templates, "status" => true]);
+                } else
+                    return response()->json(["message" => "Cannot find the company.", "status" => false]);
+            }
+        }
+        else 
+            return response()->json(["message" => "You don't have permission.", "status" => false]);
     }
 }

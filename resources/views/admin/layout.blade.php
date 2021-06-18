@@ -222,6 +222,12 @@
                             </a>
                         </li>
                         <li class="nav-main-item">
+                            <a class="nav-main-link" href="{{ route('sealpos') }}">
+                                <i class="nav-main-link-icon fa fa-expand-arrows-alt"></i>
+                                <span class="nav-main-link-name">Seal Position</span>
+                            </a>
+                        </li>
+                        <li class="nav-main-item">
                             <a class="nav-main-link" href="{{ route('settings') }}">
                                 <i class="nav-main-link-icon fa fa-cogs"></i>
                                 <span class="nav-main-link-name">Settings</span>
