@@ -835,6 +835,8 @@ class GeneralController extends Controller
                     $chatbadge = 'danger';
                 else if($job->chatIcon == 4)
                     $chatbadge = 'success';
+                else
+                    $chatbadge = 'warning';
 
                 $nestedData['actions'] = "
                 <div class='text-center' style='display: flex; align-items: center; justify-content: center;'>
