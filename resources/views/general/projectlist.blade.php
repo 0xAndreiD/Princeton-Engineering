@@ -151,7 +151,7 @@
                                 <div class="dropdown-menu"  aria-labelledby="statusFilter">
                                     <a class="dropdown-item" href="javascript:changeStatusFilter('')">All</a>
                                     @foreach($projectStatusList as $item)
-                                        <a class="dropdown-item" href="javascript:changeStatusFilter({{ $item['id'] }})">{{ $item['notes'] }}</a>
+                                        <a class="dropdown-item" href="javascript:changeStatusFilter({{ $item['id'] }})" style="color: white; background-color: {{$item['color']}}">{{ $item['notes'] }}</a>
                                     @endforeach
                                 </div>
                             </th>
@@ -160,7 +160,7 @@
                                 <div class="dropdown-menu"  aria-labelledby="stateFilter">
                                     <a class="dropdown-item" href="javascript:changeStateFilter('')">All</a>
                                     @foreach($planStatusList as $item)
-                                        <a class="dropdown-item" href="javascript:changeStateFilter({{ $item['id'] }})">{{ $item['notes'] }}</a>
+                                        <a class="dropdown-item" href="javascript:changeStateFilter({{ $item['id'] }})" style="color: white; background-color: {{$item['color']}}">{{ $item['notes'] }}</a>
                                     @endforeach
                                 </div>
                             </th>
