@@ -15,7 +15,7 @@ class JobPlanStatus extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'id', 'notes'
+        'id', 'notes', 'color'
     ];
 
     protected $table = 'job_planstatus';

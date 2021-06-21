@@ -555,10 +555,10 @@ class GeneralController extends Controller
         ->with('planStatusList', $planStatusList)->with('projectStatusList', $projectStatusList);
     }
 
-    protected $globalStates = array("None", "Saved", "Check Requested", "Reviewed", "Submitted", "Report Prepared", "Plan Requested", "Plan Reviewed", "Link Sent", "Completed");
-    protected $globalStatus = array("No action", "Plans uploaded to portal", "Plans reviewed", "Comments issued", "Updated plans uploaded to portal", "Revised comments issued", "Final plans uploaded to portal", "PE sealed plans link sent");
-    protected $stateColors = array("danger", "primary", "info", "warning", "primary", "info", "primary", "dark", "secondary", "success");
-    protected $statusColors = array("danger", "primary", "info", "warning", "primary", "dark", "secondary", "success");
+    //protected $globalStates = array("None", "Saved", "Check Requested", "Reviewed", "Submitted", "Report Prepared", "Plan Requested", "Plan Reviewed", "Link Sent", "Completed");
+    //protected $globalStatus = array("No action", "Plans uploaded to portal", "Plans reviewed", "Comments issued", "Updated plans uploaded to portal", "Revised comments issued", "Final plans uploaded to portal", "PE sealed plans link sent");
+    //protected $stateColors = array("danger", "primary", "info", "warning", "primary", "info", "primary", "dark", "secondary", "success");
+    //protected $statusColors = array("danger", "primary", "info", "warning", "primary", "dark", "secondary", "success");
 
     /**
      * Return the result of server-side rendering
@@ -613,7 +613,9 @@ class GeneralController extends Controller
             ->leftjoin('users', function($join){
                 $join->on('job_request.companyId', '=', 'users.companyid');
                 $join->on('job_request.userId', '=', 'users.usernumber');
-            });
+            })
+            ->leftjoin('job_planstatus', "job_planstatus.id", "=", "job_request.planStatus")
+            ->leftjoin('job_pstatus', "job_pstatus.id", "=", "job_request.projectState");
 
         // sort by company when $order == 'userId'
         if($order == 'userId')
@@ -718,6 +720,8 @@ class GeneralController extends Controller
                         'job_request.planCheck as plancheck',
                         'job_request.chatIcon as chatIcon',
                         'job_request.asBuilt as asbuilt',
+                        'job_planstatus.color as statuscolor',
+                        'job_pstatus.color as statecolor'
                     )
                 );
             //if($handler->offset($start)->count() > 0)
@@ -753,6 +757,8 @@ class GeneralController extends Controller
                                 'job_request.planCheck as plancheck',
                                 'job_request.chatIcon as chatIcon',
                                 'job_request.asBuilt as asbuilt',
+                                'job_planstatus.color as statuscolor',
+                                'job_pstatus.color as statecolor'
                             )
                         );
 
@@ -791,30 +797,32 @@ class GeneralController extends Controller
                 $date->setTimezone(new DateTimeZone('EST'));
                 $nestedData['submittedtime'] = $date->format("Y-m-d H:i:s");
                 
+                $globalStates = JobProjectStatus::orderBy('id', 'asc')->get();
+                $globalStatus = JobPlanStatus::orderBy('id', 'asc')->get();
                 if(Auth::user()->userrole == 2){
-                    $nestedData['projectstate'] = "<span class='badge badge-{$this->stateColors[intval($job->projectstate)]} dropdown-toggle job-dropdown' id='state_{$job->id}' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'> {$this->globalStates[intval($job->projectstate)]} </span>";
+                    $nestedData['projectstate'] = "<span class='badge dropdown-toggle job-dropdown' style='color: #fff; background-color: {$job->statecolor};' id='state_{$job->id}' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'> {$globalStates[intval($job->projectstate)]->notes} </span>";
 
                     $nestedData['projectstate'] .= "<div class='dropdown-menu' aria-labelledby='state_{$job->id}'>";
                     $i = 0;
-                    foreach($this->globalStates as $state){
-                        $nestedData['projectstate'] .= "<a class='dropdown-item' href='javascript:changeState({$job->id}, {$i})'>{$state}</a>";
+                    foreach($globalStates as $state){
+                        $nestedData['projectstate'] .= "<a class='dropdown-item' href='javascript:changeState({$job->id}, {$i})' style='color: white; background-color: {$state->color};'>{$state->notes}</a>";
                         $i ++;
                     }
                     $nestedData['projectstate'] .= "</div>";
 
-                    $nestedData['planstatus'] = "<span class='badge badge-{$this->statusColors[intval($job->planstatus)]} dropdown-toggle job-dropdown' id='status_{$job->id}' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'> {$this->globalStatus[intval($job->planstatus)]} </span>";
+                    $nestedData['planstatus'] = "<span class='badge dropdown-toggle job-dropdown' style='color: #fff; background-color: {$job->statuscolor};' id='status_{$job->id}' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'> {$globalStatus[intval($job->planstatus)]->notes} </span>";
 
                     $nestedData['planstatus'] .= "<div class='dropdown-menu' aria-labelledby='status_{$job->id}'>";
                     $i = 0;
-                    foreach($this->globalStatus as $status){
-                        $nestedData['planstatus'] .= "<a class='dropdown-item' href='javascript:changeStatus({$job->id}, {$i})'>{$status}</a>";
+                    foreach($globalStatus as $status){
+                        $nestedData['planstatus'] .= "<a class='dropdown-item' href='javascript:changeStatus({$job->id}, {$i})' style='color: white; background-color: {$status->color};'>{$status->notes}</a>";
                         $i ++;
                     }
                     $nestedData['planstatus'] .= "</div>";
                 }
                 else{
-                    $nestedData['projectstate'] = "<span class='badge badge-{$this->stateColors[intval($job->projectstate)]}' style='white-space: pre-wrap;'> {$this->globalStates[intval($job->projectstate)]} </span>";                
-                    $nestedData['planstatus'] = "<span class='badge badge-{$this->statusColors[intval($job->planstatus)]}' style='white-space: pre-wrap;'> {$this->globalStatus[intval($job->planstatus)]} </span>";                
+                    $nestedData['projectstate'] = "<span class='badge' style='white-space: pre-wrap; color: #fff; background-color: {$job->statecolor};'> {$globalStates[intval($job->projectstate)]->notes} </span>";                
+                    $nestedData['planstatus'] = "<span class='badge' style='white-space: pre-wrap; color: #fff; background-color: {$job->statuscolor};'> {$globalStatus[intval($job->planstatus)]->notes} </span>";                
                 }
 
                 if($job->chatIcon == 0)
@@ -1145,7 +1153,9 @@ class GeneralController extends Controller
                     {
                         $project->projectState = $request['state'];
                         $project->save();
-                        return response()->json(['success' => true, 'stateText' => "{$this->globalStates[intval($request['state'])]}", 'stateColor' => "{$this->stateColors[intval($request['state'])]}"]);
+
+                        $projectState = JobProjectStatus::where('id', $request['state'])->first();
+                        return response()->json(['success' => true, 'stateText' => $projectState->notes, 'stateColor' => $projectState->color]);
                     }
                     else
                         return response()->json(['success' => false, 'message' => "Wrong state value."] );
@@ -1177,7 +1187,9 @@ class GeneralController extends Controller
                     {
                         $project->planStatus = $request['status'];
                         $project->save();
-                        return response()->json(['success' => true, 'statusText' => "{$this->globalStatus[intval($request['status'])]}", 'statusColor' => "{$this->statusColors[intval($request['status'])]}"]);
+
+                        $planStatus = JobPlanStatus::where('id', $request['status'])->first();
+                        return response()->json(['success' => true, 'statusText' => $planStatus->notes, 'statusColor' => $planStatus->color]);
                     }
                     else
                         return response()->json(['success' => false, 'message' => "Wrong status value."] );
