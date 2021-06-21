@@ -41,7 +41,7 @@ function delProject(obj, id) {
     });
 }
 
-var badgeColors = {'info': '#3c90df', 'warning': '#ffb119', 'primary': '#689550', 'danger': '#e04f1a', 'dark': '#343a40', 'secondary': 'rgba(0, 0, 0, 0.33)', 'success': '#82b54b'}
+// var badgeColors = {'info': '#3c90df', 'warning': '#ffb119', 'primary': '#689550', 'danger': '#e04f1a', 'dark': '#343a40', 'secondary': 'rgba(0, 0, 0, 0.33)', 'success': '#82b54b'}
 
 function changeState(jobId, state){
     $.ajax({
@@ -51,7 +51,7 @@ function changeState(jobId, state){
         success:function(res){
             if (res.success == true) {
                 $(`#state_${jobId}`).html(res.stateText);
-                $(`#state_${jobId}`).css('background-color', badgeColors[res.stateColor]);
+                $(`#state_${jobId}`).css('background-color', res.stateColor);
             }
         },
         error: function(xhr, status, error) {
@@ -73,7 +73,7 @@ function changeStatus(jobId, status){
         success:function(res){
             if (res.success == true) {
                 $(`#status_${jobId}`).html(res.statusText);
-                $(`#status_${jobId}`).css('background-color', badgeColors[res.statusColor]);
+                $(`#status_${jobId}`).css('background-color', res.statusColor);
             }
         },
         error: function(xhr, status, error) {
