@@ -840,15 +840,18 @@ class GeneralController extends Controller
 
                 $nestedData['actions'] = "
                 <div class='text-center' style='display: flex; align-items: center; justify-content: center;'>
-                    <a href='rsinput?projectId={$nestedData['id']}' class='btn btn-primary mr-1' style='padding: 3px 6px;'>
+                    <a href='rsinput?projectId={$nestedData['id']}' class='btn btn-primary mr-1' style='padding: 3px 4px;'>
                         <i class='fa fa-pencil-alt'></i>
                     </a>" . 
-                    "<a href='jobchat?projectId={$nestedData['id']}' class='mr-2 btn btn-" . $chatbadge . "' style='padding: 3px 6px;'>
+                    "<a href='jobchat?projectId={$nestedData['id']}' class='mr-2 btn btn-" . $chatbadge . "' style='padding: 3px 4px;'>
                         <i class='fab fa-rocketchat'></i>
                     </a>". 
                     "<input class='mr-1' type='checkbox' onchange='togglePlanCheck({$job['id']})'" . ($job['plancheck'] == 1 ? "checked" : "") . ">" . 
                     "<input class='mr-2' type='checkbox' onchange='toggleAsBuilt({$job['id']})'" . ($job['asbuilt'] == 1 ? "checked" : "") . ">" . 
-                    (Auth::user()->userrole == 2 ? "<button type='button' class='js-swal-confirm btn btn-danger mr-1' onclick='delProject(this,{$nestedData['id']})' style='padding: 3px 6px;'>
+                    (Auth::user()->userrole == 2 || Auth::user()->userrole == 3 ? "<a href='onreview?projectId={$nestedData['id']}' class='mr-1 btn btn-secondary' style='padding: 3px 4px;'>
+                        <i class='fa fa-check'></i>
+                    </a>" : "") . 
+                    (Auth::user()->userrole == 2 ? "<button type='button' class='js-swal-confirm btn btn-danger mr-1' onclick='delProject(this,{$nestedData['id']})' style='padding: 3px 4px;'>
                     <i class='fa fa-trash'></i>
                 </button>" : "") .
                     "";
@@ -1586,7 +1589,7 @@ class GeneralController extends Controller
     /**
      * Return project job chat details.
      *
-     * @return JSON
+     * @return \Illuminate\Contracts\Support\Renderable
      */
     public function jobChat(Request $request){
         if(!empty($request['projectId'])){
@@ -1600,6 +1603,30 @@ class GeneralController extends Controller
                                 ->get(array('job_chat.id as id', 'users.username as username', 'users.userrole as userrole', 'job_chat.text as text', 'job_chat.datetime as datetime'));
                     return view('rsinput.chat')->with('messages', $messages)->with('project', $project)->with('projectId', $request['projectId'])
                     ->with('userrole', Auth::user()->userrole);
+                } else
+                    return redirect('projectlist');
+            } else
+                return redirect('projectlist');    
+        } else 
+            return redirect('projectlist');
+    }
+
+    /**
+     * Online-review page.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function onReview(Request $request){
+        if(!empty($request['projectId'])){
+            $project = JobRequest::where('id', '=', $request['projectId'])->first();
+            if($project){
+                if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3)
+                {
+                    $messages = JobChat::leftjoin('users', "users.id", "=", "job_chat.userId")
+                                ->where('job_chat.jobId', $request['projectId'])
+                                ->orderBy('job_chat.id', 'desc')
+                                ->get(array('job_chat.id as id', 'users.username as username', 'users.userrole as userrole', 'job_chat.text as text', 'job_chat.datetime as datetime'));
+                    return view('admin.onreview.view')->with('messages', $messages)->with('project', $project)->with('projectId', $request['projectId']);
                 } else
                     return redirect('projectlist');
             } else
