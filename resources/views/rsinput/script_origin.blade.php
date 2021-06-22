@@ -1284,6 +1284,14 @@ var isEmptyInputBox = function() {
     return isEmpty;
 }
 
+$("#txt-project-name").on('keypress', function(event){
+    if(event.key == "&" || event.key == "#")
+    {
+        event.preventDefault();
+        return false;
+    }
+})
+
 $('.domChange').on('input', function() {
     domChanged = true;
 });

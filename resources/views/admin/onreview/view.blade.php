@@ -53,10 +53,10 @@
                         <input type='checkbox' id="ASCE"> <label for="ASCE" class="mb-0 ml-2" id="ASCE-text">ASCE: </label>
                     </div>
                     <div class="flexAndCenter">
-                        <input type='checkbox' id="NEC"> <label for="NEC" class="mb-0 ml-2" id="NEC-text">Wind: </label>
+                        <input type='checkbox' id="NEC"> <label for="NEC" class="mb-0 ml-2" id="NEC-text">NEC: </label>
                     </div>
                     <div class="flexAndCenter">
-                        <input type='checkbox' id="StateCode"> <label for="StateCode" class="mb-0 ml-2" id="StateCode-text">Snow: </label>
+                        <input type='checkbox' id="StateCode"> <label for="StateCode" class="mb-0 ml-2" id="StateCode-text">State Code: </label>
                     </div>
                 </div>
             </div>
@@ -122,7 +122,7 @@
                 </div>
                 <div class="block-content review-block-content pt-3 pb-3 flexAndCenter" style="justify-content: space-between">
                     <button class="btn btn-outline-danger mr-1" style="width:100px;">Exit</button>
-                    <button class="btn btn-outline-success mr-1">Auto note</button>
+                    <button class="btn btn-outline-success mr-1">Auto Note</button>
                     <button class="btn btn-outline-warning mr-1">Clear Note</button>
                     <div class="flexAndCenter">
                         <input type='checkbox' id="ControlCheck"> <label for="ControlCheck" class="mb-0 ml-2">Check / Uncheck ALL </label>
