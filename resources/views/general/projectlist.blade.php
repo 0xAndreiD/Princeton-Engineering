@@ -43,11 +43,11 @@
                             <th style="width:8%;">Project Name</th>
                             <th style="width:4%;">State</th>
                             <th style="width:6%;">File Name</th>
-                            <th style="width:10%;">Created Time</th>
-                            <th style="width:10%;">Submitted Time</th>
+                            <th style="width:8%;">Created Time</th>
+                            <th style="width:8%;">Submitted Time</th>
                             <th style="width:8%;">Project Status</th>
                             <th style="width:8%;">Plan Status</th>
-                            <th style="min-width: 160px;">Action</th>
+                            <th style="min-width: 180px;">Action</th>
                             @else
                             <th style="width:14%;">User</th>
                             <th style="width:8%;">Project Number</th>
@@ -162,14 +162,15 @@
                                     @foreach($planStatusList as $item)
                                         <a class="dropdown-item" href="javascript:changeStateFilter({{ $item['id'] }})" style="color: white; background-color: {{$item['color']}}">{{ $item['notes'] }}</a>
                                     @endforeach
-                                </div>
+                                </div>  
                             </th>
                             <th style="display: flex; align-items: center; justify-content: center;">
-                                <span class="ml-1" style='writing-mode: vertical-lr;width: 22px;transform: rotateZ(180deg);'>Edit</span>
-                                <span class="ml-2" style='writing-mode: tb-rl;width: 32px;transform: rotateZ(180deg);'>Chat</span>
+                                <span class="ml-1" style='writing-mode: vertical-lr;width: 18px;transform: rotateZ(180deg);'>Edit</span>
+                                <span class="ml-2" style='writing-mode: tb-rl;width: 28px;transform: rotateZ(180deg);'>Chat</span>
                                 <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 17px;'><input type='checkbox' id="planCheckFilter" style="transform: rotateZ(180deg);"> Review</span>
                                 <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 22px;'><input type='checkbox' id="asBuiltFilter" style="transform: rotateZ(180deg);"> As-built</span>
-                                <span class="pr-1" style='writing-mode: tb-rl;width: 28px;transform: rotateZ(180deg);'>Delete</span>
+                                <span class="ml-1" style='writing-mode: tb-rl;width: 28px;transform: rotateZ(180deg);'>On-Review</span>
+                                <span class="" style='writing-mode: tb-rl;width: 24px;transform: rotateZ(180deg);'>Delete</span>
                             </th>
                             @else
                             <th class="searchHead"> <input type="text" placeholder="Search User" class="searchBox" id="userFilter"> </th>

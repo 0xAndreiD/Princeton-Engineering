@@ -69,6 +69,7 @@ Route::post('/toggleAsBuilt', 'GeneralController@toggleAsBuilt')->name('toggleAs
 Route::post('/checkChatList', 'GeneralController@checkChatList')->name('checkChatList');
 Route::post('/getPermitList', 'GeneralController@getPermitList')->name('getPermitList');
 Route::post('/getCompanyInfo', 'GeneralController@getCompanyInfo')->name('getCompanyInfo');
+Route::get('/onreview', 'GeneralController@onReview')->name('onReview');
 
 // APIs for list, update, download, db backup
 Route::get('/getJobList', 'APIController@getJobList')->name('getJobList');
