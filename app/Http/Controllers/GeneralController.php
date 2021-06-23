@@ -29,6 +29,7 @@ use App\StandardFavorite;
 use App\JobChat;
 use App\PermitFiles;
 use App\PermitInfo;
+use App\DropboxHome;
 use Kunnu\Dropbox\DropboxApp;
 use Kunnu\Dropbox\Dropbox;
 use Kunnu\Dropbox\DropboxFile;
@@ -1176,6 +1177,39 @@ class GeneralController extends Controller
     }
 
     /**
+     * Set the eSeal of the project.
+     *
+     * @return JSON
+     */
+    public function setESeal(Request $request){
+        if($request['projectId'])
+        {
+            $project = JobRequest::where('id', '=', $request['projectId'])->first();
+            if($project)
+            {
+                if(Auth::user()->userrole == 2 || (Auth::user()->companyid == $project['companyId'] && intval($request['state']) <= 2))
+                {
+                    if( isset($request['value']) )
+                    {
+                        $project->eSeal = $request['value'];
+                        $project->save();
+
+                        return response()->json(['success' => true]);
+                    }
+                    else
+                        return response()->json(['success' => false, 'message' => "Wrong state value."] );
+                }
+                else
+                    return response()->json(['success' => false, 'message' => "You don't have any permission to set state of this project."] );
+            }
+            else
+                return response()->json(['success' => false, 'message' => 'Cannot find the project.'] );
+        }
+        else
+            return response()->json(['success' => false, 'message' => 'Wrong Project Id.'] );
+    }
+
+    /**
      * Set the plan status of the project.
      *
      * @return JSON
@@ -1618,15 +1652,27 @@ class GeneralController extends Controller
      */
     public function onReview(Request $request){
         if(!empty($request['projectId'])){
-            $project = JobRequest::where('id', '=', $request['projectId'])->first();
-            if($project){
+            $job = JobRequest::where('id', '=', $request['projectId'])->first();
+            if($job){
                 if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3)
                 {
+                    $dropboxhome = DropboxHome::where('userId', Auth::user()->id)->first();
+                    if($dropboxhome)
+                        $homepath = $dropboxhome->path;
+                    else
+                        $homepath = 'https://www.dropbox.com/home' . env('DROPBOX_PROJECTS_PATH');
+
+                    $company = Company::where('id', $job['companyId'])->first();
+                    $companyNumber = $company ? $company['company_number'] : 0;
+                    $folderPrefix = '/' . $companyNumber. '. ' . $job['companyName'] . '/';
+                    $filepath = $folderPrefix . $job['clientProjectNumber'] . '. ' . $job['clientProjectName'] . ' ' . $job['state'];
+
                     $messages = JobChat::leftjoin('users', "users.id", "=", "job_chat.userId")
                                 ->where('job_chat.jobId', $request['projectId'])
                                 ->orderBy('job_chat.id', 'desc')
                                 ->get(array('job_chat.id as id', 'users.username as username', 'users.userrole as userrole', 'job_chat.text as text', 'job_chat.datetime as datetime'));
-                    return view('admin.onreview.view')->with('messages', $messages)->with('project', $project)->with('projectId', $request['projectId']);
+                    return view('admin.onreview.view')->with('messages', $messages)->with('job', $job)->with('projectId', $request['projectId'])
+                            ->with('reportpath', $homepath . '/Report')->with('inpath', $homepath . env('DROPBOX_PREFIX_IN') . $filepath);
                 } else
                     return redirect('projectlist');
             } else
