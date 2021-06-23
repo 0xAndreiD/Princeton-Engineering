@@ -58,6 +58,7 @@ Route::post('/getDataCheck', 'GeneralController@getDataCheck')->name('getDataChe
 Route::post('/delProject', 'GeneralController@delProject')->name('delProject');
 Route::post('/setProjectState', 'GeneralController@setProjectState')->name('setProjectState');
 Route::post('/setPlanStatus', 'GeneralController@setPlanStatus')->name('setPlanStatus');
+Route::post('/setESeal', 'GeneralController@setESeal')->name('setESeal');
 Route::post('/getASCEOptions', 'GeneralController@getASCEOptions')->name('getASCEOptions');
 Route::post('/getProjectNumComment', 'GeneralController@getProjectNumComment')->name('getProjectNumComment');
 Route::get('/jobchat', 'GeneralController@jobChat')->name('jobchat');
