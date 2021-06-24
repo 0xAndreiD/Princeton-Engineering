@@ -254,7 +254,7 @@ function openReportFiles(){
             swal.close();
             if (res.success == true && res.data) {
                 res.data.forEach(link => {
-                    let filelink = (res.reportpath + link).split(" ").join("-");
+                    let filelink = (res.reportpath + link).split(" ").join("+");
                     window.open(filelink, '_blank');
                 });
             }
