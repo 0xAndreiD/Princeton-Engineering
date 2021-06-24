@@ -1702,7 +1702,7 @@ class GeneralController extends Controller
                     // $companyNumber = $company ? $company['company_number'] : 0;
                     // $folderPrefix = '/' . $companyNumber. '. ' . $job['companyName'] . '/';
                     $jsonname = 'iRoofTM by Princeton Engineering ' . str_replace(".json", "", $job['requestFile']);
-                    $filename = $job['clientProjectNumber'] . '. ' . $job['clientProjectName'] . ' ' . $job['state'];
+                    $filename = $job['clientProjectNumber'] . '.' . $job['clientProjectName'] . ' ' . $job['state'];
 
                     $reportfiles = array();
                     $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
