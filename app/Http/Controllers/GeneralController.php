@@ -1710,25 +1710,25 @@ class GeneralController extends Controller
                     try {
                         $meta = $dropbox->getMetaData(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $jsonname . "-" . $filename . ".pdf");
                         if($meta){
-                            array_push($reportfiles, env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $jsonname . "-" . $filename . ".pdf");
+                            array_push($reportfiles, $jsonname . "-" . $filename . ".pdf");
                         }
                     } catch (DropboxClientException $e) { }
                     try {
                         $meta = $dropbox->getMetaData(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $jsonname . "-" . $filename . " s.pdf");
                         if($meta){
-                            array_push($reportfiles, env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $jsonname . "-" . $filename . " s.pdf");
+                            array_push($reportfiles, $jsonname . "-" . $filename . " s.pdf");
                         }
                     } catch (DropboxClientException $e) { }
                     try {
                         $meta = $dropbox->getMetaData(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $jsonname . "-" . $filename . " binder s.pdf");
                         if($meta){
-                            array_push($reportfiles, env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $jsonname . "-" . $filename . " binder s.pdf");
+                            array_push($reportfiles, $jsonname . "-" . $filename . " binder s.pdf");
                         }
                     } catch (DropboxClientException $e) { }
                     try {
                         $meta = $dropbox->getMetaData(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $jsonname . "-" . $filename . " Data Check.pdf");
                         if($meta){
-                            array_push($reportfiles, env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $jsonname . "-" . $filename . " Data Check.pdf");
+                            array_push($reportfiles, $jsonname . "-" . $filename . " Data Check.pdf");
                         }
                     } catch (DropboxClientException $e) { }
 
