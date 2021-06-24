@@ -242,4 +242,31 @@ function eSealUpload(){
         }
     });
 }
+
+function openReportFiles(){
+    swal.fire({ title: "Please wait...", showConfirmButton: false });
+    swal.showLoading();
+    $.ajax({
+        url:"getReportList",
+        type:'post',
+        data:{projectId: $('#projectId').val()},
+        success:function(res){
+            swal.close();
+            if (res.success == true && res.data) {
+                res.data.forEach(link => {
+                    let filelink = (res.reportpath + link).split(" ").join("-");
+                    window.open(filelink, '_blank');
+                });
+            }
+        },
+        error: function(xhr, status, error) {
+            res = JSON.parse(xhr.responseText);
+            message = res.message;
+            swal.fire({ title: "Error",
+                    text: message == "" ? "Error happened while processing. Please try again later." : message,
+                    icon: "error",
+                    confirmButtonText: `OK` });
+        }
+    });
+}
 </script>

@@ -71,6 +71,7 @@ Route::post('/checkChatList', 'GeneralController@checkChatList')->name('checkCha
 Route::post('/getPermitList', 'GeneralController@getPermitList')->name('getPermitList');
 Route::post('/getCompanyInfo', 'GeneralController@getCompanyInfo')->name('getCompanyInfo');
 Route::get('/onreview', 'GeneralController@onReview')->name('onReview');
+Route::post('/getReportList', 'GeneralController@getReportList')->name('getReportList');
 
 // APIs for list, update, download, db backup
 Route::get('/getJobList', 'APIController@getJobList')->name('getJobList');
