@@ -1672,13 +1672,73 @@ class GeneralController extends Controller
                                 ->orderBy('job_chat.id', 'desc')
                                 ->get(array('job_chat.id as id', 'users.username as username', 'users.userrole as userrole', 'job_chat.text as text', 'job_chat.datetime as datetime'));
                     return view('admin.onreview.view')->with('messages', $messages)->with('job', $job)->with('projectId', $request['projectId'])
-                            ->with('reportpath', $homepath . '/Report')->with('inpath', $homepath . env('DROPBOX_PREFIX_IN') . $filepath);
+                            ->with('inpath', $homepath . env('DROPBOX_PREFIX_IN') . $filepath);
                 } else
                     return redirect('projectlist');
             } else
                 return redirect('projectlist');    
         } else 
             return redirect('projectlist');
+    }
+
+    /**
+     * Check Dropbox Report folder to return report files' list.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getReportList(Request $request){
+        if(!empty($request['projectId'])){
+            $job = JobRequest::where('id', '=', $request['projectId'])->first();
+            if($job){
+                if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3)
+                {
+                    $dropboxhome = DropboxHome::where('userId', Auth::user()->id)->first();
+                    if($dropboxhome)
+                        $homepath = $dropboxhome->path;
+                    else
+                        $homepath = 'https://www.dropbox.com/home' . env('DROPBOX_PROJECTS_PATH');
+
+                    // $company = Company::where('id', $job['companyId'])->first();
+                    // $companyNumber = $company ? $company['company_number'] : 0;
+                    // $folderPrefix = '/' . $companyNumber. '. ' . $job['companyName'] . '/';
+                    $jsonname = 'iRoofTM by Princeton Engineering ' . str_replace(".json", "", $job['requestFile']);
+                    $filename = $job['clientProjectNumber'] . '. ' . $job['clientProjectName'] . ' ' . $job['state'];
+
+                    $reportfiles = array();
+                    $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
+                    $dropbox = new Dropbox($app);
+                    try {
+                        $meta = $dropbox->getMetaData(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $jsonname . "-" . $filename . ".pdf");
+                        if($meta){
+                            array_push($reportfiles, env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $jsonname . "-" . $filename . ".pdf");
+                        }
+                    } catch (DropboxClientException $e) { }
+                    try {
+                        $meta = $dropbox->getMetaData(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $jsonname . "-" . $filename . " s.pdf");
+                        if($meta){
+                            array_push($reportfiles, env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $jsonname . "-" . $filename . " s.pdf");
+                        }
+                    } catch (DropboxClientException $e) { }
+                    try {
+                        $meta = $dropbox->getMetaData(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $jsonname . "-" . $filename . " binder s.pdf");
+                        if($meta){
+                            array_push($reportfiles, env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $jsonname . "-" . $filename . " binder s.pdf");
+                        }
+                    } catch (DropboxClientException $e) { }
+                    try {
+                        $meta = $dropbox->getMetaData(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $jsonname . "-" . $filename . " Data Check.pdf");
+                        if($meta){
+                            array_push($reportfiles, env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $jsonname . "-" . $filename . " Data Check.pdf");
+                        }
+                    } catch (DropboxClientException $e) { }
+
+                    return response()->json(["reportpath" => $homepath . '/Reports/?preview=', "files" => $reportfiles, "success" => true, "test" => env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $jsonname . "-" . $filename . " Data Check.pdf"]);
+                } else
+                    return response()->json(["message" => "You don't have permission.", "success" => false]);
+            } else
+                return response()->json(["message" => "Cannot find project.", "success" => false]);  
+        } else 
+            return response()->json(["message" => "Empty project id.", "success" => false]);
     }
 
     /**

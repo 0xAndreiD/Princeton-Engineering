@@ -826,11 +826,11 @@
             </tr>
             <tr class="h13">
                 <td class="iw400" colspan="3" style="text-align:right !important;border-bottom: 1.00pt solid windowtext;">Check sum of chord lengths</td>
-                <td class="w400-bdr" style="font-weight:800" id="td-checksum-of-segment1-{{ $conditionId }}" colspan="2">OK</td>
+                <td class="w400-bdr" style="font-weight:800; width: 180px; word-break: break-word;" id="td-checksum-of-segment1-{{ $conditionId }}" colspan="2">OK</td>
                 <td class="right-bdr bottom-bdr"><div style="overflow:hidden"></td>
                 <td><div style="overflow:hidden"></td>
                 <td class="iw400" colspan="3" style="text-align:right !important; border-left: 1.00pt solid windowtext;border-bottom: 1.00pt solid windowtext;">Check sum of chord lengths</td>
-                <td class="w400-bdr" style="font-weight:800" id="td-checksum-of-segment2-{{ $conditionId }}" colspan="2">OK</td>
+                <td class="w400-bdr" style="font-weight:800; width: 180px; word-break: break-word;" id="td-checksum-of-segment2-{{ $conditionId }}" colspan="2">OK</td>
                 <td class="right-bdr bottom-bdr"><div style="overflow:hidden"></td>
             </tr>
             <tr class="h13">
