@@ -500,3 +500,7 @@ html, body {
     display: flex;
     align-items: center;
 }
+
+.flexRow{
+    display: flex;
+}

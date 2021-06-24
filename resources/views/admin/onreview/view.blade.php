@@ -25,16 +25,16 @@
                     <h3 class="block-title">Environmental</h3>
                 </div>
                 <div class="block-content review-block-content pt-3 pb-3" style="min-height: 154px;" id="envSection">
-                    <div class="flexAndCenter">
+                    <div class="flexRow">
                         <input type='checkbox' id="exposure"> <label for="exposure" class="mb-0 ml-2 text-left" id="exposure-text">Exposure: </label>
                     </div>
-                    <div class="flexAndCenter">
+                    <div class="flexRow">
                         <input type='checkbox' id="occupancy"> <label for="occupancy" class="mb-0 ml-2 text-left" id="occupancy-text">Occupancy: </label>
                     </div>
-                    <div class="flexAndCenter">
+                    <div class="flexRow">
                         <input type='checkbox' id="wind"> <label for="wind" class="mb-0 ml-2 text-left" id="wind-text">Wind: </label>
                     </div>
-                    <div class="flexAndCenter">
+                    <div class="flexRow">
                         <input type='checkbox' id="snow"> <label for="snow" class="mb-0 ml-2 text-left" id="snow-text">Snow: </label>
                     </div>
                 </div>
@@ -46,16 +46,16 @@
                     <h3 class="block-title">Codes</h3>
                 </div>
                 <div class="block-content review-block-content pt-3 pb-3" style="min-height: 154px;" id="codeSection">
-                    <div class="flexAndCenter">
+                    <div class="flexRow">
                         <input type='checkbox' id="IBC"> <label for="IBC" class="mb-0 ml-2 text-left" id="IBC-text">IBC: </label>
                     </div>
-                    <div class="flexAndCenter">
+                    <div class="flexRow">
                         <input type='checkbox' id="ASCE"> <label for="ASCE" class="mb-0 ml-2 text-left" id="ASCE-text">ASCE: </label>
                     </div>
-                    <div class="flexAndCenter">
+                    <div class="flexRow">
                         <input type='checkbox' id="NEC"> <label for="NEC" class="mb-0 ml-2 text-left" id="NEC-text">NEC: </label>
                     </div>
-                    <div class="flexAndCenter">
+                    <div class="flexRow">
                         <input type='checkbox' id="StateCode"> <label for="StateCode" class="mb-0 ml-2 text-left" id="StateCode-text">State Code: </label>
                     </div>
                 </div>
@@ -71,10 +71,10 @@
                         <div class="col-md-1">
                             <span style="width: 100px;" class="font-w600">Module</span>
                         </div>
-                        <div class="col-md-8 flexAndCenter">
+                        <div class="col-md-8 flexRow">
                             <input type='checkbox' id="Module"> <label for="Module" class="mb-0 ml-2 mr-5 text-left" id="Module-text">MFR / Model: </label>
                         </div>
-                        <div class="col-md-3 flexAndCenter">
+                        <div class="col-md-3 flexRow">
                             <input type='checkbox' id="ModuleQuantity"> <label for="ModuleQuantity" class="mb-0 ml-2 text-left" id="ModuleQuantity-text">Quantity: </label>
                         </div>
                     </div>
@@ -82,10 +82,10 @@
                         <div class="col-md-1">
                             <span style="width: 100px;" class="font-w600">Inverter</span>
                         </div>
-                        <div class="col-md-8 flexAndCenter">
+                        <div class="col-md-8 flexRow">
                             <input type='checkbox' id="Inverter"> <label for="Inverter" class="mb-0 ml-2 mr-5 text-left" id="Inverter-text">MFR / Model: </label>
                         </div>
-                        <div class="col-md-3 flexAndCenter">
+                        <div class="col-md-3 flexRow">
                             <input type='checkbox' id="InverterQuantity"> <label for="InverterQuantity" class="mb-0 ml-2 text-left" id="InverterQuantity-text">Quantity: </label>
                         </div>
                     </div>
@@ -93,10 +93,10 @@
                         <div class="col-md-1">
                             <span style="width: 100px;" class="font-w600">Power</span>
                         </div>
-                        <div class="col-md-4 flexAndCenter">
+                        <div class="col-md-4 flexRow">
                             <input type='checkbox' id="Power"> <label for="Power" class="mb-0 ml-2 mr-5 text-left" id="Power-text">Tot DC watts: </label>
                         </div>
-                        <div class="col-md-4 flexAndCenter">
+                        <div class="col-md-4 flexRow">
                             <input type='checkbox' id="SumInvAmps"> <label for="SumInvAmps" class="mb-0 ml-2 text-left" id="SumInvAmps-text">Sum Inv Amps: </label>
                         </div>
                     </div>
@@ -104,10 +104,10 @@
                         <div class="col-md-1">
                             <span style="width: 100px;" class="font-w600">OCPD</span>
                         </div>
-                        <div class="col-md-4 flexAndCenter">
+                        <div class="col-md-4 flexRow">
                             <input type='checkbox' id="MinA"> <label for="MinA" class="mb-0 ml-2 mr-5 text-left" id="MinA-text">Min A: </label>
                         </div>
-                        <div class="col-md-4 flexAndCenter">
+                        <div class="col-md-4 flexRow">
                             <input type='checkbox' id="RecommendedA"> <label for="RecommendedA" class="mb-0 ml-2 text-left" id="RecommendedA-text">Recommended A: </label>
                         </div>
                     </div>
@@ -115,7 +115,7 @@
                         <div class="col-md-1">
                             <span style="width: 100px;" class="font-w600">Wire</span>
                         </div>
-                        <div class="col-md-10 flexAndCenter">
+                        <div class="col-md-10 flexRow">
                             <input type='checkbox' id="MinCuWireSize"> <label for="MinCuWireSize" class="mb-0 ml-2 mr-5 text-left" id="MinCuWireSize-text">Min Cu Wire Size: </label>
                         </div>
                     </div>
@@ -135,10 +135,10 @@
                     <h3 class="block-title">Structural</h3>
                 </div>
                 <div class="block-content review-block-content pt-3 pb-3" id="structSection">
-                    <div class="flexAndCenter">
+                    <div class="flexRow">
                         <input type='checkbox' id="ColTieKneeWalls"> <label for="ColTieKneeWalls" class="mb-0 ml-2 text-left" id="ColTieKneeWalls-text">Collar Tie / Knee Walls: </label>
                     </div>
-                    <div class="flexAndCenter">
+                    <div class="flexRow">
                         <input type='checkbox' id="StructNotes"> <label for="StructNotes" class="mb-0 ml-2 text-left" id="StructNotes-text">Structural Notes: </label>
                     </div>
                 </div>
@@ -156,7 +156,7 @@
                     <a class="btn btn-outline-danger mr-1" style="width:100px;" href="{{ route('projectlist') }}">Cancel</a>
                     <button class="btn btn-outline-success mr-1" onclick="autoNote()">Auto Note</button>
                     <button class="btn btn-outline-warning mr-1" onclick="clearNote()">Clear Note</button>
-                    <div class="flexAndCenter">
+                    <div class="flexRow">
                         <input type='checkbox' id="ControlCheck" onchange="checkboxAll()"> <label for="ControlCheck" class="mb-0 ml-2 text-left">Check / Uncheck ALL </label>
                     </div>
                 </div>
@@ -182,10 +182,10 @@
                     <h3 class="block-title">Flag to Clear</h3>
                 </div>
                 <div class="block-content review-block-content pt-3 pb-3">
-                    <div class="flexAndCenter">
+                    <div class="flexRow">
                         <input type='checkbox' id="Review" onchange='togglePlanCheck({{$job["id"]}})' <?php echo $job['planCheck'] == 1 ? "checked" : ""; ?>> <label for="Review" class="mb-0 ml-2 text-left">Review</label>
                     </div>
-                    <div class="flexAndCenter">
+                    <div class="flexRow">
                         <input type='checkbox' id="Asbuilt" onchange='toggleAsBuilt({{$job["id"]}})' <?php echo $job['asBuilt'] == 1 ? "checked" : ""; ?>> <label for="Asbuilt" class="mb-0 ml-2 text-left">As-built</label>
                     </div>
                 </div>
