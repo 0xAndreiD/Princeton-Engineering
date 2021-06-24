@@ -1732,7 +1732,7 @@ class GeneralController extends Controller
                         }
                     } catch (DropboxClientException $e) { }
 
-                    return response()->json(["reportpath" => $homepath . '/Reports/?preview=', "files" => $reportfiles, "success" => true]);
+                    return response()->json(["reportpath" => $homepath . '/Reports?preview=', "files" => $reportfiles, "success" => true]);
                 } else
                     return response()->json(["message" => "You don't have permission.", "success" => false]);
             } else
