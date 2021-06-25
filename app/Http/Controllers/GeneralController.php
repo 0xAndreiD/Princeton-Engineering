@@ -171,6 +171,32 @@ class GeneralController extends Controller
                     else if($request['status'] == 'Submitted')
                         $projectState = 4;
                     $project->projectState = $projectState;
+
+                    // We need to rename dropbox project directories on IN, OUT, 
+                    if($project->clientProjectName != $request['data']['txt-project-name'] || $project->clientProjectNumber != $request['data']['txt-project-number'] || $project->state != $request['data']['option-state']){
+                        $filepath = $folderPrefix . $project['clientProjectNumber'] . '. ' . $project['clientProjectName'] . ' ' . $project['state'];
+                        $newpath = $folderPrefix . $request['data']['txt-project-number'] . '. ' . $request['data']['txt-project-name'] . ' ' . $request['data']['option-state'];
+
+                        $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
+                        $dropbox = new Dropbox($app);
+
+                        try{
+                            $dropbox->move(env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_IN') . $filepath, env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_IN') . $newpath);
+                        } catch(DropboxClientException $e) {}
+
+                        try{
+                            $dropbox->move(env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_OUT') . $filepath, env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_OUT') . $newpath);
+                        } catch(DropboxClientException $e) {}
+
+                        try{
+                            $dropbox->move(env('DROPBOX_PROJECTS_PATH') . '/eSealed' . $filepath, env('DROPBOX_PROJECTS_PATH') . '/eSealed' . $newpath);
+                        } catch(DropboxClientException $e) {}
+                        
+                        try{
+                            $dropbox->move(env('DROPBOX_PROJECTS_PATH') . '/IN_copy' . $filepath, env('DROPBOX_PROJECTS_PATH') . '/IN_copy' . $newpath);
+                        } catch(DropboxClientException $e) {}
+                    }
+
                     $project->clientProjectName = $request['data']['txt-project-name'];
                     $project->clientProjectNumber = $request['data']['txt-project-number'];
                     $project->submittedTime = gmdate("Y-m-d\TH:i:s", time());
@@ -1258,14 +1284,14 @@ class GeneralController extends Controller
                 $folderPrefix = '/' . $companyNumber. '. ' . $job['companyName'] . '/';
                 $file = $request->file('upl');
                 
-                $state = '';
-                if(Storage::disk('input')->exists($folderPrefix . $job['requestFile']))
-                {
-                    $jobData = json_decode(Storage::disk('input')->get($folderPrefix . $job['requestFile']), true);
-                    $state = $jobData['ProjectInfo']['State'];
-                }
+                // $state = '';
+                // if(Storage::disk('input')->exists($folderPrefix . $job['requestFile']))
+                // {
+                //     $jobData = json_decode(Storage::disk('input')->get($folderPrefix . $job['requestFile']), true);
+                //     $state = $jobData['ProjectInfo']['State'];
+                // }
                 
-                $filepath = $folderPrefix . $job['clientProjectNumber'] . '. ' . $job['clientProjectName'] . ' ' . $state;
+                $filepath = $folderPrefix . $job['clientProjectNumber'] . '. ' . $job['clientProjectName'] . ' ' . $job['state'];
                 $file->move(storage_path('upload') . $filepath, $file->getClientOriginalName());
                 $localpath = storage_path('upload') . $filepath . '/' . $file->getClientOriginalName();
 
@@ -1320,14 +1346,14 @@ class GeneralController extends Controller
                 $companyNumber = $company ? $company['company_number'] : 0;
                 $folderPrefix = '/' . $companyNumber . ". " . $job['companyName'] . '/';
 
-                $state = '';
-                if(Storage::disk('input')->exists($folderPrefix . $job['requestFile']))
-                {
-                    $jobData = json_decode(Storage::disk('input')->get($folderPrefix . $job['requestFile']), true);
-                    $state = $jobData['ProjectInfo']['State'];
-                }
+                // $state = '';
+                // if(Storage::disk('input')->exists($folderPrefix . $job['requestFile']))
+                // {
+                //     $jobData = json_decode(Storage::disk('input')->get($folderPrefix . $job['requestFile']), true);
+                //     $state = $jobData['ProjectInfo']['State'];
+                // }
                 
-                $filepath = $folderPrefix . $job['clientProjectNumber'] . '. ' . $job['clientProjectName'] . ' ' . $state;
+                $filepath = $folderPrefix . $job['clientProjectNumber'] . '. ' . $job['clientProjectName'] . ' ' . $job['state'];
                     
                 $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
                 $dropbox = new Dropbox($app);
@@ -1384,14 +1410,14 @@ class GeneralController extends Controller
                 $companyNumber = $company ? $company['company_number'] : 0;
                 $folderPrefix = '/' . $companyNumber . ". " . $job['companyName'] . '/';
 
-                $state = '';
-                if(Storage::disk('input')->exists($folderPrefix . $job['requestFile']))
-                {
-                    $jobData = json_decode(Storage::disk('input')->get($folderPrefix . $job['requestFile']), true);
-                    $state = $jobData['ProjectInfo']['State'];
-                }
+                // $state = '';
+                // if(Storage::disk('input')->exists($folderPrefix . $job['requestFile']))
+                // {
+                //     $jobData = json_decode(Storage::disk('input')->get($folderPrefix . $job['requestFile']), true);
+                //     $state = $jobData['ProjectInfo']['State'];
+                // }
                 
-                $filepath = env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_IN') . $folderPrefix . $job['clientProjectNumber'] . '. ' . $job['clientProjectName'] . ' ' . $state . '/' . $request->input('filename');
+                $filepath = env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_IN') . $folderPrefix . $job['clientProjectNumber'] . '. ' . $job['clientProjectName'] . ' ' . $job['state'] . '/' . $request->input('filename');
                     
                 $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
                 $dropbox = new Dropbox($app);
@@ -1438,18 +1464,18 @@ class GeneralController extends Controller
                     $companyNumber = $company ? $company['company_number'] : 0;
                     $folderPrefix = '/' . $companyNumber . ". " . $job['companyName'] . '/';
 
-                    $state = '';
-                    if(Storage::disk('input')->exists($folderPrefix . $job['requestFile']))
-                    {
-                        $jobData = json_decode(Storage::disk('input')->get($folderPrefix . $job['requestFile']), true);
-                        $state = $jobData['ProjectInfo']['State'];
-                    }
+                    // $state = '';
+                    // if(Storage::disk('input')->exists($folderPrefix . $job['requestFile']))
+                    // {
+                    //     $jobData = json_decode(Storage::disk('input')->get($folderPrefix . $job['requestFile']), true);
+                    //     $state = $jobData['ProjectInfo']['State'];
+                    // }
 
                     $setting = UserSetting::where('userId', Auth::user()->id)->first();
                     
                     
                     $zip = new ZipArchive();
-                    $filename = $job['clientProjectNumber'] . '. ' . $job['clientProjectName'] . ' ' . $state . ".zip";
+                    $filename = $job['clientProjectNumber'] . '. ' . $job['clientProjectName'] . ' ' . $job['state'] . ".zip";
 
                     if(file_exists(storage_path('download') . '/' . $filename))
                         unlink(storage_path('download') . '/' . $filename);
@@ -1461,14 +1487,14 @@ class GeneralController extends Controller
                             //$path = str_contains($filepath, env('DROPBOX_PREFIX_IN')) ? substr($filepath, strpos($filepath, env('DROPBOX_PREFIX_IN')) + 1) : substr($filepath, strpos($filepath, env('DROPBOX_PREFIX_OUT')) + 1);
                             $path = str_contains($filepath, env('DROPBOX_PREFIX_IN')) ? env('DROPBOX_PREFIX_IN') . '/' . basename($filepath) : env('DROPBOX_PREFIX_OUT') . '/' . basename($filepath);
                             if($setting)
-                                $path = $job['clientProjectNumber'] . '. ' . $job['clientProjectName'] . ' ' . $state . $path;
+                                $path = $job['clientProjectNumber'] . '. ' . $job['clientProjectName'] . ' ' . $job['state'] . $path;
                             $zip->addFromString($path, $file->getContents());
                         }
                         catch (DropboxClientException $e){}
                     }
                     $zip->close();
                     //return response()->download(storage_path('download') . '/' . $filename, null, ['Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0']);
-                    return response()->json(['success' => true, 'link' => 'downloadZip?filename=' . $filename, 'name' => $job['clientProjectNumber'] . '. ' . $job['clientProjectName'] . ' ' . $state . ".zip"]);
+                    return response()->json(['success' => true, 'link' => 'downloadZip?filename=' . $filename, 'name' => $job['clientProjectNumber'] . '. ' . $job['clientProjectName'] . ' ' . $job['state'] . ".zip"]);
                 }
             } else
                 return response()->json(['success' => false, 'message' => 'Cannot find the project.']);
@@ -1507,17 +1533,17 @@ class GeneralController extends Controller
                 $companyNumber = $company ? $company['company_number'] : 0;
                 $folderPrefix = '/' . $companyNumber . ". " . $job['companyName'] . '/';
 
-                $state = '';
-                if(Storage::disk('input')->exists($folderPrefix . $job['requestFile']))
-                {
-                    $jobData = json_decode(Storage::disk('input')->get($folderPrefix . $job['requestFile']), true);
-                    $state = $jobData['ProjectInfo']['State'];
-                }
+                // $state = '';
+                // if(Storage::disk('input')->exists($folderPrefix . $job['requestFile']))
+                // {
+                //     $jobData = json_decode(Storage::disk('input')->get($folderPrefix . $job['requestFile']), true);
+                //     $state = $jobData['ProjectInfo']['State'];
+                // }
                 
                 $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
                 $dropbox = new Dropbox($app);
                 
-                $filepath = env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_IN') . $folderPrefix . $job['clientProjectNumber'] . '. ' . $job['clientProjectName'] . ' ' . $state . '/' ;
+                $filepath = env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_IN') . $folderPrefix . $job['clientProjectNumber'] . '. ' . $job['clientProjectName'] . ' ' . $job['state'] . '/' ;
                 $dropbox->move($filepath . $request->input('filename'), $filepath . $request->input('newname'));
                 return response()->json(['success' => true]);
             } else
