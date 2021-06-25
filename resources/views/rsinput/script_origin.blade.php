@@ -4734,17 +4734,17 @@ function openPermitTab(id, filename, tabname){
         updateUccF140(5, "ucc_f140_fire.pdf");
     }
     
-    var i, tabcontent, tablinks;
-    tabcontent = document.getElementsByClassName("rfdTabContent");
-    for (i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].style.display = "none";
-    }
-    tablinks = document.getElementsByClassName("tablinks");
-    for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace(" active", "");
-    }
-    document.getElementById("tab_permit_" + id).style.display = "block";
-    document.getElementById("permitTab_" + id).className += " active";
+    // var i, tabcontent, tablinks;
+    // tabcontent = document.getElementsByClassName("rfdTabContent");
+    // for (i = 0; i < tabcontent.length; i++) {
+    //     tabcontent[i].style.display = "none";
+    // }
+    // tablinks = document.getElementsByClassName("tablinks");
+    // for (i = 0; i < tablinks.length; i++) {
+    //     tablinks[i].className = tablinks[i].className.replace(" active", "");
+    // }
+    // document.getElementById("tab_permit_" + id).style.display = "block";
+    // document.getElementById("permitTab_" + id).className += " active";
 }
 
 function updateUccF100(id, filename) {
