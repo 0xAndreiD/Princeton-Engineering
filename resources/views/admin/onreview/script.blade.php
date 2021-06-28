@@ -120,6 +120,14 @@ $(document).ready(function(){
             "file" : {"icon" : "fa fa-file m--font-warning" }
         },  
     });
+
+    $("#filetree").on("select_node.jstree",
+        function(evt, data){
+            if(data && data.node && data.node.original && data.node.original.link){
+                window.open(data.node.original.link, '_blank');
+            }
+        }
+    );
 });
 
 function checkboxAll(){
@@ -266,17 +274,47 @@ function showReportDlg(){
         data:{projectId: $('#projectId').val()},
         success:function(res){
             swal.close();
-            console.log(res);
-            if (res.success == true && res.files) {
+             if (res.success == true && res.files) {
                 $("#treeDlgTitle").html("Reports");
-                $("#filetree").empty();
-                
+                $("#filetree").jstree('delete_node', $("#filetree").jstree(true).get_node('#').children);
+
                 res.files.forEach((link, index) => {
-                    $("#filetree").jstree('create_node', null, {"text": link.filename + ' (' + parseInt(link.size / 1024) + 'KB/' + link.modifiedDate + ')', "id": "item_" + index, "type": "file", "link": link.link}, 'last');
+                    $("#filetree").jstree('create_node', null, {"text": link.filename + ' (' + parseInt(link.size / 1024) + 'KB / ' + link.modifiedDate + ')', "id": "item_" + index, "type": "file", "link": link.link}, 'last');
                 });
 
                 $("#treeDlg").modal();
-            }
+             }
+        },
+        error: function(xhr, status, error) {
+            res = JSON.parse(xhr.responseText);
+            message = res.message;
+            swal.fire({ title: "Error",
+                    text: message == "" ? "Error happened while processing. Please try again later." : message,
+                    icon: "error",
+                    confirmButtonText: `OK` });
+        }
+    });
+}
+
+function showInDirDlg(){
+    swal.fire({ title: "Please wait...", showConfirmButton: false });
+    swal.showLoading();
+    $.ajax({
+        url:"getInDIRList",
+        type:'post',
+        data:{projectId: $('#projectId').val()},
+        success:function(res){
+            swal.close();
+             if (res.success == true && res.files) {
+                $("#treeDlgTitle").html("Reports");
+                $("#filetree").jstree('delete_node', $("#filetree").jstree(true).get_node('#').children);
+
+                res.files.forEach((link, index) => {
+                    $("#filetree").jstree('create_node', null, {"text": link.filename + ' (' + parseInt(link.size / 1024) + 'KB / ' + link.modifiedDate + ')', "id": "item_" + index, "type": "file"}, 'last');
+                });
+
+                $("#treeDlg").modal();
+             }
         },
         error: function(xhr, status, error) {
             res = JSON.parse(xhr.responseText);
