@@ -306,7 +306,7 @@ function showInDirDlg(){
         success:function(res){
             swal.close();
              if (res.success == true && res.files) {
-                $("#treeDlgTitle").html("Reports");
+                $("#treeDlgTitle").html("In Directory");
                 $("#filetree").jstree('delete_node', $("#filetree").jstree(true).get_node('#').children);
 
                 res.files.forEach((link, index) => {

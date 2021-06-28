@@ -15,7 +15,7 @@
                     Online Review
                 </h1>
                 <h2 class="h5 text-white-75 mb-0">
-                    Review the job's datas through this page
+                    {{ $projecttitle }}
                 </h2>
             </div>
         </div>
@@ -225,7 +225,7 @@
 
 <!-- Terms Modal -->
 <div class="modal fade" id="treeDlg" tabindex="-1" role="dialog" aria-labelledby="modal-terms" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 800px;">
         <div class="modal-content">
             <div class="block block-themed block-transparent mb-0">
                 <div class="block-header bg-primary-dark">
