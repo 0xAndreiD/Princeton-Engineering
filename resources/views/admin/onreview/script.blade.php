@@ -310,7 +310,7 @@ function showInDirDlg(){
                 $("#filetree").jstree('delete_node', $("#filetree").jstree(true).get_node('#').children);
 
                 res.files.forEach((link, index) => {
-                    $("#filetree").jstree('create_node', null, {"text": link.filename + ' (' + parseInt(link.size / 1024) + 'KB / ' + link.modifiedDate + ')', "id": "item_" + index, "type": "file"}, 'last');
+                    $("#filetree").jstree('create_node', null, {"text": link.filename + ' (' + parseInt(link.size / 1024) + 'KB / ' + link.modifiedDate + ')', "id": "item_" + index, "type": "file", "link": link.link}, 'last');
                 });
 
                 $("#treeDlg").modal();
