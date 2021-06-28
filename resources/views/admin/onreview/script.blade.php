@@ -267,17 +267,16 @@ function showReportDlg(){
         success:function(res){
             swal.close();
             console.log(res);
-            // if (res.success == true && res.files) {
-            //     $("#filetree").jstree('delete_node', '#root');
-            //     $("#filetree").jstree('create_node', null, {"text":"Reports", "id": "root", "type": "folder", "state": {"opened": true} }, 'last');
-            //     $("#treeDlgTitle").html("Reports");
+            if (res.success == true && res.files) {
+                $("#treeDlgTitle").html("Reports");
+                $("#filetree").empty();
                 
-            //     res.files.forEach(link => {
-            //         $("#filetree").jstree('create_node', '#root', {"text": link.filename + ' (' + parseInt(link.size / 1024) + 'KB/' + link.modifiedDate + ')', "id": "root", "type": "file", "link": link.link}, 'last');
-            //     });
+                res.files.forEach(link => {
+                    $("#filetree").jstree('create_node', null, {"text": link.filename + ' (' + parseInt(link.size / 1024) + 'KB/' + link.modifiedDate + ')', "id": "root", "type": "file", "link": link.link}, 'last');
+                });
 
-            //     $("#treeDlg").modal();
-            // }
+                $("#treeDlg").modal();
+            }
         },
         error: function(xhr, status, error) {
             res = JSON.parse(xhr.responseText);
