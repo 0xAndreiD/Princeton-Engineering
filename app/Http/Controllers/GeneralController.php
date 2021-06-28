@@ -1691,7 +1691,7 @@ class GeneralController extends Controller
                                 ->where('job_chat.jobId', $request['projectId'])
                                 ->orderBy('job_chat.id', 'desc')
                                 ->get(array('job_chat.id as id', 'users.username as username', 'users.userrole as userrole', 'job_chat.text as text', 'job_chat.datetime as datetime'));
-                    return view('admin.onreview.view')->with('messages', $messages)->with('job', $job)->with('projectId', $request['projectId']);
+                    return view('admin.onreview.view')->with('messages', $messages)->with('job', $job)->with('projectId', $request['projectId'])->with('projecttitle', $job['companyName'] . ' - ' . $job['clientProjectNumber'] . '. ' . $job['clientProjectName'] . ' ' . $job['state']);
                 } else
                     return redirect('projectlist');
             } else
