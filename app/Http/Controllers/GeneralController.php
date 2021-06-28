@@ -1813,7 +1813,7 @@ class GeneralController extends Controller
                             if(!file_exists(storage_path('upload') . $filepath . '/' . $file->getName()) || filesize(storage_path('upload') . $filepath . '/' . $file->getName()) != $file->getSize()){
                                 $dropbox->download(env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_IN') . $filepath . '/' . $file->getName(), storage_path('upload') . $filepath . '/' . $file->getName());
                             }
-                            $infiles[] = array('filename' => $file->getName(), 'size' => $file->getSize(), 'modifiedDate' => $meta->getServerModified(), 'link' => env('APP_URL') . 'in/' . $request['projectId'] . '/' . $file->getName());
+                            $infiles[] = array('filename' => $file->getName(), 'size' => $file->getSize(), 'modifiedDate' => $file->getServerModified(), 'link' => env('APP_URL') . 'in/' . $request['projectId'] . '/' . $file->getName());
                         }
                     } catch (DropboxClientException $e) { 
                         $infiles = array();
