@@ -89,6 +89,11 @@ return [
             'root' => storage_path('report'),
         ],
 
+        'upload' => [
+            'driver' => 'local',
+            'root' => storage_path('upload'),
+        ],
+
     ],
 
 ];
