@@ -1835,7 +1835,7 @@ class GeneralController extends Controller
      */
     public function getINFile($jobId, $filename){
         if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3){
-            $job = JobRequest::where('id', '=', $request['projectId'])->first();
+            $job = JobRequest::where('id', '=', $jobId)->first();
             if($job){
                 $company = Company::where('id', $job['companyId'])->first();
                 $companyNumber = $company ? $company['company_number'] : 0;
