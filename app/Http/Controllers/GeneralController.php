@@ -1720,8 +1720,8 @@ class GeneralController extends Controller
                         $meta = $dropbox->getMetaData(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $filename . ".pdf");
                         if($meta){
                             if(!Storage::disk('report')->exists($filename . ".pdf") || Storage::disk('report')->size($filename . ".pdf") != $meta->getSize()){
-                                $file = $dropbox->download(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $filename . ".pdf");
-                                file_put_contents(storage_path('report') . '/' . $filename . ".pdf", $file->getContents());
+                                // $file = $dropbox->download(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $filename . ".pdf");
+                                // file_put_contents(storage_path('report') . '/' . $filename . ".pdf", $file->getContents());
                             }
                             array_push($reportfiles, array("filename" => $filename . ".pdf", "size" => $meta->getSize(), "downloadSize" => Storage::disk('report')->size($filename . ".pdf"), "modifiedDate" => $meta->getServerModified(), "link" => "report/" . $filename . ".pdf"));
                         }
@@ -1730,8 +1730,8 @@ class GeneralController extends Controller
                         $meta = $dropbox->getMetaData(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $filename . " s.pdf");
                         if($meta){
                             if(!Storage::disk('report')->exists($filename . " s.pdf") || Storage::disk('report')->size($filename . " s.pdf") != $meta->getSize()){
-                                $file = $dropbox->download(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $filename . " s.pdf");
-                                file_put_contents(storage_path('report') . '/' . $filename . " s.pdf", $file->getContents());
+                                // $file = $dropbox->download(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $filename . " s.pdf");
+                                // file_put_contents(storage_path('report') . '/' . $filename . " s.pdf", $file->getContents());
                             }
                             array_push($reportfiles, array("filename" => $filename . " s.pdf", "size" => $meta->getSize(), "downloadSize" => Storage::disk('report')->size($filename . " s.pdf"), "modifiedDate" => $meta->getServerModified(), "link" => "report/" . $filename . " s.pdf"));
                         }
@@ -1740,8 +1740,8 @@ class GeneralController extends Controller
                         $meta = $dropbox->getMetaData(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $filename . " binder s.pdf");
                         if($meta){
                             if(!Storage::disk('report')->exists($filename . " binder s.pdf") || Storage::disk('report')->size($filename . " binder s.pdf") != $meta->getSize()){
-                                $file = $dropbox->download(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $filename . " binder s.pdf");
-                                file_put_contents(storage_path('report') . '/' . $filename . " binder s.pdf", $file->getContents());
+                                // $file = $dropbox->download(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $filename . " binder s.pdf");
+                                // file_put_contents(storage_path('report') . '/' . $filename . " binder s.pdf", $file->getContents());
                             }
                             array_push($reportfiles, array("filename" => $filename . " binder s.pdf", "size" => $meta->getSize(), "downloadSize" => Storage::disk('report')->size($filename . " binder s.pdf"), "modifiedDate" => $meta->getServerModified(), "link" => "report/" . $filename . " binder s.pdf"));
                         }
@@ -1750,8 +1750,8 @@ class GeneralController extends Controller
                         $meta = $dropbox->getMetaData(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $filename . " Data Check.pdf");
                         if($meta){
                             if(!Storage::disk('report')->exists($filename . " Data Check.pdf") || Storage::disk('report')->size($filename . " Data Check.pdf") != $meta->getSize()){
-                                $file = $dropbox->download(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $filename . " Data Check.pdf");
-                                file_put_contents(storage_path('report') . '/' . $filename . " Data Check.pdf", $file->getContents());
+                                // $file = $dropbox->download(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $filename . " Data Check.pdf");
+                                // file_put_contents(storage_path('report') . '/' . $filename . " Data Check.pdf", $file->getContents());
                             }
                             array_push($reportfiles, array("filename" => $filename . " Data Check.pdf", "size" => $meta->getSize(), "downloadSize" => Storage::disk('report')->size($filename . " Data Check.pdf"), "modifiedDate" => $meta->getServerModified(), "link" => "report/" . $filename . " Data Check.pdf"));
                         }
