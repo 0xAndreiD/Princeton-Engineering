@@ -169,8 +169,8 @@
                     <h3 class="block-title">Document Control</h3>
                 </div>
                 <div class="block-content review-block-content pt-3 pb-3 flexAndCenter" style="justify-content: space-around;">
-                    <button class="btn btn-outline-primary mr-1" style="width:100px;" onclick="openReportFiles()">Reports</button>
-                    <a target="_blank" rel="noopener noreferrer" class="btn btn-outline-info mr-1" href="{{ $inpath }}">In Directory</a>
+                    <button class="btn btn-outline-primary mr-1" style="width:100px;" onclick="showReportDlg()">Reports</button>
+                    <button class="btn btn-outline-info mr-1" onclick="showInDirDlg()">In Directory</a>
                     <button class="btn btn-outline-secondary mr-1" onclick="eSealUpload()">eSeal / Upload</button>
                 </div>
             </div>
@@ -218,9 +218,33 @@
     </div>
 </div>
 
+<!-- Terms Modal -->
+<div class="modal fade" id="treeDlg" tabindex="-1" role="dialog" aria-labelledby="modal-terms" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="block block-themed block-transparent mb-0">
+                <div class="block-header bg-primary-dark">
+                    <h3 class="block-title" id="treeDlgTitle"></h3>
+                    <div class="block-options">
+                        <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                            <i class="fa fa-fw fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="block-content">
+                    <div id="filetree" style="height:300px;">
+                    
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     window.msgCount = {{ count($messages) }};
 </script>
+<script src="{{ asset('/js/plugins/jstree/jstree.min.js') }}"></script>
 
 @include('admin.onreview.script')
 @endsection

@@ -84,6 +84,11 @@ return [
             'root' => storage_path('db'),
         ],
 
+        'report' => [
+            'driver' => 'local',
+            'root' => storage_path('report'),
+        ],
+
     ],
 
 ];

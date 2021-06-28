@@ -106,6 +106,20 @@ $(document).ready(function(){
 			}
 		})
 	});
+
+    $("#filetree").jstree({
+        'plugins': ["wholerow", "types"],
+        'core': {
+            "check_callback": true,
+            "themes" : {
+                "responsive": true
+            },
+        },
+        "types" : {
+            "folder" : { "icon" : "fa fa-folder m--font-warning" },
+            "file" : {"icon" : "fa fa-file m--font-warning" }
+        },  
+    });
 });
 
 function checkboxAll(){
@@ -171,7 +185,7 @@ function autoNote(){
     let firstNote = 0;
 
     $("#envSection input[type=checkbox]:enabled").each(function() {
-        if($(this)[0].checked == false){
+        if($(this)[0].checked == true){
             if(!firstNote){
                 firstNote = 1;
                 note += ' Environmental:';
@@ -182,7 +196,7 @@ function autoNote(){
     
     firstNote = 0;
     $("#codeSection input[type=checkbox]:enabled").each(function() {
-        if($(this)[0].checked == false){
+        if($(this)[0].checked == true){
             if(!firstNote){
                 firstNote = 1;
                 if(note != '') note += '\n';
@@ -194,7 +208,7 @@ function autoNote(){
 
     firstNote = 0;
     $("#elecSection input[type=checkbox]:enabled").each(function() {
-        if($(this)[0].checked == false){
+        if($(this)[0].checked == true){
             if(!firstNote){
                 firstNote = 1;
                 if(note != '') note += '\n';
@@ -206,7 +220,7 @@ function autoNote(){
 
     firstNote = 0;
     $("#structSection input[type=checkbox]:enabled").each(function() {
-        if($(this)[0].checked == false){
+        if($(this)[0].checked == true){
             if(!firstNote){
                 firstNote = 1;
                 if(note != '') note += '\n';
@@ -243,7 +257,7 @@ function eSealUpload(){
     });
 }
 
-function openReportFiles(){
+function showReportDlg(){
     swal.fire({ title: "Please wait...", showConfirmButton: false });
     swal.showLoading();
     $.ajax({
@@ -253,10 +267,15 @@ function openReportFiles(){
         success:function(res){
             swal.close();
             if (res.success == true && res.files) {
+                $("#filetree").jstree('delete_node', '#root');
+                $("#filetree").jstree('create_node', null, {"text":"Reports", "id": "root", "type": "folder", "state": {"opened": true} }, 'last');
+                $("#treeDlgTitle").html("Reports");
+                
                 res.files.forEach(link => {
-                    let filelink = (res.reportpath + link).split(" ").join("+");
-                    window.open(filelink, '_blank');
+                    $("#filetree").jstree('create_node', '#root', {"text": link.filename + ' (' + parseInt(link.size / 1024) + 'KB/' + link.modifiedDate + ')', "id": "root", "type": "file", "link": link.link}, 'last');
                 });
+
+                $("#treeDlg").modal();
             }
         },
         error: function(xhr, status, error) {
