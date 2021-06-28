@@ -1723,7 +1723,7 @@ class GeneralController extends Controller
                                 // $file = $dropbox->download(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $filename . ".pdf");
                                 // file_put_contents(storage_path('report') . '/' . $filename . ".pdf", $file->getContents());
                             //}
-                            array_push($reportfiles, array("filename" => $filename . ".pdf", "size" => $meta->getSize(), "downloadSize" => filesize(storage_path('report') . '/' . $filename . ".pdf"), "modifiedDate" => $meta->getServerModified(), "link" => "report/" . $filename . ".pdf"));
+                            array_push($reportfiles, array("filename" => $filename . ".pdf", "size" => $meta->getSize(), "link" => "report/" . $filename . ".pdf"));
                         }
                     } catch (DropboxClientException $e) { }
                     try {
@@ -1733,7 +1733,7 @@ class GeneralController extends Controller
                                 // $file = $dropbox->download(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $filename . " s.pdf");
                                 // file_put_contents(storage_path('report') . '/' . $filename . " s.pdf", $file->getContents());
                             //}
-                            array_push($reportfiles, array("filename" => $filename . " s.pdf", "size" => $meta->getSize(), "downloadSize" => filesize(storage_path('report') . '/' . $filename . " s.pdf"), "modifiedDate" => $meta->getServerModified(), "link" => "report/" . $filename . " s.pdf"));
+                            array_push($reportfiles, array("filename" => $filename . " s.pdf", "size" => $meta->getSize(), "link" => "report/" . $filename . " s.pdf"));
                         }
                     } catch (DropboxClientException $e) { }
                     try {
@@ -1743,7 +1743,7 @@ class GeneralController extends Controller
                                 // $file = $dropbox->download(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $filename . " binder s.pdf");
                                 // file_put_contents(storage_path('report') . '/' . $filename . " binder s.pdf", $file->getContents());
                             //}
-                            array_push($reportfiles, array("filename" => $filename . " binder s.pdf", "size" => $meta->getSize(), "downloadSize" => filesize(storage_path('report') . '/' . $filename . " binder s.pdf"), "modifiedDate" => $meta->getServerModified(), "link" => "report/" . $filename . " binder s.pdf"));
+                            array_push($reportfiles, array("filename" => $filename . " binder s.pdf", "size" => $meta->getSize(), "link" => "report/" . $filename . " binder s.pdf"));
                         }
                     } catch (DropboxClientException $e) { }
                     try {
@@ -1753,7 +1753,7 @@ class GeneralController extends Controller
                                 // $file = $dropbox->download(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $filename . " Data Check.pdf");
                                 // file_put_contents(storage_path('report') . '/' . $filename . " Data Check.pdf", $file->getContents());
                             //}
-                            array_push($reportfiles, array("filename" => $filename . " Data Check.pdf", "size" => $meta->getSize(), "downloadSize" => filesize(storage_path('report') . '/' . $filename . " Data Check.pdf"), "modifiedDate" => $meta->getServerModified(), "link" => "report/" . $filename . " Data Check.pdf"));
+                            array_push($reportfiles, array("filename" => $filename . " Data Check.pdf", "size" => $meta->getSize(), "link" => "report/" . $filename . " Data Check.pdf"));
                         }
                     } catch (DropboxClientException $e) { }
 
