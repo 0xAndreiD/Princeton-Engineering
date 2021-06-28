@@ -1728,9 +1728,9 @@ class GeneralController extends Controller
                     try {
                         $meta = $dropbox->getMetaData(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $filename . " s.pdf");
                         if($meta){
-                            // if(!Storage::disk('report')->exists($filename . " s.pdf") || Storage::disk('report')->size($filename . " s.pdf") != $meta->getSize()){
-                            //     $dropbox->download(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $filename . " s.pdf", storage_path('report') . '/' . $filename . " s.pdf");
-                            // }
+                            if(!Storage::disk('report')->exists($filename . " s.pdf") || Storage::disk('report')->size($filename . " s.pdf") != $meta->getSize()){
+                                $dropbox->download(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $filename . " s.pdf", storage_path('report') . '/' . $filename . " s.pdf");
+                            }
                             array_push($reportfiles, array("filename" => $filename . " s.pdf", "size" => $meta->getSize(), "downloadSize" => Storage::disk('report')->size($filename . " s.pdf"), "modifiedDate" => $meta->getServerModified(), "link" => "report/" . $filename . " s.pdf"));
                         }
                     } catch (DropboxClientException $e) { }
