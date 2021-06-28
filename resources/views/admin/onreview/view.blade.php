@@ -1,6 +1,11 @@
 @extends('admin.layout')
 
 @section('content')
+<style>
+.jstree-node.jstree-leaf > .jstree-icon.jstree-ocl {
+    display: none;
+}
+</style>
 
 <div class="bg-image" style="background-image: url('{{ asset('img/bg_admin.jpg') }}');">
     <div class="bg-black-10">

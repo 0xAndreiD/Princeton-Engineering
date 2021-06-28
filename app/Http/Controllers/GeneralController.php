@@ -39,6 +39,7 @@ use DateTimeZone;
 use ZipArchive;
 use DB;
 use Mail;
+use Response;
 
 class GeneralController extends Controller
 {
@@ -1702,7 +1703,7 @@ class GeneralController extends Controller
     /**
      * Check Dropbox Report folder to return report files' list.
      *
-     * @return \Illuminate\Contracts\Support\Renderable
+     * @return JSON
      */
     public function getReportList(Request $request){
         if(!empty($request['projectId'])){
@@ -1722,7 +1723,7 @@ class GeneralController extends Controller
                             if(!Storage::disk('report')->exists($filename . ".pdf") || Storage::disk('report')->size($filename . ".pdf") != $meta->getSize()){
                                 $dropbox->download(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $filename . ".pdf", storage_path('report') . '/' . $filename . ".pdf");
                             }
-                            array_push($reportfiles, array("filename" => $filename . ".pdf", "size" => $meta->getSize(), "modifiedDate" => $meta->getServerModified(), "link" => "report/" . $filename . ".pdf"));
+                            array_push($reportfiles, array("filename" => $filename . ".pdf", "size" => $meta->getSize(), "modifiedDate" => $meta->getServerModified(), "link" => base_url() . "report/" . $filename . ".pdf"));
                         }
                     } catch (DropboxClientException $e) { }
                     try {
@@ -1731,7 +1732,7 @@ class GeneralController extends Controller
                             if(!Storage::disk('report')->exists($filename . " s.pdf") || Storage::disk('report')->size($filename . " s.pdf") != $meta->getSize()){
                                 $dropbox->download(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $filename . " s.pdf", storage_path('report') . '/' . $filename . " s.pdf");
                             }
-                            array_push($reportfiles, array("filename" => $filename . " s.pdf", "size" => $meta->getSize(), "modifiedDate" => $meta->getServerModified(), "link" => "report/" . $filename . " s.pdf"));
+                            array_push($reportfiles, array("filename" => $filename . " s.pdf", "size" => $meta->getSize(), "modifiedDate" => $meta->getServerModified(), "link" => base_url() . "report/" . $filename . " s.pdf"));
                         }
                     } catch (DropboxClientException $e) { }
                     try {
@@ -1740,7 +1741,7 @@ class GeneralController extends Controller
                             if(!Storage::disk('report')->exists($filename . " binder s.pdf") || Storage::disk('report')->size($filename . " binder s.pdf") != $meta->getSize()){
                                 $dropbox->download(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $filename . " binder s.pdf", storage_path('report') . '/' . $filename . " binder s.pdf");
                             }
-                            array_push($reportfiles, array("filename" => $filename . " binder s.pdf", "size" => $meta->getSize(), "modifiedDate" => $meta->getServerModified(), "link" => "report/" . $filename . " binder s.pdf"));
+                            array_push($reportfiles, array("filename" => $filename . " binder s.pdf", "size" => $meta->getSize(), "modifiedDate" => $meta->getServerModified(), "link" => base_url() . "report/" . $filename . " binder s.pdf"));
                         }
                     } catch (DropboxClientException $e) { }
                     try {
@@ -1749,7 +1750,7 @@ class GeneralController extends Controller
                             if(!Storage::disk('report')->exists($filename . " Data Check.pdf") || Storage::disk('report')->size($filename . " Data Check.pdf") != $meta->getSize()){
                                 $dropbox->download(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $filename . " Data Check.pdf", storage_path('report') . '/' . $filename . " Data Check.pdf");
                             }
-                            array_push($reportfiles, array("filename" => $filename . " Data Check.pdf", "size" => $meta->getSize(), "modifiedDate" => $meta->getServerModified(), "link" => "report/" . $filename . " Data Check.pdf"));
+                            array_push($reportfiles, array("filename" => $filename . " Data Check.pdf", "size" => $meta->getSize(), "modifiedDate" => $meta->getServerModified(), "link" => base_url() . "report/" . $filename . " Data Check.pdf"));
                         }
                     } catch (DropboxClientException $e) { }
 
@@ -1760,6 +1761,103 @@ class GeneralController extends Controller
                 return response()->json(["message" => "Cannot find project.", "success" => false]);  
         } else 
             return response()->json(["message" => "Empty project id.", "success" => false]);
+    }
+
+    /**
+     * Return the file contents of report.
+     *
+     * @return FILE or Redirect
+     */
+    public function getReport($name){
+        if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3){
+            if(Storage::disk('report')->exists($name)){
+                $path = storage_path('report') . '/' . $name;
+                
+                $file = Storage::disk('report')->get($name);
+                $type = Storage::disk('report')->mimeType($name);
+
+                $response = Response::make($file, 200);
+                $response->header("Content-Type", $type);
+
+                return $response;
+            } else
+                abort(404);
+        } else
+            return redirect('home');
+    }
+
+    /**
+     * Check Dropbox IN folder to return IN files' list.
+     *
+     * @return JSON
+     */
+    public function getInDIRList(Request $request){
+        if(!empty($request['projectId'])){
+            $job = JobRequest::where('id', '=', $request['projectId'])->first();
+            if($job){
+                if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3)
+                {
+                    $company = Company::where('id', $job['companyId'])->first();
+                    $companyNumber = $company ? $company['company_number'] : 0;
+                    $folderPrefix = '/' . $companyNumber . ". " . $job['companyName'] . '/';
+                    
+                    $filepath = $folderPrefix . $job['clientProjectNumber'] . '. ' . $job['clientProjectName'] . ' ' . $job['state'];
+                        
+                    $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
+                    $dropbox = new Dropbox($app);
+                    $infiles = array();
+                    try{
+                        $listFolderContents = $dropbox->listFolder(env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_IN') . $filepath . '/');
+                        $files = $listFolderContents->getItems()->all();
+                        foreach($files as $file){
+                            if(!file_exists(storage_path('upload') . $filepath . '/' . $file->getName()) || filesize(storage_path('upload') . $filepath . '/' . $file->getName()) != $file->getSize()){
+                                $dropbox->download(env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_IN') . $filepath . '/' . $file->getName(), storage_path('upload') . $filepath . '/' . $file->getName());
+                            }
+                            $infiles[] = array('filename' => $file->getName(), 'size' => $file->getSize(), 'modifiedDate' => $meta->getServerModified(), 'link' => base_url() . 'in/' . $request['projectId'] . '/' . $file->getName());
+                        }
+                    } catch (DropboxClientException $e) { 
+                        $infiles = array();
+                    }
+
+                    return response()->json(["files" => $infiles, "success" => true]);
+                } else
+                    return response()->json(["message" => "You don't have permission.", "success" => false]);
+            } else
+                return response()->json(["message" => "Cannot find project.", "success" => false]);  
+        } else 
+            return response()->json(["message" => "Empty project id.", "success" => false]);
+    }
+
+    /**
+     * Return the file contents of report.
+     *
+     * @return FILE or Redirect
+     */
+    public function getINFile($jobId, $filename){
+        if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3){
+            $job = JobRequest::where('id', '=', $request['projectId'])->first();
+            if($job){
+                $company = Company::where('id', $job['companyId'])->first();
+                $companyNumber = $company ? $company['company_number'] : 0;
+                $folderPrefix = '/' . $companyNumber . ". " . $job['companyName'] . '/';
+
+                $filepath = $folderPrefix . $job['clientProjectNumber'] . '. ' . $job['clientProjectName'] . ' ' . $job['state'];
+                        
+                if(file_exists(storage_path('upload') . $filepath . '/' . $filename)){
+                    $path = storage_path('upload') . $filepath . '/' . $filename;
+                    
+                    $file = Storage::disk('upload')->get($filepath . '/' . $filename);
+                    $type = Storage::disk('upload')->mimeType($filepath . '/' . $filename);
+    
+                    $response = Response::make($file, 200);
+                    $response->header("Content-Type", $type);
+    
+                    return $response;
+                } else
+                    abort(404);   
+            }
+        } else
+            return redirect('home');
     }
 
     /**
