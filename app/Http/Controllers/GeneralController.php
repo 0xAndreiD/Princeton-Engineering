@@ -1723,7 +1723,7 @@ class GeneralController extends Controller
                             if(!Storage::disk('report')->exists($filename . ".pdf") || Storage::disk('report')->size($filename . ".pdf") != $meta->getSize()){
                                 $dropbox->download(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $filename . ".pdf", storage_path('report') . '/' . $filename . ".pdf");
                             }
-                            array_push($reportfiles, array("filename" => $filename . ".pdf", "size" => $meta->getSize(), "modifiedDate" => $meta->getServerModified(), "link" => base_url() . "report/" . $filename . ".pdf"));
+                            array_push($reportfiles, array("filename" => $filename . ".pdf", "size" => $meta->getSize(), "modifiedDate" => $meta->getServerModified(), "link" => env('APP_URL') . "report/" . $filename . ".pdf"));
                         }
                     } catch (DropboxClientException $e) { }
                     try {
@@ -1732,7 +1732,7 @@ class GeneralController extends Controller
                             if(!Storage::disk('report')->exists($filename . " s.pdf") || Storage::disk('report')->size($filename . " s.pdf") != $meta->getSize()){
                                 $dropbox->download(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $filename . " s.pdf", storage_path('report') . '/' . $filename . " s.pdf");
                             }
-                            array_push($reportfiles, array("filename" => $filename . " s.pdf", "size" => $meta->getSize(), "modifiedDate" => $meta->getServerModified(), "link" => base_url() . "report/" . $filename . " s.pdf"));
+                            array_push($reportfiles, array("filename" => $filename . " s.pdf", "size" => $meta->getSize(), "modifiedDate" => $meta->getServerModified(), "link" => env('APP_URL') . "report/" . $filename . " s.pdf"));
                         }
                     } catch (DropboxClientException $e) { }
                     try {
@@ -1741,7 +1741,7 @@ class GeneralController extends Controller
                             if(!Storage::disk('report')->exists($filename . " binder s.pdf") || Storage::disk('report')->size($filename . " binder s.pdf") != $meta->getSize()){
                                 $dropbox->download(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $filename . " binder s.pdf", storage_path('report') . '/' . $filename . " binder s.pdf");
                             }
-                            array_push($reportfiles, array("filename" => $filename . " binder s.pdf", "size" => $meta->getSize(), "modifiedDate" => $meta->getServerModified(), "link" => base_url() . "report/" . $filename . " binder s.pdf"));
+                            array_push($reportfiles, array("filename" => $filename . " binder s.pdf", "size" => $meta->getSize(), "modifiedDate" => $meta->getServerModified(), "link" => env('APP_URL') . "report/" . $filename . " binder s.pdf"));
                         }
                     } catch (DropboxClientException $e) { }
                     try {
@@ -1750,7 +1750,7 @@ class GeneralController extends Controller
                             if(!Storage::disk('report')->exists($filename . " Data Check.pdf") || Storage::disk('report')->size($filename . " Data Check.pdf") != $meta->getSize()){
                                 $dropbox->download(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $filename . " Data Check.pdf", storage_path('report') . '/' . $filename . " Data Check.pdf");
                             }
-                            array_push($reportfiles, array("filename" => $filename . " Data Check.pdf", "size" => $meta->getSize(), "modifiedDate" => $meta->getServerModified(), "link" => base_url() . "report/" . $filename . " Data Check.pdf"));
+                            array_push($reportfiles, array("filename" => $filename . " Data Check.pdf", "size" => $meta->getSize(), "modifiedDate" => $meta->getServerModified(), "link" => env('APP_URL') . "report/" . $filename . " Data Check.pdf"));
                         }
                     } catch (DropboxClientException $e) { }
 
@@ -1813,7 +1813,7 @@ class GeneralController extends Controller
                             if(!file_exists(storage_path('upload') . $filepath . '/' . $file->getName()) || filesize(storage_path('upload') . $filepath . '/' . $file->getName()) != $file->getSize()){
                                 $dropbox->download(env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_IN') . $filepath . '/' . $file->getName(), storage_path('upload') . $filepath . '/' . $file->getName());
                             }
-                            $infiles[] = array('filename' => $file->getName(), 'size' => $file->getSize(), 'modifiedDate' => $meta->getServerModified(), 'link' => base_url() . 'in/' . $request['projectId'] . '/' . $file->getName());
+                            $infiles[] = array('filename' => $file->getName(), 'size' => $file->getSize(), 'modifiedDate' => $meta->getServerModified(), 'link' => env('APP_URL') . 'in/' . $request['projectId'] . '/' . $file->getName());
                         }
                     } catch (DropboxClientException $e) { 
                         $infiles = array();
