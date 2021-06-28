@@ -271,8 +271,8 @@ function showReportDlg(){
                 $("#treeDlgTitle").html("Reports");
                 $("#filetree").empty();
                 
-                res.files.forEach(link => {
-                    $("#filetree").jstree('create_node', null, {"text": link.filename + ' (' + parseInt(link.size / 1024) + 'KB/' + link.modifiedDate + ')', "id": "root", "type": "file", "link": link.link}, 'last');
+                res.files.forEach((link, index) => {
+                    $("#filetree").jstree('create_node', null, {"text": link.filename + ' (' + parseInt(link.size / 1024) + 'KB/' + link.modifiedDate + ')', "id": "item_" + index, "type": "file", "link": link.link}, 'last');
                 });
 
                 $("#treeDlg").modal();
