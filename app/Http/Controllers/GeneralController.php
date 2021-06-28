@@ -29,6 +29,7 @@ use App\StandardFavorite;
 use App\JobChat;
 use App\PermitFiles;
 use App\PermitInfo;
+use App\DropboxHome;
 use Kunnu\Dropbox\DropboxApp;
 use Kunnu\Dropbox\Dropbox;
 use Kunnu\Dropbox\DropboxFile;
@@ -1681,6 +1682,12 @@ class GeneralController extends Controller
             if($job){
                 if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3)
                 {
+                    $dropboxhome = DropboxHome::where('userId', Auth::user()->id)->first();
+                    if($dropboxhome)
+                        $homepath = $dropboxhome->path;
+                    else
+                        $homepath = 'https://www.dropbox.com/home' . env('DROPBOX_PROJECTS_PATH');
+
                     $company = Company::where('id', $job['companyId'])->first();
                     $companyNumber = $company ? $company['company_number'] : 0;
                     $folderPrefix = '/' . $companyNumber. '. ' . $job['companyName'] . '/';
@@ -1710,54 +1717,47 @@ class GeneralController extends Controller
             if($job){
                 if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3)
                 {
-                    $jsonname = 'iRoofTM by Princeton Engineering ' . str_replace(".json", "", $job['requestFile']) . "-";
-                    $filename = $jsonname . $job['clientProjectNumber'] . '.' . $job['clientProjectName'] . ' ' . $job['state'];
+                    $dropboxhome = DropboxHome::where('userId', Auth::user()->id)->first();
+                    if($dropboxhome)
+                        $homepath = $dropboxhome->path;
+                    else
+                        $homepath = 'https://www.dropbox.com/home' . env('DROPBOX_PROJECTS_PATH');
+
+                    // $company = Company::where('id', $job['companyId'])->first();
+                    // $companyNumber = $company ? $company['company_number'] : 0;
+                    // $folderPrefix = '/' . $companyNumber. '. ' . $job['companyName'] . '/';
+                    $jsonname = 'iRoofTM by Princeton Engineering ' . str_replace(".json", "", $job['requestFile']);
+                    $filename = $job['clientProjectNumber'] . '.' . $job['clientProjectName'] . ' ' . $job['state'];
 
                     $reportfiles = array();
                     $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
                     $dropbox = new Dropbox($app);
                     try {
-                        $meta = $dropbox->getMetaData(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $filename . ".pdf");
+                        $meta = $dropbox->getMetaData(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $jsonname . "-" . $filename . ".pdf");
                         if($meta){
-                            //if(!Storage::disk('report')->exists($filename . ".pdf")){
-                                // $file = $dropbox->download(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $filename . ".pdf");
-                                // file_put_contents(storage_path('report') . '/' . $filename . ".pdf", $file->getContents());
-                            //}
-                            array_push($reportfiles, array("filename" => $filename . ".pdf","link" => "report/" . $filename . ".pdf"));
+                            array_push($reportfiles, $jsonname . "-" . $filename . ".pdf");
                         }
                     } catch (DropboxClientException $e) { }
                     try {
-                        $meta = $dropbox->getMetaData(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $filename . " s.pdf");
+                        $meta = $dropbox->getMetaData(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $jsonname . "-" . $filename . " s.pdf");
                         if($meta){
-                            //if(!Storage::disk('report')->exists($filename . " s.pdf")){
-                                // $file = $dropbox->download(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $filename . " s.pdf");
-                                // file_put_contents(storage_path('report') . '/' . $filename . " s.pdf", $file->getContents());
-                            //}
-                            array_push($reportfiles, array("filename" => $filename . " s.pdf","link" => "report/" . $filename . " s.pdf"));
+                            array_push($reportfiles, $jsonname . "-" . $filename . " s.pdf");
                         }
                     } catch (DropboxClientException $e) { }
                     try {
-                        $meta = $dropbox->getMetaData(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $filename . " binder s.pdf");
+                        $meta = $dropbox->getMetaData(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $jsonname . "-" . $filename . " binder s.pdf");
                         if($meta){
-                            //if(!Storage::disk('report')->exists($filename . " binder s.pdf")){
-                                // $file = $dropbox->download(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $filename . " binder s.pdf");
-                                // file_put_contents(storage_path('report') . '/' . $filename . " binder s.pdf", $file->getContents());
-                            //}
-                            array_push($reportfiles, array("filename" => $filename . " binder s.pdf","link" => "report/" . $filename . " binder s.pdf"));
+                            array_push($reportfiles, $jsonname . "-" . $filename . " binder s.pdf");
                         }
                     } catch (DropboxClientException $e) { }
                     try {
-                        $meta = $dropbox->getMetaData(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $filename . " Data Check.pdf");
+                        $meta = $dropbox->getMetaData(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $jsonname . "-" . $filename . " Data Check.pdf");
                         if($meta){
-                            //if(!Storage::disk('report')->exists($filename . " Data Check.pdf")){
-                                // $file = $dropbox->download(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $filename . " Data Check.pdf");
-                                // file_put_contents(storage_path('report') . '/' . $filename . " Data Check.pdf", $file->getContents());
-                            //}
-                            array_push($reportfiles, array("filename" => $filename . " Data Check.pdf","link" => "report/" . $filename . " Data Check.pdf"));
+                            array_push($reportfiles, $jsonname . "-" . $filename . " Data Check.pdf");
                         }
                     } catch (DropboxClientException $e) { }
 
-                    return response()->json(["files" => $reportfiles, "success" => true]);
+                    return response()->json(["reportpath" => $homepath . '/Reports?preview=', "files" => $reportfiles, "success" => true]);
                 } else
                     return response()->json(["message" => "You don't have permission.", "success" => false]);
             } else
