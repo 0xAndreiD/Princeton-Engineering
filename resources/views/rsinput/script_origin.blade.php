@@ -3216,6 +3216,7 @@ $(document).ready(function() {
         e.stopPropagation(); 
 
         if (isEmptyInputBox() == true) { 
+            $("#submitBtns input").attr('disabled', false);
             swal.fire({ title: "Warning", text: "Please fill blank fields.", icon: "warning", confirmButtonText: `OK` });
             return; 
         }
@@ -3226,9 +3227,11 @@ $(document).ready(function() {
         await setProjectIdComment();
         var numComment = $("#project-id-comment").html();
         if(numComment.includes("duplicated.")){
+            $("#submitBtns input").attr('disabled', false);
             swal.fire({ title: "Warning", text: "This project number has already been used. Please use another one.", icon: "warning", confirmButtonText: `OK` });
             return; 
         } else if(numComment.includes("more than")){
+            $("#submitBtns input").attr('disabled', false);
             swal.fire({ title: "Warning", text: "This project number is too high. Please use another one.", icon: "warning", confirmButtonText: `OK` });
             return; 
         }
@@ -3241,6 +3244,7 @@ $(document).ready(function() {
             for(let i =1; i <= caseCount; i ++){
                 if($(`#trussFlagOption-${i}-1`)[0].checked){ // Stick 
                     if(stick_right_input[i] == ''){
+                        $("#submitBtns input").attr('disabled', false);
                         swal.fire({ title: "Warning", text: "Please fill A7~A10 fields on Tab " + i + ".", icon: "warning", confirmButtonText: `OK` });
                         return;
                     }
@@ -3259,6 +3263,7 @@ $(document).ready(function() {
             data:{data: data, status: status, caseCount: caseCount},
             success:function(res){
                 swal.close();
+                $("#submitBtns input").attr('disabled', false);
                 if (res.status == true) {
                     $("#projectId").val(res.projectId);
                     $("#uploadJobId").val(res.projectId);
@@ -3291,6 +3296,7 @@ $(document).ready(function() {
             },
             error: function(xhr, status, error) {
                 swal.close();
+                $("#submitBtns input").attr('disabled', false);
                 res = JSON.parse(xhr.responseText);
                 message = res.message;
                 swal.fire({ title: "Error",
@@ -3304,10 +3310,12 @@ $(document).ready(function() {
     }
 
     $('#rs-save').click(function(e) {
+        $("#submitBtns input").attr('disabled', true);
         if( !checkWarnings() ){
             $('#projectState').val("1");
             submitData(e, 'Saved');
         } else{
+            $("#submitBtns input").attr('disabled', false);
             swal.fire({ title: "Error",
                     text: "Warning - Please fix the warnings before submit.",
                     icon: "error",
@@ -3315,11 +3323,14 @@ $(document).ready(function() {
         }
     });
     $('#rs-datacheck').click(function(e){
+        $("#submitBtns input").attr('disabled', true);
         $('#projectState').val("2");
         submitData(e, 'Data Check');
     });
     $("#rs-submit").click(function(e){
+        $("#submitBtns input").attr('disabled', true);
         if (domChanged == false) {
+            $("#submitBtns input").attr('disabled', false);
             swal.fire({ title: "Warning", text: "No changes on this project data except drawings. So you don't need to submit.", icon: "warning", confirmButtonText: `OK` });
             return;
         }
@@ -3338,7 +3349,8 @@ $(document).ready(function() {
                 if ( result.value ) {
                     $('#projectState').val("4");
                     submitData(e, 'Submitted');
-                } 
+                } else
+                    $("#submitBtns input").attr('disabled', false);
             });
         }
         else{
@@ -3354,12 +3366,14 @@ $(document).ready(function() {
                 if ( result.value ) {
                     $('#projectState').val("4");
                     submitData(e, 'Submitted');
-                } 
+                } else
+                    $("#submitBtns input").attr('disabled', false);
             });
-            submitData(e, 'Submitted');
+            //submitData(e, 'Submitted');
         }
     });
     $('#rs-initialize').click(function(e){
+        $("#submitBtns input").attr('disabled', true);
         swal.fire({
             title: "Warning",
             html: "Warning - Your project state will be initialized.<br /> Continue?",
@@ -3381,6 +3395,7 @@ $(document).ready(function() {
                             $("#rs-initialize").addClass('disabled');
                             $('#projectState').val("1");
                         }
+                        $("#submitBtns input").attr('disabled', false);
                     },
                     error: function(xhr, status, error) {
                         res = JSON.parse(xhr.responseText);
@@ -3389,9 +3404,11 @@ $(document).ready(function() {
                                 text: message == "" ? "Error happened while processing. Please try again later." : message,
                                 icon: "error",
                                 confirmButtonText: `OK` });
+                        $("#submitBtns input").attr('disabled', false);
                     }
                 });
-            } 
+            }  else
+                $("#submitBtns input").attr('disabled', false);
         });
     });
 
