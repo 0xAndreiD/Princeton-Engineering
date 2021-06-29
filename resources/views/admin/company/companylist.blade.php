@@ -37,12 +37,13 @@
                     <thead>
                         <tr>
                             <th class="text-center" style="width: 5%;">ID</th>
-                            <th style="width:20%">Name</th>
+                            <th style="width:15%">Name</th>
                             <th style="width:5%;">Number</th>
                             <th style="width:10%;">Tel No</th>
-                            <th style="width:20%;">Address</th>
+                            <th style="width:15%;">Address</th>
                             <th style="width:15%;">Email</th>
                             <th style="width:10%;">Website</th>
+                            <th style="width:10%;">Max Allow Skip</th>
                             <th style="min-width:150px;">Action</th>
                         </tr>
                         <tr>
@@ -54,6 +55,11 @@
                             <th class="searchHead"> <input type="text" placeholder="Search Email" class="searchBox" id="emailFilter"> </th>
                             <th class="searchHead"> <input type="text" placeholder="Search Website" class="searchBox" id="siteFilter"> </th>
                             <th></th>
+                            <th style="display: flex;align-items: center;justify-content: center;">
+                                <span class="ml-1" style='writing-mode: vertical-lr;width: 42px;transform: rotateZ(180deg);'>Edit</span>
+                                <span class="ml-4" style='writing-mode: tb-rl;width: 42px;transform: rotateZ(180deg);'>Permit</span>
+                                <span class="ml-1" style='writing-mode: tb-rl;width: 42px;transform: rotateZ(180deg);'>Delete</span>
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -106,6 +112,10 @@
                                             <label for="website">Website <span class="text-danger">*</span></label>
                                             <input type="text" class="form-control" id="website" name="website" placeholder="http://example.com">
                                         </div>
+                                        <div class="form-group">
+                                            <label for="website">Max Allow Skip <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="max_allowable_skip" name="max_allowable_skip" placeholder="10">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -128,6 +138,11 @@
                         <div class="block block-themed block-transparent mb-0">
                             <div class="block-header bg-primary-dark">
                                 <h3 class="block-title">Building Permit Related Information</h3>
+                                <div class="block-options">
+                                    <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                                        <i class="fa fa-fw fa-times"></i>
+                                    </button>
+                                </div>
                             </div>
                             <div class="block-content">
                                 <div class="row items-push">
@@ -227,6 +242,7 @@
                                 </div>
                             </div>
                             <div class="block-content block-content-full text-right bg-light">
+                                <button type="button" class="btn btn-sm btn-light" data-dismiss="modal">Close</button>
                                 <button type="submit" class="btn btn-sm btn-primary">Update</button>
                             </div>
                         </div>
@@ -259,6 +275,7 @@
                         { "data": "address" },
                         { "data": "email" },
                         { "data": "website" },
+                        { "data": "maxallowskip" },
                         { "data": "actions", "orderable": false }
                     ]	 
                 });
