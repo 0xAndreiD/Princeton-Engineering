@@ -310,7 +310,7 @@ ul.social li{
             			<div class="text" style="padding: 0 2.5em; text-align: center;">
                             <h2>ProjectNumber: {{$projectNumber}}</h2>
                             <h2>ProjectName: {{$projectName}}</h2>
-                            <h2>State: {{$projectState}}</h2>
+                            <h2>State: {{$state}}</h2>
                             <h2>Do not reply this email</h2>
             			</div>
             		</td>
