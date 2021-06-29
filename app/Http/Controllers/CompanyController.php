@@ -60,7 +60,8 @@ class CompanyController extends Controller
             2 =>'number',
             3 =>'telno',
             4 =>'address',
-            5 =>'website'
+            5 =>'website',
+            6 => 'max_allowable_skip'
         );
         $totalData = Company::count();
         $totalFiltered = $totalData; 
@@ -98,7 +99,8 @@ class CompanyController extends Controller
                         'company_info.company_telno as telno',
                         'company_info.company_address as address',
                         'company_info.company_email as email',
-                        'company_info.company_website as website'
+                        'company_info.company_website as website',
+                        'company_info.max_allowable_skip as maxallowskip'
                     )
                 );
         }
@@ -111,7 +113,8 @@ class CompanyController extends Controller
                             ->orWhere('company_info.company_telno', 'LIKE',"%{$search}%")
                             ->orWhere('company_info.company_address', 'LIKE',"%{$search}%")
                             ->orWhere('company_info.company_email', 'LIKE',"%{$search}%")
-                            ->orWhere('company_info.company_website', 'LIKE',"%{$search}%");
+                            ->orWhere('company_info.company_website', 'LIKE',"%{$search}%")
+                            ->orWhere('company_info.max_allowable_skip', 'LIKE',"%{$search}%");
                         })
                         ->offset($start)
                         ->limit($limit)
@@ -124,7 +127,8 @@ class CompanyController extends Controller
                                 'company_info.company_telno as telno',
                                 'company_info.company_address as address',
                                 'company_info.company_email as email',
-                                'company_info.company_website as website'
+                                'company_info.company_website as website',
+                                'company_info.max_allowable_skip as maxallowskip'
                             )
                         );
 
@@ -135,7 +139,8 @@ class CompanyController extends Controller
                             ->orWhere('company_info.company_telno', 'LIKE',"%{$search}%")
                             ->orWhere('company_info.company_address', 'LIKE',"%{$search}%")
                             ->orWhere('company_info.company_email', 'LIKE',"%{$search}%")
-                            ->orWhere('company_info.company_website', 'LIKE',"%{$search}%");
+                            ->orWhere('company_info.company_website', 'LIKE',"%{$search}%")
+                            ->orWhere('company_info.max_allowable_skip', 'LIKE',"%{$search}%");
                         })
                         ->count();
         }
@@ -153,6 +158,7 @@ class CompanyController extends Controller
                 $nestedData['address'] = $company->address;
                 $nestedData['email'] = $company->email;
                 $nestedData['website'] = $company->website;
+                $nestedData['maxallowskip'] = $company->maxallowskip;
                 
                 $nestedData['userrole'] = "
                     <span class='badge badge-danger'> Admin </span>
@@ -206,6 +212,7 @@ class CompanyController extends Controller
             $res->company_address = $data['address'];
             $res->company_email = $data['email'];
             $res->company_website = $data['website'];
+            $res->max_allowable_skip = $data['max_allowable_skip'];
             $res->save();
             echo true;
         } else {
@@ -240,6 +247,7 @@ class CompanyController extends Controller
             $res->company_address = $data['address'];
             $res->company_email = $data['email'];
             $res->company_website = $data['website'];
+            $res->max_allowable_skip = $data['max_allowable_skip'];
             $res->save();
             echo true;
         }

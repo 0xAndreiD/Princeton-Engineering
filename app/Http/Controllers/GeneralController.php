@@ -1586,6 +1586,12 @@ class GeneralController extends Controller
             else
                 $companyId = Auth::user()->companyid;
 
+            $company = Company::where('id', $companyId)->first();
+            if($company)
+                $max_allowable_skip = $company->max_allowable_skip;
+            else
+                $max_allowable_skip = 10;
+
             $job = JobRequest::where('clientProjectNumber', $request['projectNumber'])->where('id', '!=', $request['projectId'])->where('companyId', $companyId)->first();
 
             $duplicated = false;
@@ -1600,10 +1606,10 @@ class GeneralController extends Controller
             $biggerthanmax = false;
             $maxrange = 0;
             if($request['projectNumber'] > $max){
-                $users = User::where('companyid', Auth::user()->companyid)->get();
-                if($request['projectNumber'] > $max + count($users)){
+                //$users = User::where('companyid', Auth::user()->companyid)->get();
+                if($request['projectNumber'] > $max + $max_allowable_skip){
                     $biggerthanmax = true;
-                    $maxrange = $max + count($users);
+                    $maxrange = $max + $max_allowable_skip;
                 }
             }
             return response()->json(['success' => true, 'duplicated' => $duplicated, 'maxId' => $max, 'biggerthanmax' => $biggerthanmax, 'maxrange' => $maxrange + 1]);

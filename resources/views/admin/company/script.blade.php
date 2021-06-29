@@ -27,6 +27,10 @@ $(document).ready(function(){
             required: true,
             number: true
         },
+        "max_allowable_skip": {
+            required: true,
+            number: true
+        }
     },
     messages: {
         'name': {
@@ -179,6 +183,7 @@ function updateCompany() {
     data.address = $('input#address').val();
     data.email = $('input#email').val();
     data.website = $('input#website').val();
+    data.max_allowable_skip = $('input#max_allowable_skip').val();
 
     if (data.id == 0) { // Create company
         $.post("updateCompany", {data: data}, function(result){
@@ -215,6 +220,7 @@ function showEditCompany(obj, id) {
             $('input#address').val(result.company_address);
             $('input#email').val(result.company_email);
             $('input#website').val(result.company_website);
+            $('input#max_allowable_skip').val(result.max_allowable_skip);
             $('button#updateButton').html('Update');
         }
     });
