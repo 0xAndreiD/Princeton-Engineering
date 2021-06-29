@@ -418,7 +418,7 @@
         <input class="w400-bdr" id="railsupport-custom" hidden>
         <input class="w400-bdr" id="railsupport-crc32" hidden>
     </tr>
-    <tr class="h13">
+    <tr class="h13" id="submitBtns">
         <td><div style="overflow:hidden"></div></td>
         <td style="padding: 10px;">
             <input type="button" name="rs-save" id="rs-save" class="btn btn-hero-primary {{ $projectState > 2 ? 'disabled' : '' }}" tabindex="25" value="Save" style="width:100%;"></input>
