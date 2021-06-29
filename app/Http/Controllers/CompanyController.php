@@ -218,7 +218,7 @@ class CompanyController extends Controller
         } else {
             $res = Company::where('id', $data['id'])->get()->first();
 
-            if($res->company_name != $data['name'] || $res->company_number != $data['number']){ // change folder name, update job_request table
+            if(isset($data['name']) && $res->company_name != $data['name'] || isset($data['number']) && $res->company_number != $data['number']){ // change folder name, update job_request table
                 $oldName = $res->company_number. '. ' . $res->company_name . '/';
                 $newName = $data['number']. '. ' . $data['name'] . '/';
                 if(file_exists(storage_path('/input/') . $oldName))
@@ -241,8 +241,8 @@ class CompanyController extends Controller
                 }
             }
 
-            $res->company_name = $data['name'];
-            $res->company_number = $data['number'];
+            if(isset($data['name'])) $res->company_name = $data['name'];
+            if(isset($data['number'])) $res->company_number = $data['number'];
             $res->company_telno = $data['telno'];
             $res->company_address = $data['address'];
             $res->company_email = $data['email'];

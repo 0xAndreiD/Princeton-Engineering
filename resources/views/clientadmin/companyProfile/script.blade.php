@@ -23,6 +23,10 @@ $(document).ready(function(){
             required: true,
             number: true
         },
+        'max_allowable_skip': {
+            required: true,
+            number: true
+        }
     },
     messages: {
         'name': {
@@ -127,12 +131,13 @@ function updateCompany() {
     });
     var data = {};
     data.id = $('input#id').val();
-    data.name = $('input#name').val();
-    data.number = $('input#number').val();
+    // data.name = $('input#name').val();
+    // data.number = $('input#number').val();
     data.telno = $('input#telno').val();
     data.address = $('input#address').val();
     data.email = $('input#email').val();
     data.website = $('input#website').val();
+    data.max_allowable_skip = $('input#max_allowable_skip').val();
     
     $.post("updateCompany", {data: data}, function(result){
         if (result){
