@@ -35,14 +35,14 @@
                                     <label for="number">Number <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="number" 
                                     name="digits" placeholder="Enter A Number.."
-                                    value="{{$company->company_number}}" >
+                                    value="{{$company->company_number}}" disabled>
                                     <input type="hidden" class="form-control" id="id" name="id" value="{{$company->id}}">
                                 </div>
                                 <div class="form-group">
                                     <label for="name">Name <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="name" 
                                         name="name" placeholder="Enter A Name.."
-                                        value="{{$company->company_name}}"
+                                        value="{{$company->company_name}}" disabled
                                     >
                                 </div>
                                 <div class="form-group">
@@ -71,6 +71,13 @@
                                     <input type="text" class="form-control" id="website" 
                                     name="website" placeholder="http://example.com"
                                     value="{{$company->company_website}}"
+                                    >
+                                </div>
+                                <div class="form-group">
+                                    <label for="max_allowable_skip">Max Allowable Skip <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="max_allowable_skip" 
+                                        name="max_allowable_skip" placeholder="Enter A Number.."
+                                        value="{{$company->max_allowable_skip}}"
                                     >
                                 </div>
                             </div>
