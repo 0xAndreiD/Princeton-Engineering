@@ -1884,10 +1884,10 @@ class GeneralController extends Controller
                 if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3){
                     $users = User::where('usernumber', $project->userId)->where('companyid', $project->companyId)->get();
                         
-                    $state = JobProjectStatus::where('id', $project->state)->first();
+                    // $state = JobProjectStatus::where('id', $project->state)->first();
                     //Mailing
                     $data = ['projectName' => $project->clientProjectName, 'projectNumber' => $project->clientProjectNumber, 
-                    'projectState' => $state->notes];
+                    'state' => $project->state];
 
                     foreach($users as $user){
                         if ($user) {
@@ -1933,10 +1933,10 @@ class GeneralController extends Controller
                         $project = JobRequest::where('id', '=', $request['projectId'])->first();
                         $users = User::where('usernumber', $project->userId)->where('companyid', $project->companyId)->get();
                         
-                        $state = JobProjectStatus::where('id', $project->state)->first();
+                        //$state = JobProjectStatus::where('id', $project->state)->first();
                         //Mailing
                         $data = ['projectName' => $project->clientProjectName, 'projectNumber' => $project->clientProjectNumber, 
-                        'projectState' => $state->notes];
+                        'state' => $project->state];
 
                         foreach($users as $user){
                             if ($user) {
@@ -1972,9 +1972,9 @@ class GeneralController extends Controller
         $project = JobRequest::where('id', '=', $request->input('projectId'))->first();
         $users = User::where('usernumber', $project->userId)->where('companyid', $project->companyId)->get();
         
-        $state = JobProjectStatus::where('id', $project->state)->first();
+        // $state = JobProjectStatus::where('id', $project->state)->first();
         $data = ['projectName' => $project->clientProjectName, 'projectNumber' => $project->clientProjectNumber, 
-        'projectState' => $state->notes];
+        'state' => $project->state];
         
         //Mailing
         foreach($users as $user){
