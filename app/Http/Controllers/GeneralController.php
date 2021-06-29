@@ -1875,8 +1875,24 @@ class GeneralController extends Controller
                     'userId' => Auth::user()->id,
                     'text' => $request['message']
                 ]);
-                if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3)
+                if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3){
+                    $users = User::where('usernumber', $project->userId)->where('companyid', $project->companyId)->get();
+                        
+                    $state = JobProjectStatus::where('id', $project->state)->first();
+                    //Mailing
+                    $data = ['projectName' => $project->clientProjectName, 'projectNumber' => $project->clientProjectNumber, 
+                    'projectState' => $state->notes];
+
+                    foreach($users as $user){
+                        if ($user) {
+                            Mail::send('mail.chatnotification', $data, function ($m) use ($user) {
+                                $m->from(env('MAIL_FROM_ADDRESS'), 'Princeton Engineering')->to($user->email)->subject('Chat is updated on the project');
+                            });
+                        }
+                    }
+
                     $project->chatIcon = 2;
+                }
                 else
                     $project->chatIcon = 1;
                 $project->save();
@@ -1910,9 +1926,11 @@ class GeneralController extends Controller
 
                         $project = JobRequest::where('id', '=', $request['projectId'])->first();
                         $users = User::where('usernumber', $project->userId)->where('companyid', $project->companyId)->get();
+                        
+                        $state = JobProjectStatus::where('id', $project->state)->first();
                         //Mailing
                         $data = ['projectName' => $project->clientProjectName, 'projectNumber' => $project->clientProjectNumber, 
-                        'projectState' => $project->state];
+                        'projectState' => $state->notes];
 
                         foreach($users as $user){
                             if ($user) {
@@ -1947,9 +1965,11 @@ class GeneralController extends Controller
 
         $project = JobRequest::where('id', '=', $request->input('projectId'))->first();
         $users = User::where('usernumber', $project->userId)->where('companyid', $project->companyId)->get();
+        
+        $state = JobProjectStatus::where('id', $project->state)->first();
         $data = ['projectName' => $project->clientProjectName, 'projectNumber' => $project->clientProjectNumber, 
-        'projectState' => $project->state];
-
+        'projectState' => $state->notes];
+        
         //Mailing
         foreach($users as $user){
             if ($user) {
