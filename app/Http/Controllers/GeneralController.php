@@ -1215,7 +1215,7 @@ class GeneralController extends Controller
             $project = JobRequest::where('id', '=', $request['projectId'])->first();
             if($project)
             {
-                if(Auth::user()->userrole == 2 || (Auth::user()->companyid == $project['companyId'] && intval($request['state']) <= 2))
+                if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || (Auth::user()->companyid == $project['companyId'] && intval($request['state']) <= 2))
                 {
                     $project->eSeal = 1;
                     $project->planCheck = 0;
