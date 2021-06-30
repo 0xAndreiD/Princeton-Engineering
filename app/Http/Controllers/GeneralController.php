@@ -1215,15 +1215,12 @@ class GeneralController extends Controller
             {
                 if(Auth::user()->userrole == 2 || (Auth::user()->companyid == $project['companyId'] && intval($request['state']) <= 2))
                 {
-                    if( isset($request['value']) )
-                    {
-                        $project->eSeal = $request['value'];
-                        $project->save();
+                    $project->eSeal = 1;
+                    $project->planCheck = 0;
+                    $project->asBuilt = 0;
+                    $project->save();
 
-                        return response()->json(['success' => true]);
-                    }
-                    else
-                        return response()->json(['success' => false, 'message' => "Wrong state value."] );
+                    return response()->json(['success' => true]);   
                 }
                 else
                     return response()->json(['success' => false, 'message' => "You don't have any permission to set state of this project."] );
