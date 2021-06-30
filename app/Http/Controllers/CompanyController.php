@@ -160,9 +160,9 @@ class CompanyController extends Controller
                 $nestedData['website'] = $company->website;
                 $nestedData['maxallowskip'] = $company->maxallowskip;
                 
-                $nestedData['userrole'] = "
-                    <span class='badge badge-danger'> Admin </span>
-                ";
+                // $nestedData['userrole'] = "
+                //     <span class='badge badge-danger'> Admin </span>
+                // ";
 
                 $nestedData['actions'] = "
                 <div class='text-center'>

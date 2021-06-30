@@ -248,9 +248,11 @@ function eSealUpload(){
     $.ajax({
         url:"setESeal",
         type:'post',
-        data:{projectId: $('#projectId').val(), value: 1},
+        data:{projectId: $('#projectId').val()},
         success:function(res){
             if (res.success == true) {
+                $("#Review").attr('checked', false);
+                $("#Asbuilt").attr('checked', false);
                 window.location.href = "{{ route('projectlist') }}";
             }
         },
