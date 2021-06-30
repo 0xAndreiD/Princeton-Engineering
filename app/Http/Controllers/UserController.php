@@ -334,8 +334,11 @@ class UserController extends Controller
      */
     public function settings()
     {
-        $setting = UserSetting::where('userId', Auth::user()->id)->first();
-        return view('user.configuration.settings')->with('setting', $setting);
+        if(Auth::user()->userrole != 4){
+            $setting = UserSetting::where('userId', Auth::user()->id)->first();
+            return view('user.configuration.settings')->with('setting', $setting);
+        } else
+            return redirect('home');
     }
 
     /**
