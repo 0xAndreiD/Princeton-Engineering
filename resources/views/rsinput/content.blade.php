@@ -11,10 +11,12 @@
             <label class="custom-control-label rfdTypeSelect" for="trussFlagOption-{{ $conditionId }}-2">Truss Framing Data Input</label>
         </div>
     </div>
+    @if(Auth::user()->userrole != 4)
     <div>
         <button type="button" class="btn btn-info mr-1" id="duplicate-{{ $conditionId }}"><i class="far fa-clone mr-1"></i>Duplicate</button>
         <button type="button" class="btn btn-danger mr-5" id="delete-{{ $conditionId }}"><i class="fa fa-trash mr-1"></i>Delete</button>
     </div>
+    @endif
 </div>
 <p class="txt-collar-warning" id="collartie-warning-{{ $conditionId }}">Framing modification required.  Add collar tie / knee wall at xx.yy ft.</p>
 <div class="row">

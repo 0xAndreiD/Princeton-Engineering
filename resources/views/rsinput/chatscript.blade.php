@@ -7,6 +7,7 @@
         else if(role == 1) userrole = 'Client Admin';
         else if(role == 2) userrole = 'Super Admin';
         else if(role == 3) userrole = 'Junior Super';
+        else if(role == 4) userrole = 'Reviewer';
 
         var html="";
         if (role == 2 || role == 3){
@@ -30,7 +31,7 @@
                     "</div>" + 
                 "</div>" + 
             "</div>";
-        } else if(role == 1 || role == 0) {
+        } else if(role == 1 || role == 0 || role == 4) {
             html = "<div class='col-md-10 col-sm-10'>" + 
                 "<div class='block block-bordered'>" +
                     "<div class='block-header' style='background-color: #e9eaec; display: block;'>" +
@@ -69,7 +70,7 @@
                     console.log(data);
                     if(data.msgCount > 0){
                         for(let i = 0; i < data.msgs.length; i ++)
-                            addChat(data.msgs[i].user, data.msgs[i].role, data.msgs[i].message, data.msgs[i].datetime, data.msg[i].id);
+                            addChat(data.msgs[i].user, data.msgs[i].role, data.msgs[i].message, data.msgs[i].datetime, data.msgs[i].id);
                     }
                 }
                 updateChat();
@@ -89,12 +90,15 @@
     $(document).on('submit','#submitChat', function(event){
         event.preventDefault();
 		$('#send').attr('disabled','disabled');
+        swal.fire({ title: "Please wait...", showConfirmButton: false });
+        swal.showLoading();
 		var formData = $(this).serialize();
 		$.ajax({
 			url:"submitChat",
 			method:"POST",
 			data:formData,
 			success:function(data){
+                swal.close();
                 if(!data || !data.status){
                     swal.fire({ title: "Warning", text: data && data.message ? data.message : "Failed to submit your message.", icon: "warning", confirmButtonText: `OK` });
                 } else {

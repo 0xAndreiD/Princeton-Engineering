@@ -87,12 +87,15 @@ $(document).ready(function(){
     $(document).on('submit','#submitChat', function(event){
         event.preventDefault();
 		$('#send').attr('disabled','disabled');
+        swal.fire({ title: "Please wait...", showConfirmButton: false });
+        swal.showLoading();
 		var formData = $(this).serialize();
 		$.ajax({
 			url:"submitChat",
 			method:"POST",
 			data:formData,
 			success:function(data){
+                swal.close();
                 if(!data || !data.status){
                     swal.fire({ title: "Warning", text: data && data.message ? data.message : "Failed to submit your message.", icon: "warning", confirmButtonText: `OK` });
                 } else {

@@ -368,7 +368,7 @@ class CompanyController extends Controller
             $companyList = Company::orderBy('company_name', 'asc')->get();
             return view('admin.sealpos.view')->with('companyList', $companyList);
         }
-        else if(Auth::user()->userrole != 0)
+        else if(Auth::user()->userrole != 0 && Auth::user()->userrole != 4)
             return view('clientadmin.sealpos.view');
         else
             return redirect('home');
@@ -409,7 +409,7 @@ class CompanyController extends Controller
      * @return JSON
      */
     function getSealImg(Request $request){
-        if(Auth::user()->userrole != 0){
+        if(Auth::user()->userrole != 0 && Auth::user()->userrole != 4){
             if(!empty($request['state'])){
                 $company = Company::where('id', (Auth::user()->userrole == 2 && !empty($request['companyId']) ? $request['companyId'] : Auth::user()->companyid))->first();
                 if($company){
@@ -433,7 +433,7 @@ class CompanyController extends Controller
      * @return JSON
      */
     function saveSealData(Request $request){
-        if(Auth::user()->userrole != 0){
+        if(Auth::user()->userrole != 0 && Auth::user()->userrole != 4){
             if(!empty($request['state'])){
                 $company = Company::where('id', (Auth::user()->userrole == 2 && !empty($request['companyId']) ? $request['companyId'] : Auth::user()->companyid))->first();
                 if($company){
@@ -527,7 +527,7 @@ class CompanyController extends Controller
      * @return JSON
      */
     function loadSealData(Request $request){
-        if(Auth::user()->userrole != 0){
+        if(Auth::user()->userrole != 0 && Auth::user()->userrole != 4){
             if(!empty($request['state'])){
                 $company = Company::where('id', (Auth::user()->userrole == 2 && !empty($request['companyId']) ? $request['companyId'] : Auth::user()->companyid))->first();
                 if($company){
@@ -551,7 +551,7 @@ class CompanyController extends Controller
      * @return JSON
      */
     function saveAsTemplate(Request $request){
-        if(Auth::user()->userrole != 0){
+        if(Auth::user()->userrole != 0 && Auth::user()->userrole != 4){
             if(!empty($request['state']) && !empty($request['template'])){
                 $company = Company::where('id', (Auth::user()->userrole == 2 && !empty($request['companyId']) ? $request['companyId'] : Auth::user()->companyid))->first();
                 if($company){
@@ -578,7 +578,7 @@ class CompanyController extends Controller
      * @return JSON
      */
     function getTemplateList(Request $request){
-        if(Auth::user()->userrole != 0){
+        if(Auth::user()->userrole != 0 && Auth::user()->userrole != 4){
             if(Auth::user()->userrole == 2){
                 $sealdata = SealData::get(array('companyId', 'state', 'template'));
                 $templates = array();

@@ -1,4 +1,4 @@
-@extends((Auth::user()->userrole == 2)? 'admin.layout': ((Auth::user()->userrole == 1 || Auth::user()->userrole == 3) ? 'clientadmin.layout' : 'user.layout'))
+@extends((Auth::user()->userrole == 2)? 'admin.layout': ((Auth::user()->userrole == 1 || Auth::user()->userrole == 3) ? 'clientadmin.layout' : (Auth::user()->userrole == 4 ? 'reviewer.layout' : 'user.layout')))
 
 @section('content')
 
@@ -35,7 +35,7 @@
                 <table id="projects" class="table table-bordered table-striped table-vcenter text-center" style="width:100%; min-height: 350px;">
                     <thead>
                         <tr>
-                            @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3)
+                            @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4)
                             <th class="text-center" style="width: 7%;">ID</th>
                             <th style="width:10%">Company Name</th>
                             <th style="width:8%;">User</th>
@@ -61,7 +61,7 @@
                             @endif
                         </tr>
                         <tr>
-                            @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3)
+                            @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4)
                             <th class="searchHead">
                                 <select placeholder="Chat Filter" class="searchBox" id="chatFilter">
                                     <option value="">All</option>
@@ -170,7 +170,9 @@
                                 <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 17px;'><input type='checkbox' id="planCheckFilter" style="transform: rotateZ(180deg);"> Review</span>
                                 <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 22px;'><input type='checkbox' id="asBuiltFilter" style="transform: rotateZ(180deg);"> As-built</span>
                                 <span class="ml-1" style='writing-mode: tb-rl;width: 28px;transform: rotateZ(180deg);'>Plan Check</span>
+                                @if(Auth::user()->userrole == 2)
                                 <span class="" style='writing-mode: tb-rl;width: 24px;transform: rotateZ(180deg);'>Delete</span>
+                                @endif
                             </th>
                             @else
                             <th class="searchHead"> <input type="text" placeholder="Search User" class="searchBox" id="userFilter"> </th>
@@ -386,7 +388,7 @@
             filterJson.statusFilter = status;
             localStorage.setItem('projectFilterJson', JSON.stringify(filterJson));
 
-            @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3)
+            @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4)
             table.column('9:visible').search(status).draw();
             @else
             table.column('6:visible').search(status).draw();
@@ -400,7 +402,7 @@
             filterJson.stateFilter = status;
             localStorage.setItem('projectFilterJson', JSON.stringify(filterJson));
 
-            @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3)
+            @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4)
             table.column('10:visible').search(status).draw();
             @else
             table.column('7:visible').search(status).draw();
@@ -438,7 +440,7 @@
                     }
                 },
             "columns": [
-                @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3)
+                @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4)
                 { "data": "id" },
                 { "data": "companyname" },
                 { "data": "username" },
@@ -470,7 +472,7 @@
             @endif
         });
 
-        @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3)
+        @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4)
         $("#companyFilter").on('keyup change', function() {
             table.column($(this).parent().index() + ':visible').search(this.value).draw();
         });

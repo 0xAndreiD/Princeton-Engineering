@@ -65,6 +65,8 @@ class GeneralController extends Controller
             return view('admin.home');
         else if( Auth::user()->userrole == 1 || Auth::user()->userrole == 3)
             return view('clientadmin.home');
+        else if( Auth::user()->userrole == 4 )
+            return view('reviewer.home');
         else if( Auth::user()->userrole == 0 )
             return view('user.home');
     }
@@ -593,7 +595,7 @@ class GeneralController extends Controller
      * @return JSON
      */
     public function getProjectList(Request $request){
-        if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3)
+        if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4)
         {
             $handler = new JobRequest;
             $columns = array( 
@@ -695,7 +697,7 @@ class GeneralController extends Controller
         }
 
         // admin filter company name, user, project name, project number, project state, plan status
-        if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3){
+        if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4){
             if(!empty($request->input("columns.1.search.value")))
                 $handler = $handler->where('company_info.company_name', 'LIKE', "%{$request->input("columns.1.search.value")}%");
             if(!empty($request->input("columns.2.search.value")))
@@ -807,7 +809,7 @@ class GeneralController extends Controller
             foreach ($jobs as $job)
             {
                 $nestedData['id'] = $job->id;
-                if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3)
+                if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4)
                 {
                     $nestedData['companyname'] = $job->companyname;
                     $nestedData['requestfile'] = $job->requestfile;
@@ -875,7 +877,7 @@ class GeneralController extends Controller
                     </a>". 
                     "<input class='mr-1' type='checkbox' onchange='togglePlanCheck({$job['id']})'" . ($job['plancheck'] == 1 ? "checked" : "") . ">" . 
                     "<input class='mr-2' type='checkbox' onchange='toggleAsBuilt({$job['id']})'" . ($job['asbuilt'] == 1 ? "checked" : "") . ">" . 
-                    (Auth::user()->userrole == 2 || Auth::user()->userrole == 3 ? "<a href='onreview?projectId={$nestedData['id']}' class='mr-1 btn btn-secondary' style='padding: 3px 4px;'>
+                    (Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4? "<a href='onreview?projectId={$nestedData['id']}' class='mr-1 btn btn-secondary' style='padding: 3px 4px;'>
                         <i class='fa fa-check'></i>
                     </a>" : "") . 
                     (Auth::user()->userrole == 2 ? "<button type='button' class='js-swal-confirm btn btn-danger mr-1' onclick='delProject(this,{$nestedData['id']})' style='padding: 3px 4px;'>
@@ -1077,7 +1079,7 @@ class GeneralController extends Controller
             $project = JobRequest::where('id', '=', $request['projectId'])->first();
             if($project)
             {
-                if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->companyid == $project['companyId'])
+                if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->companyid == $project['companyId'])
                 {
                     $company = Company::where('id', $project->companyId)->first();
                     $companyNumber = $company ? $company['company_number'] : 0;
@@ -1137,7 +1139,7 @@ class GeneralController extends Controller
             $project = JobRequest::where('id', '=', $request['projectId'])->first();
             if($project)
             {
-                if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->companyid == $project['companyId'])
+                if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->companyid == $project['companyId'])
                 {
                     $datacheck = DataCheck::leftjoin('structural_notes', "structural_notes.id", "=", "data_check.structural_notes")
                     ->where('jobId', $request['projectId'])->first();
@@ -1658,7 +1660,7 @@ class GeneralController extends Controller
         if(!empty($request['projectId'])){
             $project = JobRequest::where('id', '=', $request['projectId'])->first();
             if($project){
-                if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || $project->companyId == Auth::user()->companyid)
+                if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || $project->companyId == Auth::user()->companyid)
                 {
                     $messages = JobChat::leftjoin('users', "users.id", "=", "job_chat.userId")
                                 ->where('job_chat.jobId', $request['projectId'])
@@ -1683,7 +1685,7 @@ class GeneralController extends Controller
         if(!empty($request['projectId'])){
             $job = JobRequest::where('id', '=', $request['projectId'])->first();
             if($job){
-                if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3)
+                if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4)
                 {
                     $company = Company::where('id', $job['companyId'])->first();
                     $companyNumber = $company ? $company['company_number'] : 0;
@@ -1712,7 +1714,7 @@ class GeneralController extends Controller
         if(!empty($request['projectId'])){
             $job = JobRequest::where('id', '=', $request['projectId'])->first();
             if($job){
-                if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3)
+                if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4)
                 {
                     $jsonname = 'iRoofTM by Princeton Engineering ' . str_replace(".json", "", $job['requestFile']) . "-";
                     $filename = $jsonname . $job['clientProjectNumber'] . '.' . $job['clientProjectName'] . ' ' . $job['state'];
@@ -1772,7 +1774,7 @@ class GeneralController extends Controller
      * @return FILE or Redirect
      */
     public function getReport($name){
-        if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3){
+        if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4){
             if(Storage::disk('report')->exists($name)){
                 $path = storage_path('report') . '/' . $name;
                 
@@ -1798,7 +1800,7 @@ class GeneralController extends Controller
         if(!empty($request['projectId'])){
             $job = JobRequest::where('id', '=', $request['projectId'])->first();
             if($job){
-                if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3)
+                if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4)
                 {
                     $company = Company::where('id', $job['companyId'])->first();
                     $companyNumber = $company ? $company['company_number'] : 0;
@@ -1837,7 +1839,7 @@ class GeneralController extends Controller
      * @return FILE or Redirect
      */
     public function getINFile($jobId, $filename){
-        if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3){
+        if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4){
             $job = JobRequest::where('id', '=', $jobId)->first();
             if($job){
                 $company = Company::where('id', $job['companyId'])->first();
@@ -1871,14 +1873,14 @@ class GeneralController extends Controller
     public function submitChat(Request $request){
         $project = JobRequest::where('id', '=', $request['projectId'])->first();
         if($project){
-            if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || $project->companyId == Auth::user()->companyid)
+            if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || $project->companyId == Auth::user()->companyid)
             {
                 $chatItem = JobChat::create([
                     'jobId' => $request['projectId'],
                     'userId' => Auth::user()->id,
                     'text' => $request['message']
                 ]);
-                if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3){
+                if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4){
                     $users = User::where('usernumber', $project->userId)->where('companyid', $project->companyId)->get();
                         
                     // $state = JobProjectStatus::where('id', $project->state)->first();
@@ -2016,7 +2018,7 @@ class GeneralController extends Controller
     public function togglePlanCheck(Request $request){
         $project = JobRequest::where('id', '=', $request['jobId'])->first();
             if($project){
-                if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || $project->companyId == Auth::user()->companyid)
+                if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || $project->companyId == Auth::user()->companyid)
                 {
                     if($project->planCheck == 1)
                         $project->planCheck = 0;
@@ -2040,7 +2042,7 @@ class GeneralController extends Controller
     public function toggleAsBuilt(Request $request){
         $project = JobRequest::where('id', '=', $request['jobId'])->first();
             if($project){
-                if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || $project->companyId == Auth::user()->companyid)
+                if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || $project->companyId == Auth::user()->companyid)
                 {
                     if($project->asBuilt == 1)
                         $project->asBuilt = 0;
@@ -2065,7 +2067,7 @@ class GeneralController extends Controller
         if(!empty($request['jobId']) && !empty($request['msgCount'])){
             $project = JobRequest::where('id', '=', $request['jobId'])->first();
             if($project){
-                if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || $project->companyId == Auth::user()->companyid)
+                if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || $project->companyId == Auth::user()->companyid)
                 {
                     $messages = JobChat::leftjoin('users', "users.id", "=", "job_chat.userId")
                             ->where('job_chat.jobId', $request['jobId'])
@@ -2089,7 +2091,7 @@ class GeneralController extends Controller
      */
     public function getPermitList(Request $request){
         if(!empty($request['state'])){
-            if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->allow_permit == 1){
+            if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->allow_permit == 1){
                 $list = PermitFiles::where('state', $request['state'])->get();
                 return response()->json(["data" => $list, "success" => true]);
             } else {

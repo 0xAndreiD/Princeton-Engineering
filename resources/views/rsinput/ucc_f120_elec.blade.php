@@ -5,6 +5,7 @@
                 <h5 class="mt-2 ml-2">Electrical Subcode Technical Section</h5>
                 <h6 class="mt-2 ml-2">After you input the data below then click Update PDF button, don't input to the pdf directly.</h6>
             </div>
+            @if(Auth::user()->userrole != 4)
             <div class="col-12">
                 <div class="permitCtrlBtns mt-2">
                     <button class="mr-4 btn btn-danger" onclick="updateUccF120(3, 'ucc_f120_elec.pdf')">
@@ -15,6 +16,7 @@
                     </button>
                 </div>
             </div>
+            @endif
         </div>
         <div class="row">
             <div class="col-12">

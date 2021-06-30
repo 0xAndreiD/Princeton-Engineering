@@ -1,4 +1,4 @@
-@extends('admin.layout')
+@extends((Auth::user()->userrole == 2)? 'admin.layout': ((Auth::user()->userrole == 3) ? 'clientadmin.layout' : (Auth::user()->userrole == 4 ? 'reviewer.layout' : '')))
 
 @section('content')
 <style>
