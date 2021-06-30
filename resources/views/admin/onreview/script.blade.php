@@ -13,8 +13,8 @@ $(document).ready(function(){
         type:'post',
         data:{projectId: projectId},
         success:function(res){
+            var jobData = JSON.parse(res.data);
             if (res && res.success) {
-                var jobData = JSON.parse(res.data);
                 console.log(jobData);
                 if(jobData){
                     if(jobData.Equipment){
@@ -31,6 +31,52 @@ $(document).ready(function(){
                 
             } else
                 swal.fire({ title: "Error", text: res.message, icon: "error", confirmButtonText: `OK` });
+
+            $.ajax({
+                url:"getDataCheck",
+                type:'post',
+                data:{projectId: projectId},
+                success:function(res){
+                    if(res && res.success == true && res.data){
+                        console.log(res.data);
+                        $("#exposure-text").html("Exposure: " + res.data.exposureUnit);
+                        $("#occupancy-text").html("Occupancy: " + res.data.occupancyUnit);
+                        $("#wind-text").html("Wind: " + res.data.windLoadingValue);
+                        $("#snow-text").html("Snow: " + res.data.snowLoadingValue);
+                        $("#IBC-text").html("IBC: " + res.data.IBC);
+                        $("#ASCE-text").html("ASCE: " + res.data.ASCE);
+                        $("#NEC-text").html("NEC: " + res.data.NEC);
+                        $("#StateCode-text").html("State Code: " + res.data.stateCode);
+                        $("#Power-text").html("Tot DC watts: " + res.data.DCWatts);
+                        $("#SumInvAmps-text").html("Sum Inv Amps: " + res.data.InverterAmperage);
+                        $("#MinA-text").html("Min A: " + res.data.OCPDRating);
+                        $("#RecommendedA-text").html("Recommended A: " + res.data.RecommendOCPD);
+                        $("#MinCuWireSize-text").html("Min Cu Wire Size: " + res.data.MinCu);
+                        if(res.data.collarHeights){
+                            let collarNotes = '';
+                            for(let i = 1; 5 * i <= res.data.collarHeights.length; i ++){
+                                let tabCollar = res.data.collarHeights.slice(5 * (i - 1), 5 * i);
+                                let description = '';
+                                if(jobData && jobData.LoadingCase && jobData.LoadingCase[i - 1] && jobData.LoadingCase[i - 1].RoofDataInput && jobData.LoadingCase[i - 1].RoofDataInput.A5)
+                                    description = jobData.LoadingCase[i - 1].RoofDataInput.A5;
+                                if(parseFloat(tabCollar) != 0)
+                                    collarNotes = collarNotes + " FC" + i + " (" + description + ")" + " @ " + tabCollar + "'" + (5 * i == res.data.collarHeights.length ? "" : ",");
+                            }
+                            $("#ColTieKneeWalls-text").html("Collar Tie / Knee Walls: " + collarNotes);
+                        } else
+                            $("#ColTieKneeWalls-text").html("Collar Tie / Knee Walls: None");
+                        if(res.data.summary)
+                            $("#StructNotes-text").html("Structural Notes: " + res.data.summary + ' ...');
+                        else
+                            $("#StructNotes-text").html("Structural Notes: None");
+                    }
+                },
+                error: function(xhr, status, error) {
+                    res = JSON.parse(xhr.responseText);
+                    swal.fire({ title: "Error", text: res.message, icon: "error", confirmButtonText: `OK` });
+                    resolve(false);
+                }
+            });
         },
         error: function(xhr, status, error) {
             res = JSON.parse(xhr.responseText);
@@ -39,48 +85,6 @@ $(document).ready(function(){
                     text: message == "" ? "Error happened while processing. Please try again later." : message,
                     icon: "error",
                     confirmButtonText: `OK` });
-        }
-    });
-
-    $.ajax({
-        url:"getDataCheck",
-        type:'post',
-        data:{projectId: projectId},
-        success:function(res){
-            if(res && res.success == true && res.data){
-                console.log(res.data);
-                $("#exposure-text").html("Exposure: " + res.data.exposureUnit);
-                $("#occupancy-text").html("Occupancy: " + res.data.occupancyUnit);
-                $("#wind-text").html("Wind: " + res.data.windLoadingValue);
-                $("#snow-text").html("Snow: " + res.data.snowLoadingValue);
-                $("#IBC-text").html("IBC: " + res.data.IBC);
-                $("#ASCE-text").html("ASCE: " + res.data.ASCE);
-                $("#NEC-text").html("NEC: " + res.data.NEC);
-                $("#StateCode-text").html("State Code: " + res.data.stateCode);
-                $("#Power-text").html("Tot DC watts: " + res.data.DCWatts);
-                $("#SumInvAmps-text").html("Sum Inv Amps: " + res.data.InverterAmperage);
-                $("#MinA-text").html("Min A: " + res.data.OCPDRating);
-                $("#RecommendedA-text").html("Recommended A: " + res.data.RecommendOCPD);
-                $("#MinCuWireSize-text").html("Min Cu Wire Size: " + res.data.MinCu);
-                if(res.data.collarHeights){
-                    let collarNotes = '';
-                    for(let i = 1; 5 * i <= res.data.collarHeights.length; i ++){
-                        let tabCollar = res.data.collarHeights.slice(5 * (i - 1), 5 * i);
-                        collarNotes = collarNotes + " " + i + ": MP" + i + " @ " + parseFloat(tabCollar).toFixed(2) + (5 * i == res.data.collarHeights.length ? "" : ",");
-                    }
-                    $("#ColTieKneeWalls-text").html("Collar Tie / Knee Walls: " + collarNotes);
-                } else
-                    $("#ColTieKneeWalls-text").html("Collar Tie / Knee Walls: None");
-                if(res.data.summary)
-                    $("#StructNotes-text").html("Structural Notes: " + res.data.summary);
-                else
-                    $("#StructNotes-text").html("Structural Notes: None");
-            }
-        },
-        error: function(xhr, status, error) {
-            res = JSON.parse(xhr.responseText);
-            swal.fire({ title: "Error", text: res.message, icon: "error", confirmButtonText: `OK` });
-            resolve(false);
         }
     });
 

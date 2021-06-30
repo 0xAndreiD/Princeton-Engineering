@@ -1896,7 +1896,10 @@ class GeneralController extends Controller
                         }
                     }
 
-                    $project->chatIcon = 2;
+                    if(Auth::user()->userrole == 4)
+                        $project->chatIcon = 3;
+                    else
+                        $project->chatIcon = 2;
                 }
                 else
                     $project->chatIcon = 1;

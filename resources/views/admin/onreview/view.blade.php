@@ -158,7 +158,7 @@
                     <h3 class="block-title">Controls</h3>
                 </div>
                 <div class="block-content review-block-content pt-3 pb-3 flexAndCenter" style="justify-content: space-between">
-                    <a class="btn btn-outline-danger mr-1" style="width:100px;" href="{{ route('projectlist') }}">Cancel</a>
+                    <a class="btn btn-outline-danger mr-1" style="width:100px;" href="{{ route('projectlist') }}">Exit</a>
                     <button class="btn btn-outline-success mr-1" onclick="autoNote()">Auto Note</button>
                     <button class="btn btn-outline-warning mr-1" onclick="clearNote()">Clear Note</button>
                     <div class="flexRow">

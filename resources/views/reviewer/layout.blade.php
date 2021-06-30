@@ -120,13 +120,6 @@
                                 <span class="nav-main-link-name">Project list</span>
                             </a>
                         </li>
-                        <li class="nav-main-heading">Configuration</li>
-                        <li class="nav-main-item">
-                            <a class="nav-main-link" href="{{ route('settings') }}">
-                                <i class="nav-main-link-icon fa fa-cogs"></i>
-                                <span class="nav-main-link-name">Settings</span>
-                            </a>
-                        </li>
                     </ul>
                 </div>
                 <!-- END Side Navigation -->
