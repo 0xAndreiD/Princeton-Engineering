@@ -63,6 +63,7 @@
                                     <option value="">All</option>
                                     <option value="2">Super Admin</option>
                                     <option value="3">Junior Super Admin</option>
+                                    <option value="4">Reviewer</option>
                                     <option value="1">Client</option>
                                     <option value="0">User</option>
                                 </select>
@@ -130,6 +131,7 @@
                                         <option value="1"><span class='badge badge-primary'> Client </span></option>
                                         <option value="3"><span class='badge badge-warning'> Junior Super Admin </span></option>
                                         <option value="2"><span class='badge badge-danger'> Super Admin </span></option>
+                                        <option value="4"><span class='badge badge-secondary'> Reviewer </span></option>
                                     </select>
                                 </div>
                                 <div class="form-group">

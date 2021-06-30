@@ -1,4 +1,4 @@
-@extends((Auth::user()->userrole == 2)? 'admin.layout': ((Auth::user()->userrole == 1 || Auth::user()->userrole == 3) ? 'clientadmin.layout' : 'user.layout'))
+@extends((Auth::user()->userrole == 2)? 'admin.layout': ((Auth::user()->userrole == 1 || Auth::user()->userrole == 3) ? 'clientadmin.layout' : (Auth::user()->userrole == 4 ? 'reviewer.layout' : 'user.layout')))
 
 @section('content')
 <div class="bg-image" style="background-image: url('{{ asset('img/bg_admin.jpg') }}');">
@@ -69,6 +69,8 @@
                                 <button type="button" class="btn btn-danger ml-1 mr-1" onclick="delChatHistory(this,{{ $msg['id'] }})" style="padding: 3px 6px;">
                                     <i class="fa fa-trash"></i>
                                 </button>
+                            @elseif($msg['userrole'] == 4)
+                                <i class="fa fa-user-secret"></i> Reviewer
                             @endif
 
                     </div>

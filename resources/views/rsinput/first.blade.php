@@ -418,6 +418,7 @@
         <input class="w400-bdr" id="railsupport-custom" hidden>
         <input class="w400-bdr" id="railsupport-crc32" hidden>
     </tr>
+    @if(Auth::user()->userrole != 4)
     <tr class="h13" id="submitBtns">
         <td><div style="overflow:hidden"></div></td>
         <td style="padding: 10px;">
@@ -437,6 +438,7 @@
         <td><div style="overflow:hidden"></div></td>
         @endif
     </tr>
+    @endif
 </tbody>
 </table>
 

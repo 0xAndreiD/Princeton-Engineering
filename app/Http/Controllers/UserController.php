@@ -180,6 +180,9 @@ class UserController extends Controller
                     case 3:
                         $nestedData['userrole'] = "<span class='badge badge-warning'> Junior Super </span>";
                         break;
+                    case 4:
+                        $nestedData['userrole'] = "<span class='badge badge-secondary'> Reviewer </span>";
+                        break;
                 }
                 if($user->ask_two_factor == 1)
                     $nestedData['ask_two_factor'] = "<span class='badge badge-primary'> Yes </span>";

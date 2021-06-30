@@ -3,8 +3,10 @@
 <div class="col-md-7 filetreePane">
     <div class="fileActions mt-1 mb-2">
         <button class="btn btn-success" onclick="downloadFile()"><i class="fa fa-download"></i> Download</button>
+        @if(Auth::user()->userrole != 4)
         <button class="btn btn-danger" onclick="delFile()" id="deleteBtn" disabled><i class="fa fa-trash"></i> Delete</button>
         <button class="btn btn-warning" onclick="editFile()" id="renameBtn" disabled><i class="fa fa-edit"></i> Rename</button>
+        @endif
     </div>
     <div id="filetree" >
     
@@ -12,6 +14,7 @@
 </div>
 
 <div class="col-md-5">
+@if(Auth::user()->userrole != 4)
 <form id="upload" method="post" action="{{ route('jobFileUpload') }}" enctype="multipart/form-data">
     <div id="drop">
         Drop Here
@@ -34,6 +37,7 @@
     <ul></ul>
 
 </form>
+@endif
 </div>
 
 </div>
