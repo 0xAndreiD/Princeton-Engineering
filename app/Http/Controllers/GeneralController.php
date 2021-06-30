@@ -875,8 +875,8 @@ class GeneralController extends Controller
                     "<a href='jobchat?projectId={$nestedData['id']}' class='mr-2 btn btn-" . $chatbadge . "' style='padding: 3px 4px;'>
                         <i class='fab fa-rocketchat'></i>
                     </a>". 
-                    "<input class='mr-1' type='checkbox' onchange='togglePlanCheck({$job['id']})'" . ($job['plancheck'] == 1 ? "checked" : "") . ">" . 
-                    "<input class='mr-2' type='checkbox' onchange='toggleAsBuilt({$job['id']})'" . ($job['asbuilt'] == 1 ? "checked" : "") . ">" . 
+                    "<input class='mr-1' type='checkbox' " . (Auth::user()->userrole == 4 ? "style='pointer-events: none;'" : "onchange='togglePlanCheck({$job['id']})'") . ($job['plancheck'] == 1 ? " checked" : "") . ">" . 
+                    "<input class='mr-2' type='checkbox' " . (Auth::user()->userrole == 4 ? "style='pointer-events: none;'" : "onchange='toggleAsBuilt({$job['id']})'") . ($job['asbuilt'] == 1 ? " checked" : "") . ">" . 
                     (Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4? "<a href='onreview?projectId={$nestedData['id']}' class='mr-1 btn btn-secondary' style='padding: 3px 4px;'>
                         <i class='fa fa-check'></i>
                     </a>" : "") . 
@@ -1217,7 +1217,10 @@ class GeneralController extends Controller
             {
                 if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || (Auth::user()->companyid == $project['companyId'] && intval($request['state']) <= 2))
                 {
-                    $project->eSeal = 1;
+                    if($project->planCheck == 1)
+                        $project->eSeal = 1;
+                    if($project->asBuilt == 1)
+                        $project->eSeal_asbuilt = 1;
                     $project->planCheck = 0;
                     $project->asBuilt = 0;
                     $project->save();
