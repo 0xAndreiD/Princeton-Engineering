@@ -109,6 +109,26 @@ $(document).ready(function(){
                     note += '    ' + data.message + '\n\n';
                     $('#send').attr('disabled', false);
                     $("#chatLog").val(note + $('#chatLog').val());
+
+                    $.ajax({
+                        url:"setESeal",
+                        type:'post',
+                        data:{projectId: $('#projectId').val()},
+                        success:function(res){
+                            if (res.success == true) {
+                                $("#Review").attr('checked', false);
+                                $("#Asbuilt").attr('checked', false);
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            res = JSON.parse(xhr.responseText);
+                            message = res.message;
+                            swal.fire({ title: "Error",
+                                    text: message == "" ? "Error happened while processing. Please try again later." : message,
+                                    icon: "error",
+                                    confirmButtonText: `OK` });
+                        }
+                    });
                 }
 			}
 		})
@@ -144,7 +164,7 @@ function checkboxAll(){
         }
     });
 }
-
+@if(Auth::user()->userrole != 4)
 function togglePlanCheck(jobId){
     $.ajax({
         url:"togglePlanCheck",
@@ -190,6 +210,7 @@ function toggleAsBuilt(jobId){
         }
     });
 }
+@endif
 
 function clearNote(){
     $("#addChatMsg").val("");

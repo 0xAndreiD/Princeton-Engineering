@@ -188,10 +188,18 @@
                 </div>
                 <div class="block-content review-block-content pt-3 pb-3">
                     <div class="flexRow">
+                        @if(Auth::user()->userrole == 4)
+                        <input type='checkbox' id="Review" style='pointer-events: none;' <?php echo $job['planCheck'] == 1 ? "checked" : ""; ?>> <label for="Review" class="mb-0 ml-2 text-left" style='pointer-events: none;'>Review</label>
+                        @else
                         <input type='checkbox' id="Review" onchange='togglePlanCheck({{$job["id"]}})' <?php echo $job['planCheck'] == 1 ? "checked" : ""; ?>> <label for="Review" class="mb-0 ml-2 text-left">Review</label>
+                        @endif
                     </div>
                     <div class="flexRow">
+                        @if(Auth::user()->userrole == 4)
+                        <input type='checkbox' id="Asbuilt" style='pointer-events: none;' <?php echo $job['asBuilt'] == 1 ? "checked" : ""; ?>> <label for="Asbuilt" class="mb-0 ml-2 text-left" style='pointer-events: none;'>As-built</label>
+                        @else
                         <input type='checkbox' id="Asbuilt" onchange='toggleAsBuilt({{$job["id"]}})' <?php echo $job['asBuilt'] == 1 ? "checked" : ""; ?>> <label for="Asbuilt" class="mb-0 ml-2 text-left">As-built</label>
+                        @endif
                     </div>
                 </div>
             </div>
