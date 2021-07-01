@@ -20,7 +20,7 @@ $(document).ready(function(){
     $.ajax({
         url:"setAnalysisType",
         type:'post',
-        data:{projectId: projectId, value: 20},
+        data:{projectId: projectId, value: 20, method: 'add'},
         success:function(res){
             if(!res.success)
                 swal.fire({ title: "Error", text: res.message, icon: "error", confirmButtonText: `OK` });
@@ -313,7 +313,7 @@ function eSealUpload(){
                 $.ajax({
                     url:"setAnalysisType",
                     type:'post',
-                    data:{projectId: $('#projectId').val(), value: 0},
+                    data:{projectId: $('#projectId').val(), value: 20, method: 'subtract'},
                     success:function(res){
                         swal.close();
                         window.location.href = "{{ route('projectlist') }}";
@@ -344,7 +344,7 @@ function closingCode(){
     $.ajax({
         url:"setAnalysisType",
         type:'post',
-        data:{projectId: $('#projectId').val(), value: 0},
+        data:{projectId: $('#projectId').val(), value: 20, method: 'subtract'},
         success:function(res){
             if(!res.success)
                 swal.fire({ title: "Error", text: res.message, icon: "error", confirmButtonText: `OK` });
