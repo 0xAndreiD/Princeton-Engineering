@@ -8,50 +8,24 @@ $(document).ready(function(){
 
     var projectId = $('#projectId').val();
 
-    window.onbeforeunload = closingCode;
-    window.onunload = closingCode;
-    window.onhashchange = closingCode;
-
-    window.history.pushState(null, "", window.location.href);        
-    window.onpopstate = function() {
-        window.history.pushState(null, "", window.location.href);
+    window.setInterval(function(){
         $.ajax({
-            url:"setAnalysisType",
+            url:"setReviewer",
             type:'post',
-            data:{projectId: $('#projectId').val(), value: 20, method: 'subtract'},
+            data:{projectId: projectId},
             success:function(res){
-                if(!res.success)
-                    swal.fire({ title: "Error", text: res.message, icon: "error", confirmButtonText: `OK` });
+                if (res.success == true) {
+                    console.log('Reviewer set success!');
+                }
             },
             error: function(xhr, status, error) {
                 res = JSON.parse(xhr.responseText);
                 message = res.message;
-                swal.fire({ title: "Error",
-                        text: message == "" ? "Error happened while processing. Please try again later." : message,
-                        icon: "error",
-                        confirmButtonText: `OK` });
+                console.log('Error: ' + res.message);
             }
         });
-    };
-
-    $.ajax({
-        url:"setAnalysisType",
-        type:'post',
-        data:{projectId: projectId, value: 20, method: 'add'},
-        success:function(res){
-            if(!res.success)
-                swal.fire({ title: "Error", text: res.message, icon: "error", confirmButtonText: `OK` });
-        },
-        error: function(xhr, status, error) {
-            res = JSON.parse(xhr.responseText);
-            message = res.message;
-            swal.fire({ title: "Error",
-                    text: message == "" ? "Error happened while processing. Please try again later." : message,
-                    icon: "error",
-                    confirmButtonText: `OK` });
-        }
-    });
-
+    }, 3000);
+    
     $.ajax({
         url:"getProjectJson",
         type:'post',
@@ -317,8 +291,6 @@ function autoNote(){
 }
 
 function eSealUpload(){
-    swal.fire({ title: "Please wait...", showConfirmButton: false });
-    swal.showLoading();
     $.ajax({
         url:"setESeal",
         type:'post',
@@ -327,23 +299,7 @@ function eSealUpload(){
             if (res.success == true) {
                 $("#Review").attr('checked', false);
                 $("#Asbuilt").attr('checked', false);
-                $.ajax({
-                    url:"setAnalysisType",
-                    type:'post',
-                    data:{projectId: $('#projectId').val(), value: 20, method: 'subtract'},
-                    success:function(res){
-                        swal.close();
-                        window.location.href = "{{ route('projectlist') }}";
-                    },
-                    error: function(xhr, status, error) {
-                        res = JSON.parse(xhr.responseText);
-                        message = res.message;
-                        swal.fire({ title: "Error",
-                                text: message == "" ? "Error happened while processing. Please try again later." : message,
-                                icon: "error",
-                                confirmButtonText: `OK` });
-                    }
-                });
+                window.location.href = "{{ route('projectlist') }}";
             }
         },
         error: function(xhr, status, error) {
@@ -355,27 +311,6 @@ function eSealUpload(){
                     confirmButtonText: `OK` });
         }
     });
-}
-
-function closingCode(){
-    $.ajax({
-        url:"setAnalysisType",
-        type:'post',
-        data:{projectId: $('#projectId').val(), value: 20, method: 'subtract'},
-        success:function(res){
-            if(!res.success)
-                swal.fire({ title: "Error", text: res.message, icon: "error", confirmButtonText: `OK` });
-        },
-        error: function(xhr, status, error) {
-            res = JSON.parse(xhr.responseText);
-            message = res.message;
-            swal.fire({ title: "Error",
-                    text: message == "" ? "Error happened while processing. Please try again later." : message,
-                    icon: "error",
-                    confirmButtonText: `OK` });
-        }
-    });
-    return null;
 }
 
 // function showReportDlg(){

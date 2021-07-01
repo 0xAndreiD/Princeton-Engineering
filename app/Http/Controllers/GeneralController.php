@@ -2150,19 +2150,17 @@ class GeneralController extends Controller
     }
 
     /**
-     * Set Job AnalysisType
+     * Set Job ReviewerId and lastReviewTime
      *
      * @return JSON
      */
-    public function setAnalysisType(Request $request){
+    public function setReviewer(Request $request){
         if(!empty($request['projectId'])){
             if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4){
                 $job = JobRequest::where('id', $request['projectId'])->first();
                 if($job){
-                    if($request['method'] == 'subtract' && $job->analysisType >= 20)
-                        $job->analysisType = $job->analysisType - $request['value'];
-                    else if($request['method'] == 'add')
-                        $job->analysisType = $job->analysisType + $request['value'];
+                    $job->reviewerId = Auth::user()->id;
+                    $job->lastReviewTime = gmdate("Y-m-d\TH:i:s", time());
                     $job->save();
                     return response()->json(["success" => true]);
                 } else
@@ -2174,16 +2172,19 @@ class GeneralController extends Controller
     }
 
     /**
-     * Get Job AnalysisType
+     * Check Reviewer
      *
      * @return JSON
      */
-    public function getAnalysisType(Request $request){
+    public function checkReviewer(Request $request){
         if(!empty($request['projectId'])){
             if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4){
                 $job = JobRequest::where('id', $request['projectId'])->first();
                 if($job){
-                    return response()->json(["success" => true, "value" => $job->analysisType]);
+                    if(time() - strtotime($job->lastReviewTime) >= 10)
+                        return response()->json(["inReview" => false, "success" => true]);
+                    else
+                        return response()->json(["inReview" => true, "success" => true]);
                 } else
                     return response()->json(["message" => "Cannot find the project.", "success" => false]);
             } else
