@@ -877,7 +877,7 @@ class GeneralController extends Controller
                     </a>". 
                     "<input class='mr-1' type='checkbox' " . (Auth::user()->userrole == 4 ? "style='pointer-events: none;'" : "onchange='togglePlanCheck({$job['id']})'") . ($job['plancheck'] == 1 ? " checked" : "") . ">" . 
                     "<input class='mr-2' type='checkbox' " . (Auth::user()->userrole == 4 ? "style='pointer-events: none;'" : "onchange='toggleAsBuilt({$job['id']})'") . ($job['asbuilt'] == 1 ? " checked" : "") . ">" . 
-                    (Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4? "<a href='onreview?projectId={$nestedData['id']}' class='mr-1 btn btn-secondary' style='padding: 3px 4px;'>
+                    (Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4? "<button onclick='openReviewTab({$job['id']})' class='mr-1 btn btn-secondary' style='padding: 3px 4px;'>
                         <i class='fa fa-check'></i>
                     </a>" : "") . 
                     (Auth::user()->userrole == 2 ? "<button type='button' class='js-swal-confirm btn btn-danger mr-1' onclick='delProject(this,{$nestedData['id']})' style='padding: 3px 4px;'>
@@ -2147,5 +2147,45 @@ class GeneralController extends Controller
                 return response()->json(["message" => "Cannot find the company.", "success" => false]);
         } else 
             return response()->json(["message" => "Wrong Parameters.", "success" => false]);
+    }
+
+    /**
+     * Set Job AnalysisType
+     *
+     * @return JSON
+     */
+    public function setAnalysisType(Request $request){
+        if(!empty($request['projectId'])){
+            if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4){
+                $job = JobRequest::where('id', $request['projectId'])->first();
+                if($job){
+                    $job->analysisType = $request['value'];
+                    $job->save();
+                    return response()->json(["success" => true]);
+                } else
+                    return response()->json(["message" => "Cannot find the project.", "success" => false]);
+            } else
+                return response()->json(["message" => "You don't have permission.", "success" => false]);
+        } else
+            return response()->json(["message" => "Missing project id.", "success" => false]);
+    }
+
+    /**
+     * Get Job AnalysisType
+     *
+     * @return JSON
+     */
+    public function getAnalysisType(Request $request){
+        if(!empty($request['projectId'])){
+            if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4){
+                $job = JobRequest::where('id', $request['projectId'])->first();
+                if($job){
+                    return response()->json(["success" => true, "value" => $job->analysisType]);
+                } else
+                    return response()->json(["message" => "Cannot find the project.", "success" => false]);
+            } else
+                return response()->json(["message" => "You don't have permission.", "success" => false]);
+        } else
+            return response()->json(["message" => "Missing project id.", "success" => false]);
     }
 }
