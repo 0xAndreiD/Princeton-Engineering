@@ -554,16 +554,16 @@
         swal.fire({ title: "Please wait...", showConfirmButton: false });
         swal.showLoading();
         $.ajax({
-            url:"getAnalysisType",
+            url:"checkReviewer",
             type:'post',
             data:{projectId: jobId},
             success:function(res){
                 swal.close();
                 if (res.success == true) {
-                    if(res.value >= 0 && res.value < 20){
-                        window.top.location.href = "{{route('onReview')}}" + '?projectId=' + jobId;
-                    } else
+                    if(res.inReview){
                         swal.fire({ title: "Warning", text: "Already in review by a reviewer!", icon: "info", confirmButtonText: `OK` });
+                    } else
+                        window.top.location.href = "{{route('onReview')}}" + '?projectId=' + jobId;
                 } else
                     swal.fire({ title: "Error", text: res.message, icon: "error", confirmButtonText: `OK` });
             },
