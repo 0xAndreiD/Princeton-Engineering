@@ -1709,11 +1709,11 @@ class GeneralController extends Controller
     }
 
     /**
-     * Check Dropbox Report folder to return report files' list.
+     * Render report files and IN files list.
      *
-     * @return JSON
+     * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getReportList(Request $request){
+    public function jobFiles(Request $request){
         if(!empty($request['projectId'])){
             $job = JobRequest::where('id', '=', $request['projectId'])->first();
             if($job){
@@ -1762,13 +1762,33 @@ class GeneralController extends Controller
                         }
                     } catch (DropboxClientException $e) { }
 
-                    return response()->json(["files" => $reportfiles, "success" => true]);
+                    $company = Company::where('id', $job['companyId'])->first();
+                    $companyNumber = $company ? $company['company_number'] : 0;
+                    $folderPrefix = '/' . $companyNumber . ". " . $job['companyName'] . '/';
+                    
+                    $filepath = $folderPrefix . $job['clientProjectNumber'] . '. ' . $job['clientProjectName'] . ' ' . $job['state'];
+                        
+                    $infiles = array();
+                    try{
+                        $listFolderContents = $dropbox->listFolder(env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_IN') . $filepath . '/');
+                        $files = $listFolderContents->getItems()->all();
+                        foreach($files as $file){
+                            if(!file_exists(storage_path('upload') . $filepath . '/' . $file->getName()) || filesize(storage_path('upload') . $filepath . '/' . $file->getName()) != $file->getSize()){
+                                $dropbox->download(env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_IN') . $filepath . '/' . $file->getName(), storage_path('upload') . $filepath . '/' . $file->getName());
+                            }
+                            $infiles[] = array('filename' => $file->getName(), 'size' => $file->getSize(), 'modifiedDate' => $file->getServerModified(), 'link' => env('APP_URL') . 'in/' . $request['projectId'] . '/' . $file->getName());
+                        }
+                    } catch (DropboxClientException $e) { 
+                        $infiles = array();
+                    }
+
+                    return view('admin.onreview.filelist')->with('reportfiles', $reportfiles)->with('infiles', $infiles)->with('projecttitle', $job['companyName'] . ' - ' . $job['clientProjectNumber'] . '. ' . $job['clientProjectName'] . ' ' . $job['state']);
                 } else
-                    return response()->json(["message" => "You don't have permission.", "success" => false]);
+                    return redirect('home');
             } else
-                return response()->json(["message" => "Cannot find project.", "success" => false]);  
+                return redirect('home');  
         } else 
-            return response()->json(["message" => "Empty project id.", "success" => false]);
+            return redirect('home');
     }
 
     /**

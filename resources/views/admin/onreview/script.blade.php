@@ -134,27 +134,27 @@ $(document).ready(function(){
 		})
 	});
 
-    $("#filetree").jstree({
-        'plugins': ["wholerow", "types"],
-        'core': {
-            "check_callback": true,
-            "themes" : {
-                "responsive": true
-            },
-        },
-        "types" : {
-            "folder" : { "icon" : "fa fa-folder m--font-warning" },
-            "file" : {"icon" : "fa fa-file m--font-warning" }
-        },  
-    });
+    // $("#filetree").jstree({
+    //     'plugins': ["wholerow", "types"],
+    //     'core': {
+    //         "check_callback": true,
+    //         "themes" : {
+    //             "responsive": true
+    //         },
+    //     },
+    //     "types" : {
+    //         "folder" : { "icon" : "fa fa-folder m--font-warning" },
+    //         "file" : {"icon" : "fa fa-file m--font-warning" }
+    //     },  
+    // });
 
-    $("#filetree").on("select_node.jstree",
-        function(evt, data){
-            if(data && data.node && data.node.original && data.node.original.link){
-                window.open(data.node.original.link, '_blank');
-            }
-        }
-    );
+    // $("#filetree").on("select_node.jstree",
+    //     function(evt, data){
+    //         if(data && data.node && data.node.original && data.node.original.link){
+    //             window.open(data.node.original.link, '_blank');
+    //         }
+    //     }
+    // );
 });
 
 function checkboxAll(){
@@ -295,65 +295,65 @@ function eSealUpload(){
     });
 }
 
-function showReportDlg(){
-    swal.fire({ title: "Please wait...", showConfirmButton: false });
-    swal.showLoading();
-    $.ajax({
-        url:"getReportList",
-        type:'post',
-        data:{projectId: $('#projectId').val()},
-        success:function(res){
-            swal.close();
-             if (res.success == true && res.files) {
-                $("#treeDlgTitle").html("Reports");
-                $("#filetree").jstree('delete_node', $("#filetree").jstree(true).get_node('#').children);
+// function showReportDlg(){
+//     swal.fire({ title: "Please wait...", showConfirmButton: false });
+//     swal.showLoading();
+//     $.ajax({
+//         url:"getReportList",
+//         type:'post',
+//         data:{projectId: $('#projectId').val()},
+//         success:function(res){
+//             swal.close();
+//              if (res.success == true && res.files) {
+//                 $("#treeDlgTitle").html("Reports");
+//                 $("#filetree").jstree('delete_node', $("#filetree").jstree(true).get_node('#').children);
 
-                res.files.forEach((link, index) => {
-                    $("#filetree").jstree('create_node', null, {"text": link.filename + ' (' + parseInt(link.size / 1024) + 'KB / ' + link.modifiedDate + ')', "id": "item_" + index, "type": "file", "link": link.link}, 'last');
-                });
+//                 res.files.forEach((link, index) => {
+//                     $("#filetree").jstree('create_node', null, {"text": link.filename + ' (' + parseInt(link.size / 1024) + 'KB / ' + link.modifiedDate + ')', "id": "item_" + index, "type": "file", "link": link.link}, 'last');
+//                 });
 
-                $("#treeDlg").modal();
-             }
-        },
-        error: function(xhr, status, error) {
-            res = JSON.parse(xhr.responseText);
-            message = res.message;
-            swal.fire({ title: "Error",
-                    text: message == "" ? "Error happened while processing. Please try again later." : message,
-                    icon: "error",
-                    confirmButtonText: `OK` });
-        }
-    });
-}
+//                 $("#treeDlg").modal();
+//              }
+//         },
+//         error: function(xhr, status, error) {
+//             res = JSON.parse(xhr.responseText);
+//             message = res.message;
+//             swal.fire({ title: "Error",
+//                     text: message == "" ? "Error happened while processing. Please try again later." : message,
+//                     icon: "error",
+//                     confirmButtonText: `OK` });
+//         }
+//     });
+// }
 
-function showInDirDlg(){
-    swal.fire({ title: "Please wait...", showConfirmButton: false });
-    swal.showLoading();
-    $.ajax({
-        url:"getInDIRList",
-        type:'post',
-        data:{projectId: $('#projectId').val()},
-        success:function(res){
-            swal.close();
-             if (res.success == true && res.files) {
-                $("#treeDlgTitle").html("In Directory");
-                $("#filetree").jstree('delete_node', $("#filetree").jstree(true).get_node('#').children);
+// function showInDirDlg(){
+//     swal.fire({ title: "Please wait...", showConfirmButton: false });
+//     swal.showLoading();
+//     $.ajax({
+//         url:"getInDIRList",
+//         type:'post',
+//         data:{projectId: $('#projectId').val()},
+//         success:function(res){
+//             swal.close();
+//              if (res.success == true && res.files) {
+//                 $("#treeDlgTitle").html("In Directory");
+//                 $("#filetree").jstree('delete_node', $("#filetree").jstree(true).get_node('#').children);
 
-                res.files.forEach((link, index) => {
-                    $("#filetree").jstree('create_node', null, {"text": link.filename + ' (' + parseInt(link.size / 1024) + 'KB / ' + link.modifiedDate + ')', "id": "item_" + index, "type": "file", "link": link.link}, 'last');
-                });
+//                 res.files.forEach((link, index) => {
+//                     $("#filetree").jstree('create_node', null, {"text": link.filename + ' (' + parseInt(link.size / 1024) + 'KB / ' + link.modifiedDate + ')', "id": "item_" + index, "type": "file", "link": link.link}, 'last');
+//                 });
 
-                $("#treeDlg").modal();
-             }
-        },
-        error: function(xhr, status, error) {
-            res = JSON.parse(xhr.responseText);
-            message = res.message;
-            swal.fire({ title: "Error",
-                    text: message == "" ? "Error happened while processing. Please try again later." : message,
-                    icon: "error",
-                    confirmButtonText: `OK` });
-        }
-    });
-}
+//                 $("#treeDlg").modal();
+//              }
+//         },
+//         error: function(xhr, status, error) {
+//             res = JSON.parse(xhr.responseText);
+//             message = res.message;
+//             swal.fire({ title: "Error",
+//                     text: message == "" ? "Error happened while processing. Please try again later." : message,
+//                     icon: "error",
+//                     confirmButtonText: `OK` });
+//         }
+//     });
+// }
 </script>

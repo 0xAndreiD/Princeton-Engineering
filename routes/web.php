@@ -71,9 +71,8 @@ Route::post('/checkChatList', 'GeneralController@checkChatList')->name('checkCha
 Route::post('/getPermitList', 'GeneralController@getPermitList')->name('getPermitList');
 Route::post('/getCompanyInfo', 'GeneralController@getCompanyInfo')->name('getCompanyInfo');
 Route::get('/onreview', 'GeneralController@onReview')->name('onReview');
-Route::post('/getReportList', 'GeneralController@getReportList')->name('getReportList');
+Route::get('/jobFiles', 'GeneralController@jobFiles')->name('jobFiles');
 Route::get('/report/{file}', 'GeneralController@getReport');
-Route::post('/getInDIRList', 'GeneralController@getInDIRList')->name('getInDIRList');
 Route::get('/in/{jobId}/{file}', 'GeneralController@getINFile');
 
 // APIs for list, update, download, db backup
