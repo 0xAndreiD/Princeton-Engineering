@@ -356,4 +356,33 @@ function eSealUpload(){
 //         }
 //     });
 // }
+
+var currFFZoom = 1.00;
+var currIEZoom = 100;
+
+function zoomIn(){
+    if (navigator.userAgent.indexOf('Firefox') != -1 && parseFloat(navigator.userAgent.substring(navigator.userAgent.indexOf('Firefox') + 8)) >= 3.6) { //Firefox
+        var step = 0.05;
+        currFFZoom += step;
+        $('body').css('MozTransform', 'scale(' + currFFZoom + ')');
+
+    } else {
+        var step = 5;
+        currIEZoom += step;
+        $('body').css('zoom', ' ' + currIEZoom + '%');
+    }
+}
+
+function zoomOut(){
+    if (navigator.userAgent.indexOf('Firefox') != -1 && parseFloat(navigator.userAgent.substring(navigator.userAgent.indexOf('Firefox') + 8)) >= 3.6) { //Firefox
+        var step = 0.05;
+        currFFZoom -= step;
+        $('body').css('MozTransform', 'scale(' + currFFZoom + ')');
+
+    } else {
+        var step = 5;
+        currIEZoom -= step;
+        $('body').css('zoom', ' ' + currIEZoom + '%');
+    }
+}
 </script>

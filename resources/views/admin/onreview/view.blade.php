@@ -24,6 +24,12 @@
 
 <div class="content" style="text-align:left">
     <div class="row">
+        <div class="col-md-12 text-center mb-2">
+            <button class="btn btn-secondary mr-3" onclick="zoomIn()"><i class="fa fa-search-plus"></i></button>
+            <button class="btn btn-secondary" onclick="zoomOut()"><i class="fa fa-search-minus"></i></button>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-md-2">
             <div class="block">
                 <div class="block-header review-block-header pt-1 pb-1">
