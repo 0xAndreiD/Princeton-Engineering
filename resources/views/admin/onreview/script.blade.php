@@ -15,6 +15,23 @@ $(document).ready(function(){
     window.history.pushState(null, "", window.location.href);        
     window.onpopstate = function() {
         window.history.pushState(null, "", window.location.href);
+        $.ajax({
+            url:"setAnalysisType",
+            type:'post',
+            data:{projectId: $('#projectId').val(), value: 20, method: 'subtract'},
+            success:function(res){
+                if(!res.success)
+                    swal.fire({ title: "Error", text: res.message, icon: "error", confirmButtonText: `OK` });
+            },
+            error: function(xhr, status, error) {
+                res = JSON.parse(xhr.responseText);
+                message = res.message;
+                swal.fire({ title: "Error",
+                        text: message == "" ? "Error happened while processing. Please try again later." : message,
+                        icon: "error",
+                        confirmButtonText: `OK` });
+            }
+        });
     };
 
     $.ajax({

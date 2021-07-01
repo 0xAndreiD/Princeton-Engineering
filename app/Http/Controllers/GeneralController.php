@@ -2159,7 +2159,7 @@ class GeneralController extends Controller
             if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4){
                 $job = JobRequest::where('id', $request['projectId'])->first();
                 if($job){
-                    if($request['method'] == 'subtract')
+                    if($request['method'] == 'subtract' && $job->analysisType >= 20)
                         $job->analysisType = $job->analysisType - $request['value'];
                     else if($request['method'] == 'add')
                         $job->analysisType = $job->analysisType + $request['value'];
