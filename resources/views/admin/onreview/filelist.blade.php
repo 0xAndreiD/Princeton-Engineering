@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
 
-        <title>Reviewer Page</title>
+        <title>Project Files</title>
 
         <meta name="description" content="Princeton Engineering">
         <meta name="author" content="pixelcave">
@@ -126,18 +126,18 @@
                 <tbody>
                     @foreach($reportfiles as $file)
                     <tr class='file'>
-                        <td><a href="{{$file['link']}}">{{$file['filename']}}</a></td>
-                        <td><a href="{{$file['link']}}">Report</a></td>
-                        <td sorttable_customkey='0'><a href="{{$file['link']}}">{{$file['size'] / 1024 . 'KB'}}</a></td>
-                        <td sorttable_customkey='0'><a href="{{$file['link']}}">{{$file['modifiedDate']}}</a></td>
+                        <td><a target="_blank" rel="noopener noreferrer" href="{{$file['link']}}">{{$file['filename']}}</a></td>
+                        <td><a target="_blank" rel="noopener noreferrer" href="{{$file['link']}}">Report</a></td>
+                        <td sorttable_customkey="{{$file['size']}}"><a target="_blank" rel="noopener noreferrer" href="{{$file['link']}}">{{$file['size'] / 1024 . 'KB'}}</a></td>
+                        <td sorttable_customkey="{{$file['modifiedDate']}}"><a target="_blank" rel="noopener noreferrer" href="{{$file['link']}}">{{$file['modifiedDate']}}</a></td>
                     </tr>
                     @endforeach
                     @foreach($infiles as $file)
                     <tr class='file'>
-                        <td><a href="{{$file['link']}}">{{$file['filename']}}</a></td>
-                        <td><a href="{{$file['link']}}">Report</a></td>
-                        <td sorttable_customkey='0'><a href="{{$file['link']}}">{{$file['size'] / 1024 . 'KB'}}</a></td>
-                        <td sorttable_customkey='0'><a href="{{$file['link']}}">{{$file['modifiedDate']}}</a></td>
+                        <td><a target="_blank" rel="noopener noreferrer" href="{{$file['link']}}">{{$file['filename']}}</a></td>
+                        <td><a target="_blank" rel="noopener noreferrer" href="{{$file['link']}}">IN</a></td>
+                        <td sorttable_customkey="{{$file['size']}}"><a target="_blank" rel="noopener noreferrer" href="{{$file['link']}}">{{$file['size'] / 1024 . 'KB'}}</a></td>
+                        <td sorttable_customkey="{{$file['modifiedDate']}}"><a target="_blank" rel="noopener noreferrer" href="{{$file['link']}}">{{$file['modifiedDate']}}</a></td>
                     </tr>
                     @endforeach
                 </tbody>
