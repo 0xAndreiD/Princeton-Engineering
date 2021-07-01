@@ -1290,7 +1290,15 @@ $("#txt-project-name").on('keypress', function(event){
         event.preventDefault();
         return false;
     }
-})
+});
+
+$("#txt-project-number").on('keypress', function(event){
+    if(event.key == ".")
+    {
+        event.preventDefault();
+        return false;
+    }
+});
 
 $('.domChange').on('input', function() {
     domChanged = true;
