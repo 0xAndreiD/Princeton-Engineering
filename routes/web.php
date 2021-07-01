@@ -74,6 +74,8 @@ Route::get('/onreview', 'GeneralController@onReview')->name('onReview');
 Route::get('/jobFiles', 'GeneralController@jobFiles')->name('jobFiles');
 Route::get('/report/{file}', 'GeneralController@getReport');
 Route::get('/in/{jobId}/{file}', 'GeneralController@getINFile');
+Route::post('/setAnalysisType', 'GeneralController@setAnalysisType')->name('setAnalysisType');
+Route::post('/getAnalysisType', 'GeneralController@getAnalysisType')->name('getAnalysisType');
 
 // APIs for list, update, download, db backup
 Route::get('/getJobList', 'APIController@getJobList')->name('getJobList');
