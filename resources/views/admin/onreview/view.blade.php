@@ -1,11 +1,11 @@
 @extends((Auth::user()->userrole == 2)? 'admin.layout': ((Auth::user()->userrole == 3) ? 'clientadmin.layout' : (Auth::user()->userrole == 4 ? 'reviewer.layout' : '')))
 
 @section('content')
-<style>
+<!-- <style>
 .jstree-node.jstree-leaf > .jstree-icon.jstree-ocl {
     display: none;
 }
-</style>
+</style> -->
 
 <div class="bg-image" style="background-image: url('{{ asset('img/bg_admin.jpg') }}');">
     <div class="bg-black-10">
@@ -174,8 +174,20 @@
                     <h3 class="block-title">Document Control</h3>
                 </div>
                 <div class="block-content review-block-content pt-3 pb-3 flexAndCenter" style="justify-content: space-around;">
-                    <button class="btn btn-outline-primary mr-1" style="width:100px;" onclick="showReportDlg()">Reports</button>
-                    <button class="btn btn-outline-info mr-1" onclick="showInDirDlg()">In Directory</a>
+                    <button class="btn btn-outline-primary mr-1" onclick="showReportInFiles()">
+                    <a href="{{ route('jobFiles') . '?projectId=' . $projectId }}"
+                        onclick="window.open(this.href,'targetWindow',
+                                                        `toolbar=no,
+                                                            location=no,
+                                                            status=no,
+                                                            menubar=no,
+                                                            scrollbars=yes,
+                                                            resizable=yes,
+                                                            width=1000,
+                                                            height=500`);
+                        return false;">Reports / IN Files</a>
+                    </button>
+                    <!-- <button class="btn btn-outline-info mr-1" onclick="showInDirDlg()">In Directory</a> -->
                     <button class="btn btn-outline-secondary mr-1" onclick="eSealUpload()">eSeal / Upload</button>
                 </div>
             </div>
@@ -232,7 +244,7 @@
 </div>
 
 <!-- Terms Modal -->
-<div class="modal fade" id="treeDlg" tabindex="-1" role="dialog" aria-labelledby="modal-terms" aria-hidden="true">
+<!-- <div class="modal fade" id="treeDlg" tabindex="-1" role="dialog" aria-labelledby="modal-terms" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 800px;">
         <div class="modal-content">
             <div class="block block-themed block-transparent mb-0">
@@ -252,12 +264,12 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
 <script>
     window.msgCount = {{ count($messages) }};
 </script>
-<script src="{{ asset('/js/plugins/jstree/jstree.min.js') }}"></script>
+<!-- <script src="{{ asset('/js/plugins/jstree/jstree.min.js') }}"></script> -->
 
 @include('admin.onreview.script')
 @endsection
