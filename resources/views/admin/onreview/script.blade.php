@@ -291,11 +291,14 @@ function autoNote(){
 }
 
 function eSealUpload(){
+    swal.fire({ title: "Please wait...", showConfirmButton: false });
+    swal.showLoading();
     $.ajax({
         url:"setESeal",
         type:'post',
         data:{projectId: $('#projectId').val()},
         success:function(res){
+            swal.close();
             if (res.success == true) {
                 $("#Review").attr('checked', false);
                 $("#Asbuilt").attr('checked', false);
