@@ -1223,7 +1223,26 @@ class GeneralController extends Controller
                         $project->eSeal_asbuilt = 1;
                     $project->planCheck = 0;
                     $project->asBuilt = 0;
+                    $project->chatIcon = 2;
                     $project->save();
+                    JobChat::create([
+                        'jobId' => $request['projectId'],
+                        'userId' => Auth::user()->id,
+                        'text' => "Document review completed. Awaiting sealing and uploading."
+                    ]);
+
+                    $users = User::where('usernumber', $project->userId)->where('companyid', $project->companyId)->get();
+                        
+                    $data = ['projectName' => $project->clientProjectName, 'projectNumber' => $project->clientProjectNumber, 
+                    'state' => $project->state];
+
+                    foreach($users as $user){
+                        if ($user) {
+                            Mail::send('mail.chatnotification', $data, function ($m) use ($user) {
+                                $m->from(env('MAIL_FROM_ADDRESS'), 'Princeton Engineering')->to($user->email)->subject('Chat is updated on the project');
+                            });
+                        }
+                    }
 
                     return response()->json(['success' => true]);   
                 }
