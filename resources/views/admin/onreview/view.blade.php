@@ -174,17 +174,7 @@
                     <h3 class="block-title">Document Control</h3>
                 </div>
                 <div class="block-content review-block-content pt-3 pb-3 flexAndCenter" style="justify-content: space-around;">
-                    <a class="btn btn-outline-primary mr-1" href="{{ route('jobFiles') . '?projectId=' . $projectId }}"
-                        onclick="window.open(this.href,'targetWindow',
-                                                        `toolbar=no,
-                                                            location=no,
-                                                            status=no,
-                                                            menubar=no,
-                                                            scrollbars=yes,
-                                                            resizable=yes,
-                                                            width=1000,
-                                                            height=500`);
-                        return false;">Reports / IN Files</a>
+                    <a class="btn btn-outline-primary mr-1" onclick="openJobFiles('{{ route('jobFiles') . '?projectId=' . $projectId }}')">Reports / IN Files</a>
                     <!-- <button class="btn btn-outline-info mr-1" onclick="showInDirDlg()">In Directory</a> -->
                     <button class="btn btn-outline-secondary mr-1" onclick="eSealUpload()">eSeal / Upload</button>
                 </div>
