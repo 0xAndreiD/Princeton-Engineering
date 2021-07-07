@@ -171,7 +171,7 @@ $(document).ready(function(){
         $.ajax({
 			url:"getMainJobFiles",
 			method:"POST",
-			data:formData,
+			data:{projectId: $('#projectId').val()},
 			success:function(data){
                 swal.close();
                 if(data.success && data.files){
