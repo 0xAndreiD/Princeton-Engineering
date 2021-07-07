@@ -222,15 +222,22 @@
                             </a>
                         </li>
                         <li class="nav-main-item">
-                            <a class="nav-main-link" href="{{ route('sealpos') }}">
-                                <i class="nav-main-link-icon fa fa-expand-arrows-alt"></i>
-                                <span class="nav-main-link-name">Seal Position</span>
-                            </a>
-                        </li>
-                        <li class="nav-main-item">
                             <a class="nav-main-link" href="{{ route('settings') }}">
                                 <i class="nav-main-link-icon fa fa-cogs"></i>
                                 <span class="nav-main-link-name">Settings</span>
+                            </a>
+                        </li>
+                        <li class="nav-main-heading">Seal Position</li>
+                        <li class="nav-main-item">
+                            <a class="nav-main-link" href="{{ route('sealtemplate') }}">
+                                <i class="nav-main-link-icon fa fa-expand-arrows-alt"></i>
+                                <span class="nav-main-link-name">Create Template</span>
+                            </a>
+                        </li>
+                        <li class="nav-main-item">
+                            <a class="nav-main-link" href="{{ route('sealassign') }}">
+                                <i class="nav-main-link-icon fa fa-flag-usa"></i>
+                                <span class="nav-main-link-name">Assign Template</span>
                             </a>
                         </li>
                     </ul>

@@ -200,13 +200,11 @@ Route::resource('verify', 'Auth\TwoFactorController')->only(['index', 'store']);
 Route::get('verify/blocked', 'Auth\TwoFactorController@blocked')->name('verify.blocked');
 Route::get('verify/geolocation', 'Auth\TwoFactorController@geolocation')->name('verify.geolocation');
 
-// Route::get('/setStates', 'GeneralController@setStates')->name('setStates');
-
 // Seal Positioning
-Route::get('/sealpos', 'CompanyController@sealpos')->name('sealpos');
+Route::get('/sealtemplate', 'CompanyController@sealtemplate')->name('sealtemplate');
+Route::get('/sealassign', 'CompanyController@sealassign')->name('sealassign');
 Route::post('/extractImgFromPDF', 'CompanyController@extractImgFromPDF')->name('extractImgFromPDF');
-Route::post('/getSealImg', 'CompanyController@getSealImg')->name('getSealImg');
 Route::post('/saveSealData', 'CompanyController@saveSealData')->name('saveSealData');
 Route::post('/loadSealData', 'CompanyController@loadSealData')->name('loadSealData');
-Route::post('/saveAsTemplate', 'CompanyController@saveAsTemplate')->name('saveAsTemplate');
-Route::post('/getTemplateList', 'CompanyController@getTemplateList')->name('getTemplateList');
+Route::post('/saveSealTemplate', 'CompanyController@saveSealTemplate')->name('saveSealTemplate');
+Route::post('/getSealTemplateList', 'CompanyController@getSealTemplateList')->name('getSealTemplateList');

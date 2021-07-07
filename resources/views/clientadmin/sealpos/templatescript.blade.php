@@ -92,140 +92,37 @@ function dimUpdateHandler(){
     }
 }
 
-function saveContent(){
-    let state = $("#state-dropdown").html();
-    if(!state || state.length != 2){
-        swal.fire({ title: "Warning", text: 'Please select the state.', icon: "info", confirmButtonText: `OK` });
-        return;
-    }
-
-    swal.fire({ title: "Please wait...", showConfirmButton: false });
-    swal.showLoading();
-    var objects = [];
-    canvas.getObjects().forEach(object => {
-        if(object.type == 'image') objects.push({type: object.type, scaleX: object.scaleX, left: object.left, top: object.top, width: object.width, height: object.height});
-        if(object.type == 'textbox') objects.push({type: object.type, fontSize: object.fontSize, text: object.text, left: object.left, top: object.top, width: object.width, height: object.height});
-    });
-
-    $.ajax({
-        url:"saveSealData",
-        type:'post',
-        data:{
-            data: JSON.stringify(canvas.toJSON()),
-            state: state,
-            pageWidth: pageWidth,
-            pageHeight: pageHeight,
-            canvasWidth: canvas.width,
-            canvasHeight: canvas.height,
-            objects: objects
-        },
-        success:function(res){
-            swal.close();
-            if (res.status == true) {
-                swal.fire({ title: "Success", text: "Successfully Saved!", icon: "success", confirmButtonText: `OK` });
-            } else 
-                swal.fire({ title: "Error", text: res.message, icon: "error", confirmButtonText: `OK` });
-        },
-        error: function(xhr, status, error) {
-            res = JSON.parse(xhr.responseText);
-            var message = res.message;
-            swal.fire({ title: "Error",
-                    text: message == "" ? "Error happened while processing. Please try again later." : message,
-                    icon: "error",
-                    confirmButtonText: `OK` });
-        }
-    });
-}
-
-function updateTemplateList(){
-    $.ajax({
-        url:"getSealTemplateList",
-        type:'post',
-        success:function(res){
-            if (res.status == true && res.data) {
-                $("#template-list").html("");
-                res.data.forEach(template => {
-                    $("#template-list").append("<a class='dropdown-item' href='javascript:loadTemplate(\"" + template.id + "\")'>" + template.title + "</a>");
-                })
-            }
-        },
-        error: function(xhr, status, error) {
-            res = JSON.parse(xhr.responseText);
-            var message = res.message;
-            swal.fire({ title: "Error",
-                    text: message == "" ? "Error happened while processing. Please try again later." : message,
-                    icon: "error",
-                    confirmButtonText: `OK` });
-        }
-    });
-}
-
-function loadTemplate(templateId){
-    loadContent(templateId, true);
-}
-
-function loadContent(identifier, isTemplate = false){
-    var formData;
-    if(isTemplate)
-        formData = { 'templateId': identifier };
-    else
-        formData = { 'state': identifier };
-
-    swal.fire({ title: "Please wait...", showConfirmButton: false });
-    swal.showLoading();
-    $.ajax({
-        url:"loadSealData",
-        type:'post',
-        data: formData,
-        success:function(res){
-            swal.close();
-            if (res.status == true) {
-                var data = JSON.parse(res.data);
-                canvas.loadFromJSON(data, function(){
-                    canvas.getObjects().forEach(object => { 
-                        addEffect(object);
-                        if(object.type == 'textbox')
-                            object.set({editable: false});
-                    });
-                    canvas.renderAll();
-                });
-                if(data.backgroundImage && data.backgroundImage.src){
-                    fabric.Image.fromURL(data.backgroundImage.src, function(image) {
-                        canvas.setHeight(image.height * 900 / image.width);
-                        pageWidth = image.width / 200;
-                        pageHeight = image.height / 200;
-                        $("#page-width").val(pageWidth.toFixed(2));
-                        $("#page-height").val(pageHeight.toFixed(2));
-                        
-                        image.set({
-                            scaleX: canvas.width / image.width,
-                            scaleY: canvas.height / image.height
-                        })
-
-                        canvas.setBackgroundImage(image);
-                        fabric.Object.NUM_FRACTION_DIGITS = 17;
-                        canvas.renderAll();
-                    });
+function saveTemplate(){
+    swal.fire({ title: "Input the template title", input: 'text', confirmButtonText: `OK`, showCancelButton: true }).then((result => {
+        if(result && result.value){
+            swal.fire({ title: "Please wait...", showConfirmButton: false });
+            swal.showLoading();
+            $.ajax({
+                url:"saveSealTemplate",
+                type:'post',
+                data:{
+                    template: result.value,
+                    data: JSON.stringify(canvas.toJSON())
+                },
+                success:function(res){
+                    swal.close();
+                    if (res.status == true) {
+                        swal.fire({ title: "Success", text: "Successfully Saved!", icon: "success", confirmButtonText: `OK` });
+                        //updateTemplateList();
+                    } else 
+                        swal.fire({ title: "Error", text: res.message, icon: "error", confirmButtonText: `OK` });
+                },
+                error: function(xhr, status, error) {
+                    res = JSON.parse(xhr.responseText);
+                    var message = res.message;
+                    swal.fire({ title: "Error",
+                            text: message == "" ? "Error happened while processing. Please try again later." : message,
+                            icon: "error",
+                            confirmButtonText: `OK` });
                 }
-            }
-        },
-        error: function(xhr, status, error) {
-            res = JSON.parse(xhr.responseText);
-            var message = res.message;
-            swal.fire({ title: "Error",
-                    text: message == "" ? "Error happened while processing. Please try again later." : message,
-                    icon: "error",
-                    confirmButtonText: `OK` });
+            });
         }
-    });
-}
-
-function stateChange(state){
-    $("#state-dropdown").html(state);
-    $("#page-width").val("");
-    $("#page-height").val("");
-    canvas.clear();
-    loadContent(state);
+    }));
 }
 
 $(document).ready(function() {
@@ -239,27 +136,17 @@ $(document).ready(function() {
     fabric.Object.NUM_FRACTION_DIGITS = 17;
     canvas.setWidth(900);
 
-    updateTemplateList();
-
     var inputs = document.querySelectorAll( '.inputfile' );
     Array.prototype.forEach.call( inputs, function( input )
     {
         input.addEventListener( 'change', function( e )
         {
-            let state = $("#state-dropdown").html();
-            if(!state || state.length != 2){
-                $(".inputfile").val('');
-                swal.fire({ title: "Warning", text: 'Please select the state.', icon: "info", confirmButtonText: `OK` });
-                return;
-            }
-
             if($('#file')[0].files && $('#file')[0].files[0]){
                 swal.fire({ title: "Please wait...", showConfirmButton: false });
                 swal.showLoading();
 
                 var formData = new FormData();
                 formData.append('upl', $('#file')[0].files[0]);
-                formData.append('state', state);
 
                 $.ajax({
                     url:"extractImgFromPDF",
