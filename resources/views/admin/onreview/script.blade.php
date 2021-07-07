@@ -1,10 +1,23 @@
 <script>
+var popUp;
+
 $(document).ready(function(){
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+
+    window.onbeforeunload = function() {
+        if (popUp && !popUp.closed) {
+            popUp.close();
+        }
+    };
+    window.onhashchange = function() {
+        if (popUp && !popUp.closed) {
+            popUp.close();
+        }
+    };
 
     var projectId = $('#projectId').val();
 
@@ -314,6 +327,11 @@ function eSealUpload(){
                     confirmButtonText: `OK` });
         }
     });
+}
+
+function openJobFiles(url){
+    popUp = window.open(url,'targetWindow', `toolbar=no, location=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=1000, height=500`);
+    return false;
 }
 
 // function showReportDlg(){
