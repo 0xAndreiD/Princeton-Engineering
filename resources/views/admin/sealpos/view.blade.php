@@ -10,7 +10,7 @@
                     Seal Positioning
                 </h1>
                 <h2 class="h5 text-white-75 mb-0">
-                    Move your required elements to your correct position
+                    Assign a template to a state, or set custom seal position
                 </h2>
             </div>
         </div>
@@ -124,12 +124,6 @@
                 <button type="button" class="btn btn-primary" onclick="saveContent()">
                     <i class="fa fa-save"></i>
                     Save
-                </button>
-            </div>
-            <div class="btn-group push">
-                <button type="button" class="btn btn-info" onclick="saveAsTemplate()">
-                    <i class="fa fa-save"></i>
-                    Save As A Template
                 </button>
             </div>
         </div>

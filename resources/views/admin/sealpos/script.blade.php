@@ -5,45 +5,22 @@ var pageHeight;
 var wantedCompany;
 var wantedState;
 
-function drawBackground(){
-    return new Promise((resolve, reject) => {
-        $.ajax({
-            url:"getSealImg",
-            type:'post',
-            data: {
-                companyId: wantedCompany,
-                state: wantedState
-            },
-            success:function(res){
-                if (res.status == true) {
-                    fabric.Image.fromURL(res.url + '?' + new Date().getTime(), function(image) {
-                        swal.close();
-                        canvas.setHeight(image.height * 900 / image.width);
-                        image.set({
-                            scaleX: canvas.width / image.width,
-                            scaleY: canvas.height / image.height
-                        });
-                        pageWidth = image.width / 200;
-                        pageHeight = image.height / 200;
-                        $("#page-width").val(pageWidth.toFixed(2));
-                        $("#page-height").val(pageHeight.toFixed(2));
-
-                        fabric.Object.NUM_FRACTION_DIGITS = 17;
-                        canvas.setBackgroundImage(image);
-                        canvas.renderAll();
-                    });
-                } else
-                    swal.close();
-            },
-            error: function(xhr, status, error) {
-                res = JSON.parse(xhr.responseText);
-                var message = res.message;
-                swal.fire({ title: "Error",
-                        text: message == "" ? "Error happened while processing. Please try again later." : message,
-                        icon: "error",
-                        confirmButtonText: `OK` });
-            }
+function drawBackground(url){
+    fabric.Image.fromURL(url + '?' + new Date().getTime(), function(image) {
+        swal.close();
+        canvas.setHeight(image.height * 900 / image.width);
+        image.set({
+            scaleX: canvas.width / image.width,
+            scaleY: canvas.height / image.height
         });
+        pageWidth = image.width / 200;
+        pageHeight = image.height / 200;
+        $("#page-width").val(pageWidth.toFixed(2));
+        $("#page-height").val(pageHeight.toFixed(2));
+
+        fabric.Object.NUM_FRACTION_DIGITS = 17;
+        canvas.setBackgroundImage(image);
+        canvas.renderAll();
     });
 }
 
@@ -169,13 +146,13 @@ function saveContent(){
 
 function updateTemplateList(){
     $.ajax({
-        url:"getTemplateList",
+        url:"getSealTemplateList",
         type:'post',
         success:function(res){
             if (res.status == true && res.data) {
                 $("#template-list").html("");
                 res.data.forEach(template => {
-                    $("#template-list").append("<a class='dropdown-item' href='javascript:loadTemplate(\"" + template.companyId + "\", \"" + template.state + "\")'>" + template.title + "</a>");
+                    $("#template-list").append("<a class='dropdown-item' href='javascript:loadTemplate(\"" + template.companyId + "\", \"" + template.id + "\")'>" + template.title + "</a>");
                 })
             }
         },
@@ -190,73 +167,23 @@ function updateTemplateList(){
     });
 }
 
-function loadTemplate(templateCompany, templateState){
-    if(!wantedCompany){
-        swal.fire({ title: "Warning", text: 'Please select the company.', icon: "info", confirmButtonText: `OK` });
-        return;
-    }
-    if(!wantedState || wantedState.length != 2){
-        swal.fire({ title: "Warning", text: 'Please select the state.', icon: "info", confirmButtonText: `OK` });
-        return;
-    }
-    if(wantedCompany == templateCompany && wantedState == templateState) return;
-    
-    loadContent(templateCompany, templateState);
+function loadTemplate(templateCompany, templateId){ 
+    loadContent(templateCompany, templateId, true);
 }
 
-function saveAsTemplate(){
-    if(!wantedCompany){
-        swal.fire({ title: "Warning", text: 'Please select the company.', icon: "info", confirmButtonText: `OK` });
-        return;
-    }
-    if(!wantedState || wantedState.length != 2){
-        swal.fire({ title: "Warning", text: 'Please select the state.', icon: "info", confirmButtonText: `OK` });
-        return;
-    }
-    
-    swal.fire({ title: "Input the template title", input: 'text', confirmButtonText: `OK`, showCancelButton: true }).then((result => {
-        if(result && result.value){
-            swal.fire({ title: "Please wait...", showConfirmButton: false });
-            swal.showLoading();
-            $.ajax({
-                url:"saveAsTemplate",
-                type:'post',
-                data:{
-                    companyId: wantedCompany,
-                    state: wantedState,
-                    template: result.value
-                },
-                success:function(res){
-                    swal.close();
-                    if (res.status == true) {
-                        swal.fire({ title: "Success", text: "Successfully Saved!", icon: "success", confirmButtonText: `OK` });
-                        updateTemplateList();
-                    } else 
-                        swal.fire({ title: "Error", text: res.message, icon: "error", confirmButtonText: `OK` });
-                },
-                error: function(xhr, status, error) {
-                    res = JSON.parse(xhr.responseText);
-                    var message = res.message;
-                    swal.fire({ title: "Error",
-                            text: message == "" ? "Error happened while processing. Please try again later." : message,
-                            icon: "error",
-                            confirmButtonText: `OK` });
-                }
-            });
-        }
-    }));
-}
+function loadContent(companyId, identifier, isTemplate = false){
+    var formData;
+    if(isTemplate)
+        formData = { 'companyId': companyId ? companyId : wantedCompany, 'templateId': identifier };
+    else
+        formData = { 'companyId': companyId ? companyId : wantedCompany, 'state': identifier ? identifier : wantedState };
 
-function loadContent(companyId, state){
     swal.fire({ title: "Please wait...", showConfirmButton: false });
     swal.showLoading();
     $.ajax({
         url:"loadSealData",
         type:'post',
-        data:{
-            companyId: companyId ? companyId : wantedCompany,
-            state: state ? state : wantedState
-        },
+        data: formData,
         success:function(res){
             swal.close();
             if (res.status == true) {
@@ -334,19 +261,8 @@ $(document).ready(function() {
     var inputs = document.querySelectorAll( '.inputfile' );
     Array.prototype.forEach.call( inputs, function( input )
     {
-        // var label	 = input.nextElementSibling,
-        //     labelVal = label.innerHTML;
-
         input.addEventListener( 'change', function( e )
         {
-            // var fileName = '';
-            // fileName = e.target.value.split("\\").pop();
-
-            // if( fileName )
-            //     label.querySelector( 'span' ).innerHTML = fileName;
-            // else
-            //     label.innerHTML = labelVal;
-            
             if(!wantedCompany){
                 $(".inputfile").val('');
                 swal.fire({ title: "Warning", text: 'Please select the company.', icon: "info", confirmButtonText: `OK` });
@@ -375,8 +291,8 @@ $(document).ready(function() {
                     contentType: false,
                     success:function(res){
                         $(".inputfile").val('');
-                        if (res.status == true) {
-                            drawBackground();
+                        if (res.status == true && res.filename) {
+                            drawBackground(res.filename);
                         } else {
                             swal.close();
                             // error handling
