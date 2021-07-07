@@ -72,6 +72,7 @@ Route::post('/getPermitList', 'GeneralController@getPermitList')->name('getPermi
 Route::post('/getCompanyInfo', 'GeneralController@getCompanyInfo')->name('getCompanyInfo');
 Route::get('/onreview', 'GeneralController@onReview')->name('onReview');
 Route::get('/jobFiles', 'GeneralController@jobFiles')->name('jobFiles');
+Route::post('/getMainJobFiles', 'GeneralController@getMainJobFiles')->name('getMainJobFiles');
 Route::get('/report/{file}', 'GeneralController@getReport');
 Route::get('/in/{jobId}/{file}', 'GeneralController@getINFile');
 Route::post('/setReviewer', 'GeneralController@setReviewer')->name('setReviewer');
@@ -129,6 +130,8 @@ Route::post('/deleteGuard', 'AdminController@deleteGuard')->name('deleteGuard');
 Route::get('/settings', 'UserController@settings')->name('settings');
 Route::post('/getUserSetting', 'UserController@getUserSetting')->name('getUserSetting');
 Route::post('/updateUserSetting', 'UserController@updateUserSetting')->name('updateUserSetting');
+Route::get('/myaccount', 'UserController@myaccount')->name('myaccount');
+Route::post('/updateMyAccount', 'UserController@updateMyAccount')->name('updateMyAccount');
 
 Route::get('/permit', 'PermitController@index')->name('permit');
 Route::get('/configPermit', 'PermitController@configPermit')->name('configPermit');

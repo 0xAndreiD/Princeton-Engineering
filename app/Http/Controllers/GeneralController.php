@@ -1811,6 +1811,94 @@ class GeneralController extends Controller
     }
 
     /**
+     * Return report files and Biggest sized IN file.
+     *
+     * @return JSON
+     */
+    public function getMainJobFiles(Request $request){
+        if(!empty($request['projectId'])){
+            $job = JobRequest::where('id', '=', $request['projectId'])->first();
+            if($job){
+                if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4)
+                {
+                    $jsonname = 'iRoofTM by Princeton Engineering ' . str_replace(".json", "", $job['requestFile']) . "-";
+                    $filename = $jsonname . $job['clientProjectNumber'] . '.' . $job['clientProjectName'] . ' ' . $job['state'];
+
+                    $reportfiles = array();
+                    $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
+                    $dropbox = new Dropbox($app);
+                    try {
+                        $meta = $dropbox->getMetaData(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $filename . ".pdf");
+                        if($meta){
+                            if(!Storage::disk('report')->exists($filename . ".pdf") || Storage::disk('report')->size($filename . ".pdf") != $meta->getSize()){
+                                $dropbox->download(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $filename . ".pdf", storage_path('report') . '/' . $filename . ".pdf");
+                            }
+                            array_push($reportfiles, array("filename" => $filename . ".pdf", "size" => $meta->getSize(), "modifiedDate" => $meta->getServerModified(), "link" => env('APP_URL') . "report/" . $filename . ".pdf"));
+                        }
+                    } catch (DropboxClientException $e) { }
+                    try {
+                        $meta = $dropbox->getMetaData(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $filename . " s.pdf");
+                        if($meta){
+                            if(!Storage::disk('report')->exists($filename . " s.pdf") || Storage::disk('report')->size($filename . " s.pdf") != $meta->getSize()){
+                                $dropbox->download(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $filename . " s.pdf", storage_path('report') . '/' . $filename . " s.pdf");
+                            }
+                            array_push($reportfiles, array("filename" => $filename . " s.pdf", "size" => $meta->getSize(), "modifiedDate" => $meta->getServerModified(), "link" => env('APP_URL') . "report/" . $filename . " s.pdf"));
+                        }
+                    } catch (DropboxClientException $e) { }
+                    try {
+                        $meta = $dropbox->getMetaData(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $filename . " binder s.pdf");
+                        if($meta){
+                            if(!Storage::disk('report')->exists($filename . " binder s.pdf") || Storage::disk('report')->size($filename . " binder s.pdf") != $meta->getSize()){
+                                $dropbox->download(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $filename . " binder s.pdf", storage_path('report') . '/' . $filename . " binder s.pdf");
+                            }
+                            array_push($reportfiles, array("filename" => $filename . " binder s.pdf", "size" => $meta->getSize(), "modifiedDate" => $meta->getServerModified(), "link" => env('APP_URL') . "report/" . $filename . " binder s.pdf"));
+                        }
+                    } catch (DropboxClientException $e) { }
+                    try {
+                        $meta = $dropbox->getMetaData(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $filename . " Data Check.pdf");
+                        if($meta){
+                            if(!Storage::disk('report')->exists($filename . " Data Check.pdf") || Storage::disk('report')->size($filename . " Data Check.pdf") != $meta->getSize()){
+                                $dropbox->download(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $filename . " Data Check.pdf", storage_path('report') . '/' . $filename . " Data Check.pdf");
+                            }
+                            array_push($reportfiles, array("filename" => $filename . " Data Check.pdf", "size" => $meta->getSize(), "modifiedDate" => $meta->getServerModified(), "link" => env('APP_URL') . "report/" . $filename . " Data Check.pdf"));
+                        }
+                    } catch (DropboxClientException $e) { }
+
+                    $company = Company::where('id', $job['companyId'])->first();
+                    $companyNumber = $company ? $company['company_number'] : 0;
+                    $folderPrefix = '/' . $companyNumber . ". " . $job['companyName'] . '/';
+                    
+                    $filepath = $folderPrefix . $job['clientProjectNumber'] . '. ' . $job['clientProjectName'] . ' ' . $job['state'];
+                        
+                    $infile = array();
+                    $bigsize = 0;
+                    try{
+                        $listFolderContents = $dropbox->listFolder(env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_IN') . $filepath . '/');
+                        $files = $listFolderContents->getItems()->all();
+                        foreach($files as $file){
+                            if(!file_exists(storage_path('upload') . $filepath . '/' . $file->getName()) || filesize(storage_path('upload') . $filepath . '/' . $file->getName()) != $file->getSize()){
+                                $dropbox->download(env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_IN') . $filepath . '/' . $file->getName(), storage_path('upload') . $filepath . '/' . $file->getName());
+                            }
+                            if($file->getSize() > $bigsize){
+                                $bigsize = $file->getSize();
+                                $infile = array('filename' => $file->getName(), 'size' => $file->getSize(), 'modifiedDate' => $file->getServerModified(), 'link' => env('APP_URL') . 'in/' . $request['projectId'] . '/' . $file->getName());
+                            }
+                        }
+                    } catch (DropboxClientException $e) { 
+                        $infile = array();
+                    }
+                    array_push($reportfiles, $infile);
+
+                    return response()->json(['success' => true, 'files' => $reportfiles]);
+                } else
+                    return response()->json(['success' => false, 'message' => 'No permission.']);
+            } else
+                return response()->json(['success' => false, 'message' => 'Cannot find the project.']);
+        } else 
+            return response()->json(['success' => false, 'message' => 'Empty projectId.']);
+    }
+
+    /**
      * Return the file contents of report.
      *
      * @return FILE or Redirect

@@ -137,6 +137,12 @@
                                 <span class="nav-main-link-name">Settings</span>
                             </a>
                         </li>
+                        <li class="nav-main-item">
+                            <a class="nav-main-link" href="{{ route('myaccount') }}">
+                                <i class="nav-main-link-icon fa fa-user-edit"></i>
+                                <span class="nav-main-link-name">My account</span>
+                            </a>
+                        </li>
                     </ul>
                 </div>
                 <!-- END Side Navigation -->

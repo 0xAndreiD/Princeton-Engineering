@@ -221,35 +221,38 @@ class UserController extends Controller
     function updateUser(Request $request){
         $data = $request->input('data');
         if ($data['id'] == 0){
-            $isExist = User::where('username', $data['name'])->get()->first();
-            if ($isExist) {
-                echo "exist";
-                return;
-            }
-            $idExist = User::where('companyid', isset($data['companyid']) ? $data['companyid'] : Auth::user()->companyid)->where('usernumber', $data['usernumber'])->get()->first();
-            if ($idExist) {
-                echo "idexist";
-                return;
-            }
+            if(Auth::user()->userrole == 1 || Auth::user()->userrole == 2 || Auth::user()->userrole == 3){
+                $isExist = User::where('username', $data['name'])->get()->first();
+                if ($isExist) {
+                    echo "exist";
+                    return;
+                }
+                $idExist = User::where('companyid', isset($data['companyid']) ? $data['companyid'] : Auth::user()->companyid)->where('usernumber', $data['usernumber'])->get()->first();
+                if ($idExist) {
+                    echo "idexist";
+                    return;
+                }
 
-            $res = new User;
-            $res->username = $data['name'];
-            $res->email = $data['email'];
-            $res->password = $data['password'];
-            $res->userrole = 0;
-            $res->companyid = isset($data['companyid']) ? $data['companyid'] : Auth::user()->companyid;
-            if(Auth::user()->userrole == 2 || $data['userrole'] < 2)
-                $res->userrole = $data['userrole'];
-            else
+                $res = new User;
+                $res->username = $data['name'];
+                $res->email = $data['email'];
+                $res->password = $data['password'];
                 $res->userrole = 0;
-            $res->usernumber = $data['usernumber'];
-            $res->membershipid = 0;
-            $res->membershiprole = 0;
-            $res->created_at = date('Y-m-d h:i:s',strtotime(now()));
-            if (isset($data['distance_limit'])) $res->distance_limit = $data['distance_limit']; 
-            if (isset($data['ask_two_factor'])) $res->ask_two_factor = $data['ask_two_factor'];
-            $res->save();
-            echo true;
+                $res->companyid = isset($data['companyid']) ? $data['companyid'] : Auth::user()->companyid;
+                if(Auth::user()->userrole == 2 || $data['userrole'] < 2)
+                    $res->userrole = $data['userrole'];
+                else
+                    $res->userrole = 0;
+                $res->usernumber = $data['usernumber'];
+                $res->membershipid = 0;
+                $res->membershiprole = 0;
+                $res->created_at = date('Y-m-d h:i:s',strtotime(now()));
+                if (isset($data['distance_limit'])) $res->distance_limit = $data['distance_limit']; 
+                if (isset($data['ask_two_factor'])) $res->ask_two_factor = $data['ask_two_factor'];
+                $res->save();
+                echo true;
+            } else
+                echo false;
         } else {
             $isExist = User::where('username', $data['name'])->where('id', '!=', $data['id'])->get()->first();
             if ($isExist) {
@@ -263,23 +266,26 @@ class UserController extends Controller
             }
             
             $res = User::where('id', $data['id'])->get()->first();
-            $res->username = $data['name'];
-            $res->email = $data['email'];
-            if (isset($data['password'])){
-                if(Auth::user()->userrole == 2 || $res->userrole < 2)
-                    $res->password = $data['password'];
-            } 
-            $res->companyid = isset($data['companyid']) ? $data['companyid'] : Auth::user()->companyid;
-            if (isset($data['userrole'])){
-                if(Auth::user()->userrole == 2 || ($res->userrole < 2 && $data['userrole'] < 2))
-                    $res->userrole = $data['userrole']; 
-            } 
-            $res->usernumber = $data['usernumber'];
-            $res->updated_at = date('Y-m-d h:i:s',strtotime(now()));
-            if (isset($data['distance_limit'])) $res->distance_limit = $data['distance_limit']; 
-            if (isset($data['ask_two_factor'])) $res->ask_two_factor = $data['ask_two_factor'];
-            $res->save();
-            echo true;
+            if(Auth::user()->userrole == 2 || ((Auth::user()->userrole == 1 || Auth::user()->userrole == 3) && Auth::user()->companyid == $res['companyid']) || Auth::user()->id == $res['id']){
+                if (isset($data['name'])) $res->username = $data['name'];
+                if (isset($data['email'])) $res->email = $data['email'];
+                if (isset($data['password'])){
+                    if(Auth::user()->userrole == 2 || $res->userrole < 2)
+                        $res->password = $data['password'];
+                } 
+                if (isset($data['companyid'])) $res->companyid = $data['companyid'];
+                if (isset($data['userrole'])){
+                    if(Auth::user()->userrole == 2 || ($res->userrole < 2 && $data['userrole'] < 2))
+                        $res->userrole = $data['userrole']; 
+                } 
+                if (isset($data['usernumber'])) $res->usernumber = $data['usernumber'];
+                $res->updated_at = date('Y-m-d h:i:s',strtotime(now()));
+                if (isset($data['distance_limit'])) $res->distance_limit = $data['distance_limit']; 
+                if (isset($data['ask_two_factor'])) $res->ask_two_factor = $data['ask_two_factor'];
+                $res->save();
+                echo true;
+            } else
+                echo false;
         }
     }
 
@@ -290,8 +296,15 @@ class UserController extends Controller
      */
     function delete(Request $request){
         $id = $request->input('data');
-        $res = User::where('id', $id)->delete();
-        return $res;
+        $user = User::where('id', $id)->first();
+        if($user){
+            if(Auth::user()->userrole == 2 || ((Auth::user()->userrole == 1 || Auth::user()->userrole == 3) && Auth::user()->companyid == $user['companyid']) || Auth::user()->id == $user['id']){
+                $user->delete();
+                echo true;
+            } else
+                echo false;
+        } else
+            echo false;
     }
 
     /**
@@ -302,7 +315,13 @@ class UserController extends Controller
     function getUser(Request $request){
         $id = $request->input('data');
         $user = User::where('id', $id)->first();
-        return response()->json($user);
+        if($user){
+            if(Auth::user()->userrole == 2 || ((Auth::user()->userrole == 1 || Auth::user()->userrole == 3) && Auth::user()->companyid == $user['companyid']) || Auth::user()->id == $user['id']){
+                return response()->json($user);
+            } else
+                return 'nopermission';
+        } else
+            return 'noexist';
     }
 
     /**
@@ -382,5 +401,34 @@ class UserController extends Controller
             return response()->json(['success' => true]);
         } else 
             return response()->json(['success' => false, 'message' => 'Wrong Input Data.']);
+    }
+
+    /**
+     * Show My Account page.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function myaccount()
+    {
+        return view('user.account.view');
+    }
+
+    /**
+     * Update my account username, email or password.
+     *
+     * JSON
+     */
+    public function updateMyAccount(Request $request){
+        $me = User::where('id', Auth::user()->id)->first();
+        if($me){
+            $me->username = $request['username'];
+            $me->email = $request['email'];
+            $me->password = $request['password'];
+            if(($me->userrole == 2 || $me->userrole == 3 || $me->userrole == 4))
+                $me->auto_report_open = $request['autoOpen'];
+            $me->save();
+            return response()->json(['success' => true]);
+        } else
+            return response()->json(['success' => false, 'message' => 'Cannot find the user.']);
     }
 }
