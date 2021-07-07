@@ -16,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'username', 'email', 'password', 'userrole', 'companyid', 'usernumber', 'membershipid', 'membershiprole', 'two_factor_expires_at', 'two_factor_code', 'distance_limit', 'ask_two_factor', 'allow_permit'
+        'username', 'email', 'password', 'userrole', 'companyid', 'usernumber', 'membershipid', 'membershiprole', 'two_factor_expires_at', 'two_factor_code', 'distance_limit', 'ask_two_factor', 'allow_permit', 'auto_report_open'
     ];
 
     protected $dates = ['two_factor_expires_at'];

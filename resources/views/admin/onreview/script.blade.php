@@ -165,6 +165,25 @@ $(document).ready(function(){
 		})
 	});
 
+    @if(Auth::user()->auto_report_open == 1)
+        swal.fire({ title: "Please wait...", showConfirmButton: false });
+        swal.showLoading();
+        $.ajax({
+			url:"getMainJobFiles",
+			method:"POST",
+			data:formData,
+			success:function(data){
+                swal.close();
+                if(data.success && data.files){
+                    data.files.forEach(file => {
+                        window.open(file.link, '_blank');
+                    })
+                } else
+                    swal.fire({ title: "Warning", text: data.message, icon: "warning", confirmButtonText: `OK` });
+			}
+		});
+    @endif
+
     // $("#filetree").jstree({
     //     'plugins': ["wholerow", "types"],
     //     'core': {
