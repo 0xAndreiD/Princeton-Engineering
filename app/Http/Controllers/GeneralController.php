@@ -1311,10 +1311,11 @@ class GeneralController extends Controller
                 //     $jobData = json_decode(Storage::disk('input')->get($folderPrefix . $job['requestFile']), true);
                 //     $state = $jobData['ProjectInfo']['State'];
                 // }
-                
+                $filename = str_replace(array(":",";", "#", "&", "@", "/"), array(""), $file->getClientOriginalName());
+
                 $filepath = $folderPrefix . $job['clientProjectNumber'] . '. ' . $job['clientProjectName'] . ' ' . $job['state'];
-                $file->move(storage_path('upload') . $filepath, $file->getClientOriginalName());
-                $localpath = storage_path('upload') . $filepath . '/' . $file->getClientOriginalName();
+                $file->move(storage_path('upload') . $filepath, $filename);
+                $localpath = storage_path('upload') . $filepath . '/' . $filename;
 
                 $job->planStatus = 1;
                 $job->save();
@@ -1324,7 +1325,7 @@ class GeneralController extends Controller
                 // $dropboxFile = new DropboxFile($localpath);
                 // $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_IN') . $filepath . '/' . $file->getClientOriginalName(), ['autorename' => TRUE]);
                 
-                return response()->json(['success' => true, 'message' => 'Uploaded Successfully', 'filename' => $file->getClientOriginalName(), 'path' => $filepath]);
+                return response()->json(['success' => true, 'message' => 'Uploaded Successfully', 'filename' => $filename, 'path' => $filepath]);
             } else {
                 return response()->json(['success' => false, 'message' => 'Cannot find the project.']);
             }
