@@ -92,6 +92,7 @@ Route::post('/delChatApi', 'APIController@delChat')->name('delChatApi');
 Route::post('/updateChatApi', 'APIController@updateChat')->name('updateChatApi');
 Route::get('/getCsrfToken', 'APIController@getCsrfToken')->name('getCsrfToken');
 Route::post('/sendEmail', 'APIController@sendEmail')->name('sendEmail');
+Route::post('/removeSpecialChars', 'APIController@removeSpecialChars')->name('removeSpecialChars');
 
 // PV Modules
 Route::post('/getPVModules', 'GeneralController@getPVModules')->name('getPVModules');

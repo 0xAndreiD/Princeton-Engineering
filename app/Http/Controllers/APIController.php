@@ -503,4 +503,74 @@ class APIController extends Controller
         else
             return response()->json(['success' => false, 'message' => 'Auth required.']);
     }
+
+    /**
+     * Remove special characters on dropbox filenames
+     *
+     * @return JSON
+     */
+    function removeSpecialChars(Request $request){
+        if(isset($request['username']) && isset($request['password'])){
+            $user = User::where('username', '=', $request['username'])->where('password', '=', $request['password'])->first();
+            if($user && $user->userrole == 2) {
+                if(isset($request['idFrom']) && isset($request['idTo'])){
+                    for($id = $request['idFrom']; $id <= $request['idTo']; $id ++){
+                        $job = JobRequest::where('id', $id)->first();
+                        if($job){
+                            $company = Company::where('id', $job['companyId'])->first();
+                            $companyNumber = $company ? $company['company_number'] : 0;
+                            $folderPrefix = '/' . $companyNumber . ". " . $job['companyName'] . '/';
+
+                            $filepath = $folderPrefix . $job['clientProjectNumber'] . '. ' . $job['clientProjectName'] . ' ' . $job['state'];
+                            $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
+                            $dropbox = new Dropbox($app);
+                            try{
+                                $this->iterateFolder($dropbox, env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_IN') . $filepath . '/', $id);
+                            } catch (DropboxClientException $e) { 
+                                echo 'error while iterate IN (jobId: '. $id . ')\n';
+                            }
+                            try{
+                                $this->iterateFolder($dropbox, env('DROPBOX_PROJECTS_PATH') . '/IN_copy' . $filepath . '/', $id);
+                            } catch (DropboxClientException $e) { 
+                                echo 'error while iterate IN (jobId: '. $id . ')\n';
+                            }
+                            try{
+                                $this->iterateFolder($dropbox, env('DROPBOX_PROJECTS_PATH') . '/eSealed' . $filepath . '/', $id);
+                            } catch (DropboxClientException $e) { 
+                                echo 'error while iterate IN (jobId: '. $id . ')\n';
+                            }
+                        }
+                    }
+                    echo 'DONE!\n';
+                } else
+                    return response()->json(['success' => false, 'message' => 'Wrong parameter.']);
+            }
+            else
+                return response()->json(['success' => false, 'message' => 'Auth failed.']);
+        }
+        else
+            return response()->json(['success' => false, 'message' => 'Auth required.']);
+    }
+
+    /**
+     * Iterate all the subdirectories and files to remove special characters from the dropbox.
+     *
+     * @return Object
+     */
+    public function iterateFolder(Dropbox $dropbox, String $folderPath, String $id){
+        $listFolderContents = $dropbox->listFolder($folderPath);
+        $files = $listFolderContents->getItems()->all();
+        foreach($files as $file){
+            if($file->getDataProperty('.tag') === 'file')
+            {
+                if(preg_match('/[;:#&@]/', $file->getName())){
+                    $newname = str_replace(array(":",";", "#", "&", "@", "/"), array(""), $file->getName());
+                    echo 'jobId: ' . $id . '  ' . $folderPath . $file->getName() . ' -> ' . $folderPath . $newname . '\n';
+                    $dropbox->move($folderPath . $file->getName(), $folderPath . $newname);
+                }
+            }
+            else
+                $this->iterateFolder($dropbox, $folderPath . $file->getName() . '/', $id);
+        }
+    }
 }
