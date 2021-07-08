@@ -527,21 +527,21 @@ class APIController extends Controller
                             try{
                                 $this->iterateFolder($dropbox, env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_IN') . $filepath . '/', $id);
                             } catch (DropboxClientException $e) { 
-                                echo 'error while iterate IN (jobId: '. $id . ')\n';
+                                echo 'error while iterate IN (jobId: '. $id . ') <br>';
                             }
                             try{
                                 $this->iterateFolder($dropbox, env('DROPBOX_PROJECTS_PATH') . '/IN_copy' . $filepath . '/', $id);
                             } catch (DropboxClientException $e) { 
-                                echo 'error while iterate IN (jobId: '. $id . ')\n';
+                                echo 'error while iterate IN_copy (jobId: '. $id . ') <br>';
                             }
                             try{
                                 $this->iterateFolder($dropbox, env('DROPBOX_PROJECTS_PATH') . '/eSealed' . $filepath . '/', $id);
                             } catch (DropboxClientException $e) { 
-                                echo 'error while iterate IN (jobId: '. $id . ')\n';
+                                echo 'error while iterate eSealed (jobId: '. $id . ') <br>';
                             }
                         }
                     }
-                    echo 'DONE!\n';
+                    echo 'DONE! <br>';
                 } else
                     return response()->json(['success' => false, 'message' => 'Wrong parameter.']);
             }
@@ -565,7 +565,7 @@ class APIController extends Controller
             {
                 if(preg_match('/[;:#&@]/', $file->getName())){
                     $newname = str_replace(array(":",";", "#", "&", "@", "/"), array(""), $file->getName());
-                    echo 'jobId: ' . $id . '  ' . $folderPath . $file->getName() . ' -> ' . $folderPath . $newname . '\n';
+                    echo 'jobId: ' . $id . '  ' . $folderPath . $file->getName() . ' -> ' . $folderPath . $newname . ' <br>';
                     $dropbox->move($folderPath . $file->getName(), $folderPath . $newname);
                 }
             }
