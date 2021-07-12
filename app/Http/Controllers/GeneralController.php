@@ -29,6 +29,7 @@ use App\StandardFavorite;
 use App\JobChat;
 use App\PermitFiles;
 use App\PermitInfo;
+use App\PermitFields;
 use Kunnu\Dropbox\DropboxApp;
 use Kunnu\Dropbox\Dropbox;
 use Kunnu\Dropbox\DropboxFile;
@@ -309,32 +310,31 @@ class GeneralController extends Controller
      */
     public function submitPermitInput(Request $request){
         if($request['data'] && $request['data']['projectId'] && $request['data']['projectId'] > 0){
-            $project = JobPermit::where('job_id', '=', $request['data']['projectId'])->where('filename', '=', $request['filename'])->first();
-            if($project){
-                if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || $project->companyId == Auth::user()->companyid)
-                {
-                    $project->data = json_encode($request['data']);
-                    $project->save();
-                    return response()->json(["message" => "Success!", "status" => true, "projectId" => $project->id]);
-                }
-                else
+            $job = JobRequest::where('id', $request['data']['projectId'])->first();
+            if($job){
+                if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || $job->companyId == Auth::user()->companyid){
+                    $permit = JobPermit::where('job_id', '=', $request['data']['projectId'])->where('filename', '=', $request['filename'])->first();
+                    if($permit){
+                        $permit->data = json_encode($request['data']);
+                        $permit->save();
+                        return response()->json(["message" => "Success!", "status" => true]);
+                    } else {
+                        try {
+                            JobPermit::create([
+                                'job_id' => $request['data']['projectId'],
+                                'filename' => $request['filename'],
+                                'data'=> json_encode($request['data'])
+                            ]);
+                        }
+                        catch(Exception $e) {
+                            return response()->json(["message" => "Failed to generate Permit json data file", "status" => false]);
+                        }
+                        return response()->json(["message" => "Success!", "status" => true]);
+                    }
+                } else
                     return response()->json(["message" => "You don't have permission to edit this project.", "status" => false]);
-            }
-            else
-            {
-                $filename = $request['filename'];
-                try {
-                    $project = JobPermit::create([
-                        'job_id' => $request['data']['projectId'],
-                        'filename' => $request['filename'],
-                        'data'=> json_encode($request['data'])
-                    ]);
-                }
-                catch(Exception $e) {
-                    return response()->json(["message" => "Failed to generate Permit json data file", "status" => false]);
-                }
-                return response()->json(["message" => "Success!", "status" => true, "projectId" => $project->id]);
-            }
+            } else 
+                return response()->json(["message" => "Cannot find the project.", "status" => false]);
         }
     }
     /**
@@ -376,6 +376,21 @@ class GeneralController extends Controller
                 return response()->json(["message" => "Cannot find project.", "status" => false]);
         }
     }
+
+    /**
+     * Return Permit Fields List
+     *
+     * @return JSON
+     */
+    public function getPermitFields(Request $request){
+        if(!empty($request['filename']) && !empty($request['state'])){
+            $fields = PermitFields::where('filename', $request['filename'])->get();
+            $permitFile = PermitFiles::where('filename', $request['filename'])->where('state', $request['state'])->first();
+            return response()->json(["status" => true, "fields" => $fields, "description" => $permitFile ? $permitFile['description'] : ""]);
+        } else
+            return response()->json(["status" => false, "message" => "Empty Filename."]);
+    }
+
     /**
      * Save Input Datas as files
      *
@@ -2207,8 +2222,7 @@ class GeneralController extends Controller
                             ->where('job_chat.jobId', $request['jobId'])
                             ->orderBy('job_chat.id', 'desc')
                             ->get(array('job_chat.id as id', 'users.username as user', 'users.userrole as role', 'job_chat.text as message', 'job_chat.datetime as datetime'))->toArray();
-                    $messages = array_slice($messages, 0, count($messages) - $request['msgCount']);
-                    return response()->json(["success" => true, "msgCount" => count($messages), "msgs" => $messages]);
+                    return response()->json(["success" => true, "msgCount" => count($messages), "msgs" => array_slice($messages, 0, count($messages) - $request['msgCount'])]);
                 }
                 else
                     return response()->json(["message" => "You don't have permission to edit this project.", "success" => false]);

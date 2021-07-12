@@ -68,7 +68,7 @@
 			success:function(data){
                 if(data && data.success){
                     console.log(data);
-                    if(data.msgCount > 0){
+                    if(data.msgCount > 0 && data.msgCount > window.msgCount){
                         for(let i = 0; i < data.msgs.length; i ++)
                             addChat(data.msgs[i].user, data.msgs[i].role, data.msgs[i].message, data.msgs[i].datetime, data.msgs[i].id);
                     }
