@@ -1807,6 +1807,9 @@ class GeneralController extends Controller
                     try{
                         $listFolderContents = $dropbox->listFolder(env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_IN') . $filepath . '/');
                         $files = $listFolderContents->getItems()->all();
+                        if(!file_exists(storage_path('upload') . $filepath))
+                            Storage::disk('upload')->makeDirectory($filepath);
+
                         foreach($files as $file){
                             if(!file_exists(storage_path('upload') . $filepath . '/' . $file->getName()) || filesize(storage_path('upload') . $filepath . '/' . $file->getName()) != $file->getSize()){
                                 $dropbox->download(env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_IN') . $filepath . '/' . $file->getName(), storage_path('upload') . $filepath . '/' . $file->getName());
