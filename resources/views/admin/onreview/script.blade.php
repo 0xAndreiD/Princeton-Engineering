@@ -168,7 +168,7 @@ $(document).ready(function(){
 	});
 
     @if(Auth::user()->auto_report_open == 1)
-        openJobFiles();
+        openJobFiles('{{ route('jobFiles') . '?projectId=' . $projectId }}');
         swal.fire({ title: "Please wait...", showConfirmButton: false });
         swal.showLoading();
         $.ajax({
