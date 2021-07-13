@@ -2211,6 +2211,28 @@ class GeneralController extends Controller
     }
 
     /**
+     * Toggle the as built value of job.
+     *
+     * @return JSON
+     */
+    public function resetReviewChecks(Request $request){
+        $project = JobRequest::where('id', '=', $request['projectId'])->first();
+            if($project){
+                if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || $project->companyId == Auth::user()->companyid)
+                {
+                    $project->asBuilt = 0;
+                    $project->planCheck = 0;
+                    $project->save();
+                    return response()->json(["message" => "Success!", "success" => true]);
+                }
+                else
+                    return response()->json(["message" => "You don't have permission to edit this project.", "success" => false]);
+            }
+            else
+                return response()->json(["message" => "Cannot find project.", "success" => false]);
+    }
+
+    /**
      * Check job chat messages count and return updated ones
      *
      * @return JSON

@@ -142,7 +142,7 @@ $(document).ready(function(){
                     $("#chatLog").val(note + $('#chatLog').val());
 
                     $.ajax({
-                        url:"setESeal",
+                        url:"resetReviewChecks",
                         type:'post',
                         data:{projectId: $('#projectId').val()},
                         success:function(res){

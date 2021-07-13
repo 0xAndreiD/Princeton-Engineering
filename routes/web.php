@@ -27,6 +27,7 @@ Route::post('/submitProjectManager', 'GeneralController@submitProjectManager')->
 Route::post('/submitPermitInput', 'GeneralController@submitPermitInput')->name('submitPermitInput');
 Route::post('/submitPDF', 'GeneralController@submitPDF')->name('submitPDF');
 Route::get('/reference', 'GeneralController@reference')->name('reference');
+Route::post('/getPermitFields', 'GeneralController@getPermitFields')->name('getPermitFields');
 
 // Manage Users
 Route::get('/userList', 'UserController@index')->name('userList');
@@ -59,6 +60,7 @@ Route::post('/delProject', 'GeneralController@delProject')->name('delProject');
 Route::post('/setProjectState', 'GeneralController@setProjectState')->name('setProjectState');
 Route::post('/setPlanStatus', 'GeneralController@setPlanStatus')->name('setPlanStatus');
 Route::post('/setESeal', 'GeneralController@setESeal')->name('setESeal');
+Route::post('/resetReviewChecks', 'GeneralController@resetReviewChecks')->name('resetReviewChecks');
 Route::post('/getASCEOptions', 'GeneralController@getASCEOptions')->name('getASCEOptions');
 Route::post('/getProjectNumComment', 'GeneralController@getProjectNumComment')->name('getProjectNumComment');
 Route::get('/jobchat', 'GeneralController@jobChat')->name('jobchat');
