@@ -168,6 +168,7 @@ $(document).ready(function(){
 	});
 
     @if(Auth::user()->auto_report_open == 1)
+        openJobFiles();
         swal.fire({ title: "Please wait...", showConfirmButton: false });
         swal.showLoading();
         $.ajax({

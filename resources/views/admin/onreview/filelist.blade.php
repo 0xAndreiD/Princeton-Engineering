@@ -145,23 +145,23 @@
         </div>
     </body>
     <script>
-        var popUpWnds = [];
+        var popUpTabs = [];
 
         window.onbeforeunload = function() {
-            popUpWnds.forEach(popUp => {
+            popUpTabs.forEach(popUp => {
                 if (popUp && !popUp.closed)
                     popUp.close();
             });
         };
         window.onhashchange = function() {
-            popUpWnds.forEach(popUp => {
+            popUpTabs.forEach(popUp => {
                 if (popUp && !popUp.closed)
                     popUp.close();
             });
         };
 
         function openReviewFile(link){
-            popUpWnds.push(window.open(link, '_blank'));
+            popUpTabs.push(window.open(link, '_blank'));
         }
     </script>
 </html>
