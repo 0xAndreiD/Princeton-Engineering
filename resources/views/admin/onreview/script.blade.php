@@ -147,8 +147,8 @@ $(document).ready(function(){
                         data:{projectId: $('#projectId').val()},
                         success:function(res){
                             if (res.success == true) {
-                                $("#Review").attr('checked', false);
-                                $("#Asbuilt").attr('checked', false);
+                                $("#Review")[0].checked = false;
+                                $("#Asbuilt")[0].checked = false;
                             }
                         },
                         error: function(xhr, status, error) {
