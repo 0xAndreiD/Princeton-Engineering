@@ -126,22 +126,42 @@
                 <tbody>
                     @foreach($reportfiles as $file)
                     <tr class='file'>
-                        <td><a target="_blank" rel="noopener noreferrer" href="{{$file['link']}}">{{$file['filename']}}</a></td>
-                        <td><a target="_blank" rel="noopener noreferrer" href="{{$file['link']}}">Report</a></td>
-                        <td sorttable_customkey="{{$file['size']}}"><a target="_blank" rel="noopener noreferrer" href="{{$file['link']}}">{{$file['size'] / 1024 . 'KB'}}</a></td>
-                        <td sorttable_customkey="{{$file['modifiedDate']}}"><a target="_blank" rel="noopener noreferrer" href="{{$file['link']}}">{{$file['modifiedDate']}}</a></td>
+                        <td><a target="_blank" rel="noopener noreferrer" href="javascript:openReviewFile('{{$file['link']}}')">{{$file['filename']}}</a></td>
+                        <td><a target="_blank" rel="noopener noreferrer" href="javascript:openReviewFile('{{$file['link']}}')">Report</a></td>
+                        <td sorttable_customkey="{{$file['size']}}"><a target="_blank" rel="noopener noreferrer" href="javascript:openReviewFile('{{$file['link']}}')">{{$file['size'] / 1024 . 'KB'}}</a></td>
+                        <td sorttable_customkey="{{$file['modifiedDate']}}"><a target="_blank" rel="noopener noreferrer" href="javascript:openReviewFile('{{$file['link']}}')">{{$file['modifiedDate']}}</a></td>
                     </tr>
                     @endforeach
                     @foreach($infiles as $file)
                     <tr class='file'>
-                        <td><a target="_blank" rel="noopener noreferrer" href="{{$file['link']}}">{{$file['filename']}}</a></td>
-                        <td><a target="_blank" rel="noopener noreferrer" href="{{$file['link']}}">IN</a></td>
-                        <td sorttable_customkey="{{$file['size']}}"><a target="_blank" rel="noopener noreferrer" href="{{$file['link']}}">{{$file['size'] / 1024 . 'KB'}}</a></td>
-                        <td sorttable_customkey="{{$file['modifiedDate']}}"><a target="_blank" rel="noopener noreferrer" href="{{$file['link']}}">{{$file['modifiedDate']}}</a></td>
+                        <td><a target="_blank" rel="noopener noreferrer" href="javascript:openReviewFile('{{$file['link']}}')">{{$file['filename']}}</a></td>
+                        <td><a target="_blank" rel="noopener noreferrer" href="javascript:openReviewFile('{{$file['link']}}')">IN</a></td>
+                        <td sorttable_customkey="{{$file['size']}}"><a target="_blank" rel="noopener noreferrer" href="javascript:openReviewFile('{{$file['link']}}')">{{$file['size'] / 1024 . 'KB'}}</a></td>
+                        <td sorttable_customkey="{{$file['modifiedDate']}}"><a target="_blank" rel="noopener noreferrer" href="javascript:openReviewFile('{{$file['link']}}')">{{$file['modifiedDate']}}</a></td>
                     </tr>
                     @endforeach
                 </tbody>
             </table>
         </div>
     </body>
+    <script>
+        var popUpWnds = [];
+
+        window.onbeforeunload = function() {
+            popupWnds.forEach(popUp => {
+                if (popUp && !popUp.closed)
+                    popUp.close();
+            });
+        };
+        window.onhashchange = function() {
+            popupWnds.forEach(popUp => {
+                if (popUp && !popUp.closed)
+                    popUp.close();
+            });
+        };
+
+        function openReviewFile(link){
+            popUpWnds.push(window.open(link, '_blank'));
+        }
+    </script>
 </html>
