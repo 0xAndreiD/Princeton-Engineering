@@ -179,7 +179,7 @@ $(document).ready(function(){
                 swal.close();
                 if(data.success && data.files){
                     data.files.forEach(file => {
-                        popupWnds.push(window.open(file.link, '_blank'));
+                        popUpWnds.push(window.open(file.link, '_blank'));
                     })
                 } else
                     swal.fire({ title: "Warning", text: data.message, icon: "warning", confirmButtonText: `OK` });
