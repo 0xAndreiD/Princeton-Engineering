@@ -9,13 +9,13 @@ $(document).ready(function(){
     });
 
     window.onbeforeunload = function() {
-        popupWnds.forEach(popUp => {
+        popUpWnds.forEach(popUp => {
             if (popUp && !popUp.closed)
                 popUp.close();
         });
     };
     window.onhashchange = function() {
-        popupWnds.forEach(popUp => {
+        popUpWnds.forEach(popUp => {
             if (popUp && !popUp.closed)
                 popUp.close();
         });
