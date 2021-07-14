@@ -3872,6 +3872,7 @@ var loadPreloadedData = function() {
                                 $(`#b-2-${i + 1}`).val(caseData['RafterDataInput']['B2']);
                                 $(`#b-3-${i + 1}`).val(caseData['RafterDataInput']['B3']);
                                 $(`#b-4-${i + 1}`).val(caseData['RafterDataInput']['B4']);
+                                $(`#b-5-${i + 1}`).val(caseData['RafterDataInput']['B5']);
 
                                 $(`#c-1-${i + 1}`).val(caseData['CollarTieInformation']['C1']);
                                 if(!caseData['CollarTieInformation']['C2_feet'] && !caseData['CollarTieInformation']['C2_inches'])
@@ -4658,70 +4659,142 @@ function updateUccForm(data, filename){
 }
 
 var submitPdfData = async function(filename, data, status) {
-        var message = '';
-        // swal.fire({ title: "Please wait...", showConfirmButton: false });
-        // swal.showLoading();
-        var fd = new FormData();
-        fd.append("projectId", $('#projectId').val());
-        fd.append("status", status);
-        fd.append("filename", filename);
-        fd.append("data", data);
+    var message = '';
+    // swal.fire({ title: "Please wait...", showConfirmButton: false });
+    // swal.showLoading();
+    var fd = new FormData();
+    fd.append("projectId", $('#projectId').val());
+    fd.append("status", status);
+    fd.append("filename", filename);
+    fd.append("data", data);
 
-        $.ajax({
-            url:"submitPDF",
-            data:fd,
-            processData: false,
-            contentType: false,
-            type:'POST',
-            
-            success:function(res){
-                // swal.close();
-                if (res.status == true) {
-                    $("#projectId").val(res.projectId);
-                    console.log(res);
+    $.ajax({
+        url:"submitPDF",
+        data:fd,
+        processData: false,
+        contentType: false,
+        type:'POST',
+        
+        success:function(res){
+            // swal.close();
+            if (res.status == true) {
+                $("#projectId").val(res.projectId);
+                console.log(res);
+                return;
+                // $("#uploadJobId").val(res.projectId);
+                loadFileList();
+
+                // if(res.directory)
+                //     $("#filetree").jstree('rename_node', '#root', 'Root(' + res.directory + ')');
+
+                message = 'Succeeded to send pdf data!';
+
+                swal.fire({
+                    title: "Success",
+                    text: message,
+                    icon: "success",
+                    showCancelButton: true,
+                    confirmButtonText: `Yes`,
+                    cancelButtonText: `No`,
+                })
+                .then(( result ) => {
                     return;
-                    // $("#uploadJobId").val(res.projectId);
-                    loadFileList();
+                });
+            } else {
+                // error handling
+                swal.fire({ title: "Error",
+                    text: "Error happened while processing. Please try again later.",
+                    icon: "error",
+                    confirmButtonText: `OK` });
+            }
+        },
+        error: function(xhr, status, error) {
+            swal.close();
+            res = JSON.parse(xhr.responseText);
+            message = res.message;
+            swal.fire({ title: "Error",
+                    text: message == "" ? "Error happened while processing. Please try again later." : message,
+                    icon: "error",
+                    confirmButtonText: `OK` });
+        }
+    });
+    
+    //}
+}
 
-                    // if(res.directory)
-                    //     $("#filetree").jstree('rename_node', '#root', 'Root(' + res.directory + ')');
+function buildPermitFields(id, filename){
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            url:"getPermitFields",
+            data:{filename: filename, state: $('#option-state').val()},
+            type:'POST',
+            success:function(res){
+                if (res.status == true && res.fields && res.fields.length > 0) {
+                    $("#tab_permit_" + id).append(
+                        '<div class="row container" style="max-width:100%">' + 
+                            '<div class="col-3">' + 
+                                '<div class="row">' + 
+                                    '<div class="col-12">' + 
+                                        '<h5 class="mt-2 ml-2">' + res.description + '</h5>' + 
+                                        "<h6 class='mt-2 ml-2'>After you input the data below then click Update PDF button, don't input to the pdf directly.</h6>" + 
+                                    '</div>' + 
+                                    '<div class="col-12">' + 
+                                        '<div class="permitCtrlBtns mt-2">' + 
+                                            '<button class="mr-4 btn btn-danger" onclick="updatePermitPDF(' + id + ', \'' + filename + '\')">' + 
+                                                '<i class="fa fa-file-pdf mr-1" aria-hidden="true"></i>Update PDF' + 
+                                            '</button>' + 
+                                            '<button class="mr-2 btn btn-info" onclick="savePermit(' + id + ', \'' + filename + '\')">' + 
+                                                '<i class="far fa-save mr-1"></i>Save' + 
+                                            '</button>' + 
+                                        '</div>' + 
+                                    '</div>' + 
+                                '</div>' + 
+                                '<div class="row">' + 
+                                    '<div class="col-12">' + 
+                                        '<table id="permit-info-table-' + id + '" cellspacing="0" cellpadding="0" style="border-spacing:0;" >' + 
+                                            '<tbody>' + 
+                                                '<tr class="h13">' + 
+                                                    '<td><div style="overflow:hidden"></td>' + 
+                                                    '<td><div style="overflow:hidden"></td>' + 
+                                                '</tr>' + 
+                                            '</tbody>' + 
+                                        '</table>' + 
+                                    '</div>' + 
+                                '</div>' + 
+                            '</div>' + 
+                            '<div class="col-9">' + 
+                                '<iframe id="permitViewer_' + id + '" src="" type="application/pdf" class="pdfViewer" disabled></iframe>' + 
+                            '</div>' + 
+                        '</div>'
+                    );
 
-                    message = 'Succeeded to send pdf data!';
-
-                    swal.fire({
-                        title: "Success",
-                        text: message,
-                        icon: "success",
-                        showCancelButton: true,
-                        confirmButtonText: `Yes`,
-                        cancelButtonText: `No`,
-                    })
-                    .then(( result ) => {
-                        return;
+                    res.fields.forEach((field, index) => {
+                        $("#permit-info-table-" + id + " tbody").append(
+                            '<tr class="h13">' + 
+                                '<td class="iw400-right-bdr">' + field.label + '</td>' + 
+                                '<td class="w400-yellow-bdr"><input type="text" class="permit txt-block" id="' + field.htmlfield + '" tabindex="' + index + '" value="' + field.defaultvalue + '" data-pdffield="' + field.pdffield + '"></input></td>' + 
+                            '</tr>'
+                        )
                     });
-                } else {
-                    // error handling
-                    swal.fire({ title: "Error",
-                        text: "Error happened while processing. Please try again later.",
-                        icon: "error",
-                        confirmButtonText: `OK` });
-                }
+
+                    resolve(true);
+                } else 
+                    resolve(false);
             },
             error: function(xhr, status, error) {
-                swal.close();
                 res = JSON.parse(xhr.responseText);
                 message = res.message;
                 swal.fire({ title: "Error",
                         text: message == "" ? "Error happened while processing. Please try again later." : message,
                         icon: "error",
                         confirmButtonText: `OK` });
+                resolve(false);
             }
         });
-        
-        //}
-    }
+    });
+}
 
-function openPermitTab(id, filename, tabname){
+async function openPermitTab(id, filename, tabname){
     if($("#permitTab_" + id).length)
         $("#permitTab_" + id).remove();
     if($("#tab_permit" + id).length)
@@ -4729,6 +4802,8 @@ function openPermitTab(id, filename, tabname){
     $("#permitTab").after('<button class="tablinks permit" onclick="openRfdTab(event, \'tab_permit_' + id + '\')" id="permitTab_' + id + '">' + tabname + '</button>');
 
     $("#tab_permit").after('<div id="tab_permit_' + id + '" class="rfdTabContent permit" style="position:relative;"></div>');
+    
+    //await buildPermitFields(id, filename);
     if (filename == "ucc_f100_cpa.pdf") {
         $("#tab_permit_" + id).append($("#ucc_f100"));
         document.getElementById("ucc_f100").style.display = "block";
@@ -5348,7 +5423,7 @@ function submitPermitJson(filename) {
             } else {
                 // error handling
                 swal.fire({ title: "Error",
-                    text: "Error happened while processing. Please try again later.",
+                    text: res.message,
                     icon: "error",
                     confirmButtonText: `OK` });
             }

@@ -190,7 +190,7 @@
         </tr>
         <tr class="h13 class-truss-hide">
             <td><div style="overflow:hidden"></td>
-            <td class="iw400-bdr" style="vertical-align : middle;" rowspan="4" id="label-B-1-{{ $conditionId }}">Rafter Data Input</td>
+            <td class="iw400-bdr" style="vertical-align : middle;" rowspan="5" id="label-B-1-{{ $conditionId }}">Rafter Data Input</td>
             <td class="w400-bdr">B-1</td>
             <td class="iw400-right-bdr" colspan="2">Rafter width **</td>
             <td class="iw400-bdr">in</td>
@@ -207,7 +207,7 @@
         </tr>
         <tr class="h13">
             <td><div style="overflow:hidden"></td>
-            <td class="iw400-bdr" style="vertical-align : middle; display: none;" rowspan="2" id="title-B-3-{{ $conditionId }}">Truss Data Input</td>
+            <td class="iw400-bdr" style="vertical-align : middle; display: none;" rowspan="3" id="title-B-3-{{ $conditionId }}">Truss Data Input</td>
             <td class="w400-bdr">B-3</td>
             <td class="iw400-right-bdr" id="label-B-3-{{ $conditionId }}" colspan="2">Joist Spacing - Center to Center</td>
             <td class="iw400-bdr">in</td>
@@ -227,6 +227,14 @@
                     <option data-value="Spruce">Spruce</option>
                 </select>
             </td>
+            <td class="right-bdr"><div style="overflow:hidden"></td>
+        </tr>
+        <tr class="h13">
+            <td><div style="overflow:hidden"></td>
+            <td class="w400-bdr">B-5</td>
+            <td class="iw400-right-bdr" colspan="2">Max stanchion spacing</td>
+            <td class="iw400-bdr">in</td>
+            <td class="w400-yellow-bdr" colspan="2"><input type="text" class="txt-center-align" id="b-5-{{ $conditionId }}"  tabindex="38" value="48.00"></input></td>
             <td class="right-bdr"><div style="overflow:hidden"></td>
         </tr>
         <tr class="h13 class-truss-hide">
