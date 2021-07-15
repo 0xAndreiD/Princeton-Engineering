@@ -968,8 +968,8 @@ class GeneralController extends Controller
             $pv_modules[] = $module;
         }
         usort($pv_modules, function($a, $b) {
-            if(strcasecmp($a['mfr'], $b['mfr']) < -1) return -1;
-            if(strcasecmp($a['mfr'], $b['mfr']) > 1) return 1;
+            if(strcasecmp($a['mfr'], $b['mfr']) < 0) return -1;
+            if(strcasecmp($a['mfr'], $b['mfr']) > 0) return 1;
             return strcasecmp($a['model'], $b['model']);
         });
 
@@ -1011,8 +1011,8 @@ class GeneralController extends Controller
             $pv_inverters[] = $inverter;
         }
         usort($pv_inverters, function($a, $b) {
-            if(strcasecmp($a['module'], $b['module']) < -1) return -1;
-            if(strcasecmp($a['module'], $b['module']) > 1) return 1;
+            if(strcasecmp($a['module'], $b['module']) < 0) return -1;
+            if(strcasecmp($a['module'], $b['module']) > 0) return 1;
             return strcasecmp($a['submodule'], $b['submodule']);
         });
 
@@ -1053,8 +1053,8 @@ class GeneralController extends Controller
             $stanchions[] = $stanchion;
         }
         usort($stanchions, function($a, $b) {
-            if(strcasecmp($a['module'], $b['module']) < -1) return -1;
-            if(strcasecmp($a['module'], $b['module']) > 1) return 1;
+            if(strcasecmp($a['module'], $b['module']) < 0) return -1;
+            if(strcasecmp($a['module'], $b['module']) > 0) return 1;
             return strcasecmp($a['submodule'], $b['submodule']);
         });
 
@@ -1095,8 +1095,8 @@ class GeneralController extends Controller
             $railsupport[] = $support;
         }
         usort($railsupport, function($a, $b) {
-            if(strcasecmp($a['module'], $b['module']) < -1) return -1;
-            if(strcasecmp($a['module'], $b['module']) > 1) return 1;
+            if(strcasecmp($a['module'], $b['module']) < 0) return -1;
+            if(strcasecmp($a['module'], $b['module']) > 0) return 1;
             return strcasecmp($a['submodule'], $b['submodule']);
         });
 
