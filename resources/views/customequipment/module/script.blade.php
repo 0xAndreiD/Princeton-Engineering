@@ -32,7 +32,7 @@ function showEditModule(obj, id){
 }
 
 
-var requiredFields = ['mfr', 'model', 'rating', 'length', 'width', 'depth', 'weight', 'Mtg_Hole_1', 'url'];
+var requiredFields = ['mfr', 'model', 'rating', 'length', 'width', 'depth', 'weight'];
 function isEmptyInputBox(){
     var isEmpty = false;
     for(let i = 0; i < requiredFields.length; i ++){
