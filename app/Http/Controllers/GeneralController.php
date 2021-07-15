@@ -941,7 +941,7 @@ class GeneralController extends Controller
      * @return JSON
      */
     public function getPVModules(Request $request){
-        $pv_modules = PVModule::all();
+        $pv_modules = PVModule::all()->toArray();
         $favorite = StandardFavorite::where('client_no', Auth::user()->companyid)->where('type', 0)->first();
         if(!$favorite)
             $favorite_ids = '';
@@ -967,6 +967,11 @@ class GeneralController extends Controller
             $module['custom'] = true;
             $pv_modules[] = $module;
         }
+        usort($pv_modules, function($a, $b) {
+            if(strcasecmp($a['mfr'], $b['mfr']) < -1) return -1;
+            if(strcasecmp($a['mfr'], $b['mfr']) > 1) return 1;
+            return strcasecmp($a['model'], $b['model']);
+        });
 
         return json_encode($pv_modules);
     }
@@ -977,7 +982,7 @@ class GeneralController extends Controller
      * @return JSON
      */
     public function getPVInverters(Request $request){
-        $pv_inverters = PVInverter::all();
+        $pv_inverters = PVInverter::all()->toArray();
         $favorite = StandardFavorite::where('client_no', Auth::user()->companyid)->where('type', 1)->first();
         if(!$favorite)
             $favorite_ids = '';
@@ -1005,6 +1010,11 @@ class GeneralController extends Controller
             $inverter['custom'] = true;
             $pv_inverters[] = $inverter;
         }
+        usort($pv_inverters, function($a, $b) {
+            if(strcasecmp($a['module'], $b['module']) < -1) return -1;
+            if(strcasecmp($a['module'], $b['module']) > 1) return 1;
+            return strcasecmp($a['submodule'], $b['submodule']);
+        });
 
         return json_encode($pv_inverters);
     }
@@ -1015,7 +1025,7 @@ class GeneralController extends Controller
      * @return JSON
      */
     public function getStanchions(Request $request){
-        $stanchions = Stanchion::all();
+        $stanchions = Stanchion::all()->toArray();
         $favorite = StandardFavorite::where('client_no', Auth::user()->companyid)->where('type', 3)->first();
         if(!$favorite)
             $favorite_ids = '';
@@ -1042,6 +1052,11 @@ class GeneralController extends Controller
             $stanchion['custom'] = true;
             $stanchions[] = $stanchion;
         }
+        usort($stanchions, function($a, $b) {
+            if(strcasecmp($a['module'], $b['module']) < -1) return -1;
+            if(strcasecmp($a['module'], $b['module']) > 1) return 1;
+            return strcasecmp($a['submodule'], $b['submodule']);
+        });
 
         return json_encode($stanchions);
     }
@@ -1052,7 +1067,7 @@ class GeneralController extends Controller
      * @return JSON
      */
     public function getRailsupport(Request $request){
-        $railsupport = RailSupport::all();
+        $railsupport = RailSupport::all()->toArray();
         $favorite = StandardFavorite::where('client_no', Auth::user()->companyid)->where('type', 2)->first();
         if(!$favorite)
             $favorite_ids = '';
@@ -1079,6 +1094,11 @@ class GeneralController extends Controller
             $support['custom'] = true;
             $railsupport[] = $support;
         }
+        usort($railsupport, function($a, $b) {
+            if(strcasecmp($a['module'], $b['module']) < -1) return -1;
+            if(strcasecmp($a['module'], $b['module']) > 1) return 1;
+            return strcasecmp($a['submodule'], $b['submodule']);
+        });
 
         return json_encode($railsupport);
     }
