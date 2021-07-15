@@ -135,14 +135,16 @@ class PermitController extends Controller
             foreach ($data as $item) {
                 $field['filename'] = $request->filename;
                 $field['pdffield'] = $item[1];
-                if ($item[0] == 'on') $item[0] = 1; else $item[0] = 1;
+                if ($item[0] == 'on') $item[0] = 1; else $item[0] = 0;
                 $field['pdfcheck'] = $item[0];
-                $field['defaultvalue'] = $item[2];
-                $field['htmlfield'] = $item[4];
-                if ($item[3] == 'on') $item[3] = 1; else $item[3] = 0;
-                $field['htmlcheck'] = $item[3];
-                $field['label'] = $item[5];
-                $field['dbinfo'] = $item[6];
+                $field['type'] = $item[2];
+                $field['defaultvalue'] = $item[3];
+                $field['htmlfield'] = $item[5];
+                if ($item[4] == 'on') $item[4] = 1; else $item[4] = 0;
+                $field['htmlcheck'] = $item[4];
+                $field['label'] = $item[6];
+                $field['dbinfo'] = $item[7];
+                $field['options'] = $item[8];
                 PermitFields::create($field);
             }
             return response()->json(['success' => true, 'status' => true]);
@@ -206,7 +208,8 @@ class PermitController extends Controller
         $id = $request->id;
         $permit = PermitFiles::where('id', $id)->first(); //In the case of same name file is exist
         $filename = $permit->filename;
-        return view('admin.permit.config')->with('permitId', $id)->with('filename', $filename);
+        $fields = PermitFields::where('filename', $filename)->get();
+        return view('admin.permit.config')->with('permitId', $id)->with('filename', $filename)->with('fields', $fields);
     }   
     
     /**
