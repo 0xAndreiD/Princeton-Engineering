@@ -1,5 +1,5 @@
 <script>
-var popUpWnds = [];
+window.popUpWnds = [];
 
 $(document).ready(function(){
     $.ajaxSetup({
@@ -9,13 +9,13 @@ $(document).ready(function(){
     });
 
     window.onbeforeunload = function() {
-        popUpWnds.forEach(popUp => {
+        window.popUpWnds.forEach(popUp => {
             if (popUp && !popUp.closed)
                 popUp.close();
         });
     };
     window.onhashchange = function() {
-        popUpWnds.forEach(popUp => {
+        window.popUpWnds.forEach(popUp => {
             if (popUp && !popUp.closed)
                 popUp.close();
         });
@@ -179,7 +179,7 @@ $(document).ready(function(){
                 swal.close();
                 if(data.success && data.files){
                     data.files.forEach(file => {
-                        popUpWnds.push(window.open(file.link, '_blank'));
+                        window.popUpWnds.push(window.open(file.link, '_blank'));
                     })
                 } else
                     swal.fire({ title: "Warning", text: data.message, icon: "warning", confirmButtonText: `OK` });
@@ -352,7 +352,7 @@ function eSealUpload(){
 }
 
 function openJobFiles(url){
-    popUpWnds.push(window.open(url,'targetWindow', `toolbar=no, location=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=1000, height=500`));
+    window.popUpWnds.push(window.open(url,'targetWindow', `toolbar=no, location=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=1000, height=500`));
     return false;
 }
 

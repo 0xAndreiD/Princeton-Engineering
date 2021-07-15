@@ -145,23 +145,28 @@
         </div>
     </body>
     <script>
-        var popUpTabs = [];
+        
 
-        window.onbeforeunload = function() {
-            popUpTabs.forEach(popUp => {
-                if (popUp && !popUp.closed)
-                    popUp.close();
-            });
-        };
-        window.onhashchange = function() {
-            popUpTabs.forEach(popUp => {
-                if (popUp && !popUp.closed)
-                    popUp.close();
-            });
-        };
-
+        // window.onbeforeunload = function() {
+        //     popUpTabs.forEach(popUp => {
+        //         if (popUp && !popUp.closed)
+        //             popUp.close();
+        //     });
+        //     console.log('beforeunload');
+        // };
+        // window.onhashchange = function() {
+        //     popUpTabs.forEach(popUp => {
+        //         if (popUp && !popUp.closed)
+        //             popUp.close();
+        //     });
+        //     console.log('hashchange');
+        // };
         function openReviewFile(link){
-            popUpTabs.push(window.open(link, '_blank'));
+            if(parent && parent.window && parent.window.opener && parent.window.opener.popUpWnds){
+                parent.window.opener.popUpWnds.push(window.open(link, '_blank'));
+            }
+            else
+                window.open(link, '_blank');
         }
     </script>
 </html>
