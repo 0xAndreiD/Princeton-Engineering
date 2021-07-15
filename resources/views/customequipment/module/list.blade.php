@@ -101,6 +101,7 @@
         <!-- Side Overlay Tabs -->
         <div class="block block-transparent pull-x pull-t">
             <div class="block-content tab-content overflow-hidden side-view">
+                @if(Auth::user()->userrole == 2)
                 <div class="form-group">
                     <label for="mfr">Solar Module Manufacturer</label>
                     <input type="text" class="form-control" id="mfr" value="">
@@ -197,6 +198,36 @@
                     <label for="url">Url</label>
                     <input type="text" class="form-control" id="url" value="">
                 </div>
+                @else
+                <div class="form-group">
+                    <label for="mfr">Solar Module Manufacturer</label>
+                    <input type="text" class="form-control" id="mfr" value="">
+                </div>
+                <div class="form-group">
+                    <label for="module">Module</label>
+                    <input type="text" class="form-control" id="model" value="">
+                </div>
+                <div class="form-group">
+                    <label for="rating">Power Rating(Watts)</label>
+                    <input type="text" class="form-control" id="rating" value="">
+                </div>
+                <div class="form-group">
+                    <label for="length">Length(Inch)</label>
+                    <input type="text" class="form-control" id="length" value="">
+                </div>
+                <div class="form-group">
+                    <label for="width">Width(Inch)</label>
+                    <input type="text" class="form-control" id="width" value="">
+                </div>
+                <div class="form-group">
+                    <label for="depth">Depth(Inch)</label>
+                    <input type="text" class="form-control" id="depth" value="">
+                </div>
+                <div class="form-group">
+                    <label for="weight">Weight(lb)</label>
+                    <input type="text" class="form-control" id="weight" value="">
+                </div>
+                @endif
                 <div class="block-content row justify-content-center border-top">
                     <div class="col-9">
                         <button type="btn" class="btn btn-block btn-hero-primary" onclick="submitModule()">

@@ -174,13 +174,14 @@ class CustomEquipmentController extends Controller
         if(!empty($request['moduleId']) && !empty($request['data'])){
             $module = CustomModule::where('id', $request['moduleId'])->first();
             if($module){
-                if($module->client_no != Auth::user()->companyid)
+                if(Auth::user()->userrole != 2 && $module->client_no != Auth::user()->companyid)
                     return response()->json(['success' => false, 'message' => 'Company Id Mismatch.']);
                 
                 foreach($request['data'] as $fieldKey => $value)
                     $module[$fieldKey] = $value;
 
-                $base_str = $module['mfr'] . $module['model'] . $module['Voc'] . $module['Isc'] . $module['Mtg_Hole_1'] . $module['lead_len'] . $module['client_no'];
+                //$base_str = $module['mfr'] . $module['model'] . $module['Voc'] . $module['Isc'] . $module['Mtg_Hole_1'] . $module['lead_len'] . $module['client_no'];
+                $base_str = $module['mfr'] . $module['model'] . $module['client_no'];
                 do{
                     $tmp = unpack("l", pack("l", crc32($base_str)));
                     $crc32 = reset($tmp);
@@ -195,7 +196,8 @@ class CustomEquipmentController extends Controller
                 $data = $request['data'];
                 $data['client_no'] = Auth::user()->companyid;
 
-                $base_str = $data['mfr'] . $data['model'] . $data['Voc'] . $data['Isc'] . $data['Mtg_Hole_1'] . $data['lead_len'] . $data['client_no'];
+                //$base_str = $data['mfr'] . $data['model'] . $data['Voc'] . $data['Isc'] . $data['Mtg_Hole_1'] . $data['lead_len'] . $data['client_no'];
+                $base_str = $data['mfr'] . $data['model'] . $data['client_no'];
                 do{
                     $tmp = unpack("l", pack("l", crc32($base_str)));
                     $crc32 = reset($tmp);
@@ -374,7 +376,7 @@ class CustomEquipmentController extends Controller
         if(!empty($request['inverterId']) && !empty($request['data'])){
             $inverter = CustomInverter::where('id', $request['inverterId'])->first();
             if($inverter){
-                if($inverter->client_no != Auth::user()->companyid)
+                if(Auth::user()->userrole != 2 && $inverter->client_no != Auth::user()->companyid)
                     return response()->json(['success' => false, 'message' => 'Company Id Mismatch.']);
                 
                 foreach($request['data'] as $fieldKey => $value)
@@ -572,7 +574,7 @@ class CustomEquipmentController extends Controller
         if(!empty($request['rackingId']) && !empty($request['data'])){
             $racking = CustomRacking::where('id', $request['rackingId'])->first();
             if($racking){
-                if($racking->client_no != Auth::user()->companyid)
+                if(Auth::user()->userrole != 2 && $racking->client_no != Auth::user()->companyid)
                     return response()->json(['success' => false, 'message' => 'Company Id Mismatch.']);
                 
                 foreach($request['data'] as $fieldKey => $value)
@@ -773,7 +775,7 @@ class CustomEquipmentController extends Controller
         if(!empty($request['stanchionId']) && !empty($request['data'])){
             $stanchion = CustomStanchion::where('id', $request['stanchionId'])->first();
             if($stanchion){
-                if($stanchion->client_no != Auth::user()->companyid)
+                if(Auth::user()->userrole != 2 && $stanchion->client_no != Auth::user()->companyid)
                     return response()->json(['success' => false, 'message' => 'Company Id Mismatch.']);
                 
                 foreach($request['data'] as $fieldKey => $value)

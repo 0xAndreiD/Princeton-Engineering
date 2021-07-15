@@ -101,6 +101,7 @@
         <!-- Side Overlay Tabs -->
         <div class="block block-transparent pull-x pull-t">
             <div class="block-content tab-content overflow-hidden side-view">
+                @if(Auth::user()->userrole == 2)
                 <div class="form-group">
                     <label for="mfr">Inverter Manufacturer</label>
                     <input type="text" class="form-control" id="mfr" value="">
@@ -333,6 +334,20 @@
                     <label for="MPP_Vol_High">MPP Voltage High(Vdc)</label>
                     <input type="text" class="form-control" id="MPP_Vol_High" value="">
                 </div>
+                @else
+                <div class="form-group">
+                    <label for="mfr">Inverter Manufacturer</label>
+                    <input type="text" class="form-control" id="mfr" value="">
+                </div>
+                <div class="form-group">
+                    <label for="model">Model</label>
+                    <input type="text" class="form-control" id="model" value="">
+                </div>
+                <div class="form-group">
+                    <label for="rating">Rating(Watts)</label>
+                    <input type="text" class="form-control" id="rating" value="">
+                </div>
+                @endif
                 <div class="block-content row justify-content-center border-top">
                     <div class="col-9">
                         <button type="btn" class="btn btn-block btn-hero-primary" onclick="submitInverter()">
