@@ -46,7 +46,7 @@
                     @foreach($fields as $field)
                     <tr class='h13'>
                         <td class='iw400-right-bdr'>
-                            <input type='checkbox' class='configPermit' id="{{ $field['htmlfield'] }}" <?php echo $field['pdfcheck'] == 1 ? 'checked' : '';?>></input>
+                            <input type='checkbox' class='configPermit pdfcheck' id="pdfcheck_{{ $idx }}" <?php echo $field['pdfcheck'] == 1 ? 'checked' : '';?>></input>
                         </td>
                         <td class='iw400-right-bdr'>
                             <input type='hidden' class='configPermit' value="{{ $field['pdffield'] }}" id="fieldkey_{{ $idx }}"></input>{{ $field['pdffield'] }}
@@ -64,8 +64,10 @@
                             @if($field['type'] == 0)
                                 <input data-idx="{{ $field['idx'] }}" data-key="{{ $field['pdffield'] }}" class="configPermit" value="{{ $field['defaultvalue'] }}" >
                             @elseif($field['type'] == 1)
+                                <?php $i = 0; ?>
                                 @foreach(explode(",", $field['options']) as $option)
-                                <input type="radio" data-idx="{{ $field['idx'] }}" data-key="{{ $field['pdffield'] }}" name="{{ $field['htmlfield'] }}_{{ $field['idx'] }}" <?php echo $field['defaultvalue'] == $option ? 'checked' : '';?> class="permitRadio"> {{ $option }} </input>
+                                <input type="radio" data-idx="{{ $i }}" data-key="{{ $field['pdffield'] }}" name="{{ $field['htmlfield'] }}_{{ $field['idx'] }}" <?php echo $field['defaultvalue'] == $option ? 'checked' : '';?> class="permitRadio"> {{ $option }} </input>
+                                <?php $i ++; ?>
                                 @endforeach
                                 <input type="hidden" class="configPermit" id="{{ $field['htmlfield'] }}_value" value="{{ $field['defaultvalue'] }}">
                             @elseif($field['type'] == 2)
@@ -81,28 +83,41 @@
                             @endif
                         </td>
                         <td class="w400-green-bdr">
-                            <input type='checkbox' class='configPermit' <?php echo $field['htmlcheck'] == 1 ? 'checked' : '';?>></input>
+                            <input type='checkbox' class='configPermit' id='htmlcheck_{{ $idx }}' <?php echo $field['pdfcheck'] == 1 ? '' : 'disabled'; ?> <?php echo $field['htmlcheck'] == 1 ? 'checked' : '';?>></input>
                         </td>
                         <td class='w400-yellow-bdr'>
                             <input type='text' class='configPermit' value="{{ $field['htmlfield'] }}"></input>
                         </td>
                         <td class='w400-yellow-bdr'>
-                            <input type='text' class='configPermit' value="{{ $field['pdffield'] }}"></input>
+                            <input type='text' class='configPermit' value="{{ $field['label'] }}"></input>
                         </td>
                         <td class='w400-yellow-bdr'>
                             <select class='configPermit' value="{{ $field['dbinfo'] }}">
                                 <option value='0'>Select</option>
-                                <option value='company_name' <?php echo $field['dbinfo'] == 'company_name' ? 'selected' : ''; ?>>companyInfo.company_name</option>
-                                <option value='company_telno' <?php echo $field['dbinfo'] == 'company_telno' ? 'selected' : ''; ?>>companyInfo.company_telno</option>
-                                <option value='company_address' <?php echo $field['dbinfo'] == 'company_address' ? 'selected' : ''; ?>>companyInfo.company_address</option>
-                                <option value='contact_person' <?php echo $field['dbinfo'] == 'contact_person' ? 'selected' : ''; ?>>permitInfo.contact_person</option>
-                                <option value='contact_phone' <?php echo $field['dbinfo'] == 'contact_phone' ? 'selected' : ''; ?>>permitInfo.contact_phone</option>
-                                <option value='FAX' <?php echo $field['dbinfo'] == 'FAX' ? 'selected' : ''; ?>>permitInfo.FAX</option>
-                                <option value='construction_email' <?php echo $field['dbinfo'] == 'construction_email' ? 'selected' : ''; ?>>permitInfo.construction_email</option>
-                                <option value='registration' <?php echo $field['dbinfo'] == 'registration' ? 'selected' : ''; ?>>permitInfo.registration</option>
-                                <option value='exp_date' <?php echo $field['dbinfo'] == 'exp_date' ? 'selected' : ''; ?>>permitInfo.exp_date</option>
-                                <option value='EIN' <?php echo $field['dbinfo'] == 'EIN' ? 'selected' : ''; ?>>permitInfo.EIN</option>
-                                <option value='FAX' <?php echo $field['dbinfo'] == 'FAX' ? 'selected' : ''; ?>>permitInfo.FAX</option>
+                                <option value='job_projectname' <?php echo $field['dbinfo'] == 'job_projectname' ? 'selected' : ''; ?>>Job Name</option>
+                                <option value='job_address' <?php echo $field['dbinfo'] == 'job_address' ? 'selected' : ''; ?>>Job Address</option>
+                                <option value='street_address' <?php echo $field['dbinfo'] == 'street_address' ? 'selected' : ''; ?>>Street Address</option>
+                                <option value='site_city' <?php echo $field['dbinfo'] == 'site_city' ? 'selected' : ''; ?>>City</option>
+                                <option value='state_code' <?php echo $field['dbinfo'] == 'state_code' ? 'selected' : ''; ?>>State Code</option>
+                                <option value='zip_code' <?php echo $field['dbinfo'] == 'zip_code' ? 'selected' : ''; ?>>Zip Code</option>
+                                <option value='job_telephone' <?php echo $field['dbinfo'] == 'job_telephone' ? 'selected' : ''; ?>>Owner Telephone</option>
+                                <option value='job_email' <?php echo $field['dbinfo'] == 'job_email' ? 'selected' : ''; ?>>Owner Email</option>
+                                <option value='company_name' <?php echo $field['dbinfo'] == 'company_name' ? 'selected' : ''; ?>>Company Name</option>
+                                <option value='company_telno' <?php echo $field['dbinfo'] == 'company_telno' ? 'selected' : ''; ?>>Company Telephone</option>
+                                <option value='company_address' <?php echo $field['dbinfo'] == 'company_address' ? 'selected' : ''; ?>>Company Address</option>
+                                <option value='contact_person' <?php echo $field['dbinfo'] == 'contact_person' ? 'selected' : ''; ?>>Contact Person</option>
+                                <option value='contact_phone' <?php echo $field['dbinfo'] == 'contact_phone' ? 'selected' : ''; ?>>Contact Phone</option>
+                                <option value='FAX' <?php echo $field['dbinfo'] == 'FAX' ? 'selected' : ''; ?>>FAX</option>
+                                <option value='construction_email' <?php echo $field['dbinfo'] == 'construction_email' ? 'selected' : ''; ?>>Construction Email</option>
+                                <option value='registration' <?php echo $field['dbinfo'] == 'registration' ? 'selected' : ''; ?>>Registration</option>
+                                <option value='exp_date' <?php echo $field['dbinfo'] == 'exp_date' ? 'selected' : ''; ?>>Expiration Date</option>
+                                <option value='EIN' <?php echo $field['dbinfo'] == 'EIN' ? 'selected' : ''; ?>>EIN</option>
+                                <option value='FAX' <?php echo $field['dbinfo'] == 'FAX' ? 'selected' : ''; ?>>FAX</option>
+                                <option value='architect_engineer' <?php echo $field['dbinfo'] == 'architect_engineer' ? 'selected' : ''; ?>>Architect Engineer</option>
+                                <option value='architect_address' <?php echo $field['dbinfo'] == 'architect_address' ? 'selected' : ''; ?>>Architect Address</option>
+                                <option value='architect_email' <?php echo $field['dbinfo'] == 'architect_email' ? 'selected' : ''; ?>>Architect Email</option>
+                                <option value='architect_tel' <?php echo $field['dbinfo'] == 'architect_tel' ? 'selected' : ''; ?>>Architect Tel</option>
+                                <option value='architect_fax' <?php echo $field['dbinfo'] == 'architect_fax' ? 'selected' : ''; ?>>Architect Fax</option>
                             </select>
                         </td>
                         <td class='w400-green-bdr'>
@@ -155,7 +170,7 @@
         .then(function(data) {
             var list_form = $('#list_form');
 
-            var cnt = 1;
+            // var cnt = 1;
             var field_specs;
             try {
                 field_specs = pdfform().list_fields(data);
@@ -169,7 +184,7 @@
                 var options = [];
                 var key = field_key.replace(/ /g,"-");
                 var row = "<tr class='h13'>";
-                row += "<td class='iw400-right-bdr'><input type='checkbox' class='configPermit' id='" + key + "'></input></td>";
+                row += "<td class='iw400-right-bdr'><input type='checkbox' class='configPermit pdfcheck' id='pdfcheck_" + idx + "' checked></input></td>";
                 row += "<td class='iw400-right-bdr'><input type='hidden' class='configPermit' value='" + field_key + "' id='fieldkey_" + idx + "'></input>" + field_key + "</td>";
                 row += "<td class='w400-green-bdr'>";
                 
@@ -182,14 +197,14 @@
                         fieldtype = 1;
                         var fieldset_el = document.createElement('fieldset');
                         let defaultoption = "", checked = false;
-                        spec.options.forEach(function(ostr) {
+                        spec.options.forEach(function(ostr, j) {
                             options.push(ostr);
                             var label = document.createElement('label');
                             var radio = document.createElement('input');
                             radio.setAttribute('type', 'radio');
                             radio.setAttribute('value', ostr);
                             radio.setAttribute('name', key + '_' + i);
-                            radio.setAttribute('data-idx', i);
+                            radio.setAttribute('data-idx', j);
                             radio.setAttribute('data-key', field_key);
                             radio.setAttribute('data-valuekey', key);
                             radio.setAttribute('class', 'permitRadio');
@@ -216,7 +231,7 @@
                         input.setAttribute('class', 'configPermit');
                     } else if (spec.type === 'string') {
                         fieldtype = 0;
-                        input.setAttribute('value', cnt++);
+                        input.setAttribute('value', '');
                         input.setAttribute('class', 'configPermit');
                     } else if ((spec.type === 'select') && spec.options) {
                         fieldtype = 3;
@@ -246,23 +261,37 @@
                 row += "<td class='w400-green-bdr' id='defaultfield_" + idx + "'>";
                 row += defaulthtml;
                 row += "</td>";
-                row += "<td class='w400-green-bdr'><input type='checkbox' class='configPermit' ></input></td>";
+                row += "<td class='w400-green-bdr'><input type='checkbox' class='configPermit' id='htmlcheck_" + idx + "' checked></input></td>";
                 row += "<td class='w400-yellow-bdr'><input type='text' class='configPermit' value='" + key + "'></input></td>";
                 row += "<td class='w400-yellow-bdr'><input type='text' class='configPermit' value='" + field_key + "'></input></td>";
                 row += "<td class='w400-yellow-bdr'>\
                             <select class='configPermit'>\
+                                <option value='job_projectname'>Owner Name</option>\
+                                <option value='job_address'>Owner Address</option>\
+                                <option value='street_address'>Street Address</option>\
+                                <option value='site_city'>City</option>\
+                                <option value='state_code'>State Code</option>\
+                                <option value='zip_code'>Zip Code</option>\
+                                <option value='job_telephone'>Owner Telephone</option>\
+                                <option value='job_email'>Owner Email</option>\
                                 <option value='0' selected>Select</option>\
-                                <option value='company_name'>companyInfo.company_name</option>\
-                                <option value='company_telno'>companyInfo.company_telno</option>\
-                                <option value='company_address'>companyInfo.company_address</option>\
-                                <option value='contact_person'>permitInfo.contact_person</option>\
-                                <option value='contact_phone'>permitInfo.contact_phone</option>\
-                                <option value='FAX'>permitInfo.FAX</option>\
-                                <option value='construction_email'>permitInfo.construction_email</option>\
-                                <option value='registration'>permitInfo.registration</option>\
-                                <option value='exp_date'>permitInfo.exp_date</option>\
-                                <option value='EIN'>permitInfo.EIN</option>\
-                                <option value='FAX'>permitInfo.FAX</option>\
+                                <option value='site_address'>Site Address</option>\
+                                <option value='company_name'>Company Name</option>\
+                                <option value='company_telno'>Company Telephone</option>\
+                                <option value='company_address'>Company Address</option>\
+                                <option value='contact_person'>Contact Person</option>\
+                                <option value='contact_phone'>Contact Phone</option>\
+                                <option value='FAX'>FAX</option>\
+                                <option value='construction_email'>Construction Email</option>\
+                                <option value='registration'>Registration</option>\
+                                <option value='exp_date'>Expiration Date</option>\
+                                <option value='EIN'>EIN</option>\
+                                <option value='FAX'>FAX</option>\
+                                <option value='architect_engineer'>Architect Engineer</option>\
+                                <option value='architect_address'>Architect Address</option>\
+                                <option value='architect_email'>Architect Email</option>\
+                                <option value='architect_tel'>Architect Tel</option>\
+                                <option value='architect_fax'>Architect Fax</option>\
                             </select>\
                         </td>";
                 row += "<td class='w400-green-bdr'>\
@@ -274,6 +303,7 @@
                 idx ++;
             }
 
+            setPdfCheckHandler();
             setRadioHandler();
             setTypesHandler();
             setOptionsHandler();
@@ -339,6 +369,16 @@
             submitData(e);
         });
 
+        var setPdfCheckHandler = function() {
+            $('.pdfcheck').on('click', function() {
+                let id = $(this).attr('id').split("pdfcheck_").join("htmlcheck_");
+                if($(this)[0].checked)
+                    $('#' + id).attr('disabled', false);
+                else
+                    $('#' + id).attr('disabled', true);
+            });
+        }
+
         var setRadioHandler = function() {
             $('.permitRadio').on('click', function() {
                 $('#' + $(this).attr('data-valuekey') + '_value').val($(this).val());
@@ -349,7 +389,6 @@
             $('.typesConfig').on('change', function() {
                 let index = $(this).attr("id").split("fieldtype_").join("");
                 let idx = $("#idx_" + index).val();
-                console.log(idx);
                 let optionsid = $(this).attr("id").split("fieldtype_").join("optionsfield_");
                 let defaultid = $(this).attr("id").split("fieldtype_").join("defaultfield_");
                 let field_key = $("#" + $(this).attr("id").split("fieldtype_").join("fieldkey_")).val();
@@ -366,13 +405,13 @@
                 } else if($(this).val() == "1"){
                     let html = "", defaultoption = "", check = false;
                     var fieldset_el = document.createElement('fieldset');
-                    options.forEach(function(ostr) {
+                    options.forEach(function(ostr, j) {
                         var label = document.createElement('label');
                         var radio = document.createElement('input');
                         radio.setAttribute('type', 'radio');
                         radio.setAttribute('value', ostr);
                         radio.setAttribute('name', key + "_" + idx);
-                        radio.setAttribute('data-idx', idx);
+                        radio.setAttribute('data-idx', j);
                         radio.setAttribute('data-key', field_key);
                         radio.setAttribute('data-valuekey', key);
                         radio.setAttribute('class', 'permitRadio');
@@ -435,13 +474,13 @@
                 if($("#" + typeid).val() == "1"){
                     let html = "", defaultoption = "", check = false;
                     var fieldset_el = document.createElement('fieldset');
-                    options.forEach(function(ostr) {
+                    options.forEach(function(ostr, j) {
                         var label = document.createElement('label');
                         var radio = document.createElement('input');
                         radio.setAttribute('type', 'radio');
                         radio.setAttribute('value', ostr);
                         radio.setAttribute('name', key + "_" + idx);
-                        radio.setAttribute('data-idx', idx);
+                        radio.setAttribute('data-idx', j);
                         radio.setAttribute('data-key', field_key);
                         radio.setAttribute('data-valuekey', key);
                         radio.setAttribute('class', 'permitRadio');
@@ -504,7 +543,6 @@
                 }
                 var index = parseInt(input.getAttribute('data-idx'), 10);
                 var value = (input.getAttribute('type') === 'checkbox') ? input.checked : input.value;
-                console.log(key, ",", index, ",", value);
                 fields[key][index] = value;
             });
 
@@ -523,6 +561,7 @@
             { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
         });
 
+        setPdfCheckHandler();
         setRadioHandler();
         setTypesHandler();
         setOptionsHandler();

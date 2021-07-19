@@ -278,8 +278,6 @@ class GeneralController extends Controller
                 $dropbox = new Dropbox($app);
                 $dropboxFile = new DropboxFile(storage_path('/input/') . $companyNumber. '. ' . $company['company_name'] . '/' . $filename);
                 $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_JSON_INPUT') . $companyNumber. '. ' . $company['company_name'] . '/' . $filename, ['autorename' => TRUE]);
-
-                
             }
             catch(Exception $e) {
                 return response()->json(["message" => "Failed to generate RS json data file", "status" => false]);
@@ -335,7 +333,8 @@ class GeneralController extends Controller
                     return response()->json(["message" => "You don't have permission to edit this project.", "status" => false]);
             } else 
                 return response()->json(["message" => "Cannot find the project.", "status" => false]);
-        }
+        } else 
+            return response()->json(["message" => "Please save the job first.", "status" => false]);
     }
     /**
      * Save PDF as files
@@ -363,18 +362,26 @@ class GeneralController extends Controller
                     Storage::disk('output')->put($folderPrefix . $request->filename, file_get_contents($request->data));
 
                     //Backup pdf file to dropbox
-                    $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
-                    $dropbox = new Dropbox($app);
-                    $dropboxFile = new DropboxFile(storage_path('/output/') . $companyNumber. '. ' . $project['companyName'] . '/' . $request->filename);
-                    $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_OUT') . $filepath. '/' . $request->filename, ['autorename' => TRUE]);
-                    return response()->json(["message" => "Success!", "status" => true, "projectId" => $project->id, "directory" => $folderPrefix . $project['clientProjectNumber'] . '. ' . $project['clientProjectName'] . '/']);
+                    try{
+                        $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
+                        $dropbox = new Dropbox($app);
+                        $dropboxFile = new DropboxFile(storage_path('/output/') . $companyNumber. '. ' . $project['companyName'] . '/' . $request->filename);
+                        $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_OUT') . $filepath. '/' . $request->filename, ['autorename' => TRUE]);
+                        $file = $dropbox->getMetadata(env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_OUT') . $filepath. '/' . $request->filename);
+                        $info = array('name' => $file->getName(), 'id' => $file->getId(), 'type' => 'file', 'path' => env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_OUT') . $filepath. '/' . $request->filename);
+                        return response()->json(["message" => "Success!", "status" => true, "info" => $info]);
+                    } catch (DropboxClientException $e) { 
+                        $info = array();
+                        return response()->json(["message" => "Uploading PDF to dropbox failed!", "status" => false]);
+                    }
                 }
                 else
                     return response()->json(["message" => "You don't have permission to edit this pdf file.", "status" => false]);
             }
             else
                 return response()->json(["message" => "Cannot find project.", "status" => false]);
-        }
+        } else 
+            return response()->json(["message" => "Please save the job first.", "status" => false]);
     }
 
     /**
@@ -1142,14 +1149,24 @@ class GeneralController extends Controller
      * @return JSON
      */
     public function getProjectPermitJson(Request $request){
-        if($request['projectId'])
+        if($request['projectId'] && $request['state'])
         {
-            $project = JobPermit::where('job_id', '=', $request['projectId'])->get();
-            if($project)
+            $datas = JobPermit::where('job_id', '=', $request['projectId'])->get();
+            if($datas)
             {
                 // if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3)
                 // {
-                    return response()->json(['success' => true, 'data' => $project] );
+                $fileinfos = array();
+                $i = 0;
+                foreach($datas as $data){
+                    $permit = PermitFiles::where('state', $request['state'])->where('filename', $data['filename'])->first();
+                    if($permit)
+                        $fileinfos[] = $permit;
+                    else
+                        $fileinfos[] = array('id' => $i, 'tabname' => $data['filename']);
+                    $i ++;
+                }
+                return response()->json(['success' => true, 'data' => $datas, 'fileinfos' => $fileinfos] );
                 // }
                 // else
                 // {

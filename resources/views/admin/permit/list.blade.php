@@ -40,8 +40,9 @@
                             <th class="text-center" style="width: 10%;">ID</th>
                             <th style="width:15%">File Name</th>
                             <th style="width:10%;">State</th>
-                            <th style="width:30%;">Description</th>
+                            <th style="width:25%;">Description</th>
                             <th style="width:20%;">TabName</th>
+                            <th style="width:10%;">Configured</th>
                             <th style="min-width: 200px;">Actions</th>
                         </tr>
                     </thead>
@@ -136,6 +137,7 @@
                 { "data": "state" },
                 { "data": "description" },
                 { "data": "tabname" },
+                { "data": "configured" },
                 { "data": "actions", "orderable": false }
             ]	 
         });

@@ -109,6 +109,11 @@ class PermitController extends Controller
                     <button type='button' class='js-swal-confirm btn btn-danger' style='margin-left:5px;' onclick='delPermit(this,{$file['id']})'><i class='fa fa-trash'></i></button>
                 </div>";
 
+                $fields = PermitFields::where('filename', $file['filename'])->get();
+                if(count($fields) > 0)
+                    $file['configured'] = "<span class='badge badge-success'>Yes</span>";
+                else 
+                    $file['configured'] = "<span class='badge badge-danger'>No</span>";
                 $file['id'] = $id; $id ++;
                 $data[] = $file;
             }
