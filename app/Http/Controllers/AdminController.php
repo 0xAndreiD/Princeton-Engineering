@@ -394,8 +394,12 @@ class AdminController extends Controller
                             )
                         );
 
-            $totalFiltered = $handler->where('mfr', 'LIKE',"%{$search}%")
-                        ->orWhere('model', 'LIKE',"%{$search}%")
+            $totalFiltered = $handler->where('login_guard.id', 'LIKE',"%{$search}%")
+                        ->orWhere('company_info.company_name', 'LIKE',"%{$search}%")
+                        ->orWhere('users.username', 'LIKE',"%{$search}%")
+                        ->orWhere('ipAddress', 'LIKE',"%{$search}%")
+                        ->orWhere('identity', 'LIKE',"%{$search}%")
+                        ->orWhere('login_guard.created_at', 'LIKE',"%{$search}%")
                         ->count();
         }
 
