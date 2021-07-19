@@ -60,16 +60,22 @@ class GeneralController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function index(Request $request)
     {
+        $notify = 0;
+        if($request['notify']){
+            $type = base64_decode($request['notify']);
+            if($type == 'guardset')
+                $notify = 1;
+        }
         if( Auth::user()->userrole == 2 )
-            return view('admin.home');
+            return view('admin.home')->with('notify', $notify);
         else if( Auth::user()->userrole == 1 || Auth::user()->userrole == 3)
-            return view('clientadmin.home');
+            return view('clientadmin.home')->with('notify', $notify);
         else if( Auth::user()->userrole == 4 )
-            return view('reviewer.home');
+            return view('reviewer.home')->with('notify', $notify);
         else if( Auth::user()->userrole == 0 )
-            return view('user.home');
+            return view('user.home')->with('notify', $notify);
     }
 
     /**

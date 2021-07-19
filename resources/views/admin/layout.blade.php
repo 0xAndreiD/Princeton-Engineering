@@ -440,7 +440,7 @@
         <script src="{{ asset('js/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
         
         <!-- Page JS Helpers (jQuery Sparkline plugin) -->
-        <script>jQuery(function(){ Dashmix.helpers(['flatpickr', 'datepicker', 'select2', 'sparkline']); });</script>
+        <script>jQuery(function(){ Dashmix.helpers(['flatpickr', 'datepicker', 'select2', 'sparkline', 'notify']); });</script>
         <script src="{{ asset('/js/plugins/jquery-validation/jquery.validate.min.js') }}"></script>
         <script src="{{ asset('/js/plugins/jquery-validation/additional-methods.js') }}"></script>
 
