@@ -297,7 +297,7 @@
                 row += "<td class='w400-green-bdr'>\
                             <input type='text' class='configPermit optionsConfig' value='" + options.join(",") + "' id='optionsfield_" + idx + "'></input>\
                         </td>";
-                row += "<input type='hidden' class='configPermit' value='" + fieldidx + "' id='idx_{{ $idx }}'>";
+                row += "<input type='hidden' class='configPermit' value='" + fieldidx + "' id='idx_" + idx + "'>";
                 row += "</tr>";
                 list_form.append(row);
                 idx ++;
