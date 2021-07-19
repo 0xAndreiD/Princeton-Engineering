@@ -100,8 +100,6 @@
                                 <option value='site_city' <?php echo $field['dbinfo'] == 'site_city' ? 'selected' : ''; ?>>City</option>
                                 <option value='state_code' <?php echo $field['dbinfo'] == 'state_code' ? 'selected' : ''; ?>>State Code</option>
                                 <option value='zip_code' <?php echo $field['dbinfo'] == 'zip_code' ? 'selected' : ''; ?>>Zip Code</option>
-                                <option value='job_telephone' <?php echo $field['dbinfo'] == 'job_telephone' ? 'selected' : ''; ?>>Owner Telephone</option>
-                                <option value='job_email' <?php echo $field['dbinfo'] == 'job_email' ? 'selected' : ''; ?>>Owner Email</option>
                                 <option value='company_name' <?php echo $field['dbinfo'] == 'company_name' ? 'selected' : ''; ?>>Company Name</option>
                                 <option value='company_telno' <?php echo $field['dbinfo'] == 'company_telno' ? 'selected' : ''; ?>>Company Telephone</option>
                                 <option value='company_address' <?php echo $field['dbinfo'] == 'company_address' ? 'selected' : ''; ?>>Company Address</option>
@@ -272,8 +270,6 @@
                                 <option value='site_city'>City</option>\
                                 <option value='state_code'>State Code</option>\
                                 <option value='zip_code'>Zip Code</option>\
-                                <option value='job_telephone'>Owner Telephone</option>\
-                                <option value='job_email'>Owner Email</option>\
                                 <option value='0' selected>Select</option>\
                                 <option value='site_address'>Site Address</option>\
                                 <option value='company_name'>Company Name</option>\

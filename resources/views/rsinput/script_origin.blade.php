@@ -4659,10 +4659,6 @@ function buildPermitFields(id, filename){
                                             defaultvalue = $("#option-state").val();
                                         else if(field.dbinfo == 'zip_code')
                                             defaultvalue = $("#txt-zip").val();
-                                        else if(field.dbinfo == 'job_telephone')
-                                            defaultvalue = $("#txt-owner-tel").val();
-                                        else if(field.dbinfo == 'job_email')
-                                            defaultvalue = $("#txt-owner-email").val();
                                         else if(field.dbinfo == 'company_name')
                                             defaultvalue = companyInfo.company_name;
                                         else if(field.dbinfo == 'company_telno')
