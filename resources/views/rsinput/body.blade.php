@@ -57,7 +57,7 @@
             @include('rsinput.permit')
         </div>
     @endif
-    <div id="ucc_f100" class="pdfForm">
+    <!-- <div id="ucc_f100" class="pdfForm">
         @include('rsinput.ucc_f100_cpa')
     </div>
     <div id="ucc_f110" class="pdfForm">
@@ -71,7 +71,7 @@
     </div>
     <div id="ucc_f140" class="pdfForm">
         @include('rsinput.ucc_f140_fire')
-    </div>
+    </div> -->
 
     <div id="tab_upload" class="rfdTabContent">
         @include('rsinput.upload')

@@ -4888,6 +4888,8 @@ async function openPermitTab(id, filename, tabname, permitData = null, openTab =
 }
 
 function updatePermitPDF(id, filename){
+    if(!id || !filename)
+        return;
     var pdfsrc = $("#assetPdfLink").val() + '/' + filename;
     var script = $("<script>");
 

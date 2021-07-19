@@ -524,10 +524,13 @@ function list_fields(data) {
 			} else if (ft_name === 'Btn') {
 				spec = {type: 'boolean'};
 			} else if (ft_name === 'Ch') {
-				spec = {
-					type: 'select',
-					options: n.map.Opt.slice(),
-				};
+				if(n && n.map && n.map.Opt && n.map.Opt.slice){
+					spec = {
+						type: 'select',
+						options: n.map.Opt.slice(),
+					};
+				} else
+					spec = {type: 'string'};
 			} else if (ft_name === 'Sig') {
 				return; // Signature names are not supported so far
 			} else {
