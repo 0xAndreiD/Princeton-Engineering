@@ -193,7 +193,7 @@ table{
 	line-height: 1.4;
 }
 .hero .text h3{
-	font-size: 24px;
+	font-size: 20px;
 	font-weight: 300;
 }
 .hero .text h2 span{
@@ -296,9 +296,8 @@ ul.social li{
           	<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
           		<tr>
           			<td class="logo" style="text-align: center;">
-					  	<img src="https://princeton.engineering/iRoof/public/img/logo.jpg" alt="iRoof Logo" style="width: 150px;"></img>
+						<img src="https://princeton.engineering/iRoof/public/img/logo.jpg" alt="iRoof Logo" style="width: 150px;"></img>
 						<h2>Princeton Engineering</h2>
-			            <h1><a href="#" style="color: black;">Is this you logging into iRoof?</a></h1>
 			          </td>
           		</tr>
           	</table>
@@ -309,11 +308,17 @@ ul.social li{
             <table>
             	<tr>
             		<td>
-            			<div class="text" style="padding: 0 2.5em; text-align: center;">
-            				<h2>Your IP Address: {{$ip}}</h2>
-                    <h3>If yes, use this verification code:</h3>
-            				<h1>{{$code}}</h1>
-                    <p>This code expires in 10 minutes.</p>
+            			<div class="text" style="padding: 0 2.5em;">
+                            <h2>Hi, {{$username}}</h2>
+                            <h3>We realized that you have accessed to iRoof {{$attempts}} times from {{$location}}. If this is your original address, please set it to your original.</h3>
+							<br>
+							<div><a href="{{$link}}" style="padding: 15px; border-radius: 5px; background-color: lightseagreen; color: white; font-size: 1em;"> Set as Original </a></div>
+							<br>
+							<h3>If the button does not work, please paste the below link into your browser.</h3>
+							<p>{{$link}}</p>
+							<br>
+							<h3>Thanks & Regards,</h3>
+							<h3>The iRoof Team</h3>
             			</div>
             		</td>
             	</tr>
@@ -322,40 +327,40 @@ ul.social li{
 	      </tr><!-- end tr -->
       <!-- 1 Column Text + Button : END -->
       </table>
-      <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
-      	<tr>
-          <td valign="middle" class="bg_light footer email-section">
-            <table>
-            	<tr>
-                <td valign="top" width="50%" style="padding-top: 20px;">
-                  <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
-                    <tr>
-                      <td style="text-align: left; padding-right: 10px;">
-                      	<h3 class="heading">About</h3>
-                      	<p>iRoof™ Residential Roof Framing Analysis for Solar Installations</p>
-                      </td>
-                    </tr>
-                  </table>
-                </td>
-                <td valign="top" width="50%" style="padding-top: 20px;">
-                  <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
-                    <tr>
-                      <td style="text-align: left; padding-left: 5px; padding-right: 5px;">
-                      	<h3 class="heading">Contact Info</h3>
-                      	<ul style="list-style: none; padding: 0px;">
-							<li style="margin-left: 0px;"><span class="text">Princeton Engineering</span></li>
-							<li style="margin-left: 0px;"><span class="text">info@Princeton-Engineering.com</span></a></li>
-						</ul>
-                      </td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr><!-- end: tr -->
-      </table>
-
+	  <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
+		<tr>
+		<td valign="middle" class="bg_light footer email-section">
+		  <table>
+			  <tr>
+			  <td valign="top" width="50%" style="padding-top: 20px;">
+				<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+				  <tr>
+					<td style="text-align: left; padding-right: 10px;">
+						<h3 class="heading">About</h3>
+						<p>iRoof™ Residential Roof Framing Analysis for Solar Installations</p>
+					</td>
+				  </tr>
+				</table>
+			  </td>
+			  <td valign="top" width="50%" style="padding-top: 20px;">
+				<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+				  <tr>
+					<td style="text-align: left; padding-left: 5px; padding-right: 5px;">
+						<h3 class="heading">Contact Info</h3>
+						<ul style="list-style: none; padding: 0px;">
+						  <li style="margin-left: 0px;"><span class="text">Princeton Engineering</span></li>
+						  <li style="margin-left: 0px;"><span class="text">info@Princeton-Engineering.com</span></a></li>
+					  </ul>
+					</td>
+				  </tr>
+				</table>
+			  </td>
+			</tr>
+		  </table>
+		</td>
+	  </tr><!-- end: tr -->
+	</table>
+	
     </div>
   </center>
 </body>

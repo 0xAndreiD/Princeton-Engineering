@@ -127,48 +127,47 @@ class LoginController extends Controller
     {
         $ip = $request->ip();
         $checkGuard = LoginGuard::where('userId', $user->id)->where('ipAddress', $ip)->where('identity', $request['identity'])->first();
-        if(!$checkGuard && $user->ask_two_factor) {
-            $userGuard = LoginGuard::where('userId', $user->id)->get();
-            if(count($userGuard) > 0){
+        if($checkGuard && $checkGuard->blocked == 1){ // Check if blocked
+            Session::put('blocked', 1);
+        } else if($user->ask_two_factor){
+            if(!$checkGuard) {
+                $userGuard = LoginGuard::where('userId', $user->id)->get();
+                if(count($userGuard) > 0){ // There are some passed histories
+                    $user->generateTwoFactorCode();
+                    $data = ['ip' => $ip, 'code' => $user->two_factor_code];
+                    Mail::send('mail.verifycode', $data, function ($m) use ($user) {
+                        $m->from(env('MAIL_FROM_ADDRESS'), 'Princeton Engineering')->to($user->email)->subject('Please verify the iRoof access code.');
+                    });
+                    //$user->notify(new TwoFactorCode());
+                } else { // Automatic pass the first login
+                    LoginGuard::create([
+                        'userId' => $user->id,
+                        'ipAddress' => $ip,
+                        'identity' => $request['identity'],
+                        'allowed' => 0
+                    ]);
+                    if($user->userrole == 1) // Client Admin company update
+                    {
+                        $company = Company::where('id', $user->companyid)->first();
+                        if($company){
+                            $usergeo = unserialize( file_get_contents('http://www.geoplugin.net/php.gp?ip=' . $ip) );
+                            $company['company_ip'] = $ip;
+                            $company['longitude'] = $usergeo['geoplugin_longitude'];
+                            $company['latitude'] = $usergeo['geoplugin_latitude'];
+                            $company->save();
+                        }
+                    }
+                }
+            } else if($checkGuard->allowed != 0){ // The info shows it's not first login
                 $user->generateTwoFactorCode();
                 $data = ['ip' => $ip, 'code' => $user->two_factor_code];
                 Mail::send('mail.verifycode', $data, function ($m) use ($user) {
                     $m->from(env('MAIL_FROM_ADDRESS'), 'Princeton Engineering')->to($user->email)->subject('Please verify the iRoof access code.');
                 });
-                //$user->notify(new TwoFactorCode());
-            } else {
-                LoginGuard::create([
-                    'userId' => $user->id,
-                    'ipAddress' => $ip,
-                    'identity' => $request['identity'],
-                    'allowed' => 0
-                ]);
-                if($user->userrole == 1) // Client Admin company update
-                {
-                    $company = Company::where('id', $user->companyid)->first();
-                    if($company){
-                        $usergeo = unserialize( file_get_contents('http://www.geoplugin.net/php.gp?ip=' . $ip) );
-                        $company['company_ip'] = $ip;
-                        $company['longitude'] = $usergeo['geoplugin_longitude'];
-                        $company['latitude'] = $usergeo['geoplugin_latitude'];
-                        $company->save();
-                    }
-                }
             }
-        } else{
-            if($checkGuard && $checkGuard->blocked == 1){
-                Session::put('blocked', 1);
-            }
-            // if($user->userrole == 1 && $checkGuard->allowed == 1){ // Generate code verification for super admin/client admin if it's code verified
-            //     $user->generateTwoFactorCode();
-            //     $data = ['ip' => $ip, 'code' => $user->two_factor_code];
-            //     Mail::send('mail.verifycode', $data, function ($m) use ($user) {
-            //         $m->from(env('MAIL_FROM_ADDRESS'), 'Princeton Engineering')->to($user->email)->subject('Please verify the iRoof access code.');
-            //     });
-            // }
-        } 
+        }
 
-        if(!$checkGuard || $checkGuard->allowed != 2){
+        // if(!$checkGuard || $checkGuard->allowed != 2){
             // IP address check with company IP
             $company = Company::where('id', $user->companyid)->first();
             if($company && $company->company_ip && $company->company_ip != $ip){
@@ -176,7 +175,7 @@ class LoginController extends Controller
                 if($usergeo['geoplugin_latitude'] && $usergeo['geoplugin_longitude'] ){
                     $distance = $this->distance($usergeo['geoplugin_latitude'], $usergeo['geoplugin_longitude'], $company->latitude, $company->longitude, "M");
                     if($distance > $user->distance_limit){
-                        $this->performLogout($request);
+                        //$this->performLogout($request);
                         $supers = User::where('userrole', 2)->get();
                         $data = ['ip' => $ip, 'device' => $request['identity'], 'username' => $user->username, 'company' => $company->company_name, 'longitude' => $usergeo['geoplugin_longitude'], 'latitude' => $usergeo['geoplugin_latitude'], 
                         'distance' => $distance, 'location' => $usergeo['geoplugin_city'] . " " . $usergeo['geoplugin_regionName'] . " " . $usergeo['geoplugin_countryName']];
@@ -185,11 +184,11 @@ class LoginController extends Controller
                                 $m->from(env('MAIL_FROM_ADDRESS'), 'Princeton Engineering')->to($super->email)->subject('iRoof Notification.');
                             });
                         }
-                        return redirect()->route('verify.geolocation');
+                        //return redirect()->route('verify.geolocation');
                     }
                 }
             }
-        }
+        //}
 
         $mySession = SessionHistory::create([
             'userId' => $user->id,

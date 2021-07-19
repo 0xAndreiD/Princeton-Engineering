@@ -19,5 +19,13 @@
         </div>
     </div>
 </div>
+@if($notify == 1)
+<script src="{{ asset('/js/plugins/bootstrap-notify/bootstrap-notify.min.js') }}"></script>
+<script>
+    $(document).ready(function(){
+        Dashmix.helpers('notify', {type: 'success', icon: 'fa fa-check mr-1', message: 'Your original address has been changed!'});
+    })
+</script>
+@endif
 <!-- END Hero -->
 @endsection

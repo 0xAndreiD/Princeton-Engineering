@@ -336,7 +336,7 @@
         <script src="{{ asset('js/plugins/flatpickr/flatpickr.min.js') }}"></script>
 
         <script>jQuery(function(){ Dashmix.helpers('select2'); });</script>
-        <script>jQuery(function(){ Dashmix.helpers(['flatpickr']); });</script>
+        <script>jQuery(function(){ Dashmix.helpers(['flatpickr', 'notify']); });</script>
         <script src="{{ asset('/js/plugins/jquery-validation/jquery.validate.min.js') }}"></script>
         <script src="{{ asset('/js/plugins/jquery-validation/additional-methods.js') }}"></script>
 
