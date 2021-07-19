@@ -1122,28 +1122,31 @@ function updateRailSetting(setting){
 
 // load US state into select component
 var loadStateOptions = function() {
-    var selectedState = 'MA';
-    if (typeof preloaded_data != 'undefined' && typeof preloaded_data['ProjectInfo'] !== 'undefined' && typeof preloaded_data['ProjectInfo']['State'] !== 'undefined') {
-        selectedState = preloaded_data['ProjectInfo']['State'];
-    }
-
-    for (index=0; index<availableUSState.length; index++) 
-    {
-        if (availableUSState[index] == selectedState) 
-        {
-            $('#option-state').append(`<option data-value="${availableUSState[index]}" selected=""> 
-                                    ${availableUSState[index]} 
-                                </option>`);
+    return new Promise((resolve, reject) => {
+        var selectedState = 'MA';
+        if (typeof preloaded_data != 'undefined' && typeof preloaded_data['ProjectInfo'] !== 'undefined' && typeof preloaded_data['ProjectInfo']['State'] !== 'undefined') {
+            selectedState = preloaded_data['ProjectInfo']['State'];
         }
-        else 
-        {
-            $('#option-state').append(`<option data-value="${availableUSState[index]}"> 
-                                    ${availableUSState[index]} 
-                                </option>`);
-        }
-    }
 
-    detectCorrectTownForMA();
+        for (index=0; index<availableUSState.length; index++) 
+        {
+            if (availableUSState[index] == selectedState) 
+            {
+                $('#option-state').append(`<option data-value="${availableUSState[index]}" selected=""> 
+                                        ${availableUSState[index]} 
+                                    </option>`);
+            }
+            else 
+            {
+                $('#option-state').append(`<option data-value="${availableUSState[index]}"> 
+                                        ${availableUSState[index]} 
+                                    </option>`);
+            }
+        }
+
+        detectCorrectTownForMA();
+        resolve(true);
+    });
 }
 
 var updateUserOption = function(userId) {
@@ -1804,73 +1807,6 @@ var updateFloorMemberType = function(condId, selectedVal) {
         $(`#td-truss-floor-segment${index+1}-type-${condId}`).html(selectedVal);
     }
 }
-
-//--------------- Framing Condition Related functions ---------------------
-// var saveCurrentMP = function(condId, currentMP) {
-//     debugger;
-//     var curMPData = [];
-//     for (index=1; index<=11; index++) {
-//         curMPData['a-' + index + '-1'] = getValue(`#inputform-${condId} #a-` + index + '-1');
-//     }
-//     for (index=1; index<=4; index++) {
-//         curMPData['b-'+ index +'-1'] = getValue(`#inputform-${condId} #b-` + index + '-1');
-//     }
-//     for (index=1; index<=3; index++) {
-//         curMPData['c-'+ index +'-1'] = getValue(`#inputform-${condId} #c-` + index + '-1');
-//     }
-//     for (index=1; index<=3; index++) {
-//         curMPData['d-'+ index +'-1'] = getValue(`#inputform-${condId} #d-` + index + '-1');
-//     }
-//     for (index=1; index<=2; index++) {
-//         curMPData['e-'+ index +'-1'] = getValue(`#inputform-${condId} #e-` + index + '-1');
-//     }
-//     for (index=1; index<=1; index++) {
-//         curMPData['f-'+ index +'-1'] = getValue(`#inputform-${condId} #f-` + index + '-1');
-//     }
-//     for (index=1; index<=1; index++) {
-//         curMPData['g-'+ index +'-1'] = getValue(`#inputform-${condId} #g-` + index + '-1');
-//     }
-//     for (index=1; index<=8; index++) {
-//         if (getValue(`#inputform-${condId} #h-` + index + '-1') == 'TRUE') {
-//             curMPData['h-'+ index +'-1'] = 'on';
-//         }
-//         else {
-//             curMPData['h-'+ index +'-1'] = '';
-//         }
-//     }
-//     for (index=1; index<=1; index++) {
-//         curMPData['i-'+ index +'-1'] = getValue(`#inputform-${condId} #i-` + index + '-1');;
-//     }
-// }
-
-// var loadCurrentMP = function(condId, currentMP) {
-//     // load current MP value from global variable
-// }
-
-// var changeCurrentMP = function(condId, oldMP, newMP) {
-//     saveCurrentMP(condId, oldMP);
-//     loadCurrentMP(condId, newMP);
-// }
-
-// var updateTotalMPCount = function(condId, totalFramingConditions) {
-//     debugger;
-
-//     var currentMP = parseInt($(`#inputform-${condId} #a-1-1`).children("option:selected").val());
-//     saveCurrentMP(condId, currentMP);
-
-//     $(`#inputform-${condId} #a-1-1`).find('option').remove();
-//     for (index=1; index<=totalFramingConditions; index++) 
-//     {
-//         if (index == currentMP) {
-//             $(`#inputform-${condId} #a-1-1`).append(`<option data-value="${index}" selected> ${index}</option>`);
-//         }
-//         else {
-//             $(`#inputform-${condId} #a-1-1`).append(`<option data-value="${index}"> ${index}</option>`);
-//         }
-//     }
-
-//     loadCurrentMP(condId, currentMP);
-// }
 
 var stick_grid_size = [45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45];
 var stick_x_axis_starting_point = new Array(11); stick_x_axis_starting_point.fill({ number: 1, suffix: '' });
@@ -2694,14 +2630,18 @@ $(document).ready(function() {
     
     $('#option-module-type').on('change', function() {
         updatePVSubmoduleField($(this).children("option:selected").val());
-        for(let i = 1; i <= 10; i ++)
+        for(let i = 1; i <= 10; i ++){
+            drawStickGraph(i);
             drawTrussGraph(i);
+        }
     });
     $('#option-module-subtype').on('change', function() {
         updatePVSubmoduleField( $('#option-module-type').children("option:selected").val(), 
                                 $(this).children("option:selected").val());
-        for(let i = 1; i <= 10; i ++)
+        for(let i = 1; i <= 10; i ++){
+            drawStickGraph(i);
             drawTrussGraph(i);
+        }
     });
     $('#option-inverter-type').on('change', function() {
         updatePVInvertorSubField($(this).children("option:selected").val());
@@ -2744,16 +2684,17 @@ $(document).ready(function() {
     });
 
     $(".permit").on('change', function(obj) {
-        var classes = $(obj.target).attr('class').split(' ');
-        var className = "." + classes[1];
-        $(className).each(function() {
-            $(this).val($(obj.target).val());
-        });
-        updateUccF100(1, "ucc_f100_cpa.pdf");
-        updateUccF110(2, "ucc_f110_bldg.pdf");
-        updateUccF120(3, "ucc_f120_elec.pdf");
-        updateUcc3(4, "PA ucc-3.pdf");
-        updateUccF140(5, "ucc_f140_fire.pdf");
+        // var classes = $(obj.target).attr('class').split(' ');
+        // var className = "." + classes[1];
+        // $(className).each(function() {
+        //     $(this).val($(obj.target).val());
+        // });
+        // updateUccF100(1, "ucc_f100_cpa.pdf");
+        // updateUccF110(2, "ucc_f110_bldg.pdf");
+        // updateUccF120(3, "ucc_f120_elec.pdf");
+        // updateUcc3(4, "PA ucc-3.pdf");
+        // updateUccF140(5, "ucc_f140_fire.pdf");
+        updatePermitPDF($(this).attr('data-fileid'), $(this).attr('data-filename'));
     });
 
     var i = 0;
@@ -4198,74 +4139,6 @@ var loadPreloadedData = function() {
             loadPermitList("MA");
             resolve(true);
         }
-
-        // $('input:text:enabled').each(function() { 
-        //     if (typeof preloaded_data[$(this).attr('id')] !== 'undefined')
-        //         $(this).val(preloaded_data[$(this).attr('id')]);
-        // });
-        // $('input[type=checkbox]:enabled').each(function() { 
-        //     if (typeof preloaded_data[$(this).attr('id')] !== 'undefined') {
-        //         console.log($(this).attr('id') + " : " + preloaded_data[$(this).attr('id')]);
-        //         if (preloaded_data[$(this).attr('id')] == 'on') {
-        //             $(this).prop('checked', true);
-        //         }
-        //         else {
-        //             $(this).prop('checked', false);
-        //         }         
-        //     }
-        // });
-        // // $("input[name='mail']:enabled".each(function() { 
-        // //     data[$(this).attr('id')] = $(this).val();
-        // // });
-        // $('input[type=date]:enabled').each(function() { 
-        //     if (typeof preloaded_data[$(this).attr('id')] !== 'undefined') {
-        //         $(this).val(preloaded_data[$(this).attr('id')]);
-        //     }
-        // });
-        // $('select:enabled').each(function() { 
-        //     if (typeof preloaded_data[$(this).attr('id')] !== 'undefined') {
-        //         selectedValue = preloaded_data[$(this).attr('id')];
-        //         $(this).find('option').each(function() {
-        //             console.log($(this).val() + " : " + selectedValue);
-        //             if ($(this).val() == selectedValue) {
-        //                 $(this).prop('selected', true);
-        //             }
-        //         })
-
-        //         // $(this).val(preloaded_data[$(this).attr('id')]);
-        //     }
-        // });
-
-        // // $('#option-module-option1').html(preloaded_data['option-module-option1']);
-        // // $('#option-module-option2').html(preloaded_data['option-module-option2']);
-        // // $('#option-inverter-option1').html(preloaded_data['option-inverter-option1']);
-        // // $('#option-inverter-option2').html(preloaded_data['option-inverter-option2']);
-        // // $('#option-stanchion-option1').html(preloaded_data['option-stanchion-option1']);
-        // // $('#option-stanchion-option2').html(preloaded_data['option-stanchion-option2']);
-        // // $('#option-railsupport-option1').html(preloaded_data['option-railsupport-option1']);
-        // // $('#option-railsupport-option2').html(preloaded_data['option-railsupport-option2']);
-
-        // $('#td-unknown-degree1').html(preloaded_data['td-unknown-degree1']);
-        // $('#td-calculated-roof-plane-length').html(preloaded_data['td-calculated-roof-plane-length']);
-        // $('#td-diff-between-measured-and-calculated').html(preloaded_data['td-diff-between-measured-and-calculated']);
-        // $('#td-sum-of-length-entered').html(preloaded_data['td-sum-of-length-entered']);
-        // $('#td-checksum-of-segment1').html(preloaded_data['td-checksum-of-segment1']);
-        // $('#td-total-length-entered').html(preloaded_data['td-total-length-entered']);
-        // $('#td-checksum-of-segment2').html(preloaded_data['td-checksum-of-segment2']);
-
-        // $('#td-diag-1-1').html(preloaded_data['td-diag-1-1']);
-        // $('#td-diag-1-2').html(preloaded_data['td-diag-1-2']);
-        // $('#td-diag-1-3').html(preloaded_data['td-diag-1-3']);
-        // $('#td-diag-1-4').html(preloaded_data['td-diag-1-4']);
-        // $('#td-diag-1-5').html(preloaded_data['td-diag-1-5']);
-        // $('#td-diag-1-6').html(preloaded_data['td-diag-1-6']);
-
-        // $('#td-diag-2-1').html(preloaded_data['td-diag-2-1']);
-        // $('#td-diag-2-2').html(preloaded_data['td-diag-2-2']);
-        // $('#td-diag-2-3').html(preloaded_data['td-diag-2-3']);
-        // $('#td-diag-2-4').html(preloaded_data['td-diag-2-4']);
-        // $('#td-diag-2-5').html(preloaded_data['td-diag-2-5']);
-        // $('#td-diag-2-6').html(preloaded_data['td-diag-2-6']);
     });
 }
     var loadPreloadedPermitData = function() {
@@ -4275,33 +4148,35 @@ var loadPreloadedData = function() {
                 $.ajax({
                     url:"getProjectPermitJson",
                     type:'post',
-                    data:{projectId: projectId},
+                    data:{projectId: projectId, state: $('#option-state').val() },
                     success:function(res){
                         console.log(res);
                         if(res && res.success == true) {
                             for (var i=0; i<res.data.length; i++) {
                                 preloaded_data = JSON.parse(res.data[i].data);
                                 try{ 
-                                    if (res.data[i].filename == "ucc_f100_cpa.pdf") {
-                                        updateUccForm(preloaded_data, res.data[i].filename);
-                                        openPermitTab(1, res.data[i].filename,'Form Const');
-                                    }
-                                    if (res.data[i].filename == "ucc_f110_bldg.pdf") {
-                                        updateUccForm(preloaded_data, res.data[i].filename);
-                                        openPermitTab(2, res.data[i].filename,'Form Bldg');
-                                    }
-                                    if (res.data[i].filename == "ucc_f120_elec.pdf") {
-                                        updateUccForm(preloaded_data, res.data[i].filename);
-                                        openPermitTab(3, res.data[i].filename,'Form Elec');
-                                    }
-                                    if (res.data[i].filename == "PA ucc-3.pdf") {
-                                        updateUccForm(preloaded_data, res.data[i].filename);
-                                        openPermitTab(4, res.data[i].filename,'Form UCC Bldg');
-                                    }
-                                    if (res.data[i].filename == "ucc_f140_fire.pdf") {
-                                        updateUccForm(preloaded_data, res.data[i].filename);
-                                        openPermitTab(5, res.data[i].filename,'Form Fire');
-                                    }
+                                    // if (res.data[i].filename == "ucc_f100_cpa.pdf") {
+                                    //     updateUccForm(preloaded_data, res.data[i].filename);
+                                    //     openPermitTab(1, res.data[i].filename,'Form Const');
+                                    // }
+                                    // if (res.data[i].filename == "ucc_f110_bldg.pdf") {
+                                    //     updateUccForm(preloaded_data, res.data[i].filename);
+                                    //     openPermitTab(2, res.data[i].filename,'Form Bldg');
+                                    // }
+                                    // if (res.data[i].filename == "ucc_f120_elec.pdf") {
+                                    //     updateUccForm(preloaded_data, res.data[i].filename);
+                                    //     openPermitTab(3, res.data[i].filename,'Form Elec');
+                                    // }
+                                    // if (res.data[i].filename == "PA ucc-3.pdf") {
+                                    //     updateUccForm(preloaded_data, res.data[i].filename);
+                                    //     openPermitTab(4, res.data[i].filename,'Form UCC Bldg');
+                                    // }
+                                    // if (res.data[i].filename == "ucc_f140_fire.pdf") {
+                                    //     updateUccForm(preloaded_data, res.data[i].filename);
+                                    //     openPermitTab(5, res.data[i].filename,'Form Fire');
+                                    // }
+                                    if(res.fileinfos[i].id)
+                                        openPermitTab(res.fileinfos[i].id, res.data[i].filename, res.fileinfos[i].tabname, preloaded_data);
                                 }
                                 catch(e){
                                     resolve(false);
@@ -4378,7 +4253,7 @@ var loadPreloadedData = function() {
                     for(let i = 0; i < res.data.length; i ++){
                         let html ='<div class="row mb-3" style="align-items: center;">' + 
                             "<img class='mr-3 pdfIcon' src='public/img/pdf.png'></img>" + 
-                            '<a class="link-fx font-size-base" style="cursor:pointer;" onclick="openPermitTab(\'' + res.data[i].id + '\', \'' + res.data[i].filename + '\', \'' + res.data[i].tabname + '\')">' + res.data[i].description + '</a>' + 
+                            '<a class="link-fx font-size-base" style="cursor:pointer;" onclick="openPermitTab(\'' + res.data[i].id + '\', \'' + res.data[i].filename + '\', \'' + res.data[i].tabname + '\', null, true)">' + res.data[i].description + '</a>' + 
                         '</div>';
                         $("#permitContent").append(html);
                     }
@@ -4425,8 +4300,8 @@ var loadPreloadedData = function() {
     var initializeSpreadSheet = async function() {
         applyUserSetting();
         await loadPreloadedData();
+        await loadStateOptions();
         await loadPreloadedPermitData();
-        loadStateOptions();
         loadEquipmentSection();
         await loadDataCheck();
         await setProjectIdComment();
@@ -4612,51 +4487,51 @@ function editFile(){
     }
 }
 
-function updateUccForm(data, filename){
-    if (filename == "ucc_f100_cpa.pdf") {
-        $('#ucc_f100 input:text:enabled').each(function() { 
-            var property = $(this).attr('id');
-            $(this).val(data[property]);
-        });
-        $('#ucc_f100 select:enabled').each(function() { 
-            var property = $(this).attr('id');
-            $(this).val(data.property);
-        });
-    }
+// function updateUccForm(data, filename){
+//     if (filename == "ucc_f100_cpa.pdf") {
+//         $('#ucc_f100 input:text:enabled').each(function() { 
+//             var property = $(this).attr('id');
+//             $(this).val(data[property]);
+//         });
+//         $('#ucc_f100 select:enabled').each(function() { 
+//             var property = $(this).attr('id');
+//             $(this).val(data.property);
+//         });
+//     }
 
-    if (filename == "ucc_f110_bldg.pdf") {
-        $('#ucc_f110 input:text:enabled').each(function() { 
-            var property = $(this).attr('id');
-            $(this).val(data.property);
-        });
-        $('#ucc_f110 select:enabled').each(function() { 
-            var property = $(this).attr('id');
-            $(this).val(data.property);
-        });
-    }
+//     if (filename == "ucc_f110_bldg.pdf") {
+//         $('#ucc_f110 input:text:enabled').each(function() { 
+//             var property = $(this).attr('id');
+//             $(this).val(data.property);
+//         });
+//         $('#ucc_f110 select:enabled').each(function() { 
+//             var property = $(this).attr('id');
+//             $(this).val(data.property);
+//         });
+//     }
 
-    if (filename == "ucc_f120_elec.pdf") {
-        $('#ucc_f120 input:text:enabled').each(function() { 
-            var property = $(this).attr('id');
-            $(this).val(data.property);
-        });
-        $('#ucc_f120 select:enabled').each(function() { 
-            var property = $(this).attr('id');
-        $(this).val(data.property);
-        });
-    }
+//     if (filename == "ucc_f120_elec.pdf") {
+//         $('#ucc_f120 input:text:enabled').each(function() { 
+//             var property = $(this).attr('id');
+//             $(this).val(data.property);
+//         });
+//         $('#ucc_f120 select:enabled').each(function() { 
+//             var property = $(this).attr('id');
+//         $(this).val(data.property);
+//         });
+//     }
 
-    if (filename == "PA ucc-3.pdf") {
-        $('#pa_ucc3 input:text:enabled').each(function() {
-            var property = $(this).attr('id'); 
-            $(this).val(data.property);
-        });
-        $('#pa_ucc3 select:enabled').each(function() { 
-            var property = $(this).attr('id');
-            $(this).val(data.property);
-        });
-    }
-}
+//     if (filename == "PA ucc-3.pdf") {
+//         $('#pa_ucc3 input:text:enabled').each(function() {
+//             var property = $(this).attr('id'); 
+//             $(this).val(data.property);
+//         });
+//         $('#pa_ucc3 select:enabled').each(function() { 
+//             var property = $(this).attr('id');
+//             $(this).val(data.property);
+//         });
+//     }
+// }
 
 var submitPdfData = async function(filename, data, status) {
     var message = '';
@@ -4678,15 +4553,7 @@ var submitPdfData = async function(filename, data, status) {
         success:function(res){
             // swal.close();
             if (res.status == true) {
-                $("#projectId").val(res.projectId);
-                console.log(res);
-                return;
-                // $("#uploadJobId").val(res.projectId);
-                loadFileList();
-
-                // if(res.directory)
-                //     $("#filetree").jstree('rename_node', '#root', 'Root(' + res.directory + ')');
-
+                addFileNode("OUT", res.info, false);
                 message = 'Succeeded to send pdf data!';
 
                 swal.fire({
@@ -4768,16 +4635,164 @@ function buildPermitFields(id, filename){
                         '</div>'
                     );
 
-                    res.fields.forEach((field, index) => {
-                        $("#permit-info-table-" + id + " tbody").append(
-                            '<tr class="h13">' + 
-                                '<td class="iw400-right-bdr">' + field.label + '</td>' + 
-                                '<td class="w400-yellow-bdr"><input type="text" class="permit txt-block" id="' + field.htmlfield + '" tabindex="' + index + '" value="' + field.defaultvalue + '" data-pdffield="' + field.pdffield + '"></input></td>' + 
-                            '</tr>'
-                        )
-                    });
+                    $.ajax({
+                        url:"getCompanyInfo",
+                        type:'post',
+                        data:{state: $('#option-state').val()},
+                        success: function(response){
+                            if(response.success){
+                                var companyInfo = response.company;
+                                var permitInfo = response.permit;
 
-                    resolve(true);
+                                res.fields.forEach((field, index) => {
+                                    if(field.pdfcheck == 1){
+                                        let defaultvalue = '';
+                                        if(field.dbinfo == 'job_projectname')
+                                            defaultvalue = $("#txt-project-name").val();
+                                        else if(field.dbinfo == 'job_address')
+                                            defaultvalue = $("#txt-street-address").val() + ", " +  $("#txt-city").val() + ", " + $("#txt-zip").val();
+                                        else if(field.dbinfo == 'street_address')
+                                            defaultvalue = $("#txt-street-address").val();
+                                        else if(field.dbinfo == 'site_city')
+                                            defaultvalue = $("#txt-city").val();
+                                        else if(field.dbinfo == 'state_code')
+                                            defaultvalue = $("#option-state").val();
+                                        else if(field.dbinfo == 'zip_code')
+                                            defaultvalue = $("#txt-zip").val();
+                                        else if(field.dbinfo == 'job_telephone')
+                                            defaultvalue = $("#txt-owner-tel").val();
+                                        else if(field.dbinfo == 'job_email')
+                                            defaultvalue = $("#txt-owner-email").val();
+                                        else if(field.dbinfo == 'company_name')
+                                            defaultvalue = companyInfo.company_name;
+                                        else if(field.dbinfo == 'company_telno')
+                                            defaultvalue = companyInfo.company_telno;
+                                        else if(field.dbinfo == 'company_address')
+                                            defaultvalue = companyInfo.company_address;
+                                        else if(field.dbinfo == 'contact_person')
+                                            defaultvalue = permitInfo.contact_person;
+                                        else if(field.dbinfo == 'contact_phone')
+                                            defaultvalue = permitInfo.contact_phone;
+                                        else if(field.dbinfo == 'FAX')
+                                            defaultvalue = permitInfo.FAX;
+                                        else if(field.dbinfo == 'construction_email')
+                                            defaultvalue = permitInfo.construction_email;
+                                        else if(field.dbinfo == 'registration')
+                                            defaultvalue = permitInfo.registration;
+                                        else if(field.dbinfo == 'exp_date')
+                                            defaultvalue = permitInfo.exp_date;
+                                        else if(field.dbinfo == 'EIN')
+                                            defaultvalue = permitInfo.EIN;
+                                        else if(field.dbinfo == 'FAX')
+                                            defaultvalue = permitInfo.FAX;
+                                        else if(field.dbinfo == 'architect_engineer')
+                                            defaultvalue = 'Richard Pantel, P.E.';
+                                        else if(field.dbinfo == 'architect_address')
+                                            defaultvalue = '35091 Paxson Road, Round Hill, VA 20141';
+                                        else if(field.dbinfo == 'architect_email')
+                                            defaultvalue = 'rpantel@princeton-engineering.com';
+                                        else if(field.dbinfo == 'architect_tel')
+                                            defaultvalue = '908-507-5500';
+                                        else if(field.dbinfo == 'architect_fax')
+                                            defaultvalue = '877-455-5641';
+                                            
+                                        else if(field.defaultvalue)
+                                            defaultvalue = field.defaultvalue;
+                                        
+                                        let html = '';
+                                        html += ('<tr class="h13" ' + (field.htmlcheck == 0 ? 'style="display: none;"' : '' ) + '>');
+                                        if(field.type == 0){
+                                            html += ('<td class="iw400-right-bdr">' + field.label + '</td>');
+                                            html += ('<td class="w400-yellow-bdr"><input type="text" class="permit txt-block" id="' + field.htmlfield + '" tabindex="' + index + '" value="' + defaultvalue + '" data-pdffield="' + field.pdffield + '" data-idx="' + field.idx + '" data-fileid="' + id + '" data-filename="' + filename + '"></input></td>');
+                                        } else if(field.type == 1){
+                                            html += ('<td class="iw400-right-bdr">' + field.label + '</td>');
+                                            html += '<td class="w400-green-bdr">';
+                                            let options = field.options ? field.options.split(",") : [];
+                                            var fieldset_el = document.createElement('fieldset');
+                                            options.forEach(function(ostr, i) {
+                                                var label = document.createElement('label');
+                                                var radio = document.createElement('input');
+                                                radio.setAttribute('type', 'radio');
+                                                radio.setAttribute('value', ostr);
+                                                radio.setAttribute('name', field.htmlfield + "_" + field.idx);
+                                                radio.setAttribute('data-idx', i);
+                                                radio.setAttribute('data-fileid', id);
+                                                radio.setAttribute('data-filename', filename);
+                                                radio.setAttribute('id', field.htmlfield + '_' + i);
+                                                radio.setAttribute('data-pdffield', field.pdffield);
+                                                radio.setAttribute('class', 'permit');
+                                                if(defaultvalue == ostr){
+                                                    radio.setAttribute('checked', true);
+                                                }
+                                                label.appendChild(radio);
+                                                label.appendChild(document.createTextNode(ostr));
+                                                fieldset_el.appendChild(label);
+                                            });
+                                            html += fieldset_el.outerHTML;
+                                            html += '</td>';
+                                        } else if(field.type == 2){
+                                            html += ('<td class="iw400-right-bdr">' + field.label + '</td>');
+                                            html += '<td class="w400-green-bdr">';
+                                            var input = document.createElement('input');
+                                            input.setAttribute('data-idx', field.idx);
+                                            input.setAttribute('data-pdffield', field.pdffield);
+                                            input.setAttribute('data-fileid', id);
+                                            input.setAttribute('data-filename', filename);
+                                            input.setAttribute('type', 'checkbox');
+                                            input.setAttribute('class', 'permit');
+                                            input.setAttribute('id', field.htmlfield);
+                                            if(defaultvalue == 'on') input.setAttribute('checked', true);
+                                            html += input.outerHTML;
+                                            html += '</td>';
+                                        } else if(field.type == 3){
+                                            html += ('<td class="iw400-right-bdr">' + field.label + '</td>');
+                                            html += '<td class="w400-green-bdr">';
+                                            let options = field.options ? field.options.split(",") : [];
+                                            var input = document.createElement('select');
+                                            input.setAttribute('data-idx', field.idx);
+                                            input.setAttribute('data-pdffield', field.pdffield);
+                                            input.setAttribute('data-fileid', id);
+                                            input.setAttribute('data-filename', filename);
+                                            input.setAttribute('id', field.htmlfield);
+                                            options.forEach(function(ostr) {
+                                                if(defaultvalue == ostr)
+                                                    input.setAttribute('selected', true);
+                                                var option_el = document.createElement('option');
+                                                option_el.appendChild(document.createTextNode(ostr));
+                                                option_el.setAttribute('value', ostr);
+                                                input.appendChild(option_el);
+                                            });
+                                            input.setAttribute('class', 'permit');
+                                            html += input.outerHTML;
+                                            html += '</td>';
+                                        } else if(field.type == 4){
+                                            html += ('<td class="iw400-right-bdr">' + field.label + '</td>');
+                                            html += '<td class="w400-yellow-bdr">';
+                                            var textarea = document.createElement('textarea');
+                                            textarea.setAttribute('data-idx', field.idx);
+                                            textarea.setAttribute('data-pdffield', field.pdffield);
+                                            textarea.setAttribute('data-fileid', id);
+                                            textarea.setAttribute('data-filename', filename);
+                                            textarea.setAttribute('class', 'permit');
+                                            textarea.setAttribute('id', field.htmlfield);
+                                            textarea.appendChild(document.createTextNode(defaultvalue));
+                                            html += textarea.outerHTML;
+                                            html += '</td>';
+                                        }
+                                        html += '</tr>';
+                                        
+                                        $("#permit-info-table-" + id + " tbody").append(html);
+                                    }
+                                });
+                                resolve(true);
+                            } else
+                                resolve(false);
+                        },
+                        error: function(xhr, status, error) {
+                            resolve(false);
+                        }
+                    });
+                    
                 } else 
                     resolve(false);
             },
@@ -4794,7 +4809,7 @@ function buildPermitFields(id, filename){
     });
 }
 
-async function openPermitTab(id, filename, tabname){
+async function openPermitTab(id, filename, tabname, permitData = null, openTab = false){
     if($("#permitTab_" + id).length)
         $("#permitTab_" + id).remove();
     if($("#tab_permit" + id).length)
@@ -4803,532 +4818,598 @@ async function openPermitTab(id, filename, tabname){
 
     $("#tab_permit").after('<div id="tab_permit_' + id + '" class="rfdTabContent permit" style="position:relative;"></div>');
     
-    //await buildPermitFields(id, filename);
-    if (filename == "ucc_f100_cpa.pdf") {
-        $("#tab_permit_" + id).append($("#ucc_f100"));
-        document.getElementById("ucc_f100").style.display = "block";
-        updateUccF100(1, "ucc_f100_cpa.pdf");
+    swal.fire({ title: "Please wait...", showConfirmButton: false });
+    swal.showLoading();
+    await buildPermitFields(id, filename);
+    $(".permit").on('change', function(obj) {
+        updatePermitPDF($(this).attr('data-fileid'), $(this).attr('data-filename'));
+    });
+
+    if(permitData){
+        $('#permit-info-table-' + id + ' input:enabled').each(function() { 
+            var property = $(this).attr('id');
+            $(this).val(permitData[property]);
+        });
+        $('#permit-info-table-' + id + ' select:enabled').each(function() { 
+            var property = $(this).attr('id');
+            $(this).val(permitData[property]);
+        });
+        $('#permit-info-table-' + id + ' textarea:enabled').each(function() { 
+            var property = $(this).attr('id');
+            $(this).val(permitData[property]);
+        });
     }
 
-    if (filename == "ucc_f110_bldg.pdf") {
-        $("#tab_permit_" + id).append($("#ucc_f110"));
-        document.getElementById("ucc_f110").style.display = "block";
-        updateUccF110(2, "ucc_f110_bldg.pdf");
-    }
+    updatePermitPDF(id, filename);
+    // if (filename == "ucc_f100_cpa.pdf") {
+    //     $("#tab_permit_" + id).append($("#ucc_f100"));
+    //     document.getElementById("ucc_f100").style.display = "block";
+    //     updateUccF100(1, "ucc_f100_cpa.pdf");
+    // }
 
-    if (filename == "ucc_f120_elec.pdf") {
-        $("#tab_permit_" + id).append($("#ucc_f120"));
-        document.getElementById("ucc_f120").style.display = "block";
-        updateUccF120(3, "ucc_f120_elec.pdf");
-    }
+    // if (filename == "ucc_f110_bldg.pdf") {
+    //     $("#tab_permit_" + id).append($("#ucc_f110"));
+    //     document.getElementById("ucc_f110").style.display = "block";
+    //     updateUccF110(2, "ucc_f110_bldg.pdf");
+    // }
 
-    if (filename == "PA ucc-3.pdf") {
-        $("#tab_permit_" + id).append($("#pa_ucc3"));
-        document.getElementById("pa_ucc3").style.display = "block";
-        updateUcc3(4, "PA ucc-3.pdf");
-    }
+    // if (filename == "ucc_f120_elec.pdf") {
+    //     $("#tab_permit_" + id).append($("#ucc_f120"));
+    //     document.getElementById("ucc_f120").style.display = "block";
+    //     updateUccF120(3, "ucc_f120_elec.pdf");
+    // }
 
-    if (filename == "ucc_f140_fire.pdf") {
-        $("#tab_permit_" + id).append($("#ucc_f140"));
-        document.getElementById("ucc_f140").style.display = "block";
-        updateUccF140(5, "ucc_f140_fire.pdf");
-    }
+    // if (filename == "PA ucc-3.pdf") {
+    //     $("#tab_permit_" + id).append($("#pa_ucc3"));
+    //     document.getElementById("pa_ucc3").style.display = "block";
+    //     updateUcc3(4, "PA ucc-3.pdf");
+    // }
+
+    // if (filename == "ucc_f140_fire.pdf") {
+    //     $("#tab_permit_" + id).append($("#ucc_f140"));
+    //     document.getElementById("ucc_f140").style.display = "block";
+    //     updateUccF140(5, "ucc_f140_fire.pdf");
+    // }
     
-    // var i, tabcontent, tablinks;
-    // tabcontent = document.getElementsByClassName("rfdTabContent");
-    // for (i = 0; i < tabcontent.length; i++) {
-    //     tabcontent[i].style.display = "none";
-    // }
-    // tablinks = document.getElementsByClassName("tablinks");
-    // for (i = 0; i < tablinks.length; i++) {
-    //     tablinks[i].className = tablinks[i].className.replace(" active", "");
-    // }
-    // document.getElementById("tab_permit_" + id).style.display = "block";
-    // document.getElementById("permitTab_" + id).className += " active";
+    if(openTab){
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("rfdTabContent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById("tab_permit_" + id).style.display = "block";
+        document.getElementById("permitTab_" + id).className += " active";
+    }
+    swal.close();
 }
 
-function updateUccF100(id, filename) {
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
+function updatePermitPDF(id, filename){
+    var pdfsrc = $("#assetPdfLink").val() + '/' + filename;
+    var script = $("<script>");
 
-    $.ajax({
-        url:"getCompanyInfo",
-        type:'post',
-        data:{state: $('#option-state').val()},
-        success: function(res){
-            if(res.success){
-                var companyInfo = res.company;
-                var permitInfo = res.permit;
-                var pdfsrc = $("#assetPdfLink").val() + '/' + filename;
-                var script = $("<script>");
-
-                fetch(pdfsrc)
-                .then(function(response) {
-                    return response.arrayBuffer()
-                })
-                .then(function(data) {
-                    var buildingCost = 0;
-                    var elecCost = 0;
-                    var wetlands = ['', ''], ownerShipFee = ['', ''];
-
-                    if ($("#txt-building-cost").val()!="") buildingCost = parseFloat($("#txt-building-cost").val());
-                    if ($("#txt-elec-cost").val()!="") elecCost = parseFloat($("#txt-elec-cost").val());
-
-                    if ($("#owner-ship-fee").val() == 1) ownerShipFee[0] = 'X';
-                    else ownerShipFee[1] = 'X';
-
-                    if ($("#character-wetlands").val() == 1) wetlands[0] = 'X';
-                    else wetlands[1] = 'X';
-
-                    var totalCost = parseFloat(buildingCost + elecCost);
-
-                    var fields = {
-                        'Block': [$("#txt-block").val()],
-                        'Lot': [$("#txt-lot").val()],
-                        'Qualifier':[$("#txt-qualifier").val()],
-                        'Permit No':[$("#txt-permit-no").val()],
-                        'Address Site': [$("#txt-street-address").val() + ", " +  $("#txt-city").val() + ", " + $("#txt-zip").val()],
-                        'Proposed Work Site': [$("#txt-street-address").val() + ", " +  $("#txt-city").val() + ", " + $("#txt-zip").val()],
-
-                        'Owner in Fee': [$("#txt-project-name").val()],
-                        'Owner Address': [$("#txt-street-address").val() + ", " +  $("#txt-city").val() + ", " + $("#txt-zip").val()],
-                        'Owner Telephone':[$("#txt-owner-tel").val()],
-                        'Owner eMail':[$("#txt-owner-email").val()],
-
-                        'Public':[ownerShipFee[0]],
-                        'Private':[ownerShipFee[1]],
-
-                        'Princ Contractor': [companyInfo.company_name],
-                        'Contractor Phone': [companyInfo.company_telno],
-                        'Contractor Address 1': [companyInfo.company_address],
-
-                        'Number Stories':[$("#txt-character-stories").val()],
-                        'Height':[$("#txt-character-height").val()],
-                        'Area Lgst Fl':[$("#txt-character-area").val()],
-                        'New Bldg Area':[$("#txt-character-newarea").val()],
-                        'Volume':[$("#txt-character-volume").val()],
-                        'Max Live Load':[$("#txt-character-maxlive").val()],
-                        'Max Occupancy':[$("#txt-character-maxoccupancy").val()],
-                        'Indus Bldg -IBC':[$("#txt-character-approved").val()],
-                        'Indus Bldg -HUD':[$("#txt-character-hud").val()],
-                        'Land Area Disturbed':[$("#txt-character-disturbed").val()],
-                        'Flood Haz Zone':[$("#txt-character-flood").val()],
-                        'Base Flood Elev':[$("#txt-character-base").val()],
-                        'Wetlands -Yes':[wetlands[0]],
-                        'Wetlands -No':[wetlands[1]],
-                        
-                        'Architect-Engineer': ['Richard Pantel, P.E.'],
-                        'Architect Address': ['35091 Paxson Road, Round Hill, VA 20141'],
-                        'Architect eMail': ['rpantel@princeton-engineering.com'],
-                        'Architect Tel': ['908-507-5500'],
-                        'Architect Fax': ['877-455-5641'],
-
-                        'Alteration': [1],
-                        'Check Box16': [1],
-                        'Check Box29': [1],
-                        'Bldg Est Cost':[$("#txt-building-cost").val()],
-                        'Elec Est Cost':[$("#txt-elec-cost").val()],
-                        'Total Est Cost':["$" + totalCost],
-
-                        'Res Use Descrip':[$("#txt-state-specific").val()],
-                        'Res Use Proposed':[$("#txt-use-group").val()],
-
-                        'Agent Name': [companyInfo.company_name],
-                        'Agent Address': [companyInfo.company_address],
-                        'Agent Tel': [companyInfo.company_telno],
-                    };
-
-                    if(permitInfo){
-                        fields['Responsible Person'] = [permitInfo.contact_person],
-                        fields['Resp Pers Tel'] = [permitInfo.contact_phone],
-                        fields['Resp Pers Fax'] = [permitInfo.FAX],
-
-                        fields['Contractor eMail'] = [permitInfo.construction_email];
-                        fields['Contractor License'] = [permitInfo.registration];
-                        fields['License Expire'] = [permitInfo.exp_date];
-                        fields['FEID'] = [permitInfo.EIN];
-                        fields['Contractor Fax'] = [permitInfo.FAX];
-                    }
-                    var out_buf = pdfform().transform(data, fields);
-
-                    $("#permitViewer_" + id).attr("src", URL.createObjectURL(new Blob([out_buf], {
-                        type: "application/pdf"
-                    })) + "#toolbar=0");
-                }, function(err) {
-                    console.log(err);
-                });
+    fetch(pdfsrc)
+    .then(function(response) {
+        return response.arrayBuffer()
+    })
+    .then(function(buf) {
+        var list_form = document.querySelector('#permit-info-table-' + id);
+        var fields = {};
+        list_form.querySelectorAll('input,select').forEach(function(input) {
+            if ((input.getAttribute('type') === 'radio') && !input.checked) {
+                return;
             }
+
+            var key = input.getAttribute('data-pdffield');
+            if (!fields[key]) {
+                fields[key] = [];
+            }
+            var index = parseInt(input.getAttribute('data-idx'), 10);
+            var value = (input.getAttribute('type') === 'checkbox') ? input.checked : input.value;
+            
+            fields[key][index] = value;
+        });
+
+        var filled_pdf; // Uint8Array
+        try {
+            filled_pdf = pdfform().transform(buf, fields);
+        } catch (e) {
+            return on_error(e);
         }
+
+        $("#permitViewer_" + id).attr("src", URL.createObjectURL(new Blob([filled_pdf], {
+            type: "application/pdf"
+        })) + "#toolbar=0");
+    }, function(err) {
+        console.log(err);
     });
 }
 
-function updateUccF110(id, filename) {
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
+// function updateUccF100(id, filename) {
+//     $.ajaxSetup({
+//         headers: {
+//             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+//         }
+//     });
 
-    $.ajax({
-        url:"getCompanyInfo",
-        type:'post',
-        data:{state: $('#option-state').val()},
-        success: function(res){
-            if(res.success){
-                var companyInfo = res.company;
-                var permitInfo = res.permit;
-                var pdfsrc = $("#assetPdfLink").val() + '/' + filename;
-                var script = $("<script>");
+//     $.ajax({
+//         url:"getCompanyInfo",
+//         type:'post',
+//         data:{state: $('#option-state').val()},
+//         success: function(res){
+//             if(res.success){
+//                 var companyInfo = res.company;
+//                 var permitInfo = res.permit;
+//                 var pdfsrc = $("#assetPdfLink").val() + '/' + filename;
+//                 var script = $("<script>");
 
-                fetch(pdfsrc)
-                .then(function(response) {
-                    return response.arrayBuffer()
-                })
-                .then(function(data) {
-                    var buildingCost = 0;
-                    var elecCost = 0;
+//                 fetch(pdfsrc)
+//                 .then(function(response) {
+//                     return response.arrayBuffer()
+//                 })
+//                 .then(function(data) {
+//                     var buildingCost = 0;
+//                     var elecCost = 0;
+//                     var wetlands = ['', ''], ownerShipFee = ['', ''];
+
+//                     if ($("#txt-building-cost").val()!="") buildingCost = parseFloat($("#txt-building-cost").val());
+//                     if ($("#txt-elec-cost").val()!="") elecCost = parseFloat($("#txt-elec-cost").val());
+
+//                     if ($("#owner-ship-fee").val() == 1) ownerShipFee[0] = 'X';
+//                     else ownerShipFee[1] = 'X';
+
+//                     if ($("#character-wetlands").val() == 1) wetlands[0] = 'X';
+//                     else wetlands[1] = 'X';
+
+//                     var totalCost = parseFloat(buildingCost + elecCost);
+
+//                     var fields = {
+//                         'Block': [$("#txt-block").val()],
+//                         'Lot': [$("#txt-lot").val()],
+//                         'Qualifier':[$("#txt-qualifier").val()],
+//                         'Permit No':[$("#txt-permit-no").val()],
+//                         'Address Site': [$("#txt-street-address").val() + ", " +  $("#txt-city").val() + ", " + $("#txt-zip").val()],
+//                         'Proposed Work Site': [$("#txt-street-address").val() + ", " +  $("#txt-city").val() + ", " + $("#txt-zip").val()],
+
+//                         'Owner in Fee': [$("#txt-project-name").val()],
+//                         'Owner Address': [$("#txt-street-address").val() + ", " +  $("#txt-city").val() + ", " + $("#txt-zip").val()],
+//                         'Owner Telephone':[$("#txt-owner-tel").val()],
+//                         'Owner eMail':[$("#txt-owner-email").val()],
+
+//                         'Public':[ownerShipFee[0]],
+//                         'Private':[ownerShipFee[1]],
+
+//                         'Princ Contractor': [companyInfo.company_name],
+//                         'Contractor Phone': [companyInfo.company_telno],
+//                         'Contractor Address 1': [companyInfo.company_address],
+
+//                         'Number Stories':[$("#txt-character-stories").val()],
+//                         'Height':[$("#txt-character-height").val()],
+//                         'Area Lgst Fl':[$("#txt-character-area").val()],
+//                         'New Bldg Area':[$("#txt-character-newarea").val()],
+//                         'Volume':[$("#txt-character-volume").val()],
+//                         'Max Live Load':[$("#txt-character-maxlive").val()],
+//                         'Max Occupancy':[$("#txt-character-maxoccupancy").val()],
+//                         'Indus Bldg -IBC':[$("#txt-character-approved").val()],
+//                         'Indus Bldg -HUD':[$("#txt-character-hud").val()],
+//                         'Land Area Disturbed':[$("#txt-character-disturbed").val()],
+//                         'Flood Haz Zone':[$("#txt-character-flood").val()],
+//                         'Base Flood Elev':[$("#txt-character-base").val()],
+//                         'Wetlands -Yes':[wetlands[0]],
+//                         'Wetlands -No':[wetlands[1]],
+                        
+//                         'Architect-Engineer': ['Richard Pantel, P.E.'],
+//                         'Architect Address': ['35091 Paxson Road, Round Hill, VA 20141'],
+//                         'Architect eMail': ['rpantel@princeton-engineering.com'],
+//                         'Architect Tel': ['908-507-5500'],
+//                         'Architect Fax': ['877-455-5641'],
+
+//                         'Alteration': [1],
+//                         'Check Box16': [1],
+//                         'Check Box29': [1],
+//                         'Bldg Est Cost':[$("#txt-building-cost").val()],
+//                         'Elec Est Cost':[$("#txt-elec-cost").val()],
+//                         'Total Est Cost':["$" + totalCost],
+
+//                         'Res Use Descrip':[$("#txt-state-specific").val()],
+//                         'Res Use Proposed':[$("#txt-use-group").val()],
+
+//                         'Agent Name': [companyInfo.company_name],
+//                         'Agent Address': [companyInfo.company_address],
+//                         'Agent Tel': [companyInfo.company_telno],
+//                     };
+
+//                     if(permitInfo){
+//                         fields['Responsible Person'] = [permitInfo.contact_person],
+//                         fields['Resp Pers Tel'] = [permitInfo.contact_phone],
+//                         fields['Resp Pers Fax'] = [permitInfo.FAX],
+
+//                         fields['Contractor eMail'] = [permitInfo.construction_email];
+//                         fields['Contractor License'] = [permitInfo.registration];
+//                         fields['License Expire'] = [permitInfo.exp_date];
+//                         fields['FEID'] = [permitInfo.EIN];
+//                         fields['Contractor Fax'] = [permitInfo.FAX];
+//                     }
+//                     var out_buf = pdfform().transform(data, fields);
+
+//                     $("#permitViewer_" + id).attr("src", URL.createObjectURL(new Blob([out_buf], {
+//                         type: "application/pdf"
+//                     })) + "#toolbar=0");
+//                 }, function(err) {
+//                     console.log(err);
+//                 });
+//             }
+//         }
+//     });
+// }
+
+// function updateUccF110(id, filename) {
+//     $.ajaxSetup({
+//         headers: {
+//             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+//         }
+//     });
+
+//     $.ajax({
+//         url:"getCompanyInfo",
+//         type:'post',
+//         data:{state: $('#option-state').val()},
+//         success: function(res){
+//             if(res.success){
+//                 var companyInfo = res.company;
+//                 var permitInfo = res.permit;
+//                 var pdfsrc = $("#assetPdfLink").val() + '/' + filename;
+//                 var script = $("<script>");
+
+//                 fetch(pdfsrc)
+//                 .then(function(response) {
+//                     return response.arrayBuffer()
+//                 })
+//                 .then(function(data) {
+//                     var buildingCost = 0;
+//                     var elecCost = 0;
                     
-                    if ($("#txt-building-cost").val()!="") buildingCost = parseFloat($("#txt-building-cost").val());
-                    if ($("#txt-rehabil-cost").val()!="") elecCost = parseFloat($("#txt-rehabil-cost").val());
+//                     if ($("#txt-building-cost").val()!="") buildingCost = parseFloat($("#txt-building-cost").val());
+//                     if ($("#txt-rehabil-cost").val()!="") elecCost = parseFloat($("#txt-rehabil-cost").val());
 
-                    var totalCost = parseFloat(buildingCost + elecCost);
+//                     var totalCost = parseFloat(buildingCost + elecCost);
 
-                    var fields = {
-                        'Block': [$("#txt-block").val()],
-                        'Lot': [$("#txt-lot").val()],
-                        'Qualifier':[$("#txt-qualifier").val()],
-                        'Work Site1': [$("#txt-street-address").val() + ", " +  $("#txt-city").val() + ", " + $("#txt-zip").val()],
-                        'Address Site': [$("#txt-street-address").val() + ", " +  $("#txt-city").val() + ", " + $("#txt-zip").val()],
-                        'Proposed Work Site': [$("#txt-street-address").val() + ", " +  $("#txt-city").val() + ", " + $("#txt-zip").val()],
+//                     var fields = {
+//                         'Block': [$("#txt-block").val()],
+//                         'Lot': [$("#txt-lot").val()],
+//                         'Qualifier':[$("#txt-qualifier").val()],
+//                         'Work Site1': [$("#txt-street-address").val() + ", " +  $("#txt-city").val() + ", " + $("#txt-zip").val()],
+//                         'Address Site': [$("#txt-street-address").val() + ", " +  $("#txt-city").val() + ", " + $("#txt-zip").val()],
+//                         'Proposed Work Site': [$("#txt-street-address").val() + ", " +  $("#txt-city").val() + ", " + $("#txt-zip").val()],
 
-                        'Owner in Fee': [$("#txt-project-name").val()],
-                        'Owner Address': [$("#txt-street-address").val() + ", " +  $("#txt-city").val() + ", " + $("#txt-zip").val()],
-                        'Owner Tel':[$("#txt-owner-tel").val()],
-                        'Owner eMail':[$("#txt-owner-email").val()],
+//                         'Owner in Fee': [$("#txt-project-name").val()],
+//                         'Owner Address': [$("#txt-street-address").val() + ", " +  $("#txt-city").val() + ", " + $("#txt-zip").val()],
+//                         'Owner Tel':[$("#txt-owner-tel").val()],
+//                         'Owner eMail':[$("#txt-owner-email").val()],
                         
-                        'Contractor Name': [companyInfo.company_name],
-                        'Contractor Tel': [companyInfo.company_telno],
-                        'Contractor Address': [companyInfo.company_address],
+//                         'Contractor Name': [companyInfo.company_name],
+//                         'Contractor Tel': [companyInfo.company_telno],
+//                         'Contractor Address': [companyInfo.company_address],
 
-                        'Use Grp -Pres':[$("#txt-use-group-present").val()],
-                        'Use Grp -Prop':[$("#txt-use-group-proposed").val()],
-                        'No Stories':[$("#txt-character-stories").val()],
-                        'Height':[$("#txt-character-height").val()],
-                        'Area -Lgst Fl':[$("#txt-character-area").val()],
-                        'Area -New Bldg':[$("#txt-character-newarea").val()],
-                        'Volume':[$("#txt-character-volume").val()],
-                        'Max Live Load':[$("#txt-character-maxlive").val()],
-                        'Max Occupancy':[$("#txt-character-maxoccupancy").val()],
+//                         'Use Grp -Pres':[$("#txt-use-group-present").val()],
+//                         'Use Grp -Prop':[$("#txt-use-group-proposed").val()],
+//                         'No Stories':[$("#txt-character-stories").val()],
+//                         'Height':[$("#txt-character-height").val()],
+//                         'Area -Lgst Fl':[$("#txt-character-area").val()],
+//                         'Area -New Bldg':[$("#txt-character-newarea").val()],
+//                         'Volume':[$("#txt-character-volume").val()],
+//                         'Max Live Load':[$("#txt-character-maxlive").val()],
+//                         'Max Occupancy':[$("#txt-character-maxoccupancy").val()],
 
-                        'Constr Class -Pres':[$("#txt-const-group-present").val()],
-                        'Constr Class -Prop':[$("#txt-const-group-proposed").val()],
-                        'Indus Bldg -State': [$("#txt-character-approved").val()],
-                        'Indus Bld -HUD':[$("#txt-character-hud").val()],
-                        'Est Val -New Bldg':[$("#txt-building-cost").val()],
-                        'Est Val -Rehab':[$("#txt-rehabil-cost").val()],
-                        'Est Val Total':["$" + totalCost],
-                        'Contractor Print Name':[$("#txt-print-name").val()],
-                        'Description of Work' : [$("#txt-site-data").val()],
+//                         'Constr Class -Pres':[$("#txt-const-group-present").val()],
+//                         'Constr Class -Prop':[$("#txt-const-group-proposed").val()],
+//                         'Indus Bldg -State': [$("#txt-character-approved").val()],
+//                         'Indus Bld -HUD':[$("#txt-character-hud").val()],
+//                         'Est Val -New Bldg':[$("#txt-building-cost").val()],
+//                         'Est Val -Rehab':[$("#txt-rehabil-cost").val()],
+//                         'Est Val Total':["$" + totalCost],
+//                         'Contractor Print Name':[$("#txt-print-name").val()],
+//                         'Description of Work' : [$("#txt-site-data").val()],
 
-                        'Other': [1],
-                        'Other Descrip': ['Solar System'],
-                    };
+//                         'Other': [1],
+//                         'Other Descrip': ['Solar System'],
+//                     };
 
-                    if(permitInfo){
-                        fields['Responsible Person'] = [permitInfo.contact_person],
-                        fields['Resp Pers Tel'] = [permitInfo.contact_phone],
-                        fields['Resp Pers Fax'] = [permitInfo.FAX],
+//                     if(permitInfo){
+//                         fields['Responsible Person'] = [permitInfo.contact_person],
+//                         fields['Resp Pers Tel'] = [permitInfo.contact_phone],
+//                         fields['Resp Pers Fax'] = [permitInfo.FAX],
 
-                        fields['Contractor eMail'] = [permitInfo.construction_email];
-                        fields['License or Bldr Reg'] = [permitInfo.registration];
-                        fields['Expiration'] = [permitInfo.exp_date];
-                        fields['FEID'] = [permitInfo.EIN];
-                        fields['Contractor Fax'] = [permitInfo.FAX];
-                    }
-                    var out_buf = pdfform().transform(data, fields);
+//                         fields['Contractor eMail'] = [permitInfo.construction_email];
+//                         fields['License or Bldr Reg'] = [permitInfo.registration];
+//                         fields['Expiration'] = [permitInfo.exp_date];
+//                         fields['FEID'] = [permitInfo.EIN];
+//                         fields['Contractor Fax'] = [permitInfo.FAX];
+//                     }
+//                     var out_buf = pdfform().transform(data, fields);
 
-                    $("#permitViewer_" + id).attr("src", URL.createObjectURL(new Blob([out_buf], {
-                        type: "application/pdf"
-                    })) + "#toolbar=0");
-                }, function(err) {
-                    console.log(err);
-                });
-            }
-        }
-    });
-}
+//                     $("#permitViewer_" + id).attr("src", URL.createObjectURL(new Blob([out_buf], {
+//                         type: "application/pdf"
+//                     })) + "#toolbar=0");
+//                 }, function(err) {
+//                     console.log(err);
+//                 });
+//             }
+//         }
+//     });
+// }
 
-function updateUccF120(id, filename) {
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
+// function updateUccF120(id, filename) {
+//     $.ajaxSetup({
+//         headers: {
+//             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+//         }
+//     });
 
-    $.ajax({
-        url:"getCompanyInfo",
-        type:'post',
-        data:{state: $('#option-state').val()},
-        success: function(res){
-            if(res.success){
-                var companyInfo = res.company;
-                var permitInfo = res.permit;
-                var pdfsrc = $("#assetPdfLink").val() + '/' + filename;
-                var script = $("<script>");
+//     $.ajax({
+//         url:"getCompanyInfo",
+//         type:'post',
+//         data:{state: $('#option-state').val()},
+//         success: function(res){
+//             if(res.success){
+//                 var companyInfo = res.company;
+//                 var permitInfo = res.permit;
+//                 var pdfsrc = $("#assetPdfLink").val() + '/' + filename;
+//                 var script = $("<script>");
 
-                fetch(pdfsrc)
-                .then(function(response) {
-                    return response.arrayBuffer()
-                })
-                .then(function(data) {
-                    var buildingCost = 0;
-                    var elecCost = 0;
+//                 fetch(pdfsrc)
+//                 .then(function(response) {
+//                     return response.arrayBuffer()
+//                 })
+//                 .then(function(data) {
+//                     var buildingCost = 0;
+//                     var elecCost = 0;
                     
-                    if ($("#txt-bldg-cost").val()!="") buildingCost = parseFloat($("#txt-bldg-cost").val());
-                    if ($("#txt-rehabil-cost").val()!="") elecCost = parseFloat($("#txt-rehabil-cost").val());
+//                     if ($("#txt-bldg-cost").val()!="") buildingCost = parseFloat($("#txt-bldg-cost").val());
+//                     if ($("#txt-rehabil-cost").val()!="") elecCost = parseFloat($("#txt-rehabil-cost").val());
 
-                    var totalCost = parseFloat(buildingCost + elecCost);
+//                     var totalCost = parseFloat(buildingCost + elecCost);
 
-                    var fields = {
-                        'Block': [$("#txt-block").val()],
-                        'Lot': [$("#txt-lot").val()],
-                        'Qualifier':[$("#txt-qualifier").val()],
-                        'Address Site': [$("#txt-street-address").val() + ", " +  $("#txt-city").val() + ", " + $("#txt-zip").val()],
-                        'Owner Address 2': [$("#txt-street-address").val() + ", " +  $("#txt-city").val() + ", " + $("#txt-zip").val()],
+//                     var fields = {
+//                         'Block': [$("#txt-block").val()],
+//                         'Lot': [$("#txt-lot").val()],
+//                         'Qualifier':[$("#txt-qualifier").val()],
+//                         'Address Site': [$("#txt-street-address").val() + ", " +  $("#txt-city").val() + ", " + $("#txt-zip").val()],
+//                         'Owner Address 2': [$("#txt-street-address").val() + ", " +  $("#txt-city").val() + ", " + $("#txt-zip").val()],
 
-                        'Owner': [$("#txt-project-name").val()],
-                        'Owner Address': [$("#txt-street-address").val() + ", " +  $("#txt-city").val() + ", " + $("#txt-zip").val()],
-                        'Owner Tel':[$("#txt-owner-tel").val()],
-                        'Owner eMail':[$("#txt-owner-email").val()],
+//                         'Owner': [$("#txt-project-name").val()],
+//                         'Owner Address': [$("#txt-street-address").val() + ", " +  $("#txt-city").val() + ", " + $("#txt-zip").val()],
+//                         'Owner Tel':[$("#txt-owner-tel").val()],
+//                         'Owner eMail':[$("#txt-owner-email").val()],
 
-                        'Contractor': [companyInfo.company_name],
+//                         'Contractor': [companyInfo.company_name],
 
-                        'Contractor Tel': [companyInfo.company_telno],
-                        'Contractor Address 1': [companyInfo.company_address],
+//                         'Contractor Tel': [companyInfo.company_telno],
+//                         'Contractor Address 1': [companyInfo.company_address],
 
-                        'Res Use Present':[$("#txt-use-group-present").val()],
-                        'Res Use Proposed':[$("#txt-use-group-proposed").val()],
-                        'Occupied':[$("#txt-building-occupied").val()],
-                        'utilityco':[$("#txt-utility-co").val()],
-                        "Est'd Cost of Wk":[$("#txt-elec-cost").val()],
-                        'Total': [0],
+//                         'Res Use Present':[$("#txt-use-group-present").val()],
+//                         'Res Use Proposed':[$("#txt-use-group-proposed").val()],
+//                         'Occupied':[$("#txt-building-occupied").val()],
+//                         'utilityco':[$("#txt-utility-co").val()],
+//                         "Est'd Cost of Wk":[$("#txt-elec-cost").val()],
+//                         'Total': [0],
 
-                        'Qty -Trans-Gen':[$("#txt-kw-qty").val()],
-                        'Sz -Trans-Gen':[$("#txt-kw-size").val()],
-                        'Qty -Service':[$("#txt-amp-qty").val()],
-                        'Sz -Service':[$("#txt-amp-size").val()],
-                        'Qty -SubPanels':[$("#txt-subpanels-qty").val()],
-                        'Sz -Subpanels':[$("#txt-subpanels-size").val()],
-                        'Qty -Motor Cntrl Cntr':[$("#txt-motor-qty").val()],
-                        'Sz -Motor Cntrl Cntr':[$("#txt-motor-size").val()],
-                        'Qty -Elec Sign':[$("#txt-light-qty").val()],
-                        'Sz -Elec Sign':[$("#txt-light-size").val()],
+//                         'Qty -Trans-Gen':[$("#txt-kw-qty").val()],
+//                         'Sz -Trans-Gen':[$("#txt-kw-size").val()],
+//                         'Qty -Service':[$("#txt-amp-qty").val()],
+//                         'Sz -Service':[$("#txt-amp-size").val()],
+//                         'Qty -SubPanels':[$("#txt-subpanels-qty").val()],
+//                         'Sz -Subpanels':[$("#txt-subpanels-size").val()],
+//                         'Qty -Motor Cntrl Cntr':[$("#txt-motor-qty").val()],
+//                         'Sz -Motor Cntrl Cntr':[$("#txt-motor-size").val()],
+//                         'Qty -Elec Sign':[$("#txt-light-qty").val()],
+//                         'Sz -Elec Sign':[$("#txt-light-size").val()],
 
-                        'Qty -Other3':[$("#txt-solar-panel-qty").val()],
-                        'Sz -Other3':[$("#txt-solar-panel-size").val()],
-                        'Other3 Descrip': ["Solar Panels"],
-                    };
+//                         'Qty -Other3':[$("#txt-solar-panel-qty").val()],
+//                         'Sz -Other3':[$("#txt-solar-panel-size").val()],
+//                         'Other3 Descrip': ["Solar Panels"],
+//                     };
 
-                    if(permitInfo){
-                        fields['Responsible Person'] = [permitInfo.contact_person],
-                        fields['Resp Pers Tel'] = [permitInfo.contact_phone],
-                        fields['Resp Pers Fax'] = [permitInfo.FAX],
-                        fields['Print Name'] = [permitInfo.contact_person],
-                        fields['Contractor eMail'] = [permitInfo.construction_email];
-                        fields['Contractor License'] = [permitInfo.registration];
-                        fields['License Expire'] = [permitInfo.exp_date];
-                        fields['FEID'] = [permitInfo.EIN];
-                        fields['Contractor Fax'] = [permitInfo.FAX];
-                    }
-                    var out_buf = pdfform().transform(data, fields);
+//                     if(permitInfo){
+//                         fields['Responsible Person'] = [permitInfo.contact_person],
+//                         fields['Resp Pers Tel'] = [permitInfo.contact_phone],
+//                         fields['Resp Pers Fax'] = [permitInfo.FAX],
+//                         fields['Print Name'] = [permitInfo.contact_person],
+//                         fields['Contractor eMail'] = [permitInfo.construction_email];
+//                         fields['Contractor License'] = [permitInfo.registration];
+//                         fields['License Expire'] = [permitInfo.exp_date];
+//                         fields['FEID'] = [permitInfo.EIN];
+//                         fields['Contractor Fax'] = [permitInfo.FAX];
+//                     }
+//                     var out_buf = pdfform().transform(data, fields);
 
-                    $("#permitViewer_" + id).attr("src", URL.createObjectURL(new Blob([out_buf], {
-                        type: "application/pdf"
-                    })) + "#toolbar=0");
-                }, function(err) {
-                    console.log(err);
-                });
-            }
-        }
-    });
-}
+//                     $("#permitViewer_" + id).attr("src", URL.createObjectURL(new Blob([out_buf], {
+//                         type: "application/pdf"
+//                     })) + "#toolbar=0");
+//                 }, function(err) {
+//                     console.log(err);
+//                 });
+//             }
+//         }
+//     });
+// }
 
-function updateUcc3(id, filename) {
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
+// function updateUcc3(id, filename) {
+//     $.ajaxSetup({
+//         headers: {
+//             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+//         }
+//     });
 
-    $.ajax({
-        url:"getCompanyInfo",
-        type:'post',
-        data:{state: $('#option-state').val()},
-        success: function(res){
-            if(res.success){
-                var companyInfo = res.company;
-                var permitInfo = res.permit;
-                var pdfsrc = $("#assetPdfLink").val() + '/' + filename;
-                var script = $("<script>");
+//     $.ajax({
+//         url:"getCompanyInfo",
+//         type:'post',
+//         data:{state: $('#option-state').val()},
+//         success: function(res){
+//             if(res.success){
+//                 var companyInfo = res.company;
+//                 var permitInfo = res.permit;
+//                 var pdfsrc = $("#assetPdfLink").val() + '/' + filename;
+//                 var script = $("<script>");
 
-                fetch(pdfsrc)
-                .then(function(response) {
-                    return response.arrayBuffer()
-                })
-                .then(function(data) {
-                    var fee1 = 0, fee2 = 0, fee3=0, fee4 = 0, totalFee = 0;
-                    if ($("#txt-fee-1").val()!="") fee1 = parseFloat($("#txt-fee-1").val());
-                    if ($("#txt-fee-2").val()!="") fee2 = parseFloat($("#txt-fee-2").val());
-                    if ($("#txt-fee-3").val()!="") fee3 = parseFloat($("#txt-fee-3").val());
-                    if ($("#txt-fee-4").val()!="") fee4 = parseFloat($("#txt-fee-4").val());
-                    totalFee = parseFloat(fee1 + fee2 + fee3 + fee4);
+//                 fetch(pdfsrc)
+//                 .then(function(response) {
+//                     return response.arrayBuffer()
+//                 })
+//                 .then(function(data) {
+//                     var fee1 = 0, fee2 = 0, fee3=0, fee4 = 0, totalFee = 0;
+//                     if ($("#txt-fee-1").val()!="") fee1 = parseFloat($("#txt-fee-1").val());
+//                     if ($("#txt-fee-2").val()!="") fee2 = parseFloat($("#txt-fee-2").val());
+//                     if ($("#txt-fee-3").val()!="") fee3 = parseFloat($("#txt-fee-3").val());
+//                     if ($("#txt-fee-4").val()!="") fee4 = parseFloat($("#txt-fee-4").val());
+//                     totalFee = parseFloat(fee1 + fee2 + fee3 + fee4);
 
-                    var fields = {
-                        'Site Facility name':[companyInfo.company_name],
-                        'Site Building and or Tenant Name':[$("#txt-project-name").val()],
-                        'Site Street Number and Name': [$("#txt-street-address").val()],
-                        'Site City': [$("#txt-city").val()],
-                        'Site State': [$('#option-state').val()],
-                        'Site ZIP Code': [$("#txt-zip").val()],
-                        'Site Political Subdivision': [$("#txt-political-subdivision").val()],
-                        'Site County': [$("#txt-county").val()],
+//                     var fields = {
+//                         'Site Facility name':[companyInfo.company_name],
+//                         'Site Building and or Tenant Name':[$("#txt-project-name").val()],
+//                         'Site Street Number and Name': [$("#txt-street-address").val()],
+//                         'Site City': [$("#txt-city").val()],
+//                         'Site State': [$('#option-state').val()],
+//                         'Site ZIP Code': [$("#txt-zip").val()],
+//                         'Site Political Subdivision': [$("#txt-political-subdivision").val()],
+//                         'Site County': [$("#txt-county").val()],
 
-                        'App Alteration':['Yes'],
-                        'ManDocs01':['Yes'],
-                        'ManDocs02': ['Yes'],
-                        'ManDocs03': ['Yes'],
+//                         'App Alteration':['Yes'],
+//                         'ManDocs01':['Yes'],
+//                         'ManDocs02': ['Yes'],
+//                         'ManDocs03': ['Yes'],
 
-                        'CB01N':['Yes'],
-                        'CB03Y':['Yes'],
-                        'CB04N':['Yes'],
-                        'CB05N':['Yes'],
-                        'CB06N':['Yes'],
-                        'CB07N':['Yes'],
+//                         'CB01N':['Yes'],
+//                         'CB03Y':['Yes'],
+//                         'CB04N':['Yes'],
+//                         'CB05N':['Yes'],
+//                         'CB06N':['Yes'],
+//                         'CB07N':['Yes'],
                         
-                        'Number of stories above grade':[$("#txt-character-stories").val()],
-                        'total floor area':[$("#txt-character-area").val()],
-                        'Floor area new construction sq ft':[$("#txt-character-newarea").val()],
-                        'Floor area of addition sq ft':[$("#txt-character-volume").val()],
-                        'Floor area renovated sq ft':[$("#txt-character-renovated").val()],
-                        'Estimated cost of construction':[$("#txt-building-cost").val()],
+//                         'Number of stories above grade':[$("#txt-character-stories").val()],
+//                         'total floor area':[$("#txt-character-area").val()],
+//                         'Floor area new construction sq ft':[$("#txt-character-newarea").val()],
+//                         'Floor area of addition sq ft':[$("#txt-character-volume").val()],
+//                         'Floor area renovated sq ft':[$("#txt-character-renovated").val()],
+//                         'Estimated cost of construction':[$("#txt-building-cost").val()],
                         
-                        'Design Professional Name': ['Richard Pantel, P.E.'],
-                        'Design Professional Address': ['35091 Paxson Road, Round Hill, VA 20141'],
-                        'Design Professional License#': ['PE039453R'],
-                        'Design Professional Email': ['rpantel@princeton-engineering.com'],
-                        'Design Professional Phone': ['908-507-5500'],
-                        'Design Professional FAX - include area code': ['877-455-5641'],
+//                         'Design Professional Name': ['Richard Pantel, P.E.'],
+//                         'Design Professional Address': ['35091 Paxson Road, Round Hill, VA 20141'],
+//                         'Design Professional License#': ['PE039453R'],
+//                         'Design Professional Email': ['rpantel@princeton-engineering.com'],
+//                         'Design Professional Phone': ['908-507-5500'],
+//                         'Design Professional FAX - include area code': ['877-455-5641'],
 
-                        'Owner Name': [$("#txt-project-name").val()],
-                        'Owner Street Address': [$("#txt-street-address").val()],
-                        'Owner City': [$("#txt-city").val()],
-                        'Owner State': [$('#option-state').val()],
-                        'Owner ZIP Code': [$("#txt-zip").val()],
-                        'Owner Phone - include area code':[$("#txt-owner-tel").val()],
+//                         'Owner Name': [$("#txt-project-name").val()],
+//                         'Owner Street Address': [$("#txt-street-address").val()],
+//                         'Owner City': [$("#txt-city").val()],
+//                         'Owner State': [$('#option-state').val()],
+//                         'Owner ZIP Code': [$("#txt-zip").val()],
+//                         'Owner Phone - include area code':[$("#txt-owner-tel").val()],
 
-                        'List total sq ft of floor area': [$("#txt-total-floor-area").val()],
-                        'cost 1':[$("#txt-fee-1").val()],
-                        'cost 2':[$("#txt-fee-2").val()],
-                        'cost 6':[$("#txt-fee-3").val()],
-                        'cost  7':[$("#txt-fee-4").val()],
-                        'Total Fees':[$("#txt-fee-5").val()],
+//                         'List total sq ft of floor area': [$("#txt-total-floor-area").val()],
+//                         'cost 1':[$("#txt-fee-1").val()],
+//                         'cost 2':[$("#txt-fee-2").val()],
+//                         'cost 6':[$("#txt-fee-3").val()],
+//                         'cost  7':[$("#txt-fee-4").val()],
+//                         'Total Fees':[$("#txt-fee-5").val()],
 
-                        'Applicant City': [$("#txt-city").val()],
-                        'Contractor Tel': [companyInfo.company_telno],
-                        'Applicant State':[$('#option-state').val()],
-                        'Applicant ZIP Code':[$("#txt-zip").val()],
-                        'Applicant Street Address': [companyInfo.company_address],
-                    };
+//                         'Applicant City': [$("#txt-city").val()],
+//                         'Contractor Tel': [companyInfo.company_telno],
+//                         'Applicant State':[$('#option-state').val()],
+//                         'Applicant ZIP Code':[$("#txt-zip").val()],
+//                         'Applicant Street Address': [companyInfo.company_address],
+//                     };
 
-                    if(permitInfo){
-                        fields['Applicant Name'] = [permitInfo.contact_person],
-                        fields['Applicant Phone - include area code'] = [permitInfo.contact_phone],
-                        fields['Resp Pers Fax'] = [permitInfo.FAX],
-                        fields['Applicant Email'] = [permitInfo.construction_email];
-                    }
-                    var out_buf = pdfform().transform(data, fields);
+//                     if(permitInfo){
+//                         fields['Applicant Name'] = [permitInfo.contact_person],
+//                         fields['Applicant Phone - include area code'] = [permitInfo.contact_phone],
+//                         fields['Resp Pers Fax'] = [permitInfo.FAX],
+//                         fields['Applicant Email'] = [permitInfo.construction_email];
+//                     }
+//                     var out_buf = pdfform().transform(data, fields);
 
-                    $("#permitViewer_" + id).attr("src", URL.createObjectURL(new Blob([out_buf], {
-                        type: "application/pdf"
-                    })) + "#toolbar=0");
-                }, function(err) {
-                    console.log(err);
-                });
-            }
-        }
-    });
-}
+//                     $("#permitViewer_" + id).attr("src", URL.createObjectURL(new Blob([out_buf], {
+//                         type: "application/pdf"
+//                     })) + "#toolbar=0");
+//                 }, function(err) {
+//                     console.log(err);
+//                 });
+//             }
+//         }
+//     });
+// }
 
-function updateUccF140(id, filename) {
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
+// function updateUccF140(id, filename) {
+//     $.ajaxSetup({
+//         headers: {
+//             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+//         }
+//     });
 
-    $.ajax({
-        url:"getCompanyInfo",
-        type:'post',
-        data:{state: $('#option-state').val()},
-        success: function(res){
-            if(res.success){
-                var companyInfo = res.company;
-                var permitInfo = res.permit;
-                var pdfsrc = $("#assetPdfLink").val() + '/' + filename;
-                var script = $("<script>");
+//     $.ajax({
+//         url:"getCompanyInfo",
+//         type:'post',
+//         data:{state: $('#option-state').val()},
+//         success: function(res){
+//             if(res.success){
+//                 var companyInfo = res.company;
+//                 var permitInfo = res.permit;
+//                 var pdfsrc = $("#assetPdfLink").val() + '/' + filename;
+//                 var script = $("<script>");
 
-                fetch(pdfsrc)
-                .then(function(response) {
-                    return response.arrayBuffer()
-                })
-                .then(function(data) {
-                    var fireCost = 0;
-                    if ($("#txt-fire-protection-cost").val()!="") fireCost = parseFloat($("#txt-fire-protection-cost").val());
+//                 fetch(pdfsrc)
+//                 .then(function(response) {
+//                     return response.arrayBuffer()
+//                 })
+//                 .then(function(data) {
+//                     var fireCost = 0;
+//                     if ($("#txt-fire-protection-cost").val()!="") fireCost = parseFloat($("#txt-fire-protection-cost").val());
 
-                    var fields = {
-                        'Block': [$("#txt-block").val()],
-                        'Lot': [$("#txt-lot").val()],
-                        'Qualifier':[$("#txt-qualifier").val()],
-                        'Proposed Work Site': [$("#txt-street-address").val() + ", " +  $("#txt-city").val() + ", " + $("#txt-zip").val()],
+//                     var fields = {
+//                         'Block': [$("#txt-block").val()],
+//                         'Lot': [$("#txt-lot").val()],
+//                         'Qualifier':[$("#txt-qualifier").val()],
+//                         'Proposed Work Site': [$("#txt-street-address").val() + ", " +  $("#txt-city").val() + ", " + $("#txt-zip").val()],
 
-                        'Owner in Fee': [$("#txt-project-name").val()],
-                        'Owner Address': [$("#txt-street-address").val() + ", " +  $("#txt-city").val() + ", " + $("#txt-zip").val()],
-                        'Owner Telephone':[$("#txt-owner-tel").val()],
-                        'Owner eMail':[$("#txt-owner-email").val()],
+//                         'Owner in Fee': [$("#txt-project-name").val()],
+//                         'Owner Address': [$("#txt-street-address").val() + ", " +  $("#txt-city").val() + ", " + $("#txt-zip").val()],
+//                         'Owner Telephone':[$("#txt-owner-tel").val()],
+//                         'Owner eMail':[$("#txt-owner-email").val()],
 
-                        'Contractor': [companyInfo.company_name],
-                        'Contractor Phone': [companyInfo.company_telno],
-                        'Contractor Address 1': [companyInfo.company_address],
-                        'HIC Reg or Exempt': [$("#txt-contractor-registration-no").val()],
-                        'Device Total': ["0"],
-                        'Total Est Cost':[fireCost],
-                        'Cert Contr': ['Yes'],
-                    };
+//                         'Contractor': [companyInfo.company_name],
+//                         'Contractor Phone': [companyInfo.company_telno],
+//                         'Contractor Address 1': [companyInfo.company_address],
+//                         'HIC Reg or Exempt': [$("#txt-contractor-registration-no").val()],
+//                         'Device Total': ["0"],
+//                         'Total Est Cost':[fireCost],
+//                         'Cert Contr': ['Yes'],
+//                     };
 
-                    if(permitInfo){
-                        fields['Contractor eMail'] = [permitInfo.construction_email];
-                        fields['Contractor License'] = [permitInfo.registration];
-                        fields['License Expire'] = [permitInfo.exp_date];
-                        fields['FEID'] = [permitInfo.EIN];
-                        fields['Contractor Fax'] = [permitInfo.FAX];
+//                     if(permitInfo){
+//                         fields['Contractor eMail'] = [permitInfo.construction_email];
+//                         fields['Contractor License'] = [permitInfo.registration];
+//                         fields['License Expire'] = [permitInfo.exp_date];
+//                         fields['FEID'] = [permitInfo.EIN];
+//                         fields['Contractor Fax'] = [permitInfo.FAX];
 
-                        fields['Print Name'] = [permitInfo.contact_person];
-                    }
-                    var out_buf = pdfform().transform(data, fields);
+//                         fields['Print Name'] = [permitInfo.contact_person];
+//                     }
+//                     var out_buf = pdfform().transform(data, fields);
 
-                    $("#permitViewer_" + id).attr("src", URL.createObjectURL(new Blob([out_buf], {
-                        type: "application/pdf"
-                    })) + "#toolbar=0");
-                }, function(err) {
-                    console.log(err);
-                });
-            }
-        }
-    });
-}
+//                     $("#permitViewer_" + id).attr("src", URL.createObjectURL(new Blob([out_buf], {
+//                         type: "application/pdf"
+//                     })) + "#toolbar=0");
+//                 }, function(err) {
+//                     console.log(err);
+//                 });
+//             }
+//         }
+//     });
+// }
 
 function savePermit(id, filename){
     var pdfsrc = $("#permitViewer_" + id).attr('src');
@@ -5343,66 +5424,76 @@ function savePermit(id, filename){
         var url = window.URL.createObjectURL(jsonBlob);
         download(url, filename);
         
-        submitPermitJson (filename);
-        submitPdfData (filename, jsonBlob, 0);
+        submitPermitJson(id, filename);
+        submitPdfData(filename, jsonBlob, 0);
     });
 }
 
-var getPermitData = function(filename) {
+var getPermitData = function(id, filename) {
     var alldata = {};
 
     $('#inputform-first input:text:enabled').each(function() { 
         alldata[$(this).attr('id')] = $(this).val();
     });
 
-    if (filename == "ucc_f100_cpa.pdf") {
-        $('#ucc_f100 input:text:enabled').each(function() { 
-            alldata[$(this).attr('id')] = $(this).val();
-        });
-        $('#ucc_f100 select:enabled').each(function() { 
-            alldata[$(this).attr('id')] = $(this).val();
-        });
-    }
+    $('#permit-info-table-' + id + ' input:enabled').each(function() { 
+        alldata[$(this).attr('id')] = $(this).val();
+    });
+    $('#permit-info-table-' + id + ' select:enabled').each(function() { 
+        alldata[$(this).attr('id')] = $(this).val();
+    });
+    $('#permit-info-table-' + id + ' textarea:enabled').each(function() { 
+        alldata[$(this).attr('id')] = $(this).val();
+    });
+    // if (filename == "ucc_f100_cpa.pdf") {
+    //     $('#ucc_f100 input:text:enabled').each(function() { 
+    //         alldata[$(this).attr('id')] = $(this).val();
+    //     });
+    //     $('#ucc_f100 select:enabled').each(function() { 
+    //         alldata[$(this).attr('id')] = $(this).val();
+    //     });
+    // }
 
-    if (filename == "ucc_f110_bldg.pdf") {
-        $('#ucc_f110 input:text:enabled').each(function() { 
-            alldata[$(this).attr('id')] = $(this).val();
-        });
-        $('#ucc_f110 select:enabled').each(function() { 
-            alldata[$(this).attr('id')] = $(this).val();
-        });
-    }
+    // if (filename == "ucc_f110_bldg.pdf") {
+    //     $('#ucc_f110 input:text:enabled').each(function() { 
+    //         alldata[$(this).attr('id')] = $(this).val();
+    //     });
+    //     $('#ucc_f110 select:enabled').each(function() { 
+    //         alldata[$(this).attr('id')] = $(this).val();
+    //     });
+    // }
 
-    if (filename == "ucc_f120_elec.pdf") {
-        $('#ucc_f120 input:text:enabled').each(function() { 
-            alldata[$(this).attr('id')] = $(this).val();
-        });
-        $('#ucc_f120 select:enabled').each(function() { 
-            alldata[$(this).attr('id')] = $(this).val();
-        });
-    }
-    if (filename == "ucc_f140_fire.pdf") {
-        $('#ucc_f140 input:text:enabled').each(function() { 
-            alldata[$(this).attr('id')] = $(this).val();
-        });
-        $('#ucc_f140 select:enabled').each(function() { 
-            alldata[$(this).attr('id')] = $(this).val();
-        });
-    }
+    // if (filename == "ucc_f120_elec.pdf") {
+    //     $('#ucc_f120 input:text:enabled').each(function() { 
+    //         alldata[$(this).attr('id')] = $(this).val();
+    //     });
+    //     $('#ucc_f120 select:enabled').each(function() { 
+    //         alldata[$(this).attr('id')] = $(this).val();
+    //     });
+    // }
+    // if (filename == "ucc_f140_fire.pdf") {
+    //     $('#ucc_f140 input:text:enabled').each(function() { 
+    //         alldata[$(this).attr('id')] = $(this).val();
+    //     });
+    //     $('#ucc_f140 select:enabled').each(function() { 
+    //         alldata[$(this).attr('id')] = $(this).val();
+    //     });
+    // }
 
-    if (filename == "PA ucc-3.pdf") {
-        $('#pa_ucc3 input:text:enabled').each(function() { 
-            alldata[$(this).attr('id')] = $(this).val();
-        });
-        $('#pa_ucc3 select:enabled').each(function() { 
-            alldata[$(this).attr('id')] = $(this).val();
-        });
-    }
+    // if (filename == "PA ucc-3.pdf") {
+    //     $('#pa_ucc3 input:text:enabled').each(function() { 
+    //         alldata[$(this).attr('id')] = $(this).val();
+    //     });
+    //     $('#pa_ucc3 select:enabled').each(function() { 
+    //         alldata[$(this).attr('id')] = $(this).val();
+    //     });
+    // }
     return alldata;
 }
 
-function submitPermitJson(filename) {
-    var data = getPermitData(filename);
+function submitPermitJson(id, filename) {
+    var data = getPermitData(id, filename);
+    console.log(data);
     swal.fire({ title: "Please wait...", showConfirmButton: false });
     swal.showLoading();
     $.ajax({
@@ -5439,6 +5530,4 @@ function submitPermitJson(filename) {
         }
     });
 }
-
-
 </script>
