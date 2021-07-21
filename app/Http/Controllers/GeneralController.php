@@ -921,8 +921,8 @@ class GeneralController extends Controller
                     </a>". 
                     "<input class='mr-1' type='checkbox' " . (Auth::user()->userrole == 4 ? "style='pointer-events: none;'" : "onchange='togglePlanCheck({$job['id']})'") . ($job['plancheck'] == 1 ? " checked" : "") . ">" . 
                     "<input class='mr-2' type='checkbox' " . (Auth::user()->userrole == 4 ? "style='pointer-events: none;'" : "onchange='toggleAsBuilt({$job['id']})'") . ($job['asbuilt'] == 1 ? " checked" : "") . ">" . 
-                    (Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4? "<button onclick='openReviewTab({$job['id']})' class='mr-1 btn' style='padding: 3px 4px; background-image: -webkit-linear-gradient(45deg, #".$sealCol." 50%, #".$asbuiltCol." 50%); color: white; border: 1px solid white;'>
-                        <i class='fa fa-check'></i>
+                    (Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4? "<button onclick='openReviewTab({$job['id']})' class='mr-1 btn' style='padding: 7px 4px; background-image: -webkit-linear-gradient(-45deg, #".$sealCol." 0%, #".$sealCol." 47%, #FFFFFF 48%, #FFFFFF 53%, #".$asbuiltCol." 54%, #".$asbuiltCol." 100%); border: 1px solid white;'>
+                        <div style='width:16px; height: 16px;'></div>
                     </a>" : "") . 
                     (Auth::user()->userrole == 2 ? "<button type='button' class='js-swal-confirm btn btn-danger mr-1' onclick='delProject(this,{$nestedData['id']})' style='padding: 3px 4px;'>
                     <i class='fa fa-trash'></i>
