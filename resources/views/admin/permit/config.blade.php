@@ -116,6 +116,7 @@
                                 <option value='architect_email' <?php echo $field['dbinfo'] == 'architect_email' ? 'selected' : ''; ?>>Architect Email</option>
                                 <option value='architect_tel' <?php echo $field['dbinfo'] == 'architect_tel' ? 'selected' : ''; ?>>Architect Tel</option>
                                 <option value='architect_fax' <?php echo $field['dbinfo'] == 'architect_fax' ? 'selected' : ''; ?>>Architect Fax</option>
+                                <option value='architect_license' <?php echo $field['dbinfo'] == 'architect_license' ? 'selected' : ''; ?>>Architect License</option>
                             </select>
                         </td>
                         <td class='w400-green-bdr'>
@@ -264,13 +265,13 @@
                 row += "<td class='w400-yellow-bdr'><input type='text' class='configPermit' value='" + field_key + "'></input></td>";
                 row += "<td class='w400-yellow-bdr'>\
                             <select class='configPermit'>\
+                                <option value='0' selected>Select</option>\
                                 <option value='job_projectname'>Owner Name</option>\
                                 <option value='job_address'>Owner Address</option>\
                                 <option value='street_address'>Street Address</option>\
                                 <option value='site_city'>City</option>\
                                 <option value='state_code'>State Code</option>\
                                 <option value='zip_code'>Zip Code</option>\
-                                <option value='0' selected>Select</option>\
                                 <option value='site_address'>Site Address</option>\
                                 <option value='company_name'>Company Name</option>\
                                 <option value='company_telno'>Company Telephone</option>\
@@ -288,6 +289,7 @@
                                 <option value='architect_email'>Architect Email</option>\
                                 <option value='architect_tel'>Architect Tel</option>\
                                 <option value='architect_fax'>Architect Fax</option>\
+                                <option value='architect_license'>Architect License</option>\
                             </select>\
                         </td>";
                 row += "<td class='w400-green-bdr'>\

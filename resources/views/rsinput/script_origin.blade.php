@@ -4691,6 +4691,8 @@ function buildPermitFields(id, filename){
                                             defaultvalue = '908-507-5500';
                                         else if(field.dbinfo == 'architect_fax')
                                             defaultvalue = '877-455-5641';
+                                        else if(field.dbinfo == 'architect_license')
+                                            defaultvalue = 'PE039453R';
                                             
                                         else if(field.defaultvalue)
                                             defaultvalue = field.defaultvalue;
