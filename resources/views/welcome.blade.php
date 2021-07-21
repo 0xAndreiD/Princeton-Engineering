@@ -118,7 +118,7 @@ Engineering</span></small></small></span></big></font> </td>
     <tr>
       <td style="vertical-align: top;"> <a
  style="font-family: arial,verdana;" class="tertiary" id="sublink2"
- href="index.html" target="_self"> </a>
+ href="https://www.princeton-engineering.com/index.html" target="_self"> </a>
       <table style="text-align: left; width: 152px; height: 170px;"
  border="0" cellpadding="2" cellspacing="2">
         <tbody>
@@ -127,17 +127,17 @@ Engineering</span></small></small></span></big></font> </td>
             </td>
           </tr>
           <tr>
-            <td style="vertical-align: top;"><a href="index.html"> <span
+            <td style="vertical-align: top;"><a href="https://www.princeton-engineering.com/index.html"> <span
  style="font-family: helvetica,arial,sans-serif;">Home</span></a><br>
             </td>
           </tr>
           <tr>
-            <td style="vertical-align: top;"><a href="solar.html"><span
+            <td style="vertical-align: top;"><a href="https://www.princeton-engineering.com/solar.html"><span
  style="font-family: helvetica,arial,sans-serif;">Solar</span></a> </td>
           </tr>
           <tr>
             <td style="vertical-align: top;"> <a
- href="electricalmechanical.html"> <span
+ href="https://www.princeton-engineering.com/electricalmechanical.html"> <span
  style="font-family: helvetica,arial,sans-serif;">Electrical<br>
             </span></a>
             
@@ -145,13 +145,13 @@ Engineering</span></small></small></span></big></font> </td>
           </tr>
           <tr>
             <td style="vertical-align: top;"> 
-            <a href="structural.html">
+            <a href="https://www.princeton-engineering.com/structural.html">
             <span style="font-family: helvetica,arial,sans-serif;">Structural</span></a>
      </td>
           </tr>
           <tr>
             <td style="vertical-align: top;"> <a
- href="siteengineering.html"> <span
+ href="https://www.princeton-engineering.com/siteengineering.html"> <span
  style="font-family: helvetica,arial,sans-serif;">Civil Site<br>
             </span></a> </td>
           </tr>
@@ -159,7 +159,7 @@ Engineering</span></small></small></span></big></font> </td>
             <td style="vertical-align: top;"> 
             
                     <a
- href="windandseismic.html"> <span
+ href="https://www.princeton-engineering.com/windandseismic.html"> <span
  style="font-family: helvetica,arial,sans-serif;">Wind<br>
             </span></a>
             
@@ -175,7 +175,7 @@ Engineering</span></small></small></span></big></font> </td>
             <td style="vertical-align: top;"> 
             
                     <a
- href="framinganalysis.html"> <span
+ href="https://www.princeton-engineering.com/framinganalysis.html"> <span
  style="font-family: helvetica,arial,sans-serif;">iRoof&#8482;<br>
             </span></a>
             
@@ -189,7 +189,7 @@ Engineering</span></small></small></span></big></font> </td>
           <tr>
             <td style="vertical-align: top;">
             
-            <a href="contact.html"> <span
+            <a href="https://www.princeton-engineering.com/contact.html"> <span
  style="font-family: helvetica,arial,sans-serif;">Contact Us</span></a>
             </td>
           </tr>
@@ -205,9 +205,9 @@ Engineering</span></small></small></span></big></font> </td>
 
 
 <a style="font-family: arial,verdana;" class="tertiary" id="sublink9"
- href="contact.html" target="_self"> </a> <a
+ href="https://www.princeton-engineering.com/contact.html" target="_self"> </a> <a
  style="font-family: arial,verdana;" class="tertiary" id="sublink9"
- href="directions.html" target="_self"> </a> </td>
+ href="https://www.princeton-engineering.com/directions.html" target="_self"> </a> </td>
      
      
      
@@ -633,7 +633,7 @@ All engineering and review work is performed by our personnel in our offices in 
         <div align="center">  
          <div style="padding:5px;display:table;"> 
           <div class="link-button-wrapper">
-    <a href="./framinganalysis.html">
+    <a href="https://www.princeton-engineering.com/framinganalysis.html">
         <h1>
         <font style="font-family: arial,verdana;">
         <font color="#000000">
