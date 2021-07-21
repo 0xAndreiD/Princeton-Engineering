@@ -4660,27 +4660,27 @@ function buildPermitFields(id, filename){
                                         else if(field.dbinfo == 'zip_code')
                                             defaultvalue = $("#txt-zip").val();
                                         else if(field.dbinfo == 'company_name')
-                                            defaultvalue = companyInfo.company_name;
+                                            defaultvalue = companyInfo ? companyInfo.company_name : '';
                                         else if(field.dbinfo == 'company_telno')
-                                            defaultvalue = companyInfo.company_telno;
+                                            defaultvalue = companyInfo ? companyInfo.company_telno : '';
                                         else if(field.dbinfo == 'company_address')
-                                            defaultvalue = companyInfo.company_address;
+                                            defaultvalue = companyInfo ? companyInfo.company_address : '';
                                         else if(field.dbinfo == 'contact_person')
-                                            defaultvalue = permitInfo.contact_person;
+                                            defaultvalue = permitInfo ? permitInfo.contact_person : '';
                                         else if(field.dbinfo == 'contact_phone')
-                                            defaultvalue = permitInfo.contact_phone;
+                                            defaultvalue = permitInfo ? permitInfo.contact_phone : '';
                                         else if(field.dbinfo == 'FAX')
-                                            defaultvalue = permitInfo.FAX;
+                                            defaultvalue = permitInfo ? permitInfo.FAX : '';
                                         else if(field.dbinfo == 'construction_email')
-                                            defaultvalue = permitInfo.construction_email;
+                                            defaultvalue = permitInfo ? permitInfo.construction_email : '';
                                         else if(field.dbinfo == 'registration')
-                                            defaultvalue = permitInfo.registration;
+                                            defaultvalue = permitInfo ? permitInfo.registration : '';
                                         else if(field.dbinfo == 'exp_date')
-                                            defaultvalue = permitInfo.exp_date;
+                                            defaultvalue = permitInfo ? permitInfo.exp_date : '';
                                         else if(field.dbinfo == 'EIN')
-                                            defaultvalue = permitInfo.EIN;
+                                            defaultvalue = permitInfo ? permitInfo.EIN : '';
                                         else if(field.dbinfo == 'FAX')
-                                            defaultvalue = permitInfo.FAX;
+                                            defaultvalue = permitInfo ? permitInfo.FAX : '';
                                         else if(field.dbinfo == 'architect_engineer')
                                             defaultvalue = 'Richard Pantel, P.E.';
                                         else if(field.dbinfo == 'architect_address')
