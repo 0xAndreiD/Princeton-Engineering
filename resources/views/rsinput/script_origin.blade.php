@@ -4650,7 +4650,7 @@ function buildPermitFields(id, filename){
                                         if(field.dbinfo == 'job_projectname')
                                             defaultvalue = $("#txt-project-name").val();
                                         else if(field.dbinfo == 'job_address')
-                                            defaultvalue = $("#txt-street-address").val() + ", " +  $("#txt-city").val() + ", " + $("#txt-zip").val();
+                                            defaultvalue = $("#txt-street-address").val() + ", " +  $("#txt-city").val() + ", " + $("#option-state").val() + ", " + $("#txt-zip").val();
                                         else if(field.dbinfo == 'street_address')
                                             defaultvalue = $("#txt-street-address").val();
                                         else if(field.dbinfo == 'site_city')
@@ -4818,6 +4818,7 @@ async function openPermitTab(id, filename, tabname, permitData = null, openTab =
     swal.showLoading();
     await buildPermitFields(id, filename);
     $(".permit").on('change', function(obj) {
+        console.log('changed');
         updatePermitPDF($(this).attr('data-fileid'), $(this).attr('data-filename'));
     });
 
@@ -4896,7 +4897,7 @@ function updatePermitPDF(id, filename){
     .then(function(buf) {
         var list_form = document.querySelector('#permit-info-table-' + id);
         var fields = {};
-        list_form.querySelectorAll('input,select').forEach(function(input) {
+        list_form.querySelectorAll('input,select,textarea').forEach(function(input) {
             if ((input.getAttribute('type') === 'radio') && !input.checked) {
                 return;
             }
@@ -5491,7 +5492,6 @@ var getPermitData = function(id, filename) {
 
 function submitPermitJson(id, filename) {
     var data = getPermitData(id, filename);
-    console.log(data);
     swal.fire({ title: "Please wait...", showConfirmButton: false });
     swal.showLoading();
     $.ajax({
