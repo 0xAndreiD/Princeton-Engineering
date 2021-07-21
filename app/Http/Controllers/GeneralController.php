@@ -778,7 +778,8 @@ class GeneralController extends Controller
                         'job_request.chatIcon as chatIcon',
                         'job_request.asBuilt as asbuilt',
                         'job_planstatus.color as statuscolor',
-                        'job_pstatus.color as statecolor'
+                        'job_pstatus.color as statecolor',
+                        'job_request.eSeal as eSeal'
                     )
                 );
             //if($handler->offset($start)->count() > 0)
@@ -815,7 +816,8 @@ class GeneralController extends Controller
                                 'job_request.chatIcon as chatIcon',
                                 'job_request.asBuilt as asbuilt',
                                 'job_planstatus.color as statuscolor',
-                                'job_pstatus.color as statecolor'
+                                'job_pstatus.color as statecolor',
+                                'job_request.eSeal as eSeal'
                             )
                         );
 
@@ -894,6 +896,20 @@ class GeneralController extends Controller
                     $chatbadge = 'success';
                 else
                     $chatbadge = 'warning';
+                
+                if($job->eSeal == 1)
+                    $sealCol = '0000FF';
+                else if($job->eSeal == 2)
+                    $sealCol = '00FF00';
+                else
+                    $sealCol = '000000';
+                
+                if($job->asbuilt == 1)
+                    $asbuiltCol = '0000FF';
+                else if($job->asbuilt == 2)
+                    $asbuiltCol = '00FF00';
+                else
+                    $asbuiltCol = '000000';
 
                 $nestedData['actions'] = "
                 <div class='text-center' style='display: flex; align-items: center; justify-content: center;'>
@@ -905,7 +921,7 @@ class GeneralController extends Controller
                     </a>". 
                     "<input class='mr-1' type='checkbox' " . (Auth::user()->userrole == 4 ? "style='pointer-events: none;'" : "onchange='togglePlanCheck({$job['id']})'") . ($job['plancheck'] == 1 ? " checked" : "") . ">" . 
                     "<input class='mr-2' type='checkbox' " . (Auth::user()->userrole == 4 ? "style='pointer-events: none;'" : "onchange='toggleAsBuilt({$job['id']})'") . ($job['asbuilt'] == 1 ? " checked" : "") . ">" . 
-                    (Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4? "<button onclick='openReviewTab({$job['id']})' class='mr-1 btn btn-secondary' style='padding: 3px 4px;'>
+                    (Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4? "<button onclick='openReviewTab({$job['id']})' class='mr-1 btn' style='padding: 3px 4px; background-image: -webkit-linear-gradient(45deg, #".$sealCol." 50%, #".$asbuiltCol." 50%); color: white; border: 1px solid white;'>
                         <i class='fa fa-check'></i>
                     </a>" : "") . 
                     (Auth::user()->userrole == 2 ? "<button type='button' class='js-swal-confirm btn btn-danger mr-1' onclick='delProject(this,{$nestedData['id']})' style='padding: 3px 4px;'>
