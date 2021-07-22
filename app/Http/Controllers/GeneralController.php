@@ -260,6 +260,7 @@ class GeneralController extends Controller
                     'companyName' => $company['company_name'],
                     'companyId' => Auth::user()->companyid,
                     'userId' => Auth::user()->usernumber,
+                    'creator' => Auth::user()->usernumber,
                     'clientProjectName' => $request['data']['txt-project-name'],
                     'clientProjectNumber' => $request['data']['txt-project-number'],
                     'requestFile' => $filename,
