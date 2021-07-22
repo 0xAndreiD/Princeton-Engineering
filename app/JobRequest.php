@@ -15,7 +15,7 @@ class JobRequest extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'id', 'companyName', 'companyId', 'userId', 'creator', 'clientProjectName', 'clientProjectNumber', 'requestFile', 'planStatus', 'projectState', 'analysisType', 'createdTime', 'submittedTime', 'timesDownloaded', 'timesEmailed', 'timesComputed', 'state', 'planCheck', 'chatIcon', 'asBuilt', 'asBuiltDate', 'eSeal', 'eSeal_asbuilt', 'reviewerId', 'lastReviewTime'
+        'id', 'companyName', 'companyId', 'userId', 'clientProjectName', 'clientProjectNumber', 'requestFile', 'planStatus', 'projectState', 'analysisType', 'createdTime', 'submittedTime', 'timesDownloaded', 'timesEmailed', 'timesComputed', 'state', 'planCheck', 'chatIcon', 'asBuilt', 'asBuiltDate', 'eSeal', 'eSeal_asbuilt', 'reviewerId', 'lastReviewTime', 'creator'
     ];
 
     protected $table = 'job_request';
