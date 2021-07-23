@@ -205,7 +205,7 @@ Route::get('verify/resend', 'Auth\TwoFactorController@resend')->name('verify.res
 Route::resource('verify', 'Auth\TwoFactorController')->only(['index', 'store']);
 Route::get('verify/blocked', 'Auth\TwoFactorController@blocked')->name('verify.blocked');
 Route::get('verify/geolocation', 'Auth\TwoFactorController@geolocation')->name('verify.geolocation');
-Route::get('/setOriginalLogin/{id}', 'Auth\TwoFactorController@setOriginalLogin');
+Route::get('/storeLocation/{id}', 'Auth\TwoFactorController@storeLocation');
 
 // Seal Positioning
 Route::get('/sealtemplate', 'CompanyController@sealtemplate')->name('sealtemplate');

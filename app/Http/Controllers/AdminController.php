@@ -408,7 +408,7 @@ class AdminController extends Controller
             foreach ($data as $item)
             {
                 if($item['allowed'] == 0){
-                    $item['state'] = "<span class='badge badge-warning'>First Login</span>";
+                    $item['state'] = "<span class='badge badge-warning'>Allowed</span>";
                 } else if($item['allowed'] == 1){
                     $item['state'] = "<span class='badge badge-primary'>Code Verified</span>";
                 } else if($item['allowed'] == 2){

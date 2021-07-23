@@ -56,24 +56,25 @@ class TwoFactorController extends Controller
 
                 $checkGuard = LoginGuard::where('userId', $user->id)->where('ipAddress', $request->ip())->where('identity', $request['identity'])->first();
                 if(!$checkGuard){
-                    LoginGuard::create([
+                    $checkGuard = LoginGuard::create([
                         'userId' => $user->id,
                         'ipAddress' => $request->ip(),
                         'identity' => $request['identity'],
                         'allowed' => 1
                     ]);
-                } else {
-                    $checkGuard->attempts = $checkGuard->attempts + 1;
-                    $checkGuard->save();
-                    if($checkGuard->attempts >= 4){
+                } 
+                // else {
+                    // $checkGuard->attempts = $checkGuard->attempts + 1;
+                    // $checkGuard->save();
+                    // if($checkGuard->attempts >= 4){
                         $usergeo = unserialize( file_get_contents('http://www.geoplugin.net/php.gp?ip=' . $ip) );
-                        $data = ['attempts' => $checkGuard->attempts, 'username' => $user->username, 'location' => $usergeo['geoplugin_city'] . " " . $usergeo['geoplugin_regionName'] . " " . $usergeo['geoplugin_countryName'], 
-                        'link' => 'https://www.princeton.engineering/iRoof/setOriginalLogin/' . base64_encode($checkGuard->id)];
-                        Mail::send('mail.originlocationset', $data, function ($m) use ($user) {
+                        $data = ['username' => $user->username, 'location' => $usergeo['geoplugin_city'] . " " . $usergeo['geoplugin_regionName'] . " " . $usergeo['geoplugin_countryName'], 
+                        'link' => 'https://www.princeton.engineering/iRoof/storeLocation/' . base64_encode($checkGuard->id)];
+                        Mail::send('mail.storelocation', $data, function ($m) use ($user) {
                             $m->from(env('MAIL_FROM_ADDRESS'), 'Princeton Engineering')->to($user->email)->subject('iRoof Notification.');
                         });
-                    }
-                }
+                    // }
+                // }
     
                 return redirect()->route('home');
             }
@@ -109,18 +110,20 @@ class TwoFactorController extends Controller
         return view('auth.unavailablegeo')->with(['reason' => 'Your location is too far away from your company. Please contact admin.']);
     }
 
-    public function setOriginalLogin($id){
+    public function storeLocation($id){
         if($id){
             $guard = LoginGuard::where('id', base64_decode($id))->first();
             if($guard){
-                $checks = LoginGuard::where('userId', $guard->userId)->get();
-                foreach($checks as $check){
-                    if($guard->identity == $check->identity)
-                        $check->allowed = 0;
-                    else
-                        $check->allowed = 1;
-                    $check->save();
-                }
+                // $checks = LoginGuard::where('userId', $guard->userId)->get();
+                // foreach($checks as $check){
+                //     if($guard->identity == $check->identity)
+                //         $check->allowed = 0;
+                //     else
+                //         $check->allowed = 1;
+                //     $check->save();
+                // }
+                $guard->allowed = 0;
+                $guard->save();
                 return redirect('https://www.princeton.engineering/iRoof/home?notify=' . base64_encode('guardset'));
             } else
                 return redirect('https://www.princeton.engineering/iRoof/home');
