@@ -310,9 +310,9 @@ ul.social li{
             		<td>
             			<div class="text" style="padding: 0 2.5em;">
                             <h2>Hi, {{$username}}</h2>
-                            <h3>We realized that you have accessed to iRoof {{$attempts}} times from {{$location}}. If this is your original address, please set it to your original.</h3>
+                            <h3>We detected your login from {{$location}}. Will you be using this location & computer in the future? If yes, click the button below.</h3>
 							<br>
-							<div><a href="{{$link}}" style="padding: 15px; border-radius: 5px; background-color: lightseagreen; color: white; font-size: 1em;"> Set as Original </a></div>
+							<div><a href="{{$link}}" style="padding: 15px; border-radius: 5px; background-color: lightseagreen; color: white; font-size: 1em;"> Save location & device </a></div>
 							<br>
 							<h3>If the button does not work, please paste the below link into your browser.</h3>
 							<p>{{$link}}</p>

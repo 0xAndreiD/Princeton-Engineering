@@ -158,7 +158,7 @@ class LoginController extends Controller
                         }
                     }
                 }
-            } else if($checkGuard->allowed != 0){ // The info shows it's not first login
+            } else if($checkGuard->allowed != 0){ // The info shows it's not allowed login
                 $user->generateTwoFactorCode();
                 $data = ['ip' => $ip, 'code' => $user->two_factor_code];
                 Mail::send('mail.verifycode', $data, function ($m) use ($user) {

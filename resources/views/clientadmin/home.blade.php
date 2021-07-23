@@ -24,7 +24,7 @@
 <script src="{{ asset('/js/plugins/bootstrap-notify/bootstrap-notify.min.js') }}"></script>
 <script>
     $(document).ready(function(){
-        Dashmix.helpers('notify', {type: 'success', icon: 'fa fa-check mr-1', message: 'Your original address has been changed!'});
+        Dashmix.helpers('notify', {type: 'success', icon: 'fa fa-check mr-1', message: 'Your location & device has been saved!'});
     })
 </script>
 @endif
