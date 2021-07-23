@@ -1288,7 +1288,7 @@ var isEmptyInputBox = function() {
 }
 
 $("#txt-project-name").on('keypress', function(event){
-    if(event.key == "&" || event.key == "#")
+    if(event.key == "&" || event.key == "#" || event.key == ":")
     {
         event.preventDefault();
         return false;
@@ -1823,6 +1823,7 @@ var stick_y_axis_distance_grid_lines = new Array(11);
 var stick_show_axis = new Array(11);
 var stick_right_input = new Array(11);
 var stick_input_changed = new Array();
+
 
 for( let i = 1; i <= 10; i ++ )
 {
@@ -2683,19 +2684,23 @@ $(document).ready(function() {
         $(this).css('background-color', 'transparent');
     });
 
-    $(".permit").on('change', function(obj) {
-        // var classes = $(obj.target).attr('class').split(' ');
-        // var className = "." + classes[1];
-        // $(className).each(function() {
-        //     $(this).val($(obj.target).val());
-        // });
-        // updateUccF100(1, "ucc_f100_cpa.pdf");
-        // updateUccF110(2, "ucc_f110_bldg.pdf");
-        // updateUccF120(3, "ucc_f120_elec.pdf");
-        // updateUcc3(4, "PA ucc-3.pdf");
-        // updateUccF140(5, "ucc_f140_fire.pdf");
-        updatePermitPDF($(this).attr('data-fileid'), $(this).attr('data-filename'));
-    });
+    // $(".permit").on('change', function(obj) {
+    //     var classes = $(obj.target).attr('class').split(' ');
+    //     var className = "." + classes[1];
+    //     console.log(className);
+    //     $(className).each(function() {
+    //         if(this == obj.target || $(this).val() != $(obj.target).val()){
+    //             $(this).val($(obj.target).val());
+    //             updatePermitPDF($(this).attr('data-fileid'), $(this).attr('data-filename'));
+    //         }
+    //     });
+    //     // updateUccF100(1, "ucc_f100_cpa.pdf");
+    //     // updateUccF110(2, "ucc_f110_bldg.pdf");
+    //     // updateUccF120(3, "ucc_f120_elec.pdf");
+    //     // updateUcc3(4, "PA ucc-3.pdf");
+    //     // updateUccF140(5, "ucc_f140_fire.pdf");
+    //     //updatePermitPDF($(this).attr('data-fileid'), $(this).attr('data-filename'));
+    // });
 
     var i = 0;
     for(i = 1; i <= 10; i ++)
@@ -4141,6 +4146,7 @@ var loadPreloadedData = function() {
         }
     });
 }
+
     var loadPreloadedPermitData = function() {
         return new Promise((resolve, reject) => {
             var projectId = $('#projectId').val();
@@ -4701,7 +4707,7 @@ function buildPermitFields(id, filename){
                                         html += ('<tr class="h13" ' + (field.htmlcheck == 0 ? 'style="display: none;"' : '' ) + '>');
                                         if(field.type == 0){
                                             html += ('<td class="iw400-right-bdr">' + field.label + '</td>');
-                                            html += ('<td class="w400-yellow-bdr"><input type="text" class="permit txt-block" id="' + field.htmlfield + '" tabindex="' + index + '" value="' + defaultvalue + '" data-pdffield="' + field.pdffield + '" data-idx="' + field.idx + '" data-fileid="' + id + '" data-filename="' + filename + '"></input></td>');
+                                            html += ('<td class="w400-yellow-bdr"><input type="text" class="permit txt-' + field.htmlfield + '" id="' + field.htmlfield + '" tabindex="' + index + '" value="' + defaultvalue + '" data-pdffield="' + field.pdffield + '" data-idx="' + field.idx + '" data-fileid="' + id + '" data-filename="' + filename + '"></input></td>');
                                         } else if(field.type == 1){
                                             html += ('<td class="iw400-right-bdr">' + field.label + '</td>');
                                             html += '<td class="w400-green-bdr">';
@@ -4718,7 +4724,7 @@ function buildPermitFields(id, filename){
                                                 radio.setAttribute('data-filename', filename);
                                                 radio.setAttribute('id', field.htmlfield + '_' + i);
                                                 radio.setAttribute('data-pdffield', field.pdffield);
-                                                radio.setAttribute('class', 'permit');
+                                                radio.setAttribute('class', 'permit radio-' + field.htmlfield);
                                                 if(defaultvalue == ostr){
                                                     radio.setAttribute('checked', true);
                                                 }
@@ -4737,7 +4743,7 @@ function buildPermitFields(id, filename){
                                             input.setAttribute('data-fileid', id);
                                             input.setAttribute('data-filename', filename);
                                             input.setAttribute('type', 'checkbox');
-                                            input.setAttribute('class', 'permit');
+                                            input.setAttribute('class', 'permit checkbox-' + field.htmlfield);
                                             input.setAttribute('id', field.htmlfield);
                                             if(defaultvalue == 'on') input.setAttribute('checked', true);
                                             html += input.outerHTML;
@@ -4760,7 +4766,7 @@ function buildPermitFields(id, filename){
                                                 option_el.setAttribute('value', ostr);
                                                 input.appendChild(option_el);
                                             });
-                                            input.setAttribute('class', 'permit');
+                                            input.setAttribute('class', 'permit select-' + field.htmlfield);
                                             html += input.outerHTML;
                                             html += '</td>';
                                         } else if(field.type == 4){
@@ -4771,7 +4777,7 @@ function buildPermitFields(id, filename){
                                             textarea.setAttribute('data-pdffield', field.pdffield);
                                             textarea.setAttribute('data-fileid', id);
                                             textarea.setAttribute('data-filename', filename);
-                                            textarea.setAttribute('class', 'permit');
+                                            textarea.setAttribute('class', 'permit txt-' + field.htmlfield);
                                             textarea.setAttribute('id', field.htmlfield);
                                             textarea.appendChild(document.createTextNode(defaultvalue));
                                             html += textarea.outerHTML;
@@ -4819,9 +4825,17 @@ async function openPermitTab(id, filename, tabname, permitData = null, openTab =
     swal.fire({ title: "Please wait...", showConfirmButton: false });
     swal.showLoading();
     await buildPermitFields(id, filename);
-    $(".permit").on('change', function(obj) {
-        console.log('changed');
-        updatePermitPDF($(this).attr('data-fileid'), $(this).attr('data-filename'));
+    $(`#tab_permit_${id} .permit`).on('change', function(obj) {
+        var classes = $(obj.target).attr('class').split(' ');
+        var className = "." + classes[1];
+        $(className).each(function() {
+            if(this == obj.target)
+                updatePermitPDF($(this).attr('data-fileid'), $(this).attr('data-filename'));
+            else if($(this).val() != $(obj.target).val()){
+                $(this).val($(obj.target).val());
+                updatePermitPDF($(this).attr('data-fileid'), $(this).attr('data-filename'));
+            }
+        });
     });
 
     if(permitData){
