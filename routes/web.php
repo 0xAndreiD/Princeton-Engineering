@@ -18,6 +18,8 @@ Route::get('/', function () {
 Auth::routes(['register' => false]);
 
 Route::get('/home', 'GeneralController@index')->name('home');
+Route::post('/getCompanySummary', 'GeneralController@getCompanySummary')->name('getCompanySummary');
+Route::post('/getUserMetrics', 'GeneralController@getUserMetrics')->name('getUserMetrics');
 
 // RS Input Page
 Route::get('/rsinput', 'GeneralController@rsinput')->name('rsinput');

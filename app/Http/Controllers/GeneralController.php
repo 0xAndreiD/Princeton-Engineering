@@ -68,14 +68,152 @@ class GeneralController extends Controller
             if($type == 'guardset')
                 $notify = 1;
         }
+
+        $companyList = Company::orderBy('company_name', 'asc')->get();
+
         if( Auth::user()->userrole == 2 )
-            return view('admin.home')->with('notify', $notify);
+            return view('admin.home')->with('notify', $notify)->with('companyList', $companyList);
         else if( Auth::user()->userrole == 1 || Auth::user()->userrole == 3)
-            return view('clientadmin.home')->with('notify', $notify);
+            return view('clientadmin.home')->with('notify', $notify)->with('companyList', $companyList);
         else if( Auth::user()->userrole == 4 )
-            return view('reviewer.home')->with('notify', $notify);
+            return view('reviewer.home')->with('notify', $notify)->with('companyList', $companyList);
         else if( Auth::user()->userrole == 0 )
-            return view('user.home')->with('notify', $notify);
+            return view('user.home')->with('notify', $notify)->with('companyList', $companyList);
+    }
+
+    /**
+     * Calcs the company summary data.
+     *
+     * @return JSON
+     */
+    public function getCompanySummary(Request $request){
+        $summaryData = array();
+        if( Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 ){
+            if(!empty($request['companyId'])){
+                $summaryData['opened'] = JobRequest::where('companyId', $request['companyId'])->where('projectState', '!=', 9)->count();
+                $summaryData['completed'] = JobRequest::where('companyId', $request['companyId'])->where('projectState', 9)->count();
+                $summaryData['chatstotal'] = JobChat::leftjoin('users', "users.id", "=", "job_chat.userId")->where('users.companyId', $request['companyId'])->count();
+                $maxchat = DB::select(DB::raw("SELECT job_request.companyId as companyId, job_request.clientProjectName as projectName, job_request.clientProjectNumber as projectNumber, COUNT(*) AS count FROM `job_chat` LEFT JOIN `job_request` ON `job_chat`.`jobId` = `job_request`.`id` WHERE job_request.companyId = ".$request['companyId']." GROUP BY `job_chat`.`jobId` ORDER BY count DESC LIMIT 1"));
+                if($maxchat && $maxchat[0]){
+                    $maxchatjob = $maxchat[0];
+                    $summaryData['maxchat'] = json_decode(json_encode($maxchatjob),true);
+                    $maxchatcompany = Company::where('id', $maxchatjob->companyId)->first();
+                    $summaryData['maxchat']['companyName'] = $maxchatcompany ? $maxchatcompany->company_name : "";
+                }
+            } else {
+                $summaryData['opened'] = JobRequest::where('projectState', '!=', 9)->count();
+                $summaryData['completed'] = JobRequest::where('projectState', 9)->count();
+                $summaryData['chatstotal'] = JobChat::count();
+                $maxchat = DB::select("SELECT job_request.companyId as companyId, job_request.clientProjectName as projectName, job_request.clientProjectNumber as projectNumber, COUNT(*) AS count FROM `job_chat` LEFT JOIN `job_request` ON `job_chat`.`jobId` = `job_request`.`id` GROUP BY `job_chat`.`jobId` ORDER BY count DESC LIMIT 1");
+                if($maxchat && $maxchat[0]){
+                    $maxchatjob = $maxchat[0];
+                    $summaryData['maxchat'] = json_decode(json_encode($maxchatjob),true);
+                    $maxchatcompany = Company::where('id', $maxchatjob->companyId)->first();
+                    $summaryData['maxchat']['companyName'] = $maxchatcompany ? $maxchatcompany->company_name : "";
+                }
+            }
+        } else if( Auth::user()->userrole == 1 ){
+            $summaryData['opened'] = JobRequest::where('companyId', Auth::user()->companyid)->where('projectState', '!=', 9)->count();
+            $summaryData['completed'] = JobRequest::where('companyId', Auth::user()->companyid)->where('projectState', 9)->count();
+            $summaryData['chatstotal'] = JobChat::leftjoin('users', "users.id", "=", "job_chat.userId")->where('users.companyId', Auth::user()->companyid)->count();
+            $maxchat = DB::select(DB::raw("SELECT job_request.companyId as companyId, job_request.clientProjectName as projectName, job_request.clientProjectNumber as projectNumber, COUNT(*) AS count FROM `job_chat` LEFT JOIN `job_request` ON `job_chat`.`jobId` = `job_request`.`id` WHERE job_request.companyId = ".Auth::user()->companyid." GROUP BY `job_chat`.`jobId` ORDER BY count DESC LIMIT 1"));
+            if($maxchat && $maxchat[0]){
+                $maxchatjob = $maxchat[0];
+                $summaryData['maxchat'] = json_decode(json_encode($maxchatjob),true);
+                $maxchatcompany = Company::where('id', $maxchatjob->companyId)->first();
+                $summaryData['maxchat']['companyName'] = $maxchatcompany ? $maxchatcompany->company_name : "";
+            }
+        }
+        return response()->json($summaryData);
+    }
+
+    /**
+     * Return Individual Users' metrics data
+     *
+     * @return JSON
+     */
+    public function getUserMetrics(Request $request){
+        if(Auth::user()->userrole == 1){
+            $columns = array( 
+                0 =>'id', 
+                1 =>'username',
+                2 =>'opened',
+                3 =>'completed',
+                4 => 'totalchats',
+                5 => 'avgchats'
+            );
+            $handler = new User;
+            $handler = $handler->where('companyid', Auth::user()->companyid);
+        } else {
+            $columns = array( 
+                0 =>'id', 
+                1 =>'companyname',
+                2 =>'username',
+                3 =>'opened',
+                4 =>'completed',
+                5 => 'totalchats',
+                6 => 'avgchats'
+            );
+            $handler = new User;
+        }            
+        
+        $totalData = $handler->count();
+        $totalFiltered = $totalData; 
+
+        $limit = $request->input('length');
+        $start = $request->input('start');
+        $order = $columns[$request->input('order.0.column')];
+        $dir = $request->input('order.0.dir');
+
+        if(!empty($request->input("columns.1.search.value")))
+            $handler = $handler->where('companyid', '=', $request->input("columns.1.search.value"));
+
+        if(empty($request->input('search.value')))
+        {            
+            $totalFiltered = $handler->count();
+            $users = $handler->offset($start)
+                ->limit($limit)
+                ->orderBy($order,$dir)
+                ->select(DB::raw('users.id as id, (SELECT company_name from company_info WHERE company_info.id = users.companyid) as companyname, users.username as username, users.companyId as cur_companyId, users.usernumber as cur_usernum, ( SELECT COUNT(*) FROM job_request WHERE job_request.companyId = cur_companyId AND job_request.userId = cur_usernum AND job_request.projectState != 9) as opened, ( SELECT COUNT(*) FROM job_request WHERE job_request.companyId = cur_companyId AND job_request.userId = cur_usernum AND job_request.projectState = 9) as completed, ( SELECT COUNT(*) FROM job_chat WHERE job_chat.userId = users.id) as totalchats, ( SELECT COUNT(*) FROM job_chat WHERE job_chat.userId = users.id) / ( SELECT COUNT(*) FROM job_request WHERE job_request.companyId = cur_companyId AND job_request.userId = cur_usernum ) as avgchats'))
+                ->get();
+        }
+        else {
+            $search = $request->input('search.value'); 
+            $users =  $handler->where('id', 'LIKE',"%{$search}%")
+                        ->orWhere('username', 'LIKE',"%{$search}%")
+                        ->offset($start)
+                        ->limit($limit)
+                        ->orderBy($order,$dir)
+                        ->select(DB::raw('users.id as id, (SELECT company_name from company_info WHERE company_info.id = users.companyid) as companyname, users.username as username, users.companyId as cur_companyId, users.usernumber as cur_usernum, ( SELECT COUNT(*) FROM job_request WHERE job_request.companyId = cur_companyId AND job_request.userId = cur_usernum AND job_request.projectState != 9) as opened, ( SELECT COUNT(*) FROM job_request WHERE job_request.companyId = cur_companyId AND job_request.userId = cur_usernum AND job_request.projectState = 9) as completed, ( SELECT COUNT(*) FROM job_chat WHERE job_chat.userId = users.id) as totalchats, ( SELECT COUNT(*) FROM job_chat WHERE job_chat.userId = users.id) / ( SELECT COUNT(*) FROM job_request WHERE job_request.companyId = cur_companyId AND job_request.userId = cur_usernum ) as avgchats'))
+                        ->get();
+
+            $totalFiltered = $handler->where('id', 'LIKE',"%{$search}%")
+                        ->orWhere('username', 'LIKE',"%{$search}%")
+                        ->count();
+        }
+
+        $data = array();
+
+        if(!empty($users))
+        {
+            foreach ($users as $user)
+            {
+                $user['actions'] = "
+                <div class='text-center'>
+                    <button type='button' class='btn btn-warning' onclick=''>
+                        " . "<i class='fa fa-eye'></i>" . 
+                    "</button>"
+                . "</div>";
+                $data[] = $user;
+            }
+        }
+        $json_data = array(
+            "draw"            => intval($request->input('draw')),  
+            "recordsTotal"    => intval($totalData),  
+            "recordsFiltered" => intval($totalFiltered), 
+            "data"            => $data   
+            );
+        echo json_encode($json_data);
     }
 
     /**
