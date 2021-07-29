@@ -2462,7 +2462,7 @@ class GeneralController extends Controller
      */
     public function getPermitList(Request $request){
         if(!empty($request['state'])){
-            if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->allow_permit == 1){
+            if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->allow_permit > 0){
                 $list = PermitFiles::where('state', $request['state'])->get();
                 return response()->json(["data" => $list, "success" => true]);
             } else {

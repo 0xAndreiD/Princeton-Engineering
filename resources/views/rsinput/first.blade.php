@@ -418,7 +418,7 @@
         <input class="w400-bdr" id="railsupport-custom" hidden>
         <input class="w400-bdr" id="railsupport-crc32" hidden>
     </tr>
-    @if(Auth::user()->userrole != 4)
+    @if(Auth::user()->userrole != 4 && (Auth::user()->userrole != 0 || Auth::user()->allow_permit != 2))
     <tr class="h13" id="submitBtns">
         <td><div style="overflow:hidden"></div></td>
         <td style="padding: 10px;">

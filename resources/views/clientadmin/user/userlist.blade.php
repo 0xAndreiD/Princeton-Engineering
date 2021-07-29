@@ -39,8 +39,9 @@
                             <th class="text-center" style="width: 10%;">ID</th>
                             <th style="width:20%">Name</th>
                             <th style="width:20%;">Email</th>
-                            <th style="width:20%;">UserRole</th>
-                            <th style="width:20%;">UserNumber</th>
+                            <th style="width:10%;">UserRole</th>
+                            <th style="width:10%;">UserNumber</th>
+                            <th style="width:20%;">Allow Permit</th>
                             <th style="min-width: 150px;">Action</th>
                         </tr>
                         <tr>
@@ -55,6 +56,14 @@
                                 </select>
                             </th>
                             <th class="searchHead"> <input type="text" placeholder="Search Number" class="searchBox" id="userNumFilter"> </th>
+                            <th class="searchHead">
+                                <select placeholder="Search Role" class="searchBox" id="permitFilter">
+                                    <option value="">All</option>
+                                    <option value="0">No</option>
+                                    <option value="1">Regular User with Permit</option>
+                                    <option value="2">Only Permit</option>
+                                </select>
+                            </th>
                             <th></th>
                         </tr>
                     </thead>
@@ -107,6 +116,14 @@
                                     <label for="userrole">User Number (1: Administrator) <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="usernumber" name="usernumber" placeholder="Type Your User Number">
                                 </div>
+                                <div class="form-group">
+                                    <label for="userrole">Allow Permit Submit <span class="text-danger">*</span></label><br/>
+                                    <select class="form-control" id="allow_permit" name="allow_permit">
+                                        <option value="0"><span class='badge badge-primary'> No </span></option>
+                                        <option value="1"><span class='badge badge-danger'> Regular user with Permit Accessible </span></option>
+                                        <option value="2"><span class='badge badge-danger'> Only Permit Accessible </span></option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -142,6 +159,7 @@
                 { "data": "email" },
                 { "data": "userrole" },
                 { "data": "usernumber" },
+                { "data": "allow_permit" },
                 { "data": "actions", "orderable": false }
             ]	 
         });
@@ -155,7 +173,7 @@
             table.column($(this).parent().index() + ':visible').search(this.value).draw();
         });
 
-        $("#roleFilter").on('change', function() {
+        $("#roleFilter, #permitFilter").on('change', function() {
             table.column($(this).parent().index() + ':visible').search(this.value).draw();
         });
     });

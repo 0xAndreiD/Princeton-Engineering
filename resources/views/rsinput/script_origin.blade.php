@@ -4825,6 +4825,18 @@ async function openPermitTab(id, filename, tabname, permitData = null, openTab =
     swal.fire({ title: "Please wait...", showConfirmButton: false });
     swal.showLoading();
     await buildPermitFields(id, filename);
+
+    $(`#tab_permit_${id} .permit`).each(function(){
+        var classes = $(this).attr('class').split(' ');
+        var className = "." + classes[1];
+        
+        $(className).each(function() {
+            if($(this).attr('data-fileid') != id){
+                $(`#tab_permit_${id} ${className}`).val($(this).val());
+            }
+        });
+    })
+
     $(`#tab_permit_${id} .permit`).on('change', function(obj) {
         var classes = $(obj.target).attr('class').split(' ');
         var className = "." + classes[1];
