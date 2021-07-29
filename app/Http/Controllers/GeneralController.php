@@ -69,16 +69,31 @@ class GeneralController extends Controller
                 $notify = 1;
         }
 
+        if( Auth::user()->userrole == 2 )
+            return view('admin.home')->with('notify', $notify);
+        else if( Auth::user()->userrole == 1 || Auth::user()->userrole == 3)
+            return view('clientadmin.home')->with('notify', $notify);
+        else if( Auth::user()->userrole == 4 )
+            return view('reviewer.home')->with('notify', $notify);
+        else if( Auth::user()->userrole == 0 )
+            return view('user.home')->with('notify', $notify);
+    }
+
+    /**
+     * Show the statistics page.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function statistics(Request $request)
+    {
         $companyList = Company::orderBy('company_name', 'asc')->get();
 
         if( Auth::user()->userrole == 2 )
-            return view('admin.home')->with('notify', $notify)->with('companyList', $companyList);
+            return view('admin.statistics.users')->with('companyList', $companyList);
         else if( Auth::user()->userrole == 1 || Auth::user()->userrole == 3)
-            return view('clientadmin.home')->with('notify', $notify)->with('companyList', $companyList);
-        else if( Auth::user()->userrole == 4 )
-            return view('reviewer.home')->with('notify', $notify)->with('companyList', $companyList);
-        else if( Auth::user()->userrole == 0 )
-            return view('user.home')->with('notify', $notify)->with('companyList', $companyList);
+            return view('clientadmin.statistics.users')->with('companyList', $companyList);
+        else
+            return redirect('home');
     }
 
     /**
@@ -204,6 +219,7 @@ class GeneralController extends Controller
                         " . "<i class='fa fa-eye'></i>" . 
                     "</button>"
                 . "</div>";
+                $user['avgchats'] = number_format($user['avgchats'], 1);
                 $data[] = $user;
             }
         }

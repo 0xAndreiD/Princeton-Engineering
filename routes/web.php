@@ -18,6 +18,7 @@ Route::get('/', function () {
 Auth::routes(['register' => false]);
 
 Route::get('/home', 'GeneralController@index')->name('home');
+Route::get('/statistics', 'GeneralController@statistics')->name('statistics');
 Route::post('/getCompanySummary', 'GeneralController@getCompanySummary')->name('getCompanySummary');
 Route::post('/getUserMetrics', 'GeneralController@getUserMetrics')->name('getUserMetrics');
 
