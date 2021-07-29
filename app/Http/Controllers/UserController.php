@@ -55,7 +55,10 @@ class UserController extends Controller
                 2 =>'email',
                 3 =>'companyname',
                 4 =>'userrole',
-                5 =>'usernumber'
+                5 =>'usernumber',
+                6 => 'distance',
+                7 => 'ask_two_factor',
+                8 => 'allow_permit'
             );
             $handler = new User;
         }
@@ -65,9 +68,9 @@ class UserController extends Controller
                 0 =>'id', 
                 1 =>'username',
                 2 =>'email',
-                3 =>'companyname',
-                4 =>'userrole',
-                5 =>'usernumber'
+                3 =>'userrole',
+                4 =>'usernumber',
+                5 => 'allow_permit'
             );
             $handler = User::where('companyid', Auth::user()->companyid)->where('userrole', '<', 2);
         }
@@ -93,6 +96,8 @@ class UserController extends Controller
                 $handler = $handler->where('users.usernumber', 'LIKE', "%{$request->input("columns.5.search.value")}%");
             if(isset($request["columns.7.search.value"]))
                 $handler = $handler->where('users.ask_two_factor', 'LIKE', "%{$request->input("columns.7.search.value")}%");
+            if(isset($request["columns.8.search.value"]))
+                $handler = $handler->where('users.allow_permit', 'LIKE', "%{$request->input("columns.8.search.value")}%");
         } else {
             if(!empty($request->input("columns.1.search.value")))
                 $handler = $handler->where('users.username', 'LIKE', "%{$request->input("columns.1.search.value")}%");
@@ -101,6 +106,8 @@ class UserController extends Controller
             $handler = $handler->where('users.userrole', 'LIKE', "%{$request->input("columns.3.search.value")}%");
             if(!empty($request->input("columns.4.search.value")))
                 $handler = $handler->where('users.usernumber', 'LIKE', "%{$request->input("columns.4.search.value")}%");
+            if(isset($request["columns.5.search.value"]))
+                $handler = $handler->where('users.allow_permit', 'LIKE', "%{$request->input("columns.5.search.value")}%");
         }
 
         if(empty($request->input('search.value')))
@@ -118,7 +125,8 @@ class UserController extends Controller
                         'users.userrole as userrole',
                         'users.usernumber as usernumber',
                         'users.distance_limit as distance',
-                        'users.ask_two_factor as ask_two_factor'
+                        'users.ask_two_factor as ask_two_factor',
+                        'users.allow_permit as allow_permit'
                     )
                 );
         }
@@ -141,7 +149,8 @@ class UserController extends Controller
                                 'users.userrole as userrole',
                                 'users.usernumber as usernumber',
                                 'users.distance_limit as distance',
-                                'users.ask_two_factor as ask_two_factor'
+                                'users.ask_two_factor as ask_two_factor',
+                                'users.allow_permit as allow_permit'
                             )
                         );
 
@@ -188,6 +197,13 @@ class UserController extends Controller
                     $nestedData['ask_two_factor'] = "<span class='badge badge-primary'> Yes </span>";
                 else 
                     $nestedData['ask_two_factor'] = "<span class='badge badge-danger'> No </span>";
+
+                if($user->allow_permit == 0)
+                    $nestedData['allow_permit'] = "<span class='badge badge-danger'> No </span>";
+                else if($user->allow_permit == 1) 
+                    $nestedData['allow_permit'] = "<span class='badge badge-primary'> Regular User </span>";
+                else if($user->allow_permit == 2) 
+                    $nestedData['allow_permit'] = "<span class='badge badge-warning'> Only Permit </span>";
 
                 $nestedData['actions'] = "
                 <div class='text-center'>
@@ -249,6 +265,7 @@ class UserController extends Controller
                 $res->created_at = date('Y-m-d h:i:s',strtotime(now()));
                 if (isset($data['distance_limit'])) $res->distance_limit = $data['distance_limit']; 
                 if (isset($data['ask_two_factor'])) $res->ask_two_factor = $data['ask_two_factor'];
+                $res->allow_permit = $data['allow_permit'];
                 $res->save();
                 echo true;
             } else
@@ -282,6 +299,7 @@ class UserController extends Controller
                 $res->updated_at = date('Y-m-d h:i:s',strtotime(now()));
                 if (isset($data['distance_limit'])) $res->distance_limit = $data['distance_limit']; 
                 if (isset($data['ask_two_factor'])) $res->ask_two_factor = $data['ask_two_factor'];
+                if (isset($data['allow_permit'])) $res->allow_permit = $data['allow_permit'];
                 $res->save();
                 echo true;
             } else

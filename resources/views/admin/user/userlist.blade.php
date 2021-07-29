@@ -37,13 +37,14 @@
                     <thead>
                         <tr>
                             <th class="text-center" style="width: 5%;">ID</th>
-                            <th style="width:20%">Name</th>
+                            <th style="width:15%">Name</th>
                             <th style="width:15%;">Email</th>
-                            <th style="width:20%;">Company</th>
+                            <th style="width:15%;">Company</th>
                             <th style="width:5%;">UserRole</th>
                             <th style="width:5%;">UserNumber</th>
                             <th style="width:10%;">Distance Limit(Miles)</th>
                             <th style="width:5%;">Ask Two Factor</th>
+                            <th style="width:10%;">Allow Permit</th>
                             <th style="min-width: 150px;">Action</th>
                         </tr>
                         <tr>
@@ -75,6 +76,14 @@
                                     <option value="">All</option>
                                     <option value="1">Yes</option>
                                     <option value="0">No</option>
+                                </select>
+                            </th>
+                            <th class="searchHead">
+                                <select placeholder="Search Role" class="searchBox" id="permitFilter">
+                                    <option value="">All</option>
+                                    <option value="0">No</option>
+                                    <option value="1">Regular User with Permit</option>
+                                    <option value="2">Only Permit</option>
                                 </select>
                             </th>
                             <th></th>
@@ -149,6 +158,14 @@
                                         <option value="0"><span class='badge badge-danger'> No </span></option>
                                     </select>
                                 </div>
+                                <div class="form-group">
+                                    <label for="userrole">Allow Permit Submit <span class="text-danger">*</span></label><br/>
+                                    <select class="form-control" id="allow_permit" name="allow_permit">
+                                        <option value="0"><span class='badge badge-primary'> No </span></option>
+                                        <option value="1"><span class='badge badge-danger'> Regular user with Permit Accessible </span></option>
+                                        <option value="2"><span class='badge badge-danger'> Only Permit Accessible </span></option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -188,6 +205,7 @@
                 { "data": "usernumber" },
                 { "data": "distance" },
                 { "data": "ask_two_factor" },
+                { "data": "allow_permit" },
                 { "data": "actions", "orderable": false }
             ]	 
         });
@@ -204,7 +222,7 @@
             table.column($(this).parent().index() + ':visible').search(this.value).draw();
         });
 
-        $("#companyFilter, #roleFilter, #verifyFilter").on('change', function() {
+        $("#companyFilter, #roleFilter, #verifyFilter, #permitFilter").on('change', function() {
             table.column($(this).parent().index() + ':visible').search(this.value).draw();
         });
     });

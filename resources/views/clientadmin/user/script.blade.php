@@ -105,6 +105,7 @@ function updateUser() {
     data.userrole = $('select#userrole').val();
     data.distance_limit = $('input#distance_limit').val();
     data.ask_two_factor = $('select#ask_two_factor').val();
+    data.allow_permit = $('select#allow_permit').val();
 
     if (data.id == 0) { // Create user
         if (data.password == ''){
@@ -149,6 +150,7 @@ function showEditUser(obj, id) {
             $('input#password').val(result.password);
             $('input#email').val(result.email);
             $('select#userrole').val(result.userrole.toString()).trigger('change');
+            $('select#allow_permit').val(result.allow_permit ? result.allow_permit.toString() : '0').trigger('change');
             $('input#usernumber').val(result.usernumber);
             $('button#updateButton').html('Update');
             $.post("recommendUserNum", {}, function(userNum){
