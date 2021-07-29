@@ -310,7 +310,7 @@ ul.social li{
             		<td>
             			<div class="text" style="padding: 0 2.5em;">
                             <h2>Hi, {{$username}}</h2>
-                            <h3>We detected your login from {{$location}}. Will you be using this location & computer in the future? If yes, click the button below.</h3>
+                            <h3>We have detected a login from {{$location}}. Will you be using this location & computer in the future? If yes, click the button below.</h3>
 							<br>
 							<div><a href="{{$link}}" style="padding: 15px; border-radius: 5px; background-color: lightseagreen; color: white; font-size: 1em;"> Save location & device </a></div>
 							<br>

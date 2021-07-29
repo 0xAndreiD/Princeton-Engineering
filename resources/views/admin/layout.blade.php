@@ -112,6 +112,12 @@
                                 <span class="nav-main-link-name">Dashboard</span>
                             </a>
                         </li>
+                        <li class="nav-main-item">
+                            <a class="nav-main-link" href="{{ route('statistics') }}">
+                                <i class="nav-main-link-icon fa fa-bookmark"></i>
+                                <span class="nav-main-link-name">Statistics</span>
+                            </a>
+                        </li>
                         <li class="nav-main-heading">General</li>
                         <li class="nav-main-item">
                             <a class="nav-main-link" href="{{ route('rsinput') }}">
