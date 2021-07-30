@@ -86,14 +86,27 @@ class GeneralController extends Controller
      */
     public function statistics(Request $request)
     {
-        $companyList = Company::orderBy('company_name', 'asc')->get();
+        if(!empty($request['userId'])){
+            $user = User::where('id', $request['userId'])->first();
+            if($user){
+                if( Auth::user()->userrole == 2 || Auth::user()->userrole == 3)
+                    return view('clientadmin.statistics.user')->with('user', $user);
+                else if(Auth::user()->userrole == 1 && $user->companyid == Auth::user()->companyid)
+                    return view('clientadmin.statistics.user')->with('user', $user);
+                else
+                    return redirect('home');
+            }else
+                return redirect('home');
+        } else {
+            $companyList = Company::orderBy('company_name', 'asc')->get();
 
-        if( Auth::user()->userrole == 2 )
-            return view('admin.statistics.users')->with('companyList', $companyList);
-        else if( Auth::user()->userrole == 1 || Auth::user()->userrole == 3)
-            return view('clientadmin.statistics.users')->with('companyList', $companyList);
-        else
-            return redirect('home');
+            if( Auth::user()->userrole == 2 )
+                return view('admin.statistics.users')->with('companyList', $companyList);
+            else if( Auth::user()->userrole == 1 || Auth::user()->userrole == 3)
+                return view('clientadmin.statistics.users')->with('companyList', $companyList);
+            else
+                return redirect('home');
+        }
     }
 
     /**
@@ -189,7 +202,7 @@ class GeneralController extends Controller
             $users = $handler->offset($start)
                 ->limit($limit)
                 ->orderBy($order,$dir)
-                ->select(DB::raw('users.id as id, (SELECT company_name from company_info WHERE company_info.id = users.companyid) as companyname, users.username as username, users.companyId as cur_companyId, users.usernumber as cur_usernum, ( SELECT COUNT(*) FROM job_request WHERE job_request.companyId = cur_companyId AND job_request.userId = cur_usernum AND job_request.projectState != 9) as opened, ( SELECT COUNT(*) FROM job_request WHERE job_request.companyId = cur_companyId AND job_request.userId = cur_usernum AND job_request.projectState = 9) as completed, ( SELECT COUNT(*) FROM job_chat WHERE job_chat.userId = users.id) as totalchats, ( SELECT COUNT(*) FROM job_chat WHERE job_chat.userId = users.id) / ( SELECT COUNT(*) FROM job_request WHERE job_request.companyId = cur_companyId AND job_request.userId = cur_usernum ) as avgchats'))
+                ->select(DB::raw('users.id as id, (SELECT company_name from company_info WHERE company_info.id = users.companyid) as companyname, users.username as username, users.companyId as cur_companyId, users.usernumber as cur_usernum, ( SELECT COUNT(*) FROM job_request WHERE job_request.companyId = cur_companyId AND job_request.creator = cur_usernum AND job_request.projectState != 9) as opened, ( SELECT COUNT(*) FROM job_request WHERE job_request.companyId = cur_companyId AND job_request.creator = cur_usernum AND job_request.projectState = 9) as completed, ( SELECT COUNT(*) FROM job_chat WHERE job_chat.userId = users.id) as totalchats, ( SELECT COUNT(*) FROM job_chat WHERE job_chat.userId = users.id) / ( SELECT COUNT(distinct job_chat.jobId) FROM job_chat WHERE job_chat.userId = users.id ) as avgchats'))
                 ->get();
         }
         else {
@@ -199,7 +212,7 @@ class GeneralController extends Controller
                         ->offset($start)
                         ->limit($limit)
                         ->orderBy($order,$dir)
-                        ->select(DB::raw('users.id as id, (SELECT company_name from company_info WHERE company_info.id = users.companyid) as companyname, users.username as username, users.companyId as cur_companyId, users.usernumber as cur_usernum, ( SELECT COUNT(*) FROM job_request WHERE job_request.companyId = cur_companyId AND job_request.userId = cur_usernum AND job_request.projectState != 9) as opened, ( SELECT COUNT(*) FROM job_request WHERE job_request.companyId = cur_companyId AND job_request.userId = cur_usernum AND job_request.projectState = 9) as completed, ( SELECT COUNT(*) FROM job_chat WHERE job_chat.userId = users.id) as totalchats, ( SELECT COUNT(*) FROM job_chat WHERE job_chat.userId = users.id) / ( SELECT COUNT(*) FROM job_request WHERE job_request.companyId = cur_companyId AND job_request.userId = cur_usernum ) as avgchats'))
+                        ->select(DB::raw('users.id as id, (SELECT company_name from company_info WHERE company_info.id = users.companyid) as companyname, users.username as username, users.companyId as cur_companyId, users.usernumber as cur_usernum, ( SELECT COUNT(*) FROM job_request WHERE job_request.companyId = cur_companyId AND job_request.creator = cur_usernum AND job_request.projectState != 9) as opened, ( SELECT COUNT(*) FROM job_request WHERE job_request.companyId = cur_companyId AND job_request.creator = cur_usernum AND job_request.projectState = 9) as completed, ( SELECT COUNT(*) FROM job_chat WHERE job_chat.userId = users.id) as totalchats, ( SELECT COUNT(*) FROM job_chat WHERE job_chat.userId = users.id) / ( SELECT COUNT(distinct job_chat.jobId) FROM job_chat WHERE job_chat.userId = users.id ) as avgchats'))
                         ->get();
 
             $totalFiltered = $handler->where('id', 'LIKE',"%{$search}%")
@@ -215,9 +228,9 @@ class GeneralController extends Controller
             {
                 $user['actions'] = "
                 <div class='text-center'>
-                    <button type='button' class='btn btn-warning' onclick=''>
+                    <a class='btn btn-warning' href='".route('statistics')."?userId=".$user['id']."'>
                         " . "<i class='fa fa-eye'></i>" . 
-                    "</button>"
+                    "</a>"
                 . "</div>";
                 $user['avgchats'] = number_format($user['avgchats'], 1);
                 $data[] = $user;
@@ -230,6 +243,109 @@ class GeneralController extends Controller
             "data"            => $data   
             );
         echo json_encode($json_data);
+    }
+
+    /**
+     * Return individual user summary info.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getUserSummary(Request $request){
+        if(!empty($request['userId'])){
+            $user = User::where('id', $request['userId'])->first();
+            if($user){
+                $opened = JobRequest::where('companyId', $user->companyid)->where('creator', $user->usernumber)->where('projectState', '!=', '9')->count();
+                $completed = JobRequest::where('companyId', $user->companyid)->where('creator', $user->usernumber)->where('projectState', '=', '9')->count();
+                $totalchats = JobChat::where('userId', $user->id)->count();
+                $chattedjobs = count(JobChat::where('userId', $user->id)->groupBy('jobId')->get());
+                if($chattedjobs == 0)
+                    $avgchats = 0;
+                else
+                    $avgchats = number_format($totalchats / $chattedjobs, 1);
+                return response()->json(["success" => true, "info" => ["opened" => $opened, "completed" => $completed, "totalchats" => $totalchats, "avgchats" => $avgchats]]);
+            } else 
+                return response()->json(["success" => false, "message" => "Cannot find the user."]);
+        } else
+            return response()->json(["success" => false, "message" => "Missing Parameter."]);
+    }
+
+    /**
+     * Return individual user projects info.
+     *
+     * @return JSON
+     */
+    public function getUserProjects(Request $request){
+        $columns = array( 
+            0 =>'id', 
+            1 =>'projectNumber',
+            2 =>'projectName',
+            3 =>'state',
+            4 =>'createdTime',
+            5 => 'submittedTime',
+            6 => 'projectState',
+            7 => 'chats'
+        );
+
+        $user = User::where('id', $request['userId'])->first();
+        if($user){
+            $handler = JobRequest::leftjoin('job_pstatus', "job_pstatus.id", "=", "job_request.projectState")->where('job_request.companyid', $user->companyid)->where('job_request.creator', $user->usernumber);
+        
+            $totalData = $handler->count();
+            $totalFiltered = $totalData; 
+
+            $limit = $request->input('length');
+            $start = $request->input('start');
+            $order = $columns[$request->input('order.0.column')];
+            $dir = $request->input('order.0.dir');
+
+            if(isset($request["columns.3.search.value"]))
+                $handler = $handler->where('job_request.state', 'LIKE', "%{$request->input('columns.3.search.value')}%");
+
+            if(empty($request->input('search.value')))
+            {            
+                $totalFiltered = $handler->count();
+                $jobs = $handler->offset($start)
+                    ->limit($limit)
+                    ->orderBy($order,$dir)
+                    ->select(DB::raw('job_request.id as id, job_request.clientProjectNumber as projectNumber, job_request.clientProjectName as projectName, job_request.state as state, job_request.createdTime as createdTime, job_request.submittedTime as submittedTime, job_request.projectState as projectState, job_pstatus.color as statecolor, ( SELECT COUNT(*) FROM job_chat WHERE job_chat.jobId = job_request.id ) as chats'))
+                    ->get(array());
+            }
+            else {
+                $search = $request->input('search.value'); 
+                $jobs =  $handler->where('id', 'LIKE',"%{$search}%")
+                            ->orWhere('username', 'LIKE',"%{$search}%")
+                            ->offset($start)
+                            ->limit($limit)
+                            ->orderBy($order,$dir)
+                            ->select(DB::raw('job_request.id as id, job_request.clientProjectNumber as projectNumber, job_request.clientProjectName as projectName, job_request.state as state, job_request.createdTime as createdTime, job_request.submittedTime as submittedTime, job_request.projectState as projectState, job_pstatus.color as statecolor, ( SELECT COUNT(*) FROM job_chat WHERE job_chat.jobId = job_request.id ) as chats'))
+                            ->get();
+
+                $totalFiltered = $handler->where('id', 'LIKE',"%{$search}%")
+                            ->orWhere('username', 'LIKE',"%{$search}%")
+                            ->count();
+            }
+
+            $data = array();
+
+            if(!empty($jobs))
+            {
+                foreach ($jobs as $job)
+                {
+                    $globalStates = JobProjectStatus::orderBy('id', 'asc')->get();
+                    $job['projectStatus'] = "<span class='badge' style='white-space: pre-wrap; color: #fff; background-color: {$job->statecolor};'> {$globalStates[intval($job->projectstate)]->notes} </span>";
+                    $data[] = $job;
+                }
+            }
+            $json_data = array(
+                "draw"            => intval($request->input('draw')),  
+                "recordsTotal"    => intval($totalData),  
+                "recordsFiltered" => intval($totalFiltered), 
+                "data"            => $data   
+                );
+            echo json_encode($json_data);
+        } else {
+            return response()->json(["data" => [], "draw" => 1, "recordsFiltered" => 0, "recordsTotal" => 0]);
+        }
     }
 
     /**
@@ -1446,10 +1562,16 @@ class GeneralController extends Controller
             {
                 if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || (Auth::user()->companyid == $project['companyId'] && intval($request['state']) <= 2))
                 {
-                    if($project->planCheck == 1)
+                    if($project->planCheck == 1){
                         $project->eSeal = 1;
-                    if($project->asBuilt == 1)
+                        $project->reviewerId = Auth::user()->id;
+                        $project->reviewer_co_id = Auth::user()->companyid;
+                    }
+                    if($project->asBuilt == 1){
+                        $project->reviewer_asb_id = Auth::user()->id;
+                        $project->reviewer_asb_co_id = Auth::user()->companyid;
                         $project->eSeal_asbuilt = 1;
+                    }
                     $project->planCheck = 0;
                     $project->asBuilt = 0;
                     $project->chatIcon = 2;

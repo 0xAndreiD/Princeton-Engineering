@@ -21,6 +21,8 @@ Route::get('/home', 'GeneralController@index')->name('home');
 Route::get('/statistics', 'GeneralController@statistics')->name('statistics');
 Route::post('/getCompanySummary', 'GeneralController@getCompanySummary')->name('getCompanySummary');
 Route::post('/getUserMetrics', 'GeneralController@getUserMetrics')->name('getUserMetrics');
+Route::post('/getUserSummary', 'GeneralController@getUserSummary')->name('getUserSummary');
+Route::post('/getUserProjects', 'GeneralController@getUserProjects')->name('getUserProjects');
 
 // RS Input Page
 Route::get('/rsinput', 'GeneralController@rsinput')->name('rsinput');
