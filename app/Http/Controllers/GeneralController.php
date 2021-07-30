@@ -1565,12 +1565,10 @@ class GeneralController extends Controller
                     if($project->planCheck == 1){
                         $project->eSeal = 1;
                         $project->reviewerId = Auth::user()->id;
-                        $project->reviewer_co_id = Auth::user()->companyid;
                     }
                     if($project->asBuilt == 1){
-                        $project->reviewer_asb_id = Auth::user()->id;
-                        $project->reviewer_asb_co_id = Auth::user()->companyid;
                         $project->eSeal_asbuilt = 1;
+                        $project->reviewerAsbId = Auth::user()->id;
                     }
                     $project->planCheck = 0;
                     $project->asBuilt = 0;
