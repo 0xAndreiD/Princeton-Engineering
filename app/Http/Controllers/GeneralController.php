@@ -332,7 +332,7 @@ class GeneralController extends Controller
                 foreach ($jobs as $job)
                 {
                     $globalStates = JobProjectStatus::orderBy('id', 'asc')->get();
-                    $job['projectStatus'] = "<span class='badge' style='white-space: pre-wrap; color: #fff; background-color: {$job->statecolor};'> {$globalStates[intval($job->projectstate)]->notes} </span>";
+                    $job['projectStatus'] = "<span class='badge' style='white-space: pre-wrap; color: #fff; background-color: {$job->statecolor};'> {$globalStates[intval($job->projectState)]->notes} </span>";
                     $data[] = $job;
                 }
             }
