@@ -30,6 +30,7 @@ use App\JobChat;
 use App\PermitFiles;
 use App\PermitInfo;
 use App\PermitFields;
+use App\StructuralNotes;
 use Kunnu\Dropbox\DropboxApp;
 use Kunnu\Dropbox\Dropbox;
 use Kunnu\Dropbox\DropboxFile;
@@ -1486,11 +1487,29 @@ class GeneralController extends Controller
             {
                 if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->companyid == $project['companyId'])
                 {
-                    $datacheck = DataCheck::leftjoin('structural_notes', "structural_notes.id", "=", "data_check.structural_notes")
-                    ->where('jobId', $request['projectId'])->first();
-
-                    if($datacheck)
+                    $check = DataCheck::where('jobId', $request['projectId'])->first();
+                    
+                    if($check){
+                        $datacheck = $check->toArray();
+                        $datacheck['notes'] = array();
+                        if(strlen($datacheck['structural_notes']) == 1){
+                            $note = StructuralNotes::where('id', $datacheck['structural_notes'])->first();
+                            if($note)
+                                $datacheck['notes'] = $note->note;
+                            else
+                                $datacheck['notes'] = '';
+                        } else {
+                            for($i = 0; $i < strlen($datacheck['structural_notes']) - 1; $i += 2){
+                                $noteId = substr($datacheck['structural_notes'], $i, 2);
+                                $note = StructuralNotes::where('id', $noteId)->first();
+                                if($note)
+                                    $datacheck['notes'][] = $note->note;
+                                else
+                                    $datacheck['notes'][] = '';
+                            }
+                        }
                         return response()->json(['success' => true, 'data' => $datacheck]);
+                    }
                     else
                         return response()->json(['success' => false, 'message' => "No Data Check"]);
                 }

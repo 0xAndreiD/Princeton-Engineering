@@ -619,9 +619,9 @@
     </tr>
 </tbody>
 </table>
-<div>
+
     <!-- Error table -->
-    <table cellspacing="0" cellpadding="0" style="border-spacing:0; display:inline-block; vertical-align: top;" >    
+    <table cellspacing="0" cellpadding="0" style="border-spacing:0; display: inline-block; vertical-align: top;" >    
         <colgroup>
             <col width="80">
             <col width="160">
@@ -679,8 +679,43 @@
             </tr>
         </tbody>
     </table>
-</div>
 
+    <table cellspacing="0" cellpadding="0" style="border-spacing:0; display: table; vertical-align: top;" >    
+        <colgroup>
+            <col width="80">
+            <col width="240">
+            <col width="400">
+        </colgroup>
+    <tbody>
+        <tr class="h13">
+            <td><div style="overflow:hidden"></td>
+            <td><div style="overflow:hidden"></td>
+            <td><div style="overflow:hidden"></td>
+            <td><div style="overflow:hidden"></td>
+            <td><div style="overflow:hidden"></td>
+            <td><div style="overflow:hidden"></td>
+            <td><div style="overflow:hidden"></td>
+        </tr>
+        <tr class="h13" style="display: none;" id="structural-header">
+            <td><div style="overflow:hidden"></div></td>
+            <td class="iw400-bdr" colspan="2">Structural Notes</td>
+            <td><div style="overflow:hidden"></div></td>
+        </tr>
+        <tr class="h13" style="display: none;" id="structural-headers">
+            <td><div style="overflow:hidden"></div></td>
+            <td class="iw400-bdr">Framing Condition # and Name</td>
+            <td class="iw400-bdr">Note *</td>
+        </tr>
+        @for($j = 1; $j <= 10; $j ++)
+        <tr class="h13" style="display: none;" id="structural-{{$j}}">
+            <td><div style="overflow:hidden"></div></td>
+            <td class="iw400-bdr" id="structural-title-{{$j}}">{{$j}}: MP{{$j}}</td>
+            <td class="iw400-bdr" id="structural-note-{{$j}}"></td>
+        </tr>
+        @endfor
+    </tbody>
+    </table>
+    
 <input type="text" value="{{ $projectId }}" id="projectId" hidden>
 <input type="text" value="{{ $projectState }}" id="projectState" hidden>
 <input type="text" value="{{ $offset }}" id="companyOffset" hidden>
