@@ -2546,11 +2546,29 @@ $(document).ready(function() {
                                 $('#requiredNotes').html(' *************** No Roof Framing Changes are Required *************** ');
                             }
 
-                            var structural_notes = res.data.structural_notes;
-                            if (structural_notes!=0){
-                                $(`tr#structural-notes`).css('display', "table-row");
-                                $(`td#structural-notes`).css('display', 'block');
-                                $('td#structural-notes').html(res.data.note);
+                            haveChanges = false;
+                            var notes = res.data.notes;
+                            if(typeof notes == 'string'){
+                                if(notes != ''){
+                                    $(`tr#structural-notes`).css('display', "table-row");
+                                    $(`td#structural-notes`).css('display', 'block');
+                                    $('td#structural-notes').html(notes);
+                                }
+                            } else {
+                                if(notes && notes.length > 0){
+                                    for(let i = 1; i <= notes.length; i ++){
+                                        if(notes[i - 1] != ""){
+                                            haveChanges = true;
+                                            $(`#structural-${i}`).css('display', "table-row");
+                                            $(`#structural-title-${i}`).html('FC.' + i + ': ' + $(`#a-5-${i}`).val());
+                                            $(`#structural-note-${i}`).html(notes[i - 1]);
+                                        }
+                                    }
+                                    if(haveChanges){
+                                        $('#structural-header').css('display', "table-row");
+                                        $('#structural-headers').css('display', "table-row");
+                                    }
+                                }
                             }
                             $('#site-check-table').css('display', 'table');
                             $('#code-check-table').css('display', 'table');
