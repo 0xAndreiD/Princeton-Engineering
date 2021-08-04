@@ -193,8 +193,7 @@ table{
 	line-height: 1.4;
 }
 .hero .text h3{
-	font-size: 20px;
-	font-weight: 300;
+	font-size: 16px;
 }
 .hero .text h2 span{
 	font-weight: 600;
@@ -291,75 +290,82 @@ ul.social li{
     <div style="max-width: 600px; margin: 0 auto;" class="email-container">
     	<!-- BEGIN BODY -->
       <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
-      	<tr>
+	  	<tr>
           <td valign="top" class="bg_white" style="padding: 1em 2.5em 0 2.5em;">
           	<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
           		<tr>
-          			<td class="logo" style="text-align: center;">
-						<img src="https://princeton.engineering/iRoof/public/img/logo.jpg" alt="iRoof Logo" style="width: 150px;"></img>
-						<h2>Princeton Engineering</h2>
-			          </td>
+          			<td class="logo" style="text-align: center;width: 20%;">
+					  	<img src="https://princeton.engineering/iRoof/public/img/logo.jpg" alt="iRoof Logo" style="width: 100px;"></img>
+			        </td>
+					<td style="text-align: center; width: 80%;">
+						<h2 style="font-family: 'Helvetica'; margin: 0;font-size: 22px; color: blue;">TectoniCorp, P. C.</h2>
+						<h2 style="font-family: 'Helvetica'; margin: 0;font-size: 22px; color: blue; line-height: initial;">Princeton Engineering</h2>
+						<h2 style="margin: 0;font-size: 16px; color: blue; ">
+							Solar, Structural, Electrical and Site Engineering
+						</h2>
+					</td>
           		</tr>
           	</table>
           </td>
-	      </tr><!-- end tr -->
+	    </tr><!-- end tr -->
 		<tr>
-          <td valign="middle" class="hero bg_white" style="padding: 2em 0 4em 0;">
+			<td style="text-align:center; width: 100%; font-size: 18px; color: black; padding-top: 10px;" class="hero bg_white">
+				<b>iRoof™</b> Residential Roof Framing Analysis for Solar Installations
+			</td>
+		</tr>
+		<tr>
+          <td valign="middle" class="hero bg_white" style="padding: 1em 0 0 0;">
             <table>
             	<tr>
             		<td>
             			<div class="text" style="padding: 0 2.5em;">
-                            <h2>Hi, {{$username}}</h2>
-                            <h3>We have detected a login from {{$location}}. Will you be using this location & computer in the future? If yes, click the button below.</h3>
+                            <h2 style="color: black;">Hi, {{$username}}</h2>
+                            <h3 style="color: black;">We have detected a login from {{$location}}. Will you be using this location & computer in the future? If yes, click the button below.</h3>
 							<br>
 							<div><a href="{{$link}}" style="padding: 15px; border-radius: 5px; background-color: lightseagreen; color: white; font-size: 1em;"> Save location & device </a></div>
 							<br>
-							<h3>If the button does not work, please paste the below link into your browser.</h3>
+							<h3 style="color: black;">If the button does not work, please paste the below link into your browser.</h3>
 							<p>{{$link}}</p>
-							<br>
-							<h3>Thanks & Regards,</h3>
-							<h3>The iRoof Team</h3>
             			</div>
             		</td>
             	</tr>
             </table>
           </td>
-	      </tr><!-- end tr -->
+	    </tr><!-- end tr -->
+		<tr>
+			<td valign="middle" class="hero bg_white" style="padding: 0 0 0 0;">
+				<table style="margin: 0 !important;">
+					<tr>
+						<td>
+							<div class="text" style="padding: 0 2.5em; text-align: left;">
+								<h3 style="color: black;"><b>Please do not reply this email.</b></h3>
+							</div>
+							<div class="text" style="padding: 0 2.5em; text-align: left;">
+								<h3 style="font-size: 15px; color: black;">If you need further assistance, email us at info@Princeton-Engineering.com.</h3>
+							</div>
+						</td>
+					</tr>
+				</table>
+			  </td>
+		</tr>
+		<tr>
+			<td valign="middle" class="hero bg_white" style="margin: 1em 0 4em 0; border-top: 1px solid blue;">
+				<table>
+					<tr>
+						<td>
+							<div class="text" style="text-align: center; ">
+								<h3 style="text-align:center; color: blue; margin: 0;"> 35091 Paxson Road - Round Hill, VA 20141 </h3>
+							</div>
+							<div class="text" style="text-align: center;">
+								<h3 style="text-align:center; color: blue; margin:0;"> tel: 540.313.5317 - fax: 877.455.5641 - www.Princeton-Engineering.com </h3>
+							</div>
+						</td>
+					</tr>
+				</table>
+			  </td>
+		</tr>
       <!-- 1 Column Text + Button : END -->
       </table>
-	  <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
-		<tr>
-		<td valign="middle" class="bg_light footer email-section">
-		  <table>
-			  <tr>
-			  <td valign="top" width="50%" style="padding-top: 20px;">
-				<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
-				  <tr>
-					<td style="text-align: left; padding-right: 10px;">
-						<h3 class="heading">About</h3>
-						<p>iRoof™ Residential Roof Framing Analysis for Solar Installations</p>
-					</td>
-				  </tr>
-				</table>
-			  </td>
-			  <td valign="top" width="50%" style="padding-top: 20px;">
-				<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
-				  <tr>
-					<td style="text-align: left; padding-left: 5px; padding-right: 5px;">
-						<h3 class="heading">Contact Info</h3>
-						<ul style="list-style: none; padding: 0px;">
-						  <li style="margin-left: 0px;"><span class="text">Princeton Engineering</span></li>
-						  <li style="margin-left: 0px;"><span class="text">info@Princeton-Engineering.com</span></a></li>
-					  </ul>
-					</td>
-				  </tr>
-				</table>
-			  </td>
-			</tr>
-		  </table>
-		</td>
-	  </tr><!-- end: tr -->
-	</table>
 	
     </div>
   </center>
