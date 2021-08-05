@@ -192,6 +192,8 @@ Route::post('/getStandardInverters', 'StandardEquipmentController@getStandardInv
 Route::post('/submitStandardInverter', 'StandardEquipmentController@submitInverter')->name('submitStandardInverter');
 Route::post('/deleteStandardInverter', 'StandardEquipmentController@deleteInverter')->name('deleteStandardInverter');
 Route::post('/standardInverterToggleFavorite', 'StandardEquipmentController@inverterToggleFavorite')->name('inverterToggleFavorite');
+Route::post('/copyStandardInverters', 'StandardEquipmentController@copyInverters')->name('copyStandardInverters');
+Route::post('/delStandardInverters', 'StandardEquipmentController@delInverters')->name('delStandardInverters');
 
 //Standard Solar Racking(Rail Support)
 Route::get('/standardRacking', 'StandardEquipmentController@standardRacking')->name('standardRacking');
@@ -199,6 +201,8 @@ Route::post('/getStandardRacking', 'StandardEquipmentController@getStandardRacki
 Route::post('/submitStandardRacking', 'StandardEquipmentController@submitRacking')->name('submitStandardRacking');
 Route::post('/deleteStandardRacking', 'StandardEquipmentController@deleteRacking')->name('deleteStandardRacking');
 Route::post('/standardRackingToggleFavorite', 'StandardEquipmentController@rackingToggleFavorite')->name('standardRackingToggleFavorite');
+Route::post('/copyStandardRackings', 'StandardEquipmentController@copyRackings')->name('copyStandardRackings');
+Route::post('/delStandardRackings', 'StandardEquipmentController@delRackings')->name('delStandardRackings');
 
 //Standard Stanchions
 Route::get('/standardStanchion', 'StandardEquipmentController@standardStanchion')->name('standardStanchion');
@@ -206,6 +210,8 @@ Route::post('/getStandardStanchion', 'StandardEquipmentController@getStandardSta
 Route::post('/submitStandardStanchion', 'StandardEquipmentController@submitStanchion')->name('submitStandardStanchion');
 Route::post('/deleteStandardStanchion', 'StandardEquipmentController@deleteStanchion')->name('deleteStandardStanchion');
 Route::post('/standardStanchionToggleFavorite', 'StandardEquipmentController@stanchionToggleFavorite')->name('standardStanchionToggleFavorite');
+Route::post('/copyStandardStanchions', 'StandardEquipmentController@copyStanchions')->name('copyStandardStanchions');
+Route::post('/delStandardStanchions', 'StandardEquipmentController@delStanchions')->name('delStandardStanchions');
 
 //Two Factor Authentication
 Route::get('verify/resend', 'Auth\TwoFactorController@resend')->name('verify.resend');
