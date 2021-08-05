@@ -140,6 +140,135 @@ function delInverter(obj, id){
         }
     });
 }
+
+function copyInverters(){
+    var ids = [];
+    $(".bulkcheck").each(function(){
+        if($(this)[0].checked){
+            ids.push($(this).attr('id').split('bulkcheck_').join(''));
+        }
+    });
+
+    if(ids.length > 0){
+        swal.fire({
+            title: 'Are you sure want to copy selected inverters?',
+            icon: 'warning',
+            showCancelButton: true,
+            customClass: {
+                confirmButton: 'btn btn-danger m-1',
+                cancelButton: 'btn btn-secondary m-1'
+            },
+            confirmButtonText: 'Yes, copy!',
+            html: false,
+            preConfirm: e => {
+                return new Promise(resolve => {
+                    setTimeout(() => {
+                        resolve();
+                    }, 50);
+                });
+            }
+        })
+        .then(( result ) => {
+            if ( result.value ) {
+                swal.fire({ title: "Please wait...", showConfirmButton: false });
+                swal.showLoading();
+                $.ajax({
+                    url:"copyStandardInverters",
+                    type:'post',
+                    data:{ids: ids},
+                    success:function(res){
+                        swal.close();
+                        if (res.success == true) {
+                            swal.fire({ title: "Copied!", text: "Inverters have been duplicated.", icon: "success", confirmButtonText: `OK` });
+                            $('#equipments').DataTable().ajax.reload();
+                        } else {
+                            // error handling
+                            swal.fire({ title: "Error",
+                                text: res.message,
+                                icon: "error",
+                                confirmButtonText: `OK` });
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        swal.close();
+                        res = JSON.parse(xhr.responseText);
+                        message = res.message;
+                        swal.fire({ title: "Error",
+                                text: message == "" ? "Error happened while processing. Please try again later." : message,
+                                icon: "error",
+                                confirmButtonText: `OK` });
+                    }
+                });
+            }
+        });
+    } else
+        swal.fire({ title: "Warning!", text: "Please select some inverters.", icon: "warning", confirmButtonText: `OK` });
+}
+
+function delInverters(){
+    var ids = [];
+    $(".bulkcheck").each(function(){
+        if($(this)[0].checked){
+            ids.push($(this).attr('id').split('bulkcheck_').join(''));
+        }
+    });
+
+    if(ids.length > 0){
+        swal.fire({
+            title: 'Are you sure want to delete selected inverters?',
+            icon: 'warning',
+            showCancelButton: true,
+            customClass: {
+                confirmButton: 'btn btn-danger m-1',
+                cancelButton: 'btn btn-secondary m-1'
+            },
+            confirmButtonText: 'Yes, Delete!',
+            html: false,
+            preConfirm: e => {
+                return new Promise(resolve => {
+                    setTimeout(() => {
+                        resolve();
+                    }, 50);
+                });
+            }
+        })
+        .then(( result ) => {
+            if ( result.value ) {
+                swal.fire({ title: "Please wait...", showConfirmButton: false });
+                swal.showLoading();
+                $.ajax({
+                    url:"delStandardInverters",
+                    type:'post',
+                    data:{ids: ids},
+                    success:function(res){
+                        swal.close();
+                        if (res.success == true) {
+                            swal.fire({ title: "Deleted!", text: "Inverters have been deleted.", icon: "success", confirmButtonText: `OK` });
+                            $('#equipments').DataTable().ajax.reload();
+                        } else {
+                            // error handling
+                            swal.fire({ title: "Error",
+                                text: res.message,
+                                icon: "error",
+                                confirmButtonText: `OK` });
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        swal.close();
+                        res = JSON.parse(xhr.responseText);
+                        message = res.message;
+                        swal.fire({ title: "Error",
+                                text: message == "" ? "Error happened while processing. Please try again later." : message,
+                                icon: "error",
+                                confirmButtonText: `OK` });
+                    }
+                });
+            }
+        });
+    } else
+        swal.fire({ title: "Warning!", text: "Please select some inverters.", icon: "warning", confirmButtonText: `OK` });
+}
+
 @endif
 function toggleFavourite(obj, id){
     $.ajax({
