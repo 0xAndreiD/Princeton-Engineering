@@ -57,11 +57,20 @@ class StandardEquipmentController extends Controller
      * @return JSON
      */
     public function getStandardModules(Request $request){
-        $columns = array( 
-            0 =>'id', 
-            1 =>'mfr',
-            2 =>'model'
-        );
+        if(Auth::user()->userrole == 2){
+            $columns = array( 
+                0 =>'id', 
+                1 =>'id', 
+                2 =>'mfr',
+                3 =>'model'
+            );
+        } else {
+            $columns = array( 
+                0 =>'id', 
+                1 =>'mfr',
+                2 =>'model'
+            );
+        }
         $handler = new PVModule;
 
         $totalData = $handler->count();
@@ -118,6 +127,11 @@ class StandardEquipmentController extends Controller
             $id = 1;
             foreach ($modules as $module)
             {
+                if(Auth::user()->userrole == 2)
+                    $module['bulkcheck'] = "
+                        <div class='text-center'>
+                            <input type='checkbox' id='bulkcheck_{$module['id']}' class='bulkcheck' style='cursor: pointer;'>
+                        </div>";
                 $module['actions'] = "
                 <div class='text-center'>
                     <button type='button' class='btn' onclick='toggleFavourite(this,{$module['id']})'>
@@ -125,7 +139,6 @@ class StandardEquipmentController extends Controller
                     "</button>" . 
                     (Auth::user()->userrole == 2 ? "<button type='button' class='btn btn-primary' onclick='showEditModule(this,{$module['id']})'><i class='fa fa-pencil-alt'></i></button>" . "<button type='button' class='js-swal-confirm btn btn-danger' style='margin-left:5px;' onclick='delModule(this,{$module['id']})'><i class='fa fa-trash'></i></button>" : "")
                     . "</div>";
-                $module['id'] = $id; $id ++;
                 $module['favorite_ids'] = $favorites;
                 $data[] = $module;
             }
@@ -258,6 +271,51 @@ class StandardEquipmentController extends Controller
         } else {
             return response()->json(['success' => false, 'message' => 'Empty moduleId.']);
         }
+    }
+
+    /**
+     * Copy standard modules.
+     *
+     * @return JSON
+     */
+    public function copyModules(Request $request){
+        if(!empty($request['ids']) && count($request['ids']) > 0){
+            foreach($request['ids'] as $id){
+                $module = PVModule::where('id', $id)->first()->replicate();
+                if($module){
+                    $module['model'] = $module['model'] . "_copy";
+                    $base_str = $module['mfr'] . $module['model'];
+                    do{
+                        $tmp = unpack("l", pack("l", crc32($base_str)));
+                        $crc32 = reset($tmp);
+                        $check = PVModule::where('crc32', $crc32)->first();
+                        $base_str .= $this->generateRandomString();
+                    }while($check);
+                    
+                    $module['crc32'] = $crc32;
+                    $module->save();
+                }
+            }
+            return response()->json(['success' => true]);
+        } else 
+            return response()->json(['success' => false, 'message' => 'Nothing to copy.']);
+    }
+
+    /**
+     * Delete standard modules.
+     *
+     * @return JSON
+     */
+    public function delModules(Request $request){
+        if(!empty($request['ids']) && count($request['ids']) > 0){
+            foreach($request['ids'] as $id){
+                $module = PVModule::where('id', $id)->first();
+                if($module)
+                    $module->delete();    
+            }
+            return response()->json(['success' => true]);
+        } else 
+            return response()->json(['success' => false, 'message' => 'Nothing to copy.']);
     }
 
     /**

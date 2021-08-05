@@ -26,10 +26,18 @@
             <h3 class="block-title">Module List</h3>
             @if(Auth::user()->userrole == 2)
             <div class="block-options">
-                <button type="button" class="btn-block-option" 
+                <button type="button" class="btn-block-option mr-2" 
                     data-toggle='modal' data-target='#modal-block-normal'
                     onclick="showAddModule()">
                     <i class="fa fa-plus"></i> Add Module
+                </button>
+                <button type="button" class="btn-block-option mr-2" 
+                    onclick="copyModules()">
+                    <i class="fa fa-copy"></i> Copy Modules
+                </button>
+                <button type="button" class="btn-block-option" 
+                    onclick="delModules()">
+                    <i class="fa fa-trash"></i> Delete Modules
                 </button>
             </div>
             @endif
@@ -39,6 +47,9 @@
                 <table id="equipments" class="table table-bordered table-striped table-vcenter text-center" style="width:100%;">
                     <thead>
                         <tr>
+                            @if(Auth::user()->userrole == 2)
+                            <th class="text-center" style="width: 5%;"></th>
+                            @endif
                             <th class="text-center" style="width: 10%;">ID</th>
                             <th style="width:40%">Manufacturer</th>
                             <th style="width:40%;">Model</th>
@@ -46,6 +57,7 @@
                         </tr>
                         @if(Auth::user()->userrole == 2)
                         <tr>
+                            <th></th>
                             <th></th>
                             <th class="searchHead"> <input type="text" placeholder="Search Manufacturer" class="searchBox" id="mfrFilter"> </th>
                             <th></th>
@@ -146,11 +158,17 @@
                     "data":{ _token: "{{csrf_token()}}"}
                 },
             "columns": [
+                @if(Auth::user()->userrole == 2)
+                { "data": "bulkcheck", "orderable": false },
+                @endif
                 { "data": "id" },
                 { "data": "mfr" },
                 { "data": "model" },
                 { "data": "actions", "orderable": false }
-            ]	 
+            ],
+            @if(Auth::user()->userrole == 2)
+            "order": [[1, "asc"]]
+            @endif
         });
 
         $.ajaxSetup({

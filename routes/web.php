@@ -183,6 +183,8 @@ Route::post('/getStandardModules', 'StandardEquipmentController@getStandardModul
 Route::post('/submitStandardModule', 'StandardEquipmentController@submitModule')->name('submitStandardModule');
 Route::post('/deleteStandardModule', 'StandardEquipmentController@deleteModule')->name('deleteStandardModule');
 Route::post('/standardModuleToggleFavorite', 'StandardEquipmentController@moduleToggleFavorite')->name('standardModuleToggleFavorite');
+Route::post('/copyStandardModules', 'StandardEquipmentController@copyModules')->name('copyStandardModules');
+Route::post('/delStandardModules', 'StandardEquipmentController@delModules')->name('delStandardModules');
 
 //Standard Inverter
 Route::get('/standardInverter', 'StandardEquipmentController@standardInverter')->name('standardInverter');
