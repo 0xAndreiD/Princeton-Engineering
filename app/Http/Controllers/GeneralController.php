@@ -1051,7 +1051,8 @@ class GeneralController extends Controller
                         'job_request.asBuilt as asbuilt',
                         'job_planstatus.color as statuscolor',
                         'job_pstatus.color as statecolor',
-                        'job_request.eSeal as eSeal'
+                        'job_request.eSeal as eSeal',
+                        'job_request.eSeal_asbuilt as eSeal_asbuilt'
                     )
                 );
             //if($handler->offset($start)->count() > 0)
@@ -1089,7 +1090,8 @@ class GeneralController extends Controller
                                 'job_request.asBuilt as asbuilt',
                                 'job_planstatus.color as statuscolor',
                                 'job_pstatus.color as statecolor',
-                                'job_request.eSeal as eSeal'
+                                'job_request.eSeal as eSeal',
+                                'job_request.eSeal_asbuilt as eSeal_asbuilt'
                             )
                         );
 
