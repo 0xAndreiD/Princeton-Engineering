@@ -1176,9 +1176,9 @@ class GeneralController extends Controller
                 else
                     $sealCol = '000000';
                 
-                if($job->asbuilt == 1)
+                if($job->eSeal_asbuilt == 1)
                     $asbuiltCol = '0000FF';
-                else if($job->asbuilt == 2)
+                else if($job->eSeal_asbuilt == 2)
                     $asbuiltCol = '00FF00';
                 else
                     $asbuiltCol = '000000';
