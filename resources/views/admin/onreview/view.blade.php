@@ -201,6 +201,8 @@
                         <input type='checkbox' id="Asbuilt" onchange='toggleAsBuilt({{$job["id"]}})' <?php echo $job['asBuilt'] == 1 ? "checked" : ""; ?>> <label for="Asbuilt" class="mb-0 ml-2 text-left">As-built</label>
                         @endif
                     </div>
+                    <input type="hidden" id="planCheckVal" value="{{ $job['planCheck'] }}">
+                    <input type="hidden" id="asBuiltVal" value="{{ $job['asBuilt'] }}">
                 </div>
             </div>
         </div>

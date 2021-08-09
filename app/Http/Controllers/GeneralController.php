@@ -1583,11 +1583,11 @@ class GeneralController extends Controller
             {
                 if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || (Auth::user()->companyid == $project['companyId'] && intval($request['state']) <= 2))
                 {
-                    if($project->planCheck == 1){
+                    if($request['planCheck'] == 1){
                         $project->eSeal = 1;
                         $project->reviewerId = Auth::user()->id;
                     }
-                    if($project->asBuilt == 1){
+                    if($request['asBuilt'] == 1){
                         $project->eSeal_asbuilt = 1;
                         $project->reviewerAsbId = Auth::user()->id;
                     }

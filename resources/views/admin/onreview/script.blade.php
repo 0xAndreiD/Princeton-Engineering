@@ -331,7 +331,7 @@ function eSealUpload(){
     $.ajax({
         url:"setESeal",
         type:'post',
-        data:{projectId: $('#projectId').val()},
+        data:{projectId: $('#projectId').val(), planCheck: $("#planCheckVal").val(), asBuilt: $("#asBuiltVal").val()},
         success:function(res){
             swal.close();
             if (res.success == true) {
