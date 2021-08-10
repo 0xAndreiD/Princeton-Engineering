@@ -656,7 +656,7 @@ var getPVModuleSubTypes = function(mainType) {
             }
         }
         if (bFound == false){
-            if(moduleSetting == 0 || (moduleSetting == 1 && !availablePVModules[index][7]) || (moduleSetting == 2 && availablePVModules[index][8]))
+            if(moduleSetting == 0 || (moduleSetting == 1 && !availablePVModules[index][7]) || (moduleSetting == 2 && availablePVModules[index][8] == true))
                 subTypes.push(availablePVModules[index]);
         }
     }
@@ -694,7 +694,7 @@ var updatePVSubmoduleField = function(mainType, subType="") {
         for (index=0; index<subTypes.length; index++) 
         {
             let background = '';
-            if(subTypes[index][8])
+            if(subTypes[index][8] == true)
                 background = '#90EE90';
             else if(subTypes[index][7])
                 background = '#FED8B1';
@@ -746,7 +746,7 @@ var getPVInvertorSubTypes = function(mainType) {
             }
         }
         if (bFound == false){
-            if(inverterSetting == 0 || (inverterSetting == 1 && !availablePVInverters[index][4]) || (inverterSetting == 2 && availablePVInverters[index][5]))
+            if(inverterSetting == 0 || (inverterSetting == 1 && !availablePVInverters[index][4]) || (inverterSetting == 2 && availablePVInverters[index][5] == true))
                 subTypes.push(availablePVInverters[index]);
         }
     }
@@ -785,7 +785,7 @@ var updatePVInvertorSubField = function(mainType, subType = "") {
         for (index=0; index<subTypes.length; index++) 
         {
             let background = '';
-            if(subTypes[index][5])
+            if(subTypes[index][5] == true)
                 background = '#90EE90';
             else if(subTypes[index][4])
                 background = '#FED8B1';
@@ -836,7 +836,7 @@ var getStanchionSubTypes = function(mainType) {
             }
         }
         if (bFound == false){
-            if(stanchionSetting == 0 || (stanchionSetting == 1 && !availableStanchions[index][4]) || (stanchionSetting == 2 && availableStanchions[index][5]))
+            if(stanchionSetting == 0 || (stanchionSetting == 1 && !availableStanchions[index][4]) || (stanchionSetting == 2 && availableStanchions[index][5] == true))
                 subTypes.push(availableStanchions[index]);
         }
     }
@@ -875,7 +875,7 @@ var updateStanchionSubField = function(mainType, subType = "") {
         for (index=0; index<subTypes.length; index++) 
         {
             let background = '';
-            if(subTypes[index][5])
+            if(subTypes[index][5] == true)
                 background = '#90EE90';
             else if(subTypes[index][4])
                 background = '#FED8B1';
@@ -926,7 +926,7 @@ var getRailSupportSubTypes = function(mainType) {
             }
         }
         if (bFound == false){
-            if(railSetting == 0 || (railSetting == 1 && !availableRailSupports[index][4]) || (railSetting == 2 && availableRailSupports[index][5]))
+            if(railSetting == 0 || (railSetting == 1 && !availableRailSupports[index][4]) || (railSetting == 2 && availableRailSupports[index][5] == true))
                 subTypes.push(availableRailSupports[index]);
         }
     }
@@ -964,7 +964,7 @@ var updateRailSupportSubField = function(mainType, subType = "") {
         for (index=0; index<subTypes.length; index++) 
         {
             let background = '';
-            if(subTypes[index][5])
+            if(subTypes[index][5] == true)
                 background = '#90EE90';
             else if(subTypes[index][4])
                 background = '#FED8B1';
