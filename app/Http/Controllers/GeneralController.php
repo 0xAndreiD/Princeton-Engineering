@@ -1244,7 +1244,7 @@ class GeneralController extends Controller
      * @return JSON
      */
     public function getPVModules(Request $request){
-        $pv_modules = PVModule::all()->toArray();
+        $pv_modules = PVModule::all();
         $favorite = StandardFavorite::where('client_no', Auth::user()->companyid)->where('type', 0)->first();
         if(!$favorite)
             $favorite_ids = '';
@@ -1255,6 +1255,7 @@ class GeneralController extends Controller
             if(in_array(strval($module['crc32']), $favorites))
                 $module['favorite'] = true;
         }
+        $pv_modules = $pv_modules->toArray();
 
         //Custom
         if(Auth::user()->userrole != 2){
@@ -1285,7 +1286,7 @@ class GeneralController extends Controller
      * @return JSON
      */
     public function getPVInverters(Request $request){
-        $pv_inverters = PVInverter::all()->toArray();
+        $pv_inverters = PVInverter::all();
         $favorite = StandardFavorite::where('client_no', Auth::user()->companyid)->where('type', 1)->first();
         if(!$favorite)
             $favorite_ids = '';
@@ -1296,6 +1297,7 @@ class GeneralController extends Controller
             if(in_array(strval($inverter['crc32']), $favorites))
                 $inverter['favorite'] = true;
         }
+        $pv_inverters = $pv_inverters->toArray();
 
         //Custom
 
@@ -1328,7 +1330,7 @@ class GeneralController extends Controller
      * @return JSON
      */
     public function getStanchions(Request $request){
-        $stanchions = Stanchion::all()->toArray();
+        $stanchions = Stanchion::all();
         $favorite = StandardFavorite::where('client_no', Auth::user()->companyid)->where('type', 3)->first();
         if(!$favorite)
             $favorite_ids = '';
@@ -1339,6 +1341,7 @@ class GeneralController extends Controller
             if(in_array(strval($stanchion['crc32']), $favorites))
                 $stanchion['favorite'] = true;
         }
+        $stanchions = $stanchions->toArray();
 
         //Custom
         if(Auth::user()->userrole != 2){
@@ -1370,7 +1373,7 @@ class GeneralController extends Controller
      * @return JSON
      */
     public function getRailsupport(Request $request){
-        $railsupport = RailSupport::all()->toArray();
+        $railsupport = RailSupport::all();
         $favorite = StandardFavorite::where('client_no', Auth::user()->companyid)->where('type', 2)->first();
         if(!$favorite)
             $favorite_ids = '';
@@ -1381,6 +1384,7 @@ class GeneralController extends Controller
             if(in_array(strval($support['crc32']), $favorites))
                 $support['favorite'] = true;
         }
+        $railsupport = $railsupport->toArray();
 
         //Custom
         if(Auth::user()->userrole != 2){
