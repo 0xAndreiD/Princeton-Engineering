@@ -999,7 +999,7 @@ function updateModuleSetting(setting){
             let checkModule = availablePVModules.filter(item => item[0] == type && !item[7])
             if(checkModule[0]) mainTypes.push(type);
         } else {
-            let checkModule = availablePVModules.filter(item => item[0] == type && item[8])
+            let checkModule = availablePVModules.filter(item => item[0] == type && item[8] == true)
             if(checkModule[0]) mainTypes.push(type);
         }
     })
@@ -1032,7 +1032,7 @@ function updateInverterSetting(setting){
             let checkModule = availablePVInverters.filter(item => item[0] == type && !item[4])
             if(checkModule[0]) mainTypes.push(type);
         } else {
-            let checkModule = availablePVInverters.filter(item => item[0] == type && item[5])
+            let checkModule = availablePVInverters.filter(item => item[0] == type && item[5] == true)
             if(checkModule[0]) mainTypes.push(type);
         }
     })
@@ -1066,7 +1066,7 @@ function updateStanchionSetting(setting){
             let checkModule = availableStanchions.filter(item => item[0] == type && !item[4])
             if(checkModule[0]) mainTypes.push(type);
         } else {
-            let checkModule = availableStanchions.filter(item => item[0] == type && item[5])
+            let checkModule = availableStanchions.filter(item => item[0] == type && item[5] == true)
             if(checkModule[0]) mainTypes.push(type);
         }
     })
@@ -1099,7 +1099,7 @@ function updateRailSetting(setting){
             let checkModule = availableRailSupports.filter(item => item[0] == type && !item[4])
             if(checkModule[0]) mainTypes.push(type);
         } else {
-            let checkModule = availableRailSupports.filter(item => item[0] == type && item[5])
+            let checkModule = availableRailSupports.filter(item => item[0] == type && item[5] == true)
             if(checkModule[0]) mainTypes.push(type);
         }
     })
