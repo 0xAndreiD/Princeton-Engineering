@@ -1241,11 +1241,13 @@ var isEmptyInputBox = function() {
         if($(`#c-2-${i}`).val() != "" && parseFloat($(`#c-2-${i}`).val()) != 0 && ($(`#c-1-${i}`).val() == ""))
         {
             isEmpty = true;
+            console.log(`#c-1-${i}`);
             $(`#c-1-${i}`).css('background-color', '#FFC7CE');
         }    
         if($(`#c-2-${i}`).val() != "" && parseFloat($(`#c-2-${i}`).val()) != 0 && ($(`#c-3-${i}`).val() == ""))
         {
             isEmpty = true;
+            console.log(`#c-3-${i}`);
             $(`#c-3-${i}`).css('background-color', '#FFC7CE');
         }
     }
@@ -1270,6 +1272,7 @@ var isEmptyInputBox = function() {
             return;
 
         $(this).css('background-color', '#FFC7CE');
+        console.log($(this).attr('id'));
         isEmpty = true;
     });
     
@@ -1277,10 +1280,12 @@ var isEmptyInputBox = function() {
     // check empty date boxes
     if ($('#date-of-field-visit').val() == "") {
         $('#date-of-field-visit').css('background-color', '#FFC7CE');
+        console.log('date-of-field-visit');
         isEmpty = true;
     }
     if ($('#date-of-plan-set').val() == "") {
         $('#date-of-plan-set').css('background-color', '#FFC7CE');
+        console.log('date-of-plan-set');
         isEmpty = true;
     }
 
