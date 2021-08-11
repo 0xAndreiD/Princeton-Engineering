@@ -3730,6 +3730,7 @@ var loadPreloadedData = function() {
                             $('#option-state').val(preloaded_data['ProjectInfo']['State']);
                             //detectCorrectTownForMA();
                             $('#txt-zip').val(preloaded_data['ProjectInfo']['Zip']);
+                            $("#option-project-type").val(preloaded_data['ProjectInfo']['Type']);
 
                             $('#txt-name-of-field-personnel').val(preloaded_data['Personnel']['Name']);
                             $('#date-of-field-visit').val(preloaded_data['Personnel']['DateOfFieldVisit']);
@@ -4325,9 +4326,9 @@ var loadPreloadedData = function() {
         applyUserSetting();
         await loadPreloadedData();
         await loadStateOptions();
+        await loadDataCheck();
         await loadPreloadedPermitData();
         loadEquipmentSection();
-        await loadDataCheck();
         await setProjectIdComment();
 
         var i;
@@ -4717,6 +4718,9 @@ function buildPermitFields(id, filename){
                                             defaultvalue = '877-455-5641';
                                         else if(field.dbinfo == 'architect_license')
                                             defaultvalue = 'PE039453R';
+                                        else if(field.dbinfo == 'elec_desc_of_work'){
+                                            defaultvalue = "Installation of " + $('#option-project-type').val() + " " + ($('#DCWatts').html() / 1000) + " kW PV solar system";
+                                        }
                                             
                                         else if(field.defaultvalue)
                                             defaultvalue = field.defaultvalue;

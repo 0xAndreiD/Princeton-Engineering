@@ -117,6 +117,7 @@
                                 <option value='architect_tel' <?php echo $field['dbinfo'] == 'architect_tel' ? 'selected' : ''; ?>>Architect Tel</option>
                                 <option value='architect_fax' <?php echo $field['dbinfo'] == 'architect_fax' ? 'selected' : ''; ?>>Architect Fax</option>
                                 <option value='architect_license' <?php echo $field['dbinfo'] == 'architect_license' ? 'selected' : ''; ?>>Architect License</option>
+                                <option value='elec_desc_of_work' <?php echo $field['dbinfo'] == 'elec_desc_of_work' ? 'selected' : ''; ?>>Elec Desc of Work</option>
                             </select>
                         </td>
                         <td class='w400-green-bdr'>
@@ -290,6 +291,7 @@
                                 <option value='architect_tel'>Architect Tel</option>\
                                 <option value='architect_fax'>Architect Fax</option>\
                                 <option value='architect_license'>Architect License</option>\
+                                <option value='elec_desc_of_work'>Elec Desc of Work</option>\
                             </select>\
                         </td>";
                 row += "<td class='w400-green-bdr'>\
