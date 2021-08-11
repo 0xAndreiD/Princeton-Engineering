@@ -715,6 +715,7 @@ class GeneralController extends Controller
         $data['ProjectInfo']['City'] = $input['txt-city'];
         $data['ProjectInfo']['State'] = $input['option-state'];
         $data['ProjectInfo']['Zip'] = $input['txt-zip'];
+        $data['ProjectInfo']['Type'] = $input['option-project-type'];
         
         //Personnel
         $data['Personnel'] = array();

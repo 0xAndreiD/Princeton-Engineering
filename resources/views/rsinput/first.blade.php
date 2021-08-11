@@ -141,6 +141,18 @@
     </tr>
     <tr class="h13">
         <td><div style="overflow:hidden"></div></td>
+        <td class="iw400-right-bdr">Project Type</td>
+        <td class="w400-green-bdr">
+            <select id="option-project-type" tabindex="11">
+                <option value="Rooftop" selected="">Roof Mount</option>
+                <option value="Groundmount">Ground Mount</option>
+            </select>
+        </td>
+        <td><div style="overflow:hidden"></div></td>
+        <td><div style="overflow:hidden"></div></td>
+    </tr>
+    <tr class="h13">
+        <td><div style="overflow:hidden"></div></td>
         <td class="iw400-right-bdr"># of Framing Conditions</td>
         <td class="w400-green-bdr">
             <select id="option-number-of-conditions" tabindex="12">
