@@ -1252,7 +1252,7 @@ var isEmptyInputBox = function() {
         }
     }
     
-    var empty_textboxes = $('input:text:enabled').filter(function() { return this.value === ""; });
+    var empty_textboxes = $('.rfdContainer input:text:enabled').filter(function() { return this.value === ""; });
     empty_textboxes.each(function() { 
         // skip note 
         if (typeof $(this).attr('id') == "string" && ($(this).attr('id').includes("i-1-") || isIgnorable($(this).attr('id')) )) {
@@ -3735,7 +3735,8 @@ var loadPreloadedData = function() {
                             $('#option-state').val(preloaded_data['ProjectInfo']['State']);
                             //detectCorrectTownForMA();
                             $('#txt-zip').val(preloaded_data['ProjectInfo']['Zip']);
-                            $("#option-project-type").val(preloaded_data['ProjectInfo']['Type']);
+                            if(preloaded_data['ProjectInfo']['Type'])
+                                $("#option-project-type").val(preloaded_data['ProjectInfo']['Type']);
 
                             $('#txt-name-of-field-personnel').val(preloaded_data['Personnel']['Name']);
                             $('#date-of-field-visit').val(preloaded_data['Personnel']['DateOfFieldVisit']);
