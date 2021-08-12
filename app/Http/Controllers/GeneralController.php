@@ -1304,11 +1304,11 @@ class GeneralController extends Controller
 
         if(Auth::user()->userrole != 2){
             $custom_inverters = CustomInverter::where('client_no', Auth::user()->companyid)->get(
-                array('mfr as module', 'model as submodule', 'rating as option1', 'favorite', 'crc32')
+                array('mfr as module', 'model as submodule', 'rating as option1', 'favorite', 'crc32', 'Rated_Out_Power as watts')
             );
         } else {
             $custom_inverters = CustomInverter::get(
-                array('mfr as module', 'model as submodule', 'rating as option1', 'favorite', 'crc32')
+                array('mfr as module', 'model as submodule', 'rating as option1', 'favorite', 'crc32', 'Rated_Out_Power as watts')
             );
         }
         foreach($custom_inverters as $inverter){

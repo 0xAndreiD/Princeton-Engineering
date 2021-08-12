@@ -144,8 +144,8 @@
         <td class="iw400-right-bdr">Project Type</td>
         <td class="w400-green-bdr">
             <select id="option-project-type" tabindex="11">
-                <option value="Rooftop" selected="">Roof Mount</option>
-                <option value="Groundmount">Ground Mount</option>
+                <option value="Roof Mount" selected="">Roof Mount</option>
+                <option value="Ground Mount">Ground Mount</option>
             </select>
         </td>
         <td><div style="overflow:hidden"></div></td>
@@ -359,6 +359,7 @@
         </td>
         <input class="w400-bdr" id="inverter-custom" hidden>
         <input class="w400-bdr" id="inverter-crc32" hidden>
+        <input class="w400-bdr" id="inverter-watts" hidden>
     </tr>
     <tr class="h13">
         <td><div style="overflow:hidden"></div></td>

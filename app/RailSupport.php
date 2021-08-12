@@ -15,7 +15,7 @@ class RailSupport extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'id', 'module', 'submodule', 'option1', 'option2', 'crc32'
+        'id', 'module', 'submodule', 'option1', 'option2', 'crc32', 'VAC', 'watts'
     ];
 
     protected $table = 'rail_support';

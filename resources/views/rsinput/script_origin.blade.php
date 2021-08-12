@@ -805,6 +805,7 @@ var updatePVInvertorSubField = function(mainType, subType = "") {
     $('#option-inverter-option2').html(optionPVInverter(mainType, subType, 3));   
     $('#inverter-custom').val(optionPVInverter(mainType, subType, 4) ? true : false);
     $('#inverter-crc32').val(optionPVInverter(mainType, subType, 6));
+    $('#inverter-watts').val(optionPVInverter(mainType, subType, 7));
 }
 
 var getStanchionTypes = function() {
@@ -2323,7 +2324,7 @@ $(document).ready(function() {
                 if(res.length > 0)
                 {
                     for(let i = 0; i < res.length; i ++){
-                        availablePVInverters.push([res[i]['module'], res[i]['submodule'], res[i]['option1'], res[i]['option2'], res[i]['custom'], res[i]['favorite'], res[i]['crc32']]);
+                        availablePVInverters.push([res[i]['module'], res[i]['submodule'], res[i]['option1'], res[i]['option2'], res[i]['custom'], res[i]['favorite'], res[i]['crc32'], res[i]['watts']]);
                     }
                 }
                 // ------------------- Second Line ---------------------
@@ -3735,8 +3736,12 @@ var loadPreloadedData = function() {
                             $('#option-state').val(preloaded_data['ProjectInfo']['State']);
                             //detectCorrectTownForMA();
                             $('#txt-zip').val(preloaded_data['ProjectInfo']['Zip']);
-                            if(preloaded_data['ProjectInfo']['Type'])
-                                $("#option-project-type").val(preloaded_data['ProjectInfo']['Type']);
+                            if(preloaded_data['ProjectInfo']['Type']){
+                                if(preloaded_data['ProjectInfo']['Type'] == 'Ground Mount')
+                                    $("#option-project-type").val('Ground Mount');
+                                else
+                                    $("#option-project-type").val('Roof Mount');
+                            }
 
                             $('#txt-name-of-field-personnel').val(preloaded_data['Personnel']['Name']);
                             $('#date-of-field-visit').val(preloaded_data['Personnel']['DateOfFieldVisit']);
@@ -4725,7 +4730,7 @@ function buildPermitFields(id, filename){
                                         else if(field.dbinfo == 'architect_license')
                                             defaultvalue = 'PE039453R';
                                         else if(field.dbinfo == 'elec_desc_of_work'){
-                                            defaultvalue = "Installation of " + $('#option-project-type').val() + " " + ($('#DCWatts').html() / 1000) + " kW PV solar system";
+                                            defaultvalue = "Installation of " + $('#option-project-type').val() + " " + (parseFloat($("#inverter-watts").val()) * $("#option-inverter-quantity").val() / 1000) + " kW PV solar system";
                                         }
                                             
                                         else if(field.defaultvalue)
