@@ -15,7 +15,7 @@ class PVModule extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'id', 'mfr', 'model', 'rating', 'length', 'width', 'depth', 'weight', 'crc32'
+        'id', 'mfr', 'model', 'rating', 'length', 'width', 'depth', 'weight', 'crc32', 'VAC', 'watts'
     ];
 
     protected $table = 'pv_module';
