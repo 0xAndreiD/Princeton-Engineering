@@ -2518,7 +2518,6 @@ $(document).ready(function() {
                             $('#DCWatts').html(res.data.DCWatts);
                             $('#InverterAmperage').html(res.data.InverterAmperage);
                             $('#OCPDRating').html(res.data.OCPDRating);
-                            $('#OCPDRating').html(res.data.OCPDRating);
                             $('#RecommendOCPD').html(res.data.RecommendOCPD);
                             $('#MinCu').html(res.data.MinCu);
                             
@@ -2529,10 +2528,16 @@ $(document).ready(function() {
                                     if(collarHeights.length >= 5 * i)
                                     {
                                         let tabCollar = collarHeights.slice(5 * (i - 1), 5 * i);
+                                        let notesId = 0;
+                                        if(res.data.structural_notes && res.data.structural_notes.length >= 2 * i)
+                                            notesId = parseInt(res.data.structural_notes.slice(2 * (i - 1), 2 * i));
                                         if(parseFloat(tabCollar) != 0)
                                         {
                                             haveChanges = true;
-                                            $(`#collartie-height-${i}`).html(parseFloat(tabCollar).toFixed(2));
+                                            if(notesId == 2)
+                                                $(`#collartie-height-${i}`).html('Framing Error. See note below.');
+                                            else
+                                                $(`#collartie-height-${i}`).html(parseFloat(tabCollar).toFixed(2));
                                             $(`#collartie-title-${i}`).html(i + ': ' + $(`#a-5-${i}`).val());
                                             $(`#collartie-${i}`).css('display', "table-row");
                                             $(`#collartie-warning-${i}`).css('display', 'block');
