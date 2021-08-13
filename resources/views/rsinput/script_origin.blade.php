@@ -4736,7 +4736,12 @@ function buildPermitFields(id, filename){
                                             defaultvalue = 'PE039453R';
                                         else if(field.dbinfo == 'elec_desc_of_work'){
                                             defaultvalue = "Installation of " + $('#option-project-type').val() + " " + (parseFloat($("#inverter-watts").val()) * $("#option-inverter-quantity").val() / 1000) + " kW PV solar system";
-                                        }
+                                        } else if(field.dbinfo == 'inverter_qty')
+                                            defaultvalue = $("#option-inverter-quantity").val();
+                                        else if(field.dbinfo == 'inverter_watts')
+                                            defaultvalue = $("#inverter-watts").val() / 1000;
+                                        else if(field.dbinfo == 'inverter_model_mfr')
+                                            defaultvalue = $("#option-inverter-type").val() + " / " + $("#option-inverter-subtype").val();
                                             
                                         else if(field.defaultvalue)
                                             defaultvalue = field.defaultvalue;
