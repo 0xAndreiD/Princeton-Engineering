@@ -118,6 +118,9 @@
                                 <option value='architect_fax' <?php echo $field['dbinfo'] == 'architect_fax' ? 'selected' : ''; ?>>Architect Fax</option>
                                 <option value='architect_license' <?php echo $field['dbinfo'] == 'architect_license' ? 'selected' : ''; ?>>Architect License</option>
                                 <option value='elec_desc_of_work' <?php echo $field['dbinfo'] == 'elec_desc_of_work' ? 'selected' : ''; ?>>Elec Desc of Work</option>
+                                <option value='inverter_qty' <?php echo $field['dbinfo'] == 'inverter_qty' ? 'selected' : ''; ?>>Inverter Quantity</option>
+                                <option value='inverter_watts' <?php echo $field['dbinfo'] == 'inverter_watts' ? 'selected' : ''; ?>>Inverter Watts</option>
+                                <option value='inverter_model_mfr' <?php echo $field['dbinfo'] == 'inverter_model_mfr' ? 'selected' : ''; ?>>Inverter MFR / MODEL</option>
                             </select>
                         </td>
                         <td class='w400-green-bdr'>
@@ -292,6 +295,9 @@
                                 <option value='architect_fax'>Architect Fax</option>\
                                 <option value='architect_license'>Architect License</option>\
                                 <option value='elec_desc_of_work'>Elec Desc of Work</option>\
+                                <option value='inverter_qty'>Inverter Quantity</option>\
+                                <option value='inverter_watts'>Inverter Watts</option>\
+                                <option value='inverter_model_mfr'>Inverter MFR / MODEL</option>\
                             </select>\
                         </td>";
                 row += "<td class='w400-green-bdr'>\
