@@ -147,9 +147,10 @@ class PermitController extends Controller
                 $field['htmlfield'] = $item[5];
                 if ($item[4] == 'on') $item[4] = 1; else $item[4] = 0;
                 $field['htmlcheck'] = $item[4];
-                $field['label'] = $item[6];
-                $field['dbinfo'] = $item[7];
-                $field['options'] = $item[8];
+                $field['section'] = $item[6];
+                $field['label'] = $item[7];
+                $field['dbinfo'] = $item[8];
+                $field['options'] = $item[9];
                 PermitFields::create($field);
             }
             return response()->json(['success' => true, 'status' => true]);

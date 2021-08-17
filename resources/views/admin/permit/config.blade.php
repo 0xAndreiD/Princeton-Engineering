@@ -33,12 +33,13 @@
                 <thead>
                     <tr>
                         <th style="width:15%; text-align:center" colspan="2">PDF Field</th>
-                        <th style="width:15%; text-align:center">Type</th>
+                        <th style="width:10%; text-align:center">Type</th>
                         <th style="width:10%; text-align:center">Default Value</th>
-                        <th style="width:15%; text-align:center" colspan = "2">HTML Field ID</th>
+                        <th style="width:10%; text-align:center" colspan = "2">HTML Field ID</th>
+                        <th style="width:15%; text-align:center">Section Name</th>
                         <th style="width:15%; text-align:center">Label</th>
                         <th style="width:10%; text-align:center">DBinfo</th>
-                        <th style="width:30%; text-align:center">Options</th>
+                        <th style="width:25%; text-align:center">Options</th>
                     </tr>
                 </thead>
                 <tbody id="list_form">
@@ -87,6 +88,9 @@
                         </td>
                         <td class='w400-yellow-bdr'>
                             <input type='text' class='configPermit' value="{{ $field['htmlfield'] }}"></input>
+                        </td>
+                        <td class='w400-yellow-bdr'>
+                            <input type='text' class='configPermit' value="{{ $field['section'] }}"></input>
                         </td>
                         <td class='w400-yellow-bdr'>
                             <input type='text' class='configPermit' value="{{ $field['label'] }}"></input>
@@ -266,6 +270,7 @@
                 row += "</td>";
                 row += "<td class='w400-green-bdr'><input type='checkbox' class='configPermit' id='htmlcheck_" + idx + "' checked></input></td>";
                 row += "<td class='w400-yellow-bdr'><input type='text' class='configPermit' value='" + key + "'></input></td>";
+                row += "<td class='w400-yellow-bdr'><input type='text' class='configPermit' value=''></input></td>";
                 row += "<td class='w400-yellow-bdr'><input type='text' class='configPermit' value='" + field_key + "'></input></td>";
                 row += "<td class='w400-yellow-bdr'>\
                             <select class='configPermit'>\

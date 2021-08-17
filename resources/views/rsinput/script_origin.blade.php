@@ -4747,6 +4747,11 @@ function buildPermitFields(id, filename){
                                             defaultvalue = field.defaultvalue;
                                         
                                         let html = '';
+                                        if(field.section && field.section != ''){
+                                            html += '<tr class="h13">';
+                                            html += ('<td colspan="2" class="text-left"><b>' + field.section + '</b></td>');
+                                            html += '</tr>';
+                                        }
                                         html += ('<tr class="h13" ' + (field.htmlcheck == 0 ? 'style="display: none;"' : '' ) + '>');
                                         if(field.type == 0){
                                             html += ('<td class="iw400-right-bdr">' + field.label + '</td>');
