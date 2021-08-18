@@ -4688,8 +4688,8 @@ function buildPermitFields(id, filename){
                                 res.fields.sort((a, b) => {
                                     if(!a || !a.sortIndex) return 1;
                                     if(!b || !b.sortIndex) return -1;
-                                    if(a.sortIndex < b.sortIndex) return -1;
-                                    if(a.sortIndex > b.sortIndex) return 1;
+                                    if(parseInt(a.sortIndex) < parseInt(b.sortIndex)) return -1;
+                                    if(parseInt(a.sortIndex) > parseInt(b.sortIndex)) return 1;
                                     return 0;
                                 });
                                 res.fields.forEach((field, index) => {
