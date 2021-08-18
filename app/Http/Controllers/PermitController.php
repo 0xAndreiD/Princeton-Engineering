@@ -151,6 +151,8 @@ class PermitController extends Controller
                 $field['label'] = $item[7];
                 $field['dbinfo'] = $item[8];
                 $field['options'] = $item[9];
+                if (isset($item[10])) $field['sortIndex'] = $item[10];
+                else $field['sortIndex'] = null;
                 PermitFields::create($field);
             }
             return response()->json(['success' => true, 'status' => true]);

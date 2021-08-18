@@ -4685,6 +4685,13 @@ function buildPermitFields(id, filename){
                                 var companyInfo = response.company;
                                 var permitInfo = response.permit;
 
+                                res.fields.sort((a, b) => {
+                                    if(!a || !a.sortIndex) return 1;
+                                    if(!b || !b.sortIndex) return -1;
+                                    if(a.sortIndex < b.sortIndex) return -1;
+                                    if(a.sortIndex > b.sortIndex) return 1;
+                                    return 0;
+                                });
                                 res.fields.forEach((field, index) => {
                                     if(field.pdfcheck == 1){
                                         let defaultvalue = '';

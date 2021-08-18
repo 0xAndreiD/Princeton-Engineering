@@ -15,7 +15,7 @@ class PermitFields extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'filename', 'pdffield', 'idx', 'pdfcheck', 'defaultvalue', 'htmlfield', 'htmlcheck', 'section', 'label', 'dbinfo', 'type', 'options'
+        'filename', 'pdffield', 'idx', 'pdfcheck', 'defaultvalue', 'htmlfield', 'htmlcheck', 'section', 'label', 'dbinfo', 'type', 'options', 'sortIndex'
     ];
 
     protected $table = 'permit_fields';

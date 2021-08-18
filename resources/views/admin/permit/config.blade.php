@@ -39,7 +39,8 @@
                         <th style="width:15%; text-align:center">Section Name</th>
                         <th style="width:15%; text-align:center">Label</th>
                         <th style="width:10%; text-align:center">DBinfo</th>
-                        <th style="width:25%; text-align:center">Options</th>
+                        <th style="width:20%; text-align:center">Options</th>
+                        <th style="width:5%; text-align:center">Priority</th>
                     </tr>
                 </thead>
                 <tbody id="list_form">
@@ -129,6 +130,9 @@
                         </td>
                         <td class='w400-green-bdr'>
                             <input type='text' class='configPermit optionsConfig' value="{{ $field['options'] }}" id="optionsfield_{{ $idx }}"></input>
+                        </td>
+                        <td class='w400-green-bdr'>
+                            <input type='text' class='configPermit' value="{{ $field['sortIndex'] }}"></input>
                         </td>
                         <input type='hidden' class='configPermit' value="{{ $field['idx'] }}" id="idx_{{ $idx }}">
                     </tr>
@@ -307,6 +311,9 @@
                         </td>";
                 row += "<td class='w400-green-bdr'>\
                             <input type='text' class='configPermit optionsConfig' value='" + options.join(",") + "' id='optionsfield_" + idx + "'></input>\
+                        </td>";
+                row += "<td class='w400-green-bdr'>\
+                            <input type='text' class='configPermit' value=''></input>\
                         </td>";
                 row += "<input type='hidden' class='configPermit' value='" + fieldidx + "' id='idx_" + idx + "'>";
                 row += "</tr>";
