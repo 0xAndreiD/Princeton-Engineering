@@ -580,48 +580,6 @@ var availableUSState = [
   "NE","NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","RI","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY"
 ];
 
-var availableMATowns = [
-    "Abington", "Acton", "Acushnet", "Adams", "Agawam", "Alford", "Amesbury", "Amherst", "Andover", "Aquinnah", "Arlington", 
-    "Ashburnham", "Ashby", "Ashfield", "Ashland", "Athol", "Attleboro", "Auburn", "Avon", "Ayer", 
-    "Barnstable", "Barre", "Becket", "Bedford", "Belchertown", "Bellingham", "Belmont", "Berkley", "Berlin", "Bernardston", 
-    "Beverly", "Billerica", "Blackstone", "Blandford", "Bolton", "Boston", "Bourne", "Boxborough", "Boxford", "Boylston", 
-    "Braintree", "Brewster", "Bridgewater", "Brimfield", "Brockton", "Brookfield", "Brookline", "Buckland", "Burlington", 
-    "Cambridge", "Canton", "Carlisle", "Carver", "Charlemont", "Charlton", "Chatham", "Chelmsford", "Chelsea", "Cheshire", 
-    "Chester", "Chesterfield", "Chicopee", "Chilmark", "Clarksburg", "Clinton", "Cohasset", "Colrain", "Concord", "Conway", 
-    "Cummington", "Dalton", "Danvers", "Dartmouth", "Dedham", "Deerfield", "Dennis", "Dighton", "Douglas", "Dover", "Dracut", 
-    "Dudley", "Dunstable", "Duxbury", "E. Bridgewater", "E. Brookfield", "E. Longmeadow", "Eastham", "Easthampton", "Easton", 
-    "Edgartown", "Egremont", "Erving", "Essex", "Everett", "Fairhaven", "Fall River", "Falmouth", "Fitchburg", "Florida", 
-    "Foxborough", "Framingham", "Franklin", "Freetown", "Gardner", "Gay Head", "Georgetown", "Gill", "Gloucester", 
-    "Goshen", "Grafton", "Gosnold", "Granby", "Granville", "GreatBarrington", "Greenfield", "Groton", "Groveland", 
-    "Hadley", "Halifax", "Hamilton", "Hampden", "Hancock", "Hanover", "Hanson", "Hardwick", "Harvard", "Harwich", 
-    "Hatfield", "Haverhill", "Hawley", "Heath", "Hingham", "Hinsdale", "Holbrook", "Holden", "Holland", "Holliston", 
-    "Holyoke", "Hopedale", "Hopkinton", "Hubbardston", "Hudson", "Hull", "Huntington", "Ipswich", "Kingston", 
-    "Lakeville", "Lancaster", "Lanesborough", "Lawrence", "Lee", "Leicester", "Lenox", "Leominster", "Leverett", 
-    "Lexington", "Leyden", "Lincoln", "Littleton", "Longmeadow", "Lowell", "Ludlow", "Lunenburg", "Lynn", 
-    "Lynnfield", "Malden", "Manchester", "Mansfield", "Marblehead", "Marion", "Marlborough", "Marshfield", "Mashpee", 
-    "Mattapoisett", "Maynard", "Medfield", "Medford", "Medway", "Melrose", "Mendon", "Merrimac", "Methuen", 
-    "Middleborough", "Middlefield", "Middleton", "Milford", "Millbury", "Millis", "Millville", "Milton", "Monroe", 
-    "Monson", "Montague", "Monterey", "Montgomery", "Mount Washington", "Nahant", "Nantucket", "Natick", "Needham", 
-    "New Ashford", "New Bedford", "New Braintree", "New Marlborough", "New Salem", "Newbury", "Newburyport", 
-    "Newton", "Norfolk", "North Adams", "North Andover", "North Attleborough", "North Brookfield", "North Reading", 
-    "Northampton", "Northborough", "Northbridge", "Northfield", "Norton", "Norwell", "Norwood", "OakBluffs", 
-    "Oakham", "Orange", "Orleans", "Otis", "Oxford", "Palmer", "Paxton", "Peabody", "Pelham", "Pembroke", "Pepperell", 
-    "Peru", "Petersham", "Phillipston", "Pittsfield", "Plainfield", "Plainville", "Plymouth", "Plympton", "Princeton", 
-    "Provincetown", "Quincy", "Randolph", "Raynham", "Reading", "Rehoboth", "Revere", "Richmond", "Rochester", "Rockland", 
-    "Rockport", "Rowe", "Rowley", "Royalston", "Russell", "Rutland", "Salem", "Salisbury", "Sandisfield", "Sandwich", 
-    "Saugus", "Savoy", "Scituate", "Seekonk", "Sharon", "Sheffield", "Shelburne", "Sherborn", "Shirley", "Shrewsbury", 
-    "Shutesbury", "Somerset", "Somerville", "SouthHadley", "Southampton", "Southborough", "Southbridge", 
-    "Southwick", "Spencer", "Springfield", "Sterling", "Stockbridge", "Stoneham", "Stoughton", "Stow", "Sturbridge", 
-    "Sudbury", "Sunderland", "Sutton", "Swampscott", "Swansea", "Taunton", "Templeton", "Tewksbury", "Tisbury", 
-    "Tolland", "Topsfield", "Townsend", "Truro", "Tyngsborough", "Tyringham", "Upton", "Uxbridge", "Wakefield", 
-    "Wales", "Walpole", "Waltham", "Ware", "Wareham", "Warren", "Warwick", "Washington", "Watertown", "Wayland", 
-    "Webster", "Wellesley", "Wellfleet", "Wendell", "Wenham", "W. Boylston", "W. Bridgewater", "W. Brookfield", 
-    "W. Newbury", "W. Springfield", "W. Stockbridge", "W. Tisbury", "Westborough", "Westfield", "Westford", 
-    "Westhampton", "Westminster", "Weston", "Westport", "Westwood", "Weymouth", "Whately", "Whitman", 
-    "Wilbraham", "Willamsburg", "Williamstown", "Wilmington", "Winchendon", "Winchester", "Windsor", "Winthrop", 
-    "Woburn", "Worcester", "Worthington", "Wrentham", "Yarmouth"
-];
-
 var availablePVModules = [];
 var availablePVInverters = [];
 var availableStanchions = [];
@@ -1145,7 +1103,7 @@ var loadStateOptions = function() {
             }
         }
 
-        detectCorrectTownForMA();
+        detectCorrectTown();
         resolve(true);
     });
 }
@@ -1174,33 +1132,57 @@ var updateUserOption = function(userId) {
 
 
 
-var detectCorrectTownForMA = function() {
+var detectCorrectTown = function() {
     var city_name = document.getElementById("txt-city").value;
     var option_state = document.getElementById("option-state");        
     var selected = option_state.options[option_state.selectedIndex];
     var state_name = selected.getAttribute('data-value');
 
-    err_message = "No Town name match in MA CMR780.  Correct Town name.";
-    good_message = "Good Massachusetts town name";
+    // err_message = "No Town name match in MA CMR780.  Correct Town name.";
+    // good_message = "Good Massachusetts town name";
 
-    if (state_name == 'MA') {
-        for (index= 0; index <availableMATowns.length ; index++) {
-            if (availableMATowns[index] == city_name) {
-                $('#txt-city-comment').html('&nbsp;&nbsp;' + good_message);
-                $('#txt-city-comment').css('color', 'black');
-                return;
+    $.ajax({
+        url:"checkCorrectTown",
+        type:'post',
+        data:{city: city_name, state: state_name},
+        success:function(res){
+            if(res.status == true) {
+                // $('#txt-city-comment').html('&nbsp;&nbsp;' + `Good ${state_name} town name`);
+                // $('#txt-city-comment').css('color', 'black');
+            } 
+            else{
+                if(res.recommended){
+                    $('#txt-city-comment').html('&nbsp;&nbsp;' + `No Town name match in ${state_name}. Correct Town name.`);
+                    $('#txt-city-comment').css('color', '#FF0000');
+                    $('#txt-city-comment').css('font-weight', 'bold');
+                    swal.fire({
+                        title: "Warning",
+                        html: `The ${city_name} town is not on the published ${state_name} list, and that the recommended nearest listed town is ${res.recommended}.  Would you like to use this town?`,
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonText: `Yes`,
+                        cancelButtonText: `No`,
+                    })
+                    .then(( result ) => {
+                        if ( result.value )
+                        {
+                            $("#txt-city").val(res.recommended);
+                            // $('#txt-city-comment').html('&nbsp;&nbsp;' + `Good ${state_name} town name`);
+                            // $('#txt-city-comment').css('color', 'black');
+                        }
+                    });
+                } else {
+                    // $('#txt-city-comment').html("");
+                    // $('#txt-city-comment').css('color', 'black');
+                    // $('#txt-city-comment').css('font-weight', 'normal');
+                }
             }
+        },
+        error: function(xhr, status, error) {
+            res = JSON.parse(xhr.responseText);
+            swal.fire({ title: "Error", text: res.message, icon: "error", confirmButtonText: `OK` });
         }
-
-        $('#txt-city-comment').html('&nbsp;&nbsp;' + err_message);
-        $('#txt-city-comment').css('color', '#FF0000');
-        $('#txt-city-comment').css('font-weight', 'bold');
-    }
-    else {
-        $('#txt-city-comment').html("");
-        $('#txt-city-comment').css('color', 'black');
-        $('#txt-city-comment').css('font-weight', 'normal');
-    }
+    });
 }
 
 var updateNumberOfConditions = function(conditions) {
@@ -2606,7 +2588,7 @@ $(document).ready(function() {
     });
 
     $("#txt-city").change(function(){
-        detectCorrectTownForMA();
+        detectCorrectTown();
     });
 
     $('#option-user-id').on('change', function() {
@@ -2649,7 +2631,7 @@ $(document).ready(function() {
     });
 
     $('#option-state').on('change', function() {
-        detectCorrectTownForMA();
+        detectCorrectTown();
         loadASCEOptions($(this).val());
         loadPermitList($(this).val());
 
@@ -3229,6 +3211,11 @@ $(document).ready(function() {
                     if(stick_right_input[i] == ''){
                         $("#submitBtns input").attr('disabled', false);
                         swal.fire({ title: "Warning", text: "Please fill A7~A10 fields on Tab " + i + ".", icon: "warning", confirmButtonText: `OK` });
+                        return;
+                    }
+                    if(parseFloat($(`#ac-7-${i}`).val()) == 0 || parseFloat($(`#ac-8-${i}`).val()) == 0 || parseFloat($(`#ac-9-${i}`).val()) == 0 || parseFloat($(`#ac-10-${i}`).val()) == 0){
+                        $("#submitBtns input").attr('disabled', false);
+                        swal.fire({ title: "Warning", text: "Please fix 0 values of A7~A10 fields on Tab " + i + ".", icon: "warning", confirmButtonText: `OK` });
                         return;
                     }
                 }
