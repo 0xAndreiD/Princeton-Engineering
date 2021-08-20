@@ -31,6 +31,7 @@ use App\PermitFiles;
 use App\PermitInfo;
 use App\PermitFields;
 use App\StructuralNotes;
+use App\TownNameLocations;
 use Kunnu\Dropbox\DropboxApp;
 use Kunnu\Dropbox\Dropbox;
 use Kunnu\Dropbox\DropboxFile;
@@ -2699,4 +2700,60 @@ class GeneralController extends Controller
         } else
             return response()->json(["message" => "Missing project id.", "success" => false]);
     }
+
+    /**
+     * Check Correct Town and return Recommended Town
+     *
+     * @return JSON
+     */
+    public function checkCorrectTown(Request $request){
+        if(!empty($request['city']) && !empty($request['state'])){
+            $town = TownNameLocations::where('state', $request['state'])->where('City_Town', $request['city'])->first();
+            if($town)
+                return response()->json(["status" => true]);
+            
+            $towns = TownNameLocations::where('state', $request['state'])->get();
+            if(count($towns)){
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, "https://maps.googleapis.com/maps/api/geocode/json?address={$request['city']},{$request['state']}&key=AIzaSyB6zzkSrnFTQ13is6pqEuJNVH4UVE-GUs4"); 
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
+                $response = curl_exec($ch);
+
+                // $response = file_get_contents("https://maps.googleapis.com/maps/api/geocode/json?address={$request['city']}, {$request['state']}&key=AIzaSyB6zzkSrnFTQ13is6pqEuJNVH4UVE-GUs4");
+                $geo = json_decode($response);
+
+                if(curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200 && $geo->status == "OK"){
+                    $lat = $geo->results[0]->geometry->location->lat;
+                    $lng = $geo->results[0]->geometry->location->lng;
+                    $distance = 99999;
+                    $recommended = '';
+                    foreach($towns as $town){
+                        $dist = $this->distance($lat, $lng, $town->Lat, $town->Lng);
+                        if($dist < $distance){
+                            $distance = $dist;
+                            $recommended = $town->City_Town;
+                        }
+                    }
+                    return response()->json(["status" => false, "recommended" => $recommended, "distance" => $distance]);
+                } else 
+                    return response()->json(["status" => false, "message" => "Geo API Failed.", "response" => $response]);
+            } else
+                return response()->json(["status" => false, "message" => "No State Records."]);
+        } else 
+            return response()->json(["status" => false, "message" => "Empty city or state Param."]);
+    }
+
+    /**
+     * Return distance between two lat / long
+     *
+     * @return Double
+     */
+    private function distance($lat1, $lon1, $lat2, $lon2) {
+        $theta = $lon1 - $lon2;
+        $dist = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) +  cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta));
+        $dist = acos($dist);
+        $dist = rad2deg($dist);
+        $miles = $dist * 60 * 1.1515;
+        return $miles;
+      }
 }

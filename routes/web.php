@@ -84,6 +84,7 @@ Route::get('/report/{file}', 'GeneralController@getReport');
 Route::get('/in/{jobId}/{file}', 'GeneralController@getINFile');
 Route::post('/setReviewer', 'GeneralController@setReviewer')->name('setReviewer');
 Route::post('/checkReviewer', 'GeneralController@checkReviewer')->name('checkReviewer');
+Route::post('/checkCorrectTown', 'GeneralController@checkCorrectTown')->name('checkCorrectTown');
 
 // APIs for list, update, download, db backup
 Route::get('/getJobList', 'APIController@getJobList')->name('getJobList');
