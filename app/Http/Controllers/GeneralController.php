@@ -2715,7 +2715,7 @@ class GeneralController extends Controller
             $towns = TownNameLocations::where('state', $request['state'])->get();
             if(count($towns)){
                 $ch = curl_init();
-                curl_setopt($ch, CURLOPT_URL, "https://maps.googleapis.com/maps/api/geocode/json?address={$request['city']},{$request['state']}&key=AIzaSyB6zzkSrnFTQ13is6pqEuJNVH4UVE-GUs4"); 
+                curl_setopt($ch, CURLOPT_URL, "https://maps.googleapis.com/maps/api/geocode/json?address=".str_replace(" ", "", $request['city']).",{$request['state']}&key=AIzaSyB6zzkSrnFTQ13is6pqEuJNVH4UVE-GUs4"); 
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
                 $response = curl_exec($ch);
 

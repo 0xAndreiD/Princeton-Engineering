@@ -1152,9 +1152,9 @@ var detectCorrectTown = function() {
             } 
             else{
                 if(res.recommended){
-                    $('#txt-city-comment').html('&nbsp;&nbsp;' + `No Town name match in ${state_name}. Correct Town name.`);
-                    $('#txt-city-comment').css('color', '#FF0000');
-                    $('#txt-city-comment').css('font-weight', 'bold');
+                    // $('#txt-city-comment').html('&nbsp;&nbsp;' + `No Town name match in ${state_name}. Correct Town name.`);
+                    // $('#txt-city-comment').css('color', '#FF0000');
+                    // $('#txt-city-comment').css('font-weight', 'bold');
                     swal.fire({
                         title: "Warning",
                         html: `The ${city_name} town is not on the published ${state_name} list, and that the recommended nearest listed town is ${res.recommended}.  Would you like to use this town?`,
