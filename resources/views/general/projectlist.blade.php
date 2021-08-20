@@ -244,30 +244,18 @@
                                 <span class="badge dropdown-toggle job-dropdown" id="statusFilter" data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>All</span>
                                 <div class="dropdown-menu"  aria-labelledby="statusFilter">
                                     <a class="dropdown-item" href="javascript:changeStatusFilter('')">All</a>
-                                    <a class="dropdown-item" href="javascript:changeStatusFilter('0')">None</a>
-                                    <a class="dropdown-item" href="javascript:changeStatusFilter('1')">Saved</a>
-                                    <a class="dropdown-item" href="javascript:changeStatusFilter('2')">Check Requested</a>
-                                    <a class="dropdown-item" href="javascript:changeStatusFilter('3')">Reviewed</a>
-                                    <a class="dropdown-item" href="javascript:changeStatusFilter('4')">Submitted</a>
-                                    <a class="dropdown-item" href="javascript:changeStatusFilter('5')">Report Prepared</a>
-                                    <a class="dropdown-item" href="javascript:changeStatusFilter('6')">Plan Requested</a>
-                                    <a class="dropdown-item" href="javascript:changeStatusFilter('7')">Plan Reviewed</a>
-                                    <a class="dropdown-item" href="javascript:changeStatusFilter('8')">Link Sent</a>
-                                    <a class="dropdown-item" href="javascript:changeStatusFilter('9')">Completed</a>
+                                    @foreach($projectStatusList as $item)
+                                        <a class="dropdown-item" href="javascript:changeStatusFilter({{ $item['id'] }})" style="color: white; background-color: {{$item['color']}}">{{ $item['notes'] }}</a>
+                                    @endforeach
                                 </div>
                             </th>
                             <th class="searchHead">
                                 <span class="badge dropdown-toggle job-dropdown" id="stateFilter" data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>All</span>
                                 <div class="dropdown-menu"  aria-labelledby="stateFilter">
                                     <a class="dropdown-item" href="javascript:changeStateFilter('')">All</a>
-                                    <a class="dropdown-item" href="javascript:changeStateFilter('0')">No action</a>
-                                    <a class="dropdown-item" href="javascript:changeStateFilter('1')">Plans uploaded to portal</a>
-                                    <a class="dropdown-item" href="javascript:changeStateFilter('2')">Plans reviewed</a>
-                                    <a class="dropdown-item" href="javascript:changeStateFilter('3')">Comments issued</a>
-                                    <a class="dropdown-item" href="javascript:changeStateFilter('4')">Updated plans uploaded to portal</a>
-                                    <a class="dropdown-item" href="javascript:changeStateFilter('5')">Revised comments issued</a>
-                                    <a class="dropdown-item" href="javascript:changeStateFilter('6')">Final plans uploaded to portal</a>
-                                    <a class="dropdown-item" href="javascript:changeStateFilter('7')">PE sealed plans link sent</a>
+                                    @foreach($planStatusList as $item)
+                                        <a class="dropdown-item" href="javascript:changeStateFilter({{ $item['id'] }})" style="color: white; background-color: {{$item['color']}}">{{ $item['notes'] }}</a>
+                                    @endforeach
                                 </div>
                             </th>
                             <th style="display: flex; align-items: center; justify-content: center;">
@@ -288,6 +276,16 @@
 <script src="{{ asset('js/pages/common.js') }}"></script>
 
 <script>
+    var projectStatus = [
+        @foreach($projectStatusList as $item)
+        { id:"{{ $item['id'] }}", notes: "{{ $item['notes'] }}", color: "{{ $item['color'] }}" },
+        @endforeach
+    ];
+    var planStatus = [
+        @foreach($planStatusList as $item)
+        { id:"{{ $item['id'] }}", notes: "{{ $item['notes'] }}", color: "{{ $item['color'] }}" },
+        @endforeach
+    ];
     var filterJson;
     $(document).ready(function () {
         $.ajaxSetup({
@@ -303,31 +301,26 @@
         }
 
         changeStateFilterLabel = function(status){
+            console.log(status);
             $(`#stateFilter`).css('color', '#FFFFFF');
-            if(status == ''){ $(`#stateFilter`).css('color', '#495057'); $(`#stateFilter`).html('All');  $(`#stateFilter`).css('background-color', '#FFFFFF'); }
-            else if(status == '0'){ $(`#stateFilter`).html('No action');  $(`#stateFilter`).css('background-color', '#e04f1a'); }
-            else if(status == '1'){ $(`#stateFilter`).html('Plans uploaded to portal');  $(`#stateFilter`).css('background-color', '#689550'); }
-            else if(status == '2'){ $(`#stateFilter`).html('Plans reviewed');  $(`#stateFilter`).css('background-color', '#3c90df'); }
-            else if(status == '3'){ $(`#stateFilter`).html('Comments issued');  $(`#stateFilter`).css('background-color', '#ffb119'); }
-            else if(status == '4'){ $(`#stateFilter`).html('Updated plans uploaded to portal');  $(`#stateFilter`).css('background-color', '#689550'); }
-            else if(status == '5'){ $(`#stateFilter`).html('Revised comments issued');  $(`#stateFilter`).css('background-color', '#343a40'); }
-            else if(status == '6'){ $(`#stateFilter`).html('Final plans uploaded to portal');  $(`#stateFilter`).css('background-color', 'rgba(0, 0, 0, 0.33)'); }
-            else if(status == '7'){ $(`#stateFilter`).html('PE sealed plans link sent');  $(`#stateFilter`).css('background-color', '#82b54b'); }
+            if(status === ''){ $(`#stateFilter`).css('color', '#495057'); $(`#stateFilter`).html('All');  $(`#stateFilter`).css('background-color', '#FFFFFF'); }
+            else {
+                let item = planStatus.filter(e => e.id && e.id == status);
+                if(item[0]){
+                    $(`#stateFilter`).css('color', 'white'); $(`#stateFilter`).html(item[0].notes);  $(`#stateFilter`).css('background-color', item[0].color);
+                }
+            }
         }
 
         changeStatusFilterLabel = function(status) {
             $(`#statusFilter`).css('color', '#FFFFFF');
-            if(status == ''){ $(`#statusFilter`).css('color', '#495057'); $(`#statusFilter`).html('All');  $(`#statusFilter`).css('background-color', '#FFFFFF'); }
-            else if(status == '0'){ $(`#statusFilter`).html('None');  $(`#statusFilter`).css('background-color', '#e04f1a'); }
-            else if(status == '1'){ $(`#statusFilter`).html('Saved');  $(`#statusFilter`).css('background-color', '#689550'); }
-            else if(status == '2'){ $(`#statusFilter`).html('Check Requested');  $(`#statusFilter`).css('background-color', '#3c90df'); }
-            else if(status == '3'){ $(`#statusFilter`).html('Reviewed');  $(`#statusFilter`).css('background-color', '#ffb119'); }
-            else if(status == '4'){ $(`#statusFilter`).html('Submitted');  $(`#statusFilter`).css('background-color', '#689550'); }
-            else if(status == '5'){ $(`#statusFilter`).html('Report Prepared');  $(`#statusFilter`).css('background-color', '#3c90df'); }
-            else if(status == '6'){ $(`#statusFilter`).html('Plan Requested');  $(`#statusFilter`).css('background-color', '#689550'); }
-            else if(status == '7'){ $(`#statusFilter`).html('Plan Reviewed');  $(`#statusFilter`).css('background-color', '#343a40'); }
-            else if(status == '8'){ $(`#statusFilter`).html('Link Sent');  $(`#statusFilter`).css('background-color', 'rgba(0, 0, 0, 0.33)'); }
-            else if(status == '9'){ $(`#statusFilter`).html('Completed');  $(`#statusFilter`).css('background-color', '#82b54b'); }
+            if(status === ''){ $(`#statusFilter`).css('color', '#495057'); $(`#statusFilter`).html('All');  $(`#statusFilter`).css('background-color', '#FFFFFF'); }
+            else {
+                let item = projectStatus.filter(e => e.id && e.id == status);
+                if(item[0]){
+                    $(`#statusFilter`).css('color', 'white'); $(`#statusFilter`).html(item[0].notes);  $(`#statusFilter`).css('background-color', item[0].color);
+                }
+            }
         }
 
         Object.keys(filterJson).forEach(function(k) {
