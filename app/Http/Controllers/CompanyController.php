@@ -648,7 +648,14 @@ class CompanyController extends Controller
                 return response()->json(["data" => $info, "success" => true]);
             else
                 return response()->json(["success" => true]);
-        } else 
+        } else if(Auth::user()->userrole == 2){
+            $info = BillingInfo::where('clientId', $request['clientId'])->first();
+            if($info)
+                return response()->json(["data" => $info, "success" => true]);
+            else
+                return response()->json(["success" => true]);
+        }
+        else 
             return response()->json(["message" => "You don't have permission.", "success" => false]);
     }
 
@@ -658,12 +665,11 @@ class CompanyController extends Controller
      * @return JSON
      */
     function saveBillingInfo(Request $request){
-        if(Auth::user()->userrole == 1){
-            $info = BillingInfo::where('clientId', Auth::user()->companyid)->first();
+        if(Auth::user()->userrole == 1 || Auth::user()->userrole == 2){
+            $info = BillingInfo::where('clientId', (Auth::user()->userrole == 2 ? $request['clientId'] : Auth::user()->companyid))->first();
             if(!$info){
                 $info = new BillingInfo;
-                $info->clientId = Auth::user()->companyid;
-                
+                $info->clientId = (Auth::user()->userrole == 2 ? $request['clientId'] : Auth::user()->companyid);
             }
 
             $info->billing_name = $request['billing_name'];
@@ -687,10 +693,138 @@ class CompanyController extends Controller
             $info->expiration_date = $request['expiration_date'];
             $info->security_code = $request['security_code'];
 
+            if(Auth::user()->userrole == 2){
+                $info->billing_type = $request['billing_type'];
+                $info->amount_per_job = $request['amount_per_job'];
+                $info->send_invoice = $request['send_invoice'];
+                $info->block_on_fail = $request['block_on_fail'];
+            }
+
             $info->save();
 
             return response()->json(["success" => true]);
         } else 
             return response()->json(["message" => "You don't have permission.", "success" => false]);
+    }
+
+    function billinginfo(Request $request){
+        if(Auth::user()->userrole == 2)
+            return view('admin.billing.view');
+        else
+            return redirect('home');
+    }
+
+    /**
+     * Get the All Client Biling Info
+     *
+     * @return JSON
+     */
+    public function getCompanyBilling(Request $request){
+        $columns = array( 
+            0 =>'id', 
+            1 =>'name',
+            2 =>'number',
+            3 =>'billing_type',
+            4 =>'amount',
+            5 =>'send_invoice',
+            6 => 'block_on_fail'
+        );
+        $totalData = Company::count();
+        $totalFiltered = $totalData; 
+
+        $limit = $request->input('length');
+        $start = $request->input('start');
+        $order = $columns[$request->input('order.0.column')];
+        $dir = $request->input('order.0.dir');
+
+        $handler = Company::leftjoin("billing_info", "billing_info.clientId", "=", "company_info.id");
+
+        if(empty($request->input('search.value')))
+        {            
+            $totalFiltered = $handler->count();
+            $companys = $handler->offset($start)
+                ->limit($limit)
+                ->orderBy($order,$dir)
+                ->get(
+                    array(
+                        'company_info.id as id',
+                        'company_info.company_name as name',
+                        'company_info.company_number as number',
+                        'billing_info.billing_type as billing_type', 'billing_info.amount_per_job as amount', 'billing_info.send_invoice as send_invoice', 'billing_info.block_on_fail as block_on_fail', 
+                    )
+                );
+        }
+        else {
+            $search = $request->input('search.value'); 
+            $companys =  $handler->where(function ($q) use ($search) {
+                            $q->where('company_info.id','LIKE',"%{$search}%")
+                            ->orWhere('company_info.company_name', 'LIKE',"%{$search}%")
+                            ->orWhere('company_info.company_number', 'LIKE',"%{$search}%");
+                        })
+                        ->offset($start)
+                        ->limit($limit)
+                        ->orderBy($order,$dir)
+                        ->get(
+                            array(
+                                'company_info.id as id',
+                                'company_info.company_name as name',
+                                'company_info.company_number as number',
+                                'billing_info.billing_type as billing_type', 'billing_info.amount_per_job as amount', 'billing_info.send_invoice as send_invoice', 'billing_info.block_on_fail as block_on_fail', 
+                            )
+                        );
+
+            $totalFiltered = $handler->where(function ($q) use ($search) {
+                            $q->where('company_info.id','LIKE',"%{$search}%")
+                            ->orWhere('company_info.company_name', 'LIKE',"%{$search}%")
+                            ->orWhere('company_info.company_number', 'LIKE',"%{$search}%");
+                        })
+                        ->count();
+        }
+
+        $data = array();
+
+        if(!empty($companys))
+        {
+            foreach ($companys as $company)
+            {
+                $nestedData['id'] = $company->id;
+                $nestedData['name'] = $company->name;
+                $nestedData['number'] = $company->number;
+                
+                if($company->billing_type == 1)
+                    $nestedData['billing_type'] = '<span class="badge badge-primary">Bill on Creation Date</span>';
+                else
+                    $nestedData['billing_type'] = '<span class="badge badge-warning">Bill on Complete State</span>';
+
+                $nestedData['amount'] = $company->amount;
+
+                if($company->send_invoice == 1)
+                    $nestedData['send_invoice'] = '<span class="badge badge-danger">Yes</span>';
+                else
+                    $nestedData['send_invoice'] = '<span class="badge badge-primary">No</span>';
+
+                if($company->block_on_fail == 1)
+                    $nestedData['block_on_fail'] = '<span class="badge badge-danger">Yes</span>';
+                else
+                    $nestedData['block_on_fail'] = '<span class="badge badge-primary">No</span>';
+
+                $nestedData['actions'] = "
+                <div class='text-center'>
+                    <button type='button' class='btn btn-warning' 
+                        onclick='showBillingInfo(this,{$nestedData['id']})'
+                        data-toggle='modal' data-target='#modal-block-normal'>
+                        <i class='fa fa-pencil-alt'></i>
+                    </button>
+                </div>";
+                $data[] = $nestedData;
+            }
+        }
+        $json_data = array(
+            "draw"            => intval($request->input('draw')),  
+            "recordsTotal"    => intval($totalData),  
+            "recordsFiltered" => intval($totalFiltered), 
+            "data"            => $data   
+            );
+        echo json_encode($json_data);
     }
 }
