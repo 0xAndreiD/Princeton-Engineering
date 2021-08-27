@@ -272,7 +272,10 @@ class CompanyController extends Controller
      */
     function getCompany(Request $request){
         if(Auth::user()->userrole == 2){
-            $id = $request->input('data');
+            if(!empty($request['data']))
+                $id = $request->input('data');
+            else
+                $id = Auth::user()->companyid;
             $company = Company::where('id', $id)->first();
             
             return response()->json($company);

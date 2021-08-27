@@ -433,7 +433,7 @@ function billingCopy(){
 }
 
 function shippingCopy(){
-    if($("#billing_same_chk")[0].checked){
+    if($("#shipping_same_chk")[0].checked){
         $("#sname").val($("#bname").val());
         $("#smail").val($("#bmail").val());
         $("#saddress").val($("#baddress").val());
