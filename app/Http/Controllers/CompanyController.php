@@ -649,7 +649,12 @@ class CompanyController extends Controller
             else
                 return response()->json(["success" => true]);
         } else if(Auth::user()->userrole == 2){
-            $info = BillingInfo::where('clientId', $request['clientId'])->first();
+            if(!empty($request['clientId']))
+                $clientId = $request['clientId'];
+            else
+                $clientId = Auth::user()->companyid;
+
+            $info = BillingInfo::where('clientId', $clientId)->first();
             if($info)
                 return response()->json(["data" => $info, "success" => true]);
             else
@@ -666,10 +671,15 @@ class CompanyController extends Controller
      */
     function saveBillingInfo(Request $request){
         if(Auth::user()->userrole == 1 || Auth::user()->userrole == 2){
-            $info = BillingInfo::where('clientId', (Auth::user()->userrole == 2 ? $request['clientId'] : Auth::user()->companyid))->first();
+            if(Auth::user()->userrole == 2 && !empty($request['clientId']))
+                $clientId = $request['clientId'];
+            else
+                $clientId = Auth::user()->companyid;
+
+            $info = BillingInfo::where('clientId', $clientId)->first();
             if(!$info){
                 $info = new BillingInfo;
-                $info->clientId = (Auth::user()->userrole == 2 ? $request['clientId'] : Auth::user()->companyid);
+                $info->clientId = $clientId;
             }
 
             $info->billing_name = $request['billing_name'];
@@ -694,10 +704,10 @@ class CompanyController extends Controller
             $info->security_code = $request['security_code'];
 
             if(Auth::user()->userrole == 2){
-                $info->billing_type = $request['billing_type'];
-                $info->amount_per_job = $request['amount_per_job'];
-                $info->send_invoice = $request['send_invoice'];
-                $info->block_on_fail = $request['block_on_fail'];
+                if(!empty($request['billing_type'])) $info->billing_type = $request['billing_type'];
+                if(!empty($request['amount_per_job'])) $info->amount_per_job = $request['amount_per_job'];
+                if(!empty($request['send_invoice'])) $info->send_invoice = $request['send_invoice'];
+                if(!empty($request['block_on_fail'])) $info->block_on_fail = $request['block_on_fail'];
             }
 
             $info->save();
