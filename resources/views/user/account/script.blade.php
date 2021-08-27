@@ -37,7 +37,7 @@ function saveAccount(){
     });
 }
 
-@if(Auth::user()->userrole == 1)
+@if(Auth::user()->userrole == 1 || Auth::user()->userrole == 2)
 var cardnumber_mask;
 window.onload = function () {
 swal.fire({ title: "Please wait...", showConfirmButton: false });

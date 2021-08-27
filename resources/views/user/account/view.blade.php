@@ -24,7 +24,7 @@
 
 <!-- Content -->
 <div class="content" style="text-align:left">
-    <div class="row" <?php echo Auth::user()->userrole == 1 ? '' : 'style="justify-content: space-around;"'; ?>>
+    <div class="row" <?php echo Auth::user()->userrole == 1 || Auth::user()->userrole == 2 ? '' : 'style="justify-content: space-around;"'; ?>>
         <div class="col-md-3">
             <h2 class="content-heading pt-0 text-center">Account Settings</h2>
             <div class="form-group mb-4">
@@ -52,7 +52,7 @@
                 <button class="btn btn-primary" onclick="saveAccount()"> Save Account Settings </button>
             </div>
         </div>
-        @if (Auth::user()->userrole == 1)
+        @if (Auth::user()->userrole == 1 || Auth::user()->userrole == 2)
         <div class="col-md-3">
             <h2 class="content-heading pt-0 text-center">Billing Information</h2>
             <div class="form-group mb-4">
