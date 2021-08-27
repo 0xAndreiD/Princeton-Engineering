@@ -47,6 +47,8 @@
         <link rel="stylesheet" href="{{ asset('css/jquery.ui.min.css') }}">
         <!-- END Stylesheets -->
 
+        @yield('css_after')
+
         <script src="{{ asset('js/jquery.min.js') }}"></script>
         <script type="text/javascript" src="{{ asset('js/sweetalert.min.js') }}" ></script>
        

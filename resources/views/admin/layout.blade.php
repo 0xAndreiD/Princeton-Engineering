@@ -47,6 +47,8 @@
         <link rel="stylesheet" href="{{ asset('js/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css') }}">
         <!-- END Stylesheets -->
 
+        @yield('css_after')
+
         {{-- <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script> --}}
         <script src="{{ asset('js/jquery.min.js') }}"></script>
         <script type="text/javascript" src="{{ asset('js/sweetalert.min.js') }}" ></script>

@@ -50,6 +50,8 @@ Route::post('/updateCompany', 'CompanyController@updateCompany')->name('updateCo
 Route::post('/delCompany', 'CompanyController@delete')->name('delCompany');
 Route::post('/getPermitInfo', 'CompanyController@getPermitInfo')->name('getPermitInfo');
 Route::post('/updatePermitInfo', 'CompanyController@updatePermitInfo')->name('updatePermitInfo');
+Route::post('/getBillingInfo', 'CompanyController@getBillingInfo')->name('getBillingInfo');
+Route::post('/saveBillingInfo', 'CompanyController@saveBillingInfo')->name('saveBillingInfo');
 
 // Company Profile
 Route::get('/companyProfile', 'CompanyController@companyProfile')->name('companyProfile');
