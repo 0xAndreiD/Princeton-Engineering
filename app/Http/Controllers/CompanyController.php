@@ -14,6 +14,7 @@ use App\JobRequest;
 use App\PermitInfo;
 use App\SealData;
 use App\SealObjects;
+use App\BillingInfo;
 use Kunnu\Dropbox\DropboxApp;
 use Kunnu\Dropbox\Dropbox;
 use Kunnu\Dropbox\DropboxFile;
@@ -270,10 +271,16 @@ class CompanyController extends Controller
      * @return JSON
      */
     function getCompany(Request $request){
-        $id = $request->input('data');
-        $company = Company::where('id', $id)->first();
-        
-        return response()->json($company);
+        if(Auth::user()->userrole == 2){
+            $id = $request->input('data');
+            $company = Company::where('id', $id)->first();
+            
+            return response()->json($company);
+        } else {
+            $company = Company::where('id', Auth::user()->companyid)->first();
+            
+            return response()->json($company);
+        }
     }
 
 
@@ -627,5 +634,63 @@ class CompanyController extends Controller
         }
         else 
             return response()->json(["message" => "You don't have permission.", "status" => false]);
+    }
+
+    /**
+     * Return Client Billing Info
+     *
+     * @return JSON
+     */
+    function getBillingInfo(Request $request){
+        if(Auth::user()->userrole == 1){
+            $info = BillingInfo::select('billing_name', 'billing_mail', 'billing_address', 'billing_city', 'billing_state', 'billing_zip', 'billing_same_info', 'shipping_name', 'shipping_mail', 'shipping_address', 'shipping_city', 'shipping_state', 'shipping_zip', 'shipping_same_info', 'card_name', 'card_number', 'expiration_date', 'security_code')->where('clientId', Auth::user()->companyid)->first();
+            if($info)
+                return response()->json(["data" => $info, "success" => true]);
+            else
+                return response()->json(["success" => true]);
+        } else 
+            return response()->json(["message" => "You don't have permission.", "success" => false]);
+    }
+
+    /**
+     * Save Client Billing Info
+     *
+     * @return JSON
+     */
+    function saveBillingInfo(Request $request){
+        if(Auth::user()->userrole == 1){
+            $info = BillingInfo::where('clientId', Auth::user()->companyid)->first();
+            if(!$info){
+                $info = new BillingInfo;
+                $info->clientId = Auth::user()->companyid;
+                
+            }
+
+            $info->billing_name = $request['billing_name'];
+            $info->billing_mail = $request['billing_mail'];
+            $info->billing_address = $request['billing_address'];
+            $info->billing_city = $request['billing_city'];
+            $info->billing_state = $request['billing_state'];
+            $info->billing_zip = $request['billing_zip'];
+            $info->billing_same_info = $request['billing_same_info'];
+
+            $info->shipping_name = $request['shipping_name'];
+            $info->shipping_mail = $request['shipping_mail'];
+            $info->shipping_address = $request['shipping_address'];
+            $info->shipping_city = $request['shipping_city'];
+            $info->shipping_state = $request['shipping_state'];
+            $info->shipping_zip = $request['shipping_zip'];
+            $info->shipping_same_info = $request['shipping_same_info'];
+
+            $info->card_name = $request['card_name'];
+            $info->card_number = $request['card_number'];
+            $info->expiration_date = $request['expiration_date'];
+            $info->security_code = $request['security_code'];
+
+            $info->save();
+
+            return response()->json(["success" => true]);
+        } else 
+            return response()->json(["message" => "You don't have permission.", "success" => false]);
     }
 }
