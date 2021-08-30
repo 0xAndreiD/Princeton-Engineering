@@ -100,7 +100,7 @@
         <td><div style="overflow:hidden"></div></td>
         <td class="iw400-right-bdr">City</td>
         <td class="w400-yellow-bdr"><input type="text" id="txt-city" tabindex="9" value="Somerville"></input></td>
-        <td class="iw400" id="txt-city-comment" colspan="2" style="text-align: left;">&nbsp;&nbsp;Good Massachusetts town name</td>
+        <td class="iw400" id="txt-city-comment" colspan="2" style="text-align: left;"></td>
     </tr>
     <tr class="h13">
         <td><div style="overflow:hidden"></div></td>
