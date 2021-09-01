@@ -422,7 +422,7 @@ class CompanyController extends Controller
                 $im->writeImage(public_path() . '/sealfiles/' . $jpgname . '.jpg');
                 $im->clear();
                 $im->destroy();
-                unlink(public_path() . '/sealfiles/' . $filename);
+                // unlink(public_path() . '/sealfiles/' . $filename);
                 return response()->json(["status" => true, "filename" => asset('sealfiles') . '/' . $jpgname . '.jpg']);
             } else
                 return response()->json(["message" => "Cannot find the company.", "status" => false]);    
