@@ -334,6 +334,8 @@ class GeneralController extends Controller
                 foreach ($jobs as $job)
                 {
                     $globalStates = JobProjectStatus::orderBy('id', 'asc')->get();
+                    $statenote = isset($globalStates[intval($job->projectstate)]) ? $globalStates[intval($job->projectstate)]->notes : 'Unknown State';
+                    if(!isset($globalStates[intval($job->projectstate)])) $job->statecolor = '#ff0000';
                     $job['projectStatus'] = "<span class='badge' style='white-space: pre-wrap; color: #fff; background-color: {$job->statecolor};'> {$globalStates[intval($job->projectState)]->notes} </span>";
                     $data[] = $job;
                 }
@@ -1135,7 +1137,11 @@ class GeneralController extends Controller
                 $globalStates = JobProjectStatus::orderBy('id', 'asc')->get();
                 $globalStatus = JobPlanStatus::orderBy('id', 'asc')->get();
                 if(Auth::user()->userrole == 2){
-                    $nestedData['projectstate'] = "<span class='badge dropdown-toggle job-dropdown' style='color: #fff; background-color: {$job->statecolor};' id='state_{$job->id}' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'> {$globalStates[intval($job->projectstate)]->notes} </span>";
+                    $statenote = isset($globalStates[intval($job->projectstate)]) ? $globalStates[intval($job->projectstate)]->notes : 'Unknown State';
+                    $statusnote = isset($globalStatus[intval($job->planstatus)]) ? $globalStatus[intval($job->planstatus)]->notes : 'Unknown Status';
+                    if(!isset($globalStates[intval($job->projectstate)])) $job->statecolor = '#ff0000';
+                    if(!isset($globalStatus[intval($job->planstatus)])) $job->statuscolor = '#ff0000';
+                    $nestedData['projectstate'] = "<span class='badge dropdown-toggle job-dropdown' style='color: #fff; background-color: {$job->statecolor};' id='state_{$job->id}' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'> {$statenote} </span>";
 
                     $nestedData['projectstate'] .= "<div class='dropdown-menu' aria-labelledby='state_{$job->id}'>";
                     $i = 0;
@@ -1145,7 +1151,7 @@ class GeneralController extends Controller
                     }
                     $nestedData['projectstate'] .= "</div>";
 
-                    $nestedData['planstatus'] = "<span class='badge dropdown-toggle job-dropdown' style='color: #fff; background-color: {$job->statuscolor};' id='status_{$job->id}' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'> {$globalStatus[intval($job->planstatus)]->notes} </span>";
+                    $nestedData['planstatus'] = "<span class='badge dropdown-toggle job-dropdown' style='color: #fff; background-color: {$job->statuscolor};' id='status_{$job->id}' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'> {$statusnote} </span>";
 
                     $nestedData['planstatus'] .= "<div class='dropdown-menu' aria-labelledby='status_{$job->id}'>";
                     $i = 0;
@@ -1156,8 +1162,8 @@ class GeneralController extends Controller
                     $nestedData['planstatus'] .= "</div>";
                 }
                 else{
-                    $nestedData['projectstate'] = "<span class='badge' style='white-space: pre-wrap; color: #fff; background-color: {$job->statecolor};'> {$globalStates[intval($job->projectstate)]->notes} </span>";                
-                    $nestedData['planstatus'] = "<span class='badge' style='white-space: pre-wrap; color: #fff; background-color: {$job->statuscolor};'> {$globalStatus[intval($job->planstatus)]->notes} </span>";                
+                    $nestedData['projectstate'] = "<span class='badge' style='white-space: pre-wrap; color: #fff; background-color: {$job->statecolor};'> {$statenote} </span>";                
+                    $nestedData['planstatus'] = "<span class='badge' style='white-space: pre-wrap; color: #fff; background-color: {$job->statuscolor};'> {$statusnote} </span>";                
                 }
 
                 if($job->chatIcon == 0)
