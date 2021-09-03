@@ -484,6 +484,7 @@ class GeneralController extends Controller
                     $project->clientProjectNumber = $request['data']['txt-project-number'];
                     $project->submittedTime = gmdate("Y-m-d\TH:i:s", time());
                     $project->state = $request['data']['option-state'];
+                    $project->analysisType = 0;
 
                     if (isset($request['data']['option-user-id'])) {
                         $project->userId = $request['data']['option-user-id'];

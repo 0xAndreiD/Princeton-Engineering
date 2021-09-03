@@ -1276,7 +1276,7 @@ var isEmptyInputBox = function() {
 }
 
 $("#txt-project-name").on('keypress', function(event){
-    if(event.key == "&" || event.key == "#" || event.key == ":")
+    if(event.key == "&" || event.key == "#" || event.key == ":" || event.key == "/" || event.key == "\\")
     {
         event.preventDefault();
         return false;
