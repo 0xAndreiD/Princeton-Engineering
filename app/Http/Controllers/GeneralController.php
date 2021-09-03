@@ -1136,11 +1136,13 @@ class GeneralController extends Controller
                 
                 $globalStates = JobProjectStatus::orderBy('id', 'asc')->get();
                 $globalStatus = JobPlanStatus::orderBy('id', 'asc')->get();
+
+                $statenote = isset($globalStates[intval($job->projectstate)]) ? $globalStates[intval($job->projectstate)]->notes : 'Unknown State';
+                $statusnote = isset($globalStatus[intval($job->planstatus)]) ? $globalStatus[intval($job->planstatus)]->notes : 'Unknown Status';
+                if(!isset($globalStates[intval($job->projectstate)])) $job->statecolor = '#ff0000';
+                if(!isset($globalStatus[intval($job->planstatus)])) $job->statuscolor = '#ff0000';
+
                 if(Auth::user()->userrole == 2){
-                    $statenote = isset($globalStates[intval($job->projectstate)]) ? $globalStates[intval($job->projectstate)]->notes : 'Unknown State';
-                    $statusnote = isset($globalStatus[intval($job->planstatus)]) ? $globalStatus[intval($job->planstatus)]->notes : 'Unknown Status';
-                    if(!isset($globalStates[intval($job->projectstate)])) $job->statecolor = '#ff0000';
-                    if(!isset($globalStatus[intval($job->planstatus)])) $job->statuscolor = '#ff0000';
                     $nestedData['projectstate'] = "<span class='badge dropdown-toggle job-dropdown' style='color: #fff; background-color: {$job->statecolor};' id='state_{$job->id}' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'> {$statenote} </span>";
 
                     $nestedData['projectstate'] .= "<div class='dropdown-menu' aria-labelledby='state_{$job->id}'>";
