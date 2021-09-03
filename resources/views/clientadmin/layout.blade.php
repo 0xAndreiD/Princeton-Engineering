@@ -438,5 +438,16 @@
         <script src="{{ asset('/js/plugins/jquery-validation/additional-methods.js') }}"></script>
 
         <script src="{{ asset('js/pages/be_forms_validation.js') }}"></script>
+        <script>
+            $(document).ready(function(){
+                var scrollpos = localStorage.getItem('scrollpos');
+                console.log(scrollpos);
+                if (scrollpos) document.getElementsByClassName('simplebar-content-wrapper')[0].scrollTo(0, scrollpos);
+            })
+
+            window.onbeforeunload = function(e) {
+                localStorage.setItem('scrollpos', document.getElementsByClassName('simplebar-content-wrapper')[0].scrollTop);
+            };
+        </script>
     </body>
 </html>
