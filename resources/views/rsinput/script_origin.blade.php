@@ -37,16 +37,21 @@ function openRfdTab(evt, tabName) {
 document.getElementById("defaultOpen").click();
 
 function fcChangeType( conditionId, type ){
-    if( type == 1 )
+    if( type == 1 ) // Truss
     {
         $(`#label-A-1-${conditionId}`).attr('rowspan', 8);
+        $(`#label-B-1-${conditionId}`).attr('rowspan', 5);
         $(`#label-B-1-${conditionId}`)[0].style.display = "none";
         $(`#title-B-3-${conditionId}`)[0].style.display = "table-cell";
-        var elements = $(`#inputform-${conditionId} .class-truss-hide`);
+        
+        var elements = $(`#inputform-${conditionId} .class-IBC-hide`);
         for(let i = 0; i < elements.length; i ++)
-        {
+            elements[i].style.display = 'table-row';
+        elements = $(`#inputform-${conditionId} .class-truss-hide`);
+        for(let i = 0; i < elements.length; i ++)
             elements[i].style.display = 'none';
-        }
+        maxModuleNumChange(conditionId);
+
         $(`#label-A-9-${conditionId}`)[0].innerHTML = 'Rise from Truss Plate to Top Ridge';
         $(`#label-A-10-${conditionId}`)[0].innerHTML = 'Horiz Len from Outside of Truss Plate to Ridge';
         $(`#label-A-11-${conditionId}`)[0].innerHTML = 'Diagonal Overhang Length past Truss Plate';
@@ -54,17 +59,23 @@ function fcChangeType( conditionId, type ){
         $(`#label-B-4-${conditionId}`)[0].innerHTML = 'Truss Material';
         $(`#label-F-1-${conditionId}`)[0].innerHTML = 'Maximum # Modules along Truss';
         document.getElementById(`trussInput-${conditionId}`).style.display = "block";
+        drawTrussGraph(conditionId);
     }    
-    else
+    else if(type == 0) // Stick
     {
         $(`#label-A-1-${conditionId}`).attr('rowspan', 12);
+        $(`#label-B-1-${conditionId}`).attr('rowspan', 5);
         $(`#label-B-1-${conditionId}`)[0].style.display = "table-cell";
         $(`#title-B-3-${conditionId}`)[0].style.display = "none";
-        var elements = $(`#inputform-${conditionId} .class-truss-hide`);
+        
+        var elements = $(`#inputform-${conditionId} .class-IBC-hide`);
         for(let i = 0; i < elements.length; i ++)
-        {
             elements[i].style.display = 'table-row';
-        }
+        elements = $(`#inputform-${conditionId} .class-truss-hide`);
+        for(let i = 0; i < elements.length; i ++)
+            elements[i].style.display = 'table-row';
+        maxModuleNumChange(conditionId);
+
         $(`#label-A-9-${conditionId}`)[0].innerHTML = 'Rise from Rafter Plate to Top Ridge';
         $(`#label-A-10-${conditionId}`)[0].innerHTML = 'Horiz Len from Outside of Rafter Plate to Ridge';
         $(`#label-A-11-${conditionId}`)[0].innerHTML = 'Diagonal Overhang Length past Rafter Plate';
@@ -72,6 +83,30 @@ function fcChangeType( conditionId, type ){
         $(`#label-B-4-${conditionId}`)[0].innerHTML = 'Rafter Material';
         $(`#label-F-1-${conditionId}`)[0].innerHTML = 'Maximum # Modules along Rafter';
         document.getElementById(`trussInput-${conditionId}`).style.display = "none";
+        drawStickGraph(conditionId);
+    } else if(type == 2){ // IBC 5%
+        $(`#label-A-1-${conditionId}`).attr('rowspan', 10);
+        $(`#label-B-1-${conditionId}`).attr('rowspan', 3);
+        $(`#label-B-1-${conditionId}`)[0].style.display = "table-cell";
+        $(`#title-B-3-${conditionId}`)[0].style.display = "none";
+        
+        var elements = $(`#inputform-${conditionId} .class-truss-hide`);
+        for(let i = 0; i < elements.length; i ++)
+            elements[i].style.display = 'table-row';
+        elements = $(`#inputform-${conditionId} .class-IBC-hide`);
+        for(let i = 0; i < elements.length; i ++)
+            elements[i].style.display = 'none';
+        for(let i = 1; i <= 12; i ++)
+            $(`#Module-${i}-${conditionId}`)[0].style.display = "none";
+
+        $(`#label-A-9-${conditionId}`)[0].innerHTML = 'Rise from Rafter Plate to Top Ridge';
+        $(`#label-A-10-${conditionId}`)[0].innerHTML = 'Horiz Len from Outside of Rafter Plate to Ridge';
+        $(`#label-A-11-${conditionId}`)[0].innerHTML = 'Diagonal Overhang Length past Rafter Plate';
+        $(`#label-B-3-${conditionId}`)[0].innerHTML = 'Joist Spacing - Center to Center';
+        $(`#label-B-4-${conditionId}`)[0].innerHTML = 'Rafter Material';
+        $(`#label-F-1-${conditionId}`)[0].innerHTML = '# Modules on Roof Plane';
+        document.getElementById(`trussInput-${conditionId}`).style.display = "none";
+        drawStickGraph(conditionId);
     }
 }
 
@@ -1221,16 +1256,16 @@ var isEmptyInputBox = function() {
     var caseCount = $("#option-number-of-conditions").val();
     for(let i = 1; i <= caseCount; i ++)
     {
+        var isIBC = $(`#trussFlagOption-${i}-3`)[0].checked;
+        if(isIBC) break;
         if($(`#c-2-${i}`).val() != "" && parseFloat($(`#c-2-${i}`).val()) != 0 && ($(`#c-1-${i}`).val() == ""))
         {
             isEmpty = true;
-            console.log(`#c-1-${i}`);
             $(`#c-1-${i}`).css('background-color', '#FFC7CE');
         }    
         if($(`#c-2-${i}`).val() != "" && parseFloat($(`#c-2-${i}`).val()) != 0 && ($(`#c-3-${i}`).val() == ""))
         {
             isEmpty = true;
-            console.log(`#c-3-${i}`);
             $(`#c-3-${i}`).css('background-color', '#FFC7CE');
         }
     }
@@ -1336,6 +1371,12 @@ var getData = function(caseCount = 10) {
     {
         var data = {}
         data['TrussFlag'] = $(`#trussFlagOption-${i}-2`)[0].checked;
+        
+        let tabType;
+        if($(`#trussFlagOption-${i}-1`)[0].checked) tabType = 0;
+        else if($(`#trussFlagOption-${i}-2`)[0].checked) tabType = 1;
+        else if($(`#trussFlagOption-${i}-3`)[0].checked) tabType = 2;
+        data['Analysis_Type'] = tabType;
         
         $(`#inputform-${i} input:text:enabled`).each(function() { 
             data[$(this).attr('id')] = $(this).val();
@@ -1966,7 +2007,7 @@ var drawStickBaseLine = function( condId ) {
     }
 }
 
-var adjustStickDrawingPanel = function( condId ) {
+var adjustStickDrawingPanel = function( condId, isIBC = false ) {
     var topYPoint = 0, topXPoint = 0;
 
     var angleRadian = degreeToRadian( parseFloat($(`#a-7-${condId}`).val()) );
@@ -2000,11 +2041,15 @@ var adjustStickDrawingPanel = function( condId ) {
     }
     moduleLengthSum -= moduleGap;
 
-    // Show alert when module length is longer
-    if( roofHeight + overhangY < Math.sin(angleRadian) * moduleLengthSum || (angleRadian != 0 && (1.0 / Math.tan(angleRadian)) * (roofHeight + overhangY) + overhangX < Math.cos(angleRadian) * moduleLengthSum))
-        $(`#stick-module-alert-${condId}`).css('display', 'block');
-    else
+    if(!isIBC){
+        // Show alert when module length is longer
+        if( roofHeight + overhangY < Math.sin(angleRadian) * moduleLengthSum || (angleRadian != 0 && (1.0 / Math.tan(angleRadian)) * (roofHeight + overhangY) + overhangX < Math.cos(angleRadian) * moduleLengthSum))
+            $(`#stick-module-alert-${condId}`).css('display', 'block');
+        else
+            $(`#stick-module-alert-${condId}`).css('display', 'none');
+    } else {
         $(`#stick-module-alert-${condId}`).css('display', 'none');
+    }
 
     topYPoint = Math.max(roofHeight + overhangY, Math.sin(angleRadian) * moduleLengthSum + moduleHeight * Math.sin(degreeToRadian( parseFloat($(`#g-2-${condId}`).val()) )));
     topXPoint = Math.max(angleRadian != 0 ? (1.0 / Math.tan(angleRadian)) * (roofHeight + overhangY) + overhangX : 0, Math.sin(Math.PI / 2 - angleRadian) * moduleLengthSum);
@@ -2034,7 +2079,10 @@ var adjustStickDrawingPanel = function( condId ) {
 var drawStickGraph = function( condId ) {
     if($(`#a-7-${condId}`).val() == "") // angle should not be empty
         return;
-    adjustStickDrawingPanel(condId);
+
+    var isIBC = $(`#trussFlagOption-${condId}-3`)[0].checked;
+    
+    adjustStickDrawingPanel(condId, isIBC);
     drawStickBaseLine(condId);
 
     var label_index = 1;
@@ -2120,116 +2168,118 @@ var drawStickGraph = function( condId ) {
     stick_ctx[condId].stroke();
     stick_ctx[condId].setLineDash([25, 0]);
 
-    // Draw Knee Wall
-    var kneeWallHeight = $(`#c-4-${condId}`).val() == "" ? 0 : parseFloat($(`#c-4-${condId}`).val());
+    if(!isIBC){
+        // Draw Knee Wall
+        var kneeWallHeight = $(`#c-4-${condId}`).val() == "" ? 0 : parseFloat($(`#c-4-${condId}`).val());
 
-    if( kneeWallHeight <= roofHeight )
-    {
-        $(`#c-4-warn-${condId}`).css('display', 'none');
+        if( kneeWallHeight <= roofHeight )
+        {
+            $(`#c-4-warn-${condId}`).css('display', 'none');
+            stick_ctx[condId].beginPath();
+            stick_ctx[condId].lineWidth = 2;
+            stick_ctx[condId].strokeStyle = "#0000FF";
+            stick_ctx[condId].moveTo(kneeWallHeight * (1 / Math.tan(angleRadian)) * stick_grid_size[condId], 0);
+            stick_ctx[condId].lineTo(kneeWallHeight * (1 / Math.tan(angleRadian))  * stick_grid_size[condId], - kneeWallHeight * stick_grid_size[condId]);
+            stick_ctx[condId].stroke();
+        }
+        else
+            $(`#c-4-warn-${condId}`).css('display', 'block');
+
+        // Draw Required Collar Tie
+        if($(`#collartie-${condId}`).css('display') == 'table-row'){
+            var newTieHeight = $(`#collartie-height-${condId}`).html();
+            stick_ctx[condId].beginPath();
+            stick_ctx[condId].lineWidth = 2;
+            stick_ctx[condId].strokeStyle = "#FF0000";
+            stick_ctx[condId].setLineDash([5, 5]);
+            stick_ctx[condId].moveTo(angleRadian != 0 ? newTieHeight * (1 / Math.tan(angleRadian))  * stick_grid_size[condId] : 0, - newTieHeight * stick_grid_size[condId]);
+            stick_ctx[condId].lineTo(angleRadian != 0 ? roofHeight * (1 / Math.tan(angleRadian))  * stick_grid_size[condId] : 0, - newTieHeight * stick_grid_size[condId]);
+            stick_ctx[condId].stroke();
+            stick_ctx[condId].setLineDash([5, 0]);
+            stick_ctx[condId].fillStyle = "#FF0000";
+            stick_ctx[condId].fillText("Prop Collar Tie",  newTieHeight * (1 / Math.tan(angleRadian))  * stick_grid_size[condId] / 2 + roofHeight * (1 / Math.tan(angleRadian))  * stick_grid_size[condId] / 2 - 50, - newTieHeight * stick_grid_size[condId] + 20);
+        }
+
+        // Draw Collar Tie
+        var collarTieHeight = $(`#c-2-${condId}`).val() == "" ? 0 : parseFloat($(`#c-2-${condId}`).val());
+        if( collarTieHeight <= roofHeight )
+        {
+            $(`#c-2-warn-${condId}`).css('display', 'none');
+            stick_ctx[condId].beginPath();
+            stick_ctx[condId].lineWidth = 2;
+            stick_ctx[condId].strokeStyle = "#0000FF";
+            stick_ctx[condId].moveTo(angleRadian != 0 ? collarTieHeight * (1 / Math.tan(angleRadian))  * stick_grid_size[condId] : 0, - collarTieHeight * stick_grid_size[condId]);
+            stick_ctx[condId].lineTo(angleRadian != 0 ? roofHeight * (1 / Math.tan(angleRadian))  * stick_grid_size[condId] : 0, - collarTieHeight * stick_grid_size[condId]);
+            stick_ctx[condId].stroke();
+        }
+        else
+            $(`#c-2-warn-${condId}`).css('display', 'block');
+
+        // Draw solar rectangles
+        var startModule = overhangLength - uphillDist;
+        var moduleDepth = 1.17 / 12;
+        var moduleWidth = parseFloat($("#pv-module-width").val()) / 12;
+        var moduleHeight = parseFloat($("#pv-module-length").val()) / 12;
+        var moduleGap = parseFloat($(`#g-1-${condId}`).val()) / 12;
+
+        var startPoint = [- Math.sin(Math.PI / 2 - angleRadian) * startModule * stick_grid_size[condId] - stick_grid_size[condId] / 4 * Math.sin(angleRadian), Math.cos(Math.PI / 2 - angleRadian) * startModule * stick_grid_size[condId] - stick_grid_size[condId] / 4];
+        stick_ctx[condId].translate(startPoint[0], startPoint[1]);
+        stick_ctx[condId].rotate(- angleRadian);
         stick_ctx[condId].beginPath();
         stick_ctx[condId].lineWidth = 2;
-        stick_ctx[condId].strokeStyle = "#0000FF";
-        stick_ctx[condId].moveTo(kneeWallHeight * (1 / Math.tan(angleRadian)) * stick_grid_size[condId], 0);
-        stick_ctx[condId].lineTo(kneeWallHeight * (1 / Math.tan(angleRadian))  * stick_grid_size[condId], - kneeWallHeight * stick_grid_size[condId]);
-        stick_ctx[condId].stroke();
-    }
-    else
-        $(`#c-4-warn-${condId}`).css('display', 'block');
-
-    // Draw Required Collar Tie
-    if($(`#collartie-${condId}`).css('display') == 'table-row'){
-        var newTieHeight = $(`#collartie-height-${condId}`).html();
-        stick_ctx[condId].beginPath();
-        stick_ctx[condId].lineWidth = 2;
-        stick_ctx[condId].strokeStyle = "#FF0000";
-        stick_ctx[condId].setLineDash([5, 5]);
-        stick_ctx[condId].moveTo(angleRadian != 0 ? newTieHeight * (1 / Math.tan(angleRadian))  * stick_grid_size[condId] : 0, - newTieHeight * stick_grid_size[condId]);
-        stick_ctx[condId].lineTo(angleRadian != 0 ? roofHeight * (1 / Math.tan(angleRadian))  * stick_grid_size[condId] : 0, - newTieHeight * stick_grid_size[condId]);
-        stick_ctx[condId].stroke();
-        stick_ctx[condId].setLineDash([5, 0]);
-        stick_ctx[condId].fillStyle = "#FF0000";
-        stick_ctx[condId].fillText("Prop Collar Tie",  newTieHeight * (1 / Math.tan(angleRadian))  * stick_grid_size[condId] / 2 + roofHeight * (1 / Math.tan(angleRadian))  * stick_grid_size[condId] / 2 - 50, - newTieHeight * stick_grid_size[condId] + 20);
-    }
-
-    // Draw Collar Tie
-    var collarTieHeight = $(`#c-2-${condId}`).val() == "" ? 0 : parseFloat($(`#c-2-${condId}`).val());
-    if( collarTieHeight <= roofHeight )
-    {
-        $(`#c-2-warn-${condId}`).css('display', 'none');
-        stick_ctx[condId].beginPath();
-        stick_ctx[condId].lineWidth = 2;
-        stick_ctx[condId].strokeStyle = "#0000FF";
-        stick_ctx[condId].moveTo(angleRadian != 0 ? collarTieHeight * (1 / Math.tan(angleRadian))  * stick_grid_size[condId] : 0, - collarTieHeight * stick_grid_size[condId]);
-        stick_ctx[condId].lineTo(angleRadian != 0 ? roofHeight * (1 / Math.tan(angleRadian))  * stick_grid_size[condId] : 0, - collarTieHeight * stick_grid_size[condId]);
-        stick_ctx[condId].stroke();
-    }
-    else
-        $(`#c-2-warn-${condId}`).css('display', 'block');
-
-    // Draw solar rectangles
-    var startModule = overhangLength - uphillDist;
-    var moduleDepth = 1.17 / 12;
-    var moduleWidth = parseFloat($("#pv-module-width").val()) / 12;
-    var moduleHeight = parseFloat($("#pv-module-length").val()) / 12;
-    var moduleGap = parseFloat($(`#g-1-${condId}`).val()) / 12;
-
-    var startPoint = [- Math.sin(Math.PI / 2 - angleRadian) * startModule * stick_grid_size[condId] - stick_grid_size[condId] / 4 * Math.sin(angleRadian), Math.cos(Math.PI / 2 - angleRadian) * startModule * stick_grid_size[condId] - stick_grid_size[condId] / 4];
-    stick_ctx[condId].translate(startPoint[0], startPoint[1]);
-    stick_ctx[condId].rotate(- angleRadian);
-    stick_ctx[condId].beginPath();
-    stick_ctx[condId].lineWidth = 2;
-    stick_ctx[condId].strokeStyle = "#000000";
-
-    //totalRoofLength = parseFloat($(`#a-9-${condId}`).val()) / Math.sin(angleRadian);
-    var moduleCount = parseInt($(`#f-1-${condId}`).val());
-    
-    let moduleStartX = 0;
-    var orientation = false;
-    
-    var supportStart = parseFloat($(`#e-2-${condId}`).val()) - parseFloat($(`#e-1-${condId}`).val());
-    var moduleTilt = degreeToRadian(parseFloat($(`#g-2-${condId}`).val()));
-
-    stick_ctx[condId].fillStyle = "#000";
-    for(let i = 1; i <= moduleCount; i ++)
-    {
-        orientation = false;
-        if($(`#a-6-${condId}`).val() == "Portrait")
-            orientation = true;
-        if($(`#h-${i}-${condId}`)[0].checked)
-            orientation = !orientation;
-        
         stick_ctx[condId].strokeStyle = "#000000";
-        
-        let curModuleWidth = (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight));
-        if(moduleTilt >= 0){
-            stick_ctx[condId].translate(moduleStartX * stick_grid_size[condId], 0);
-            stick_ctx[condId].rotate(- moduleTilt);
-            stick_ctx[condId].strokeRect(0, 0, curModuleWidth * stick_grid_size[condId], moduleDepth * stick_grid_size[condId]);
-            // Left Support
-            stick_ctx[condId].fillRect(supportStart * stick_grid_size[condId] - 1, moduleDepth * stick_grid_size[condId], stick_grid_size[condId] / 12, stick_grid_size[condId] / 4 / Math.cos(moduleTilt) - moduleDepth * stick_grid_size[condId] + Math.max(1, 1 / 12 * Math.tan(moduleTilt) * stick_grid_size[condId]) + supportStart * Math.tan(moduleTilt) * stick_grid_size[condId]);
-            // Right Support
-            stick_ctx[condId].fillRect(curModuleWidth * stick_grid_size[condId] - stick_grid_size[condId] * (1 / 12 + supportStart) + 1, moduleDepth * stick_grid_size[condId], stick_grid_size[condId] / 12, stick_grid_size[condId] / 4 / Math.cos(moduleTilt) - moduleDepth * stick_grid_size[condId] + curModuleWidth * Math.tan(moduleTilt) * stick_grid_size[condId] +  Math.max(1, 1 / 12 * Math.tan(moduleTilt) * stick_grid_size[condId]) - supportStart * Math.tan(moduleTilt) * stick_grid_size[condId]);
-            stick_ctx[condId].rotate(moduleTilt);
-            stick_ctx[condId].translate(- moduleStartX * stick_grid_size[condId], 0);
-        }
-        else{
-            stick_ctx[condId].translate(moduleStartX * stick_grid_size[condId] + curModuleWidth * stick_grid_size[condId], 0);
-            stick_ctx[condId].rotate(- moduleTilt);
-            stick_ctx[condId].strokeRect(0, 0, - curModuleWidth * stick_grid_size[condId], moduleDepth * stick_grid_size[condId]);
-            // Left Support
-            stick_ctx[condId].fillRect(- curModuleWidth * stick_grid_size[condId] + supportStart * stick_grid_size[condId] - 1, moduleDepth * stick_grid_size[condId], stick_grid_size[condId] / 12, stick_grid_size[condId] / 4 / Math.cos(moduleTilt) - moduleDepth * stick_grid_size[condId] + Math.max(1, - 1 / 12 * Math.tan(moduleTilt) * stick_grid_size[condId]) - curModuleWidth * Math.tan(moduleTilt) * stick_grid_size[condId] + supportStart * Math.tan(moduleTilt) * stick_grid_size[condId]);
-            // Right Support
-            stick_ctx[condId].fillRect(- stick_grid_size[condId] * (1 / 12 + supportStart) + 1, moduleDepth * stick_grid_size[condId], stick_grid_size[condId] / 12, stick_grid_size[condId] / 4 / Math.cos(moduleTilt) - moduleDepth * stick_grid_size[condId] + Math.max(1, - 1 / 12 * Math.tan(moduleTilt) * stick_grid_size[condId]) - supportStart * Math.tan(moduleTilt) * stick_grid_size[condId]);
-            stick_ctx[condId].rotate(moduleTilt);
-            stick_ctx[condId].translate(- moduleStartX * stick_grid_size[condId] - curModuleWidth * stick_grid_size[condId], 0);
+
+        //totalRoofLength = parseFloat($(`#a-9-${condId}`).val()) / Math.sin(angleRadian);
+        var moduleCount = parseInt($(`#f-1-${condId}`).val());
+
+        let moduleStartX = 0;
+        var orientation = false;
+
+        var supportStart = parseFloat($(`#e-2-${condId}`).val()) - parseFloat($(`#e-1-${condId}`).val());
+        var moduleTilt = degreeToRadian(parseFloat($(`#g-2-${condId}`).val()));
+
+        stick_ctx[condId].fillStyle = "#000";
+        for(let i = 1; i <= moduleCount; i ++)
+        {
+            orientation = false;
+            if($(`#a-6-${condId}`).val() == "Portrait")
+                orientation = true;
+            if($(`#h-${i}-${condId}`)[0].checked)
+                orientation = !orientation;
+            
+            stick_ctx[condId].strokeStyle = "#000000";
+            
+            let curModuleWidth = (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight));
+            if(moduleTilt >= 0){
+                stick_ctx[condId].translate(moduleStartX * stick_grid_size[condId], 0);
+                stick_ctx[condId].rotate(- moduleTilt);
+                stick_ctx[condId].strokeRect(0, 0, curModuleWidth * stick_grid_size[condId], moduleDepth * stick_grid_size[condId]);
+                // Left Support
+                stick_ctx[condId].fillRect(supportStart * stick_grid_size[condId] - 1, moduleDepth * stick_grid_size[condId], stick_grid_size[condId] / 12, stick_grid_size[condId] / 4 / Math.cos(moduleTilt) - moduleDepth * stick_grid_size[condId] + Math.max(1, 1 / 12 * Math.tan(moduleTilt) * stick_grid_size[condId]) + supportStart * Math.tan(moduleTilt) * stick_grid_size[condId]);
+                // Right Support
+                stick_ctx[condId].fillRect(curModuleWidth * stick_grid_size[condId] - stick_grid_size[condId] * (1 / 12 + supportStart) + 1, moduleDepth * stick_grid_size[condId], stick_grid_size[condId] / 12, stick_grid_size[condId] / 4 / Math.cos(moduleTilt) - moduleDepth * stick_grid_size[condId] + curModuleWidth * Math.tan(moduleTilt) * stick_grid_size[condId] +  Math.max(1, 1 / 12 * Math.tan(moduleTilt) * stick_grid_size[condId]) - supportStart * Math.tan(moduleTilt) * stick_grid_size[condId]);
+                stick_ctx[condId].rotate(moduleTilt);
+                stick_ctx[condId].translate(- moduleStartX * stick_grid_size[condId], 0);
+            }
+            else{
+                stick_ctx[condId].translate(moduleStartX * stick_grid_size[condId] + curModuleWidth * stick_grid_size[condId], 0);
+                stick_ctx[condId].rotate(- moduleTilt);
+                stick_ctx[condId].strokeRect(0, 0, - curModuleWidth * stick_grid_size[condId], moduleDepth * stick_grid_size[condId]);
+                // Left Support
+                stick_ctx[condId].fillRect(- curModuleWidth * stick_grid_size[condId] + supportStart * stick_grid_size[condId] - 1, moduleDepth * stick_grid_size[condId], stick_grid_size[condId] / 12, stick_grid_size[condId] / 4 / Math.cos(moduleTilt) - moduleDepth * stick_grid_size[condId] + Math.max(1, - 1 / 12 * Math.tan(moduleTilt) * stick_grid_size[condId]) - curModuleWidth * Math.tan(moduleTilt) * stick_grid_size[condId] + supportStart * Math.tan(moduleTilt) * stick_grid_size[condId]);
+                // Right Support
+                stick_ctx[condId].fillRect(- stick_grid_size[condId] * (1 / 12 + supportStart) + 1, moduleDepth * stick_grid_size[condId], stick_grid_size[condId] / 12, stick_grid_size[condId] / 4 / Math.cos(moduleTilt) - moduleDepth * stick_grid_size[condId] + Math.max(1, - 1 / 12 * Math.tan(moduleTilt) * stick_grid_size[condId]) - supportStart * Math.tan(moduleTilt) * stick_grid_size[condId]);
+                stick_ctx[condId].rotate(moduleTilt);
+                stick_ctx[condId].translate(- moduleStartX * stick_grid_size[condId] - curModuleWidth * stick_grid_size[condId], 0);
+            }
+
+            moduleStartX += (moduleGap + curModuleWidth);
         }
 
-        moduleStartX += (moduleGap + curModuleWidth);
+        stick_ctx[condId].rotate(angleRadian);
+        stick_ctx[condId].translate(- startPoint[0], - startPoint[1]);
     }
     
-    stick_ctx[condId].rotate(angleRadian);
-    stick_ctx[condId].translate(- startPoint[0], - startPoint[1]);
-
     var overhangX = Math.floor(overhangLength * stick_grid_size[condId] * Math.sin(Math.PI / 2 - angleRadian ));
     var overhangY = Math.floor(overhangLength * stick_grid_size[condId] * Math.sin(angleRadian ));
     stick_ctx[condId].translate(- overhangX, overhangY);
@@ -2505,38 +2555,72 @@ $(document).ready(function() {
                             
                             var collarHeights = res.data.collarHeights;
                             var haveChanges = false;
+                            var ibcChanges = false;
                             if(collarHeights){
                                 for(let i = 1; i <= $('#option-number-of-conditions').val(); i ++){
                                     if(collarHeights.length >= 5 * i)
                                     {
-                                        let tabCollar = collarHeights.slice(5 * (i - 1), 5 * i);
+                                        let pieceValue = collarHeights.slice(5 * (i - 1), 5 * i);
                                         let notesId = 0;
                                         if(res.data.structural_notes && res.data.structural_notes.length >= 2 * i)
                                             notesId = parseInt(res.data.structural_notes.slice(2 * (i - 1), 2 * i));
-                                        if(parseFloat(tabCollar) != 0)
+                                        if(!($(`#trussFlagOption-${i}-3`)[0].checked) && parseFloat(pieceValue) != 0)
                                         {
                                             haveChanges = true;
                                             if(notesId == 2)
                                                 $(`#collartie-height-${i}`).html('Framing Error. See note below.');
                                             else
-                                                $(`#collartie-height-${i}`).html(parseFloat(tabCollar).toFixed(2));
+                                                $(`#collartie-height-${i}`).html(parseFloat(pieceValue).toFixed(2));
                                             $(`#collartie-title-${i}`).html(i + ': ' + $(`#a-5-${i}`).val());
                                             $(`#collartie-${i}`).css('display', "table-row");
                                             $(`#collartie-warning-${i}`).css('display', 'block');
-                                            $(`#collartie-warning-${i}`).html('Framing modification required.  Add collar tie / knee wall at ' + parseFloat(tabCollar).toFixed(2) + ' ft.');
+                                            $(`#collartie-warning-${i}`).html('Framing modification required.  Add collar tie / knee wall at ' + parseFloat(pieceValue).toFixed(2) + ' ft.');
+                                        }
+                                        if($(`#trussFlagOption-${i}-3`)[0].checked){
+                                            ibcChanges = true;
+                                            $(`#ibc-dc-${i}`).css('display', "table-row");
+                                            $(`#ibc-dc-title-${i}`).html(i + ': ' + $(`#a-5-${i}`).val());
+                                            $(`#ibc-dc-max-${i}`).html(parseInt(pieceValue));
+                                            let fcModuleCnt = $(`#f-1-${i}`).val();
+                                            if(parseFloat(pieceValue) >= fcModuleCnt){
+                                                $(`#ibc-dc-msg-${i}`).html(`OK. ${fcModuleCnt} used within limits.`);
+                                                $(`#ibc-dc-title-${i}`).css('color', 'black');
+                                                $(`#ibc-dc-max-${i}`).css('color', 'black');
+                                                $(`#ibc-dc-msg-${i}`).css('color', 'black');
+                                            } else 
+                                                $(`#ibc-dc-msg-${i}`).html(`ERROR. ${fcModuleCnt} used exceeds allowable.`);
                                         }
                                     }
                                 }
                             }
+
+                            if(ibcChanges){
+                                $('#ibc-dc-table').css('display', 'block');
+                                $('#ibc-dc-header').css('display', "table-row");
+                                $('#ibc-dc-headers').css('display', "table-row");
+                                $('#requiredNotes').css('color', 'red');
+                                $('#requiredNotes').html(' *************** Roof Framing Changes are Required *************** ');
+                            } else {
+                                $('#ibc-dc-table').css('display', 'none');
+                                if(!haveChanges){
+                                    $('#requiredNotes').css('color', 'black');
+                                    $('#requiredNotes').html(' *************** No Roof Framing Changes are Required *************** ');
+                                }
+                            }
+
                             if(haveChanges){
                                 $('#collartie-header').css('display', "table-row");
                                 $('#collartie-headers').css('display', "table-row");
                                 $('#collartie-note').css('display', "table-row");
                                 $('#requiredNotes').css('color', 'red');
                                 $('#requiredNotes').html(' *************** Roof Framing Changes are Required *************** ');
+                                $('#collartie-dc-table').css('display', 'block');
                             } else {
-                                $('#requiredNotes').css('color', 'black');
-                                $('#requiredNotes').html(' *************** No Roof Framing Changes are Required *************** ');
+                                $('#collartie-dc-table').css('display', 'none');
+                                if(!ibcChanges){
+                                    $('#requiredNotes').css('color', 'black');
+                                    $('#requiredNotes').html(' *************** No Roof Framing Changes are Required *************** ');
+                                }
                             }
 
                             haveChanges = false;
@@ -3207,7 +3291,7 @@ $(document).ready(function() {
 
         if(status != 'Saved'){
             for(let i =1; i <= caseCount; i ++){
-                if($(`#trussFlagOption-${i}-1`)[0].checked){ // Stick 
+                if($(`#trussFlagOption-${i}-1`)[0].checked || $(`#trussFlagOption-${i}-3`)[0].checked){ // Stick or IBC 5%
                     if(stick_right_input[i] == ''){
                         $("#submitBtns input").attr('disabled', false);
                         swal.fire({ title: "Warning", text: "Please fill A7~A10 fields on Tab " + i + ".", icon: "warning", confirmButtonText: `OK` });
@@ -3570,7 +3654,14 @@ var doDuplicate = async function (targetTabId, curTabId, checkOverwrite){
         return;
     $(`#trussFlagOption-${targetTabId}-1`).prop('checked', $(`#trussFlagOption-${curTabId}-1`)[0].checked);
     $(`#trussFlagOption-${targetTabId}-2`).prop('checked', $(`#trussFlagOption-${curTabId}-2`)[0].checked);
-    fcChangeType(targetTabId, $(`#trussFlagOption-${curTabId}-2`)[0].checked);
+    $(`#trussFlagOption-${targetTabId}-3`).prop('checked', $(`#trussFlagOption-${curTabId}-3`)[0].checked);
+    
+    var tabType;
+    if($(`#trussFlagOption-${curTabId}-1`)[0].checked) tabType = 0;
+    else if($(`#trussFlagOption-${curTabId}-2`)[0].checked) tabType = 1;
+    else if($(`#trussFlagOption-${curTabId}-3`)[0].checked) tabType = 2;
+    fcChangeType(targetTabId, tabType);
+
     $(`#inputform-${curTabId} input:text:enabled, #inputform-${curTabId} select:enabled`).each(function() { 
         let elementId = $(this).attr('id');
         elementId = elementId.slice(0, elementId.length  - 2) + '-' + targetTabId;
@@ -3581,7 +3672,8 @@ var doDuplicate = async function (targetTabId, curTabId, checkOverwrite){
         elementId = elementId.slice(0, elementId.length  - 2) + '-' + targetTabId;
         $(`#${elementId}`).prop('checked', $(this)[0].checked);
     });
-    maxModuleNumChange(targetTabId);
+    if(tabType != 2) // If Stick or Truss
+        maxModuleNumChange(targetTabId);
     updateRoofMemberType(targetTabId, $(`#option-roof-member-type-${curTabId}`).val());
     updateNumberSegment1(targetTabId, $(`#option-number-segments1-${curTabId}`).val());
     updateFloorMemberType(targetTabId, $(`#option-floor-member-type-${curTabId}`).val());
@@ -3657,7 +3749,14 @@ var deleteTab = function(curTabId) {
                     sourceTabId = targetTabId + 1;
                     $(`#trussFlagOption-${targetTabId}-1`).prop('checked', $(`#trussFlagOption-${sourceTabId}-1`)[0].checked);
                     $(`#trussFlagOption-${targetTabId}-2`).prop('checked', $(`#trussFlagOption-${sourceTabId}-2`)[0].checked);
-                    fcChangeType(targetTabId, $(`#trussFlagOption-${sourceTabId}-2`)[0].checked);
+                    $(`#trussFlagOption-${targetTabId}-3`).prop('checked', $(`#trussFlagOption-${sourceTabId}-3`)[0].checked);
+
+                    var tabType;
+                    if($(`#trussFlagOption-${sourceTabId}-1`)[0].checked) tabType = 0;
+                    else if($(`#trussFlagOption-${sourceTabId}-2`)[0].checked) tabType = 1;
+                    else if($(`#trussFlagOption-${sourceTabId}-3`)[0].checked) tabType = 2;
+                    fcChangeType(targetTabId, tabType);
+                    
                     $(`#inputform-${sourceTabId} input:text:enabled, #inputform-${sourceTabId} select:enabled`).each(function() { 
                         let elementId = $(this).attr('id');
                         elementId = elementId.slice(0, elementId.length  - 2) + '-' + targetTabId;
@@ -3668,7 +3767,8 @@ var deleteTab = function(curTabId) {
                         elementId = elementId.slice(0, elementId.length  - 2) + '-' + targetTabId;
                         $(`#${elementId}`).prop('checked', $(this)[0].checked);
                     });
-                    maxModuleNumChange(targetTabId);
+                    if(tabType != 2) // If Stick or Truss
+                        maxModuleNumChange(targetTabId);
                     updateRoofMemberType(targetTabId, $(`#option-roof-member-type-${sourceTabId}`).val());
                     updateNumberSegment1(targetTabId, $(`#option-number-segments1-${sourceTabId}`).val());
                     updateFloorMemberType(targetTabId, $(`#option-floor-member-type-${sourceTabId}`).val());
@@ -3750,9 +3850,17 @@ var loadPreloadedData = function() {
                             for(let i = 0; i < preloaded_data['LoadingCase'].length; i ++)
                             {
                                 let caseData = preloaded_data['LoadingCase'][i];
-                                $(`#trussFlagOption-${i + 1}-1`).prop('checked', !caseData['TrussFlag']);
-                                $(`#trussFlagOption-${i + 1}-2`).prop('checked', caseData['TrussFlag']);
-                                fcChangeType(i + 1, caseData['TrussFlag']);
+                                console.log(caseData['Analysis_Type']);
+                                $(`#trussFlagOption-${i + 1}-1`).prop('checked', caseData['Analysis_Type'] != 2 ? !caseData['TrussFlag'] : false);
+                                $(`#trussFlagOption-${i + 1}-2`).prop('checked', caseData['Analysis_Type'] != 2 ? caseData['TrussFlag'] : false);
+                                $(`#trussFlagOption-${i + 1}-3`).prop('checked', (caseData['Analysis_Type'] == 2));
+
+                                var tabType;
+                                if($(`#trussFlagOption-${i + 1}-1`)[0].checked) tabType = 0;
+                                else if($(`#trussFlagOption-${i + 1}-2`)[0].checked) tabType = 1;
+                                else if($(`#trussFlagOption-${i + 1}-3`)[0].checked) tabType = 2;
+                                fcChangeType(i + 1, tabType);
+
                                 if(!caseData['RoofDataInput']['A2_feet'] && !caseData['RoofDataInput']['A2_inches'])
                                 {
                                     $(`#af-2-${i + 1}`).val(caseData['RoofDataInput']['A2']);
@@ -3891,7 +3999,8 @@ var loadPreloadedData = function() {
                                 $(`#e-2-${i + 1}`).val(caseData['Location']['E2']);
 
                                 $(`#f-1-${i + 1}`).val(caseData['NumberOfModules']['F1']);
-                                maxModuleNumChange(i + 1);
+                                if(tabType != 2) // If Stick or Truss
+                                    maxModuleNumChange(i + 1);
                                 $(`#g-1-${i + 1}`).val(caseData['NSGap']['G1']);
                                 if(caseData['NSGap']['G2']) $(`#g-2-${i + 1}`).val(caseData['NSGap']['G2']);
                                 
