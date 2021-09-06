@@ -44,6 +44,7 @@ Route::post('/recommendUserNum', 'UserController@recommendUserNum')->name('recom
 
 // Manage Companies
 Route::get('/companyList', 'CompanyController@index')->name('companyList');
+Route::get('/editCompany', 'CompanyController@editCompany')->name('editCompany');
 Route::post('/getCompanyData', 'CompanyController@getCompanyData')->name('getCompanyData');
 Route::post('/getCompany', 'CompanyController@getCompany')->name('getCompany');
 Route::post('/updateCompany', 'CompanyController@updateCompany')->name('updateCompany');

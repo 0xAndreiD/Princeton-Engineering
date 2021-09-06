@@ -4,44 +4,96 @@ $(document).ready(function(){
         headers:
         { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
     });
-});
 
-function saveAccount(){
-    if($("#username").val() == "" || $("#email").val() == "" || $("#password").val() == "")
-    {
-        swal.fire({ title: "Error", text: "Please fix empty values.", icon: "error", confirmButtonText: `OK` });
-        return;
-    }
-    $.ajax({
-        url:"updateMyAccount",
-        type:'post',
-        data: {
-            'username': $("#username").val(),
-            'email': $("#email").val(),
-            'password': $("#password").val(),
-            @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4)
-            'autoOpen': $("#automatic-open")[0].checked ? 1 : 0,
-            @endif
+    Dashmix.helpers('validation');
+    var validateObj = $('#profileForm').validate({rules: {
+        'name': {
+            required: true,
+            minlength: 3
         },
-        success: function(res){
-            if(!res.success)
-                swal.fire({ title: "Error", text: res.message, icon: "error", confirmButtonText: `OK` });
-            else
-                swal.fire({ title: "Success", text: "Successfully Updated!", icon: "success", confirmButtonText: `OK` });
+        'email': {
+            required: true,
+            email: true
         },
-        error: function(xhr, status, error) {
-            res = JSON.parse(xhr.responseText);
-            message = res.message;
-            swal.fire({ title: "Error", text: message == "" ? "Error happened while processing." : message, icon: "error", confirmButtonText: `OK` });
+        'telno': {
+            required: true,
+            phoneUS: true
+        },
+        'digits': {
+            required: true,
+            digits: true
+        },
+        'number': {
+            required: true,
+            number: true
+        },
+        "max_allowable_skip": {
+            required: true,
+            number: true
         }
+    },
+    messages: {
+        'name': {
+            required: 'Please enter a name',
+            minlength: 'Your name must consist of at least 3 characters'
+        },
+        'email': 'Please enter a valid email address',
+        'telno': 'Please enter a US phone!',
+        'digits': 'Please enter only digits!',
+        'number': 'Please enter a number!',
+    },
+    submitHandler: function(){
+        updateCompany();
+    }
     });
-}
 
-@if(Auth::user()->userrole == 1 || Auth::user()->userrole == 2)
+    $('#permitForm').validate({rules: {
+        'state': {
+            required: true,
+        },
+        'construction_email': {
+            required: false,
+            email: true
+        },
+        'registration': {
+            required: false,
+            digits: true
+        },
+        'exp_date': {
+            required: false,
+        },
+        'EIN': {
+            required: false,
+            number: true
+        },
+        'contact_person': {
+            required: false,
+        },
+        'contact_phone': {
+            required: false,
+            phoneUS: true
+        },
+        'fax': {
+            required: false,
+        }
+    },
+    messages: {
+        'state': {
+            required: 'Please select a state',
+            minlength: 'Your name must consist of at least 3 characters'
+        },
+        'construction_email': 'Please enter a valid email address',
+        'registration': 'Please enter only digits!',
+        'EIN': 'Please enter only digits!',
+    },
+    submitHandler: function(){
+        updatePermitInfo();
+    }
+    });
+})
+
 var cardnumber_mask;
 window.onload = function () {
-swal.fire({ title: "Please wait...", showConfirmButton: false });
-swal.showLoading();
 
 const cardname = document.getElementById('cardname');
 const cardnumber = document.getElementById('cardnumber');
@@ -325,7 +377,6 @@ $.ajax({
         url:"getBillingInfo",
         type:'post',
         success:function(res){
-            swal.close();
             if(res.success == true) {
                 if(res.data){
                     $("#bname").val(res.data.billing_name);
@@ -361,7 +412,6 @@ $.ajax({
             }
         },
         error: function(xhr, status, error) {
-            swal.close();
             res = JSON.parse(xhr.responseText);
             swal.fire({ title: "Error", text: res.message, icon: "error", confirmButtonText: `OK` });
         }
@@ -445,7 +495,5 @@ function shippingCopy(){
         $("#szip").val($("#bzip").val());
     }
 }
-
-@endif
 
 </script>
