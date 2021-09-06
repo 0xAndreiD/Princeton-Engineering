@@ -167,16 +167,10 @@ class CompanyController extends Controller
 
                 $nestedData['actions'] = "
                 <div class='text-center'>
-                    <button type='button' class='btn btn-primary' 
-                        onclick='showEditCompany(this,{$nestedData['id']})'
-                        data-toggle='modal' data-target='#modal-block-normal'>
+                    <a class='btn btn-primary' 
+                        href='" . route('editCompany') . "?id={$nestedData['id']}'>
                         <i class='fa fa-pencil-alt'></i>
-                    </button>
-                    <button type='button' class='btn btn-warning' 
-                        onclick='showPermitInfoCompany(this,{$nestedData['id']})'
-                        data-toggle='modal' data-target='#modal-permit-normal'>
-                        <i class='fa fa-pencil-alt'></i>
-                    </button>
+                    </a>
                     <button type='button' class='js-swal-confirm btn btn-danger' onclick='delCompany(this,{$nestedData['id']})'>
                         <i class='fa fa-trash'></i>
                     </button>
@@ -191,6 +185,22 @@ class CompanyController extends Controller
             "data"            => $data   
             );
         echo json_encode($json_data);
+    }
+
+    /**
+     * Edit Company Page.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    function editCompany(Request $request){
+        if(Auth::user()->userrole == 2){
+            if(!empty($request['id'])){
+                $company = Company::find($request['id']);
+                return view('admin.company.edit')->with('company', $company);
+            } else
+                return redirect('home');
+        } else 
+            return redirect('home');
     }
 
     /**

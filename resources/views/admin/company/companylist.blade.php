@@ -57,8 +57,8 @@
                             <th></th>
                             <th style="display: flex;align-items: center;justify-content: center;">
                                 <span class="ml-1" style='writing-mode: vertical-lr;width: 42px;transform: rotateZ(180deg);'>Edit</span>
-                                <span class="ml-4" style='writing-mode: tb-rl;width: 42px;transform: rotateZ(180deg);'>Permit</span>
-                                <span class="ml-1" style='writing-mode: tb-rl;width: 42px;transform: rotateZ(180deg);'>Delete</span>
+                                {{-- <span class="ml-4" style='writing-mode: tb-rl;width: 42px;transform: rotateZ(180deg);'>Permit</span> --}}
+                                <span class="ml-3" style='writing-mode: tb-rl;width: 42px;transform: rotateZ(180deg);'>Delete</span>
                             </th>
                         </tr>
                     </thead>
