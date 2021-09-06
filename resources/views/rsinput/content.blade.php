@@ -10,6 +10,10 @@
             <input type="radio" class="custom-control-input rfdTypeSelect" id="trussFlagOption-{{ $conditionId }}-2" name="trussFlag-{{ $conditionId }}" onchange="fcChangeType({{ $conditionId }}, 1)" value="1">
             <label class="custom-control-label rfdTypeSelect" for="trussFlagOption-{{ $conditionId }}-2">Truss Framing Data Input</label>
         </div>
+        <div class="custom-control custom-radio custom-control-success mb-1 ">
+            <input type="radio" class="custom-control-input rfdTypeSelect" id="trussFlagOption-{{ $conditionId }}-3" name="trussFlag-{{ $conditionId }}" onchange="fcChangeType({{ $conditionId }}, 2)" value="2">
+            <label class="custom-control-label rfdTypeSelect" for="trussFlagOption-{{ $conditionId }}-3">IBC 5% Data Input</label>
+        </div>
     </div>
     @if(Auth::user()->userrole != 4)
     <div>
@@ -100,7 +104,7 @@
             <td class="w400-yellow-bdr" colspan="2"><input type="text" class="txt-center-align" id="a-5-{{ $conditionId }}"  tabindex="29" value="MP1"></input></td>
             <td class="right-bdr"><div style="overflow:hidden"></td>
         </tr>
-        <tr class="h13">
+        <tr class="h13 class-IBC-hide">
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">A-6</td>
             <td class="iw400-right-bdr" colspan="2">Orientation</td>
@@ -177,7 +181,7 @@
             <td class="td-dec-feet right-bdr"><input type="text" class="txt-calced right-bdr" id="a-11-{{ $conditionId }}"  tabindex="-1" value="0.83" readonly></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
-        <tr class="h13">
+        <tr class="h13 class-IBC-hide">
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">A-12</td>
             <td class="iw400-right-bdr" colspan="2">Roof Shape</td>
@@ -214,7 +218,7 @@
             <td class="w400-yellow-bdr" colspan="2"><input type="text" class="txt-center-align" id="b-3-{{ $conditionId }}"  tabindex="38" value="16.00"></input></td>
             <td class="right-bdr"><div style="overflow:hidden"></td>
         </tr>
-        <tr class="h13">
+        <tr class="h13 class-IBC-hide">
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">B-4</td>
             <td class="iw400-right-bdr" id="label-B-4-{{ $conditionId }}" colspan="2">Rafter Material</td>
@@ -229,7 +233,7 @@
             </td>
             <td class="right-bdr"><div style="overflow:hidden"></td>
         </tr>
-        <tr class="h13">
+        <tr class="h13 class-IBC-hide">
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">B-5</td>
             <td class="iw400-right-bdr" colspan="2">Max stanchion spacing</td>
@@ -237,7 +241,7 @@
             <td class="w400-yellow-bdr" colspan="2"><input type="text" class="txt-center-align" id="b-5-{{ $conditionId }}"  tabindex="38" value="48.00"></input></td>
             <td class="right-bdr"><div style="overflow:hidden"></td>
         </tr>
-        <tr class="h13 class-truss-hide">
+        <tr class="h13 class-truss-hide class-IBC-hide">
             <td><div style="overflow:hidden"></td>
             <td class="iw400-bdr" style="vertical-align : middle;" rowspan="4">Collar Tie / Knee Wall Information</td>
             <td class="w400-bdr">C-1</td>
@@ -246,7 +250,7 @@
             <td class="w400-yellow-bdr" colspan="2"><input type="text" class="txt-center-align" id="c-1-{{ $conditionId }}"  tabindex="39" value=""></input></td>
             <td class="right-bdr"><div style="overflow:hidden"></td>
         </tr>
-        <tr class="h13 class-truss-hide">
+        <tr class="h13 class-truss-hide class-IBC-hide">
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">C-2</td>
             <td class="iw400-right-bdr" colspan="2">Dist. from Top of Collar Tie to Attic Deck</td>
@@ -256,7 +260,7 @@
             <td class="td-dec-feet right-bdr"><input type="text" class="txt-calced" id="c-2-{{ $conditionId }}"  tabindex="-1" value="" readonly></input></td>
             <td><div id="c-2-warn-{{ $conditionId }}" class="warnCell">Warning - Height above high end of rafter</td>
         </tr>
-        <tr class="h13 class-truss-hide">
+        <tr class="h13 class-truss-hide class-IBC-hide">
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">C-3</td>
             <td class="iw400-right-bdr" colspan="2">Tie Spacing - Center to Center</td>
@@ -264,7 +268,7 @@
             <td class="w400-yellow-bdr" colspan="2"><input type="text" class="txt-center-align" id="c-3-{{ $conditionId }}"  tabindex="41" value=""></input></td>
             <td class="right-bdr"><div style="overflow:hidden"></td>
         </tr>
-        <tr class="h13 class-truss-hide">
+        <tr class="h13 class-truss-hide class-IBC-hide">
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">C-4</td>
             <td class="iw400-right-bdr" colspan="2">Knee Wall Height</td>
@@ -312,7 +316,7 @@
             </td>
             <td class="right-bdr"><div style="overflow:hidden"></td>
         </tr>
-        <tr class="h13">
+        <tr class="h13 class-IBC-hide">
             <td><div style="overflow:hidden"></td>
             <td class="iw400-bdr" style="vertical-align : middle;" rowspan="2">Location</td>
             <td class="w400-bdr">E-1</td>
@@ -323,7 +327,7 @@
             <td class="td-dec-feet right-bdr"><input type="text" class="txt-calced" id="e-1-{{ $conditionId }}" tabindex="-1" value="4.25" readonly></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
-        <tr class="h13">
+        <tr class="h13 class-IBC-hide">
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">E-2</td>
             <td class="iw400-right-bdr" colspan="2">Uphill Distance from Eave to Lowest Support</td>
@@ -357,7 +361,7 @@
             </td>
             <td class="right-bdr"><div style="overflow:hidden"></td>
         </tr>
-        <tr class="h13">
+        <tr class="h13 class-IBC-hide">
             <td><div style="overflow:hidden"></td>
             <td class="iw400-bdr" rowspan="2">Module Geometry</td>
             <td class="w400-bdr">G-1</td>
@@ -366,7 +370,7 @@
             <td class="w400-yellow-bdr" colspan="2"><input type="text" class="txt-center-align" id="g-1-{{ $conditionId }}" tabindex="48" value="1"></input></td>
             <td class="right-bdr"><div style="overflow:hidden"></td>
         </tr>
-        <tr class="h13">
+        <tr class="h13 class-IBC-hide">
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">G-2</td>
             <td class="iw400-right-bdr" colspan="2">Module relative tilt</td>

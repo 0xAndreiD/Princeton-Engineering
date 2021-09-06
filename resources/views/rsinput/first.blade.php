@@ -633,13 +633,57 @@
 </tbody>
 </table>
 
-    <!-- Error table -->
-    <table cellspacing="0" cellpadding="0" style="border-spacing:0; display: inline-block; vertical-align: top;" >    
-        <colgroup>
-            <col width="80">
-            <col width="160">
-            <col width="200">
-        </colgroup>
+<table id="ibc-dc-table" cellspacing="0" cellpadding="0" style="border-spacing:0; display: inline-block; vertical-align: top;" >    
+    <colgroup>
+        <col width="80">
+        <col width="160">
+        <col width="200">
+        <col width="200">
+    </colgroup>
+    <tbody>
+        <tr class="h13">
+            <td><div style="overflow:hidden"></td>
+                <td><div style="overflow:hidden"></td>
+                <td><div style="overflow:hidden"></td>
+                <td><div style="overflow:hidden"></td>
+                <td><div style="overflow:hidden"></td>
+                <td><div style="overflow:hidden"></td>
+                <td><div style="overflow:hidden"></td>
+        </tr>
+        <tr class="h13" style="display: none;" id="ibc-dc-header">
+            <td><div style="overflow:hidden"></div></td>
+            <td class="iw400-bdr" colspan="3">IBC 5% Solution</td>
+            <td><div style="overflow:hidden"></div></td>
+            <td><div style="overflow:hidden"></div></td>
+        </tr>
+        <tr class="h13" style="display: none;" id="ibc-dc-headers">
+            <td><div style="overflow:hidden"></div></td>
+            <td class="iw400-bdr">Framing Condition # and Name</td>
+            <td class="iw400-bdr">Max. # Allowed Modules</td>
+            <td class="iw400-bdr">Check Result</td>
+        </tr>
+        @for($j = 1; $j <= 10; $j ++)
+        <tr class="h13" style="display: none;" id="ibc-dc-{{$j}}">
+            <td><div style="overflow:hidden"></div></td>
+            <td class="iw400-bdr" id="ibc-dc-title-{{$j}}" style="color:red;">{{$j}}: MP{{$j}}</td>
+            <td class="iw400-bdr" id="ibc-dc-max-{{$j}}" style="color:red;"></td>
+            <td class="iw400-bdr" id="ibc-dc-msg-{{$j}}" style="color:red;"></td>
+        </tr>
+        @endfor
+        {{-- <tr style="display: none;" id="ibc-dc-note">
+            <td><div style="overflow:hidden"></div></td>
+            <td colspan="2" style="font-style: italic;font-size: 10pt;font-family: Arial;font-weight: 400;color: black;">* Note: Where two collar tie heights would be in conflict, use the lower height for both roofs. </td>
+        </tr> --}}
+    </tbody>
+</table>
+
+<!-- Error table -->
+<table id="collartie-dc-table" cellspacing="0" cellpadding="0" style="border-spacing:0; display: inline-block; vertical-align: top;" >    
+    <colgroup>
+        <col width="80">
+        <col width="160">
+        <col width="200">
+    </colgroup>
     <tbody>
         <tr class="h13">
             <td><div style="overflow:hidden"></td>
@@ -672,62 +716,62 @@
             <td colspan="2" style="font-style: italic;font-size: 10pt;font-family: Arial;font-weight: 400;color: black;">* Note: Where two collar tie heights would be in conflict, use the lower height for both roofs. </td>
         </tr>
     </tbody>
-    </table>
+</table>
 
-    <table cellspacing="0" cellpadding="0" style="border-spacing:0; display:inline-block" >    
-        <colgroup>
-            <col width="30">
-            <col width="400">
-        </colgroup>
-        <tbody>
-            <tr class="h13">
-                <td><div style="overflow:hidden"></td>
-                <td><div style="overflow:hidden"></td>
-            </tr>
-            <tr class="h13" style="display:none" id="structural-notes">
-                <td><div style="overflow:hidden"></div></td>
-                <td class="iw400-bdr" id="structural-notes" style="align:left">
-                    Rafters upon which stanchions will be placed, require collar ties or knee walls. Collar tie / knee wall locations either exist or will be added at the heights indicated herein. All new collar tiles shall be 2x6 material and shall be fastened at each end with (8) 12D common nails, (4) per side. If knee walls are to be used, stud framing to match rafter locations. Install top and bottom plate. All material to be 2x4 fastened w/10D common nails.
-                </td>
-            </tr>
-        </tbody>
-    </table>
-
-    <table cellspacing="0" cellpadding="0" style="border-spacing:0; display: table; vertical-align: top;" >    
-        <colgroup>
-            <col width="80">
-            <col width="240">
-            <col width="400">
-        </colgroup>
+<table cellspacing="0" cellpadding="0" style="border-spacing:0; display:inline-block" >    
+    <colgroup>
+        <col width="30">
+        <col width="400">
+    </colgroup>
     <tbody>
         <tr class="h13">
             <td><div style="overflow:hidden"></td>
             <td><div style="overflow:hidden"></td>
-            <td><div style="overflow:hidden"></td>
-            <td><div style="overflow:hidden"></td>
-            <td><div style="overflow:hidden"></td>
-            <td><div style="overflow:hidden"></td>
-            <td><div style="overflow:hidden"></td>
         </tr>
-        <tr class="h13" style="display: none;" id="structural-header">
+        <tr class="h13" style="display:none" id="structural-notes">
             <td><div style="overflow:hidden"></div></td>
-            <td class="iw400-bdr" colspan="2">Structural Notes</td>
-            <td><div style="overflow:hidden"></div></td>
+            <td class="iw400-bdr" id="structural-notes" style="align:left">
+                Rafters upon which stanchions will be placed, require collar ties or knee walls. Collar tie / knee wall locations either exist or will be added at the heights indicated herein. All new collar tiles shall be 2x6 material and shall be fastened at each end with (8) 12D common nails, (4) per side. If knee walls are to be used, stud framing to match rafter locations. Install top and bottom plate. All material to be 2x4 fastened w/10D common nails.
+            </td>
         </tr>
-        <tr class="h13" style="display: none;" id="structural-headers">
-            <td><div style="overflow:hidden"></div></td>
-            <td class="iw400-bdr">Framing Condition # and Name</td>
-            <td class="iw400-bdr">Note *</td>
-        </tr>
-        @for($j = 1; $j <= 10; $j ++)
-        <tr class="h13" style="display: none;" id="structural-{{$j}}">
-            <td><div style="overflow:hidden"></div></td>
-            <td class="iw400-bdr" id="structural-title-{{$j}}">{{$j}}: MP{{$j}}</td>
-            <td class="iw400-bdr" id="structural-note-{{$j}}"></td>
-        </tr>
-        @endfor
     </tbody>
-    </table>
+</table>
+
+<table cellspacing="0" cellpadding="0" style="border-spacing:0; display: table; vertical-align: top;" >    
+    <colgroup>
+        <col width="80">
+        <col width="240">
+        <col width="400">
+    </colgroup>
+<tbody>
+    <tr class="h13">
+        <td><div style="overflow:hidden"></td>
+        <td><div style="overflow:hidden"></td>
+        <td><div style="overflow:hidden"></td>
+        <td><div style="overflow:hidden"></td>
+        <td><div style="overflow:hidden"></td>
+        <td><div style="overflow:hidden"></td>
+        <td><div style="overflow:hidden"></td>
+    </tr>
+    <tr class="h13" style="display: none;" id="structural-header">
+        <td><div style="overflow:hidden"></div></td>
+        <td class="iw400-bdr" colspan="2">Structural Notes</td>
+        <td><div style="overflow:hidden"></div></td>
+    </tr>
+    <tr class="h13" style="display: none;" id="structural-headers">
+        <td><div style="overflow:hidden"></div></td>
+        <td class="iw400-bdr">Framing Condition # and Name</td>
+        <td class="iw400-bdr">Note *</td>
+    </tr>
+    @for($j = 1; $j <= 10; $j ++)
+    <tr class="h13" style="display: none;" id="structural-{{$j}}">
+        <td><div style="overflow:hidden"></div></td>
+        <td class="iw400-bdr" id="structural-title-{{$j}}">{{$j}}: MP{{$j}}</td>
+        <td class="iw400-bdr" id="structural-note-{{$j}}"></td>
+    </tr>
+    @endfor
+</tbody>
+</table>
     
 <input type="text" value="{{ $projectId }}" id="projectId" hidden>
 <input type="text" value="{{ $projectState }}" id="projectState" hidden>

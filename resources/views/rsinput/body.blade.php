@@ -58,19 +58,19 @@
         </div>
     @endif
     <!-- <div id="ucc_f100" class="pdfForm">
-        @include('rsinput.ucc_f100_cpa')
+        {{-- @include('rsinput.ucc_f100_cpa') --}}
     </div>
     <div id="ucc_f110" class="pdfForm">
-        @include('rsinput.ucc_f110_bldg')
+        {{-- @include('rsinput.ucc_f110_bldg') --}}
     </div>
     <div id="ucc_f120" class="pdfForm">
-        @include('rsinput.ucc_f120_elec')
+        {{-- @include('rsinput.ucc_f120_elec') --}}
     </div>
     <div id="pa_ucc3" class="pdfForm">
-        @include('rsinput.pa_ucc3')
+        {{-- @include('rsinput.pa_ucc3') --}}
     </div>
     <div id="ucc_f140" class="pdfForm">
-        @include('rsinput.ucc_f140_fire')
+        {{-- @include('rsinput.ucc_f140_fire') --}}
     </div> -->
 
     <div id="tab_upload" class="rfdTabContent">

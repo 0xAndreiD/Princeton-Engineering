@@ -748,6 +748,7 @@ class GeneralController extends Controller
             $caseData = array();
             $caseData['LC_Number'] = $number;
             $caseData['TrussFlag'] = filter_var($caseInput['TrussFlag'], FILTER_VALIDATE_BOOLEAN);
+            $caseData['Analysis_Type'] = $caseInput['Analysis_Type'];
             $caseData['RoofDataInput'] = array(
                 "A1" => $number, 
                 "A2_feet" => number_format(floatval($caseInput["af-2-{$number}"]), 2), "A2_inches" => number_format(floatval($caseInput["ai-2-{$number}"]), 2), "A2" => number_format(floatval($caseInput["a-2-{$number}"]), 2),
