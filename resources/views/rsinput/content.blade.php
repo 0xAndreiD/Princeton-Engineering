@@ -1,18 +1,22 @@
 <form id="inputform-{{ $conditionId }}">
 <!-- Section info table section -->
 <div class="form-group rfdTypePane">
-    <div>
-        <div class="custom-control custom-radio custom-control-success mb-1">
-            <input type="radio" class="custom-control-input rfdTypeSelect" id="trussFlagOption-{{ $conditionId }}-1" name="trussFlag-{{ $conditionId }}" onchange="fcChangeType({{ $conditionId }}, 0)" checked value="0">
-            <label class="custom-control-label rfdTypeSelect" for="trussFlagOption-{{ $conditionId }}-1">Stick Framing Data Input</label>
+    <div class="row">
+        <div class="ml-1">
+            <div class="custom-control custom-radio custom-control-success mb-1">
+                <input type="radio" class="custom-control-input rfdTypeSelect" id="trussFlagOption-{{ $conditionId }}-1" name="trussFlag-{{ $conditionId }}" onchange="fcChangeType({{ $conditionId }}, 0)" checked value="0">
+                <label class="custom-control-label rfdTypeSelect" for="trussFlagOption-{{ $conditionId }}-1">Stick Framing Data Input</label>
+            </div>
+            <div class="custom-control custom-radio custom-control-success mb-1 ">
+                <input type="radio" class="custom-control-input rfdTypeSelect" id="trussFlagOption-{{ $conditionId }}-2" name="trussFlag-{{ $conditionId }}" onchange="fcChangeType({{ $conditionId }}, 1)" value="1">
+                <label class="custom-control-label rfdTypeSelect" for="trussFlagOption-{{ $conditionId }}-2">Truss Framing Data Input</label>
+            </div>
         </div>
-        <div class="custom-control custom-radio custom-control-success mb-1 ">
-            <input type="radio" class="custom-control-input rfdTypeSelect" id="trussFlagOption-{{ $conditionId }}-2" name="trussFlag-{{ $conditionId }}" onchange="fcChangeType({{ $conditionId }}, 1)" value="1">
-            <label class="custom-control-label rfdTypeSelect" for="trussFlagOption-{{ $conditionId }}-2">Truss Framing Data Input</label>
-        </div>
-        <div class="custom-control custom-radio custom-control-success mb-1 ">
-            <input type="radio" class="custom-control-input rfdTypeSelect" id="trussFlagOption-{{ $conditionId }}-3" name="trussFlag-{{ $conditionId }}" onchange="fcChangeType({{ $conditionId }}, 2)" value="2">
-            <label class="custom-control-label rfdTypeSelect" for="trussFlagOption-{{ $conditionId }}-3">IBC 5% Data Input</label>
+        <div class="ml-4">
+            <div class="custom-control custom-radio custom-control-success mb-1 ">
+                <input type="radio" class="custom-control-input rfdTypeSelect" id="trussFlagOption-{{ $conditionId }}-3" name="trussFlag-{{ $conditionId }}" onchange="fcChangeType({{ $conditionId }}, 2)" value="2">
+                <label class="custom-control-label rfdTypeSelect" for="trussFlagOption-{{ $conditionId }}-3">IBC 5% Data Input - Only Areas with No Snow</label>
+            </div>
         </div>
     </div>
     @if(Auth::user()->userrole != 4)
@@ -343,7 +347,7 @@
             <td class="w400-bdr">F-1</td>
             <td class="iw400-right-bdr" id="label-F-1-{{ $conditionId }}" colspan="2">Maximum # Modules along Rafter</td>
             <td class="iw400-bdr"></td>
-            <td class="w400-yellow-bdr" colspan="2">
+            <td class="w400-yellow-bdr" colspan="2" id="input-f-1-{{ $conditionId }}">
                 <select id="f-1-{{ $conditionId }}" tabindex="47" onchange="maxModuleNumChange({{ $conditionId }})">
                     <option data-value="1">1</option>
                     <option data-value="2" selected="">2</option>

@@ -59,6 +59,22 @@ function fcChangeType( conditionId, type ){
         $(`#label-B-4-${conditionId}`)[0].innerHTML = 'Truss Material';
         $(`#label-F-1-${conditionId}`)[0].innerHTML = 'Maximum # Modules along Truss';
         document.getElementById(`trussInput-${conditionId}`).style.display = "block";
+
+        $(`#input-f-1-${conditionId}`).html(`<select id="f-1-${conditionId}" tabindex="47" onchange="maxModuleNumChange(${conditionId})">\
+            <option data-value="1">1</option>\
+            <option data-value="2" selected="">2</option>\
+            <option data-value="3">3</option>\
+            <option data-value="4">4</option>\
+            <option data-value="5">5</option>\
+            <option data-value="6">6</option>\
+            <option data-value="7">7</option>\
+            <option data-value="8">8</option>\
+            <option data-value="9">9</option>\
+            <option data-value="10">10</option>\
+            <option data-value="11">11</option>\
+            <option data-value="12">12</option>\
+        </select>`);
+
         drawTrussGraph(conditionId);
     }    
     else if(type == 0) // Stick
@@ -83,6 +99,22 @@ function fcChangeType( conditionId, type ){
         $(`#label-B-4-${conditionId}`)[0].innerHTML = 'Rafter Material';
         $(`#label-F-1-${conditionId}`)[0].innerHTML = 'Maximum # Modules along Rafter';
         document.getElementById(`trussInput-${conditionId}`).style.display = "none";
+
+        $(`#input-f-1-${conditionId}`).html(`<select id="f-1-${conditionId}" tabindex="47" onchange="maxModuleNumChange(${conditionId})">\
+            <option data-value="1">1</option>\
+            <option data-value="2" selected="">2</option>\
+            <option data-value="3">3</option>\
+            <option data-value="4">4</option>\
+            <option data-value="5">5</option>\
+            <option data-value="6">6</option>\
+            <option data-value="7">7</option>\
+            <option data-value="8">8</option>\
+            <option data-value="9">9</option>\
+            <option data-value="10">10</option>\
+            <option data-value="11">11</option>\
+            <option data-value="12">12</option>\
+        </select>`);
+
         drawStickGraph(conditionId);
     } else if(type == 2){ // IBC 5%
         $(`#label-A-1-${conditionId}`).attr('rowspan', 10);
@@ -106,6 +138,16 @@ function fcChangeType( conditionId, type ){
         $(`#label-B-4-${conditionId}`)[0].innerHTML = 'Rafter Material';
         $(`#label-F-1-${conditionId}`)[0].innerHTML = '# Modules on Roof Plane';
         document.getElementById(`trussInput-${conditionId}`).style.display = "none";
+
+        $(`#input-f-1-${conditionId}`).html(`<input id="f-1-${conditionId}" tabindex="47" value="2" type="number" min="1" style="overflow: hidden;border: 0px;width: 100%;background: transparent;padding-left: 4px;text-align: center;">`);
+        $(`#f-1-${conditionId}`).on('keypress', function(event){
+            if(event.key == "-")
+            {
+                event.preventDefault();
+                return false;
+            }
+        });
+
         drawStickGraph(conditionId);
     }
 }
@@ -1376,9 +1418,12 @@ var getData = function(caseCount = 10) {
         if($(`#trussFlagOption-${i}-1`)[0].checked) tabType = 0;
         else if($(`#trussFlagOption-${i}-2`)[0].checked) tabType = 1;
         else if($(`#trussFlagOption-${i}-3`)[0].checked) tabType = 2;
-        data['Analysis_Type'] = tabType;
+        data['Analysis_type'] = tabType;
         
         $(`#inputform-${i} input:text:enabled`).each(function() { 
+            data[$(this).attr('id')] = $(this).val();
+        });
+        $(`#inputform-${i} input[type="number"]`).each(function() { 
             data[$(this).attr('id')] = $(this).val();
         });
         $(`#inputform-${i} input[type=checkbox]:enabled`).each(function() { 
@@ -3850,10 +3895,10 @@ var loadPreloadedData = function() {
                             for(let i = 0; i < preloaded_data['LoadingCase'].length; i ++)
                             {
                                 let caseData = preloaded_data['LoadingCase'][i];
-                                console.log(caseData['Analysis_Type']);
-                                $(`#trussFlagOption-${i + 1}-1`).prop('checked', caseData['Analysis_Type'] != 2 ? !caseData['TrussFlag'] : false);
-                                $(`#trussFlagOption-${i + 1}-2`).prop('checked', caseData['Analysis_Type'] != 2 ? caseData['TrussFlag'] : false);
-                                $(`#trussFlagOption-${i + 1}-3`).prop('checked', (caseData['Analysis_Type'] == 2));
+                                console.log(caseData['Analysis_type']);
+                                $(`#trussFlagOption-${i + 1}-1`).prop('checked', caseData['Analysis_type'] != 2 ? !caseData['TrussFlag'] : false);
+                                $(`#trussFlagOption-${i + 1}-2`).prop('checked', caseData['Analysis_type'] != 2 ? caseData['TrussFlag'] : false);
+                                $(`#trussFlagOption-${i + 1}-3`).prop('checked', (caseData['Analysis_type'] == 2));
 
                                 var tabType;
                                 if($(`#trussFlagOption-${i + 1}-1`)[0].checked) tabType = 0;

@@ -499,10 +499,10 @@ class GeneralController extends Controller
                     Storage::disk('input')->put($folderPrefix . $project['requestFile'], json_encode($data));
                     
                     // //Backup json file to dropbox
-                    $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
-                    $dropbox = new Dropbox($app);
-                    $dropboxFile = new DropboxFile(storage_path('/input/') . $companyNumber. '. ' . $project['companyName'] . '/' . $project['requestFile']);
-                    $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_JSON_INPUT') . $companyNumber. '. ' . $project['companyName'] . '/' . $project['requestFile'], ['mode' => 'overwrite']);
+                    // $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
+                    // $dropbox = new Dropbox($app);
+                    // $dropboxFile = new DropboxFile(storage_path('/input/') . $companyNumber. '. ' . $project['companyName'] . '/' . $project['requestFile']);
+                    // $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_JSON_INPUT') . $companyNumber. '. ' . $project['companyName'] . '/' . $project['requestFile'], ['mode' => 'overwrite']);
 
                     return response()->json(["message" => "Success!", "status" => true, "projectId" => $project->id, "directory" => $folderPrefix . $project['clientProjectNumber'] . '. ' . $project['clientProjectName'] . ' ' . $request['data']['option-state'] . '/']);
                 }
@@ -748,7 +748,7 @@ class GeneralController extends Controller
             $caseData = array();
             $caseData['LC_Number'] = $number;
             $caseData['TrussFlag'] = filter_var($caseInput['TrussFlag'], FILTER_VALIDATE_BOOLEAN);
-            $caseData['Analysis_Type'] = $caseInput['Analysis_Type'];
+            $caseData['Analysis_type'] = $caseInput['Analysis_type'];
             $caseData['RoofDataInput'] = array(
                 "A1" => $number, 
                 "A2_feet" => number_format(floatval($caseInput["af-2-{$number}"]), 2), "A2_inches" => number_format(floatval($caseInput["ai-2-{$number}"]), 2), "A2" => number_format(floatval($caseInput["a-2-{$number}"]), 2),
