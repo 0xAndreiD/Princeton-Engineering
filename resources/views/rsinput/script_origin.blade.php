@@ -2614,7 +2614,7 @@ $(document).ready(function() {
                                 $('#collartie-note').css('display', "table-row");
                                 $('#requiredNotes').css('color', 'red');
                                 $('#requiredNotes').html(' *************** Roof Framing Changes are Required *************** ');
-                                $('#collartie-dc-table').css('display', 'block');
+                                $('#collartie-dc-table').css('display', 'inline-block');
                             } else {
                                 $('#collartie-dc-table').css('display', 'none');
                                 if(!ibcChanges){
