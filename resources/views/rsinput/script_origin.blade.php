@@ -50,7 +50,6 @@ function fcChangeType( conditionId, type ){
         elements = $(`#inputform-${conditionId} .class-truss-hide`);
         for(let i = 0; i < elements.length; i ++)
             elements[i].style.display = 'none';
-        maxModuleNumChange(conditionId);
 
         $(`#label-A-9-${conditionId}`)[0].innerHTML = 'Rise from Truss Plate to Top Ridge';
         $(`#label-A-10-${conditionId}`)[0].innerHTML = 'Horiz Len from Outside of Truss Plate to Ridge';
@@ -74,6 +73,7 @@ function fcChangeType( conditionId, type ){
             <option data-value="11">11</option>\
             <option data-value="12">12</option>\
         </select>`);
+        maxModuleNumChange(conditionId);
 
         drawTrussGraph(conditionId);
     }    
@@ -90,7 +90,6 @@ function fcChangeType( conditionId, type ){
         elements = $(`#inputform-${conditionId} .class-truss-hide`);
         for(let i = 0; i < elements.length; i ++)
             elements[i].style.display = 'table-row';
-        maxModuleNumChange(conditionId);
 
         $(`#label-A-9-${conditionId}`)[0].innerHTML = 'Rise from Rafter Plate to Top Ridge';
         $(`#label-A-10-${conditionId}`)[0].innerHTML = 'Horiz Len from Outside of Rafter Plate to Ridge';
@@ -114,6 +113,7 @@ function fcChangeType( conditionId, type ){
             <option data-value="11">11</option>\
             <option data-value="12">12</option>\
         </select>`);
+        maxModuleNumChange(conditionId);
 
         drawStickGraph(conditionId);
     } else if(type == 2){ // IBC 5%
@@ -331,7 +331,7 @@ var drawBaseLine = function( condId ) {
     }
 }
 
-var adjustDrawingPanel = function( condId ) {
+var adjustDrawingPanel = function( condId, isIBC = false ) {
     var topYPoint = 0, topXPoint = 0;
 
     for (var key in globalRoofLines[condId]) {
@@ -368,24 +368,30 @@ var adjustDrawingPanel = function( condId ) {
     var moduleCount = parseInt($(`#f-1-${condId}`).val());
     
     var moduleLengthSum = parseFloat($(`#e-1-${condId}`).val());
-    var orientation = false;
-    for(let i = 1; i <= moduleCount; i ++)
-    {
-        orientation = false;
-        if($(`#a-6-${condId}`).val() == "Portrait")
-            orientation = true;
-        if($(`#h-${i}-${condId}`)[0].checked)
-            orientation = !orientation;
+    if(!isIBC){
+        var orientation = false;
+        for(let i = 1; i <= moduleCount; i ++)
+        {
+            orientation = false;
+            if($(`#a-6-${condId}`).val() == "Portrait")
+                orientation = true;
+            if($(`#h-${i}-${condId}`)[0].checked)
+                orientation = !orientation;
 
-        moduleLengthSum += (moduleGap + (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)));
-    }
-    moduleLengthSum -= moduleGap;
+            moduleLengthSum += (moduleGap + (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)));
+        }
+        moduleLengthSum -= moduleGap;
 
-    // Show alert when module length is longer
-    if(topXPoint < moduleLengthSum * Math.cos(angleRadian) || topYPoint < moduleLengthSum * Math.sin(angleRadian))
-        $(`#truss-module-alert-${condId}`).css('display', 'block');
-    else
+        // Show alert when module length is longer
+        if(topXPoint < moduleLengthSum * Math.cos(angleRadian) || topYPoint < moduleLengthSum * Math.sin(angleRadian))
+            $(`#truss-module-alert-${condId}`).css('display', 'block');
+        else
+            $(`#truss-module-alert-${condId}`).css('display', 'none');
+    } else {
+        moduleLengthSum = 0;
+        moduleHeight = 0;
         $(`#truss-module-alert-${condId}`).css('display', 'none');
+    }
 
     topXPoint = Math.max(topXPoint, moduleLengthSum * Math.cos(angleRadian));
     topYPoint = Math.max(topYPoint, moduleLengthSum * Math.sin(angleRadian) + moduleHeight * Math.sin(degreeToRadian( parseFloat($(`#g-2-${condId}`).val()) )));
@@ -478,7 +484,9 @@ var drawLine = function(condId, start, end, label, rotateMethod = 0) {
 }
 
 var drawTrussGraph = function( condId ) {
-    adjustDrawingPanel(condId);
+    var isIBC = $(`#trussFlagOption-${condId}-3`)[0].checked;
+    
+    adjustDrawingPanel(condId, isIBC);
     drawBaseLine(condId);
 
     var label_index = 1;
@@ -564,86 +572,88 @@ var drawTrussGraph = function( condId ) {
     ctx[condId].fillText("Wall", - 40, 20);
     ctx[condId].rotate(Math.PI / 2);
 
-    // Draw Required Collar Tie
-    if($(`#collartie-${condId}`).css('display') == 'table-row' && lastDiagnol && lastDiagnol[0] && lastDiagnol[1]){
-        var newTieHeight = $(`#collartie-height-${condId}`).html();
-        ctx[condId].beginPath();
-        ctx[condId].lineWidth = 2;
-        ctx[condId].strokeStyle = "#FF0000";
-        ctx[condId].setLineDash([5, 5]);
-        ctx[condId].moveTo(angleRadian != 0 ? newTieHeight * (1 / Math.tan(angleRadian))  * grid_size[condId] : 0, - newTieHeight * grid_size[condId]);
-        ctx[condId].lineTo(angleRadian != 0 ? (lastDiagnol[1][0] - newTieHeight * (lastDiagnol[1][0] - lastDiagnol[0][0]) / (lastDiagnol[0][1] - lastDiagnol[1][1]) ) * grid_size[condId] : 0, - newTieHeight * grid_size[condId]);
-        ctx[condId].stroke();
-        ctx[condId].setLineDash([5, 0]);
-        ctx[condId].fillStyle = "#FF0000";
-        ctx[condId].fillText("Prop Collar Tie",  newTieHeight * (1 / Math.tan(angleRadian))  * grid_size[condId] / 2 + (lastDiagnol[1][0] - newTieHeight * (lastDiagnol[1][0] - lastDiagnol[0][0]) / (lastDiagnol[0][1] - lastDiagnol[1][1]) ) * grid_size[condId] / 2 - 50, - newTieHeight * grid_size[condId] + 20);
-    }
-
-    // Draw solar rectangles
-    var startModule = overhangLength - uphillDist;
-    var moduleDepth = 1.17 / 12;
-    var moduleWidth = parseFloat($("#pv-module-width").val()) / 12;
-    var moduleHeight = parseFloat($("#pv-module-length").val()) / 12;
-    var moduleGap = parseFloat($(`#g-1-${condId}`).val()) / 12;
-
-    var startPoint = [- Math.sin(Math.PI / 2 - angleRadian) * startModule * grid_size[condId] - grid_size[condId] / 4 * Math.sin(angleRadian), Math.cos(Math.PI / 2 - angleRadian) * startModule * grid_size[condId] - grid_size[condId] / 4];
-    ctx[condId].translate(startPoint[0], startPoint[1]);
-    ctx[condId].rotate(- angleRadian);
-    ctx[condId].beginPath();
-    ctx[condId].lineWidth = 2;
-    ctx[condId].strokeStyle = "#000000";
-
-    var totalRoofLength = 0;
-    for (var key in globalRoofLines[condId]) {
-        totalRoofLength += getDistance(globalRoofLines[condId][key][0], globalRoofLines[condId][key][1]);
-    }
-    totalRoofLength += startModule;
-    var moduleCount = parseInt($(`#f-1-${condId}`).val());
-    
-    let moduleStartX = 0;
-    var orientation = false;
-
-    var supportStart = parseFloat($(`#e-2-${condId}`).val()) - parseFloat($(`#e-1-${condId}`).val());
-    var moduleTilt = degreeToRadian(parseFloat($(`#g-2-${condId}`).val()));
-
-    ctx[condId].fillStyle = '#000';
-    for(let i = 1; i <= moduleCount; i ++)
-    {
-        orientation = false;
-        if($(`#a-6-${condId}`).val() == "Portrait")
-            orientation = true;
-        if($(`#h-${i}-${condId}`)[0].checked)
-            orientation = !orientation;
-
-        let curModuleWidth = (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight));
-                
-        if(moduleTilt >= 0){
-            ctx[condId].translate(moduleStartX * grid_size[condId], 0);
-            ctx[condId].rotate(- moduleTilt);
-            ctx[condId].strokeRect(0, 0, curModuleWidth * grid_size[condId], moduleDepth * grid_size[condId]);
-            // Left Support
-            ctx[condId].fillRect(supportStart * grid_size[condId] - 1, moduleDepth * grid_size[condId], grid_size[condId] / 12, grid_size[condId] / 4 / Math.cos(moduleTilt) + 1 - moduleDepth * grid_size[condId] + supportStart * Math.tan(moduleTilt) * grid_size[condId]);
-            // Right Support
-            ctx[condId].fillRect(curModuleWidth * grid_size[condId] - (supportStart + 1 / 12) * grid_size[condId] + 1, moduleDepth * grid_size[condId], grid_size[condId] / 12, grid_size[condId] / 4 / Math.cos(moduleTilt) + 1 - moduleDepth * grid_size[condId] + curModuleWidth * Math.tan(moduleTilt) * grid_size[condId] - supportStart * Math.tan(moduleTilt) * grid_size[condId]);
-            ctx[condId].rotate(moduleTilt);
-            ctx[condId].translate(- moduleStartX * grid_size[condId], 0);
-        }else{
-            ctx[condId].translate(moduleStartX * grid_size[condId] + curModuleWidth * grid_size[condId], 0);
-            ctx[condId].rotate(- moduleTilt);
-            ctx[condId].strokeRect(0, 0, - curModuleWidth * grid_size[condId], moduleDepth * grid_size[condId]);
-            // Left Support
-            ctx[condId].fillRect(- curModuleWidth * grid_size[condId] + supportStart * grid_size[condId] - 1, moduleDepth * grid_size[condId], grid_size[condId] / 12, grid_size[condId] / 4 / Math.cos(moduleTilt) + 1 - moduleDepth * grid_size[condId] - curModuleWidth * Math.tan(moduleTilt) * grid_size[condId] + supportStart * Math.tan(moduleTilt) * grid_size[condId]);
-            // Right Support
-            ctx[condId].fillRect(- (supportStart + 1 / 12) * grid_size[condId] + 1, moduleDepth * grid_size[condId], grid_size[condId] / 12, grid_size[condId] / 4 / Math.cos(moduleTilt) + 1 - moduleDepth * grid_size[condId] - supportStart * Math.tan(moduleTilt) * grid_size[condId]);
-            ctx[condId].rotate(moduleTilt);
-            ctx[condId].translate(- moduleStartX * grid_size[condId] - curModuleWidth * grid_size[condId], 0);
+    if(!isIBC){
+        // Draw Required Collar Tie
+        if($(`#collartie-${condId}`).css('display') == 'table-row' && lastDiagnol && lastDiagnol[0] && lastDiagnol[1]){
+            var newTieHeight = $(`#collartie-height-${condId}`).html();
+            ctx[condId].beginPath();
+            ctx[condId].lineWidth = 2;
+            ctx[condId].strokeStyle = "#FF0000";
+            ctx[condId].setLineDash([5, 5]);
+            ctx[condId].moveTo(angleRadian != 0 ? newTieHeight * (1 / Math.tan(angleRadian))  * grid_size[condId] : 0, - newTieHeight * grid_size[condId]);
+            ctx[condId].lineTo(angleRadian != 0 ? (lastDiagnol[1][0] - newTieHeight * (lastDiagnol[1][0] - lastDiagnol[0][0]) / (lastDiagnol[0][1] - lastDiagnol[1][1]) ) * grid_size[condId] : 0, - newTieHeight * grid_size[condId]);
+            ctx[condId].stroke();
+            ctx[condId].setLineDash([5, 0]);
+            ctx[condId].fillStyle = "#FF0000";
+            ctx[condId].fillText("Prop Collar Tie",  newTieHeight * (1 / Math.tan(angleRadian))  * grid_size[condId] / 2 + (lastDiagnol[1][0] - newTieHeight * (lastDiagnol[1][0] - lastDiagnol[0][0]) / (lastDiagnol[0][1] - lastDiagnol[1][1]) ) * grid_size[condId] / 2 - 50, - newTieHeight * grid_size[condId] + 20);
         }
 
-        moduleStartX += (moduleGap + curModuleWidth);
+        // Draw solar rectangles
+        var startModule = overhangLength - uphillDist;
+        var moduleDepth = 1.17 / 12;
+        var moduleWidth = parseFloat($("#pv-module-width").val()) / 12;
+        var moduleHeight = parseFloat($("#pv-module-length").val()) / 12;
+        var moduleGap = parseFloat($(`#g-1-${condId}`).val()) / 12;
+
+        var startPoint = [- Math.sin(Math.PI / 2 - angleRadian) * startModule * grid_size[condId] - grid_size[condId] / 4 * Math.sin(angleRadian), Math.cos(Math.PI / 2 - angleRadian) * startModule * grid_size[condId] - grid_size[condId] / 4];
+        ctx[condId].translate(startPoint[0], startPoint[1]);
+        ctx[condId].rotate(- angleRadian);
+        ctx[condId].beginPath();
+        ctx[condId].lineWidth = 2;
+        ctx[condId].strokeStyle = "#000000";
+
+        var totalRoofLength = 0;
+        for (var key in globalRoofLines[condId]) {
+            totalRoofLength += getDistance(globalRoofLines[condId][key][0], globalRoofLines[condId][key][1]);
+        }
+        totalRoofLength += startModule;
+        var moduleCount = parseInt($(`#f-1-${condId}`).val());
+        
+        let moduleStartX = 0;
+        var orientation = false;
+
+        var supportStart = parseFloat($(`#e-2-${condId}`).val()) - parseFloat($(`#e-1-${condId}`).val());
+        var moduleTilt = degreeToRadian(parseFloat($(`#g-2-${condId}`).val()));
+
+        ctx[condId].fillStyle = '#000';
+        for(let i = 1; i <= moduleCount; i ++)
+        {
+            orientation = false;
+            if($(`#a-6-${condId}`).val() == "Portrait")
+                orientation = true;
+            if($(`#h-${i}-${condId}`)[0].checked)
+                orientation = !orientation;
+
+            let curModuleWidth = (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight));
+                    
+            if(moduleTilt >= 0){
+                ctx[condId].translate(moduleStartX * grid_size[condId], 0);
+                ctx[condId].rotate(- moduleTilt);
+                ctx[condId].strokeRect(0, 0, curModuleWidth * grid_size[condId], moduleDepth * grid_size[condId]);
+                // Left Support
+                ctx[condId].fillRect(supportStart * grid_size[condId] - 1, moduleDepth * grid_size[condId], grid_size[condId] / 12, grid_size[condId] / 4 / Math.cos(moduleTilt) + 1 - moduleDepth * grid_size[condId] + supportStart * Math.tan(moduleTilt) * grid_size[condId]);
+                // Right Support
+                ctx[condId].fillRect(curModuleWidth * grid_size[condId] - (supportStart + 1 / 12) * grid_size[condId] + 1, moduleDepth * grid_size[condId], grid_size[condId] / 12, grid_size[condId] / 4 / Math.cos(moduleTilt) + 1 - moduleDepth * grid_size[condId] + curModuleWidth * Math.tan(moduleTilt) * grid_size[condId] - supportStart * Math.tan(moduleTilt) * grid_size[condId]);
+                ctx[condId].rotate(moduleTilt);
+                ctx[condId].translate(- moduleStartX * grid_size[condId], 0);
+            }else{
+                ctx[condId].translate(moduleStartX * grid_size[condId] + curModuleWidth * grid_size[condId], 0);
+                ctx[condId].rotate(- moduleTilt);
+                ctx[condId].strokeRect(0, 0, - curModuleWidth * grid_size[condId], moduleDepth * grid_size[condId]);
+                // Left Support
+                ctx[condId].fillRect(- curModuleWidth * grid_size[condId] + supportStart * grid_size[condId] - 1, moduleDepth * grid_size[condId], grid_size[condId] / 12, grid_size[condId] / 4 / Math.cos(moduleTilt) + 1 - moduleDepth * grid_size[condId] - curModuleWidth * Math.tan(moduleTilt) * grid_size[condId] + supportStart * Math.tan(moduleTilt) * grid_size[condId]);
+                // Right Support
+                ctx[condId].fillRect(- (supportStart + 1 / 12) * grid_size[condId] + 1, moduleDepth * grid_size[condId], grid_size[condId] / 12, grid_size[condId] / 4 / Math.cos(moduleTilt) + 1 - moduleDepth * grid_size[condId] - supportStart * Math.tan(moduleTilt) * grid_size[condId]);
+                ctx[condId].rotate(moduleTilt);
+                ctx[condId].translate(- moduleStartX * grid_size[condId] - curModuleWidth * grid_size[condId], 0);
+            }
+
+            moduleStartX += (moduleGap + curModuleWidth);
+        }
+        
+        ctx[condId].rotate(angleRadian);
+        ctx[condId].translate(- startPoint[0], - startPoint[1]);
     }
-    
-    ctx[condId].rotate(angleRadian);
-    ctx[condId].translate(- startPoint[0], - startPoint[1]);
 
     var overhangX = Math.floor(overhangLength * grid_size[condId] * Math.sin(Math.PI / 2 - angleRadian ));
     var overhangY = Math.floor(overhangLength * grid_size[condId] * Math.sin(angleRadian));
@@ -2073,26 +2083,28 @@ var adjustStickDrawingPanel = function( condId, isIBC = false ) {
     var moduleHeight = parseFloat($("#pv-module-length").val()) / 12;
 
     var moduleLengthSum = parseFloat($(`#e-1-${condId}`).val());
-    var orientation;
-    for(let i = 1; i <= moduleCount; i ++)
-    {
-        orientation = false;
-        if($(`#a-6-${condId}`).val() == "Portrait")
-            orientation = true;
-        if($(`#h-${i}-${condId}`)[0].checked)
-            orientation = !orientation;
-        
-        moduleLengthSum += (moduleGap + (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)));
-    }
-    moduleLengthSum -= moduleGap;
-
     if(!isIBC){
+        var orientation;
+        for(let i = 1; i <= moduleCount; i ++)
+        {
+            orientation = false;
+            if($(`#a-6-${condId}`).val() == "Portrait")
+                orientation = true;
+            if($(`#h-${i}-${condId}`)[0].checked)
+                orientation = !orientation;
+            
+            moduleLengthSum += (moduleGap + (orientation ? Math.max(moduleWidth, moduleHeight) : Math.min(moduleWidth, moduleHeight)));
+        }
+        moduleLengthSum -= moduleGap;
+
         // Show alert when module length is longer
         if( roofHeight + overhangY < Math.sin(angleRadian) * moduleLengthSum || (angleRadian != 0 && (1.0 / Math.tan(angleRadian)) * (roofHeight + overhangY) + overhangX < Math.cos(angleRadian) * moduleLengthSum))
             $(`#stick-module-alert-${condId}`).css('display', 'block');
         else
             $(`#stick-module-alert-${condId}`).css('display', 'none');
     } else {
+        moduleLengthSum = 0;
+        moduleHeight = 0;
         $(`#stick-module-alert-${condId}`).css('display', 'none');
     }
 
@@ -3895,7 +3907,6 @@ var loadPreloadedData = function() {
                             for(let i = 0; i < preloaded_data['LoadingCase'].length; i ++)
                             {
                                 let caseData = preloaded_data['LoadingCase'][i];
-                                console.log(caseData['Analysis_type']);
                                 $(`#trussFlagOption-${i + 1}-1`).prop('checked', caseData['Analysis_type'] != 2 ? !caseData['TrussFlag'] : false);
                                 $(`#trussFlagOption-${i + 1}-2`).prop('checked', caseData['Analysis_type'] != 2 ? caseData['TrussFlag'] : false);
                                 $(`#trussFlagOption-${i + 1}-3`).prop('checked', (caseData['Analysis_type'] == 2));
