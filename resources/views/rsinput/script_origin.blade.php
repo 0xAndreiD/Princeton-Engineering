@@ -2613,6 +2613,7 @@ $(document).ready(function() {
                             var collarHeights = res.data.collarHeights;
                             var haveChanges = false;
                             var ibcChanges = false;
+                            var showIBC = false;
                             if(collarHeights){
                                 for(let i = 1; i <= $('#option-number-of-conditions').val(); i ++){
                                     if(collarHeights.length >= 5 * i)
@@ -2634,7 +2635,7 @@ $(document).ready(function() {
                                             $(`#collartie-warning-${i}`).html('Framing modification required.  Add collar tie / knee wall at ' + parseFloat(pieceValue).toFixed(2) + ' ft.');
                                         }
                                         if($(`#trussFlagOption-${i}-3`)[0].checked){
-                                            ibcChanges = true;
+                                            showIBC = true;
                                             $(`#ibc-dc-${i}`).css('display', "table-row");
                                             $(`#ibc-dc-title-${i}`).html(i + ': ' + $(`#a-5-${i}`).val());
                                             $(`#ibc-dc-max-${i}`).html(parseInt(pieceValue));
@@ -2644,17 +2645,21 @@ $(document).ready(function() {
                                                 $(`#ibc-dc-title-${i}`).css('color', 'black');
                                                 $(`#ibc-dc-max-${i}`).css('color', 'black');
                                                 $(`#ibc-dc-msg-${i}`).css('color', 'black');
-                                            } else 
+                                            } else {
+                                                ibcChanges = true;
                                                 $(`#ibc-dc-msg-${i}`).html(`ERROR. ${fcModuleCnt} used exceeds allowable.`);
+                                            }
                                         }
                                     }
                                 }
                             }
 
-                            if(ibcChanges){
+                            if(showIBC){
                                 $('#ibc-dc-table').css('display', 'block');
                                 $('#ibc-dc-header').css('display', "table-row");
                                 $('#ibc-dc-headers').css('display', "table-row");
+                            }
+                            if(ibcChanges){
                                 $('#requiredNotes').css('color', 'red');
                                 $('#requiredNotes').html(' *************** Roof Framing Changes are Required *************** ');
                             } else {
