@@ -42,10 +42,10 @@
                                     <h3 class="block-title">Company Information</h3>
                                 </div>
                             </div>
-                            <form onsubmit="return false;" method="POST" id="profileForm">
+                            <form class="js-validation" onsubmit="return false;" method="POST" id="profileForm">
                                 <div class="form-group">
                                     <label for="number">Company Number <span class="text-danger">*</span></label>
-                                    <input type="text" style="border: 1px solid pink;" class="form-control" id="number" name="digits" placeholder="Enter A Number.." value="{{ $company->company_number }}">
+                                    <input type="text" style="border: 1px solid pink;" class="form-control" id="number" name="number" placeholder="Enter A Number.." value="{{ $company->company_number }}">
                                     <input type="hidden" class="form-control" id="id" name="id" value="{{ $company->id }}">
                                 </div>
                                 <div class="form-group">
@@ -81,9 +81,9 @@
                                     <input type="text" style="border: 1px solid pink;" class="form-control" id="max_allowable_skip" name="max_allowable_skip" placeholder="10" value="{{ $company->max_allowable_skip }}">
                                 </div>
                                 <div class="form-group">
-                                    <label for="logolink">Company Logo <span class="text-danger">*</span></label>
+                                    <label for="logolink">Company Logo Link <span class="text-danger">*</span></label>
                                     <div class="input-group">
-                                        <input type="text" style="border: 1px solid pink;" class="form-control" id="logo-link" name="logolink" placeholder="Upload Logo or paste image link...">
+                                        <input type="text" style="border: 1px solid pink; margin-top: 0px;" class="form-control" id="logolink" name="logolink" placeholder="Upload Logo or paste image link..." value="{{ $company->company_logo }}">
                                         <div class="input-group-append">
                                             <button type="button" class="btn btn-dark" id="import-open" onclick="onUploadOpen()">Open</button>
                                         </div>
@@ -110,10 +110,10 @@
                                     <h3 class="block-title">Permit Information</h3>
                                 </div>
                             </div>
-                            <form onsubmit="return false;" method="POST" id="permitForm">
+                            <form class="js-validation" onsubmit="return false;" method="POST" id="permitForm" action="abc">
                                 <div class="form-group">
                                     <label for="usState">State <span class="text-danger">*</span></label>
-                                    <select style="border: 1px solid pink; padding: 8px; border-radius: 5px;" id="usState" onchange="pullPermit()">
+                                    <select style="border: 1px solid pink; padding: 8px; border-radius: 5px;" id="usState" onchange="pullPermit()" name="state">
                                         <option value="" selected>Select state</option>
                                         <option value="AL">AL</option>
                                         <option value="AZ">AZ</option>
@@ -228,7 +228,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="expectedjobs">Expected number of jobs per month<span class="text-danger">*</span></label>
-                                <input type="text" style="border: 1px solid pink;" class="form-control" id="expectedjobs" name="expectedjobs" placeholder="ex: 0.00">
+                                <input type="text" style="border: 1px solid pink;" class="form-control" id="expectedjobs" name="expectedjobs" placeholder="ex: 600">
                             </div>
                             <div class="form-group">
                                 <label for="basefee">Fee per base number of jobs <span class="text-danger">*</span></label>
@@ -455,5 +455,6 @@
 </div>
 
 <script src="{{ asset('js/imask.min.js') }}"></script>
+<script src="{{ asset('js/jquery.form.js') }}"></script>
 @include('admin.company.editscript')
 @endsection

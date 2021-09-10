@@ -96,7 +96,11 @@
                 <!-- User Info -->
                 <div class="content-side content-side-full bg-black-10 text-center smini-hidden">
                     <a class="img-link d-block mb-3" href="javascript:void(0)">
-                        <img class="img-avatar img-avatar-thumb" src="{{ asset('img/avatar.jpg') }}" alt="">
+                        @if(Session::has('company_logo'))
+                            <img class="img-avatar img-avatar-thumb" src="{{ Session::get('company_logo') }}" alt="">
+                        @else
+                            <img class="img-avatar img-avatar-thumb" src="{{ asset('img/avatar.jpg') }}" alt="">
+                        @endif
                     </a>
                     <a class="font-w600 text-dual" href="javascript:void(0)">
                         @ {{ Auth::user()->username }}
@@ -241,13 +245,13 @@
                                 <span class="nav-main-link-name">My account</span>
                             </a>
                         </li>
-                        <li class="nav-main-heading">Financial</li>
+                        {{-- <li class="nav-main-heading">Financial</li>
                         <li class="nav-main-item">
                             <a class="nav-main-link" href="{{ route('billinginfo') }}">
                                 <i class="nav-main-link-icon fa fa-money-bill"></i>
                                 <span class="nav-main-link-name">Billing Info</span>
                             </a>
-                        </li>
+                        </li> --}}
                         <li class="nav-main-heading">Seal Position</li>
                         <li class="nav-main-item">
                             <a class="nav-main-link" href="{{ route('sealtemplate') }}">

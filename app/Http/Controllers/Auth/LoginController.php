@@ -125,6 +125,12 @@ class LoginController extends Controller
 
     protected function authenticated(Request $request, $user)
     {
+        // Logo link session set
+        $company = Company::where('id', $user->companyid)->first();
+        if($company && $company->company_logo != ''){
+            Session::put('company_logo', $company->company_logo);
+        }
+
         $ip = $request->ip();
         $checkGuard = LoginGuard::where('userId', $user->id)->where('ipAddress', $ip)->where('identity', $request['identity'])->first();
         if($checkGuard && $checkGuard->blocked == 1){ // Check if blocked
@@ -148,7 +154,7 @@ class LoginController extends Controller
                     ]);
                     if($user->userrole == 1) // Client Admin company update
                     {
-                        $company = Company::where('id', $user->companyid)->first();
+                        // $company = Company::where('id', $user->companyid)->first();
                         if($company){
                             $usergeo = unserialize( file_get_contents('http://www.geoplugin.net/php.gp?ip=' . $ip) );
                             $company['company_ip'] = $ip;
@@ -169,7 +175,7 @@ class LoginController extends Controller
 
         // if(!$checkGuard || $checkGuard->allowed != 2){
             // IP address check with company IP
-            $company = Company::where('id', $user->companyid)->first();
+            // $company = Company::where('id', $user->companyid)->first();
             if($company && $company->company_ip && $company->company_ip != $ip){
                 $usergeo = unserialize( file_get_contents('http://www.geoplugin.net/php.gp?ip=' . $ip) );
                 if($usergeo['geoplugin_latitude'] && $usergeo['geoplugin_longitude'] ){
