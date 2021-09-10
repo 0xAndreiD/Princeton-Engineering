@@ -53,8 +53,8 @@ Route::post('/getPermitInfo', 'CompanyController@getPermitInfo')->name('getPermi
 Route::post('/updatePermitInfo', 'CompanyController@updatePermitInfo')->name('updatePermitInfo');
 Route::post('/getBillingInfo', 'CompanyController@getBillingInfo')->name('getBillingInfo');
 Route::post('/saveBillingInfo', 'CompanyController@saveBillingInfo')->name('saveBillingInfo');
-Route::get('/billinginfo', 'CompanyController@billinginfo')->name('billinginfo');
-Route::post('/getCompanyBilling', 'CompanyController@getCompanyBilling')->name('getCompanyBilling');
+// Route::get('/billinginfo', 'CompanyController@billinginfo')->name('billinginfo');
+// Route::post('/getCompanyBilling', 'CompanyController@getCompanyBilling')->name('getCompanyBilling');
 
 // Company Profile
 Route::get('/companyProfile', 'CompanyController@companyProfile')->name('companyProfile');

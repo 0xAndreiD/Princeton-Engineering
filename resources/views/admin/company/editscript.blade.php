@@ -90,7 +90,161 @@ $(document).ready(function(){
         updatePermitInfo();
     }
     });
+
+    $("#logofile").on('change', function(){
+        $("#logolink").val($(this).val().split('\\').pop());
+    });
 })
+
+function updateCompany() {
+    let toast = Swal.mixin({
+        buttonsStyling: false,
+        customClass: {
+            confirmButton: 'btn btn-success m-1',
+            cancelButton: 'btn btn-danger m-1',
+            input: 'form-control'
+        }
+    });
+    // var data = {};
+    // data.id = $('input#id').val();
+    // data.name = $('input#name').val();
+    // data.legalname = $('input#legalname').val();
+    // data.number = $('input#number').val();
+    // data.telno = $('input#telno').val();
+    // data.address = $('input#address').val();
+    // data.streetaddress = $('input#streetaddress').val();
+    // data.email = $('input#email').val();
+    // data.website = $('input#website').val();
+    // data.max_allowable_skip = $('input#max_allowable_skip').val();
+    // data.logolink = $('input#logolink').val();
+
+    if ($('input#id').val() == 0) { // Create company
+        swal.fire({ title: "Please wait...", showConfirmButton: false });
+        swal.showLoading();
+        $("#profileForm").ajaxSubmit({
+            type: "POST",
+            url: "updateCompany",
+            dataType: 'json',
+            data:{},
+            success: function(res){
+                swal.close();
+                if (res && res.success == true){
+                    toast.fire('Created!', 'Company has been created.', 'success');
+                } else {
+                    toast.fire('Error!', res.message, 'error');
+                }
+            },
+            error: function(xhr, status, error) {
+                swal.close();
+                res = JSON.parse(xhr.responseText);
+                message = res.message;
+                swal.fire({ title: "Error",
+                        text: message == "" ? "Error happened while processing. Please try again later." : message,
+                        icon: "error",
+                        confirmButtonText: `OK` });
+            }
+        });
+    } else { // Update company
+        swal.fire({ title: "Please wait...", showConfirmButton: false });
+        swal.showLoading();
+        $("#profileForm").ajaxSubmit({
+            type: "POST",
+            url: "updateCompany",
+            data: {},
+            dataType: 'json',
+            success: function(res){
+                swal.close();
+                if (res && res.success){
+                    toast.fire('Updated!', 'Company has been updated.', 'success');
+                }
+            },
+            error: function(xhr, status, error) {
+                swal.close();
+                res = JSON.parse(xhr.responseText);
+                message = res.message;
+                swal.fire({ title: "Error",
+                        text: message == "" ? "Error happened while processing. Please try again later." : message,
+                        icon: "error",
+                        confirmButtonText: `OK` });
+            }
+        });
+    }
+}
+
+function onUploadOpen(){
+    $("#logofile").trigger('click');
+}
+
+function updatePermitInfo(){
+    let toast = Swal.mixin({
+        buttonsStyling: false,
+        customClass: {
+            confirmButton: 'btn btn-success m-1',
+            cancelButton: 'btn btn-danger m-1',
+            input: 'form-control'
+        }
+    });
+    var data = {};
+    data.id = $('input#id').val();
+    data.state = $('#usState').val();
+    data.construction_email = $('input#construction_email').val();
+    data.registration = $('input#registration').val();
+    data.exp_date = $('input#exp_date').val();
+    data.ein = $('input#EIN').val();
+    data.contact_person = $('input#contact_person').val();
+    data.contact_phone = $('input#contact_phone').val();
+    data.fax = $('input#fax').val();
+    
+    $.post("updatePermitInfo", {data: data}, function(result){
+        if (result && result.success){
+            toast.fire('Updated!', 'Permit Info has been updated.', 'success');
+        } else{
+            if(result && result.message)
+                toast.fire('Failed!', result.message, 'error');
+            else
+                toast.fire('Failed!', "Permit Info Update Failed.", 'error');
+        }
+    });
+}
+
+function pullPermit(){
+    $.ajax({
+        url:"getPermitInfo",
+        type:'post',
+        data: {
+            id: $('input#id').val(),
+            state: $('#usState').val()
+        },
+        success:function(res){
+            if(res.success){
+                $('#construction_email').val(res.construction_email);
+                $('#registration').val(res.registration);
+                $('#exp_date').val(res.exp_date);
+                $('#EIN').val(res.ein);
+                $('#contact_person').val(res.contact_person);
+                $('#contact_phone').val(res.contact_phone);
+                $('#fax').val(res.fax);
+            } else {
+                $('#construction_email').val("");
+                $('#registration').val("");
+                $('#exp_date').val("");
+                $('#EIN').val("");
+                $('#contact_person').val("");
+                $('#contact_phone').val("");
+                $('#fax').val("");
+            }
+        },
+        error: function(xhr, status, error) {
+            res = JSON.parse(xhr.responseText);
+            message = res.message;
+            swal.fire({ title: "Error",
+                    text: message == "" ? "Error happened while processing. Please try again later." : message,
+                    icon: "error",
+                    confirmButtonText: `OK` });
+            resolve(false);
+        }
+    });
+}
 
 var cardnumber_mask;
 window.onload = function () {
@@ -379,6 +533,13 @@ $.ajax({
         success:function(res){
             if(res.success == true) {
                 if(res.data){
+                    $("#billing_type").val(res.data.billing_type);
+                    $("#expectedjobs").val(res.data.expected_jobs);
+                    $("#basefee").val(res.data.base_fee);
+                    $("#extrafee").val(res.data.extra_fee);
+                    $("#send_invoice").val(res.data.send_invoice);
+                    $("#block_on_fail").val(res.data.block_on_fail);
+
                     $("#bname").val(res.data.billing_name);
                     $("#bmail").val(res.data.billing_mail);
                     $("#baddress").val(res.data.billing_address);
@@ -423,6 +584,13 @@ function saveBilling(){
     swal.showLoading();
 
     var data = {};
+    data.billing_type = $("#billing_type").val();
+    data.expected_jobs = $("#expectedjobs").val();
+    data.base_fee = $("#basefee").val();
+    data.extra_fee = $("#extrafee").val();
+    data.send_invoice = $("#send_invoice").val();
+    data.block_on_fail = $("#block_on_fail").val();
+
     data.billing_name = $("#bname").val();
     data.billing_mail = $("#bmail").val();
     data.billing_address = $("#baddress").val();

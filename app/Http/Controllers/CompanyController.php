@@ -209,28 +209,44 @@ class CompanyController extends Controller
      * @return JSON
      */
     function updateCompany(Request $request){
-        $data = $request->input('data');
+        $data = $request;
         if ($data['id'] == 0){
             $isExist = Company::where('company_name', $data['name'])->get()->first();
             if ($isExist) {
-                echo "exist";
+                return response()->json(["success" => false, "message" => "Company already exists with the same name."]);
                 return;
             }
-            $res = new Company;
-            $res->company_name = $data['name'];
-            $res->company_number = $data['number'];
-            $res->company_telno = $data['telno'];
-            $res->company_address = $data['address'];
-            $res->company_email = $data['email'];
-            $res->company_website = $data['website'];
-            $res->max_allowable_skip = $data['max_allowable_skip'];
-            $res->save();
-            echo true;
-        } else {
-            $res = Company::where('id', $data['id'])->get()->first();
+            $company = new Company;
+            $company->company_name = $data['name'];
+            $company->legal_name = $data['legalname'];
+            $company->company_number = $data['number'];
+            $company->company_telno = $data['telno'];
+            $company->company_address = $data['address'];
+            $company->second_address = $data['streetaddress'];
+            $company->company_email = $data['email'];
+            $company->company_website = $data['website'];
+            $company->max_allowable_skip = $data['max_allowable_skip'];
+            if(!empty($data->file('logofile'))){
+                $file = $request->file('logofile');
+                $filename = $data['number'] . ". " . $data['name'] . ' ' . $file->getClientOriginalName();
+                $file->move(public_path() . '/logos', $filename);
+                $company->company_logo = asset('logos') . '/' . $filename;
 
-            if(isset($data['name']) && $res->company_name != $data['name'] || isset($data['number']) && $res->company_number != $data['number']){ // change folder name, update job_request table
-                $oldName = $res->company_number. '. ' . $res->company_name . '/';
+                //Backup json file to dropbox
+                $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
+                $dropbox = new Dropbox($app);
+                $dropboxFile = new DropboxFile(public_path() . '/logos/' . $filename);
+                $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_LOGO_PATH') . $filename, ['autorename' => TRUE]);
+            } else {
+                $company->company_logo = $data['logolink'];
+            }
+            $company->save();
+            return response()->json(["success" => true]);
+        } else {
+            $company = Company::where('id', $data['id'])->get()->first();
+
+            if(isset($data['name']) && $company->company_name != $data['name'] || isset($data['number']) && $company->company_number != $data['number']){ // change folder name, update job_request table
+                $oldName = $company->company_number. '. ' . $company->company_name . '/';
                 $newName = $data['number']. '. ' . $data['name'] . '/';
                 if(file_exists(storage_path('/input/') . $oldName))
                     rename(storage_path('/input/') . $oldName, storage_path('/input/') . $newName);
@@ -241,7 +257,7 @@ class CompanyController extends Controller
                     // $listFolderContents = $dropbox->listFolder(env('DROPBOX_JSON_INPUT') . $oldName);
                     // $files = $listFolderContents->getItems()->all();
                     // foreach($files as $file)
-                        $dropbox->move(env('DROPBOX_JSON_INPUT') . $res->company_number. '. ' . $res->company_name, env('DROPBOX_JSON_INPUT') . $data['number']. '. ' . $data['name']);
+                        $dropbox->move(env('DROPBOX_JSON_INPUT') . $company->company_number. '. ' . $company->company_name, env('DROPBOX_JSON_INPUT') . $data['number']. '. ' . $data['name']);
                     // $dropbox->delete(env('DROPBOX_JSON_INPUT') . $oldName);
                 } catch (DropboxClientException $e) { }
 
@@ -252,15 +268,30 @@ class CompanyController extends Controller
                 }
             }
 
-            if(isset($data['name'])) $res->company_name = $data['name'];
-            if(isset($data['number'])) $res->company_number = $data['number'];
-            $res->company_telno = $data['telno'];
-            $res->company_address = $data['address'];
-            $res->company_email = $data['email'];
-            $res->company_website = $data['website'];
-            $res->max_allowable_skip = $data['max_allowable_skip'];
-            $res->save();
-            echo true;
+            if(isset($data['name'])) $company->company_name = $data['name'];
+            if(isset($data['number'])) $company->company_number = $data['number'];
+            $company->legal_name = $data['legalname'];
+            $company->company_telno = $data['telno'];
+            $company->company_address = $data['address'];
+            $company->second_address = $data['streetaddress'];
+            $company->company_email = $data['email'];
+            $company->company_website = $data['website'];
+            $company->max_allowable_skip = $data['max_allowable_skip'];
+            if(!empty($data->file('logofile'))){
+                $file = $request->file('logofile');
+                $filename = $data['number'] . ". " . $data['name'] . ' ' . $file->getClientOriginalName();
+                $file->move(public_path() . '/logos', $filename);
+                $company->company_logo = asset('logos') . '/' . $filename;
+
+                $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
+                $dropbox = new Dropbox($app);
+                $dropboxFile = new DropboxFile(public_path() . '/logos/' . $filename);
+                $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_LOGO_PATH') . $filename, ['autorename' => TRUE]);
+            } else {
+                $company->company_logo = $data['logolink'];
+            }
+            $company->save();
+            return response()->json(["success" => true]);
         }
     }
 
@@ -717,10 +748,12 @@ class CompanyController extends Controller
             $info->security_code = $request['security_code'];
 
             if(Auth::user()->userrole == 2){
-                if(!empty($request['billing_type'])) $info->billing_type = $request['billing_type'];
-                if(!empty($request['amount_per_job'])) $info->amount_per_job = $request['amount_per_job'];
-                if(!empty($request['send_invoice'])) $info->send_invoice = $request['send_invoice'];
-                if(!empty($request['block_on_fail'])) $info->block_on_fail = $request['block_on_fail'];
+                if(isset($request['billing_type'])) $info->billing_type = $request['billing_type'];
+                if(isset($request['expected_jobs'])) $info->expected_jobs = $request['expected_jobs'];
+                if(isset($request['base_fee'])) $info->base_fee = $request['base_fee'];
+                if(isset($request['extra_fee'])) $info->extra_fee = $request['extra_fee'];
+                if(isset($request['send_invoice'])) $info->send_invoice = $request['send_invoice'];
+                if(isset($request['block_on_fail'])) $info->block_on_fail = $request['block_on_fail'];
             }
 
             $info->save();
@@ -730,124 +763,124 @@ class CompanyController extends Controller
             return response()->json(["message" => "You don't have permission.", "success" => false]);
     }
 
-    function billinginfo(Request $request){
-        if(Auth::user()->userrole == 2)
-            return view('admin.billing.view');
-        else
-            return redirect('home');
-    }
+    // function billinginfo(Request $request){
+    //     if(Auth::user()->userrole == 2)
+    //         return view('admin.billing.view');
+    //     else
+    //         return redirect('home');
+    // }
 
-    /**
-     * Get the All Client Biling Info
-     *
-     * @return JSON
-     */
-    public function getCompanyBilling(Request $request){
-        $columns = array( 
-            0 =>'id', 
-            1 =>'name',
-            2 =>'number',
-            3 =>'billing_type',
-            4 =>'amount',
-            5 =>'send_invoice',
-            6 => 'block_on_fail'
-        );
-        $totalData = Company::count();
-        $totalFiltered = $totalData; 
+    // /**
+    //  * Get the All Client Biling Info
+    //  *
+    //  * @return JSON
+    //  */
+    // public function getCompanyBilling(Request $request){
+    //     $columns = array( 
+    //         0 =>'id', 
+    //         1 =>'name',
+    //         2 =>'number',
+    //         3 =>'billing_type',
+    //         4 =>'amount',
+    //         5 =>'send_invoice',
+    //         6 => 'block_on_fail'
+    //     );
+    //     $totalData = Company::count();
+    //     $totalFiltered = $totalData; 
 
-        $limit = $request->input('length');
-        $start = $request->input('start');
-        $order = $columns[$request->input('order.0.column')];
-        $dir = $request->input('order.0.dir');
+    //     $limit = $request->input('length');
+    //     $start = $request->input('start');
+    //     $order = $columns[$request->input('order.0.column')];
+    //     $dir = $request->input('order.0.dir');
 
-        $handler = Company::leftjoin("billing_info", "billing_info.clientId", "=", "company_info.id");
+    //     $handler = Company::leftjoin("billing_info", "billing_info.clientId", "=", "company_info.id");
 
-        if(empty($request->input('search.value')))
-        {            
-            $totalFiltered = $handler->count();
-            $companys = $handler->offset($start)
-                ->limit($limit)
-                ->orderBy($order,$dir)
-                ->get(
-                    array(
-                        'company_info.id as id',
-                        'company_info.company_name as name',
-                        'company_info.company_number as number',
-                        'billing_info.billing_type as billing_type', 'billing_info.amount_per_job as amount', 'billing_info.send_invoice as send_invoice', 'billing_info.block_on_fail as block_on_fail', 
-                    )
-                );
-        }
-        else {
-            $search = $request->input('search.value'); 
-            $companys =  $handler->where(function ($q) use ($search) {
-                            $q->where('company_info.id','LIKE',"%{$search}%")
-                            ->orWhere('company_info.company_name', 'LIKE',"%{$search}%")
-                            ->orWhere('company_info.company_number', 'LIKE',"%{$search}%");
-                        })
-                        ->offset($start)
-                        ->limit($limit)
-                        ->orderBy($order,$dir)
-                        ->get(
-                            array(
-                                'company_info.id as id',
-                                'company_info.company_name as name',
-                                'company_info.company_number as number',
-                                'billing_info.billing_type as billing_type', 'billing_info.amount_per_job as amount', 'billing_info.send_invoice as send_invoice', 'billing_info.block_on_fail as block_on_fail', 
-                            )
-                        );
+    //     if(empty($request->input('search.value')))
+    //     {            
+    //         $totalFiltered = $handler->count();
+    //         $companys = $handler->offset($start)
+    //             ->limit($limit)
+    //             ->orderBy($order,$dir)
+    //             ->get(
+    //                 array(
+    //                     'company_info.id as id',
+    //                     'company_info.company_name as name',
+    //                     'company_info.company_number as number',
+    //                     'billing_info.billing_type as billing_type', 'billing_info.amount_per_job as amount', 'billing_info.send_invoice as send_invoice', 'billing_info.block_on_fail as block_on_fail', 
+    //                 )
+    //             );
+    //     }
+    //     else {
+    //         $search = $request->input('search.value'); 
+    //         $companys =  $handler->where(function ($q) use ($search) {
+    //                         $q->where('company_info.id','LIKE',"%{$search}%")
+    //                         ->orWhere('company_info.company_name', 'LIKE',"%{$search}%")
+    //                         ->orWhere('company_info.company_number', 'LIKE',"%{$search}%");
+    //                     })
+    //                     ->offset($start)
+    //                     ->limit($limit)
+    //                     ->orderBy($order,$dir)
+    //                     ->get(
+    //                         array(
+    //                             'company_info.id as id',
+    //                             'company_info.company_name as name',
+    //                             'company_info.company_number as number',
+    //                             'billing_info.billing_type as billing_type', 'billing_info.amount_per_job as amount', 'billing_info.send_invoice as send_invoice', 'billing_info.block_on_fail as block_on_fail', 
+    //                         )
+    //                     );
 
-            $totalFiltered = $handler->where(function ($q) use ($search) {
-                            $q->where('company_info.id','LIKE',"%{$search}%")
-                            ->orWhere('company_info.company_name', 'LIKE',"%{$search}%")
-                            ->orWhere('company_info.company_number', 'LIKE',"%{$search}%");
-                        })
-                        ->count();
-        }
+    //         $totalFiltered = $handler->where(function ($q) use ($search) {
+    //                         $q->where('company_info.id','LIKE',"%{$search}%")
+    //                         ->orWhere('company_info.company_name', 'LIKE',"%{$search}%")
+    //                         ->orWhere('company_info.company_number', 'LIKE',"%{$search}%");
+    //                     })
+    //                     ->count();
+    //     }
 
-        $data = array();
+    //     $data = array();
 
-        if(!empty($companys))
-        {
-            foreach ($companys as $company)
-            {
-                $nestedData['id'] = $company->id;
-                $nestedData['name'] = $company->name;
-                $nestedData['number'] = $company->number;
+    //     if(!empty($companys))
+    //     {
+    //         foreach ($companys as $company)
+    //         {
+    //             $nestedData['id'] = $company->id;
+    //             $nestedData['name'] = $company->name;
+    //             $nestedData['number'] = $company->number;
                 
-                if($company->billing_type == 1)
-                    $nestedData['billing_type'] = '<span class="badge badge-primary">Bill on Creation Date</span>';
-                else
-                    $nestedData['billing_type'] = '<span class="badge badge-warning">Bill on Complete State</span>';
+    //             if($company->billing_type == 1)
+    //                 $nestedData['billing_type'] = '<span class="badge badge-primary">Bill on Creation Date</span>';
+    //             else
+    //                 $nestedData['billing_type'] = '<span class="badge badge-warning">Bill on Complete State</span>';
 
-                $nestedData['amount'] = $company->amount;
+    //             $nestedData['amount'] = $company->amount;
 
-                if($company->send_invoice == 1)
-                    $nestedData['send_invoice'] = '<span class="badge badge-danger">Yes</span>';
-                else
-                    $nestedData['send_invoice'] = '<span class="badge badge-primary">No</span>';
+    //             if($company->send_invoice == 1)
+    //                 $nestedData['send_invoice'] = '<span class="badge badge-danger">Yes</span>';
+    //             else
+    //                 $nestedData['send_invoice'] = '<span class="badge badge-primary">No</span>';
 
-                if($company->block_on_fail == 1)
-                    $nestedData['block_on_fail'] = '<span class="badge badge-danger">Yes</span>';
-                else
-                    $nestedData['block_on_fail'] = '<span class="badge badge-primary">No</span>';
+    //             if($company->block_on_fail == 1)
+    //                 $nestedData['block_on_fail'] = '<span class="badge badge-danger">Yes</span>';
+    //             else
+    //                 $nestedData['block_on_fail'] = '<span class="badge badge-primary">No</span>';
 
-                $nestedData['actions'] = "
-                <div class='text-center'>
-                    <button type='button' class='btn btn-warning' 
-                        onclick='showBillingInfo(this,{$nestedData['id']})'
-                        data-toggle='modal' data-target='#modal-block-normal'>
-                        <i class='fa fa-pencil-alt'></i>
-                    </button>
-                </div>";
-                $data[] = $nestedData;
-            }
-        }
-        $json_data = array(
-            "draw"            => intval($request->input('draw')),  
-            "recordsTotal"    => intval($totalData),  
-            "recordsFiltered" => intval($totalFiltered), 
-            "data"            => $data   
-            );
-        echo json_encode($json_data);
-    }
+    //             $nestedData['actions'] = "
+    //             <div class='text-center'>
+    //                 <button type='button' class='btn btn-warning' 
+    //                     onclick='showBillingInfo(this,{$nestedData['id']})'
+    //                     data-toggle='modal' data-target='#modal-block-normal'>
+    //                     <i class='fa fa-pencil-alt'></i>
+    //                 </button>
+    //             </div>";
+    //             $data[] = $nestedData;
+    //         }
+    //     }
+    //     $json_data = array(
+    //         "draw"            => intval($request->input('draw')),  
+    //         "recordsTotal"    => intval($totalData),  
+    //         "recordsFiltered" => intval($totalFiltered), 
+    //         "data"            => $data   
+    //         );
+    //     echo json_encode($json_data);
+    // }
 }
