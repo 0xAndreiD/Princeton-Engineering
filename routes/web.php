@@ -56,8 +56,8 @@ Route::post('/saveBillingInfo', 'CompanyController@saveBillingInfo')->name('save
 // Route::get('/billinginfo', 'CompanyController@billinginfo')->name('billinginfo');
 // Route::post('/getCompanyBilling', 'CompanyController@getCompanyBilling')->name('getCompanyBilling');
 
-// Company Profile
-Route::get('/companyProfile', 'CompanyController@companyProfile')->name('companyProfile');
+// Company Info
+Route::get('/companyInfo', 'CompanyController@companyInfo')->name('companyInfo');
 
 // Project List Page
 Route::get('/projectlist', 'GeneralController@projectList')->name('projectlist');

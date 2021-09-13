@@ -210,6 +210,9 @@ class CompanyController extends Controller
      */
     function updateCompany(Request $request){
         $data = $request;
+        if(Auth::user()->userrole == 1)
+            $data['id'] = Auth::user()->companyid;
+        
         if ($data['id'] == 0){
             $isExist = Company::where('company_name', $data['name'])->get()->first();
             if ($isExist) {
@@ -217,9 +220,11 @@ class CompanyController extends Controller
                 return;
             }
             $company = new Company;
-            $company->company_name = $data['name'];
+            if(Auth::user()->userrole == 2){
+                $company->company_name = $data['name'];
+                $company->company_number = $data['number'];
+            }
             $company->legal_name = $data['legalname'];
-            $company->company_number = $data['number'];
             $company->company_telno = $data['telno'];
             $company->company_address = $data['address'];
             $company->second_address = $data['streetaddress'];
@@ -268,8 +273,10 @@ class CompanyController extends Controller
                 }
             }
 
-            if(isset($data['name'])) $company->company_name = $data['name'];
-            if(isset($data['number'])) $company->company_number = $data['number'];
+            if(Auth::user()->userrole == 2){
+                if(isset($data['name'])) $company->company_name = $data['name'];
+                if(isset($data['number'])) $company->company_number = $data['number'];
+            }
             $company->legal_name = $data['legalname'];
             $company->company_telno = $data['telno'];
             $company->company_address = $data['address'];
@@ -333,12 +340,12 @@ class CompanyController extends Controller
      *
      * @return JSON
      */
-    function companyProfile(Request $request){
+    function companyInfo(Request $request){
         $userObject = Auth::user();
         $companyID = $userObject->companyid;
 
         $company = Company::where('id', $companyID)->first();
-        return view('clientadmin.companyProfile.companyprofile')->with('company', $company);
+        return view('clientadmin.companyInfo.companyinfo')->with('company', $company);
 
         // return response()->json($company);
     }
@@ -349,10 +356,11 @@ class CompanyController extends Controller
      * @return JSON
      */
     function getPermitInfo(Request $request){
-        if(!empty($request['state']) && !empty($request['id'])){
-            if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || $request['id'] == Auth::user()->companyid)
+        $companyId = (Auth::user()->userrole == 1 ? Auth::user()->companyid : $request['id']);
+        if(!empty($request['state']) && $companyId){
+            if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || $companyId == Auth::user()->companyid)
             {
-                $permit = PermitInfo::where('company_id', $request['id'])->where('state', $request['state'])->first();
+                $permit = PermitInfo::where('company_id', $companyId)->where('state', $request['state'])->first();
                 if($permit)
                     return response()->json(["success" => true, "construction_email" => $permit->construction_email, "registration" => $permit->registration, "exp_date" => $permit->exp_date, "ein" => $permit->EIN, "fax" => $permit->FAX, "contact_person" => $permit->contact_person, "contact_phone" => $permit->contact_phone]);
                 else
@@ -372,6 +380,9 @@ class CompanyController extends Controller
     function updatePermitInfo(Request $request){
         if(!empty($request['data'])){
             $data = $request['data'];
+            if(Auth::user()->userrole == 1)
+                $data['id'] = Auth::user()->companyid;
+
             if(isset($data['state'])){
                 if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || $data['id'] == Auth::user()->companyid)
                 {

@@ -105,70 +105,30 @@ function updateCompany() {
             input: 'form-control'
         }
     });
-    // var data = {};
-    // data.id = $('input#id').val();
-    // data.name = $('input#name').val();
-    // data.legalname = $('input#legalname').val();
-    // data.number = $('input#number').val();
-    // data.telno = $('input#telno').val();
-    // data.address = $('input#address').val();
-    // data.streetaddress = $('input#streetaddress').val();
-    // data.email = $('input#email').val();
-    // data.website = $('input#website').val();
-    // data.max_allowable_skip = $('input#max_allowable_skip').val();
-    // data.logolink = $('input#logolink').val();
 
-    if ($('input#id').val() == 0) { // Create company
-        swal.fire({ title: "Please wait...", showConfirmButton: false });
-        swal.showLoading();
-        $("#profileForm").ajaxSubmit({
-            type: "POST",
-            url: "updateCompany",
-            dataType: 'json',
-            data:{},
-            success: function(res){
-                swal.close();
-                if (res && res.success == true){
-                    toast.fire('Created!', 'Company has been created.', 'success');
-                } else {
-                    toast.fire('Error!', res.message, 'error');
-                }
-            },
-            error: function(xhr, status, error) {
-                swal.close();
-                res = JSON.parse(xhr.responseText);
-                message = res.message;
-                swal.fire({ title: "Error",
-                        text: message == "" ? "Error happened while processing. Please try again later." : message,
-                        icon: "error",
-                        confirmButtonText: `OK` });
+    swal.fire({ title: "Please wait...", showConfirmButton: false });
+    swal.showLoading();
+    $("#profileForm").ajaxSubmit({
+        type: "POST",
+        url: "updateCompany",
+        data: {},
+        dataType: 'json',
+        success: function(res){
+            swal.close();
+            if (res && res.success){
+                toast.fire('Updated!', 'Company Info has been updated.', 'success');
             }
-        });
-    } else { // Update company
-        swal.fire({ title: "Please wait...", showConfirmButton: false });
-        swal.showLoading();
-        $("#profileForm").ajaxSubmit({
-            type: "POST",
-            url: "updateCompany",
-            data: {},
-            dataType: 'json',
-            success: function(res){
-                swal.close();
-                if (res && res.success){
-                    toast.fire('Updated!', 'Company has been updated.', 'success');
-                }
-            },
-            error: function(xhr, status, error) {
-                swal.close();
-                res = JSON.parse(xhr.responseText);
-                message = res.message;
-                swal.fire({ title: "Error",
-                        text: message == "" ? "Error happened while processing. Please try again later." : message,
-                        icon: "error",
-                        confirmButtonText: `OK` });
-            }
-        });
-    }
+        },
+        error: function(xhr, status, error) {
+            swal.close();
+            res = JSON.parse(xhr.responseText);
+            message = res.message;
+            swal.fire({ title: "Error",
+                    text: message == "" ? "Error happened while processing. Please try again later." : message,
+                    icon: "error",
+                    confirmButtonText: `OK` });
+        }
+    });
 }
 
 function onUploadOpen(){
@@ -185,7 +145,6 @@ function updatePermitInfo(){
         }
     });
     var data = {};
-    data.id = $('input#id').val();
     data.state = $('#usState').val();
     data.construction_email = $('input#construction_email').val();
     data.registration = $('input#registration').val();
@@ -212,7 +171,6 @@ function pullPermit(){
         url:"getPermitInfo",
         type:'post',
         data: {
-            id: $('input#id').val(),
             state: $('#usState').val()
         },
         success:function(res){
@@ -466,7 +424,7 @@ generatecard.addEventListener('click', function () {
 
 
 // CREDIT CARD IMAGE JS
- document.querySelector('.preload').classList.remove('preload');
+    document.querySelector('.preload').classList.remove('preload');
 document.querySelector('.creditcard').addEventListener('click', function () {
     if (this.classList.contains('flipped')) {
         this.classList.remove('flipped');
@@ -530,17 +488,9 @@ securitycode.addEventListener('focus', function () {
 $.ajax({
     url:"getBillingInfo",
     type:'post',
-    data:{ clientId: $('input#id').val() },
     success:function(res){
         if(res.success == true) {
             if(res.data){
-                $("#billing_type").val(res.data.billing_type);
-                $("#expectedjobs").val(res.data.expected_jobs);
-                $("#basefee").val(res.data.base_fee);
-                $("#extrafee").val(res.data.extra_fee);
-                $("#send_invoice").val(res.data.send_invoice);
-                $("#block_on_fail").val(res.data.block_on_fail);
-
                 $("#bname").val(res.data.billing_name);
                 $("#bmail").val(res.data.billing_mail);
                 $("#baddress").val(res.data.billing_address);
@@ -585,12 +535,6 @@ function saveBilling(){
     swal.showLoading();
 
     var data = {};
-    data.billing_type = $("#billing_type").val();
-    data.expected_jobs = $("#expectedjobs").val();
-    data.base_fee = $("#basefee").val();
-    data.extra_fee = $("#extrafee").val();
-    data.send_invoice = $("#send_invoice").val();
-    data.block_on_fail = $("#block_on_fail").val();
 
     data.billing_name = $("#bname").val();
     data.billing_mail = $("#bmail").val();
