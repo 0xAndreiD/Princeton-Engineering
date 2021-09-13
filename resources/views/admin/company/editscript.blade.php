@@ -526,8 +526,10 @@ expirationdate.addEventListener('focus', function () {
 securitycode.addEventListener('focus', function () {
     document.querySelector('.creditcard').classList.add('flipped');
 });
+};
 
-$.ajax({
+$(document).ready(function(){
+    $.ajax({
         url:"getBillingInfo",
         type:'post',
         success:function(res){
@@ -577,7 +579,7 @@ $.ajax({
             swal.fire({ title: "Error", text: res.message, icon: "error", confirmButtonText: `OK` });
         }
     });
-};
+});
 
 function saveBilling(){
     swal.fire({ title: "Please wait...", showConfirmButton: false });
