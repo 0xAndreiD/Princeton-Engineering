@@ -540,6 +540,33 @@ $.ajax({
                 $("#extrafee").val(res.data.extra_fee);
                 $("#send_invoice").val(res.data.send_invoice);
                 $("#block_on_fail").val(res.data.block_on_fail);
+                if(res.data.billing_period == 0){
+                    $("#bill-weekly")[0].checked = true;
+                    changeBillPeriod(0);
+                } else if(res.data.billing_period == 1){
+                    $("#bill-biweekly")[0].checked = true;
+                    changeBillPeriod(1);
+                } else if(res.data.billing_period == 2){
+                    $("#bill-monthly")[0].checked = true;
+                    changeBillPeriod(2);
+                }
+                if(res.data.billing_period == 0 || res.data.billing_period == 1){
+                    if(res.data.billing_day == 1)
+                        $("#bill-monday")[0].checked = true;
+                    else if(res.data.billing_day == 2)
+                        $("#bill-tuesday")[0].checked = true;
+                    else if(res.data.billing_day == 3)
+                        $("#bill-wednesday")[0].checked = true;
+                    else if(res.data.billing_day == 4)
+                        $("#bill-thursday")[0].checked = true;
+                    else if(res.data.billing_day == 5)
+                        $("#bill-friday")[0].checked = true;
+                    else if(res.data.billing_day == 6)
+                        $("#bill-saturday")[0].checked = true;
+                    else if(res.data.billing_day == 7)
+                        $("#bill-sunday")[0].checked = true;
+                } else 
+                    $("#billday").val(res.data.billing_day);
 
                 $("#bname").val(res.data.billing_name);
                 $("#bmail").val(res.data.billing_mail);
@@ -591,6 +618,33 @@ function saveBilling(){
     data.extra_fee = $("#extrafee").val();
     data.send_invoice = $("#send_invoice").val();
     data.block_on_fail = $("#block_on_fail").val();
+    if($("#bill-weekly")[0].checked == true)
+        data.billing_period = 0;
+    else if($("#bill-biweekly")[0].checked == true)
+        data.billing_period = 1;
+    else if($("#bill-monthly")[0].checked == true)
+        data.billing_period = 2;
+    
+    if(data.billing_period == 0 || data.billing_period == 1){
+        if($("#bill-monday")[0].checked == true)
+            data.billing_day = 1;
+        else if($("#bill-tuesday")[0].checked == true)
+            data.billing_day = 2;
+        else if($("#bill-wednesday")[0].checked == true)
+            data.billing_day = 3;
+        else if($("#bill-thursday")[0].checked == true)
+            data.billing_day = 4;
+        else if($("#bill-friday")[0].checked == true)
+            data.billing_day = 5;
+        else if($("#bill-saturday")[0].checked == true)
+            data.billing_day = 6;
+        else if($("#bill-sunday")[0].checked == true)
+            data.billing_day = 7;
+    } else {
+        data.billing_day = $("#billday").val();
+        if(data.billing_day == '')
+            data.billing_day = 1;
+    }
 
     data.billing_name = $("#bname").val();
     data.billing_mail = $("#bmail").val();
@@ -662,6 +716,16 @@ function shippingCopy(){
         $("#scity").val($("#bcity").val());
         $("#sstate").val($("#bstate").val());
         $("#szip").val($("#bzip").val());
+    }
+}
+
+function changeBillPeriod(type){
+    if(type == 0 || type == 1){
+        $("#weekday-picker").css("display", "flex");
+        $("#billday-input").css("display", "none");
+    } else {
+        $("#weekday-picker").css("display", "none");
+        $("#billday-input").css("display", "block");
     }
 }
 

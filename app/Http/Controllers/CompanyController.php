@@ -765,6 +765,8 @@ class CompanyController extends Controller
                 if(isset($request['extra_fee'])) $info->extra_fee = $request['extra_fee'];
                 if(isset($request['send_invoice'])) $info->send_invoice = $request['send_invoice'];
                 if(isset($request['block_on_fail'])) $info->block_on_fail = $request['block_on_fail'];
+                if(isset($request['billing_period'])) $info->billing_period = $request['billing_period'];
+                if(isset($request['billing_day'])) $info->billing_day = $request['billing_day'];
             }
 
             $info->save();

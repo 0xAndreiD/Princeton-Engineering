@@ -252,6 +252,56 @@
                                     <option value="1"> Yes </option>
                                 </select>
                             </div>
+                            <div class="form-group">
+                                <label>Bill Day <span class="text-danger">*</span></label><br/>
+                                <div style="display: flex; align-items: center;">
+                                    <div class="custom-control custom-radio custom-control-primary mb-1 mr-2">
+                                        <input type="radio" class="custom-control-input" id="bill-weekly" name="billperiod" onclick="changeBillPeriod(0)">
+                                        <label style="cursor: pointer;" class="custom-control-label" for="bill-weekly">Weekly </label>
+                                    </div>
+                                    <div class="custom-control custom-radio custom-control-info mb-1 mr-2">
+                                        <input type="radio" class="custom-control-input" id="bill-biweekly" name="billperiod" onclick="changeBillPeriod(1)">
+                                        <label style="cursor: pointer;" class="custom-control-label" for="bill-biweekly">Biweekly </label>
+                                    </div>
+                                    <div class="custom-control custom-radio custom-control-warning mb-1">
+                                        <input type="radio" class="custom-control-input" id="bill-monthly" name="billperiod" onclick="changeBillPeriod(2)">
+                                        <label style="cursor: pointer;" class="custom-control-label" for="bill-monthly">Monthly </label>
+                                    </div>
+                                </div>
+                                <div style="display: flex; align-items: center;" id="weekday-picker">
+                                    <div class="custom-control custom-radio custom-control-primary mb-1 mr-2">
+                                        <input type="radio" class="custom-control-input" id="bill-monday" name="billweekday">
+                                        <label style="cursor: pointer;" class="custom-control-label" for="bill-monday">Mon</label>
+                                    </div>
+                                    <div class="custom-control custom-radio custom-control-info mb-1 mr-2">
+                                        <input type="radio" class="custom-control-input" id="bill-tuesday" name="billweekday">
+                                        <label style="cursor: pointer;" class="custom-control-label" for="bill-tuesday">Tue</label>
+                                    </div>
+                                    <div class="custom-control custom-radio custom-control-warning mb-1 mr-2">
+                                        <input type="radio" class="custom-control-input" id="bill-wednesday" name="billweekday">
+                                        <label style="cursor: pointer;" class="custom-control-label" for="bill-wednesday">Wed</label>
+                                    </div>
+                                    <div class="custom-control custom-radio custom-control-danger mb-1 mr-2">
+                                        <input type="radio" class="custom-control-input" id="bill-thursday" name="billweekday">
+                                        <label style="cursor: pointer;" class="custom-control-label" for="bill-thursday">Thu</label>
+                                    </div>
+                                    <div class="custom-control custom-radio custom-control-primary mb-1 mr-2">
+                                        <input type="radio" class="custom-control-input" id="bill-friday" name="billweekday">
+                                        <label style="cursor: pointer;" class="custom-control-label" for="bill-friday">Fri</label>
+                                    </div>
+                                    <div class="custom-control custom-radio custom-control-light mb-1 mr-2">
+                                        <input type="radio" class="custom-control-input" id="bill-saturday" name="billweekday">
+                                        <label style="cursor: pointer;" class="custom-control-label" for="bill-saturday">Sat</label>
+                                    </div>
+                                    <div class="custom-control custom-radio custom-control-dark mb-1 mr-2">
+                                        <input type="radio" class="custom-control-input" id="bill-sunday" name="billweekday">
+                                        <label style="cursor: pointer;" class="custom-control-label" for="bill-sunday">Sun</label>
+                                    </div>
+                                </div>
+                                <div style="display: none;" id="billday-input">
+                                    <input type="text" style="border: 1px solid pink;" class="form-control" id="billday" name="billday" placeholder="Day in the month">
+                                </div>
+                            </div>
                         </div>
                         <div class="col-md-3">
                             <h2 class="content-heading pt-0 text-center">Billing Information</h2>
