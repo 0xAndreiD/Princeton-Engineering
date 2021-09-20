@@ -801,6 +801,8 @@ class APIController extends Controller
 
                     $curBill->state = 2;
                     $curBill->save();
+
+                    $this->setBilled($curBill);
                 } else {
                     echo "Transaction Failed \n";
                     if ($tresponse->getErrors() != null) {
@@ -833,5 +835,25 @@ class APIController extends Controller
         }
 
         return $response;
+    }
+
+    /**
+     * Set job_request jobs' billed to 1
+     *
+     * @return Boolean
+     */
+    private function setBilled($history){
+        if($history && $history->jobIds){
+            $jobIds = json_decode($history->jobids);
+            foreach($jobIds as $id){
+                $job = JobRequest::where('id', $id)->first();
+                if($job){
+                    $job->billed = 1;
+                    $job->save();
+                }
+            }
+            return true;
+        } else
+            return false;
     }
 }
