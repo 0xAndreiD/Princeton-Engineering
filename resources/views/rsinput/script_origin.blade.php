@@ -1370,12 +1370,20 @@ $("#txt-project-name").on('keypress', function(event){
     }
 });
 
+$("#txt-project-name").on('keyup', function(event){
+    $(this).val($(this).val().replace("&", "").replace("#", "").replace(":", "").replace("/", "").replace("\\", ""));
+});
+
 $("#txt-project-number").on('keypress', function(event){
     if(event.key == ".")
     {
         event.preventDefault();
         return false;
     }
+});
+
+$("#txt-project-number").on('keyup', function(event){
+    $(this).val($(this).val().replace(".", ""));
 });
 
 $('.domChange').on('input', function() {
