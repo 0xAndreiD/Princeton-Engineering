@@ -11,9 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'WelcomeController@index');
 
 Auth::routes(['register' => false]);
 
@@ -91,13 +89,14 @@ Route::post('/setReviewer', 'GeneralController@setReviewer')->name('setReviewer'
 Route::post('/checkReviewer', 'GeneralController@checkReviewer')->name('checkReviewer');
 Route::post('/checkCorrectTown', 'GeneralController@checkCorrectTown')->name('checkCorrectTown');
 
-// APIs for list, update, download, db backup
+// APIs for list, update, download, db backup, bill request
 Route::get('/getJobList', 'APIController@getJobList')->name('getJobList');
 Route::get('/updateJobData', 'APIController@updateJobData')->name('updateJobData');
 Route::get('/downloadFile', 'APIController@downloadFile')->name('downloadFile');
 Route::get('/getUserInfo', 'APIController@getUserInfo')->name('getUserInfo');
 Route::get('/getCompanyList', 'APIController@getCompanyList')->name('getCompanyList');
 Route::get('/cronDBBackup', 'APIController@cronDBBackup')->name('cronDBBackup');
+Route::get('/cronSendBill', 'APIController@cronSendBill')->name('cronSendBill');
 Route::get('/getCustomEquipment', 'APIController@getCustomEquipment')->name('getCustomEquipment');
 Route::get('/getChat', 'APIController@getChat')->name('getChat');
 Route::get('/addChat', 'APIController@addChat')->name('addChat');
