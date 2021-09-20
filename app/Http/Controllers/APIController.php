@@ -17,15 +17,20 @@ use App\CustomInverter;
 use App\CustomRacking;
 use App\CustomStanchion;
 use App\JobChat;
+use App\BillingHistory;
+use App\BillingInfo;
 use Kunnu\Dropbox\DropboxApp;
 use Kunnu\Dropbox\Dropbox;
 use Kunnu\Dropbox\DropboxFile;
 use Kunnu\Dropbox\Exceptions\DropboxClientException;
 use Ifsnop\Mysqldump as IMysqldump;
+use net\authorize\api\contract\v1 as AnetAPI;
+use net\authorize\api\controller as AnetController;
 
 use DateTime;
 use DateTimeZone;
 use Mail;
+use DB;
 
 class APIController extends Controller
 {
@@ -572,5 +577,261 @@ class APIController extends Controller
             else
                 $this->iterateFolder($dropbox, $folderPath . $file->getName() . '/', $id);
         }
+    }
+
+    /**
+     * Check if today is billing day. If it is, calculates the jobs and send payment
+     *
+     * @return JSON
+     */
+    public function cronSendBill(Request $request){
+        $companies = Company::get();
+
+        $weekday = date('w');
+        if($weekday == 0) // sunday is 7 in our system
+            $weekday = 7;
+        $monthday = date('j');
+        $curtime = time();
+
+        foreach($companies as $company){
+            $billInfo = BillingInfo::where('clientId', $company->id)->first();
+            if($billInfo && $billInfo->card_number != '' && $billInfo->expiration_date != '' && $billInfo->security_code != ''){
+                // Check if today is the payment day
+                $checkDay = false;
+                if($billInfo->billing_period == 0 && $weekday == $billInfo->billing_day){ // weekly
+                    $checkDay = true;
+                    $dateFrom = date('Y-m-d', strtotime('-7 day', $curtime));
+                    $dateTo = date('Y-m-d', strtotime('-1 day', $curtime));
+                    $timeFrom = date('Y-m-d H:i:s', strtotime('-7 day', $curtime));
+                    $timeTo = strtotime('-1 day', $curtime);
+                    $timeTo = date('Y-m-d H:i:s', strtotime('+23 hour +59 minutes +59 seconds', $timeTo));
+                } else if($billInfo->billing_period == 1 && $weekday == $billInfo->billing_day){ // biweekly
+                    $lastbilled = BillingHistory::where('companyId', $company->id)->orderBy('issuedAt', 'desc')->first();
+                    if(!$lastbilled)
+                        $checkDay = true;
+                    else{
+                        $diff = abs(time() - strtotime($lastbilled->issuedAt));
+                        if($diff > 10 * 60 * 60 * 24) { // Check if it's past 10 days from last billing day
+                            $checkDay = true;
+                        }
+                    }
+                    if($checkDay == true){
+                        $dateFrom = date('Y-m-d', strtotime('-14 day', $curtime));
+                        $dateTo = date('Y-m-d', strtotime('-1 day', $curtime));
+                        $timeFrom = date('Y-m-d H:i:s', strtotime('-14 day', $curtime));
+                        $timeTo = strtotime('-1 day', $curtime);
+                        $timeTo = date('Y-m-d H:i:s', strtotime('+23 hour +59 minutes +59 seconds', $timeTo));
+                    }
+                } if($billInfo->billing_period == 2 && $monthday == $billInfo->billing_day){ // monthly
+                    $checkDay = true;
+                    $dateFrom = date('Y-m-d', strtotime('-1 month', $curtime));
+                    $dateTo = date('Y-m-d', strtotime('-1 day', $curtime));
+                    $timeFrom = date('Y-m-d H:i:s', strtotime('-1 month', $curtime));
+                    $timeTo = strtotime('-1 day', $curtime);
+                    $timeTo = date('Y-m-d H:i:s', strtotime('+23 hour +59 minutes +59 seconds', $timeTo));
+                } 
+
+                if($checkDay) { // Bill only if today is bill day
+                    // collect the jobs that need to be billed
+                    if($billInfo->billing_type == 0)
+                        $jobs = JobRequest::where('companyId', $company->id)->where('billed', '0')->where('projectState', '9')->get();
+                    else
+                        $jobs = JobRequest::where('companyId', $company->id)->where('billed', '0')->where('createdTime', '>=', $timeFrom)->where('createdTime', '<=', $timeTo)->get();
+                    
+                    if(count($jobs) > 0){
+                        // calculate this month's billed jobs count
+                        $month = date('m');
+                        $histories = BillingHistory::whereRaw('Month(issuedAt) = '.$month)->where('state', 2)->get();
+                        $billedCount = 0;
+                        foreach($histories as $history)
+                            $billedCount += $history->jobCount;
+                        
+                        // calcs the number of not exceeded job counts, exceeded job counts in the month
+                        if($billedCount >= $billInfo->expected_jobs){
+                            $notExceeded = 0;
+                            $exceeded = count($jobs);
+                        } else {
+                            $notExceeded = min($billInfo->expected_jobs - $billedCount, count($jobs));
+                            $exceeded = count($jobs) - $notExceeded;
+                        }
+                        $amount = $billInfo->base_fee * $notExceeded + $billInfo->extra_fee * $exceeded;
+
+                        $curBill = new BillingHistory();
+                        $curBill->companyId = $company->id;
+                        $curBill->amount = $amount;
+                        $jobIds = array();
+                        foreach($jobs as $job)
+                            $jobIds[] = $job->id;
+                        $curBill->jobIds = json_encode($jobIds);
+                        $curBill->jobCount = count($jobs);
+                        $curBill->issuedAt = gmdate("Y-m-d\TH:i:s", time());
+                        if($billInfo->billing_type == 1)
+                            $curBill->issuedFrom = $dateFrom;
+                        $curBill->issuedTo = $dateTo;
+                        $curBill->state = 0;
+                        $curBill->save();
+
+                        if($billInfo->send_invoice == 0){ // Directly authorize and charge funds
+                            $this->chargeCreditCard($curBill, $company, $billInfo, $amount);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Authorize and Capture credit card payments
+     *
+     * @return Authorize.Net Response
+     */
+    private function chargeCreditCard($curBill, $company, $billInfo, $amount)
+    {
+        echo "Processing credit card payments for " . $company->company_number . ". " . $company->company_name . " with historyId: " . $curBill->id . "\n";
+        /* Create a merchantAuthenticationType object with authentication details
+        retrieved from the constants file */
+        $merchantAuthentication = new AnetAPI\MerchantAuthenticationType();
+        $merchantAuthentication->setName(env('MERCHANT_LOGIN_ID'));
+        $merchantAuthentication->setTransactionKey(env('MERCHANT_TRANSACTION_KEY'));
+        
+        // Set the transaction's refId
+        $refId = 'ref' . time();
+
+        // Create the payment data for a credit card
+        $creditCard = new AnetAPI\CreditCardType();
+        $creditCard->setCardNumber(str_replace(' ', '', $billInfo->card_number));
+        $creditCard->setExpirationDate($billInfo->expiration_date);
+        $creditCard->setCardCode($billInfo->security_code);
+
+        // Add the payment data to a paymentType object
+        $paymentOne = new AnetAPI\PaymentType();
+        $paymentOne->setCreditCard($creditCard);
+
+        // Create order information
+        $order = new AnetAPI\OrderType();
+        $order->setInvoiceNumber($curBill->id);
+        $order->setDescription("iRoof Engineering Services");
+
+        if($billInfo->billing_name != ''){
+            // Set the customer's Bill To address
+            $customerAddress = new AnetAPI\CustomerAddressType();
+            $customerAddress->setFirstName($billInfo->billing_name);
+            $customerAddress->setCompany($company->legal_name);
+            $customerAddress->setAddress($billInfo->billing_address);
+            $customerAddress->setCity($billInfo->billing_city);
+            $customerAddress->setState($billInfo->billing_state);
+            $customerAddress->setZip($billInfo->billing_zip);
+            $customerAddress->setCountry("USA");
+        }
+
+        if($billInfo->shipping_name != ''){
+            // Set the customer's Ship To address
+            $shipAddress = new AnetAPI\CustomerAddressType();
+            $shipAddress->setFirstName($billInfo->shipping_name);
+            $shipAddress->setCompany("Princeton Engineering");
+            $shipAddress->setAddress($billInfo->shipping_address);
+            $shipAddress->setCity($billInfo->shipping_city);
+            $shipAddress->setState($billInfo->shipping_state);
+            $shipAddress->setZip($billInfo->shipping_zip);
+            $shipAddress->setCountry("USA");
+        }
+
+        // Set the customer's identifying information
+        $customerData = new AnetAPI\CustomerDataType();
+        $customerData->setType("individual");
+        $customerData->setId($company->company_number);
+        $customerData->setEmail($company->company_email);
+
+        // Add values for transaction settings
+        // $duplicateWindowSetting = new AnetAPI\SettingType();
+        // $duplicateWindowSetting->setSettingName("duplicateWindow");
+        // $duplicateWindowSetting->setSettingValue("60");
+
+        // Add some merchant defined fields. These fields won't be stored with the transaction,
+        // but will be echoed back in the response.
+        // $merchantDefinedField1 = new AnetAPI\UserFieldType();
+        // $merchantDefinedField1->setName("customerLoyaltyNum");
+        // $merchantDefinedField1->setValue("1128836273");
+
+        // $merchantDefinedField2 = new AnetAPI\UserFieldType();
+        // $merchantDefinedField2->setName("favoriteColor");
+        // $merchantDefinedField2->setValue("blue");
+
+        // Create a TransactionRequestType object and add the previous objects to it
+        $transactionRequestType = new AnetAPI\TransactionRequestType();
+        $transactionRequestType->setTransactionType("authCaptureTransaction");
+        $transactionRequestType->setAmount($amount);
+        $transactionRequestType->setOrder($order);
+        $transactionRequestType->setPayment($paymentOne);
+        if($billInfo->billing_name)
+            $transactionRequestType->setBillTo($customerAddress);
+        if($billInfo->shipping_name)
+            $transactionRequestType->setBillTo($shipAddress);
+        $transactionRequestType->setCustomer($customerData);
+        // $transactionRequestType->addToTransactionSettings($duplicateWindowSetting);
+        // $transactionRequestType->addToUserFields($merchantDefinedField1);
+        // $transactionRequestType->addToUserFields($merchantDefinedField2);
+
+        // Assemble the complete transaction request
+        $request = new AnetAPI\CreateTransactionRequest();
+        $request->setMerchantAuthentication($merchantAuthentication);
+        $request->setRefId($refId);
+        $request->setTransactionRequest($transactionRequestType);
+
+        // Create the controller and get the response
+        $controller = new AnetController\CreateTransactionController($request);
+        $response = $controller->executeWithApiResponse(\net\authorize\api\constants\ANetEnvironment::SANDBOX);
+        
+
+        if ($response != null) {
+            // Check to see if the API request was successfully received and acted upon
+            if ($response->getMessages()->getResultCode() == "Ok") {
+                // Since the API request was successful, look for a transaction response
+                // and parse it to display the results of authorizing the card
+                $tresponse = $response->getTransactionResponse();
+            
+                if ($tresponse != null && $tresponse->getMessages() != null) {
+                    echo " Successfully created transaction with";
+                    $curBill->response = " Transaction ID: " . $tresponse->getTransId() . "\n";
+                    $curBill->response .= (" Transaction Response Code: " . $tresponse->getResponseCode() . "\n");
+                    $curBill->response .= (" Message Code: " . $tresponse->getMessages()[0]->getCode() . "\n");
+                    $curBill->response .= (" Auth Code: " . $tresponse->getAuthCode() . "\n");
+                    $curBill->response .= (" Description: " . $tresponse->getMessages()[0]->getDescription() . "\n");
+                    echo $curBill->response;
+
+                    $curBill->state = 2;
+                    $curBill->save();
+                } else {
+                    echo "Transaction Failed \n";
+                    if ($tresponse->getErrors() != null) {
+                        $curBill->response = " Error Code  : " . $tresponse->getErrors()[0]->getErrorCode() . "\n";
+                        $curBill->response .= (" Error Message : " . $tresponse->getErrors()[0]->getErrorText() . "\n");
+                        echo $curBill->response;
+                    }
+                    $curBill->state = 1;
+                    $curBill->save();
+                }
+                // Or, print errors if the API request wasn't successful
+            } else {
+                echo "Transaction Failed \n";
+                $tresponse = $response->getTransactionResponse();
+            
+                if ($tresponse != null && $tresponse->getErrors() != null) {
+                    $curBill->response = " Error Code  : " . $tresponse->getErrors()[0]->getErrorCode() . "\n";
+                    $curBill->response .= (" Error Message : " . $tresponse->getErrors()[0]->getErrorText() . "\n");
+                    echo $curBill->response;
+                } else {
+                    $curBill->response = " Error Code  : " . $response->getMessages()->getMessage()[0]->getCode() . "\n";
+                    $curBill->response .= (" Error Message : " . $response->getMessages()->getMessage()[0]->getText() . "\n");
+                    echo $curBill->response;
+                }
+                $curBill->state = 1;
+                $curBill->save();
+            }
+        } else {
+            echo  "No response returned \n";
+        }
+
+        return $response;
     }
 }
