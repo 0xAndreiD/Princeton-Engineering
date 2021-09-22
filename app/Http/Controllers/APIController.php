@@ -693,7 +693,7 @@ class APIController extends Controller
 
                         if($billInfo->send_invoice == 0){ // Directly authorize and charge funds
                             $this->createInvoice(0, $curBill, $company, $billInfo, $jobs, $curtime); // Unpaid invoice
-                            //$this->chargeCreditCard($curBill, $company, $billInfo, $amount, $jobs, $curtime);
+                            $this->chargeCreditCard($curBill, $company, $billInfo, $amount, $jobs, $curtime);
                         } else if($billInfo->send_invoice == 1) { // Send unpaid invoice first
                             $this->createInvoice(0, $curBill, $company, $billInfo, $jobs, $curtime); // Unpaid invoice
                             $this->sendBillMail(0, $curBill, $company, $billInfo, '');
