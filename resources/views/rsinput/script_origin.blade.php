@@ -75,6 +75,11 @@ function fcChangeType( conditionId, type ){
         </select>`);
         maxModuleNumChange(conditionId);
 
+        $(`#f-1-${conditionId}`).on('change', function() {
+            drawTrussGraph(window.conditionId);
+            drawStickGraph(window.conditionId);
+        });
+
         drawTrussGraph(conditionId);
     }    
     else if(type == 0) // Stick
@@ -115,6 +120,11 @@ function fcChangeType( conditionId, type ){
         </select>`);
         maxModuleNumChange(conditionId);
 
+        $(`#f-1-${conditionId}`).on('change', function() {
+            drawTrussGraph(window.conditionId);
+            drawStickGraph(window.conditionId);
+        });
+
         drawStickGraph(conditionId);
     } else if(type == 2){ // IBC 5%
         $(`#label-A-1-${conditionId}`).attr('rowspan', 10);
@@ -146,6 +156,11 @@ function fcChangeType( conditionId, type ){
                 event.preventDefault();
                 return false;
             }
+        });
+
+        $(`#f-1-${conditionId}`).on('change', function() {
+            drawTrussGraph(window.conditionId);
+            drawStickGraph(window.conditionId);
         });
 
         drawStickGraph(conditionId);
@@ -608,6 +623,7 @@ var drawTrussGraph = function( condId ) {
         }
         totalRoofLength += startModule;
         var moduleCount = parseInt($(`#f-1-${condId}`).val());
+        console.log('here', moduleCount);
         
         let moduleStartX = 0;
         var orientation = false;
