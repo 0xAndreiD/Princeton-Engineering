@@ -21,6 +21,7 @@ storage/*.key
 storage/input/
 storage/output/
 storage/db/
+storage/invoice/
 .env
 Homestead.yaml
 Homestead.json
