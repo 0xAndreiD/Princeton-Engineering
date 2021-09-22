@@ -291,53 +291,19 @@ ul.social li{
     <div style="max-width: 600px; margin: 0 auto;" class="email-container">
     	<!-- BEGIN BODY -->
       <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
-      	<tr>
-          <td valign="top" class="bg_white" style="padding: 1em 2.5em 0 2.5em;">
-          	<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
-          		<tr>
-          			<td class="logo" style="text-align: center;width: 20%;">
-					  	<img src="https://princeton.engineering/iRoof/public/img/logo.jpg" alt="iRoof Logo" style="width: 100px;"></img>
-			        </td>
-					<td style="text-align: center; width: 80%;">
-						<h2 style="font-family: 'Helvetica'; margin: 0;font-size: 22px; color: blue;">TectoniCorp, P. C.</h2>
-						<h2 style="font-family: 'Helvetica'; margin: 0;font-size: 22px; color: blue; line-height: initial;">Princeton Engineering</h2>
-						<h2 style="margin: 0;font-size: 16px; color: blue; ">
-							Solar, Structural, Electrical and Site Engineering
-						</h2>
-					</td>
-          		</tr>
-          	</table>
-          </td>
-	      </tr><!-- end tr -->
-		<tr>
-			<td style="text-align:center; width: 100%; font-size: 18px; color: black; padding-top: 10px;" class="hero bg_white">
-				<b>iRoof™</b> Residential Roof Framing Analysis for Solar Installations
-			</td>
-		</tr>
+
         <tr>
 			<td style="text-align:center; width: 100%; font-size: 20px; color: black; padding-top: 10px;" class="hero bg_white">
 				@if($type == 0)
-				A new invoice has been generated on {{ $issuedDate }}.
+				A new invoice has been generated on {{ $issuedDate }} for company {{ $company->company_number }}. {{ $company->company_name }}.
 				@elseif($type == 1)
-				Your payment to Princeton Engineering was failed.
+				The {{ $issuedDate }} payment from company {{ $company->company_number }}. {{ $company->company_name }} was failed.
 				@elseif($type == 2)
-				Your payment to Princeton Engineering was successful.
+				The {{ $issuedDate }} payment from company {{ $company->company_number }}. {{ $company->company_name }} was successful.
 				@endif
 			</td>
 		</tr>
 
-        <tr>
-			<td style="text-align:justify; width: 100%; font-size: 16px; color: black; padding-top: 10px;" class="hero bg_white">
-                @if($type == 0)
-				We're writing to let you know that your {{ $issuedDate }} Princeton Engineering payment(I-{{ $curBill->id }}), for company {{ $company->company_number }}. {{ $company->company_name }}, has been requested. The unpaid invoice is attached to this email.
-				@elseif($type == 1)
-				We're writing to let you know that your {{ $issuedDate }} Princeton Engineering payment(I-{{ $curBill->id }}), for company {{ $company->company_number }}. {{ $company->company_name }}, has failed. The unpaid invoice is attached to this email.
-                @elseif($type == 2)
-                We're writing to let you know that your {{ $issuedDate }} Princeton Engineering payment(I-{{ $curBill->id }}), for company {{ $company->company_number }}. {{ $company->company_name }}, has processed successfully. A total of ${{ $curBill->amount }} was charged to your card ************{{ $cardnumber }}. The paid invoice is attached to this email.
-                @endif
-			</td>
-		</tr>
-		
         <tr>
             <td valign="middle" class="hero bg_white" style="padding: 1em 0 0 0;">
               <table style="margin: 0 !important;">
@@ -358,52 +324,6 @@ ul.social li{
             </td>
         </tr><!-- end tr -->
         
-		@if($type == 0 || $type == 1)
-		<tr>
-            <td valign="middle" class="hero bg_white" style="padding: 1em 0 0 0;">
-              <table style="margin: 0 !important;">
-                  <tr>
-                      <td>
-						<div><a href="https://princeton.engineering/iRoof/bills" style="padding: 15px; border-radius: 5px; background-color: lightseagreen; color: white; font-size: 1em;"> VIEW & PAY INVOICE </a></div>
-                      </td>
-                  </tr>
-              </table>
-            </td>
-        </tr><!-- end tr -->
-        @endif
-
-		<tr>
-			<td valign="middle" class="hero bg_white" style="padding: 0 0 0 0;">
-				<table style="margin: 0 !important;">
-					<tr>
-						<td>
-							<div class="text" style="padding: 0 2.5em; text-align: left;">
-								<h3 style="color: black;"><b>Please do not reply this email.</b></h3>
-							</div>
-							<div class="text" style="padding: 0 2.5em; text-align: left;">
-								<h3 style="font-size: 15px; color: black;">If you need further assistance, email us at info@Princeton-Engineering.com.</h3>
-							</div>
-						</td>
-					</tr>
-				</table>
-			  </td>
-		</tr>
-		<tr>
-			<td valign="middle" class="hero bg_white" style="margin: 1em 0 4em 0; border-top: 1px solid blue;">
-				<table>
-					<tr>
-						<td>
-							<div class="text" style="text-align: center; ">
-								<h3 style="text-align:center; color: blue; margin: 0;"> 35091 Paxson Road - Round Hill, VA 20141 </h3>
-							</div>
-							<div class="text" style="text-align: center;">
-								<h3 style="text-align:center; color: blue; margin:0;"> tel: 540.313.5317 - fax: 877.455.5641 - www.Princeton-Engineering.com </h3>
-							</div>
-						</td>
-					</tr>
-				</table>
-			  </td>
-		</tr>
       </table>
     </div>
   </center>

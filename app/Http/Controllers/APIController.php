@@ -31,6 +31,8 @@ use DateTime;
 use DateTimeZone;
 use Mail;
 use DB;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 
 class APIController extends Controller
 {
@@ -633,10 +635,26 @@ class APIController extends Controller
 
                 if($checkDay) { // Bill only if today is bill day
                     // collect the jobs that need to be billed
-                    if($billInfo->billing_type == 0)
-                        $jobs = JobRequest::where('companyId', $company->id)->where('billed', '0')->where('projectState', '9')->get();
-                    else
-                        $jobs = JobRequest::where('companyId', $company->id)->where('billed', '0')->where('createdTime', '>=', $timeFrom)->where('createdTime', '<=', $timeTo)->get();
+                    if($billInfo->billing_type == 0){
+                        $jobs = JobRequest::leftjoin('users', function($join){
+                            $join->on('job_request.companyId', '=', 'users.companyid');
+                            $join->on('job_request.userId', '=', 'users.usernumber');
+                        })
+                        ->where('job_request.companyId', $company->id)->where('job_request.billed', '0')->where('job_request.projectState', '9')
+                        ->get(
+                            array('job_request.id as id', 'users.username as username', 'job_request.clientProjectName as projectname', 'job_request.clientProjectNumber as projectnumber', 'job_request.state as state', 'job_request.createdTime as createdtime', 'job_request.submittedTime as submittedtime')
+                        );
+                    }
+                    else{
+                        $jobs = JobRequest::leftjoin('users', function($join){
+                            $join->on('job_request.companyId', '=', 'users.companyid');
+                            $join->on('job_request.userId', '=', 'users.usernumber');
+                        })
+                        ->where('job_request.companyId', $company->id)->where('job_request.billed', '0')->where('job_request.createdTime', '>=', $timeFrom)->where('job_request.createdTime', '<=', $timeTo)
+                        ->get(
+                            array('job_request.id as id', 'users.username as username', 'job_request.clientProjectName as projectname', 'job_request.clientProjectNumber as projectnumber', 'job_request.state as state', 'job_request.createdTime as createdtime', 'job_request.submittedTime as submittedtime')
+                        );
+                    }
                     
                     if(count($jobs) > 0){
                         // calculate this month's billed jobs count
@@ -664,15 +682,21 @@ class APIController extends Controller
                             $jobIds[] = $job->id;
                         $curBill->jobIds = json_encode($jobIds);
                         $curBill->jobCount = count($jobs);
-                        $curBill->issuedAt = gmdate("Y-m-d\TH:i:s", time());
-                        if($billInfo->billing_type == 1)
-                            $curBill->issuedFrom = $dateFrom;
+                        $curBill->issuedAt = gmdate("Y-m-d\TH:i:s", $curtime);
+                        // if($billInfo->billing_type == 1)
+                        $curBill->issuedFrom = $dateFrom;
                         $curBill->issuedTo = $dateTo;
                         $curBill->state = 0;
+                        $curBill->notExceeded = $notExceeded;
+                        $curBill->exceeded = $exceeded;
                         $curBill->save();
 
                         if($billInfo->send_invoice == 0){ // Directly authorize and charge funds
-                            $this->chargeCreditCard($curBill, $company, $billInfo, $amount);
+                            $this->createInvoice(0, $curBill, $company, $billInfo, $jobs, $curtime); // Unpaid invoice
+                            $this->chargeCreditCard($curBill, $company, $billInfo, $amount, $jobs, $curtime);
+                        } else if($billInfo->send_invoice == 1) { // Send unpaid invoice first
+                            $this->createInvoice(0, $curBill, $company, $billInfo, $jobs, $curtime); // Unpaid invoice
+                            $this->sendBillMail(0, $curBill, $company, $billInfo, '');
                         }
                     }
                 }
@@ -681,11 +705,68 @@ class APIController extends Controller
     }
 
     /**
+     * Create the invoice and set the invoice filename to invoice field.
+     *
+     * @return Boolean
+     */
+    private function createInvoice($type, $curBill, $company, $billInfo, $jobs, $curtime){
+        $options = new Options();
+        $options->set('defaultFont', 'Helvetica');
+        $dompdf = new DOMPDF($options);
+        $dompdf->setPaper('A4', 'portrait');
+        
+        $html = view('pdf.invoice')
+                ->with('type', $type)
+                ->with('curBill', $curBill)
+                ->with('invoiceDate', gmdate("Y-m-d", $curtime))
+                ->with('company', $company)
+                ->with('billInfo', $billInfo)
+                ->with('jobs', $jobs)
+                ->render();
+
+        $dompdf->load_html($html);
+        $dompdf->render();
+        $output = $dompdf->output();
+
+        $filepath = storage_path('invoice') . '/' . $company->company_number . '. '. $company->company_name . ' ' . $curtime . '.pdf';
+        file_put_contents($filepath, $output);
+
+        $curBill->invoice = $company->company_number . '. '. $company->company_name . ' ' . $curtime . '.pdf';
+        $curBill->save();
+    }
+
+    /**
+     * Send bill notification to client / supers
+     *
+     * @return Boolean
+     */
+    private function sendBillMail($type, $curBill, $company, $billInfo, $error = ''){
+        $data = ['type' => $type, 'curBill' => $curBill, 'company' => $company, 'cardnumber' => substr($billInfo->card_number, -4), 'issuedDate' => date('Y-m-d', strtotime($curBill->issuedAt)),'error' => $error];
+        
+        if($company->company_email != ''){
+            $info = ['email' => $company->company_email, 'filename' => $curBill->invoice];
+            Mail::send('mail.billnotification', $data, function ($m) use ($info) {
+                $m->from(env('MAIL_FROM_ADDRESS'), 'Princeton Engineering')->to($info['email'])->subject('Important! iRoof Bill Notification.');
+                $m->attach(storage_path('invoice') . '/' . $info['filename']);
+            });
+        }
+
+        $supers = User::where('userrole', 2)->get();
+        foreach($supers as $super){
+            $info = ['email' => $super->email, 'filename' => $curBill->invoice];
+            Mail::send('mail.billsupernotify', $data, function ($m) use ($info) {
+                $m->from(env('MAIL_FROM_ADDRESS'), 'Princeton Engineering')->to($info['email'])->subject('Important! iRoof Bill Notification.');
+                $m->attach(storage_path('invoice') . '/' . $info['filename']);
+            });
+        }
+    }
+
+    /**
      * Authorize and Capture credit card payments
      *
      * @return Authorize.Net Response
      */
-    private function chargeCreditCard($curBill, $company, $billInfo, $amount)
+    private function chargeCreditCard($curBill, $company, $billInfo, $amount, $jobs, $curtime)
     {
         echo "Processing credit card payments for " . $company->company_number . ". " . $company->company_name . " with historyId: " . $curBill->id . "\n";
         /* Create a merchantAuthenticationType object with authentication details
@@ -803,32 +884,41 @@ class APIController extends Controller
                     $curBill->save();
 
                     $this->setBilled($curBill);
+                    $this->createInvoice(1, $curBill, $company, $billInfo, $jobs, $curtime); // Paid invoice
+                    $this->sendBillMail(2, $curBill, $company, $billInfo, '');
                 } else {
                     echo "Transaction Failed \n";
+                    $error = '';
                     if ($tresponse->getErrors() != null) {
                         $curBill->response = " Error Code  : " . $tresponse->getErrors()[0]->getErrorCode() . "\n";
                         $curBill->response .= (" Error Message : " . $tresponse->getErrors()[0]->getErrorText() . "\n");
+                        $error = $tresponse->getErrors()[0]->getErrorText();
                         echo $curBill->response;
                     }
                     $curBill->state = 1;
                     $curBill->save();
+                    $this->sendBillMail(1, $curBill, $company, $billInfo, $error);
                 }
                 // Or, print errors if the API request wasn't successful
             } else {
                 echo "Transaction Failed \n";
                 $tresponse = $response->getTransactionResponse();
             
+                $error = '';
                 if ($tresponse != null && $tresponse->getErrors() != null) {
                     $curBill->response = " Error Code  : " . $tresponse->getErrors()[0]->getErrorCode() . "\n";
                     $curBill->response .= (" Error Message : " . $tresponse->getErrors()[0]->getErrorText() . "\n");
+                    $error = $tresponse->getErrors()[0]->getErrorText();
                     echo $curBill->response;
                 } else {
                     $curBill->response = " Error Code  : " . $response->getMessages()->getMessage()[0]->getCode() . "\n";
                     $curBill->response .= (" Error Message : " . $response->getMessages()->getMessage()[0]->getText() . "\n");
+                    $error = $tresponse->getErrors()[0]->getErrorText();
                     echo $curBill->response;
                 }
                 $curBill->state = 1;
                 $curBill->save();
+                $this->sendBillMail(1, $curBill, $company, $billInfo, $error);
             }
         } else {
             echo  "No response returned \n";
@@ -844,7 +934,7 @@ class APIController extends Controller
      */
     private function setBilled($history){
         if($history && $history->jobIds){
-            $jobIds = json_decode($history->jobids);
+            $jobIds = json_decode($history->jobIds);
             foreach($jobIds as $id){
                 $job = JobRequest::where('id', $id)->first();
                 if($job){
