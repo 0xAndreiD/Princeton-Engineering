@@ -612,6 +612,8 @@ function saveBilling(){
     swal.showLoading();
 
     var data = {};
+    data.clientId = $("#id").val();
+
     data.billing_type = $("#billing_type").val();
     data.expected_jobs = $("#expectedjobs").val();
     data.base_fee = $("#basefee").val();

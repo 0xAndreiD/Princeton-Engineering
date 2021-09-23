@@ -15,13 +15,19 @@ use App\PermitInfo;
 use App\SealData;
 use App\SealObjects;
 use App\BillingInfo;
+use App\BillingHistory;
 use Kunnu\Dropbox\DropboxApp;
 use Kunnu\Dropbox\Dropbox;
 use Kunnu\Dropbox\DropboxFile;
 use Kunnu\Dropbox\Exceptions\DropboxClientException;
+use net\authorize\api\contract\v1 as AnetAPI;
+use net\authorize\api\controller as AnetController;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 
 use Imagick;
-
+use Response;
+use Mail;
 
 class CompanyController extends Controller
 {
@@ -896,4 +902,556 @@ class CompanyController extends Controller
     //         );
     //     echo json_encode($json_data);
     // }
+
+    /**
+     * Show billing history of all clients, with various features.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function bills(Request $request){
+        if(Auth::user()->userrole == 2){
+            $companyList = Company::orderBy('company_name', 'asc')->get();
+            return view('admin.bills.view')->with('companyList', $companyList);
+        } else if(Auth::user()->userrole == 1){
+            return view('clientadmin.bills.view');
+        }
+    }
+
+    /**
+     * Return the list of bills
+     *
+     * @return JSON
+     */
+    public function getBills(Request $request){
+        if(Auth::user()->userrole == 2){
+            $columns = array( 
+                0 =>'id', 
+                1 =>'companyname', 
+                2 =>'issuedDate',
+                3 =>'issuedFrom',
+                4 =>'issuedTo',
+                5 =>'jobCount',
+                6 =>'amount',
+                7 => 'state'
+            );
+            $handler = new BillingHistory;
+        } else {
+            $columns = array( 
+                0 =>'id', 
+                1 =>'issuedDate',
+                2 =>'issuedFrom',
+                3 =>'issuedTo',
+                4 =>'jobCount',
+                5 =>'amount',
+                6 => 'state'
+            );
+            $handler = BillingHistory::where('companyId', Auth::user()->companyid);
+        }
+        $totalData = BillingHistory::count();
+        $totalFiltered = $totalData; 
+
+        $limit = $request->input('length');
+        $start = $request->input('start');
+        $order = $columns[$request->input('order.0.column')];
+        $dir = $request->input('order.0.dir');
+
+        $handler = $handler->leftjoin("company_info", "company_info.id", "=", "billing_history.companyId");
+
+        if(!empty($request->input("columns.1.search.value")))
+            $handler = $handler->where('companyId', '=', $request->input("columns.1.search.value"));
+
+        if(empty($request->input('search.value')))
+        {            
+            $totalFiltered = $handler->count();
+            $bills = $handler->offset($start)
+                ->limit($limit)
+                ->orderBy($order,$dir)
+                ->get(
+                    array(
+                        'billing_history.id as id',
+                        'company_info.company_name as companyname',
+                        'billing_history.issuedAt as issuedAt', 'billing_history.issuedFrom as issuedFrom', 'billing_history.issuedTo as issuedTo', 'billing_history.jobCount as jobCount', 'billing_history.jobIds as jobIds', 'billing_history.amount as amount', 'billing_history.state as state',
+                    )
+                );
+        }
+        else {
+            $search = $request->input('search.value'); 
+            $bills =  $handler->where(function ($q) use ($search) {
+                            $q->where('billing_history.id','LIKE',"%{$search}%")
+                            ->orWhere('billing_history.jobCount', 'LIKE',"%{$search}%")
+                            ->orWhere('billing_history.issuedAt', 'LIKE',"%{$search}%");
+                        })
+                        ->offset($start)
+                        ->limit($limit)
+                        ->orderBy($order,$dir)
+                        ->get(
+                            array(
+                                array(
+                                    'billing_history.id as id',
+                                    'company_info.company_name as companyname',
+                                    'billing_history.issuedAt as issuedAt', 'billing_history.issuedFrom as issuedFrom', 'billing_history.issuedTo as issuedTo', 'billing_history.jobCount as jobCount', 'billing_history.jobIds as jobIds', 'billing_history.amount as amount', 'billing_history.state as state',
+                                )
+                            )
+                        );
+
+            $totalFiltered = $handler->where(function ($q) use ($search) {
+                            $q->where('billing_history.id','LIKE',"%{$search}%")
+                            ->orWhere('billing_history.jobCount', 'LIKE',"%{$search}%")
+                            ->orWhere('billing_history.issuedDate', 'LIKE',"%{$search}%");
+                        })
+                        ->count();
+        }
+
+        $data = array();
+
+        if(!empty($bills))
+        {
+            foreach ($bills as $bill)
+            {
+                $nestedData['id'] = $bill->id;
+                $nestedData['companyname'] = $bill->companyname;
+                $nestedData['issuedDate'] = $bill->issuedAt;
+                $nestedData['issuedFrom'] = $bill->issuedFrom;
+                $nestedData['issuedTo'] = $bill->issuedTo;
+                
+                $jobs = JobRequest::whereIn('id', json_decode($bill->jobIds))->where('billed', 1)->get('id');
+                
+                $nestedData['jobCount'] = count($jobs) . ' / ' . $bill->jobCount;
+                $nestedData['amount'] = '$' . $bill->amount;
+
+                if($bill->state == 0) { $badgeColor = 'danger'; $badgeTxt = 'Unpaid'; }
+                if($bill->state == 1) { $badgeColor = 'warning'; $badgeTxt = 'Failed'; }
+                if($bill->state == 2) { $badgeColor = 'success'; $badgeTxt = 'Paid'; }
+
+                if(Auth::user()->userrole == 2){
+                    $nestedData['state'] = "<span class='badge badge-{$badgeColor} dropdown-toggle job-dropdown' style='color: #fff;' id='state_{$bill->id}' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'> {$badgeTxt} </span>";
+                    $nestedData['state'] .= "<div class='dropdown-menu' aria-labelledby='state_{$bill->id}'>";
+                    $nestedData['state'] .= "<a class='dropdown-item' href='javascript:changeState(this, {$bill->id}, 0)' style='color: white; background-color: #e04f1a;'>Unpaid</a>";
+                    $nestedData['state'] .= "<a class='dropdown-item' href='javascript:changeState(this, {$bill->id}, 1)' style='color: white; background-color: rgb(255, 177, 25);'>Failed</a>";
+                    $nestedData['state'] .= "<a class='dropdown-item' href='javascript:changeState(this, {$bill->id}, 2)' style='color: white; background-color: #82b54b;'>Paid</a>";
+                    $nestedData['state'] .= "</div>";
+
+                    $nestedData['actions'] = "
+                    <div class='text-center' style='display: flex; align-items: center; justify-content: center;'>
+                        <a href='invoice?id={$bill['id']}' class='btn btn-warning mr-1' style='padding: 3px 4px;' target='_blank'>
+                            <i class='fa fa-download'></i>
+                        </a>
+                        <button type='button' class='btn btn-success mr-1' onclick='chargeNow(this, {$bill->id})' style='padding: 3px 4px;' " . ($bill->state == 2 || count($jobs) == $bill->jobCount ? "disabled" : "") . ">
+                            <i class='fa fa-money-check'></i>
+                        </button>
+                        <button type='button' class='btn btn-primary mr-1' onclick='markAsPaid(this, {$bill->id})' style='padding: 3px 4px;' " . ($bill->state == 2 ? "disabled" : "") . ">
+                            <i class='fa fa-check'></i>
+                        </button>
+                        <button type='button' class='btn btn-danger mr-1' onclick='delBill(this, {$bill->id})' style='padding: 3px 4px;'>
+                            <i class='fa fa-trash'></i>
+                        </button>
+                    </div>
+                    ";
+                } else {
+                    $nestedData['state'] = "<span class='badge badge-{$badgeColor}' style='white-space: pre-wrap; color: #fff;'> {$badgeTxt} </span>";
+                    $nestedData['actions'] = "
+                    <div class='text-center' style='display: flex; align-items: center; justify-content: center;'>
+                        <a href='invoice?id={$bill['id']}' class='btn btn-warning mr-1' style='padding: 3px 4px;' target='_blank'>
+                            <i class='fa fa-download'></i>
+                        </a>
+                        <button type='button' class='btn btn-success mr-1' onclick='chargeNow(this, {$bill->id})' style='padding: 3px 4px;' " . ($bill->state == 2 ? "disabled" : "") . ">
+                            <i class='fa fa-money-check'></i>
+                        </button>
+                    </div>
+                    ";
+                }
+                
+                $data[] = $nestedData;
+            }
+        }
+        $json_data = array(
+            "draw"            => intval($request->input('draw')),  
+            "recordsTotal"    => intval($totalData),  
+            "recordsFiltered" => intval($totalFiltered), 
+            "data"            => $data   
+            );
+        echo json_encode($json_data);
+    }
+
+    /**
+     * Return the invoice file pdf.
+     *
+     * @return FILE or Redirect
+     */
+    public function getInvoice(Request $request){
+        if(!empty($request['id'])){
+            $bill = BillingHistory::where('id', $request['id'])->first();
+            if($bill){
+                if($bill->invoice && $bill->invoice != ''){
+                    if(Auth::user()->userrole == 2 || Auth::user()->userrole == 1){
+                        if(Auth::user()->userrole == 1 && Auth::user()->companyid != $bill->companyId) // check permission
+                            return redirect('home');
+    
+                        if(Storage::disk('invoice')->exists($bill->invoice)){
+                            $path = storage_path('invoice') . '/' . $bill->invoice;
+                            
+                            $file = Storage::disk('invoice')->get($bill->invoice);
+                            $type = Storage::disk('invoice')->mimeType($bill->invoice);
+            
+                            $response = Response::make($file, 200);
+                            $response->header("Content-Type", $type);
+            
+                            return $response;
+                        } else
+                            abort(404);
+                    } else
+                        return redirect('home');
+                } else
+                    abort(404);
+            } else 
+                return redirect('home');
+        } else
+            return redirect('home');
+    }
+
+    /**
+     * Charge the payment.
+     *
+     * @return FILE or Redirect
+     */
+    public function chargeNow(Request $request){
+        if(!empty($request['id'])){
+            $bill = BillingHistory::where('id', $request['id'])->first();
+            if($bill){
+                if(Auth::user()->userrole == 2 || Auth::user()->userrole == 1){
+                    if(Auth::user()->userrole == 1 && Auth::user()->companyid != $bill->companyId)
+                        return response()->json(["success" => false, "message" => "You don't have any permission."]);
+
+                    $company = Company::where('id', $bill->companyId)->first();
+                    $billInfo = BillingInfo::where('clientId', $bill->companyId)->first();
+                    
+                    if($this->chargeCreditCard($bill, $company, $billInfo, $bill->amount, time()))
+                        return response()->json(["success" => true]);
+                    else
+                        return response()->json(["success" => false, "message" => "Transaction failed. Please check the error details from the email."]);
+                } else
+                    return response()->json(["success" => false, "message" => "You don't have any permission."]);
+            } else
+                return response()->json(["success" => false, "message" => "Cannot find the bill."]);
+        } else
+            return response()->json(["success" => false, "message" => "Empty Bill Id."]);
+    }
+
+    /**
+     * Create the invoice and set the invoice filename to invoice field.
+     *
+     * @return Boolean
+     */
+    private function createInvoice($type, $curBill, $company, $billInfo, $curtime){
+        $options = new Options();
+        $options->set('defaultFont', 'Helvetica');
+        $dompdf = new DOMPDF($options);
+        $dompdf->setPaper('A4', 'portrait');
+        
+        $jobs = JobRequest::whereIn('job_request.id', json_decode($curBill->jobIds))->leftjoin('users', function($join){
+                $join->on('job_request.companyId', '=', 'users.companyid');
+                $join->on('job_request.userId', '=', 'users.usernumber');
+            })->get(
+                array('job_request.id as id', 'users.username as username', 'job_request.clientProjectName as projectname', 'job_request.clientProjectNumber as projectnumber', 'job_request.state as state', 'job_request.createdTime as createdtime', 'job_request.submittedTime as submittedtime')
+            );
+        
+        $html = view('pdf.invoice')
+                ->with('type', $type)
+                ->with('curBill', $curBill)
+                ->with('invoiceDate', gmdate("Y-m-d", $curtime))
+                ->with('company', $company)
+                ->with('billInfo', $billInfo)
+                ->with('jobs', $jobs)
+                ->render();
+
+        $dompdf->load_html($html);
+        $dompdf->render();
+        $output = $dompdf->output();
+
+        $filepath = storage_path('invoice') . '/' . $company->company_number . '. '. $company->company_name . ' ' . $curtime . '.pdf';
+        file_put_contents($filepath, $output);
+
+        $curBill->invoice = $company->company_number . '. '. $company->company_name . ' ' . $curtime . '.pdf';
+        $curBill->save();
+    }
+
+    /**
+     * Send bill notification to client / supers
+     *
+     * @return Boolean
+     */
+    private function sendBillMail($type, $curBill, $company, $billInfo, $error = ''){
+        $data = ['type' => $type, 'curBill' => $curBill, 'company' => $company, 'cardnumber' => substr($billInfo->card_number, -4), 'issuedDate' => date('Y-m-d', strtotime($curBill->issuedAt)),'error' => $error];
+        
+        if($company->company_email != ''){
+            $info = ['email' => $company->company_email, 'filename' => $curBill->invoice];
+            Mail::send('mail.billnotification', $data, function ($m) use ($info) {
+                $m->from(env('MAIL_FROM_ADDRESS'), 'Princeton Engineering')->to($info['email'])->subject('Important! iRoof Bill Notification.');
+                $m->attach(storage_path('invoice') . '/' . $info['filename']);
+            });
+        }
+
+        $supers = User::where('userrole', 2)->get();
+        foreach($supers as $super){
+            $info = ['email' => $super->email, 'filename' => $curBill->invoice];
+            Mail::send('mail.billsupernotify', $data, function ($m) use ($info) {
+                $m->from(env('MAIL_FROM_ADDRESS'), 'Princeton Engineering')->to($info['email'])->subject('Important! iRoof Bill Notification.');
+                $m->attach(storage_path('invoice') . '/' . $info['filename']);
+            });
+        }
+    }
+
+    /**
+     * Authorize and Capture credit card payments
+     *
+     * @return Authorize.Net Response
+     */
+    private function chargeCreditCard($curBill, $company, $billInfo, $amount, $curtime)
+    {
+        //echo "Processing credit card payments for " . $company->company_number . ". " . $company->company_name . " with historyId: " . $curBill->id . "\n";
+        /* Create a merchantAuthenticationType object with authentication details
+        retrieved from the constants file */
+        $merchantAuthentication = new AnetAPI\MerchantAuthenticationType();
+        $merchantAuthentication->setName(env('MERCHANT_LOGIN_ID'));
+        $merchantAuthentication->setTransactionKey(env('MERCHANT_TRANSACTION_KEY'));
+        
+        // Set the transaction's refId
+        $refId = 'ref' . time();
+
+        // Create the payment data for a credit card
+        $creditCard = new AnetAPI\CreditCardType();
+        $creditCard->setCardNumber(str_replace(' ', '', $billInfo->card_number));
+        $creditCard->setExpirationDate($billInfo->expiration_date);
+        $creditCard->setCardCode($billInfo->security_code);
+
+        // Add the payment data to a paymentType object
+        $paymentOne = new AnetAPI\PaymentType();
+        $paymentOne->setCreditCard($creditCard);
+
+        // Create order information
+        $order = new AnetAPI\OrderType();
+        $order->setInvoiceNumber($curBill->id);
+        $order->setDescription("iRoof Engineering Services");
+
+        if($billInfo->billing_name != ''){
+            // Set the customer's Bill To address
+            $customerAddress = new AnetAPI\CustomerAddressType();
+            $customerAddress->setFirstName($billInfo->billing_name);
+            $customerAddress->setCompany($company->legal_name);
+            $customerAddress->setAddress($billInfo->billing_address);
+            $customerAddress->setCity($billInfo->billing_city);
+            $customerAddress->setState($billInfo->billing_state);
+            $customerAddress->setZip($billInfo->billing_zip);
+            $customerAddress->setCountry("USA");
+        }
+
+        if($billInfo->shipping_name != ''){
+            // Set the customer's Ship To address
+            $shipAddress = new AnetAPI\CustomerAddressType();
+            $shipAddress->setFirstName($billInfo->shipping_name);
+            $shipAddress->setCompany("Princeton Engineering");
+            $shipAddress->setAddress($billInfo->shipping_address);
+            $shipAddress->setCity($billInfo->shipping_city);
+            $shipAddress->setState($billInfo->shipping_state);
+            $shipAddress->setZip($billInfo->shipping_zip);
+            $shipAddress->setCountry("USA");
+        }
+
+        // Set the customer's identifying information
+        $customerData = new AnetAPI\CustomerDataType();
+        $customerData->setType("individual");
+        $customerData->setId($company->company_number);
+        $customerData->setEmail($company->company_email);
+
+        // Add values for transaction settings
+        // $duplicateWindowSetting = new AnetAPI\SettingType();
+        // $duplicateWindowSetting->setSettingName("duplicateWindow");
+        // $duplicateWindowSetting->setSettingValue("60");
+
+        // Add some merchant defined fields. These fields won't be stored with the transaction,
+        // but will be echoed back in the response.
+        // $merchantDefinedField1 = new AnetAPI\UserFieldType();
+        // $merchantDefinedField1->setName("customerLoyaltyNum");
+        // $merchantDefinedField1->setValue("1128836273");
+
+        // $merchantDefinedField2 = new AnetAPI\UserFieldType();
+        // $merchantDefinedField2->setName("favoriteColor");
+        // $merchantDefinedField2->setValue("blue");
+
+        // Create a TransactionRequestType object and add the previous objects to it
+        $transactionRequestType = new AnetAPI\TransactionRequestType();
+        $transactionRequestType->setTransactionType("authCaptureTransaction");
+        $transactionRequestType->setAmount($amount);
+        $transactionRequestType->setOrder($order);
+        $transactionRequestType->setPayment($paymentOne);
+        if($billInfo->billing_name)
+            $transactionRequestType->setBillTo($customerAddress);
+        if($billInfo->shipping_name)
+            $transactionRequestType->setBillTo($shipAddress);
+        $transactionRequestType->setCustomer($customerData);
+        // $transactionRequestType->addToTransactionSettings($duplicateWindowSetting);
+        // $transactionRequestType->addToUserFields($merchantDefinedField1);
+        // $transactionRequestType->addToUserFields($merchantDefinedField2);
+
+        // Assemble the complete transaction request
+        $request = new AnetAPI\CreateTransactionRequest();
+        $request->setMerchantAuthentication($merchantAuthentication);
+        $request->setRefId($refId);
+        $request->setTransactionRequest($transactionRequestType);
+
+        // Create the controller and get the response
+        $controller = new AnetController\CreateTransactionController($request);
+        $response = $controller->executeWithApiResponse(\net\authorize\api\constants\ANetEnvironment::SANDBOX);
+        
+
+        if ($response != null) {
+            // Check to see if the API request was successfully received and acted upon
+            if ($response->getMessages()->getResultCode() == "Ok") {
+                // Since the API request was successful, look for a transaction response
+                // and parse it to display the results of authorizing the card
+                $tresponse = $response->getTransactionResponse();
+            
+                if ($tresponse != null && $tresponse->getMessages() != null) {
+                    //echo " Successfully created transaction with";
+                    $curBill->response = " Transaction ID: " . $tresponse->getTransId() . "\n";
+                    $curBill->response .= (" Transaction Response Code: " . $tresponse->getResponseCode() . "\n");
+                    $curBill->response .= (" Message Code: " . $tresponse->getMessages()[0]->getCode() . "\n");
+                    $curBill->response .= (" Auth Code: " . $tresponse->getAuthCode() . "\n");
+                    $curBill->response .= (" Description: " . $tresponse->getMessages()[0]->getDescription() . "\n");
+                    //echo $curBill->response;
+
+                    $curBill->state = 2;
+                    $curBill->save();
+
+                    $this->setBilled($curBill);
+                    $this->createInvoice(1, $curBill, $company, $billInfo, $curtime); // Paid invoice
+                    $this->sendBillMail(2, $curBill, $company, $billInfo, '');
+                    return true;
+                } else {
+                    //echo "Transaction Failed \n";
+                    $error = '';
+                    if ($tresponse->getErrors() != null) {
+                        $curBill->response = " Error Code  : " . $tresponse->getErrors()[0]->getErrorCode() . "\n";
+                        $curBill->response .= (" Error Message : " . $tresponse->getErrors()[0]->getErrorText() . "\n");
+                        $error = $tresponse->getErrors()[0]->getErrorText();
+                        //echo $curBill->response;
+                    }
+                    $curBill->state = 1;
+                    $curBill->save();
+                    $this->sendBillMail(1, $curBill, $company, $billInfo, $error);
+                    return false;
+                }
+                // Or, print errors if the API request wasn't successful
+            } else {
+                //echo "Transaction Failed \n";
+                $tresponse = $response->getTransactionResponse();
+            
+                $error = '';
+                if ($tresponse != null && $tresponse->getErrors() != null) {
+                    $curBill->response = " Error Code  : " . $tresponse->getErrors()[0]->getErrorCode() . "\n";
+                    $curBill->response .= (" Error Message : " . $tresponse->getErrors()[0]->getErrorText() . "\n");
+                    $error = $tresponse->getErrors()[0]->getErrorText();
+                    //echo $curBill->response;
+                } else {
+                    $curBill->response = " Error Code  : " . $response->getMessages()->getMessage()[0]->getCode() . "\n";
+                    $curBill->response .= (" Error Message : " . $response->getMessages()->getMessage()[0]->getText() . "\n");
+                    $error = $tresponse->getErrors()[0]->getErrorText();
+                    //echo $curBill->response;
+                }
+                $curBill->state = 1;
+                $curBill->save();
+                $this->sendBillMail(1, $curBill, $company, $billInfo, $error);
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Set job_request jobs' billed to 1
+     *
+     * @return Boolean
+     */
+    private function setBilled($history){
+        if($history && $history->jobIds){
+            $jobIds = json_decode($history->jobIds);
+            foreach($jobIds as $id){
+                $job = JobRequest::where('id', $id)->first();
+                if($job){
+                    $job->billed = 1;
+                    $job->save();
+                }
+            }
+            return true;
+        } else
+            return false;
+    }
+
+    /**
+     * Set job_request jobs' billed to 1
+     *
+     * @return JSON
+     */
+    public function markAsPaid(Request $request){
+        if(Auth::user()->userrole == 2){
+            if(!empty($request['id'])){
+                $bill = BillingHistory::where('id', $request['id'])->first();
+                if($bill){
+                    $jobs = JobRequest::whereIn('id', json_decode($bill->jobIds))->get();
+                    foreach($jobs as $job){
+                        $job->billed = 1;
+                        $job->save();
+                    }
+                    $bill->state = 2;
+                    $bill->save();
+                    return response()->json(["success" => true]);
+                } else 
+                    return response()->json(["success" => false, "message" => "Cannot find the bill."]);
+            } else
+                return response()->json(["success" => false, "message" => "Empty bill id."]);
+        } else
+            return response()->json(["success" => false, "message" => "You don't have any permission."]);
+    }
+
+    /**
+     * Set job_request jobs' billed to 1
+     *
+     * @return JSON
+     */
+    public function delBill(Request $request){
+        if(Auth::user()->userrole == 2){
+            if(!empty($request['id'])){
+                $bill = BillingHistory::where('id', $request['id'])->first();
+                if($bill){
+                    $bill->delete();
+                    return response()->json(["success" => true]);
+                } else 
+                    return response()->json(["success" => false, "message" => "Cannot find the bill."]);
+            } else
+                return response()->json(["success" => false, "message" => "Empty bill id."]);
+        } else
+            return response()->json(["success" => false, "message" => "You don't have any permission."]);
+    }
+
+    /**
+     * Set job_request jobs' billed to 1
+     *
+     * @return JSON
+     */
+    public function setBillState(Request $request){
+        if(Auth::user()->userrole == 2){
+            if(!empty($request['id']) && isset($request['state'])){
+                $bill = BillingHistory::where('id', $request['id'])->first();
+                if($bill){
+                    $bill->state = $request['state'];
+                    $bill->save();
+                    return response()->json(["success" => true]);
+                } else 
+                    return response()->json(["success" => false, "message" => "Cannot find the bill."]);
+            } else
+                return response()->json(["success" => false, "message" => "Empty bill id."]);
+        } else
+            return response()->json(["success" => false, "message" => "You don't have any permission."]);
+    }
 }
