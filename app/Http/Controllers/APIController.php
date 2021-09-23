@@ -604,9 +604,8 @@ class APIController extends Controller
                     $checkDay = true;
                     $dateFrom = date('Y-m-d', strtotime('-7 day', $curtime));
                     $dateTo = date('Y-m-d', strtotime('-1 day', $curtime));
-                    $timeFrom = date('Y-m-d H:i:s', strtotime('-7 day', $curtime));
-                    $timeTo = strtotime('-1 day', $curtime);
-                    $timeTo = date('Y-m-d H:i:s', strtotime('+23 hour +59 minutes +59 seconds', $timeTo));
+                    $timeFrom = date('Y-m-d', strtotime('-7 day', $curtime)) . ' 00:00:00';
+                    $timeTo = date('Y-m-d', strtotime('-1 day', $curtime)) . ' 23:59:59';
                 } else if($billInfo->billing_period == 1 && $weekday == $billInfo->billing_day){ // biweekly
                     $lastbilled = BillingHistory::where('companyId', $company->id)->orderBy('issuedAt', 'desc')->first();
                     if(!$lastbilled)
@@ -620,17 +619,15 @@ class APIController extends Controller
                     if($checkDay == true){
                         $dateFrom = date('Y-m-d', strtotime('-14 day', $curtime));
                         $dateTo = date('Y-m-d', strtotime('-1 day', $curtime));
-                        $timeFrom = date('Y-m-d H:i:s', strtotime('-14 day', $curtime));
-                        $timeTo = strtotime('-1 day', $curtime);
-                        $timeTo = date('Y-m-d H:i:s', strtotime('+23 hour +59 minutes +59 seconds', $timeTo));
+                        $timeFrom = date('Y-m-d', strtotime('-14 day', $curtime)) . ' 00:00:00';
+                        $timeTo = date('Y-m-d', strtotime('-1 day', $curtime)) . ' 23:59:59';
                     }
                 } if($billInfo->billing_period == 2 && $monthday == $billInfo->billing_day){ // monthly
                     $checkDay = true;
                     $dateFrom = date('Y-m-d', strtotime('-1 month', $curtime));
                     $dateTo = date('Y-m-d', strtotime('-1 day', $curtime));
-                    $timeFrom = date('Y-m-d H:i:s', strtotime('-1 month', $curtime));
-                    $timeTo = strtotime('-1 day', $curtime);
-                    $timeTo = date('Y-m-d H:i:s', strtotime('+23 hour +59 minutes +59 seconds', $timeTo));
+                    $timeFrom = date('Y-m-d', strtotime('-1 month', $curtime));
+                    $timeTo = date('Y-m-d', strtotime('-1 day', $curtime)) . ' 23:59:59';
                 } 
 
                 if($checkDay) { // Bill only if today is bill day
@@ -659,7 +656,7 @@ class APIController extends Controller
                     if(count($jobs) > 0){
                         // calculate this month's billed jobs count
                         $month = date('m');
-                        $histories = BillingHistory::whereRaw('Month(issuedAt) = '.$month)->where('state', 2)->get();
+                        $histories = BillingHistory::where('companyId', $company->id)->whereRaw('Month(issuedAt) = '.$month)->where('state', 2)->get();
                         $billedCount = 0;
                         foreach($histories as $history)
                             $billedCount += $history->jobCount;

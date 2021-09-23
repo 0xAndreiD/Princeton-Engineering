@@ -94,6 +94,11 @@ return [
             'root' => storage_path('upload'),
         ],
 
+        'invoice' => [
+            'driver' => 'local',
+            'root' => storage_path('invoice'),
+        ],
+
     ],
 
 ];

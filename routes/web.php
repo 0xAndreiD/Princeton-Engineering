@@ -57,6 +57,15 @@ Route::post('/saveBillingInfo', 'CompanyController@saveBillingInfo')->name('save
 // Company Info
 Route::get('/companyInfo', 'CompanyController@companyInfo')->name('companyInfo');
 
+// Company Bills
+Route::get('/bills', 'CompanyController@bills')->name('bills');
+Route::post('/getBills', 'CompanyController@getBills')->name('getBills');
+Route::get('/invoice', 'CompanyController@getInvoice')->name('invoice');
+Route::post('/chargeNow', 'CompanyController@chargeNow')->name('chargeNow');
+Route::post('/markAsPaid', 'CompanyController@markAsPaid')->name('markAsPaid');
+Route::post('/delBill', 'CompanyController@delBill')->name('delBill');
+Route::post('/setBillState', 'CompanyController@setBillState')->name('setBillState');
+
 // Project List Page
 Route::get('/projectlist', 'GeneralController@projectList')->name('projectlist');
 Route::get('/requestFile', 'GeneralController@requestFile')->name('requestFile');

@@ -157,6 +157,13 @@
                                 <span class="nav-main-link-name">Project list</span>
                             </a>
                         </li>
+                        <li class="nav-main-heading">Financial</li>
+                        <li class="nav-main-item">
+                            <a class="nav-main-link" href="{{ route('bills') }}">
+                                <i class="nav-main-link-icon fa fa-money-bill"></i>
+                                <span class="nav-main-link-name">Bills</span>
+                            </a>
+                        </li>
                         <li class="nav-main-heading">Standard Products</li>
                         <li class="nav-main-item">
                             <a class="nav-main-link" href="{{ route('standardModule') }}">
