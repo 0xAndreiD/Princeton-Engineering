@@ -541,7 +541,7 @@ $.ajax({
                 $("#send_invoice").val(res.data.send_invoice);
                 $("#block_on_fail").val(res.data.block_on_fail);
                 $("#block_days_after").val(res.data.block_days_after);
-                if(res.data.block_on_fail)
+                if(res.data.block_on_fail == 1)
                     $("#block_days_after")[0].disabled = false;
                 if(res.data.billing_period == 0){
                     $("#bill-weekly")[0].checked = true;
