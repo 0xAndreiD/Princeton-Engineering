@@ -3429,7 +3429,7 @@ $(document).ready(function() {
                 } else {
                     // error handling
                     swal.fire({ title: "Error",
-                        text: "Error happened while processing. Please try again later.",
+                        text: res.message,
                         icon: "error",
                         confirmButtonText: `OK` });
                 }

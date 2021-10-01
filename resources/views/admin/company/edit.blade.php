@@ -235,7 +235,7 @@
                                 <input type="text" style="border: 1px solid pink;" class="form-control" id="basefee" name="basefee" placeholder="ex: 0.00">
                             </div>
                             <div class="form-group">
-                                <label for="extrafee">Fee per base number of jobs <span class="text-danger">*</span></label>
+                                <label for="extrafee">Fee per job in excess of Base <span class="text-danger">*</span></label>
                                 <input type="text" style="border: 1px solid pink;" class="form-control" id="extrafee" name="extrafee" placeholder="ex: 0.00">
                             </div>
                             <div class="form-group">
@@ -247,10 +247,14 @@
                             </div>
                             <div class="form-group">
                                 <label for="block_on_fail">Block features on bill failure <span class="text-danger">*</span></label><br/>
-                                <select style="border: 1px solid pink;" class="form-control" id="block_on_fail" name="block_on_fail">
+                                <select style="border: 1px solid pink;" class="form-control" id="block_on_fail" name="block_on_fail" onchange="onBlockChange()">
                                     <option value="0"> No </option>
                                     <option value="1"> Yes </option>
                                 </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="block_days_after">Block features after * days<span class="text-danger">*</span></label>
+                                <input type="text" style="border: 1px solid pink;" class="form-control" id="block_days_after" name="block_days_after" placeholder="ex: 3" disabled>
                             </div>
                             <div class="form-group">
                                 <label>Bill Day <span class="text-danger">*</span></label><br/>

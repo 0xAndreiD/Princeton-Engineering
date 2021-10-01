@@ -146,4 +146,62 @@ function changeState(obj, id, state){
     });
 }
 
+function editBill(obj, id){
+    $('#billmodal').modal('toggle');
+    $.post("getBillData", {id: id}, function(result){
+        if (result.success && result.data){
+            $("#id").val(result.data.id);
+            $("#company").val(result.data.companyId);
+            $("#issuedAt").val(result.data.issuedAt);
+            $("#issuedFrom").val(result.data.issuedFrom);
+            $("#issuedTo").val(result.data.issuedTo);
+            $("#jobCount").val(result.data.jobCount);
+            let jobIds = JSON.parse(result.data.jobIds);
+            $("#jobIds").val(jobIds.join(','));
+            $("#amount").val(result.data.amount);
+            $("#state").val(result.data.state);
+        }
+    });
+}
+
+function saveBill(){
+    let data = {};
+    data.id = $("#id").val();
+    data.companyId = $("#company").val();
+    data.issuedAt = $("#issuedAt").val();
+    data.issuedFrom = $("#issuedFrom").val();
+    data.issuedTo = $("#issuedTo").val();
+    data.jobCount = $("#jobCount").val();
+    data.jobIds = $("#jobIds").val().split(',');
+    data.amount = $("#amount").val();
+    data.state = $("#state").val();
+    data.updatePDF = $("#updatePDF")[0].checked;
+
+    swal.fire({ title: "Please wait...", showConfirmButton: false });
+    swal.showLoading();
+    $.post("saveBill", data, function(result){
+        swal.close();
+        if (result.success){
+            $("#infos").DataTable().draw(false);
+            toast.fire('Success', 'The bill is saved.', 'success');
+        } else {
+            toast.fire('Error', result.message, 'error');
+        }
+    });
+}
+
+function addBill(){
+    $('select#company').val("1").trigger('change');
+    $("#issuedAt").val('');
+    $("#issuedFrom").val('');
+    $("#issuedTo").val('');
+    $("#jobCount").val('');
+    $("#jobIds").val('');
+    $("#amount").val('');
+    $("#state").val('0').trigger('change');
+    $("#updatePDF")[0].checked = true;
+
+    $('#billmodal').modal('toggle');
+}
+
 </script>

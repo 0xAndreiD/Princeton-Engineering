@@ -540,6 +540,9 @@ $.ajax({
                 $("#extrafee").val(res.data.extra_fee);
                 $("#send_invoice").val(res.data.send_invoice);
                 $("#block_on_fail").val(res.data.block_on_fail);
+                $("#block_days_after").val(res.data.block_days_after);
+                if(res.data.block_on_fail)
+                    $("#block_days_after")[0].disabled = false;
                 if(res.data.billing_period == 0){
                     $("#bill-weekly")[0].checked = true;
                     changeBillPeriod(0);
@@ -620,6 +623,7 @@ function saveBilling(){
     data.extra_fee = $("#extrafee").val();
     data.send_invoice = $("#send_invoice").val();
     data.block_on_fail = $("#block_on_fail").val();
+    data.block_days_after = $("#block_days_after").val();
     if($("#bill-weekly")[0].checked == true)
         data.billing_period = 0;
     else if($("#bill-biweekly")[0].checked == true)
@@ -729,6 +733,13 @@ function changeBillPeriod(type){
         $("#weekday-picker").css("display", "none");
         $("#billday-input").css("display", "block");
     }
+}
+
+function onBlockChange(){
+    if($("#block_on_fail").val() == 0){
+        $("#block_days_after")[0].disabled = true;
+    } else
+        $("#block_days_after")[0].disabled = false;
 }
 
 </script>
