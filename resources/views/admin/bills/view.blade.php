@@ -24,6 +24,13 @@
     <div class="block block-rounded block-bordered">
         <div class="block-header block-header-default">
             <h3 class="block-title">Client Bills</h3>
+            <div class="block-options">
+                <button type="button" class="btn-block-option" 
+                    data-toggle='modal' data-target='#modal-block-normal'
+                    onclick="addBill()">
+                    <i class="fa fa-plus"></i> Add Bill
+                </button>
+            </div>
         </div>
         <div class="block-content block-content-full">
             <div class="table-responsive">
@@ -57,7 +64,8 @@
                             <th></th>
                             <th></th>
                             <th style="display: flex; align-items: center; justify-content: center;">
-                                <span class="ml-1" style='writing-mode: vertical-lr;width: 17px;transform: rotateZ(180deg);'>Invoice</span>
+                                <span class="ml-2" style='writing-mode: vertical-lr;width: 17px;transform: rotateZ(180deg);'>Edit</span>
+                                <span class="ml-2" style='writing-mode: vertical-lr;width: 17px;transform: rotateZ(180deg);'>Invoice</span>
                                 <span class="ml-2" style='writing-mode: tb-rl;width: 26px;transform: rotateZ(180deg);'>Charge Now</span>
                                 <span class="ml-2" style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 21px;'>Mark As Paid</span>
                                 <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 29px;'>Delete</span>
@@ -66,6 +74,82 @@
                     </thead>
                 </table>
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bill Management Modal -->
+<div class="modal" id="billmodal" tabindex="-1" role="dialog" aria-labelledby="billmodal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form class="js-validation" onsubmit="return false;" method="POST" id="billUpdateForm">
+                <div class="block block-themed block-transparent mb-0">
+                    <div class="block-header bg-primary-dark">
+                        <h3 class="block-title">Invoice Details</h3>
+                        <div class="block-options">
+                            <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                                <i class="fa fa-fw fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="block-content">
+                        <div class="row items-push">
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label for="company">Company <span class="text-danger">*</span></label><br/>
+                                    <select class="form-control" id="company" name="company">
+                                        @foreach ($companyList as $company)
+                                            <option value="{{$company->id}}">{{ $company->company_name }}</option>
+                                        @endforeach
+                                    </select>
+                                    <input type="hidden" id="id" name="id">
+                                </div>
+                                <div class="form-group">
+                                    <label for="issuedAt">Issued DateTime <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="issuedAt" name="issuedAt" placeholder="Enter Issued Datetime...">
+                                </div>
+                                <div class="form-group">
+                                    <label for="issuedFrom">Issued From <span class="text-danger">*</span></label>
+                                    <input type="date" class="form-control" id="issuedFrom" name="issuedFrom" placeholder="Enter Issued From...">
+                                </div>
+                                <div class="form-group">
+                                    <label for="issuedTo">Issued To <span class="text-danger">*</span></label>
+                                    <input type="date" class="form-control" id="issuedTo" name="issuedTo" placeholder="Enter Issued To...">
+                                </div>
+                                <div class="form-group">
+                                    <label for="jobCount">Job Counts <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="jobCount" name="jobCount" placeholder="Enter Job Counts...">
+                                </div>
+                                <div class="form-group">
+                                    <label for="jobIds">Job Ids <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="jobIds" name="jobIds" placeholder="Enter Job Ids with comma...">
+                                </div>
+                                <div class="form-group">
+                                    <label for="amount">Amount <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="amount" name="amount" placeholder="Enter total amount...">
+                                </div>
+                                <div class="form-group">
+                                    <label for="state">State <span class="text-danger">*</span></label><br/>
+                                    <select class="form-control" id="state" name="state">
+                                        <option value="0">Unpaid</option>
+                                        <option value="1">Failed</option>
+                                        <option value="2">Paid</option>
+                                        <option value="3">Deleted</option>
+                                    </select>
+                                </div>
+                                <div class="custom-control custom-checkbox custom-control-dark mb-1 mr-2">
+                                    <input type="checkbox" class="custom-control-input" id="updatePDF" name="updatePDF" checked>
+                                    <label style="cursor: pointer;" class="custom-control-label" for="updatePDF">Update Invoice PDF</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="block-content block-content-full text-right bg-light">
+                        <button type="button" class="btn btn-sm btn-light" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-sm btn-primary" onclick="saveBill()">Save</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>

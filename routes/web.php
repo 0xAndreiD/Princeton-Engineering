@@ -63,7 +63,9 @@ Route::post('/getBills', 'CompanyController@getBills')->name('getBills');
 Route::get('/invoice', 'CompanyController@getInvoice')->name('invoice');
 Route::post('/chargeNow', 'CompanyController@chargeNow')->name('chargeNow');
 Route::post('/markAsPaid', 'CompanyController@markAsPaid')->name('markAsPaid');
+Route::post('/getBillData', 'CompanyController@getBillData')->name('getBillData');
 Route::post('/delBill', 'CompanyController@delBill')->name('delBill');
+Route::post('/saveBill', 'CompanyController@saveBill')->name('saveBill');
 Route::post('/setBillState', 'CompanyController@setBillState')->name('setBillState');
 
 // Project List Page

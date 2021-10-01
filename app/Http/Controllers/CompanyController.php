@@ -773,6 +773,7 @@ class CompanyController extends Controller
                 if(isset($request['block_on_fail'])) $info->block_on_fail = $request['block_on_fail'];
                 if(isset($request['billing_period'])) $info->billing_period = $request['billing_period'];
                 if(isset($request['billing_day'])) $info->billing_day = $request['billing_day'];
+                if(isset($request['block_days_after'])) $info->block_days_after = $request['block_days_after'];
             }
 
             $info->save();
@@ -1022,6 +1023,7 @@ class CompanyController extends Controller
                 if($bill->state == 0) { $badgeColor = 'danger'; $badgeTxt = 'Unpaid'; }
                 if($bill->state == 1) { $badgeColor = 'warning'; $badgeTxt = 'Failed'; }
                 if($bill->state == 2) { $badgeColor = 'success'; $badgeTxt = 'Paid'; }
+                if($bill->state == 3) { $badgeColor = 'dark'; $badgeTxt = 'Deleted'; }
 
                 if(Auth::user()->userrole == 2){
                     $nestedData['state'] = "<span class='badge badge-{$badgeColor} dropdown-toggle job-dropdown' style='color: #fff;' id='state_{$bill->id}' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'> {$badgeTxt} </span>";
@@ -1033,13 +1035,16 @@ class CompanyController extends Controller
 
                     $nestedData['actions'] = "
                     <div class='text-center' style='display: flex; align-items: center; justify-content: center;'>
-                        <a href='invoice?id={$bill['id']}' class='btn btn-warning mr-1' style='padding: 3px 4px;' target='_blank'>
+                        <button type='button' class='btn btn-success mr-1' onclick='editBill(this, {$bill->id})' style='padding: 3px 4px;'>
+                            <i class='fa fa-pencil-alt'></i>
+                        </button>
+                        <a href='invoice?id={$bill['id']}' class='btn btn-warning mr-1' style='padding: 3px 4px; " . ($bill->state == 3 ? "opacity: 0.5; pointer-events: none;" : "") . "' target='_blank'>
                             <i class='fa fa-download'></i>
                         </a>
-                        <button type='button' class='btn btn-success mr-1' onclick='chargeNow(this, {$bill->id})' style='padding: 3px 4px;' " . ($bill->state == 2 || count($jobs) == $bill->jobCount ? "disabled" : "") . ">
+                        <button type='button' class='btn btn-success mr-1' onclick='chargeNow(this, {$bill->id})' style='padding: 3px 4px;' " . ($bill->state == 2 || $bill->state == 3 || count($jobs) == $bill->jobCount ? "disabled" : "") . ">
                             <i class='fa fa-money-check'></i>
                         </button>
-                        <button type='button' class='btn btn-primary mr-1' onclick='markAsPaid(this, {$bill->id})' style='padding: 3px 4px;' " . ($bill->state == 2 ? "disabled" : "") . ">
+                        <button type='button' class='btn btn-primary mr-1' onclick='markAsPaid(this, {$bill->id})' style='padding: 3px 4px;' " . ($bill->state == 2 || $bill->state == 3 ? "disabled" : "") . ">
                             <i class='fa fa-check'></i>
                         </button>
                         <button type='button' class='btn btn-danger mr-1' onclick='delBill(this, {$bill->id})' style='padding: 3px 4px;'>
@@ -1424,7 +1429,8 @@ class CompanyController extends Controller
             if(!empty($request['id'])){
                 $bill = BillingHistory::where('id', $request['id'])->first();
                 if($bill){
-                    $bill->delete();
+                    $bill->state = 3;
+                    $bill->save();
                     return response()->json(["success" => true]);
                 } else 
                     return response()->json(["success" => false, "message" => "Cannot find the bill."]);
@@ -1451,6 +1457,86 @@ class CompanyController extends Controller
                     return response()->json(["success" => false, "message" => "Cannot find the bill."]);
             } else
                 return response()->json(["success" => false, "message" => "Empty bill id."]);
+        } else
+            return response()->json(["success" => false, "message" => "You don't have any permission."]);
+    }
+
+    /**
+     * Set job_request jobs' billed to 1
+     *
+     * @return JSON
+     */
+    public function getBillData(Request $request){
+        if(Auth::user()->userrole == 2){
+            if(!empty($request['id'])){
+                $bill = BillingHistory::where('id', $request['id'])->first();
+                if($bill){
+                    return response()->json(["success" => true, "data" => $bill]);
+                } else 
+                    return response()->json(["success" => false, "message" => "Cannot find the bill."]);
+            } else
+                return response()->json(["success" => false, "message" => "Empty bill id."]);
+        } else
+            return response()->json(["success" => false, "message" => "You don't have any permission."]);
+    }
+
+    /**
+     * Set job_request jobs' billed to 1
+     *
+     * @return JSON
+     */
+    public function saveBill(Request $request){
+        if(Auth::user()->userrole == 2){
+            if(!empty($request['id'])){
+                $bill = BillingHistory::where('id', $request['id'])->first();
+                if($bill){
+                    $bill->companyId = $request['companyId'];
+                    $bill->issuedAt = $request['issuedAt'];
+                    $bill->issuedFrom = $request['issuedFrom'];
+                    $bill->issuedTo = $request['issuedTo'];
+                    $bill->jobCount = $request['jobCount'];
+                    $bill->jobIds = json_encode($request['jobIds']);
+                    $bill->amount = $request['amount'];
+                    $bill->state = $request['state'];
+                    $bill->save();
+
+                    if($request['updatePDF']){
+                        $company = Company::where('id', $bill->companyId)->first();
+                        $billInfo = BillingInfo::where('clientId', $bill->companyId)->first();
+                        if($bill->state == 2)
+                            $this->createInvoice(1, $bill, $company, $billInfo, strtotime($bill->issuedAt));
+                        else
+                            $this->createInvoice(0, $bill, $company, $billInfo, strtotime($bill->issuedAt));
+                    }
+
+                    return response()->json(["success" => true]);
+                } else 
+                    return response()->json(["success" => false, "message" => "Cannot find the bill."]);
+            } else{
+                $bill = new BillingHistory;
+                $bill->companyId = $request['companyId'];
+                if(!empty($request['issuedAt']))
+                    $bill->issuedAt = $request['issuedAt'];
+                else
+                    $bill->issuedAt = gmdate("Y-m-d\TH:i:s", $curtime);
+                $bill->issuedFrom = $request['issuedFrom'];
+                $bill->issuedTo = $request['issuedTo'];
+                $bill->jobCount = $request['jobCount'];
+                $bill->jobIds = json_encode($request['jobIds']);
+                $bill->amount = $request['amount'];
+                $bill->state = $request['state'];
+                $bill->save();
+
+                if($request['updatePDF']){
+                    $company = Company::where('id', $bill->companyId)->first();
+                    $billInfo = BillingInfo::where('clientId', $bill->companyId)->first();
+                    if($bill->state == 2)
+                        $this->createInvoice(1, $bill, $company, $billInfo, strtotime($bill->issuedAt));
+                    else
+                        $this->createInvoice(0, $bill, $company, $billInfo, strtotime($bill->issuedAt));
+                }
+                return response()->json(["success" => true]);
+            }
         } else
             return response()->json(["success" => false, "message" => "You don't have any permission."]);
     }

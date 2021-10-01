@@ -32,6 +32,8 @@ use App\PermitInfo;
 use App\PermitFields;
 use App\StructuralNotes;
 use App\TownNameLocations;
+use App\BillingInfo;
+use App\BillingHistory;
 use Kunnu\Dropbox\DropboxApp;
 use Kunnu\Dropbox\Dropbox;
 use Kunnu\Dropbox\DropboxFile;
@@ -427,6 +429,11 @@ class GeneralController extends Controller
      * @return JSON
      */
     public function submitInput(Request $request){
+        // Check if current user's company has outdated unpaid bill
+        if($this->checkOutdatedBill())
+            return response()->json(["message" => "Your company has outdated unpaid invoice. Please pay the bill before submitting jobs.", "status" => false]);
+
+        // Process to save the job data
         if($request['data'] && $request['data']['projectId'] && $request['data']['projectId'] > 0){
             $project = JobRequest::where('id', '=', $request['data']['projectId'])->first();
             if($project){
@@ -2765,5 +2772,31 @@ class GeneralController extends Controller
         $dist = rad2deg($dist);
         $miles = $dist * 60 * 1.1515;
         return $miles;
+      }
+
+      /**
+     * Check the user company's unpaid invoices and if they're outdated
+     *
+     * @return Boolean
+     */
+      private function checkOutdatedBill(){
+        if(Auth::user()->userrole == 2)
+            return false;
+        
+        $billInfo = BillingInfo::where('clientId', Auth::user()->companyid)->first();
+        if(!$billInfo || $billInfo->block_on_fail != 1 || $billInfo->block_days_after == 0 || $billInfo->card_number == '')
+            return false;
+        
+        $bills = BillingHistory::where('companyId', Auth::user()->companyid)->where('state', '<=', '1')->get();
+
+        $now = time();
+        foreach($bills as $bill){
+            $issuedAt = strtotime($bill->issuedAt);
+            if($now - $issuedAt > $billInfo->block_days_after * 24 * 60 * 60){
+                return true;
+            }
+        }
+
+        return false;
       }
 }
