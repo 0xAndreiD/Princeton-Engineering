@@ -62,11 +62,20 @@
                             <th></th>
                             <th></th>
                             <th></th>
-                            <th></th>
+                            <th class="searchHead">
+                                <span class='badge dropdown-toggle job-dropdown' id="stateFilter" style='background-color: #fff; color: #000;' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'> All </span>
+                                <div class='dropdown-menu' aria-labelledby='state_{$bill->id}'>
+                                    <a class='dropdown-item' href="javascript:changeStateFilter('')" style='background-color: #fff; color: #000;'>All</a>
+                                    <a class='dropdown-item' href='javascript:changeStateFilter(1)' style='color: white; background-color: #e04f1a;'>Unpaid</a>
+                                    <a class='dropdown-item' href='javascript:changeStateFilter(2)' style='color: white; background-color: rgb(255, 177, 25);'>Failed</a>
+                                    <a class='dropdown-item' href='javascript:changeStateFilter(3)' style='color: white; background-color: #82b54b;'>Paid</a>
+                                    <a class='dropdown-item' href='javascript:changeStateFilter(4)' style='color: white; background-color: #343a40;'>Deleted</a>
+                                </div>
+                            </th>
                             <th style="display: flex; align-items: center; justify-content: center;">
                                 <span class="ml-2" style='writing-mode: vertical-lr;width: 17px;transform: rotateZ(180deg);'>Edit</span>
                                 <span class="ml-2" style='writing-mode: vertical-lr;width: 17px;transform: rotateZ(180deg);'>Invoice</span>
-                                <span class="ml-2" style='writing-mode: tb-rl;width: 26px;transform: rotateZ(180deg);'>Charge Now</span>
+                                <span class="ml-2" style='writing-mode: tb-rl;width: 26px;transform: rotateZ(180deg);'>Pay Now</span>
                                 <span class="ml-2" style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 21px;'>Mark As Paid</span>
                                 <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 29px;'>Delete</span>
                             </th>
@@ -190,6 +199,15 @@
         $("#companyFilter").on('change', function() {
             table.column($(this).parent().index() + ':visible').search(this.value).draw();
         });
+
+        changeStateFilter = function(state){
+            if(state == '') { $("#stateFilter").css('background-color', '#fff'); $("#stateFilter").css('color', '#000'); $("#stateFilter").html('All'); }
+            else if(state == 1) { $("#stateFilter").css('background-color', '#e04f1a'); $("#stateFilter").css('color', '#fff'); $("#stateFilter").html('Unpaid'); }
+            else if(state == 2) { $("#stateFilter").css('background-color', 'rgb(255, 177, 25)'); $("#stateFilter").css('color', '#fff'); $("#stateFilter").html('Failed'); }
+            else if(state == 3) { $("#stateFilter").css('background-color', '#82b54b'); $("#stateFilter").css('color', '#fff'); $("#stateFilter").html('Paid'); }
+            else if(state == 4) { $("#stateFilter").css('background-color', '#343a40'); $("#stateFilter").css('color', '#fff'); $("#stateFilter").html('Deleted'); }
+            table.column('7:visible').search(state).draw();
+        }
     })
 </script>
 
