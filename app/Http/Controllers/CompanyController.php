@@ -960,6 +960,8 @@ class CompanyController extends Controller
 
         if(!empty($request->input("columns.1.search.value")))
             $handler = $handler->where('companyId', '=', $request->input("columns.1.search.value"));
+        if(!empty($request->input("columns.7.search.value")))
+            $handler = $handler->where('state', '=', $request->input("columns.7.search.value") - 1);
 
         if(empty($request->input('search.value')))
         {            

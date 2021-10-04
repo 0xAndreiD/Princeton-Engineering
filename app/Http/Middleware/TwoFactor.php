@@ -31,7 +31,7 @@ class TwoFactor
         }
         if(auth()->check() && $user->two_factor_code)
         {
-            if($user->two_factor_expires_at->lt(now()))
+            if($user->two_factor_expires_at && $user->two_factor_expires_at->lt(now()))
             {
                 $user->resetTwoFactorCode();
                 auth()->logout();
