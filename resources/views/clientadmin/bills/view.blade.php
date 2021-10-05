@@ -48,8 +48,8 @@
                             <th></th>
                             <th></th>
                             <th style="display: flex; align-items: center; justify-content: center;">
-                                <span class="ml-1" style='writing-mode: vertical-lr;width: 17px;transform: rotateZ(180deg);'>Invoice</span>
-                                <span class="ml-2" style='writing-mode: tb-rl;width: 26px;transform: rotateZ(180deg);'>Charge Now</span>
+                                <span class="ml-1" style='writing-mode: vertical-lr;width: 17px;transform: rotateZ(180deg);'>Open Invoice</span>
+                                <span class="ml-2" style='writing-mode: tb-rl;width: 26px;transform: rotateZ(180deg);'>Pay Now</span>
                             </th>
                         </tr>
                     </thead>

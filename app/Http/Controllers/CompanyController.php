@@ -962,6 +962,18 @@ class CompanyController extends Controller
             $handler = $handler->where('companyId', '=', $request->input("columns.1.search.value"));
         if(!empty($request->input("columns.7.search.value")))
             $handler = $handler->where('state', '=', $request->input("columns.7.search.value") - 1);
+        
+        // filter issued_from
+        if(!empty($request->input("issued_at")) && $request->input("issued_at") != "")
+            $handler = $handler->where('billing_history.issuedAt', 'LIKE', "{$request->input("issued_at")}%");
+        
+        // filter issued_from
+        if(!empty($request->input("issued_from")) && $request->input("issued_from") != "")
+            $handler = $handler->where('billing_history.issuedFrom', '>=', $request->input("issued_from"));
+        
+        // filter issued_to
+        if(!empty($request->input("issued_to")) && $request->input("issued_to") != "")
+            $handler = $handler->where('billing_history.issuedTo', '<=', $request->input("issued_to"));
 
         if(empty($request->input('search.value')))
         {            
