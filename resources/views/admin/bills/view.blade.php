@@ -57,9 +57,15 @@
                                     @endforeach
                                 </select>
                             </th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
+                            <th class="searchHead">
+                                <input type="text" class="js-flatpickr bg-white searchBox" id="issued_at" name="issued_at_datetime" placeholder="Select Date">
+                            </th>
+                            <th class="searchHead">
+                                <input type="text" class="js-flatpickr bg-white searchBox" id="issued_from" name="issued_from_datetime" placeholder="Select From">
+                            </th>
+                            <th class="searchHead">
+                                <input type="text" class="js-flatpickr bg-white searchBox" id="issued_to" name="issued_to_datetime" placeholder="Select To">
+                            </th>
                             <th></th>
                             <th></th>
                             <th class="searchHead">
@@ -74,7 +80,7 @@
                             </th>
                             <th style="display: flex; align-items: center; justify-content: center;">
                                 <span class="ml-2" style='writing-mode: vertical-lr;width: 17px;transform: rotateZ(180deg);'>Edit</span>
-                                <span class="ml-2" style='writing-mode: vertical-lr;width: 17px;transform: rotateZ(180deg);'>Invoice</span>
+                                <span class="ml-2" style='writing-mode: vertical-lr;width: 17px;transform: rotateZ(180deg);'>Open Invoice</span>
                                 <span class="ml-2" style='writing-mode: tb-rl;width: 26px;transform: rotateZ(180deg);'>Pay Now</span>
                                 <span class="ml-2" style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 21px;'>Mark As Paid</span>
                                 <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 29px;'>Delete</span>
@@ -181,7 +187,11 @@
                     "url": "{{ url('getBills') }}",
                     "dataType": "json",
                     "type": "POST",
-                    "data":{ _token: "{{csrf_token()}}"}
+                    "data": function(data){
+                        data.issued_at = $("#issued_at").val();
+                        data.issued_from = $("#issued_from").val();
+                        data.issued_to = $("#issued_to").val();
+                    }
                 },
             "columns": [
                 { "data": "id" },
@@ -208,6 +218,10 @@
             else if(state == 4) { $("#stateFilter").css('background-color', '#343a40'); $("#stateFilter").css('color', '#fff'); $("#stateFilter").html('Deleted'); }
             table.column('7:visible').search(state).draw();
         }
+
+        $("#issued_at, #issued_from, #issued_to").on('change', function() {
+            table.draw();
+        });
     })
 </script>
 
