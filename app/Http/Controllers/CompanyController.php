@@ -1408,7 +1408,7 @@ class CompanyController extends Controller
     }
 
     /**
-     * Set job_request jobs' billed to 1
+     * mark jobs as paid
      *
      * @return JSON
      */
@@ -1434,7 +1434,7 @@ class CompanyController extends Controller
     }
 
     /**
-     * Set job_request jobs' billed to 1
+     * set bill state to deleted
      *
      * @return JSON
      */
@@ -1455,7 +1455,7 @@ class CompanyController extends Controller
     }
 
     /**
-     * Set job_request jobs' billed to 1
+     * set bill state
      *
      * @return JSON
      */
@@ -1476,7 +1476,7 @@ class CompanyController extends Controller
     }
 
     /**
-     * Set job_request jobs' billed to 1
+     * return billing history data
      *
      * @return JSON
      */
@@ -1495,7 +1495,7 @@ class CompanyController extends Controller
     }
 
     /**
-     * Set job_request jobs' billed to 1
+     * Save edited bill data
      *
      * @return JSON
      */
@@ -1553,5 +1553,35 @@ class CompanyController extends Controller
             }
         } else
             return response()->json(["success" => false, "message" => "You don't have any permission."]);
+    }
+
+    /**
+     * Return cc last 4 numbers, and payment due date
+     *
+     * @return JSON
+     */
+    public function getPaymentShortInfo(Request $request){
+        if(!empty($request['id'])){
+            $bill = BillingHistory::where('id', $request['id'])->first();
+            if($bill){
+                $billInfo = BillingInfo::where('clientId', $bill->companyId)->first();
+                if($billInfo){
+                    if($billInfo->block_days_after)
+                        $duedate = date('Y-m-d', strtotime("+{$billInfo->block_days_after} day", strtotime($bill->issuedAt)));
+                    else
+                        $duedate = date('Y-m-d', strtotime($bill->issuedAt));
+
+                    if($billInfo->card_number)
+                        $cardnumber = substr($billInfo->card_number, -4);
+                    else
+                        $cardnumber = 'XXXX';
+
+                    return response()->json(["success" => true, "duedate" => $duedate, "cardnumber" => $cardnumber]);
+                } else 
+                    return response()->json(["success" => false, "message" => "Cannot find the billing info."]);
+            } else 
+                return response()->json(["success" => false, "message" => "Cannot find the bill."]);
+        } else
+            return response()->json(["success" => false, "message" => "Empty bill id."]);
     }
 }

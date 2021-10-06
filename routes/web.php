@@ -51,6 +51,7 @@ Route::post('/getPermitInfo', 'CompanyController@getPermitInfo')->name('getPermi
 Route::post('/updatePermitInfo', 'CompanyController@updatePermitInfo')->name('updatePermitInfo');
 Route::post('/getBillingInfo', 'CompanyController@getBillingInfo')->name('getBillingInfo');
 Route::post('/saveBillingInfo', 'CompanyController@saveBillingInfo')->name('saveBillingInfo');
+Route::post('/getPaymentShortInfo', 'CompanyController@getPaymentShortInfo')->name('getPaymentShortInfo');
 // Route::get('/billinginfo', 'CompanyController@billinginfo')->name('billinginfo');
 // Route::post('/getCompanyBilling', 'CompanyController@getCompanyBilling')->name('getCompanyBilling');
 
