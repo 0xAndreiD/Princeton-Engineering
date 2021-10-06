@@ -431,7 +431,7 @@ class GeneralController extends Controller
     public function submitInput(Request $request){
         // Check if current user's company has outdated unpaid bill
         if($this->checkOutdatedBill())
-            return response()->json(["message" => "Your company has outdated unpaid invoice. Please pay the bill before submitting jobs.", "status" => false]);
+            return response()->json(["message" => "Your company has overdue unpaid invoices. Please pay these outstanding invoices in order to continue using iRoof.", "status" => false]);
 
         // Process to save the job data
         if($request['data'] && $request['data']['projectId'] && $request['data']['projectId'] > 0){
