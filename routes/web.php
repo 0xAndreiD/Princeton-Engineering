@@ -49,9 +49,6 @@ Route::post('/updateCompany', 'CompanyController@updateCompany')->name('updateCo
 Route::post('/delCompany', 'CompanyController@delete')->name('delCompany');
 Route::post('/getPermitInfo', 'CompanyController@getPermitInfo')->name('getPermitInfo');
 Route::post('/updatePermitInfo', 'CompanyController@updatePermitInfo')->name('updatePermitInfo');
-Route::post('/getBillingInfo', 'CompanyController@getBillingInfo')->name('getBillingInfo');
-Route::post('/saveBillingInfo', 'CompanyController@saveBillingInfo')->name('saveBillingInfo');
-Route::post('/getPaymentShortInfo', 'CompanyController@getPaymentShortInfo')->name('getPaymentShortInfo');
 // Route::get('/billinginfo', 'CompanyController@billinginfo')->name('billinginfo');
 // Route::post('/getCompanyBilling', 'CompanyController@getCompanyBilling')->name('getCompanyBilling');
 
@@ -68,6 +65,10 @@ Route::post('/getBillData', 'CompanyController@getBillData')->name('getBillData'
 Route::post('/delBill', 'CompanyController@delBill')->name('delBill');
 Route::post('/saveBill', 'CompanyController@saveBill')->name('saveBill');
 Route::post('/setBillState', 'CompanyController@setBillState')->name('setBillState');
+Route::post('/getBillingInfo', 'CompanyController@getBillingInfo')->name('getBillingInfo');
+Route::post('/saveBillingInfo', 'CompanyController@saveBillingInfo')->name('saveBillingInfo');
+Route::post('/getPaymentShortInfo', 'CompanyController@getPaymentShortInfo')->name('getPaymentShortInfo');
+Route::post('/billNow', 'CompanyController@billNow')->name('billNow');
 
 // Project List Page
 Route::get('/projectlist', 'GeneralController@projectList')->name('projectlist');

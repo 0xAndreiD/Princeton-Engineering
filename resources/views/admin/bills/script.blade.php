@@ -213,4 +213,38 @@ function addBill(){
     $('#billmodal').modal('toggle');
 }
 
+function billNow(){
+    let toast = Swal.mixin({
+        buttonsStyling: false,
+        customClass: {
+            confirmButton: 'btn btn-success m-1',
+            cancelButton: 'btn btn-danger m-1',
+            input: 'form-control'
+        }
+    });
+
+    let companyIds = [];
+    
+    $(".companychecker").each(function() {
+        if($(this)[0].checked == true)
+            companyIds.push($(this).attr('data-id'));
+    });
+    
+    if(companyIds.length){
+        swal.fire({ title: "Please wait...", showConfirmButton: false });
+        swal.showLoading();
+        $.post("billNow", {companyIds: companyIds, issuedFrom: $("#customIssuedFrom").val(), issuedTo: $("#customIssuedTo").val()}, function(res){
+            swal.close();
+
+            if(res && res.success){
+                toast.fire('Done', "Bills are created for selected clients.", 'success');
+                $("#infos").DataTable().draw(false);
+            }
+            else 
+                toast.fire('Error', res.message, 'error');
+        });
+    } else
+        toast.fire('Warning', 'Please select any company.', 'warning');
+}
+
 </script>

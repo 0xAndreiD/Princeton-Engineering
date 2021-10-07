@@ -597,7 +597,8 @@ class APIController extends Controller
 
         foreach($companies as $company){
             $billInfo = BillingInfo::where('clientId', $company->id)->first();
-            if($billInfo && $billInfo->card_number != '' && $billInfo->expiration_date != '' && $billInfo->security_code != ''){
+            if($billInfo){
+            // if($billInfo && $billInfo->card_number != '' && $billInfo->expiration_date != '' && $billInfo->security_code != ''){
                 // Check if today is the payment day
                 $checkDay = false;
                 if($billInfo->billing_period == 0 && $weekday == $billInfo->billing_day){ // weekly
@@ -740,12 +741,17 @@ class APIController extends Controller
     private function sendBillMail($type, $curBill, $company, $billInfo, $error = ''){
         $data = ['type' => $type, 'curBill' => $curBill, 'company' => $company, 'cardnumber' => substr($billInfo->card_number, -4), 'issuedDate' => date('Y-m-d', strtotime($curBill->issuedAt)),'error' => $error];
         
-        if($company->company_email != ''){
-            $info = ['email' => $company->company_email, 'filename' => $curBill->invoice];
-            Mail::send('mail.billnotification', $data, function ($m) use ($info) {
-                $m->from(env('MAIL_FROM_ADDRESS'), 'Princeton Engineering')->to($info['email'])->subject('Important! iRoof Bill Notification.');
-                $m->attach(storage_path('invoice') . '/' . $info['filename']);
-            });
+        if($company->bill_notifiers){
+            $notifiers = explode(";", $company->bill_notifiers);
+            foreach($notifiers as $notifier){
+                if($notifier != ''){
+                    $info = ['email' => $notifier, 'filename' => $curBill->invoice];
+                    Mail::send('mail.billnotification', $data, function ($m) use ($info) {
+                        $m->from(env('MAIL_FROM_ADDRESS'), 'Princeton Engineering')->to($info['email'])->subject('Important! iRoof Bill Notification.');
+                        $m->attach(storage_path('invoice') . '/' . $info['filename']);
+                    });
+                }
+            }
         }
 
         $supers = User::where('userrole', 2)->get();
@@ -909,7 +915,7 @@ class APIController extends Controller
                 } else {
                     $curBill->response = " Error Code  : " . $response->getMessages()->getMessage()[0]->getCode() . "\n";
                     $curBill->response .= (" Error Message : " . $response->getMessages()->getMessage()[0]->getText() . "\n");
-                    $error = $tresponse->getErrors()[0]->getErrorText();
+                    $error = $response->getMessages()->getMessage()[0]->getText();
                     echo $curBill->response;
                 }
                 $curBill->state = 1;

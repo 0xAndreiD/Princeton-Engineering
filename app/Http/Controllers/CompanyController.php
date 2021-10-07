@@ -237,6 +237,7 @@ class CompanyController extends Controller
             $company->company_email = $data['email'];
             $company->company_website = $data['website'];
             $company->max_allowable_skip = $data['max_allowable_skip'];
+            $company->bill_notifiers = $data['bill_notifiers'];
             if(!empty($data->file('logofile'))){
                 $file = $request->file('logofile');
                 $filename = $data['number'] . ". " . $data['name'] . ' ' . $file->getClientOriginalName();
@@ -290,6 +291,7 @@ class CompanyController extends Controller
             $company->company_email = $data['email'];
             $company->company_website = $data['website'];
             $company->max_allowable_skip = $data['max_allowable_skip'];
+            $company->bill_notifiers = $data['bill_notifiers'];
             if(!empty($data->file('logofile'))){
                 $file = $request->file('logofile');
                 $filename = $data['number'] . ". " . $data['name'] . ' ' . $file->getClientOriginalName();
@@ -1202,12 +1204,17 @@ class CompanyController extends Controller
     private function sendBillMail($type, $curBill, $company, $billInfo, $error = ''){
         $data = ['type' => $type, 'curBill' => $curBill, 'company' => $company, 'cardnumber' => substr($billInfo->card_number, -4), 'issuedDate' => date('Y-m-d', strtotime($curBill->issuedAt)),'error' => $error];
         
-        if($company->company_email != ''){
-            $info = ['email' => $company->company_email, 'filename' => $curBill->invoice];
-            Mail::send('mail.billnotification', $data, function ($m) use ($info) {
-                $m->from(env('MAIL_FROM_ADDRESS'), 'Princeton Engineering')->to($info['email'])->subject('Important! iRoof Bill Notification.');
-                $m->attach(storage_path('invoice') . '/' . $info['filename']);
-            });
+        if($company->bill_notifiers){
+            $notifiers = explode(";", $company->bill_notifiers);
+            foreach($notifiers as $notifier){
+                if($notifier != ''){
+                    $info = ['email' => $notifier, 'filename' => $curBill->invoice];
+                    Mail::send('mail.billnotification', $data, function ($m) use ($info) {
+                        $m->from(env('MAIL_FROM_ADDRESS'), 'Princeton Engineering')->to($info['email'])->subject('Important! iRoof Bill Notification.');
+                        $m->attach(storage_path('invoice') . '/' . $info['filename']);
+                    });
+                }
+            }
         }
 
         $supers = User::where('userrole', 2)->get();
@@ -1374,7 +1381,7 @@ class CompanyController extends Controller
                 } else {
                     $curBill->response = " Error Code  : " . $response->getMessages()->getMessage()[0]->getCode() . "\n";
                     $curBill->response .= (" Error Message : " . $response->getMessages()->getMessage()[0]->getText() . "\n");
-                    $error = $tresponse->getErrors()[0]->getErrorText();
+                    $error = $response->getMessages()->getMessage()[0]->getText();
                     //echo $curBill->response;
                 }
                 $curBill->state = 1;
@@ -1583,5 +1590,96 @@ class CompanyController extends Controller
                 return response()->json(["success" => false, "message" => "Cannot find the bill."]);
         } else
             return response()->json(["success" => false, "message" => "Empty bill id."]);
+    }
+
+    /**
+     * call billing routines right now
+     *
+     * @return JSON
+     */
+    public function billNow(Request $request){
+        if(!empty($request['companyIds'])){
+            foreach($request['companyIds'] as $id){
+                $company = Company::where('id', $id)->first();
+                if($company){
+                    $billInfo = BillingInfo::where('clientId', $company->id)->first();
+                    if($billInfo){
+                        $dateFrom = date('Y-m-d', strtotime($request['issuedFrom']));
+                        $dateTo = date('Y-m-d', strtotime($request['issuedTo']));
+                        $timeFrom = $dateFrom . ' 00:00:00';
+                        $timeTo = $dateTo . ' 23:59:59';
+
+                        // collect the jobs that need to be billed
+                        if($billInfo->billing_type == 0){
+                            $jobs = JobRequest::leftjoin('users', function($join){
+                                $join->on('job_request.companyId', '=', 'users.companyid');
+                                $join->on('job_request.userId', '=', 'users.usernumber');
+                            })
+                            ->where('job_request.companyId', $company->id)->where('job_request.billed', '0')->where('job_request.projectState', '9')
+                            ->get(
+                                array('job_request.id as id', 'users.username as username', 'job_request.clientProjectName as projectname', 'job_request.clientProjectNumber as projectnumber', 'job_request.state as state', 'job_request.createdTime as createdtime', 'job_request.submittedTime as submittedtime')
+                            );
+                        }
+                        else{
+                            $jobs = JobRequest::leftjoin('users', function($join){
+                                $join->on('job_request.companyId', '=', 'users.companyid');
+                                $join->on('job_request.userId', '=', 'users.usernumber');
+                            })
+                            ->where('job_request.companyId', $company->id)->where('job_request.billed', '0')->where('job_request.createdTime', '>=', $timeFrom)->where('job_request.createdTime', '<=', $timeTo)
+                            ->get(
+                                array('job_request.id as id', 'users.username as username', 'job_request.clientProjectName as projectname', 'job_request.clientProjectNumber as projectnumber', 'job_request.state as state', 'job_request.createdTime as createdtime', 'job_request.submittedTime as submittedtime')
+                            );
+                        }
+                        
+                        $curtime = time();
+                        if(count($jobs) > 0){
+                            // calculate this month's billed jobs count
+                            $month = date('m');
+                            $histories = BillingHistory::where('companyId', $company->id)->whereRaw('Month(issuedAt) = '.$month)->where('state', 2)->get();
+                            $billedCount = 0;
+                            foreach($histories as $history)
+                                $billedCount += $history->jobCount;
+                            
+                            // calcs the number of not exceeded job counts, exceeded job counts in the month
+                            if($billedCount >= $billInfo->expected_jobs){
+                                $notExceeded = 0;
+                                $exceeded = count($jobs);
+                            } else {
+                                $notExceeded = min($billInfo->expected_jobs - $billedCount, count($jobs));
+                                $exceeded = count($jobs) - $notExceeded;
+                            }
+                            $amount = $billInfo->base_fee * $notExceeded + $billInfo->extra_fee * $exceeded;
+
+                            $curBill = new BillingHistory();
+                            $curBill->companyId = $company->id;
+                            $curBill->amount = $amount;
+                            $jobIds = array();
+                            foreach($jobs as $job)
+                                $jobIds[] = $job->id;
+                            $curBill->jobIds = json_encode($jobIds);
+                            $curBill->jobCount = count($jobs);
+                            $curBill->issuedAt = gmdate("Y-m-d\TH:i:s", $curtime);
+                            // if($billInfo->billing_type == 1)
+                            $curBill->issuedFrom = $dateFrom;
+                            $curBill->issuedTo = $dateTo;
+                            $curBill->state = 0;
+                            $curBill->notExceeded = $notExceeded;
+                            $curBill->exceeded = $exceeded;
+                            $curBill->save();
+
+                            if($billInfo->send_invoice == 0){ // Directly authorize and charge funds
+                                $this->createInvoice(0, $curBill, $company, $billInfo, $curtime); // Unpaid invoice
+                                $this->chargeCreditCard($curBill, $company, $billInfo, $amount, $curtime);
+                            } else if($billInfo->send_invoice == 1) { // Send unpaid invoice first
+                                $this->createInvoice(0, $curBill, $company, $billInfo, $curtime); // Unpaid invoice
+                                $this->sendBillMail(0, $curBill, $company, $billInfo, '');
+                            }
+                        }
+                    }
+                }
+            }
+            return response()->json(["success" => true]);
+        } else
+            return response()->json(["success" => false, "message" => "Empty company ids."]);
     }
 }
