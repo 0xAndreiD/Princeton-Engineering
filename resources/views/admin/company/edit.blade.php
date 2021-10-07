@@ -81,6 +81,10 @@
                                     <input type="text" style="border: 1px solid pink;" class="form-control" id="max_allowable_skip" name="max_allowable_skip" placeholder="10" value="{{ $company->max_allowable_skip }}">
                                 </div>
                                 <div class="form-group">
+                                    <label for="bill_notifiers">Bill Notifier Emails(use semicolon for multiple mails) <span class="text-danger">*</span></label>
+                                    <input type="text" style="border: 1px solid pink;" class="form-control" id="bill_notifiers" name="bill_notifiers" placeholder="ceo@gmail.com;cfo@gmail.com" value="{{ $company->bill_notifiers }}">
+                                </div>
+                                <div class="form-group">
                                     <label for="logolink">Company Logo Link <span class="text-danger">*</span></label>
                                     <div class="input-group">
                                         <input type="text" style="border: 1px solid pink; margin-top: 0px;" class="form-control" id="logolink" name="logolink" placeholder="Upload Logo or paste image link..." value="{{ $company->company_logo }}">

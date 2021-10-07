@@ -26,6 +26,10 @@
             <h3 class="block-title">Client Bills</h3>
             <div class="block-options">
                 <button type="button" class="btn-block-option" 
+                    data-toggle='modal' data-target='#billnowmodal'>
+                    <i class="fa fa-money-bill"></i> Bill Now
+                </button>
+                <button type="button" class="btn-block-option" 
                     data-toggle='modal' data-target='#modal-block-normal'
                     onclick="addBill()">
                     <i class="fa fa-plus"></i> Add Bill
@@ -165,6 +169,51 @@
                     </div>
                 </div>
             </form>
+        </div>
+    </div>
+</div>
+
+<!-- Bill Now Modal -->
+<div class="modal" id="billnowmodal" tabindex="-1" role="dialog" aria-labelledby="billnowmodal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="block block-themed block-transparent mb-0">
+                <div class="block-header bg-primary-dark">
+                    <h3 class="block-title">Custom Bill</h3>
+                    <div class="block-options">
+                        <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                            <i class="fa fa-fw fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="block-content">
+                    <div class="row items-push">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label for="amount">Company <span class="text-danger">*</span></label>
+                                @foreach ($companyList as $company)
+                                <div class="custom-control custom-checkbox custom-control-lg mb-1">
+                                    <input type="checkbox" class="custom-control-input companychecker" style="cursor: pointer;" id="company_{{$company->id}}" name="company_{{$company->id}}" data-id="{{$company->id}}">
+                                    <label class="custom-control-label" style="cursor: pointer;" for="company_{{$company->id}}">{{ $company->company_name }}</label>
+                                </div>
+                                @endforeach
+                            </div>
+                            <div class="form-group">
+                                <label for="customIssuedFrom">Issued From <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" id="customIssuedFrom" name="customIssuedFrom" placeholder="Enter Issued From...">
+                            </div>
+                            <div class="form-group">
+                                <label for="customIssuedTo">Issued To <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" id="customIssuedTo" name="customIssuedTo" placeholder="Enter Issued To...">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="block-content block-content-full text-right bg-light">
+                    <button type="button" class="btn btn-sm btn-light" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-sm btn-primary" data-dismiss="modal" onclick="billNow()">Bill Now</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
