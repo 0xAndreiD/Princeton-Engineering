@@ -234,6 +234,9 @@ class CompanyController extends Controller
             $company->company_telno = $data['telno'];
             $company->company_address = $data['address'];
             $company->second_address = $data['streetaddress'];
+            $company->city = $data['city'];
+            $company->state = $data['state'];
+            $company->zip = $data['zip'];
             $company->company_email = $data['email'];
             $company->company_website = $data['website'];
             $company->max_allowable_skip = $data['max_allowable_skip'];
@@ -242,16 +245,17 @@ class CompanyController extends Controller
                 $file = $request->file('logofile');
                 $filename = $data['number'] . ". " . $data['name'] . ' ' . $file->getClientOriginalName();
                 $file->move(public_path() . '/logos', $filename);
-                $company->company_logo = asset('logos') . '/' . $filename;
+                $company->company_logo = $filename;
 
                 //Backup json file to dropbox
-                $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
-                $dropbox = new Dropbox($app);
-                $dropboxFile = new DropboxFile(public_path() . '/logos/' . $filename);
-                $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_LOGO_PATH') . $filename, ['autorename' => TRUE]);
-            } else {
-                $company->company_logo = $data['logolink'];
-            }
+                // $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
+                // $dropbox = new Dropbox($app);
+                // $dropboxFile = new DropboxFile(public_path() . '/logos/' . $filename);
+                // $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_LOGO_PATH') . $filename, ['autorename' => TRUE]);
+            } 
+            // else {
+            //     $company->company_logo = $data['logolink'];
+            // }
             $company->save();
             return response()->json(["success" => true]);
         } else {
@@ -288,6 +292,9 @@ class CompanyController extends Controller
             $company->company_telno = $data['telno'];
             $company->company_address = $data['address'];
             $company->second_address = $data['streetaddress'];
+            $company->city = $data['companycity'];
+            $company->state = $data['companystate'];
+            $company->zip = $data['companyzip'];
             $company->company_email = $data['email'];
             $company->company_website = $data['website'];
             $company->max_allowable_skip = $data['max_allowable_skip'];
@@ -296,15 +303,16 @@ class CompanyController extends Controller
                 $file = $request->file('logofile');
                 $filename = $data['number'] . ". " . $data['name'] . ' ' . $file->getClientOriginalName();
                 $file->move(public_path() . '/logos', $filename);
-                $company->company_logo = asset('logos') . '/' . $filename;
+                $company->company_logo = $filename;
 
-                $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
-                $dropbox = new Dropbox($app);
-                $dropboxFile = new DropboxFile(public_path() . '/logos/' . $filename);
-                $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_LOGO_PATH') . $filename, ['autorename' => TRUE]);
-            } else {
-                $company->company_logo = $data['logolink'];
+                // $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
+                // $dropbox = new Dropbox($app);
+                // $dropboxFile = new DropboxFile(public_path() . '/logos/' . $filename);
+                // $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_LOGO_PATH') . $filename, ['autorename' => TRUE]);
             }
+            // else {
+            //     $company->company_logo = $data['logolink'];
+            // }
             $company->save();
             return response()->json(["success" => true]);
         }

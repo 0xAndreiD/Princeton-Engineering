@@ -1,4 +1,4 @@
-@extends('admin.layout')
+@extends('clientadmin.layout')
 
 @section('content')
 <!-- Hero -->

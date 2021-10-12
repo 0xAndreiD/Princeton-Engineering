@@ -61,12 +61,32 @@
                                     <input type="text" style="border: 1px solid pink;" class="form-control" id="telno" name="telno" placeholder="212-999-0000" value="{{ $company->company_telno }}">
                                 </div>
                                 <div class="form-group">
-                                    <label for="address">Address <span class="text-danger">*</span></label>
+                                    <label for="address">Street Address 1 <span class="text-danger">*</span></label>
                                     <input type="text" style="border: 1px solid pink;" class="form-control" id="address" name="address" placeholder="Company Address.." value="{{ $company->company_address }}">
                                 </div>
                                 <div class="form-group">
-                                    <label for="address">Street Address <span class="text-danger">*</span></label>
+                                    <label for="address">Street Address 2 <span class="text-danger">*</span></label>
                                     <input type="text" style="border: 1px solid pink;" class="form-control" id="streetaddress" name="streetaddress" placeholder="Company 2nd Street Address.." value="{{ $company->second_address }}">
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label for="address">City <span class="text-danger">*</span></label>
+                                            <input type="text" style="border: 1px solid pink;" class="form-control" id="companycity" name="companycity" placeholder="Company City.." value="{{ $company->city }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="form-group">
+                                            <label for="address">State <span class="text-danger">*</span></label>
+                                            <input type="text" style="border: 1px solid pink;" class="form-control" id="companystate" name="companystate" placeholder="Company State.." value="{{ $company->state }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="form-group">
+                                            <label for="address">Zip <span class="text-danger">*</span></label>
+                                            <input type="text" style="border: 1px solid pink;" class="form-control" id="companyzip" name="companyzip" placeholder="Company Zip.." value="{{ $company->zip }}">
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="email">Email <span class="text-danger">*</span></label>
@@ -85,11 +105,11 @@
                                     <input type="text" style="border: 1px solid pink;" class="form-control" id="bill_notifiers" name="bill_notifiers" placeholder="ceo@gmail.com;cfo@gmail.com" value="{{ $company->bill_notifiers }}">
                                 </div>
                                 <div class="form-group">
-                                    <label for="logolink">Company Logo Link <span class="text-danger">*</span></label>
+                                    <label for="logolink">Company Logo <span class="text-danger">*</span></label>
                                     <div class="input-group">
-                                        <input type="text" style="border: 1px solid pink; margin-top: 0px;" class="form-control" id="logolink" name="logolink" placeholder="Upload Logo or paste image link..." value="{{ $company->company_logo }}">
+                                        <input type="text" style="border: 1px solid pink; margin-top: 0px;" class="form-control" id="logolink" name="logolink" placeholder="None Uploaded..." value="{{ $company->company_logo }}" disabled>
                                         <div class="input-group-append">
-                                            <button type="button" class="btn btn-dark" id="import-open" onclick="onUploadOpen()">Open</button>
+                                            <button type="button" class="btn btn-dark" id="import-open" onclick="onUploadOpen()">Upload</button>
                                         </div>
                                     </div>
                                     <input type="file" class="form-control" id="logofile" name="logofile" hidden>
