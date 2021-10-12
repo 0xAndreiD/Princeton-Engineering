@@ -588,6 +588,9 @@ function billingCopy(){
                     $("#bname").val(res.company_name);
                     $("#bmail").val(res.company_email);
                     $("#baddress").val(res.company_address);
+                    $("#bcity").val(res.city);
+                    $("#bstate").val(res.state);
+                    $("#bzip").val(res.zip);
                 }
             },
             error: function(xhr, status, error) {

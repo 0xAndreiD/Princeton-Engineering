@@ -128,7 +128,7 @@ class LoginController extends Controller
         // Logo link session set
         $company = Company::where('id', $user->companyid)->first();
         if($company && $company->company_logo != ''){
-            Session::put('company_logo', $company->company_logo);
+            Session::put('company_logo', asset('logos') . '/' .$company->company_logo);
         }
 
         $ip = $request->ip();
