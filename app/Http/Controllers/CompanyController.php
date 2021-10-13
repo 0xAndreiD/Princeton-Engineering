@@ -1164,7 +1164,7 @@ class CompanyController extends Controller
                     $company = Company::where('id', $bill->companyId)->first();
                     $billInfo = BillingInfo::where('clientId', $bill->companyId)->first();
                     
-                    if($this->chargeCreditCard($bill, $company, $billInfo, $bill->amount, time()))
+                    if($this->chargeCreditCard($bill, $company, $billInfo, $bill->amount, time(), $request['code']))
                         return response()->json(["success" => true]);
                     else
                         return response()->json(["success" => false, "message" => "Transaction failed. Please check the error details from the email."]);
@@ -1252,7 +1252,7 @@ class CompanyController extends Controller
      *
      * @return Authorize.Net Response
      */
-    private function chargeCreditCard($curBill, $company, $billInfo, $amount, $curtime)
+    private function chargeCreditCard($curBill, $company, $billInfo, $amount, $curtime, $code = null)
     {
         //echo "Processing credit card payments for " . $company->company_number . ". " . $company->company_name . " with historyId: " . $curBill->id . "\n";
         /* Create a merchantAuthenticationType object with authentication details
@@ -1268,7 +1268,10 @@ class CompanyController extends Controller
         $creditCard = new AnetAPI\CreditCardType();
         $creditCard->setCardNumber(str_replace(' ', '', $billInfo->card_number));
         $creditCard->setExpirationDate($billInfo->expiration_date);
-        $creditCard->setCardCode($billInfo->security_code);
+        if($code)
+            $creditCard->setCardCode($code);
+        else
+            $creditCard->setCardCode($billInfo->security_code);
 
         // Add the payment data to a paymentType object
         $paymentOne = new AnetAPI\PaymentType();
@@ -1603,7 +1606,12 @@ class CompanyController extends Controller
                     else
                         $cardnumber = 'XXXX';
 
-                    return response()->json(["success" => true, "duedate" => $duedate, "cardnumber" => $cardnumber]);
+                    if($billInfo->security_code)
+                        $security = true;
+                    else
+                        $security = false;
+
+                    return response()->json(["success" => true, "duedate" => $duedate, "cardnumber" => $cardnumber, "security" => $security]);
                 } else 
                     return response()->json(["success" => false, "message" => "Cannot find the billing info."]);
             } else 
