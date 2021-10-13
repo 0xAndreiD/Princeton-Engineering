@@ -250,10 +250,10 @@
                                 <label for="bname"><i class="fa fa-user"></i> Full Name</label>
                                 <input type="text" style="border: 1px solid pink;" class="form-control" id="bname" name="billing_name" placeholder="Enter Name..." value="">
                             </div>
-                            <div class="form-group mb-4">
+                            {{-- <div class="form-group mb-4">
                                 <label for="bmail"><i class="fa fa-envelope"></i> Email</label>
                                 <input type="text" style="border: 1px solid pink;" class="form-control" id="bmail" name="billing_email" placeholder="Enter Email..." value="">
-                            </div>
+                            </div> --}}
                             <div class="form-group mb-4">
                                 <label for="baddress"><i class="fa fa-address-card-o"></i> Address</label>
                                 <input type="text" style="border: 1px solid pink;" class="form-control" id="baddress" name="billing_address" placeholder="Enter Address..." value="">
@@ -281,19 +281,19 @@
                             <h2 class="content-heading pt-0 text-center">Shipping Information</h2>
                             <div class="form-group mb-4">
                                 <label for="sname"><i class="fa fa-user"></i> Full Name</label>
-                                <input type="text" style="border: 1px solid pink;" class="form-control" id="sname" name="billing_name" placeholder="Enter Name..." value="">
+                                <input type="text" style="border: 1px solid pink;" class="form-control" id="sname" name="shipping_name" placeholder="Enter Name..." value="">
                             </div>
-                            <div class="form-group mb-4">
+                            {{-- <div class="form-group mb-4">
                                 <label for="smail"><i class="fa fa-envelope"></i> Email</label>
-                                <input type="text" style="border: 1px solid pink;" class="form-control" id="smail" name="billing_email" placeholder="Enter Email..." value="">
-                            </div>
+                                <input type="text" style="border: 1px solid pink;" class="form-control" id="smail" name="shipping_email" placeholder="Enter Email..." value="">
+                            </div> --}}
                             <div class="form-group mb-4">
                                 <label for="saddress"><i class="fa fa-address-card-o"></i> Address</label>
-                                <input type="text" style="border: 1px solid pink;" class="form-control" id="saddress" name="billing_address" placeholder="Enter Address..." value="">
+                                <input type="text" style="border: 1px solid pink;" class="form-control" id="saddress" name="shipping_address" placeholder="Enter Address..." value="">
                             </div>
                             <div class="form-group mb-4">
                                 <label for="scity"><i class="fa fa-institution"></i> City</label>
-                                <input type="text" style="border: 1px solid pink;" class="form-control" id="scity" name="billing_city" placeholder="Enter City..." value="">
+                                <input type="text" style="border: 1px solid pink;" class="form-control" id="scity" name="shipping_city" placeholder="Enter City..." value="">
                             </div>
                             <div class="row mb-4">
                                 <div class="ml-3">
@@ -447,5 +447,5 @@
 
 <script src="{{ asset('js/imask.min.js') }}"></script>
 <script src="{{ asset('js/jquery.form.js') }}"></script>
-@include('admin.company.editscript')
+@include('clientadmin.companyinfo.script')
 @endsection

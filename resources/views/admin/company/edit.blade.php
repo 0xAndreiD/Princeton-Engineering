@@ -101,10 +101,6 @@
                                     <input type="text" style="border: 1px solid pink;" class="form-control" id="max_allowable_skip" name="max_allowable_skip" placeholder="10" value="{{ $company->max_allowable_skip }}">
                                 </div>
                                 <div class="form-group">
-                                    <label for="bill_notifiers">Bill Notifier Emails(use semicolon for multiple mails) <span class="text-danger">*</span></label>
-                                    <input type="text" style="border: 1px solid pink;" class="form-control" id="bill_notifiers" name="bill_notifiers" placeholder="ceo@gmail.com;cfo@gmail.com" value="{{ $company->bill_notifiers }}">
-                                </div>
-                                <div class="form-group">
                                     <label for="logolink">Company Logo <span class="text-danger">*</span></label>
                                     <div class="input-group">
                                         <input type="text" style="border: 1px solid pink; margin-top: 0px;" class="form-control" id="logolink" name="logolink" placeholder="None Uploaded..." value="{{ $company->company_logo }}" disabled>
@@ -330,6 +326,10 @@
                                     <input type="text" style="border: 1px solid pink;" class="form-control" id="billday" name="billday" placeholder="Day in the month">
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <label for="bill_notifiers">Bill Notifier Emails(use semicolon for multiple mails) <span class="text-danger">*</span></label>
+                                <input type="text" style="border: 1px solid pink;" class="form-control" id="bill_notifiers" name="bill_notifiers" placeholder="ceo@gmail.com;cfo@gmail.com" value="{{ $company->bill_notifiers }}">
+                            </div>
                         </div>
                         <div class="col-md-3">
                             <h2 class="content-heading pt-0 text-center">Billing Information</h2>
@@ -337,10 +337,10 @@
                                 <label for="bname"><i class="fa fa-user"></i> Full Name</label>
                                 <input type="text" style="border: 1px solid pink;" class="form-control" id="bname" name="billing_name" placeholder="Enter Name..." value="">
                             </div>
-                            <div class="form-group mb-4">
+                            {{-- <div class="form-group mb-4">
                                 <label for="bmail"><i class="fa fa-envelope"></i> Email</label>
                                 <input type="text" style="border: 1px solid pink;" class="form-control" id="bmail" name="billing_email" placeholder="Enter Email..." value="">
-                            </div>
+                            </div> --}}
                             <div class="form-group mb-4">
                                 <label for="baddress"><i class="fa fa-address-card-o"></i> Address</label>
                                 <input type="text" style="border: 1px solid pink;" class="form-control" id="baddress" name="billing_address" placeholder="Enter Address..." value="">
@@ -368,19 +368,19 @@
                             <h2 class="content-heading pt-0 text-center">Shipping Information</h2>
                             <div class="form-group mb-4">
                                 <label for="sname"><i class="fa fa-user"></i> Full Name</label>
-                                <input type="text" style="border: 1px solid pink;" class="form-control" id="sname" name="billing_name" placeholder="Enter Name..." value="">
+                                <input type="text" style="border: 1px solid pink;" class="form-control" id="sname" name="shipping_name" placeholder="Enter Name..." value="">
                             </div>
-                            <div class="form-group mb-4">
+                            {{-- <div class="form-group mb-4">
                                 <label for="smail"><i class="fa fa-envelope"></i> Email</label>
-                                <input type="text" style="border: 1px solid pink;" class="form-control" id="smail" name="billing_email" placeholder="Enter Email..." value="">
-                            </div>
+                                <input type="text" style="border: 1px solid pink;" class="form-control" id="smail" name="shipping_email" placeholder="Enter Email..." value="">
+                            </div> --}}
                             <div class="form-group mb-4">
                                 <label for="saddress"><i class="fa fa-address-card-o"></i> Address</label>
-                                <input type="text" style="border: 1px solid pink;" class="form-control" id="saddress" name="billing_address" placeholder="Enter Address..." value="">
+                                <input type="text" style="border: 1px solid pink;" class="form-control" id="saddress" name="shipping_address" placeholder="Enter Address..." value="">
                             </div>
                             <div class="form-group mb-4">
                                 <label for="scity"><i class="fa fa-institution"></i> City</label>
-                                <input type="text" style="border: 1px solid pink;" class="form-control" id="scity" name="billing_city" placeholder="Enter City..." value="">
+                                <input type="text" style="border: 1px solid pink;" class="form-control" id="scity" name="shipping_city" placeholder="Enter City..." value="">
                             </div>
                             <div class="row mb-4">
                                 <div class="ml-3">
