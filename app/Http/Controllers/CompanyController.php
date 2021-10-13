@@ -992,6 +992,9 @@ class CompanyController extends Controller
         if(!empty($request->input("issued_to")) && $request->input("issued_to") != "")
             $handler = $handler->where('billing_history.issuedTo', '<=', $request->input("issued_to"));
 
+        if(Auth::user()->userrole != 2)
+            $handler = $handler->where('billing_history.state', '!=', '3');
+
         if(empty($request->input('search.value')))
         {            
             $totalFiltered = $handler->count();
@@ -1072,7 +1075,7 @@ class CompanyController extends Controller
                         <a href='invoice?id={$bill['id']}' class='btn btn-warning mr-1' style='padding: 3px 4px; " . ($bill->state == 3 ? "opacity: 0.5; pointer-events: none;" : "") . "' target='_blank'>
                             <i class='fa fa-download'></i>
                         </a>
-                        <button type='button' class='btn btn-success mr-1' onclick='chargeNow(this, {$bill->id})' style='padding: 3px 4px;' " . ($bill->state == 2 || $bill->state == 3 || count($jobs) == $bill->jobCount ? "disabled" : "") . ">
+                        <button type='button' class='btn btn-success mr-1' onclick='chargeNow(this, {$bill->id})' style='padding: 3px 4px;' " . ($bill->state == 2 || $bill->state == 3 ? "disabled" : "") . ">
                             <i class='fa fa-money-check'></i>
                         </button>
                         <button type='button' class='btn btn-primary mr-1' onclick='markAsPaid(this, {$bill->id})' style='padding: 3px 4px;' " . ($bill->state == 2 || $bill->state == 3 ? "disabled" : "") . ">
