@@ -174,6 +174,15 @@ function editBill(obj, id){
 }
 
 function saveBill(){
+    let toast = Swal.mixin({
+        buttonsStyling: false,
+        customClass: {
+            confirmButton: 'btn btn-success m-1',
+            cancelButton: 'btn btn-danger m-1',
+            input: 'form-control'
+        }
+    });
+    
     let data = {};
     data.id = $("#id").val();
     data.companyId = $("#company").val();

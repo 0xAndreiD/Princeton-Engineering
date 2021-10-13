@@ -1180,7 +1180,9 @@ class CompanyController extends Controller
         $jobs = JobRequest::whereIn('job_request.id', json_decode($curBill->jobIds))->leftjoin('users', function($join){
                 $join->on('job_request.companyId', '=', 'users.companyid');
                 $join->on('job_request.userId', '=', 'users.usernumber');
-            })->get(
+            })
+            ->orderBy('job_request.createdTime', 'asc')
+            ->get(
                 array('job_request.id as id', 'users.username as username', 'job_request.clientProjectName as projectname', 'job_request.clientProjectNumber as projectnumber', 'job_request.state as state', 'job_request.createdTime as createdtime', 'job_request.submittedTime as submittedtime')
             );
         
@@ -1624,6 +1626,7 @@ class CompanyController extends Controller
                                 $join->on('job_request.userId', '=', 'users.usernumber');
                             })
                             ->where('job_request.companyId', $company->id)->where('job_request.billed', '0')->where('job_request.projectState', '9')
+                            ->orderBy('job_request.createdTime', 'asc')
                             ->get(
                                 array('job_request.id as id', 'users.username as username', 'job_request.clientProjectName as projectname', 'job_request.clientProjectNumber as projectnumber', 'job_request.state as state', 'job_request.createdTime as createdtime', 'job_request.submittedTime as submittedtime')
                             );
@@ -1634,6 +1637,7 @@ class CompanyController extends Controller
                                 $join->on('job_request.userId', '=', 'users.usernumber');
                             })
                             ->where('job_request.companyId', $company->id)->where('job_request.billed', '0')->where('job_request.createdTime', '>=', $timeFrom)->where('job_request.createdTime', '<=', $timeTo)
+                            ->orderBy('job_request.createdTime', 'asc')
                             ->get(
                                 array('job_request.id as id', 'users.username as username', 'job_request.clientProjectName as projectname', 'job_request.clientProjectNumber as projectnumber', 'job_request.state as state', 'job_request.createdTime as createdtime', 'job_request.submittedTime as submittedtime')
                             );
