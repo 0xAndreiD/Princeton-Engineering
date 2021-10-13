@@ -488,6 +488,7 @@ securitycode.addEventListener('focus', function () {
 $.ajax({
     url:"getBillingInfo",
     type:'post',
+    "data":{ _token: "{{csrf_token()}}"},
     success:function(res){
         if(res.success == true) {
             if(res.data){

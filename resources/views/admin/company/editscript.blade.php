@@ -572,7 +572,7 @@ $.ajax({
                     $("#billday").val(res.data.billing_day);
 
                 $("#bname").val(res.data.billing_name);
-                $("#bmail").val(res.data.billing_mail);
+                // $("#bmail").val(res.data.billing_mail);
                 $("#baddress").val(res.data.billing_address);
                 $("#bcity").val(res.data.billing_city);
                 $("#bstate").val(res.data.billing_state);
@@ -581,7 +581,7 @@ $.ajax({
                     $("#billing_same_chk")[0].checked = true;
                 
                 $("#sname").val(res.data.shipping_name);
-                $("#smail").val(res.data.shipping_mail);
+                // $("#smail").val(res.data.shipping_mail);
                 $("#saddress").val(res.data.shipping_address);
                 $("#scity").val(res.data.shipping_city);
                 $("#sstate").val(res.data.shipping_state);
@@ -651,9 +651,10 @@ function saveBilling(){
         if(data.billing_day == '')
             data.billing_day = 1;
     }
+    data.bill_notifiers = $("#bill_notifiers").val();
 
     data.billing_name = $("#bname").val();
-    data.billing_mail = $("#bmail").val();
+    // data.billing_mail = $("#bmail").val();
     data.billing_address = $("#baddress").val();
     data.billing_city = $("#bcity").val();
     data.billing_state = $("#bstate").val();
@@ -661,7 +662,7 @@ function saveBilling(){
     data.billing_same_info = $("#billing_same_chk")[0].checked ? 1 : 0;
 
     data.shipping_name = $("#sname").val();
-    data.shipping_mail = $("#smail").val();
+    // data.shipping_mail = $("#smail").val();
     data.shipping_address = $("#saddress").val();
     data.shipping_city = $("#scity").val();
     data.shipping_state = $("#sstate").val();

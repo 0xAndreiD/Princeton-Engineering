@@ -240,7 +240,7 @@ class CompanyController extends Controller
             $company->company_email = $data['email'];
             $company->company_website = $data['website'];
             $company->max_allowable_skip = $data['max_allowable_skip'];
-            $company->bill_notifiers = $data['bill_notifiers'];
+            // $company->bill_notifiers = $data['bill_notifiers'];
             if(!empty($data->file('logofile'))){
                 $file = $request->file('logofile');
                 $filename = $data['number'] . ". " . $data['name'] . ' ' . $file->getClientOriginalName();
@@ -298,7 +298,7 @@ class CompanyController extends Controller
             $company->company_email = $data['email'];
             $company->company_website = $data['website'];
             $company->max_allowable_skip = $data['max_allowable_skip'];
-            $company->bill_notifiers = $data['bill_notifiers'];
+            // $company->bill_notifiers = $data['bill_notifiers'];
             if(!empty($data->file('logofile'))){
                 $file = $request->file('logofile');
                 $filename = $data['number'] . ". " . $data['name'] . ' ' . $file->getClientOriginalName();
@@ -784,6 +784,13 @@ class CompanyController extends Controller
                 if(isset($request['billing_period'])) $info->billing_period = $request['billing_period'];
                 if(isset($request['billing_day'])) $info->billing_day = $request['billing_day'];
                 if(isset($request['block_days_after'])) $info->block_days_after = $request['block_days_after'];
+                if(isset($request['bill_notifiers'])){
+                    $company = Company::where('id', $clientId)->first();
+                    if($company){
+                        $company->bill_notifiers = $request['bill_notifiers'];
+                        $company->save();
+                    }
+                } 
             }
 
             $info->save();
