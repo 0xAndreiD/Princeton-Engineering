@@ -447,5 +447,5 @@
 
 <script src="{{ asset('js/imask.min.js') }}"></script>
 <script src="{{ asset('js/jquery.form.js') }}"></script>
-@include('clientadmin.companyinfo.script')
+@include('clientadmin.companyInfo.script')
 @endsection
