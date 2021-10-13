@@ -1,5 +1,5 @@
 <style>
-  body { margin-top: 70px; }
+  body { margin-top: 45px; }
 
   h3, h4, h5{
     padding: 0;
@@ -20,10 +20,10 @@
   
   /* Positions */
   
-  .cr-top    { top: -10px; }
+  .cr-top    { top: -30px; }
   .cr-bottom { bottom: 25px; }
   .cr-left   { left: -50px; }
-  .cr-right  { right: -170px; }
+  .cr-right  { right: -200px; }
   
   /* Rotations */
   
@@ -48,7 +48,7 @@
   }
 
   .cr-paid h3, .cr-unpaid h3 { 
-    font-size: 40px;
+    font-size: 25px;
   }
 
   .cr-paid { 
@@ -160,23 +160,25 @@
 <table style="width: 100%; border: 1px solid #cccccc; font-size: 14px; margin-top: 10px;">
   <thead>
     <tr style="background: #efefef;">
+      <th style="width: 10%; text-align: center; border: 1px solid #efefef;">Number</th>
       <th style="width: 15%; text-align: center; border: 1px solid #efefef;">User</th>
       <th style="width: 15%; text-align: center; border: 1px solid #efefef;">Project Number</th>
-      <th style="width: 25%; text-align: center; border: 1px solid #efefef;">Project Name</th>
-      <th style="width: 5%; text-align: center; border: 1px solid #efefef;">State</th>
+      <th style="width: 30%; text-align: center; border: 1px solid #efefef;">Project Name</th>
+      <th style="width: 10%; text-align: center; border: 1px solid #efefef;">State</th>
       <th style="width: 20%; text-align: center; border: 1px solid #efefef;">Created Time</th>
-      <th style="width: 20%; text-align: center; border: 1px solid #efefef;">Submitted Time</th>
     </tr>
   </thead>
   <tbody>
+    <?php $i = 1; ?>
     @foreach($jobs as $job)
     <tr>
+      <td style="text-align: center;">{{ $i }}</td>
       <td style="text-align: center;">{{ $job->username }}</td>
       <td style="text-align: center;">{{ $job->projectnumber }}</td>
       <td style="text-align: center;">{{ $job->projectname }}</td>
       <td style="text-align: center;">{{ $job->state }}</td>
-      <td style="text-align: center;">{{ $job->createdtime }}</td>
-      <td style="text-align: center;">{{ $job->submittedtime }}</td>
+      <td style="text-align: center;">{{ date('Y-m-d', strtotime($job->createdtime)) }}</td>
+      <?php $i ++; ?>
     </tr>
     @endforeach
   </tbody>
