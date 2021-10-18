@@ -177,11 +177,13 @@ function changeState(obj, id, state){
 
 function editBill(obj, id){
     $('#billmodal').modal('toggle');
+    $('#expContainer').html('');
     $.post("getBillData", {id: id}, function(result){
         if (result.success && result.data){
             $("#id").val(result.data.id);
             $("#company").val(result.data.companyId);
             $("#issuedAt").val(result.data.issuedAt);
+            $("#duedate").val(result.data.duedate);
             $("#issuedFrom").val(result.data.issuedFrom);
             $("#issuedTo").val(result.data.issuedTo);
             $("#jobCount").val(result.data.jobCount);
@@ -189,6 +191,59 @@ function editBill(obj, id){
             $("#jobIds").val(jobIds.join(','));
             $("#amount").val(result.data.amount);
             $("#state").val(result.data.state);
+            if(result.data.expenses){
+                let expenses = JSON.parse(result.data.expenses);
+                expenses.forEach(expense => {
+                    $('#expContainer').append(`<div class="row mb-1 expenseRow">\
+                        <div class="col-6">\
+                            <select name="description" class="form-control editableSel" style="border: 1px solid pink;" value="${expense.description}" oninput="expDescChange(this)">\
+                                <option>Overnight Shipping</option>\
+                                <option onclick="expDescChange(this, 0.1)">Reproduction: Photocopying / Printing: Letter size</option>\
+                                <option onclick="expDescChange(this, 0.2)">Reproduction: Photocopying / Printing: Ledger size</option>\
+                                <option onclick="expDescChange(this, 0.5)">Travel: Mileage</option>\
+                                <option>Travel: Other</option>\
+                                <option>Post Installation Letter</option>\
+                                <option>Electric Load Calculator Review</option>\
+                                <option>${expense.description}</option>\
+                            </select>\
+                        </div>\
+                        <div class="col-2">\
+                            <input type="text" class="form-control" name="price" placeholder="" style="border: 1px solid pink;" value="${expense.price}">\
+                        </div>\
+                        <div class="col-2">\
+                            <input type="text" class="form-control" name="quantity" placeholder="" style="border: 1px solid pink;" value="${expense.quantity}">\
+                        </div>\
+                        <div class="col-2 text-center">\
+                            <button class="btn btn-success" onclick="addExpToAmount(this)"><i class="fa fa-fw fa-plus"></i></button>\
+                        </div>\
+                    </div>`);
+                });
+                $(".editableSel").editableSelect({ filter: false });
+            } else {
+                $('#expContainer').html('<div class="row mb-1 expenseRow">\
+                    <div class="col-6">\
+                        <select name="description" class="form-control editableSel" style="border: 1px solid pink;" oninput="expDescChange(this)">\
+                            <option>Overnight Shipping</option>\
+                            <option onclick="expDescChange(this, 0.1)">Reproduction: Photocopying / Printing: Letter size</option>\
+                            <option onclick="expDescChange(this, 0.2)">Reproduction: Photocopying / Printing: Ledger size</option>\
+                            <option onclick="expDescChange(this, 0.5)">Travel: Mileage</option>\
+                            <option>Travel: Other</option>\
+                            <option>Post Installation Letter</option>\
+                            <option>Electric Load Calculator Review</option>\
+                        </select>\
+                    </div>\
+                    <div class="col-2">\
+                        <input type="text" class="form-control" name="price" placeholder="" style="border: 1px solid pink;">\
+                    </div>\
+                    <div class="col-2">\
+                        <input type="text" class="form-control" name="quantity" placeholder="" style="border: 1px solid pink;">\
+                    </div>\
+                    <div class="col-2 text-center">\
+                        <button class="btn btn-success" onclick="addExpToAmount(this)"><i class="fa fa-fw fa-plus"></i></button>\
+                    </div>\
+                </div>');
+                $(".editableSel").editableSelect({ filter: false });
+            }
         }
     });
 }
@@ -207,6 +262,7 @@ function saveBill(){
     data.id = $("#id").val();
     data.companyId = $("#company").val();
     data.issuedAt = $("#issuedAt").val();
+    data.duedate = $("#duedate").val();
     data.issuedFrom = $("#issuedFrom").val();
     data.issuedTo = $("#issuedTo").val();
     data.jobCount = $("#jobCount").val();
@@ -214,6 +270,16 @@ function saveBill(){
     data.amount = $("#amount").val();
     data.state = $("#state").val();
     data.updatePDF = $("#updatePDF")[0].checked;
+    data.sendMail = $("#sendMail")[0].checked;
+
+    data.expenses = [];
+    $(".expenseRow").each(function(){
+        let description = $(this).find("input[name='description']").val();
+        let price = $(this).find("input[name='price']").val();
+        let quantity = $(this).find("input[name='quantity']").val();
+        if(description != '')
+            data.expenses.push({description: description, price: price, quantity: quantity});
+    });
 
     swal.fire({ title: "Please wait...", showConfirmButton: false });
     swal.showLoading();
@@ -240,6 +306,29 @@ function addBill(){
     $("#updatePDF")[0].checked = true;
 
     $('#billmodal').modal('toggle');
+    $('#expContainer').html('<div class="row mb-1 expenseRow">\
+        <div class="col-6">\
+            <select name="description" class="form-control editableSel" style="border: 1px solid pink;" oninput="expDescChange(this)">\
+                <option>Overnight Shipping</option>\
+                <option onclick="expDescChange(this, 0.1)">Reproduction: Photocopying / Printing: Letter size</option>\
+                <option onclick="expDescChange(this, 0.2)">Reproduction: Photocopying / Printing: Ledger size</option>\
+                <option onclick="expDescChange(this, 0.5)">Travel: Mileage</option>\
+                <option>Travel: Other</option>\
+                <option>Post Installation Letter</option>\
+                <option>Electric Load Calculator Review</option>\
+            </select>\
+        </div>\
+        <div class="col-2">\
+            <input type="text" class="form-control" name="price" placeholder="" style="border: 1px solid pink;">\
+        </div>\
+        <div class="col-2">\
+            <input type="text" class="form-control" name="quantity" placeholder="" style="border: 1px solid pink;">\
+        </div>\
+        <div class="col-2 text-center">\
+            <button class="btn btn-success" onclick="addExpToAmount(this)"><i class="fa fa-fw fa-plus"></i></button>\
+        </div>\
+    </div>');
+    $(".editableSel").editableSelect({ filter: false });
 }
 
 function billNow(){
@@ -274,6 +363,43 @@ function billNow(){
         });
     } else
         toast.fire('Warning', 'Please select any company.', 'warning');
+}
+
+function addExpense(){
+    $('#expContainer').append('<div class="row mb-1 expenseRow">\
+        <div class="col-6">\
+            <select name="description" class="form-control editableSel" style="border: 1px solid pink;">\
+                <option>Overnight Shipping</option>\
+                <option onclick="expDescChange(this, 0.1)">Reproduction: Photocopying / Printing: Letter size</option>\
+                <option onclick="expDescChange(this, 0.2)">Reproduction: Photocopying / Printing: Ledger size</option>\
+                <option onclick="expDescChange(this, 0.5)">Travel: Mileage</option>\
+                <option>Travel: Other</option>\
+                <option>Post Installation Letter</option>\
+                <option>Electric Load Calculator Review</option>\
+            </select>\
+        </div>\
+        <div class="col-2">\
+            <input type="text" class="form-control" name="price" placeholder="" style="border: 1px solid pink;">\
+        </div>\
+        <div class="col-2">\
+            <input type="text" class="form-control" name="quantity" placeholder="" style="border: 1px solid pink;">\
+        </div>\
+        <div class="col-2 text-center">\
+            <button class="btn btn-success" onclick="addExpToAmount(this)"><i class="fa fa-fw fa-plus"></i></button>\
+        </div>\
+    </div>');
+    $(".editableSel").editableSelect({ filter: false });
+}
+
+function addExpToAmount(obj){
+    let price = $(obj).parents(".expenseRow").find("input[name='price']").val();
+    let quantity = $(obj).parents(".expenseRow").find("input[name='quantity']").val();
+    $("#amount").val(parseFloat($("#amount").val()) + price * quantity);
+}
+
+function expDescChange(obj, price){
+    console.log(price);
+    $(obj).parents(".expenseRow").find("input[name='price']").val(price);
 }
 
 </script>

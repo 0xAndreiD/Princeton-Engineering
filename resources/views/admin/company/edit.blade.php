@@ -330,6 +330,10 @@
                                 <label for="bill_notifiers">Bill Notifier Emails(use semicolon for multiple mails) <span class="text-danger">*</span></label>
                                 <input type="text" style="border: 1px solid pink;" class="form-control" id="bill_notifiers" name="bill_notifiers" placeholder="ceo@gmail.com;cfo@gmail.com" value="{{ $company->bill_notifiers }}">
                             </div>
+                            <div class="form-group">
+                                <label for="bill_notifiers">Send invoices to the attention of: <span class="text-danger">*</span></label>
+                                <input type="text" style="border: 1px solid pink;" class="form-control" id="attn_name" name="attn_name" placeholder="CEO, CFO" value="{{ $company->attn_name }}">
+                            </div>
                         </div>
                         <div class="col-md-3">
                             <h2 class="content-heading pt-0 text-center">Billing Information</h2>

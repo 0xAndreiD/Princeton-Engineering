@@ -652,6 +652,7 @@ function saveBilling(){
             data.billing_day = 1;
     }
     data.bill_notifiers = $("#bill_notifiers").val();
+    data.attn_name = $("#attn_name").val();
 
     data.billing_name = $("#bname").val();
     // data.billing_mail = $("#bmail").val();

@@ -689,6 +689,7 @@ class APIController extends Controller
                         $curBill->state = 0;
                         $curBill->notExceeded = $notExceeded;
                         $curBill->exceeded = $exceeded;
+                        $curBill->duedate = date('Y-m-d', strtotime("+{$billInfo->block_days_after} day", $curtime));
                         $curBill->save();
 
                         if($billInfo->send_invoice == 0){ // Directly authorize and charge funds
@@ -721,11 +722,28 @@ class APIController extends Controller
                 ->with('invoiceDate', gmdate("Y-m-d", $curtime))
                 ->with('company', $company)
                 ->with('billInfo', $billInfo)
+                ->with('dueDate', $curBill->duedate)
                 ->with('jobs', $jobs)
                 ->render();
 
         $dompdf->load_html($html);
         $dompdf->render();
+
+        // Parameters
+        $x          = 545;
+        $y          = 810;
+        $text       = "{PAGE_NUM} of {PAGE_COUNT}";     
+        $font       = $dompdf->getFontMetrics()->get_font('Helvetica', 'normal');   
+        $size       = 10;    
+        $color      = array(0,0,0);
+        $word_space = 0.0;
+        $char_space = 0.0;
+        $angle      = 0.0;
+
+        $dompdf->getCanvas()->page_text(
+        $x, $y, $text, $font, $size, $color, $word_space, $char_space, $angle
+        );
+
         $output = $dompdf->output();
 
         $filepath = storage_path('invoice') . '/' . $company->company_number . '. '. $company->company_name . ' ' . $curtime . '.pdf';
@@ -744,7 +762,7 @@ class APIController extends Controller
         $data = ['type' => $type, 'curBill' => $curBill, 'company' => $company, 'cardnumber' => substr($billInfo->card_number, -4), 'issuedDate' => date('Y-m-d', strtotime($curBill->issuedAt)),'error' => $error];
         
         if($company->bill_notifiers){
-            $notifiers = explode(";", $company->bill_notifiers);
+            $notifiers = explode(";", str_replace(' ', '', $company->bill_notifiers));
             foreach($notifiers as $notifier){
                 if($notifier != ''){
                     $info = ['email' => $notifier, 'filename' => $curBill->invoice];
