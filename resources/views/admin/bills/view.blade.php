@@ -2,6 +2,11 @@
 
 @section('content')
 <!-- Hero -->
+
+@section('css_after')
+<link rel="stylesheet" href="{{ asset('css/jquery-editable-select.min.css') }}">
+@endsection
+
 <div class="bg-image" style="background-image: url('{{ asset('img/bg_admin.jpg') }}');">
     <div class="bg-black-10">
         <div class="content content-full content-top">
@@ -111,12 +116,12 @@
                             </button>
                         </div>
                     </div>
-                    <div class="block-content">
+                    <div class="block-content" style="max-height: 700px; overflow: auto;">
                         <div class="row items-push">
                             <div class="col-lg-12">
                                 <div class="form-group">
                                     <label for="company">Company <span class="text-danger">*</span></label><br/>
-                                    <select class="form-control" id="company" name="company">
+                                    <select class="form-control" id="company" name="company" style="border: 1px solid pink;">
                                         @foreach ($companyList as $company)
                                             <option value="{{$company->id}}">{{ $company->company_name }}</option>
                                         @endforeach
@@ -125,31 +130,47 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="issuedAt">Issued DateTime <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="issuedAt" name="issuedAt" placeholder="Enter Issued Datetime...">
+                                    <input type="text" class="form-control" id="issuedAt" name="issuedAt" placeholder="Enter Issued Datetime..." style="border: 1px solid pink;">
+                                </div>
+                                <div class="form-group">
+                                    <label for="issuedAt">Due Date <span class="text-danger">*</span></label>
+                                    <input type="date" class="form-control" id="duedate" name="duedate" placeholder="Enter Due Date..." style="border: 1px solid pink;">
                                 </div>
                                 <div class="form-group">
                                     <label for="issuedFrom">Issued From <span class="text-danger">*</span></label>
-                                    <input type="date" class="form-control" id="issuedFrom" name="issuedFrom" placeholder="Enter Issued From...">
+                                    <input type="date" class="form-control" id="issuedFrom" name="issuedFrom" placeholder="Enter Issued From..." style="border: 1px solid pink;">
                                 </div>
                                 <div class="form-group">
                                     <label for="issuedTo">Issued To <span class="text-danger">*</span></label>
-                                    <input type="date" class="form-control" id="issuedTo" name="issuedTo" placeholder="Enter Issued To...">
+                                    <input type="date" class="form-control" id="issuedTo" name="issuedTo" placeholder="Enter Issued To..." style="border: 1px solid pink;">
                                 </div>
                                 <div class="form-group">
                                     <label for="jobCount">Job Counts <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="jobCount" name="jobCount" placeholder="Enter Job Counts...">
+                                    <input type="text" class="form-control" id="jobCount" name="jobCount" placeholder="Enter Job Counts..." style="border: 1px solid pink;">
                                 </div>
                                 <div class="form-group">
                                     <label for="jobIds">Job Ids <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="jobIds" name="jobIds" placeholder="Enter Job Ids with comma...">
+                                    <input type="text" class="form-control" id="jobIds" name="jobIds" placeholder="Enter Job Ids with comma..." style="border: 1px solid pink;">
                                 </div>
                                 <div class="form-group">
                                     <label for="amount">Amount <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="amount" name="amount" placeholder="Enter total amount...">
+                                    <input type="text" class="form-control" id="amount" name="amount" placeholder="Enter total amount..." style="border: 1px solid pink;">
+                                </div>
+                                <div class="form-group">
+                                    <label for="amount">Custom Expenses <span class="text-success" onclick="addExpense()" style="cursor: pointer;"> <i class="fa fa-plus"></i> </span></label>
+                                    <div class="row">
+                                        <div class="col-6 text-center">Description</div>
+                                        <div class="col-2 text-center">Price</div>
+                                        <div class="col-2 text-center">Quantity</div>
+                                        <div class="col-2 text-center">Add</div>
+                                    </div>
+                                    <div id="expContainer">
+                                        
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="state">State <span class="text-danger">*</span></label><br/>
-                                    <select class="form-control" id="state" name="state">
+                                    <select class="form-control" id="state" name="state" style="border: 1px solid pink;">
                                         <option value="0">Unpaid</option>
                                         <option value="1">Failed</option>
                                         <option value="2">Paid</option>
@@ -159,6 +180,10 @@
                                 <div class="custom-control custom-checkbox custom-control-dark mb-1 mr-2">
                                     <input type="checkbox" class="custom-control-input" id="updatePDF" name="updatePDF" checked>
                                     <label style="cursor: pointer;" class="custom-control-label" for="updatePDF">Update Invoice PDF</label>
+                                </div>
+                                <div class="custom-control custom-checkbox custom-control-dark mb-1 mr-2">
+                                    <input type="checkbox" class="custom-control-input" id="sendMail" name="sendMail">
+                                    <label style="cursor: pointer;" class="custom-control-label" for="sendMail">Send Notification Emails</label>
                                 </div>
                             </div>
                         </div>
@@ -273,6 +298,7 @@
         });
     })
 </script>
+<script src="{{ asset('js/jquery-editable-select.min.js') }}"></script>
 
 @include('admin.bills.script')
 @endsection

@@ -791,6 +791,13 @@ class CompanyController extends Controller
                         $company->save();
                     }
                 } 
+                if(isset($request['attn_name'])){
+                    $company = Company::where('id', $clientId)->first();
+                    if($company){
+                        $company->attn_name = $request['attn_name'];
+                        $company->save();
+                    }
+                } 
             }
 
             $info->save();
@@ -1195,18 +1202,40 @@ class CompanyController extends Controller
             ->get(
                 array('job_request.id as id', 'users.username as username', 'job_request.clientProjectName as projectname', 'job_request.clientProjectNumber as projectnumber', 'job_request.state as state', 'job_request.createdTime as createdtime', 'job_request.submittedTime as submittedtime')
             );
+
+        $expenses = array();
+        if($curBill->expenses)
+            $expenses = json_decode($curBill->expenses);
         
         $html = view('pdf.invoice')
                 ->with('type', $type)
                 ->with('curBill', $curBill)
                 ->with('invoiceDate', gmdate("Y-m-d", $curtime))
+                ->with('dueDate', $curBill->duedate)
                 ->with('company', $company)
                 ->with('billInfo', $billInfo)
                 ->with('jobs', $jobs)
+                ->with('expenses', $expenses)
                 ->render();
 
         $dompdf->load_html($html);
         $dompdf->render();
+
+        // Parameters
+        $x          = 545;
+        $y          = 810;
+        $text       = "{PAGE_NUM} of {PAGE_COUNT}";     
+        $font       = $dompdf->getFontMetrics()->get_font('Helvetica', 'normal');   
+        $size       = 10;    
+        $color      = array(0,0,0);
+        $word_space = 0.0;
+        $char_space = 0.0;
+        $angle      = 0.0;
+
+        $dompdf->getCanvas()->page_text(
+        $x, $y, $text, $font, $size, $color, $word_space, $char_space, $angle
+        );
+
         $output = $dompdf->output();
 
         $filepath = storage_path('invoice') . '/' . $company->company_number . '. '. $company->company_name . ' ' . $curtime . '.pdf';
@@ -1225,7 +1254,7 @@ class CompanyController extends Controller
         $data = ['type' => $type, 'curBill' => $curBill, 'company' => $company, 'cardnumber' => substr($billInfo->card_number, -4), 'issuedDate' => date('Y-m-d', strtotime($curBill->issuedAt)),'error' => $error];
         
         if($company->bill_notifiers){
-            $notifiers = explode(";", $company->bill_notifiers);
+            $notifiers = explode(";", str_replace(' ', '', $company->bill_notifiers));
             foreach($notifiers as $notifier){
                 if($notifier != ''){
                     $info = ['email' => $notifier, 'filename' => $curBill->invoice];
@@ -1542,15 +1571,24 @@ class CompanyController extends Controller
                     $bill->jobIds = json_encode($request['jobIds']);
                     $bill->amount = $request['amount'];
                     $bill->state = $request['state'];
+                    $bill->duedate = $request['duedate'];
+                    if($request['expenses'])
+                        $bill->expenses = json_encode($request['expenses']);
+                    else
+                        $bill->expenses = NULL;
                     $bill->save();
 
-                    if($request['updatePDF']){
+                    if($request['updatePDF'] == 'true'){
                         $company = Company::where('id', $bill->companyId)->first();
                         $billInfo = BillingInfo::where('clientId', $bill->companyId)->first();
                         if($bill->state == 2)
                             $this->createInvoice(1, $bill, $company, $billInfo, strtotime($bill->issuedAt));
                         else
                             $this->createInvoice(0, $bill, $company, $billInfo, strtotime($bill->issuedAt));
+                    }
+
+                    if($request['sendMail'] == 'true'){
+                        $this->sendBillMail(3, $bill, $company, $billInfo, '');
                     }
 
                     return response()->json(["success" => true]);
@@ -1569,9 +1607,14 @@ class CompanyController extends Controller
                 $bill->jobIds = json_encode($request['jobIds']);
                 $bill->amount = $request['amount'];
                 $bill->state = $request['state'];
+                $bill->duedate = $request['duedate'];
+                if($request['expenses'])
+                    $bill->expenses = json_encode($request['expenses']);
+                else
+                    $bill->expenses = NULL;
                 $bill->save();
 
-                if($request['updatePDF']){
+                if($request['updatePDF'] == 'true'){
                     $company = Company::where('id', $bill->companyId)->first();
                     $billInfo = BillingInfo::where('clientId', $bill->companyId)->first();
                     if($bill->state == 2)
@@ -1579,6 +1622,10 @@ class CompanyController extends Controller
                     else
                         $this->createInvoice(0, $bill, $company, $billInfo, strtotime($bill->issuedAt));
                 }
+
+                if($request['sendMail'] == 'true')
+                    $this->sendBillMail(0, $bill, $company, $billInfo, '');
+
                 return response()->json(["success" => true]);
             }
         } else
@@ -1695,6 +1742,7 @@ class CompanyController extends Controller
                             $curBill->state = 0;
                             $curBill->notExceeded = $notExceeded;
                             $curBill->exceeded = $exceeded;
+                            $curBill->duedate = date('Y-m-d', strtotime("+{$billInfo->block_days_after} day", time()));
                             $curBill->save();
 
                             if($billInfo->send_invoice == 0){ // Directly authorize and charge funds

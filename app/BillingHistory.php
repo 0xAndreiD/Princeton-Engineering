@@ -15,7 +15,7 @@ class BillingHistory extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'id', 'companyId', 'amount', 'jobIds', 'jobCount', 'response', 'issuedAt', 'issuedFrom', 'issuedTo', 'state', 'invoice', 'receipt'
+        'id', 'companyId', 'amount', 'jobIds', 'jobCount', 'response', 'issuedAt', 'issuedFrom', 'issuedTo', 'state', 'invoice', 'receipt', 'expenses', 'duedate'
     ];
 
     protected $table = 'billing_history';

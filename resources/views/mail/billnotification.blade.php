@@ -322,6 +322,8 @@ ul.social li{
 				Your payment to Princeton Engineering was failed.
 				@elseif($type == 2)
 				Your payment to Princeton Engineering was successful.
+				@elseif($type == 3)
+				A invoice has been updated.
 				@endif
 			</td>
 		</tr>
@@ -347,7 +349,7 @@ ul.social li{
                               <h3 style="margin: 0; color: black;">Details:</h3>
 							  <h3 style="margin: 0px 0px 0px 50px; color: black;">	Invoice # {{ $curBill->id }}</h3>
                               <h3 style="margin: 0px 0px 0px 50px; color: black;">	Amount:		${{ $curBill->amount }} USD</h3>
-							  <h3 style="margin: 0px 0px 0px 50px; color: black;">	Due Date:	{{ $issuedDate }}</h3>
+							  <h3 style="margin: 0px 0px 0px 50px; color: black;">	Due Date:	{{ $curBill->duedate }}</h3>
                               @if($type == 1)
 							  <h3 style="margin: 0px 0px 0px 50px; color: black;">	Reason:		{{$error}}</h3>
 							  @endif
