@@ -623,7 +623,6 @@ var drawTrussGraph = function( condId ) {
         }
         totalRoofLength += startModule;
         var moduleCount = parseInt($(`#f-1-${condId}`).val());
-        console.log('here', moduleCount);
         
         let moduleStartX = 0;
         var orientation = false;
@@ -1007,6 +1006,30 @@ var optionRailSupport = function(mainType, subType, idx) {
     return "N/A";
 }
 
+var loadASCEOptions = function(state){
+    for(let j = 0; j < 10; j ++){
+        $(`#a-12-${j + 1}`).find('option').remove();
+    }
+    $.ajax({
+        url:"getASCEOptions",
+        type:'post',
+        data:{state: state, crc32: $("#railsupport-crc32").val() },
+        success: function(res){
+            if(res.success && res.data && state == $('#option-state').val()){
+                for(let i = 0; i < res.data.length; i ++){
+                    for(let j = 0; j < 10; j ++){
+                        if(preloaded_data && preloaded_data['LoadingCase'] && preloaded_data['LoadingCase'][j] && preloaded_data['LoadingCase'][j]['RoofDataInput']
+                            && preloaded_data['LoadingCase'][j]['RoofDataInput']['A12'] == res.data[i])
+                            $(`#a-12-${j + 1}`).append(`<option data-value="${res.data[i]}" selected>${res.data[i]}</option>`);
+                        else
+                            $(`#a-12-${j + 1}`).append(`<option data-value="${res.data[i]}">${res.data[i]}</option>`);
+                    }
+                }
+            }
+        }
+    });
+}
+
 var updateRailSupportSubField = function(mainType, subType = "") {
     if (subType == "") {
         selectedSubType = "";
@@ -1046,6 +1069,7 @@ var updateRailSupportSubField = function(mainType, subType = "") {
     $('#option-railsupport-option2').html(optionRailSupport(mainType, subType, 3));
     $('#railsupport-custom').val(optionRailSupport(mainType, subType, 4) ? true : false);
     $('#railsupport-crc32').val(optionRailSupport(mainType, subType, 6));
+    loadASCEOptions($('#option-state').val());
 }
 
 var moduleSetting = 0, inverterSetting = 0, railSetting = 0, stanchionSetting = 0;
@@ -4435,30 +4459,6 @@ var loadPreloadedData = function() {
                     $(".h13").css('height', res.inputCellHeight + 'pt');
                     $(".h13 input").css('font-family', res.inputFontFamily);
                     $(".h13 td").css('font-family', res.inputFontFamily);
-                }
-            }
-        });
-    }
-
-    var loadASCEOptions = function(state){
-        for(let j = 0; j < 10; j ++){
-            $(`#a-12-${j + 1}`).find('option').remove();
-        }
-        $.ajax({
-            url:"getASCEOptions",
-            type:'post',
-            data:{state: state},
-            success: function(res){
-                if(res.success && res.data && state == $('#option-state').val()){
-                    for(let i = 0; i < res.data.length; i ++){
-                        for(let j = 0; j < 10; j ++){
-                            if(preloaded_data && preloaded_data['LoadingCase'] && preloaded_data['LoadingCase'][j] && preloaded_data['LoadingCase'][j]['RoofDataInput']
-                             && preloaded_data['LoadingCase'][j]['RoofDataInput']['A12'] == res.data[i])
-                                $(`#a-12-${j + 1}`).append(`<option data-value="${res.data[i]}" selected>${res.data[i]}</option>`);
-                            else
-                                $(`#a-12-${j + 1}`).append(`<option data-value="${res.data[i]}">${res.data[i]}</option>`);
-                        }
-                    }
                 }
             }
         });
