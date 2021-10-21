@@ -1977,10 +1977,17 @@ class GeneralController extends Controller
         if(!empty($request['state'])){
             $year_value = ASCEYear::where('jurisdiction_abbrev', $request['state'])->first();
             if($year_value){
-                $roof_types = ASCERoofTypes::where('asce', $year_value['asce7_in_years'])->get();
                 $data = array();
-                foreach($roof_types as $type)
-                    $data[] = $type->roof_type;
+                
+                $crc32_roofs = ASCERoofTypes::where('asce', $year_value['asce7_in_years'])->where('rack_crc32', $request['crc32'])->get(); 
+                if(count($crc32_roofs) > 0){
+                    foreach($crc32_roofs as $type)
+                        $data[] = $type->roof_type;
+                } else {
+                    $roof_types = ASCERoofTypes::where('asce', $year_value['asce7_in_years'])->whereNull('rack_crc32')->get();
+                    foreach($roof_types as $type)
+                        $data[] = $type->roof_type;
+                }
                 return response()->json(['success' => true, 'data' => $data]);
             } else
                 return response()->json(['success' => false, 'message' => 'Cannot find state']);

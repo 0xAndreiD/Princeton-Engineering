@@ -15,7 +15,7 @@ class ASCERoofTypes extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'id', 'asce', 'roof_type'
+        'id', 'asce', 'roof_type', 'rack_crc32'
     ];
 
     protected $table = 'asce_roof_types';
