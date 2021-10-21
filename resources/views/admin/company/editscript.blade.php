@@ -540,6 +540,7 @@ $.ajax({
                 $("#extrafee").val(res.data.extra_fee);
                 $("#send_invoice").val(res.data.send_invoice);
                 $("#block_on_fail").val(res.data.block_on_fail);
+                $("#due_days").val(res.data.due_days);
                 $("#block_days_after").val(res.data.block_days_after);
                 if(res.data.block_on_fail == 1)
                     $("#block_days_after")[0].disabled = false;
@@ -623,6 +624,7 @@ function saveBilling(){
     data.extra_fee = $("#extrafee").val();
     data.send_invoice = $("#send_invoice").val();
     data.block_on_fail = $("#block_on_fail").val();
+    data.due_days = $("#due_days").val();
     data.block_days_after = $("#block_days_after").val();
     if($("#bill-weekly")[0].checked == true)
         data.billing_period = 0;

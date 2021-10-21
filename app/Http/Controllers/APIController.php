@@ -689,7 +689,7 @@ class APIController extends Controller
                         $curBill->state = 0;
                         $curBill->notExceeded = $notExceeded;
                         $curBill->exceeded = $exceeded;
-                        $curBill->duedate = date('Y-m-d', strtotime("+{$billInfo->block_days_after} day", $curtime));
+                        $curBill->duedate = date('Y-m-d', strtotime("+{$billInfo->due_days} day", $curtime));
                         $curBill->save();
 
                         if($billInfo->send_invoice == 0){ // Directly authorize and charge funds

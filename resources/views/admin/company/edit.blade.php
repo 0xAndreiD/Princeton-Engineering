@@ -273,6 +273,10 @@
                                 </select>
                             </div>
                             <div class="form-group">
+                                <label for="bill_notifiers">Payment Due Days: <span class="text-danger">*</span></label>
+                                <input type="text" style="border: 1px solid pink;" class="form-control" id="due_days" name="due_days" placeholder="7">
+                            </div>
+                            <div class="form-group">
                                 <label for="block_days_after">Block features after * days<span class="text-danger">*</span></label>
                                 <input type="text" style="border: 1px solid pink;" class="form-control" id="block_days_after" name="block_days_after" placeholder="ex: 3" disabled>
                             </div>
