@@ -781,6 +781,7 @@ class CompanyController extends Controller
                 if(isset($request['extra_fee'])) $info->extra_fee = $request['extra_fee'];
                 if(isset($request['send_invoice'])) $info->send_invoice = $request['send_invoice'];
                 if(isset($request['block_on_fail'])) $info->block_on_fail = $request['block_on_fail'];
+                if(isset($request['due_days'])) $info->due_days = $request['due_days'];
                 if(isset($request['billing_period'])) $info->billing_period = $request['billing_period'];
                 if(isset($request['billing_day'])) $info->billing_day = $request['billing_day'];
                 if(isset($request['block_days_after'])) $info->block_days_after = $request['block_days_after'];
@@ -1643,10 +1644,10 @@ class CompanyController extends Controller
             if($bill){
                 $billInfo = BillingInfo::where('clientId', $bill->companyId)->first();
                 if($billInfo){
-                    if($billInfo->block_days_after)
-                        $duedate = date('Y-m-d', strtotime("+{$billInfo->block_days_after} day", strtotime($bill->issuedAt)));
-                    else
-                        $duedate = date('Y-m-d', strtotime($bill->issuedAt));
+                    // if($billInfo->due_days)
+                    $duedate = date('Y-m-d', strtotime("+{$billInfo->due_days} day", strtotime($bill->issuedAt)));
+                    // else
+                    //     $duedate = date('Y-m-d', strtotime($bill->issuedAt));
 
                     if($billInfo->card_number)
                         $cardnumber = substr($billInfo->card_number, -4);
@@ -1742,7 +1743,7 @@ class CompanyController extends Controller
                             $curBill->state = 0;
                             $curBill->notExceeded = $notExceeded;
                             $curBill->exceeded = $exceeded;
-                            $curBill->duedate = date('Y-m-d', strtotime("+{$billInfo->block_days_after} day", time()));
+                            $curBill->duedate = date('Y-m-d', strtotime("+{$billInfo->due_days} day", time()));
                             $curBill->save();
 
                             if($billInfo->send_invoice == 0){ // Directly authorize and charge funds
