@@ -104,7 +104,7 @@
 
 <!-- Bill Management Modal -->
 <div class="modal" id="billmodal" tabindex="-1" role="dialog" aria-labelledby="billmodal" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog" role="document" style="max-width: 1000px;">
         <div class="modal-content">
             <form class="js-validation" onsubmit="return false;" method="POST" id="billUpdateForm">
                 <div class="block block-themed block-transparent mb-0">
@@ -128,21 +128,33 @@
                                     </select>
                                     <input type="hidden" id="id" name="id">
                                 </div>
-                                <div class="form-group">
-                                    <label for="issuedAt">Issued DateTime <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="issuedAt" name="issuedAt" placeholder="Enter Issued Datetime..." style="border: 1px solid pink;">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label for="issuedAt">Issued DateTime <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="issuedAt" name="issuedAt" placeholder="Enter Issued Datetime..." style="border: 1px solid pink;">
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label for="issuedAt">Due Date <span class="text-danger">*</span></label>
+                                            <input type="date" class="form-control" id="duedate" name="duedate" placeholder="Enter Due Date..." style="border: 1px solid pink;">
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="issuedAt">Due Date <span class="text-danger">*</span></label>
-                                    <input type="date" class="form-control" id="duedate" name="duedate" placeholder="Enter Due Date..." style="border: 1px solid pink;">
-                                </div>
-                                <div class="form-group">
-                                    <label for="issuedFrom">Issued From <span class="text-danger">*</span></label>
-                                    <input type="date" class="form-control" id="issuedFrom" name="issuedFrom" placeholder="Enter Issued From..." style="border: 1px solid pink;">
-                                </div>
-                                <div class="form-group">
-                                    <label for="issuedTo">Issued To <span class="text-danger">*</span></label>
-                                    <input type="date" class="form-control" id="issuedTo" name="issuedTo" placeholder="Enter Issued To..." style="border: 1px solid pink;">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label for="issuedFrom">Issued From <span class="text-danger">*</span></label>
+                                            <input type="date" class="form-control" id="issuedFrom" name="issuedFrom" placeholder="Enter Issued From..." style="border: 1px solid pink;">
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label for="issuedTo">Issued To <span class="text-danger">*</span></label>
+                                            <input type="date" class="form-control" id="issuedTo" name="issuedTo" placeholder="Enter Issued To..." style="border: 1px solid pink;">
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="jobCount">Job Counts <span class="text-danger">*</span></label>
@@ -157,12 +169,15 @@
                                     <input type="text" class="form-control" id="amount" name="amount" placeholder="Enter total amount..." style="border: 1px solid pink;">
                                 </div>
                                 <div class="form-group">
-                                    <label for="amount">Custom Expenses <span class="text-success" onclick="addExpense()" style="cursor: pointer;"> <i class="fa fa-plus"></i> </span></label>
+                                    <label>Invoice Items <span class="text-success" onclick="addExpense()" style="cursor: pointer;"> <i class="fa fa-plus"></i> </span></label>
                                     <div class="row">
-                                        <div class="col-6 text-center">Description</div>
-                                        <div class="col-2 text-center">Price</div>
-                                        <div class="col-2 text-center">Quantity</div>
-                                        <div class="col-2 text-center">Add</div>
+                                        <div class="col-2 pl-0 pr-0 text-center">Date</div>
+                                        <div class="col-2 pl-0 pr-0 text-center">Item Code</div>
+                                        <div class="col-4 pl-0 pr-0 text-center">Description</div>
+                                        <div class="col-1 pl-0 pr-0 text-center">Price</div>
+                                        <div class="col-1 pl-0 pr-0 text-center">Quantity</div>
+                                        <div class="col-1 pl-0 pr-0 text-center">Amount</div>
+                                        <div class="col-1 pl-0 pr-0 text-center">Action</div>
                                     </div>
                                     <div id="expContainer">
                                         
@@ -189,8 +204,8 @@
                         </div>
                     </div>
                     <div class="block-content block-content-full text-right bg-light">
-                        <button type="button" class="btn btn-sm btn-light" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-sm btn-primary" onclick="saveBill()">Save</button>
+                        <button type="button" class="btn btn-sm btn-light" data-dismiss="modal">Close / Cancel</button>
+                        <button type="submit" class="btn btn-sm btn-primary" onclick="saveBill()">Save Changes</button>
                     </div>
                 </div>
             </form>

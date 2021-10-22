@@ -175,6 +175,44 @@ function changeState(obj, id, state){
     });
 }
 
+var defaultExps = [
+    {'code': 'Monthly Base', 'description': 'Monthly base number of jobs', 'price': '', 'quantity': '', 'amount': 0 },
+    {'code': 'Above Monthly', 'description': 'Jobs exceeding monthly base', 'price': '', 'quantity': '', 'amount': 0 },
+    {'code': 'Shipping', 'description': 'Overnight Shipping', 'price': '', 'quantity': '', 'amount': 0 },
+    {'code': 'Reproduction', 'description': 'Photocopying / Printing: Letter size', 'price': 0.1, 'quantity': 1, 'amount': 0.1 },
+    {'code': 'Reproduction', 'description': 'Photocopying / Printing: Ledger size', 'price': 0.2, 'quantity': 1, 'amount': 0.2 },
+    {'code': 'Travel', 'description': 'Mileage', 'price': 0.5, 'quantity': 1, 'amount': 0.5 },
+    {'code': 'Travel', 'description': 'Other', 'price': '', 'quantity': '', 'amount': 0 },
+    {'code': 'Letter', 'description': 'Post Installation Letter', 'price': '', 'quantity': '', 'amount': 0 },
+    {'code': 'Review', 'description': 'Electric Load Calculator Review', 'price': '', 'quantity': '', 'amount': 0 },
+];
+
+var pulldownHandler = function (e, li) {
+    if($(this).attr('name') == 'code'){
+        let exps = defaultExps.filter(e => e.code == $(li).html());
+
+        let html = '<select name="description" class="form-control editableSel" style="border: 1px solid pink;">';
+        exps.forEach(exp => {
+            html += `<option>${exp.description}</option>`;
+        });
+        html += '</select>';
+        
+        $(li).parents(".expenseRow").find(".descSel").html(html);
+        $(li).parents(".expenseRow").find("select[name='description']").editableSelect({ filter: false }).on('select.editable-select', pulldownHandler);
+    } else if($(this).attr('name') == 'description'){
+        let code = $(li).parents(".expenseRow").find("input[name='code']").val();
+        let description = $(li).parents(".expenseRow").find("input[name='description']").val();
+        
+        let exp = defaultExps.filter(e => e.code == code && e.description == description);
+        if(exp.length > 0 && exp[0].price > 0){
+            $(li).parents(".expenseRow").find("input[name='price']").val(exp[0].price);
+            $(li).parents(".expenseRow").find("input[name='quantity']").val(exp[0].quantity);
+            $(li).parents(".expenseRow").find("input[name='amount']").val(exp[0].amount);
+            updateAmount();
+        }
+    }
+}
+
 function editBill(obj, id){
     $('#billmodal').modal('toggle');
     $('#expContainer').html('');
@@ -193,56 +231,85 @@ function editBill(obj, id){
             $("#state").val(result.data.state);
             if(result.data.expenses){
                 let expenses = JSON.parse(result.data.expenses);
-                expenses.forEach(expense => {
+                expenses.forEach((expense, idx) => {
                     $('#expContainer').append(`<div class="row mb-1 expenseRow">\
-                        <div class="col-6">\
-                            <select name="description" class="form-control editableSel" style="border: 1px solid pink;" value="${expense.description}" oninput="expDescChange(this)">\
-                                <option>Overnight Shipping</option>\
-                                <option onclick="expDescChange(this, 0.1)">Reproduction: Photocopying / Printing: Letter size</option>\
-                                <option onclick="expDescChange(this, 0.2)">Reproduction: Photocopying / Printing: Ledger size</option>\
-                                <option onclick="expDescChange(this, 0.5)">Travel: Mileage</option>\
-                                <option>Travel: Other</option>\
-                                <option>Post Installation Letter</option>\
-                                <option>Electric Load Calculator Review</option>\
-                                <option>${expense.description}</option>\
+                        <div class="col-2 pl-0 pr-0">\
+                            <input type="date" class="form-control" name="date" placeholder="" style="border: 1px solid pink;" value="${expense.date}">\
+                        </div>\
+                        <div class="col-2 pl-0 pr-0">\
+                            <select id="code_${idx}" name="code" class="form-control editableSel" style="border: 1px solid pink;" value="${expense.code}">\
+                                <option>Monthly Base</option>\
+                                <option>Above Monthly</option>\
+                                <option>Shipping</option>\
+                                <option>Reproduction</option>\
+                                <option>Travel</option>\
+                                <option>Letter</option>\
+                                <option>Review</option>\
                             </select>\
                         </div>\
-                        <div class="col-2">\
-                            <input type="text" class="form-control" name="price" placeholder="" style="border: 1px solid pink;" value="${expense.price}">\
+                        <div class="col-4 pl-0 pr-0 descSel">\
+                            <select id="desc_${idx}" name="description" class="form-control editableSel" style="border: 1px solid pink;" value="${expense.description}">\
+                            </select>\
                         </div>\
-                        <div class="col-2">\
-                            <input type="text" class="form-control" name="quantity" placeholder="" style="border: 1px solid pink;" value="${expense.quantity}">\
+                        <div class="col-1 pl-0 pr-0">\
+                            <input type="text" class="form-control" name="price" placeholder="" style="border: 1px solid pink;" value="${expense.price}" onchange="expAmountUpdate(this)">\
                         </div>\
-                        <div class="col-2 text-center">\
-                            <button class="btn btn-success" onclick="addExpToAmount(this)"><i class="fa fa-fw fa-plus"></i></button>\
+                        <div class="col-1 pl-0 pr-0">\
+                            <input type="text" class="form-control" name="quantity" placeholder="" style="border: 1px solid pink;" value="${expense.quantity}" onchange="expAmountUpdate(this)">\
+                        </div>\
+                        <div class="col-1 pl-0 pr-0">\
+                            <input type="text" class="form-control" name="amount" placeholder="" style="border: 1px solid pink;" value="${expense.amount}" onchange="updateAmount()">\
+                        </div>\
+                        <div class="col-1 pl-0 pr-0 text-center">\
+                            <button class="btn btn-danger" onclick="delExpense(this)"><i class="fa fa-fw fa-trash"></i></button>\
                         </div>\
                     </div>`);
+
+                    let exps = defaultExps.filter(e => e.code == expense.code);
+                    if(exps.length == 0)
+                        $(`#code_${idx}`).append(`<option>${expense.code}</option>`);
+                    exps.forEach(exp => {
+                        $(`#desc_${idx}`).append(`<option>${exp.description}</option>`);
+                    });
+                    if(exps.filter(e => e.description == expense.description).length == 0)
+                        $(`#desc_${idx}`).append(`<option>${expense.description}</option>`);
                 });
-                $(".editableSel").editableSelect({ filter: false });
+
+                $(".editableSel").editableSelect({ filter: false }).on('select.editable-select', pulldownHandler);
             } else {
-                $('#expContainer').html('<div class="row mb-1 expenseRow">\
-                    <div class="col-6">\
-                        <select name="description" class="form-control editableSel" style="border: 1px solid pink;" oninput="expDescChange(this)">\
-                            <option>Overnight Shipping</option>\
-                            <option onclick="expDescChange(this, 0.1)">Reproduction: Photocopying / Printing: Letter size</option>\
-                            <option onclick="expDescChange(this, 0.2)">Reproduction: Photocopying / Printing: Ledger size</option>\
-                            <option onclick="expDescChange(this, 0.5)">Travel: Mileage</option>\
-                            <option>Travel: Other</option>\
-                            <option>Post Installation Letter</option>\
-                            <option>Electric Load Calculator Review</option>\
-                        </select>\
-                    </div>\
-                    <div class="col-2">\
-                        <input type="text" class="form-control" name="price" placeholder="" style="border: 1px solid pink;">\
-                    </div>\
-                    <div class="col-2">\
-                        <input type="text" class="form-control" name="quantity" placeholder="" style="border: 1px solid pink;">\
-                    </div>\
-                    <div class="col-2 text-center">\
-                        <button class="btn btn-success" onclick="addExpToAmount(this)"><i class="fa fa-fw fa-plus"></i></button>\
-                    </div>\
-                </div>');
-                $(".editableSel").editableSelect({ filter: false });
+                $('#expContainer').html(`<div class="row mb-1 expenseRow">\
+                        <div class="col-2 pl-0 pr-0">\
+                            <input type="date" class="form-control" name="date" placeholder="" style="border: 1px solid pink;">\
+                        </div>\
+                        <div class="col-2 pl-0 pr-0">\
+                            <select name="code" class="form-control editableSel" style="border: 1px solid pink;">\
+                                <option>Monthly Base</option>\
+                                <option>Above Monthly</option>\
+                                <option>Shipping</option>\
+                                <option>Reproduction</option>\
+                                <option>Travel</option>\
+                                <option>Letter</option>\
+                                <option>Review</option>\
+                            </select>\
+                        </div>\
+                        <div class="col-4 pl-0 pr-0 descSel">\
+                            <select name="description" class="form-control editableSel" style="border: 1px solid pink;">\
+                            </select>\
+                        </div>\
+                        <div class="col-1 pl-0 pr-0">\
+                            <input type="text" class="form-control" name="price" placeholder="" style="border: 1px solid pink;" onchange="expAmountUpdate(this)">\
+                        </div>\
+                        <div class="col-1 pl-0 pr-0">\
+                            <input type="text" class="form-control" name="quantity" placeholder="" style="border: 1px solid pink;" onchange="expAmountUpdate(this)">\
+                        </div>\
+                        <div class="col-1 pl-0 pr-0">\
+                            <input type="text" class="form-control" name="amount" placeholder="" style="border: 1px solid pink;" onchange="updateAmount()">\
+                        </div>\
+                        <div class="col-1 pl-0 pr-0 text-center">\
+                            <button class="btn btn-danger" onclick="delExpense(this)"><i class="fa fa-fw fa-trash"></i></button>\
+                        </div>\
+                    </div>`);
+                $(".editableSel").editableSelect({ filter: false }).on('select.editable-select', pulldownHandler);
             }
         }
     });
@@ -274,17 +341,21 @@ function saveBill(){
 
     data.expenses = [];
     $(".expenseRow").each(function(){
+        let date = $(this).find("input[name='date']").val();
+        let code = $(this).find("input[name='code']").val();
         let description = $(this).find("input[name='description']").val();
         let price = $(this).find("input[name='price']").val();
         let quantity = $(this).find("input[name='quantity']").val();
+        let amount = $(this).find("input[name='amount']").val();
         if(description != '')
-            data.expenses.push({description: description, price: price, quantity: quantity});
+            data.expenses.push({date: date, code: code, description: description, price: price, quantity: quantity, amount: amount});
     });
 
     swal.fire({ title: "Please wait...", showConfirmButton: false });
     swal.showLoading();
     $.post("saveBill", data, function(result){
         swal.close();
+        $('#billmodal').modal('toggle');
         if (result.success){
             $("#infos").DataTable().draw(false);
             toast.fire('Success', 'The bill is saved.', 'success');
@@ -306,29 +377,39 @@ function addBill(){
     $("#updatePDF")[0].checked = true;
 
     $('#billmodal').modal('toggle');
-    $('#expContainer').html('<div class="row mb-1 expenseRow">\
-        <div class="col-6">\
-            <select name="description" class="form-control editableSel" style="border: 1px solid pink;" oninput="expDescChange(this)">\
-                <option>Overnight Shipping</option>\
-                <option onclick="expDescChange(this, 0.1)">Reproduction: Photocopying / Printing: Letter size</option>\
-                <option onclick="expDescChange(this, 0.2)">Reproduction: Photocopying / Printing: Ledger size</option>\
-                <option onclick="expDescChange(this, 0.5)">Travel: Mileage</option>\
-                <option>Travel: Other</option>\
-                <option>Post Installation Letter</option>\
-                <option>Electric Load Calculator Review</option>\
-            </select>\
-        </div>\
-        <div class="col-2">\
-            <input type="text" class="form-control" name="price" placeholder="" style="border: 1px solid pink;">\
-        </div>\
-        <div class="col-2">\
-            <input type="text" class="form-control" name="quantity" placeholder="" style="border: 1px solid pink;">\
-        </div>\
-        <div class="col-2 text-center">\
-            <button class="btn btn-success" onclick="addExpToAmount(this)"><i class="fa fa-fw fa-plus"></i></button>\
-        </div>\
-    </div>');
-    $(".editableSel").editableSelect({ filter: false });
+    $('#expContainer').html(`<div class="row mb-1 expenseRow">\
+                        <div class="col-2 pl-0 pr-0">\
+                            <input type="date" class="form-control" name="date" placeholder="" style="border: 1px solid pink;">\
+                        </div>\
+                        <div class="col-2 pl-0 pr-0">\
+                            <select name="code" class="form-control editableSel" style="border: 1px solid pink;" >\
+                                <option>Monthly Base</option>\
+                                <option>Above Monthly</option>\
+                                <option>Shipping</option>\
+                                <option>Reproduction</option>\
+                                <option>Travel</option>\
+                                <option>Letter</option>\
+                                <option>Review</option>\
+                            </select>\
+                        </div>\
+                        <div class="col-4 pl-0 pr-0 descSel">\
+                            <select name="description" class="form-control editableSel" style="border: 1px solid pink;">\
+                            </select>\
+                        </div>\
+                        <div class="col-1 pl-0 pr-0">\
+                            <input type="text" class="form-control" name="price" placeholder="" style="border: 1px solid pink;" onchange="expAmountUpdate(this)">\
+                        </div>\
+                        <div class="col-1 pl-0 pr-0">\
+                            <input type="text" class="form-control" name="quantity" placeholder="" style="border: 1px solid pink;" onchange="expAmountUpdate(this)">\
+                        </div>\
+                        <div class="col-1 pl-0 pr-0">\
+                            <input type="text" class="form-control" name="amount" placeholder="" style="border: 1px solid pink;" onchange="updateAmount()">\
+                        </div>\
+                        <div class="col-1 pl-0 pr-0 text-center">\
+                            <button class="btn btn-danger" onclick="delExpense(this)"><i class="fa fa-fw fa-trash"></i></button>\
+                        </div>\
+                    </div>`);
+    $(".editableSel").editableSelect({ filter: false }).on('select.editable-select', pulldownHandler);
 }
 
 function billNow(){
@@ -366,40 +447,62 @@ function billNow(){
 }
 
 function addExpense(){
-    $('#expContainer').append('<div class="row mb-1 expenseRow">\
-        <div class="col-6">\
-            <select name="description" class="form-control editableSel" style="border: 1px solid pink;">\
-                <option>Overnight Shipping</option>\
-                <option onclick="expDescChange(this, 0.1)">Reproduction: Photocopying / Printing: Letter size</option>\
-                <option onclick="expDescChange(this, 0.2)">Reproduction: Photocopying / Printing: Ledger size</option>\
-                <option onclick="expDescChange(this, 0.5)">Travel: Mileage</option>\
-                <option>Travel: Other</option>\
-                <option>Post Installation Letter</option>\
-                <option>Electric Load Calculator Review</option>\
-            </select>\
-        </div>\
-        <div class="col-2">\
-            <input type="text" class="form-control" name="price" placeholder="" style="border: 1px solid pink;">\
-        </div>\
-        <div class="col-2">\
-            <input type="text" class="form-control" name="quantity" placeholder="" style="border: 1px solid pink;">\
-        </div>\
-        <div class="col-2 text-center">\
-            <button class="btn btn-success" onclick="addExpToAmount(this)"><i class="fa fa-fw fa-plus"></i></button>\
-        </div>\
-    </div>');
-    $(".editableSel").editableSelect({ filter: false });
+    $('#expContainer').append(`<div class="row mb-1 expenseRow">\
+                        <div class="col-2 pl-0 pr-0">\
+                            <input type="date" class="form-control" name="date" placeholder="" style="border: 1px solid pink;">\
+                        </div>\
+                        <div class="col-2 pl-0 pr-0">\
+                            <select name="code" class="form-control editableSel" style="border: 1px solid pink;">\
+                                <option>Monthly Base</option>\
+                                <option>Above Monthly</option>\
+                                <option>Shipping</option>\
+                                <option>Reproduction</option>\
+                                <option>Travel</option>\
+                                <option>Letter</option>\
+                                <option>Review</option>\
+                            </select>\
+                        </div>\
+                        <div class="col-4 pl-0 pr-0 descSel">\
+                            <select name="description" class="form-control editableSel" style="border: 1px solid pink;">\
+                            </select>\
+                        </div>\
+                        <div class="col-1 pl-0 pr-0">\
+                            <input type="text" class="form-control" name="price" placeholder="" style="border: 1px solid pink;" onchange="expAmountUpdate(this)">\
+                        </div>\
+                        <div class="col-1 pl-0 pr-0">\
+                            <input type="text" class="form-control" name="quantity" placeholder="" style="border: 1px solid pink;" onchange="expAmountUpdate(this)">\
+                        </div>\
+                        <div class="col-1 pl-0 pr-0">\
+                            <input type="text" class="form-control" name="amount" placeholder="" style="border: 1px solid pink;" onchange="updateAmount()">\
+                        </div>\
+                        <div class="col-1 pl-0 pr-0 text-center">\
+                            <button class="btn btn-danger" onclick="delExpense(this)"><i class="fa fa-fw fa-trash"></i></button>\
+                        </div>\
+                    </div>`);
+    $(".editableSel").editableSelect({ filter: false }).on('select.editable-select', pulldownHandler);
 }
 
-function addExpToAmount(obj){
-    let price = $(obj).parents(".expenseRow").find("input[name='price']").val();
-    let quantity = $(obj).parents(".expenseRow").find("input[name='quantity']").val();
-    $("#amount").val(parseFloat($("#amount").val()) + price * quantity);
+function updateAmount(){
+    let amount = 0;
+    $(".expenseRow").each(function(){
+        console.log($(this).find("input[name='amount']").val());
+        amount += parseFloat($(this).find("input[name='amount']").val());
+    });
+    $("#amount").val(amount);
 }
 
-function expDescChange(obj, price){
-    console.log(price);
-    $(obj).parents(".expenseRow").find("input[name='price']").val(price);
+function expAmountUpdate(obj){
+    let price = parseFloat($(obj).parents(".expenseRow").find("input[name='price']").val());
+    let quantity = parseFloat($(obj).parents(".expenseRow").find("input[name='quantity']").val());
+    if(price && quantity){
+        $(obj).parents(".expenseRow").find("input[name='amount']").val(price * quantity);
+        updateAmount();
+    }
+}
+
+function delExpense(obj){
+    $(obj).parents(".expenseRow").remove();
+    updateAmount();
 }
 
 </script>

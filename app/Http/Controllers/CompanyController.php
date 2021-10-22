@@ -1743,6 +1743,12 @@ class CompanyController extends Controller
                             $curBill->state = 0;
                             $curBill->notExceeded = $notExceeded;
                             $curBill->exceeded = $exceeded;
+                            
+                            $expenses = array();
+                            array_push($expenses, ["date" => gmdate("Y-m-d", $curtime), "code" => "Monthly Base", "description" => "Monthly base number of jobs", "quantity" => $notExceeded, "price" => $billInfo->base_fee, "amount" => $billInfo->base_fee * $notExceeded]);
+                            array_push($expenses, ["date" => gmdate("Y-m-d", $curtime), "code" => "Above Monthly", "description" => "Jobs exceeding monthly base", "quantity" => $exceeded, "price" => $billInfo->extra_fee, "amount" => $billInfo->extra_fee * $exceeded]);
+                            $curBill->expenses = json_encode($expenses);
+
                             $curBill->duedate = date('Y-m-d', strtotime("+{$billInfo->due_days} day", time()));
                             $curBill->save();
 

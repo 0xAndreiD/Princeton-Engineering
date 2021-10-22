@@ -690,6 +690,12 @@ class APIController extends Controller
                         $curBill->notExceeded = $notExceeded;
                         $curBill->exceeded = $exceeded;
                         $curBill->duedate = date('Y-m-d', strtotime("+{$billInfo->due_days} day", $curtime));
+
+                        $expenses = array();
+                        array_push($expenses, ["date" => gmdate("Y-m-d", $curtime), "code" => "Monthly Base", "description" => "Monthly base number of jobs", "quantity" => $notExceeded, "price" => $billInfo->base_fee, "amount" => $billInfo->base_fee * $notExceeded]);
+                        array_push($expenses, ["date" => gmdate("Y-m-d", $curtime), "code" => "Above Monthly", "description" => "Jobs exceeding monthly base", "quantity" => $exceeded, "price" => $billInfo->extra_fee, "amount" => $billInfo->extra_fee * $exceeded]);
+                        $curBill->expenses = json_encode($expenses);
+
                         $curBill->save();
 
                         if($billInfo->send_invoice == 0){ // Directly authorize and charge funds
@@ -716,6 +722,10 @@ class APIController extends Controller
         $dompdf = new DOMPDF($options);
         $dompdf->setPaper('A4', 'portrait');
         
+        $expenses = array();
+        if($curBill->expenses)
+            $expenses = json_decode($curBill->expenses);
+        
         $html = view('pdf.invoice')
                 ->with('type', $type)
                 ->with('curBill', $curBill)
@@ -724,6 +734,7 @@ class APIController extends Controller
                 ->with('billInfo', $billInfo)
                 ->with('dueDate', $curBill->duedate)
                 ->with('jobs', $jobs)
+                ->with('expenses', $expenses)
                 ->render();
 
         $dompdf->load_html($html);
