@@ -142,14 +142,16 @@
 <table style="width: 100%; border: 1px solid #cccccc; font-size: 14px; margin-top: 10px;">
   <thead>
     <tr style="background: #efefef;">
-      <th style="width: 55%; text-align: center; border: 1px solid #efefef;">DESCRIPTION</th>
-      <th style="width: 15%; text-align: center; border: 1px solid #efefef;">QUANTITY</th>
-      <th style="width: 15%; text-align: center; border: 1px solid #efefef;">UNIT PRICE</th>
+      <th style="width: 15%; text-align: center; border: 1px solid #efefef;">DATE</th>
+      <th style="width: 15%; text-align: center; border: 1px solid #efefef;">CODE</th>
+      <th style="width: 35%; text-align: center; border: 1px solid #efefef;">DESCRIPTION</th>
+      <th style="width: 10%; text-align: center; border: 1px solid #efefef;">QUANTITY</th>
+      <th style="width: 10%; text-align: center; border: 1px solid #efefef;">UNIT PRICE</th>
       <th style="width: 15%; text-align: center; border: 1px solid #efefef;">AMOUNT</th>
     </tr>
   </thead>
   <tbody>
-    <tr>
+    {{-- <tr>
       <td>Monthly base number of jobs</td>
       <td style="text-align: center;">{{ $curBill->notExceeded }}</td>
       <td style="text-align: center;">${{ $billInfo->base_fee }}</td>
@@ -160,16 +162,20 @@
       <td style="text-align: center;">{{ $curBill->exceeded }}</td>
       <td style="text-align: center;">${{ $billInfo->extra_fee }}</td>
       <td style="text-align: center;">${{ $billInfo->extra_fee * $curBill->exceeded }}</td>
-    </tr>
+    </tr> --}}
     @foreach($expenses as $expense)
     <tr>
+      <td style="text-align: center;">{{ $expense->date }}</td>
+      <td style="text-align: center;">{{ $expense->code }}</td>
       <td>{{ $expense->description }}</td>
       <td style="text-align: center;">{{ $expense->quantity }}</td>
       <td style="text-align: center;">${{ $expense->price }}</td>
-      <td style="text-align: center;">${{ $expense->price * $expense->quantity }}</td>
+      <td style="text-align: center;">${{ $expense->amount }}</td>
     </tr>
     @endforeach
     <tr style="background: #efefef;">
+      <td></td>
+      <td></td>
       <td>Total Price</td>
       <td></td>
       <td></td>
@@ -178,7 +184,7 @@
   </tbody>
 </table>
 <table style="width: 100%;">
-  <td style="font-style: italic;">
+  <td style="font-style: italic; font-size: 14px;">
     We thank you for your business. All unpaid balances over 30 days are charged interest at the rate of 1-1/2% per month (18% APR) which is added to the open account balance.
   </td>
 </table>
