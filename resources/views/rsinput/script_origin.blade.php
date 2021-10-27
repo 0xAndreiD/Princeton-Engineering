@@ -43,20 +43,29 @@ function fcChangeType( conditionId, type ){
         $(`#label-B-1-${conditionId}`).attr('rowspan', 5);
         $(`#label-B-1-${conditionId}`)[0].style.display = "none";
         $(`#title-B-3-${conditionId}`)[0].style.display = "table-cell";
+        $(`#label-G-1-${conditionId}`).attr('rowspan', 2);
         
-        var elements = $(`#inputform-${conditionId} .class-IBC-hide`);
+        var elements = $(`#inputform-${conditionId} .class-IBC-hide`); // show all IBC
         for(let i = 0; i < elements.length; i ++)
             elements[i].style.display = 'table-row';
-        elements = $(`#inputform-${conditionId} .class-truss-hide`);
+        elements = $(`#inputform-${conditionId} .class-GroundMount-hide`); // show all GroundMount
+        for(let i = 0; i < elements.length; i ++)
+            elements[i].style.display = 'table-row';
+        elements = $(`#inputform-${conditionId} .class-truss-hide`); // hide all truss
         for(let i = 0; i < elements.length; i ++)
             elements[i].style.display = 'none';
 
-        $(`#label-A-9-${conditionId}`)[0].innerHTML = 'Rise from Truss Plate to Top Ridge';
-        $(`#label-A-10-${conditionId}`)[0].innerHTML = 'Horiz Len from Outside of Truss Plate to Ridge';
-        $(`#label-A-11-${conditionId}`)[0].innerHTML = 'Diagonal Overhang Length past Truss Plate';
-        $(`#label-B-3-${conditionId}`)[0].innerHTML = 'Truss Spacing - Center to Center';
-        $(`#label-B-4-${conditionId}`)[0].innerHTML = 'Truss Material';
-        $(`#label-F-1-${conditionId}`)[0].innerHTML = 'Maximum # Modules along Truss';
+        $(`#label-A-2-${conditionId}`).html('Roof Average Height');
+        $(`#label-A-3-${conditionId}`).html('Plan View Length of Building Section');
+        $(`#label-A-4-${conditionId}`).html('Plan View Width of Building Section');
+        $(`#label-A-7-${conditionId}`).html('Roof Slope');
+        $(`#label-A-8-${conditionId}`).html('Diagonal Rafter Length from Plate to Ridge');
+        $(`#label-A-9-${conditionId}`).html('Rise from Truss Plate to Top Ridge');
+        $(`#label-A-10-${conditionId}`).html('Horiz Len from Outside of Truss Plate to Ridge');
+        $(`#label-A-11-${conditionId}`).html('Diagonal Overhang Length past Truss Plate');
+        $(`#label-B-3-${conditionId}`).html('Truss Spacing - Center to Center');
+        $(`#label-B-4-${conditionId}`).html('Truss Material');
+        $(`#label-F-1-${conditionId}`).html('Maximum # Modules along Truss');
         document.getElementById(`trussInput-${conditionId}`).style.display = "block";
 
         $(`#input-f-1-${conditionId}`).html(`<select id="f-1-${conditionId}" tabindex="47" onchange="maxModuleNumChange(${conditionId})">\
@@ -88,20 +97,29 @@ function fcChangeType( conditionId, type ){
         $(`#label-B-1-${conditionId}`).attr('rowspan', 5);
         $(`#label-B-1-${conditionId}`)[0].style.display = "table-cell";
         $(`#title-B-3-${conditionId}`)[0].style.display = "none";
+        $(`#label-G-1-${conditionId}`).attr('rowspan', 2);
         
-        var elements = $(`#inputform-${conditionId} .class-IBC-hide`);
+        var elements = $(`#inputform-${conditionId} .class-IBC-hide`); // show all IBC
         for(let i = 0; i < elements.length; i ++)
             elements[i].style.display = 'table-row';
-        elements = $(`#inputform-${conditionId} .class-truss-hide`);
+        elements = $(`#inputform-${conditionId} .class-truss-hide`); // show all Truss
+        for(let i = 0; i < elements.length; i ++)
+            elements[i].style.display = 'table-row';
+        elements = $(`#inputform-${conditionId} .class-GroundMount-hide`); // show all GroundMount
         for(let i = 0; i < elements.length; i ++)
             elements[i].style.display = 'table-row';
 
-        $(`#label-A-9-${conditionId}`)[0].innerHTML = 'Rise from Rafter Plate to Top Ridge';
-        $(`#label-A-10-${conditionId}`)[0].innerHTML = 'Horiz Len from Outside of Rafter Plate to Ridge';
-        $(`#label-A-11-${conditionId}`)[0].innerHTML = 'Diagonal Overhang Length past Rafter Plate';
-        $(`#label-B-3-${conditionId}`)[0].innerHTML = 'Joist Spacing - Center to Center';
-        $(`#label-B-4-${conditionId}`)[0].innerHTML = 'Rafter Material';
-        $(`#label-F-1-${conditionId}`)[0].innerHTML = 'Maximum # Modules along Rafter';
+        $(`#label-A-2-${conditionId}`).html('Roof Average Height');
+        $(`#label-A-3-${conditionId}`).html('Plan View Length of Building Section');
+        $(`#label-A-4-${conditionId}`).html('Plan View Width of Building Section');
+        $(`#label-A-7-${conditionId}`).html('Roof Slope');
+        $(`#label-A-8-${conditionId}`).html('Diagonal Rafter Length from Plate to Ridge');
+        $(`#label-A-9-${conditionId}`).html('Rise from Rafter Plate to Top Ridge');
+        $(`#label-A-10-${conditionId}`).html('Horiz Len from Outside of Rafter Plate to Ridge');
+        $(`#label-A-11-${conditionId}`).html('Diagonal Overhang Length past Rafter Plate');
+        $(`#label-B-3-${conditionId}`).html('Joist Spacing - Center to Center');
+        $(`#label-B-4-${conditionId}`).html('Rafter Material');
+        $(`#label-F-1-${conditionId}`).html('Maximum # Modules along Rafter');
         document.getElementById(`trussInput-${conditionId}`).style.display = "none";
 
         $(`#input-f-1-${conditionId}`).html(`<select id="f-1-${conditionId}" tabindex="47" onchange="maxModuleNumChange(${conditionId})">\
@@ -131,22 +149,32 @@ function fcChangeType( conditionId, type ){
         $(`#label-B-1-${conditionId}`).attr('rowspan', 3);
         $(`#label-B-1-${conditionId}`)[0].style.display = "table-cell";
         $(`#title-B-3-${conditionId}`)[0].style.display = "none";
+        $(`#label-G-1-${conditionId}`).attr('rowspan', 2);
         
-        var elements = $(`#inputform-${conditionId} .class-truss-hide`);
+        var elements = $(`#inputform-${conditionId} .class-truss-hide`); // show all Truss
         for(let i = 0; i < elements.length; i ++)
             elements[i].style.display = 'table-row';
-        elements = $(`#inputform-${conditionId} .class-IBC-hide`);
+        elements = $(`#inputform-${conditionId} .class-GroundMount-hide`); // show all GroundMount
+        for(let i = 0; i < elements.length; i ++)
+            elements[i].style.display = 'table-row';
+        elements = $(`#inputform-${conditionId} .class-IBC-hide`); // hide all IBC
         for(let i = 0; i < elements.length; i ++)
             elements[i].style.display = 'none';
+
         for(let i = 1; i <= 12; i ++)
             $(`#Module-${i}-${conditionId}`)[0].style.display = "none";
 
-        $(`#label-A-9-${conditionId}`)[0].innerHTML = 'Rise from Rafter Plate to Top Ridge';
-        $(`#label-A-10-${conditionId}`)[0].innerHTML = 'Horiz Len from Outside of Rafter Plate to Ridge';
-        $(`#label-A-11-${conditionId}`)[0].innerHTML = 'Diagonal Overhang Length past Rafter Plate';
-        $(`#label-B-3-${conditionId}`)[0].innerHTML = 'Joist Spacing - Center to Center';
-        $(`#label-B-4-${conditionId}`)[0].innerHTML = 'Rafter Material';
-        $(`#label-F-1-${conditionId}`)[0].innerHTML = '# Modules on Roof Plane';
+        $(`#label-A-2-${conditionId}`).html('Roof Average Height');
+        $(`#label-A-3-${conditionId}`).html('Plan View Length of Building Section');
+        $(`#label-A-4-${conditionId}`).html('Plan View Width of Building Section');
+        $(`#label-A-7-${conditionId}`).html('Roof Slope');
+        $(`#label-A-8-${conditionId}`).html('Diagonal Rafter Length from Plate to Ridge');
+        $(`#label-A-9-${conditionId}`).html('Rise from Rafter Plate to Top Ridge');
+        $(`#label-A-10-${conditionId}`).html('Horiz Len from Outside of Rafter Plate to Ridge');
+        $(`#label-A-11-${conditionId}`).html('Diagonal Overhang Length past Rafter Plate');
+        $(`#label-B-3-${conditionId}`).html('Joist Spacing - Center to Center');
+        $(`#label-B-4-${conditionId}`).html('Rafter Material');
+        $(`#label-F-1-${conditionId}`).html('# Modules on Roof Plane');
         document.getElementById(`trussInput-${conditionId}`).style.display = "none";
 
         $(`#input-f-1-${conditionId}`).html(`<input id="f-1-${conditionId}" tabindex="47" value="2" type="number" min="1" style="overflow: hidden;border: 0px;width: 100%;background: transparent;padding-left: 4px;text-align: center;">`);
@@ -157,6 +185,56 @@ function fcChangeType( conditionId, type ){
                 return false;
             }
         });
+
+        $(`#f-1-${conditionId}`).on('change', function() {
+            drawTrussGraph(window.conditionId);
+            drawStickGraph(window.conditionId);
+        });
+
+        drawStickGraph(conditionId);
+    } else if(type == 3){ // Ground Mount
+        $(`#label-A-1-${conditionId}`).attr('rowspan', 11);
+        $(`#label-B-1-${conditionId}`).attr('rowspan', 3);
+        $(`#label-B-1-${conditionId}`)[0].style.display = "table-cell";
+        $(`#title-B-3-${conditionId}`)[0].style.display = "none";
+        $(`#label-G-1-${conditionId}`).attr('rowspan', 1);
+        
+        var elements = $(`#inputform-${conditionId} .class-truss-hide`); // show all truss
+        for(let i = 0; i < elements.length; i ++)
+            elements[i].style.display = 'table-row';
+        elements = $(`#inputform-${conditionId} .class-IBC-hide`); // show all IBC
+        for(let i = 0; i < elements.length; i ++)
+            elements[i].style.display = 'table-row';
+        elements = $(`#inputform-${conditionId} .class-GroundMount-hide`); // hide all GroundMount
+        for(let i = 0; i < elements.length; i ++)
+            elements[i].style.display = 'none';
+
+        $(`#label-A-2-${conditionId}`).html('Average Height');
+        $(`#label-A-3-${conditionId}`).html('Plan View Length');
+        $(`#label-A-4-${conditionId}`).html('Plan View Width');
+        $(`#label-A-7-${conditionId}`).html('Slope');
+        $(`#label-A-8-${conditionId}`).html('Slope Length');
+        $(`#label-A-9-${conditionId}`).html('Rise');
+        $(`#label-A-10-${conditionId}`).html('Horiz Len');
+        $(`#label-A-11-${conditionId}`).html('Diagonal Overhang Length past Bottom Rail');
+        $(`#label-F-1-${conditionId}`).html('Maximum # Modules along Slope');
+        document.getElementById(`trussInput-${conditionId}`).style.display = "none";
+
+        $(`#input-f-1-${conditionId}`).html(`<select id="f-1-${conditionId}" tabindex="47" onchange="maxModuleNumChange(${conditionId})">\
+            <option data-value="1">1</option>\
+            <option data-value="2" selected="">2</option>\
+            <option data-value="3">3</option>\
+            <option data-value="4">4</option>\
+            <option data-value="5">5</option>\
+            <option data-value="6">6</option>\
+            <option data-value="7">7</option>\
+            <option data-value="8">8</option>\
+            <option data-value="9">9</option>\
+            <option data-value="10">10</option>\
+            <option data-value="11">11</option>\
+            <option data-value="12">12</option>\
+        </select>`);
+        maxModuleNumChange(conditionId);
 
         $(`#f-1-${conditionId}`).on('change', function() {
             drawTrussGraph(window.conditionId);
@@ -1476,6 +1554,7 @@ var getData = function(caseCount = 10) {
         if($(`#trussFlagOption-${i}-1`)[0].checked) tabType = 0;
         else if($(`#trussFlagOption-${i}-2`)[0].checked) tabType = 1;
         else if($(`#trussFlagOption-${i}-3`)[0].checked) tabType = 2;
+        else if($(`#trussFlagOption-${i}-4`)[0].checked) tabType = 3;
         data['Analysis_type'] = tabType;
         
         $(`#inputform-${i} input:text:enabled`).each(function() { 
@@ -1982,8 +2061,8 @@ var drawStickBaseLine = function( condId ) {
 
     var angleRadian = degreeToRadian( parseFloat($(`#a-7-${condId}`).val()) );
     var overhangLength = parseFloat($(`#a-11-${condId}`).val());
-    var overhangX = Math.floor(overhangLength * stick_grid_size[condId] * Math.sin(Math.PI / 2 - angleRadian ));
-    var overhangY = Math.floor(overhangLength * stick_grid_size[condId] * Math.sin(angleRadian));
+    var overhangX = $(`#trussFlagOption-${condId}-4`)[0].checked == false ? Math.floor(overhangLength * stick_grid_size[condId] * Math.sin(Math.PI / 2 - angleRadian )) : 0;
+    var overhangY = $(`#trussFlagOption-${condId}-4`)[0].checked == false ? Math.floor(overhangLength * stick_grid_size[condId] * Math.sin(angleRadian)) : 0;
 
     stick_ctx[condId].translate(overhangX, - overhangY);
     
@@ -2122,15 +2201,15 @@ var adjustStickDrawingPanel = function( condId, isIBC = false ) {
     // else if(stick_right_input[condId] == 'length')
     //     roofHeight = parseFloat($(`#a-10-${condId}`).val()) * Math.tan(angleRadian);
     
-    var overhangX = parseFloat($(`#a-11-${condId}`).val()) * Math.sin(Math.PI / 2 - angleRadian);
-    var overhangY = parseFloat($(`#a-11-${condId}`).val()) * Math.sin(angleRadian );
+    var overhangX = $(`#trussFlagOption-${condId}-4`)[0].checked == false ? parseFloat($(`#a-11-${condId}`).val()) * Math.sin(Math.PI / 2 - angleRadian) : 0;
+    var overhangY = $(`#trussFlagOption-${condId}-4`)[0].checked == false ? parseFloat($(`#a-11-${condId}`).val()) * Math.sin(angleRadian) : 0;
 
     var moduleCount = parseInt($(`#f-1-${condId}`).val());
     var moduleGap = parseFloat($(`#g-1-${condId}`).val()) / 12;
     var moduleWidth = parseFloat($("#pv-module-width").val()) / 12;
     var moduleHeight = parseFloat($("#pv-module-length").val()) / 12;
 
-    var moduleLengthSum = parseFloat($(`#e-1-${condId}`).val());
+    var moduleLengthSum = $(`#trussFlagOption-${condId}-4`)[0].checked == false ? parseFloat($(`#e-1-${condId}`).val()) : parseFloat($(`#a-11-${condId}`).val());
     if(!isIBC){
         var orientation;
         for(let i = 1; i <= moduleCount; i ++)
@@ -2199,27 +2278,29 @@ var drawStickGraph = function( condId ) {
     var overhangLength = parseFloat($(`#a-11-${condId}`).val());
     var uphillDist = parseFloat($(`#e-1-${condId}`).val());
 
-    stick_ctx[condId].beginPath();
-    stick_ctx[condId].lineWidth = 2;
-    stick_ctx[condId].strokeStyle = "#0000FF";
-    stick_ctx[condId].moveTo(0, 0);
-    stick_ctx[condId].lineTo( - Math.sin(Math.PI / 2 - angleRadian) * overhangLength * stick_grid_size[condId], Math.cos(Math.PI / 2 - angleRadian) * overhangLength * stick_grid_size[condId]);
-    stick_ctx[condId].stroke();
+    if($(`#trussFlagOption-${condId}-4`)[0].checked == false){
+        stick_ctx[condId].beginPath();
+        stick_ctx[condId].lineWidth = 2;
+        stick_ctx[condId].strokeStyle = "#0000FF";
+        stick_ctx[condId].moveTo(0, 0);
+        stick_ctx[condId].lineTo( - Math.sin(Math.PI / 2 - angleRadian) * overhangLength * stick_grid_size[condId], Math.cos(Math.PI / 2 - angleRadian) * overhangLength * stick_grid_size[condId]);
+        stick_ctx[condId].stroke();
 
-    // Draw Wall
-    stick_ctx[condId].beginPath();
-    stick_ctx[condId].lineWidth = 2;
-    stick_ctx[condId].strokeStyle = "#0000FF";
-    stick_ctx[condId].moveTo(0, 0);
-    stick_ctx[condId].lineTo(0, 100);
-    stick_ctx[condId].stroke();
+        // Draw Wall
+        stick_ctx[condId].beginPath();
+        stick_ctx[condId].lineWidth = 2;
+        stick_ctx[condId].strokeStyle = "#0000FF";
+        stick_ctx[condId].moveTo(0, 0);
+        stick_ctx[condId].lineTo(0, 100);
+        stick_ctx[condId].stroke();
 
-    stick_ctx[condId].font = '16px Arial';
-    stick_ctx[condId].textAlign = 'end';
-    stick_ctx[condId].fillStyle = "#000000";
-    stick_ctx[condId].rotate(- Math.PI / 2);
-    stick_ctx[condId].fillText("Wall", -20, 20);
-    stick_ctx[condId].rotate(Math.PI / 2);
+        stick_ctx[condId].font = '16px Arial';
+        stick_ctx[condId].textAlign = 'end';
+        stick_ctx[condId].fillStyle = "#000000";
+        stick_ctx[condId].rotate(- Math.PI / 2);
+        stick_ctx[condId].fillText("Wall", -20, 20);
+        stick_ctx[condId].rotate(Math.PI / 2);
+    }
 
     // Draw Roof
     //var roofHeight;
@@ -2258,9 +2339,9 @@ var drawStickGraph = function( condId ) {
     stick_ctx[condId].font = '16px Arial';
     stick_ctx[condId].textAlign = 'start';
     if( angleRadian != 0 )
-        stick_ctx[condId].fillText("Attic Floor", roofHeight * (1 / Math.tan(angleRadian))  * stick_grid_size[condId] / 2, 30);
+        stick_ctx[condId].fillText($(`#trussFlagOption-${condId}-4`)[0].checked == false ? "Attic Floor" : "Ground", roofHeight * (1 / Math.tan(angleRadian))  * stick_grid_size[condId] / 2, 30);
     else
-        stick_ctx[condId].fillText("Attic Floor", stick_canvas_width[condId] / 2, 30);
+        stick_ctx[condId].fillText($(`#trussFlagOption-${condId}-4`)[0].checked == false ? "Attic Floor" : "Ground", stick_canvas_width[condId] / 2, 30);
 
     // Draw dashed line
     stick_ctx[condId].beginPath();
@@ -2321,7 +2402,7 @@ var drawStickGraph = function( condId ) {
             $(`#c-2-warn-${condId}`).css('display', 'block');
 
         // Draw solar rectangles
-        var startModule = overhangLength - uphillDist;
+        var startModule = $(`#trussFlagOption-${condId}-4`)[0].checked == false ? overhangLength - uphillDist : -overhangLength;
         var moduleDepth = 1.17 / 12;
         var moduleWidth = parseFloat($("#pv-module-width").val()) / 12;
         var moduleHeight = parseFloat($("#pv-module-length").val()) / 12;
@@ -2385,8 +2466,8 @@ var drawStickGraph = function( condId ) {
         stick_ctx[condId].translate(- startPoint[0], - startPoint[1]);
     }
     
-    var overhangX = Math.floor(overhangLength * stick_grid_size[condId] * Math.sin(Math.PI / 2 - angleRadian ));
-    var overhangY = Math.floor(overhangLength * stick_grid_size[condId] * Math.sin(angleRadian ));
+    var overhangX = $(`#trussFlagOption-${condId}-4`)[0].checked == false ? Math.floor(overhangLength * stick_grid_size[condId] * Math.sin(Math.PI / 2 - angleRadian )) : 0;
+    var overhangY = $(`#trussFlagOption-${condId}-4`)[0].checked == false ? Math.floor(overhangLength * stick_grid_size[condId] * Math.sin(angleRadian )) : 0;
     stick_ctx[condId].translate(- overhangX, overhangY);
 }
 
@@ -2832,6 +2913,20 @@ $(document).ready(function() {
         $("button.permit").hide();
         $("div.permit").hide();
         //aaaa
+    });
+
+    $("#option-project-type").on('change', function() {
+        if($(this).val() == "Ground Mount")
+            $(".GroundMount-Option").css("display", "block");
+        else{
+            for(let i = 1; i <= 10; i ++){
+                if($(`#trussFlagOption-${i}-4`)[0].checked){
+                    $(`#trussFlagOption-${i}-1`)[0].checked = true;
+                    fcChangeType(i, 0);
+                }
+            }
+            $(".GroundMount-Option").css("display", "none");
+        }
     });
     
     $('#option-module-type').on('change', function() {
@@ -3401,7 +3496,7 @@ $(document).ready(function() {
 
         if(status != 'Saved'){
             for(let i =1; i <= caseCount; i ++){
-                if($(`#trussFlagOption-${i}-1`)[0].checked || $(`#trussFlagOption-${i}-3`)[0].checked){ // Stick or IBC 5%
+                if($(`#trussFlagOption-${i}-2`)[0].checked == false){ // Stick or IBC 5% or GroundMount
                     if(stick_right_input[i] == ''){
                         $("#submitBtns input").attr('disabled', false);
                         swal.fire({ title: "Warning", text: "Please fill A7~A10 fields on Tab " + i + ".", icon: "warning", confirmButtonText: `OK` });
@@ -3765,11 +3860,13 @@ var doDuplicate = async function (targetTabId, curTabId, checkOverwrite){
     $(`#trussFlagOption-${targetTabId}-1`).prop('checked', $(`#trussFlagOption-${curTabId}-1`)[0].checked);
     $(`#trussFlagOption-${targetTabId}-2`).prop('checked', $(`#trussFlagOption-${curTabId}-2`)[0].checked);
     $(`#trussFlagOption-${targetTabId}-3`).prop('checked', $(`#trussFlagOption-${curTabId}-3`)[0].checked);
+    $(`#trussFlagOption-${targetTabId}-4`).prop('checked', $(`#trussFlagOption-${curTabId}-4`)[0].checked);
     
     var tabType;
     if($(`#trussFlagOption-${curTabId}-1`)[0].checked) tabType = 0;
     else if($(`#trussFlagOption-${curTabId}-2`)[0].checked) tabType = 1;
     else if($(`#trussFlagOption-${curTabId}-3`)[0].checked) tabType = 2;
+    else if($(`#trussFlagOption-${curTabId}-4`)[0].checked) tabType = 3;
     fcChangeType(targetTabId, tabType);
 
     $(`#inputform-${curTabId} input:text:enabled, #inputform-${curTabId} select:enabled`).each(function() { 
@@ -3860,11 +3957,13 @@ var deleteTab = function(curTabId) {
                     $(`#trussFlagOption-${targetTabId}-1`).prop('checked', $(`#trussFlagOption-${sourceTabId}-1`)[0].checked);
                     $(`#trussFlagOption-${targetTabId}-2`).prop('checked', $(`#trussFlagOption-${sourceTabId}-2`)[0].checked);
                     $(`#trussFlagOption-${targetTabId}-3`).prop('checked', $(`#trussFlagOption-${sourceTabId}-3`)[0].checked);
+                    $(`#trussFlagOption-${targetTabId}-4`).prop('checked', $(`#trussFlagOption-${sourceTabId}-4`)[0].checked);
 
                     var tabType;
                     if($(`#trussFlagOption-${sourceTabId}-1`)[0].checked) tabType = 0;
                     else if($(`#trussFlagOption-${sourceTabId}-2`)[0].checked) tabType = 1;
                     else if($(`#trussFlagOption-${sourceTabId}-3`)[0].checked) tabType = 2;
+                    else if($(`#trussFlagOption-${sourceTabId}-4`)[0].checked) tabType = 3;
                     fcChangeType(targetTabId, tabType);
                     
                     $(`#inputform-${sourceTabId} input:text:enabled, #inputform-${sourceTabId} select:enabled`).each(function() { 
@@ -3939,8 +4038,10 @@ var loadPreloadedData = function() {
                             //detectCorrectTownForMA();
                             $('#txt-zip').val(preloaded_data['ProjectInfo']['Zip']);
                             if(preloaded_data['ProjectInfo']['Type']){
-                                if(preloaded_data['ProjectInfo']['Type'] == 'Ground Mount')
+                                if(preloaded_data['ProjectInfo']['Type'] == 'Ground Mount'){
                                     $("#option-project-type").val('Ground Mount');
+                                    $(".GroundMount-Option").css("display", "block");
+                                }
                                 else
                                     $("#option-project-type").val('Roof Mount');
                             }
@@ -3963,11 +4064,13 @@ var loadPreloadedData = function() {
                                 $(`#trussFlagOption-${i + 1}-1`).prop('checked', caseData['Analysis_type'] != 2 ? !caseData['TrussFlag'] : false);
                                 $(`#trussFlagOption-${i + 1}-2`).prop('checked', caseData['Analysis_type'] != 2 ? caseData['TrussFlag'] : false);
                                 $(`#trussFlagOption-${i + 1}-3`).prop('checked', (caseData['Analysis_type'] == 2));
+                                $(`#trussFlagOption-${i + 1}-4`).prop('checked', (caseData['Analysis_type'] == 3));
 
                                 var tabType;
                                 if($(`#trussFlagOption-${i + 1}-1`)[0].checked) tabType = 0;
                                 else if($(`#trussFlagOption-${i + 1}-2`)[0].checked) tabType = 1;
                                 else if($(`#trussFlagOption-${i + 1}-3`)[0].checked) tabType = 2;
+                                else if($(`#trussFlagOption-${i + 1}-4`)[0].checked) tabType = 3;
                                 fcChangeType(i + 1, tabType);
 
                                 if(!caseData['RoofDataInput']['A2_feet'] && !caseData['RoofDataInput']['A2_inches'])
