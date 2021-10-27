@@ -17,6 +17,10 @@
                 <input type="radio" class="custom-control-input rfdTypeSelect" id="trussFlagOption-{{ $conditionId }}-3" name="trussFlag-{{ $conditionId }}" onchange="fcChangeType({{ $conditionId }}, 2)" value="2">
                 <label class="custom-control-label rfdTypeSelect" for="trussFlagOption-{{ $conditionId }}-3">IBC 5% Data Input - Only Areas with No Snow</label>
             </div>
+            <div class="custom-control custom-radio custom-control-success mb-1 GroundMount-Option" style="display: none;">
+                <input type="radio" class="custom-control-input rfdTypeSelect" id="trussFlagOption-{{ $conditionId }}-4" name="trussFlag-{{ $conditionId }}" onchange="fcChangeType({{ $conditionId }}, 3)" value="3">
+                <label class="custom-control-label rfdTypeSelect" for="trussFlagOption-{{ $conditionId }}-4">Ground Mount</label>
+            </div>
         </div>
     </div>
     @if(Auth::user()->userrole != 4)
@@ -73,7 +77,7 @@
         <tr class="h13">
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">A-2</td>
-            <td class="iw400-right-bdr" colspan="2">Roof Average Height</td>
+            <td class="iw400-right-bdr" colspan="2" id="label-A-2-{{ $conditionId }}">Roof Average Height</td>
             <td class="iw400-bdr">ft | in</td>
             <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="af-2-{{ $conditionId }}" tabindex="26" value="30.00"></input></td>
             <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="ai-2-{{ $conditionId }}" tabindex="26" value="0.00"></input></td>
@@ -83,7 +87,7 @@
         <tr class="h13">
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">A-3</td>
-            <td class="iw400-right-bdr" colspan="2">Plan View Length of Building Section</td>
+            <td class="iw400-right-bdr" colspan="2" id="label-A-3-{{ $conditionId }}">Plan View Length of Building Section</td>
             <td class="iw400-bdr">ft | in</td>
             <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="af-3-{{ $conditionId }}"  tabindex="27" value="31.17"></input></td>
             <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="ai-3-{{ $conditionId }}"  tabindex="27" value="0.00"></input></td>
@@ -93,7 +97,7 @@
         <tr class="h13">
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">A-4</td>
-            <td class="iw400-right-bdr" colspan="2">Plan View Width of Building Section</td>
+            <td class="iw400-right-bdr" colspan="2" id="label-A-4-{{ $conditionId }}">Plan View Width of Building Section</td>
             <td class="iw400-bdr">ft | in</td>
             <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="af-4-{{ $conditionId }}"  tabindex="28" value="14.25"></input></td>
             <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="ai-4-{{ $conditionId }}"  tabindex="28" value="0.00"></input></td>
@@ -125,7 +129,7 @@
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">A-7</td>
             <td class="iw400-bdr" style="vertical-align : middle;" rowspan="4">Enter any two values</td>
-            <td class="iw400-right-bdr" >Roof Slope</td>
+            <td class="iw400-right-bdr" id="label-A-7-{{ $conditionId }}">Roof Slope</td>
             <td class="iw400-bdr">deg</td>
             <td id="value-7-{{ $conditionId }}" class="w400-yellow-bdr" colspan="2"><input type="text" class="txt-center-align" id="a-7-{{ $conditionId }}" tabindex="31" value=""></input></td>
             <td id="calced-7-{{ $conditionId }}" class="calcedCell right-bdr">
@@ -138,7 +142,7 @@
         <tr class="h13 class-truss-hide" id="tr-8-{{ $conditionId }}">
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">A-8</td>
-            <td class="iw400-right-bdr">Diagonal Rafter Length from Plate to Ridge</td>
+            <td class="iw400-right-bdr" id="label-A-8-{{ $conditionId }}">Diagonal Rafter Length from Plate to Ridge</td>
             <td class="iw400-bdr">ft | in</td>
             <td id="valuef-8-{{ $conditionId }}" class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="af-8-{{ $conditionId }}"  tabindex="32" value=""></input></td>
             <td id="valuei-8-{{ $conditionId }}" class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="ai-8-{{ $conditionId }}"  tabindex="32" value=""></input></td>
@@ -185,7 +189,7 @@
             <td class="td-dec-feet right-bdr"><input type="text" class="txt-calced right-bdr" id="a-11-{{ $conditionId }}"  tabindex="-1" value="0.83" readonly></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
-        <tr class="h13 class-IBC-hide">
+        <tr class="h13 class-IBC-hide class-GroundMount-hide">
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">A-12</td>
             <td class="iw400-right-bdr" colspan="2">Roof Shape</td>
@@ -196,7 +200,7 @@
             </td>
             <td class="right-bdr"><div style="overflow:hidden"></td>
         </tr>
-        <tr class="h13 class-truss-hide">
+        <tr class="h13 class-truss-hide class-GroundMount-hide">
             <td><div style="overflow:hidden"></td>
             <td class="iw400-bdr" style="vertical-align : middle;" rowspan="5" id="label-B-1-{{ $conditionId }}">Rafter Data Input</td>
             <td class="w400-bdr">B-1</td>
@@ -205,7 +209,7 @@
             <td class="w400-yellow-bdr" colspan="2"><input type="text" class="txt-center-align" id="b-1-{{ $conditionId }}"  tabindex="36" value="1.50"></input></td>
             <td class="right-bdr"><div style="overflow:hidden"></td>
         </tr>
-        <tr class="h13 class-truss-hide">
+        <tr class="h13 class-truss-hide class-GroundMount-hide">
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">B-2</td>
             <td class="iw400-right-bdr" colspan="2">Rafter Height **</td>
@@ -213,7 +217,7 @@
             <td class="w400-yellow-bdr" colspan="2"><input type="text" class="txt-center-align" id="b-2-{{ $conditionId }}"  tabindex="37" value="5.50"></input></td>
             <td class="right-bdr"><div style="overflow:hidden"></td>
         </tr>
-        <tr class="h13">
+        <tr class="h13 class-GroundMount-hide">
             <td><div style="overflow:hidden"></td>
             <td class="iw400-bdr" style="vertical-align : middle; display: none;" rowspan="3" id="title-B-3-{{ $conditionId }}">Truss Data Input</td>
             <td class="w400-bdr">B-3</td>
@@ -222,7 +226,7 @@
             <td class="w400-yellow-bdr" colspan="2"><input type="text" class="txt-center-align" id="b-3-{{ $conditionId }}"  tabindex="38" value="16.00"></input></td>
             <td class="right-bdr"><div style="overflow:hidden"></td>
         </tr>
-        <tr class="h13 class-IBC-hide">
+        <tr class="h13 class-IBC-hide class-GroundMount-hide">
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">B-4</td>
             <td class="iw400-right-bdr" id="label-B-4-{{ $conditionId }}" colspan="2">Rafter Material</td>
@@ -237,7 +241,7 @@
             </td>
             <td class="right-bdr"><div style="overflow:hidden"></td>
         </tr>
-        <tr class="h13 class-IBC-hide">
+        <tr class="h13 class-IBC-hide class-GroundMount-hide">
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">B-5</td>
             <td class="iw400-right-bdr" colspan="2">Max stanchion spacing</td>
@@ -245,7 +249,7 @@
             <td class="w400-yellow-bdr" colspan="2"><input type="text" class="txt-center-align" id="b-5-{{ $conditionId }}"  tabindex="38" value="48.00"></input></td>
             <td class="right-bdr"><div style="overflow:hidden"></td>
         </tr>
-        <tr class="h13 class-truss-hide class-IBC-hide">
+        <tr class="h13 class-truss-hide class-IBC-hide class-GroundMount-hide">
             <td><div style="overflow:hidden"></td>
             <td class="iw400-bdr" style="vertical-align : middle;" rowspan="4">Collar Tie / Knee Wall Information</td>
             <td class="w400-bdr">C-1</td>
@@ -254,7 +258,7 @@
             <td class="w400-yellow-bdr" colspan="2"><input type="text" class="txt-center-align" id="c-1-{{ $conditionId }}"  tabindex="39" value=""></input></td>
             <td class="right-bdr"><div style="overflow:hidden"></td>
         </tr>
-        <tr class="h13 class-truss-hide class-IBC-hide">
+        <tr class="h13 class-truss-hide class-IBC-hide class-GroundMount-hide">
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">C-2</td>
             <td class="iw400-right-bdr" colspan="2">Dist. from Top of Collar Tie to Attic Deck</td>
@@ -264,7 +268,7 @@
             <td class="td-dec-feet right-bdr"><input type="text" class="txt-calced" id="c-2-{{ $conditionId }}"  tabindex="-1" value="" readonly></input></td>
             <td><div id="c-2-warn-{{ $conditionId }}" class="warnCell">Warning - Height above high end of rafter</td>
         </tr>
-        <tr class="h13 class-truss-hide class-IBC-hide">
+        <tr class="h13 class-truss-hide class-IBC-hide class-GroundMount-hide">
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">C-3</td>
             <td class="iw400-right-bdr" colspan="2">Tie Spacing - Center to Center</td>
@@ -272,7 +276,7 @@
             <td class="w400-yellow-bdr" colspan="2"><input type="text" class="txt-center-align" id="c-3-{{ $conditionId }}"  tabindex="41" value=""></input></td>
             <td class="right-bdr"><div style="overflow:hidden"></td>
         </tr>
-        <tr class="h13 class-truss-hide class-IBC-hide">
+        <tr class="h13 class-truss-hide class-IBC-hide class-GroundMount-hide">
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">C-4</td>
             <td class="iw400-right-bdr" colspan="2">Knee Wall Height</td>
@@ -282,7 +286,7 @@
             <td class="td-dec-feet right-bdr"><input type="text" class="txt-calced" id="c-4-{{ $conditionId }}"  tabindex="-1" value="" readonly></input></td>
             <td><div id="c-4-warn-{{ $conditionId }}" class="warnCell">Warning - Height above high end of rafter</td>
         </tr>
-        <tr class="h13">
+        <tr class="h13 class-GroundMount-hide">
             <td><div style="overflow:hidden"></td>
             <td class="iw400-bdr" style="vertical-align : middle;" rowspan="3">Roof Deck and Surface</td>
             <td class="w400-bdr">D-1</td>
@@ -291,7 +295,7 @@
             <td class="w400-yellow-bdr" colspan="2"><input type="text" class="txt-center-align" id="d-1-{{ $conditionId }}"  tabindex="42" value="0.50"></input></td>
             <td class="right-bdr"><div style="overflow:hidden"></td>
         </tr>
-        <tr class="h13">
+        <tr class="h13 class-GroundMount-hide">
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">D-2</td>
             <td class="iw400-right-bdr" colspan="2">Shingle Type</td>
@@ -306,7 +310,7 @@
             </td>
             <td class="right-bdr"><div style="overflow:hidden"></td>
         </tr>
-        <tr class="h13">
+        <tr class="h13 class-GroundMount-hide">
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">D-3</td>
             <td class="iw400-right-bdr" colspan="2"># Shingle Layers</td>
@@ -320,7 +324,7 @@
             </td>
             <td class="right-bdr"><div style="overflow:hidden"></td>
         </tr>
-        <tr class="h13 class-IBC-hide">
+        <tr class="h13 class-IBC-hide class-GroundMount-hide">
             <td><div style="overflow:hidden"></td>
             <td class="iw400-bdr" style="vertical-align : middle;" rowspan="2">Location</td>
             <td class="w400-bdr">E-1</td>
@@ -331,7 +335,7 @@
             <td class="td-dec-feet right-bdr"><input type="text" class="txt-calced" id="e-1-{{ $conditionId }}" tabindex="-1" value="4.25" readonly></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
-        <tr class="h13 class-IBC-hide">
+        <tr class="h13 class-IBC-hide class-GroundMount-hide">
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">E-2</td>
             <td class="iw400-right-bdr" colspan="2">Uphill Distance from Eave to Lowest Support</td>
@@ -367,14 +371,14 @@
         </tr>
         <tr class="h13 class-IBC-hide">
             <td><div style="overflow:hidden"></td>
-            <td class="iw400-bdr" rowspan="2">Module Geometry</td>
+            <td class="iw400-bdr" id="label-G-1-{{ $conditionId }}" rowspan="2">Module Geometry</td>
             <td class="w400-bdr">G-1</td>
             <td class="iw400-right-bdr" colspan="2">Uphill Gap Between Modules</td>
             <td class="iw400-bdr">in</td>
             <td class="w400-yellow-bdr" colspan="2"><input type="text" class="txt-center-align" id="g-1-{{ $conditionId }}" tabindex="48" value="1"></input></td>
             <td class="right-bdr"><div style="overflow:hidden"></td>
         </tr>
-        <tr class="h13 class-IBC-hide">
+        <tr class="h13 class-IBC-hide class-GroundMount-hide">
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">G-2</td>
             <td class="iw400-right-bdr" colspan="2">Module relative tilt</td>
