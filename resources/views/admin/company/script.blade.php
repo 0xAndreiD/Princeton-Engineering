@@ -186,11 +186,14 @@ function updateCompany() {
     data.max_allowable_skip = $('input#max_allowable_skip').val();
 
     if (data.id == 0) { // Create company
-        $.post("updateCompany", {data: data}, function(result){
-            if (result == true){
+        swal.fire({ title: "Please wait...", showConfirmButton: false });
+        swal.showLoading();
+        $.post("updateCompany", data, function(res){
+            swal.close();
+            if (res && res.success){
                 toast.fire('Created!', 'Company has been created.', 'success');
-            } else if (result == "exist") {
-                toast.fire('Error!', 'Company already exists with the same name', 'error');
+            } else {
+                toast.fire('Error!', res.message, 'error');
                 return;
             }
             $('#modal-block-normal').modal('toggle');
@@ -199,10 +202,13 @@ function updateCompany() {
     } else { // Update company
         swal.fire({ title: "Please wait...", showConfirmButton: false });
         swal.showLoading();
-        $.post("updateCompany", {data: data}, function(result){
-            if (result){
-                swal.close();
+        $.post("updateCompany", data, function(res){
+            swal.close();
+            if (res){
                 toast.fire('Updated!', 'Company has been updated.', 'success');
+            } else {
+                toast.fire('Error!', res.message, 'error');
+                return;
             }
             $('#modal-block-normal').modal('toggle');
             $('#companys').DataTable().ajax.reload();
