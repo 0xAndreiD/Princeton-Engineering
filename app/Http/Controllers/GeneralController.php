@@ -339,7 +339,7 @@ class GeneralController extends Controller
                     $globalStates = JobProjectStatus::orderBy('id', 'asc')->get();
                     $statenote = isset($globalStates[intval($job->projectstate)]) ? $globalStates[intval($job->projectstate)]->notes : 'Unknown State';
                     if(!isset($globalStates[intval($job->projectstate)])) $job->statecolor = '#ff0000';
-                    $job['projectStatus'] = "<span class='badge' style='white-space: pre-wrap; color: #fff; background-color: {$job->statecolor};'> {$globalStates[intval($job->projectState)]->notes} </span>";
+                    $job['projectStatus'] = "<span class='badge' style='white-space: pre-wrap; color: black; background-color: {$job->statecolor};'> {$globalStates[intval($job->projectState)]->notes} </span>";
                     $data[] = $job;
                 }
             }
@@ -1153,29 +1153,29 @@ class GeneralController extends Controller
                 if(!isset($globalStatus[intval($job->planstatus)])) $job->statuscolor = '#ff0000';
 
                 if(Auth::user()->userrole == 2){
-                    $nestedData['projectstate'] = "<span class='badge dropdown-toggle job-dropdown' style='color: #fff; background-color: {$job->statecolor};' id='state_{$job->id}' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'> {$statenote} </span>";
+                    $nestedData['projectstate'] = "<span class='badge dropdown-toggle job-dropdown' style='color: black; background-color: {$job->statecolor};' id='state_{$job->id}' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'> {$statenote} </span>";
 
                     $nestedData['projectstate'] .= "<div class='dropdown-menu' aria-labelledby='state_{$job->id}'>";
                     $i = 0;
                     foreach($globalStates as $state){
-                        $nestedData['projectstate'] .= "<a class='dropdown-item' href='javascript:changeState({$job->id}, {$i})' style='color: white; background-color: {$state->color};'>{$state->notes}</a>";
+                        $nestedData['projectstate'] .= "<a class='dropdown-item' href='javascript:changeState({$job->id}, {$i})' style='color: black; background-color: {$state->color};'>{$state->notes}</a>";
                         $i ++;
                     }
                     $nestedData['projectstate'] .= "</div>";
 
-                    $nestedData['planstatus'] = "<span class='badge dropdown-toggle job-dropdown' style='color: #fff; background-color: {$job->statuscolor};' id='status_{$job->id}' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'> {$statusnote} </span>";
+                    $nestedData['planstatus'] = "<span class='badge dropdown-toggle job-dropdown' style='color: black; background-color: {$job->statuscolor};' id='status_{$job->id}' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'> {$statusnote} </span>";
 
                     $nestedData['planstatus'] .= "<div class='dropdown-menu' aria-labelledby='status_{$job->id}'>";
                     $i = 0;
                     foreach($globalStatus as $status){
-                        $nestedData['planstatus'] .= "<a class='dropdown-item' href='javascript:changeStatus({$job->id}, {$i})' style='color: white; background-color: {$status->color};'>{$status->notes}</a>";
+                        $nestedData['planstatus'] .= "<a class='dropdown-item' href='javascript:changeStatus({$job->id}, {$i})' style='color: black; background-color: {$status->color};'>{$status->notes}</a>";
                         $i ++;
                     }
                     $nestedData['planstatus'] .= "</div>";
                 }
                 else{
-                    $nestedData['projectstate'] = "<span class='badge' style='white-space: pre-wrap; color: #fff; background-color: {$job->statecolor};'> {$statenote} </span>";                
-                    $nestedData['planstatus'] = "<span class='badge' style='white-space: pre-wrap; color: #fff; background-color: {$job->statuscolor};'> {$statusnote} </span>";                
+                    $nestedData['projectstate'] = "<span class='badge' style='white-space: pre-wrap; color: black; background-color: {$job->statecolor};'> {$statenote} </span>";                
+                    $nestedData['planstatus'] = "<span class='badge' style='white-space: pre-wrap; color: black; background-color: {$job->statuscolor};'> {$statusnote} </span>";                
                 }
 
                 if($job->chatIcon == 0)
