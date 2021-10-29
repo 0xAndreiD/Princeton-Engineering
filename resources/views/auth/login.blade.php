@@ -84,7 +84,7 @@
                         <p class="display-4 font-w700 text-white mb-3">Residential Roof Framing Analysis</p>
                         <p class="display-4 font-w700 text-white mb-3">for Solar Installations</p>
                         <p class="font-size-lg font-w600 text-white-75 mb-0">
-                            Copyright &copy; <span>2020</span>
+                            Patent Pending / Copyright &copy; <span>2020</span>
                         </p>
                     </div>
                 </div>

@@ -352,7 +352,7 @@
                             .
                         </div>
                         <div class="col-sm-6 order-sm-1 text-center text-sm-left">
-                            <span >Copyright © 2020 Richard Pantel. All Rights Reserved</span>
+                            <span >Patent Pending / Copyright © 2020 Richard Pantel. All Rights Reserved</span>
                         </div>
                     </div>
                 </div>
