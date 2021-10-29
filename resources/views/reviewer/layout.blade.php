@@ -165,7 +165,7 @@
                         <!-- END Home Link -->
                         <!-- Term Link -->
                         <div class="d-inline-block">
-                            <a type="button" class="btn btn-dual" data-toggle="modal" data-target="#modal-terms">
+                            <a type="button" class="btn btn-dual" data-toggle="modal" data-target="#modal-terms" onclick="openTerms()">
                                 Read Terms
                             </a>
                         </div>
@@ -235,59 +235,7 @@
                                 </button>
                             </div>
                         </div>
-                        <div class="block-content termsDlg">
-                            <h5>1. Terms / Conditions / Privacy Policies</h5>
-                            <p>We may collect personal identification information from Users in a variety of ways, including, but not limited to, when Users visit our site, place an order and in connection with other activities, services, features or resources we make available on our Site. Users may be asked for, as appropriate, name, email address, mailing address, phone number, credit card information,</p>
-                            <p>Users may, however, visit the public portions of our Site anonymously.</p>
-                            <p>We will collect personal identification information from Users only if they voluntarily submit such information to us. Users can always refuse to supply personally identification information, except that it may prevent them from engaging in certain Site related activities.</p>
-                            <h6>Non-personal identification information</h6>
-                            <p>We may collect non-personal identification information about Users whenever they interact with our Site. Non-personal identification information may include the browser name, the type of computer and technical information about Users means of connection to our Site, such as the operating system and the Internet service providers utilized and other similar information.</p>
-                            <h6>Web browser cookies</h6>
-                            <p>Our Site may use "cookies" to enhance User experience. User's web browser places cookies on their hard drive for record-keeping purposes and sometimes to track information about them. User may choose to set their web browser to refuse cookies, or to alert you when cookies are being sent. If they do so, note that some parts of the Site may not function properly.</p>
-                            <h6>How we use collected information</h6>
-                            <p>TECTONICORP, P.C. dba Princeton Engineering,: collects and uses Users personal information for the following purposes:</p>
-                            <p><p style="font-weight: bold; margin-bottom: 0rem">To process transactions</p>
-                            We may use the information Users provide about themselves when placing an order only to provide service to that order. We do not share this information with outside parties except to the extent necessary to provide the service.
-                            </p>
-                            <p><p style="font-weight: bold; margin-bottom: 0rem">To send periodic emails</p>
-                            The email address Users provide for order processing, will only be used to send them information and updates pertaining to their order. It may also be used to respond to their inquiries, and/or other requests or questions. If User decides to opt-in to our mailing list, they will receive emails that may include company news, updates, related product or service information, etc. If at any time the User would like to unsubscribe from receiving future emails, we include detailed unsubscribe instructions at the bottom of each email or User may contact us via our Site.
-                            </p>
-                            <h6>How we protect your information</h6>
-                            <p>We adopt appropriate data collection, storage and processing practices and security measures to protect against unauthorized access, alteration, disclosure or destruction of your personal information, username, password, transaction information and data stored on our Site.</p>
-                            <p>Sensitive and private data exchange between the Site and its Users happens over a SSL secured communication channel and is encrypted and protected with digital signatures. </p>
-                            <h6>Third party websites</h6>
-                            <p>Users may find advertising or other content on our Site that link to the sites and services of our partners, suppliers, advertisers, sponsors, licensors and other third parties. We do not control the content or links that appear on these sites and are not responsible for the practices employed by websites linked to or from our Site. In addition, these sites or services, including their content and links, may be constantly changing. These sites and services may have their own privacy policies and customer service policies. Browsing and interaction on any other website, including websites which have a link to our Site, is subject to that website\'s own terms and policies.</p>
-                            <h6>Changes to this privacy policy</h6>
-                            <p><span style="font-weight: bold;">TECTONICORP, P.C. dba Princeton Engineering</span> has the discretion to update this privacy policy at any time. When we do, revise the updated date at the bottom of this page,. We encourage Users to frequently check this page for any changes to stay informed about how we are helping to protect the personal information we collect. You acknowledge and agree that it is your responsibility to review this privacy policy periodically and become aware of modifications.</p>
-                            <h6>Your acceptance of these terms</h6>
-                            <p>By using this Site, you signify your acceptance of this policy and terms of service. If you do not agree to this policy, please do not use our Site. Your continued use of the Site following the posting of changes to this policy will be deemed your acceptance of those changes.</p>
-                            <h6>Contacting us</h6>
-                            <p>If you have any questions about this Privacy Policy, the practices of this site, or your dealings with this site, please contact us at: info@Princeton-Engineering.com or you can call us at 908-507-5500.</p>
-                            
-                            <h5>2. Refunds</h5>
-                            <p>Customers using a credit card are entitled to a refund if the cardholder is unhappy with the services rendered by Princeton Engineering. Refund requests must be sent to info@Princeton-Engineering.com with the subject line "REFUND REQUESTED".  Provide identification of the project and the reason for the refund request.  Refund requests made after 7 calendar days of the provision of services will be declined. Approved refund requests shall be processed and a refund will be issued.</p>
-
-                            <h5>3. NDA</h5>
-                            <p>You or a company representative has signed the MUTUAL NONDISCLOSURE AGREEMENT [a copy of which can be found <a href="{{ asset('pdf/Princeton NDA Form.pdf') }}">HERE</a>] and you and your company agree to be bound by its terms.</p>
-
-                            <h5>4. Authorized Use of iRoof.</h5>
-                            <p>By using iRoof, you agree that use of iRoof is limited to the registered client and its employees.  iRoof report distribution will be limited to provision to AHJ's and for internal record storage.  You are prohibited from providing copies of iRoof reports or allowing access into the online portal of iRoof to any unauthorized users or competitors of Princeton Engineering.  You agree that Princeton Engineering and Richard Pantel have made substantial intellectual and monetary investments into iRoof and any unauthorized use of iRoof or distribution of iRoof reports or copying or reverse engineering of any parts of the iRoof web site will result in financial damages to Princeton Engineering and Richard Pantel.  Breaches of this agreement will be pursued through litigation.  All parties related to said unauthorized access or document distribution will be enjoined in such litigation.</p>
-
-                            <h5>5. Cancellation</h5>
-                            <p>Princeton Engineering reserves the right to cancel client accounts or user access for any reason, including the client or the client's employees allowing unauthorized access into iRoof.  Unauthorized access includes access by persons who are not direct employees of a registered client.</p>
-
-                            <h5>6. Copyright</h5>
-                            <p>Copyright © 2020 Richard Pantel. All Rights Reserved.</p>
-                            <p>No parts of this data input form or related calculation reports may be copied in format,
-                            content or intent, or reproduced in any form or by any electronic or mechanical
-                            means, including information storage and retrieval systems, without
-                            permission in writing from the author.<span>&nbsp;
-                            </span>Further, disassembly or reverse engineering of this data input form
-                            or related calculation reports is strictly prohibited.</p>
-                            <p>The author's contact
-                            information is: RPantel@Princeton-Engineering.com, web-site:
-                            www.Princeton-Engineering.com; tel: 908-507-5500</p>
-                        </div>
+                        <div class="block-content termsDlg" id="termsContent"></div>
                         <div class="block-content block-content-full text-right bg-light">
                             <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal">Done</button>
                         </div>
@@ -332,5 +280,20 @@
         <script src="{{ asset('/js/plugins/jquery-validation/additional-methods.js') }}"></script>
 
         <script src="{{ asset('js/pages/be_forms_validation.js') }}"></script>
+
+        <script>
+            function openTerms(){
+                if($("#termsContent").html() == ''){
+                    swal.fire({ title: "Please wait...", showConfirmButton: false });
+                    swal.showLoading();
+                    $.post("getSystemMsgs", { _token: "{{csrf_token()}}"}, function(res){
+                        swal.close();
+                        if (res && res.terms_html){
+                            $("#termsContent").html(res.terms_html);
+                        }
+                    });
+                }
+            }
+        </script>
     </body>
 </html>

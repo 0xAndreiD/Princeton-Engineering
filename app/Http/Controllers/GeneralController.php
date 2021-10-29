@@ -34,6 +34,7 @@ use App\StructuralNotes;
 use App\TownNameLocations;
 use App\BillingInfo;
 use App\BillingHistory;
+use App\SystemMsgs;
 use Kunnu\Dropbox\DropboxApp;
 use Kunnu\Dropbox\Dropbox;
 use Kunnu\Dropbox\DropboxFile;
@@ -2805,5 +2806,15 @@ class GeneralController extends Controller
         }
 
         return false;
+      }
+
+      /**
+     * Return the System Msgs Data
+     *
+     * @return JSON
+     */
+      public function getSystemMsgs(){
+        $msg = SystemMsgs::first();
+        return response()->json($msg);
       }
 }
