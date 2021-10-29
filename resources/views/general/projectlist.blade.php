@@ -151,7 +151,7 @@
                                 <div class="dropdown-menu"  aria-labelledby="statusFilter">
                                     <a class="dropdown-item" href="javascript:changeStatusFilter('')">All</a>
                                     @foreach($projectStatusList as $item)
-                                        <a class="dropdown-item" href="javascript:changeStatusFilter({{ $item['id'] }})" style="color: white; background-color: {{$item['color']}}">{{ $item['notes'] }}</a>
+                                        <a class="dropdown-item" href="javascript:changeStatusFilter({{ $item['id'] }})" style="color: black; background-color: {{$item['color']}}">{{ $item['notes'] }}</a>
                                     @endforeach
                                 </div>
                             </th>
@@ -160,7 +160,7 @@
                                 <div class="dropdown-menu"  aria-labelledby="stateFilter">
                                     <a class="dropdown-item" href="javascript:changeStateFilter('')">All</a>
                                     @foreach($planStatusList as $item)
-                                        <a class="dropdown-item" href="javascript:changeStateFilter({{ $item['id'] }})" style="color: white; background-color: {{$item['color']}}">{{ $item['notes'] }}</a>
+                                        <a class="dropdown-item" href="javascript:changeStateFilter({{ $item['id'] }})" style="color: black; background-color: {{$item['color']}}">{{ $item['notes'] }}</a>
                                     @endforeach
                                 </div>  
                             </th>
@@ -245,7 +245,7 @@
                                 <div class="dropdown-menu"  aria-labelledby="statusFilter">
                                     <a class="dropdown-item" href="javascript:changeStatusFilter('')">All</a>
                                     @foreach($projectStatusList as $item)
-                                        <a class="dropdown-item" href="javascript:changeStatusFilter({{ $item['id'] }})" style="color: white; background-color: {{$item['color']}}">{{ $item['notes'] }}</a>
+                                        <a class="dropdown-item" href="javascript:changeStatusFilter({{ $item['id'] }})" style="color: black; background-color: {{$item['color']}}">{{ $item['notes'] }}</a>
                                     @endforeach
                                 </div>
                             </th>
@@ -254,7 +254,7 @@
                                 <div class="dropdown-menu"  aria-labelledby="stateFilter">
                                     <a class="dropdown-item" href="javascript:changeStateFilter('')">All</a>
                                     @foreach($planStatusList as $item)
-                                        <a class="dropdown-item" href="javascript:changeStateFilter({{ $item['id'] }})" style="color: white; background-color: {{$item['color']}}">{{ $item['notes'] }}</a>
+                                        <a class="dropdown-item" href="javascript:changeStateFilter({{ $item['id'] }})" style="color: black; background-color: {{$item['color']}}">{{ $item['notes'] }}</a>
                                     @endforeach
                                 </div>
                             </th>
@@ -301,24 +301,23 @@
         }
 
         changeStateFilterLabel = function(status){
-            console.log(status);
-            $(`#stateFilter`).css('color', '#FFFFFF');
+            $(`#stateFilter`).css('color', 'black');
             if(status === ''){ $(`#stateFilter`).css('color', '#495057'); $(`#stateFilter`).html('All');  $(`#stateFilter`).css('background-color', '#FFFFFF'); }
             else {
                 let item = planStatus.filter(e => e.id && e.id == status);
                 if(item[0]){
-                    $(`#stateFilter`).css('color', 'white'); $(`#stateFilter`).html(item[0].notes);  $(`#stateFilter`).css('background-color', item[0].color);
+                    $(`#stateFilter`).css('color', 'black'); $(`#stateFilter`).html(item[0].notes);  $(`#stateFilter`).css('background-color', item[0].color);
                 }
             }
         }
 
         changeStatusFilterLabel = function(status) {
-            $(`#statusFilter`).css('color', '#FFFFFF');
+            $(`#statusFilter`).css('color', 'black');
             if(status === ''){ $(`#statusFilter`).css('color', '#495057'); $(`#statusFilter`).html('All');  $(`#statusFilter`).css('background-color', '#FFFFFF'); }
             else {
                 let item = projectStatus.filter(e => e.id && e.id == status);
                 if(item[0]){
-                    $(`#statusFilter`).css('color', 'white'); $(`#statusFilter`).html(item[0].notes);  $(`#statusFilter`).css('background-color', item[0].color);
+                    $(`#statusFilter`).css('color', 'black'); $(`#statusFilter`).html(item[0].notes);  $(`#statusFilter`).css('background-color', item[0].color);
                 }
             }
         }
