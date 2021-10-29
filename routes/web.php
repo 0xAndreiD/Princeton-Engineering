@@ -246,3 +246,6 @@ Route::post('/saveSealData', 'CompanyController@saveSealData')->name('saveSealDa
 Route::post('/loadSealData', 'CompanyController@loadSealData')->name('loadSealData');
 Route::post('/saveSealTemplate', 'CompanyController@saveSealTemplate')->name('saveSealTemplate');
 Route::post('/getSealTemplateList', 'CompanyController@getSealTemplateList')->name('getSealTemplateList');
+
+// Pull System Msgs
+Route::post('/getSystemMsgs', 'GeneralController@getSystemMsgs')->name('getSystemMsgs');
