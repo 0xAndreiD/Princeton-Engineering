@@ -530,6 +530,13 @@
             return;
         }
         @endif
+
+        if($(obj)[0].checked == true && $(obj).parents('tr').find(".asbuilt")[0].checked == true){
+            swal.fire({ title: "Warning", text: "Only one type of review checkbox at a time please.", icon: "warning", confirmButtonText: `OK` });
+            $(obj)[0].checked = false;
+            return;
+        }
+
         $.ajax({
             url:"togglePlanCheck",
             type:'post',
@@ -561,6 +568,13 @@
             return;
         }
         @endif
+
+        if($(obj)[0].checked == true && $(obj).parents('tr').find(".plancheck")[0].checked == true){
+            swal.fire({ title: "Warning", text: "Only one type of review checkbox at a time please.", icon: "warning", confirmButtonText: `OK` });
+            $(obj)[0].checked = false;
+            return;
+        }
+
         $.ajax({
             url:"toggleAsBuilt",
             type:'post',
