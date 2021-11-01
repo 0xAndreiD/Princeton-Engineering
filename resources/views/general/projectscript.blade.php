@@ -52,6 +52,7 @@ function changeState(jobId, state){
             if (res.success == true) {
                 $(`#state_${jobId}`).html(res.stateText);
                 $(`#state_${jobId}`).css('background-color', res.stateColor);
+                $('#projects').DataTable().draw();
             }
         },
         error: function(xhr, status, error) {

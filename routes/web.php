@@ -79,6 +79,7 @@ Route::post('/getProjectPermitJson', 'GeneralController@getProjectPermitJson')->
 Route::post('/getDataCheck', 'GeneralController@getDataCheck')->name('getDataCheck');
 Route::post('/delProject', 'GeneralController@delProject')->name('delProject');
 Route::post('/setProjectState', 'GeneralController@setProjectState')->name('setProjectState');
+Route::post('/getProjectState', 'GeneralController@getProjectState')->name('getProjectState');
 Route::post('/setPlanStatus', 'GeneralController@setPlanStatus')->name('setPlanStatus');
 Route::post('/setESeal', 'GeneralController@setESeal')->name('setESeal');
 Route::post('/resetReviewChecks', 'GeneralController@resetReviewChecks')->name('resetReviewChecks');
