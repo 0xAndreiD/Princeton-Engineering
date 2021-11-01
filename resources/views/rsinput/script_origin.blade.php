@@ -2667,6 +2667,12 @@ $(document).ready(function() {
         });
     }
     var togglePlanCheck = function (){
+        if($("#togglePlanCheck")[0].checked == true && $("#toggleAsBuilt")[0].checked == true){
+            swal.fire({ title: "Warning", text: "Only one type of review checkbox at a time please.", icon: "warning", confirmButtonText: `OK` });
+            $("#togglePlanCheck")[0].checked = false;
+            return;
+        }
+        
         var jobId = $('#projectId').val();
 
         $.ajax({
@@ -2691,6 +2697,12 @@ $(document).ready(function() {
     }
 
     var toggleAsBuilt = function(){
+        if($("#togglePlanCheck")[0].checked == true && $("#toggleAsBuilt")[0].checked == true){
+            swal.fire({ title: "Warning", text: "Only one type of review checkbox at a time please.", icon: "warning", confirmButtonText: `OK` });
+            $("#toggleAsBuilt")[0].checked = false;
+            return;
+        }
+        
         var jobId = $('#projectId').val();
 
         $.ajax({
