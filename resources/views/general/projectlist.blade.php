@@ -521,8 +521,15 @@
         })
     }
 
-    @if(Auth::user()->userrole == 2)
-    function togglePlanCheck(obj, jobId){
+    async function togglePlanCheck(obj, jobId){
+        @if(Auth::user()->userrole == 0)
+        let state = await getProjectState(jobId);
+        if(state != 3 && state < 5){
+            swal.fire({ title: "Warning", text: 'Project must be calculated before asking for a Review.', icon: "warning", confirmButtonText: `OK` });
+            $(obj)[0].checked = false;
+            return;
+        }
+        @endif
         $.ajax({
             url:"togglePlanCheck",
             type:'post',
@@ -544,14 +551,14 @@
             }
         });
     }
-    @endif
-
+    
     async function toggleAsBuilt(obj, jobId){
-        @if(Auth::user()->userrole != 2)
+        @if(Auth::user()->userrole == 0)
         let state = await getProjectState(jobId);
-        if(state == 2 || state == 4){
-            swal.fire({ title: "Error", text: 'Please click As-Built after the project has been analyzed.', icon: "warning", confirmButtonText: `OK` });
+        if(state != 3 && state < 5){
+            swal.fire({ title: "Warning", text: 'Project must be calculated before asking for a As-Built.', icon: "warning", confirmButtonText: `OK` });
             $(obj)[0].checked = false;
+            return;
         }
         @endif
         $.ajax({
