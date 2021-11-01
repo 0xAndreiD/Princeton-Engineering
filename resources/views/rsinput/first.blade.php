@@ -778,7 +778,6 @@
     <colgroup>
         <col width="80">
         <col width="160">
-        <col width="160">
         <col width="80">
     </colgroup>
 <tbody>
@@ -786,12 +785,12 @@
         <td><div style="overflow:hidden"></div></td>
         <td style="color: black;">
             <div class="text-center" style="display:flex; align-items: center; justify-content: center;">
-                Review Request: <input id='togglePlanCheck' name='togglePlanCheck' style='cursor: pointer;' class='mr-1 ml-2' type='checkbox' {{ $planCheck == 1 ? 'checked' : '' }}/>
+                <input id='togglePlanCheck' name='togglePlanCheck' style='cursor: pointer;' class='mr-1 ml-2' type='checkbox' {{ $planCheck == 1 ? 'checked' : '' }}/> 
+                 Review Request 
             </div>
-        </td>
-        <td style="color: black;">
             <div class="text-center" style="display:flex; align-items: center; justify-content: center;">
-                As-Built Request: <input id='toggleAsBuilt' name='toggleAsBuilt' style='cursor: pointer;' class='mr-1 ml-2' type='checkbox' {{ $asBuilt == 1 ? 'checked' : '' }}/>
+                <input id='toggleAsBuilt' name='toggleAsBuilt' style='cursor: pointer;' class='mr-1 ml-2' type='checkbox' {{ $asBuilt == 1 ? 'checked' : '' }}/> 
+                 As-Built Request 
             </div>
         </td>
         <td style="padding: 10px;">
