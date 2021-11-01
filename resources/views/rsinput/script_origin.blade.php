@@ -2769,14 +2769,14 @@ $(document).ready(function() {
                                             $(`#ibc-dc-title-${i}`).html(i + ': ' + $(`#a-5-${i}`).val());
                                             $(`#ibc-dc-max-${i}`).html(parseInt(pieceValue));
                                             let fcModuleCnt = $(`#f-1-${i}`).val();
-                                            if(parseFloat(pieceValue) >= fcModuleCnt){
-                                                $(`#ibc-dc-msg-${i}`).html(`OK. ${fcModuleCnt} used within limits.`);
+                                            if(parseInt(pieceValue) >= fcModuleCnt){
+                                                $(`#ibc-dc-msg-${i}`).html(`OK. ${fcModuleCnt} of modules used is within allowable limits.`);
                                                 $(`#ibc-dc-title-${i}`).css('color', 'black');
                                                 $(`#ibc-dc-max-${i}`).css('color', 'black');
                                                 $(`#ibc-dc-msg-${i}`).css('color', 'black');
                                             } else {
                                                 ibcChanges = true;
-                                                $(`#ibc-dc-msg-${i}`).html(`ERROR. ${fcModuleCnt} used exceeds allowable.`);
+                                                $(`#ibc-dc-msg-${i}`).html(`ERROR. ${fcModuleCnt} of modules used exceeds allowable by ${fcModuleCnt - parseInt(pieceValue)}.`);
                                             }
                                         }
                                     }
