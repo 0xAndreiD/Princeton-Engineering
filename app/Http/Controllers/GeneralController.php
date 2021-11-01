@@ -377,6 +377,7 @@ class GeneralController extends Controller
                     ->with('companyMembers', $companymembers)
                     ->with('projectState', $project ? $project->projectState : 0)
                     ->with('planCheck', $project ? $project->planCheck : 0)
+                    ->with('asBuilt', $project ? $project->asBuilt : 0)
                     ->with('projectId', $request['projectId'] ? $request['projectId'] : -1)
                     ->with('userId', $project ? $project['userId'] : 0)
                     ->with('offset', $company['offset']);
@@ -391,6 +392,7 @@ class GeneralController extends Controller
                     ->with('companyMembers', $companymembers)
                     ->with('projectState', 0)
                     ->with('planCheck', 0)
+                    ->with('asBuilt', 0)
                     ->with('projectId', $request['projectId'] ? $request['projectId'] : -1)
                     ->with('userId', $project ? $project['userId'] : 0)
                     ->with('offset', 0.5);

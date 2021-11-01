@@ -450,6 +450,11 @@
         @else
         <td><div style="overflow:hidden"></div></td>
         @endif
+        @if($projectState != 3 && $projectState < 5)
+        <td style="padding: 10px;" id="aboveExit">
+            <a href="{{ route('projectlist') }}" class="btn btn-hero-primary" tabindex="29" style="width:100%;">EXIT</a>
+        </td>
+        @endif
     </tr>
     @endif
 </tbody>
@@ -768,26 +773,35 @@
 </tbody>
 </table>
 
-<table id="review-check-table" cellspacing="0" cellpadding="0" style="border-spacing:0; display:none;" class="mb-2">
+@if($projectState == 3 || $projectState >= 5)
+<table id="review-check-table" cellspacing="0" cellpadding="0" style="border-spacing:0;" class="mb-2">
     <colgroup>
         <col width="80">
         <col width="160">
-        <col width="70">
-        <col width="500">
+        <col width="160">
+        <col width="80">
     </colgroup>
 <tbody>
     <tr>
         <td><div style="overflow:hidden"></div></td>
-        <td colspan="3"><div style="overflow:hidden"></div></td>
         <td style="color: black;">
             <div class="text-center" style="display:flex; align-items: center; justify-content: center;">
-                Review:<input id='togglePlanCheck' name='togglePlanCheck' style='cursor: pointer;' class='mr-1' type='checkbox' {{ $planCheck == 1 ? 'checked' : '' }}/>
+                Review Request: <input id='togglePlanCheck' name='togglePlanCheck' style='cursor: pointer;' class='mr-1 ml-2' type='checkbox' {{ $planCheck == 1 ? 'checked' : '' }}/>
             </div>
+        </td>
+        <td style="color: black;">
+            <div class="text-center" style="display:flex; align-items: center; justify-content: center;">
+                As-Built Request: <input id='toggleAsBuilt' name='toggleAsBuilt' style='cursor: pointer;' class='mr-1 ml-2' type='checkbox' {{ $asBuilt == 1 ? 'checked' : '' }}/>
+            </div>
+        </td>
+        <td style="padding: 10px;">
+            <a href="{{ route('projectlist') }}" class="btn btn-hero-primary" style="width:100%;">EXIT</a>
         </td>
     </tr>
 </tbody>
 </table>
-    
+@endif
+
 <input type="text" value="{{ $projectId }}" id="projectId" hidden>
 <input type="text" value="{{ $projectState }}" id="projectState" hidden>
 <input type="text" value="{{ $offset }}" id="companyOffset" hidden>
