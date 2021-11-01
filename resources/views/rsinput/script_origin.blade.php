@@ -2666,27 +2666,61 @@ $(document).ready(function() {
             }
         });
     }
-    var togglePlanCheck = function (){
+    var togglePlanCheck = async function (){
         var jobId = $('#projectId').val();
-        $.ajax({
-            url:"togglePlanCheck",
-            type:'post',
-            data:{jobId: jobId},
-            success: function(res){
-                if(res.success){
-                    return;
-                }else
-                    swal.fire({ title: "Error", text: res.message, icon: "error", confirmButtonText: `OK` });
-            },
-            error: function(xhr, status, error) {
-                res = JSON.parse(xhr.responseText);
-                message = res.message;
-                swal.fire({ title: "Error",
-                    text: message == "" ? "Error happened while processing. Please try again later." : message,
-                    icon: "error",
-                    confirmButtonText: `OK` });
-            }
-        });
+
+        let state = await getProjectState(jobId);
+        if(state == 2 || state == 4){
+            swal.fire({ title: "Error", text: 'Please click Review after the project has been analyzed.', icon: "warning", confirmButtonText: `OK` });
+            $("#togglePlanCheck")[0].checked = false;
+        } else {
+            $.ajax({
+                url:"togglePlanCheck",
+                type:'post',
+                data:{jobId: jobId},
+                success: function(res){
+                    if(res.success){
+                        return;
+                    }else
+                        swal.fire({ title: "Error", text: res.message, icon: "error", confirmButtonText: `OK` });
+                },
+                error: function(xhr, status, error) {
+                    res = JSON.parse(xhr.responseText);
+                    message = res.message;
+                    swal.fire({ title: "Error",
+                        text: message == "" ? "Error happened while processing. Please try again later." : message,
+                        icon: "error",
+                        confirmButtonText: `OK` });
+                }
+            });
+        }
+    }
+
+    var getProjectState = function(jobId){
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url:"getProjectState",
+                type:'post',
+                data:{jobId: jobId},
+                success: function(res){
+                    if(res.success){
+                        resolve(res.state);
+                    }else{
+                        swal.fire({ title: "Error", text: res.message, icon: "error", confirmButtonText: `OK` });
+                        resolve(0);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    res = JSON.parse(xhr.responseText);
+                    message = res.message;
+                    swal.fire({ title: "Error",
+                        text: message == "" ? "Error happened while processing. Please try again later." : message,
+                        icon: "error",
+                        confirmButtonText: `OK` });
+                    resolve(0);
+                }
+            });
+        })
     }
 
     $("#togglePlanCheck").change(function(){
@@ -2839,6 +2873,7 @@ $(document).ready(function() {
                                 }
                             }
                             $('#site-check-table').css('display', 'table');
+                            $('#review-check-table').css('display', 'table');
                             $('#code-check-table').css('display', 'table');
                             $('#environment-check-table').css('display', 'table');
                             $('#electric-check-table').css('display', 'table');

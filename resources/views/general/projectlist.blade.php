@@ -494,9 +494,35 @@
 
     });
 
+    function getProjectState(jobId){
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url:"getProjectState",
+                type:'post',
+                data:{jobId: jobId},
+                success: function(res){
+                    if(res.success){
+                        resolve(res.state);
+                    }else{
+                        swal.fire({ title: "Error", text: res.message, icon: "error", confirmButtonText: `OK` });
+                        resolve(0);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    res = JSON.parse(xhr.responseText);
+                    message = res.message;
+                    swal.fire({ title: "Error",
+                        text: message == "" ? "Error happened while processing. Please try again later." : message,
+                        icon: "error",
+                        confirmButtonText: `OK` });
+                    resolve(0);
+                }
+            });
+        })
+    }
 
-
-    function togglePlanCheck(jobId){
+    @if(Auth::user()->userrole == 2)
+    function togglePlanCheck(obj, jobId){
         $.ajax({
             url:"togglePlanCheck",
             type:'post',
@@ -518,8 +544,16 @@
             }
         });
     }
+    @endif
 
-    function toggleAsBuilt(jobId){
+    async function toggleAsBuilt(obj, jobId){
+        @if(Auth::user()->userrole != 2)
+        let state = await getProjectState(jobId);
+        if(state == 2 || state == 4){
+            swal.fire({ title: "Error", text: 'Please click As-Built after the project has been analyzed.', icon: "warning", confirmButtonText: `OK` });
+            $(obj)[0].checked = false;
+        }
+        @endif
         $.ajax({
             url:"toggleAsBuilt",
             type:'post',

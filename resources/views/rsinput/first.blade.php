@@ -473,11 +473,6 @@
     <tr class="h13">
         <td><div style="overflow:hidden"></div></td>
         <td colspan="3" style="text-align:center;"><h4 style="margin:0">Data Input Check</h4></td>
-        <td style="color: black;">
-            <div class="text-center" style="display:flex; align-items: center; justify-content: center">
-                Review:<input id='togglePlanCheck' name='togglePlanCheck' class='mr-1' type='checkbox' {{ $planCheck == 1 ? 'checked' : '' }}/>
-            </div>
-        </td>
     </tr>
     <tr class="h13">
         <td><div style="overflow:hidden"></div></td>
@@ -770,6 +765,26 @@
         <td class="iw400-bdr" id="structural-note-{{$j}}"></td>
     </tr>
     @endfor
+</tbody>
+</table>
+
+<table id="review-check-table" cellspacing="0" cellpadding="0" style="border-spacing:0; display:none;" class="mb-2">
+    <colgroup>
+        <col width="80">
+        <col width="160">
+        <col width="70">
+        <col width="500">
+    </colgroup>
+<tbody>
+    <tr>
+        <td><div style="overflow:hidden"></div></td>
+        <td colspan="3"><div style="overflow:hidden"></div></td>
+        <td style="color: black;">
+            <div class="text-center" style="display:flex; align-items: center; justify-content: center;">
+                Review:<input id='togglePlanCheck' name='togglePlanCheck' style='cursor: pointer;' class='mr-1' type='checkbox' {{ $planCheck == 1 ? 'checked' : '' }}/>
+            </div>
+        </td>
+    </tr>
 </tbody>
 </table>
     

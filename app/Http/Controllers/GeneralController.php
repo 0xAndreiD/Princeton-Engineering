@@ -457,10 +457,16 @@ class GeneralController extends Controller
                     $projectState = 0;
                     if($request['status'] == 'Saved')
                         $projectState = 1;
-                    else if($request['status'] == 'Data Check')
+                    else if($request['status'] == 'Data Check'){
                         $projectState = 2;
-                    else if($request['status'] == 'Submitted')
+                        $project->planCheck = 0;
+                        $project->asBuilt = 0;
+                    }
+                    else if($request['status'] == 'Submitted'){
                         $projectState = 4;
+                        $project->planCheck = 0;
+                        $project->asBuilt = 0;
+                    }
                     $project->projectState = $projectState;
 
                     // We need to rename dropbox project directories on IN, OUT, 
@@ -535,10 +541,16 @@ class GeneralController extends Controller
                 $projectState = 0;
                 if($request['status'] == 'Saved')
                     $projectState = 1;
-                else if($request['status'] == 'Data Check')
+                else if($request['status'] == 'Data Check'){
                     $projectState = 2;
-                else if($request['status'] == 'Submitted')
+                    $project->planCheck = 0;
+                    $project->asBuilt = 0;
+                }
+                else if($request['status'] == 'Submitted'){
                     $projectState = 4;
+                    $project->planCheck = 0;
+                    $project->asBuilt = 0;
+                }
                 $project = JobRequest::create([
                     'companyName' => $company['company_name'],
                     'companyId' => Auth::user()->companyid,
@@ -1213,8 +1225,8 @@ class GeneralController extends Controller
                     "<a href='jobchat?projectId={$nestedData['id']}' class='mr-2 btn btn-" . $chatbadge . "' style='padding: 3px 4px;'>
                         <i class='fab fa-rocketchat'></i>
                     </a>". 
-                    "<input class='mr-1' type='checkbox' " . (Auth::user()->userrole == 4 ? "style='pointer-events: none;'" : "onchange='togglePlanCheck({$job['id']})'") . ($job['plancheck'] == 1 ? " checked" : "") . ">" . 
-                    "<input class='mr-2' type='checkbox' " . (Auth::user()->userrole == 4 ? "style='pointer-events: none;'" : "onchange='toggleAsBuilt({$job['id']})'") . ($job['asbuilt'] == 1 ? " checked" : "") . ">" . 
+                    "<input class='mr-1' type='checkbox' " . (Auth::user()->userrole != 2 ? "style='pointer-events: none;'" : "onchange='togglePlanCheck(this, {$job['id']})'") . ($job['plancheck'] == 1 ? " checked" : "") . (Auth::user()->userrole != 2 ? " disabled" : "") . ">" . 
+                    "<input class='mr-2' type='checkbox' " . (Auth::user()->userrole == 4 ? "style='pointer-events: none;'" : "onchange='toggleAsBuilt(this, {$job['id']})'") . ($job['asbuilt'] == 1 ? " checked" : "") . ">" . 
                     (Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4? "<button onclick='openReviewTab({$job['id']})' class='mr-1 btn' style='padding: 7px 4px; background-image: -webkit-linear-gradient(-45deg, #".$sealCol." 0%, #".$sealCol." 47%, #FFFFFF 48%, #FFFFFF 53%, #".$asbuiltCol." 54%, #".$asbuiltCol." 100%); border: 1px solid white;'>
                         <div style='width:16px; height: 16px;'></div>
                     </a>" : "") . 
@@ -1576,6 +1588,12 @@ class GeneralController extends Controller
                     if( isset($request['state']) )
                     {
                         $project->projectState = $request['state'];
+
+                        if($project->projectState == 2 || $project->projectState == 4){
+                            $project->planCheck = 0;
+                            $project->asBuilt = 0;
+                        }
+
                         $project->save();
 
                         $projectState = JobProjectStatus::where('id', $request['state'])->first();
@@ -1584,6 +1602,29 @@ class GeneralController extends Controller
                     else
                         return response()->json(['success' => false, 'message' => "Wrong state value."] );
                 }
+                else
+                    return response()->json(['success' => false, 'message' => "You don't have any permission to set state of this project."] );
+            }
+            else
+                return response()->json(['success' => false, 'message' => 'Cannot find the project.'] );
+        }
+        else
+            return response()->json(['success' => false, 'message' => 'Wrong Project Id.'] );
+    }
+
+    /**
+     * Get the project state of the project.
+     *
+     * @return JSON
+     */
+    public function getProjectState(Request $request){
+        if($request['jobId'])
+        {
+            $project = JobRequest::where('id', '=', $request['jobId'])->first();
+            if($project)
+            {
+                if(Auth::user()->userrole == 2 || Auth::user()->companyid == $project['companyId'])
+                    return response()->json(['success' => true, 'state' => $project->projectState] );
                 else
                     return response()->json(['success' => false, 'message' => "You don't have any permission to set state of this project."] );
             }
