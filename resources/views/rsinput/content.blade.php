@@ -288,9 +288,23 @@
         </tr>
         <tr class="h13 class-GroundMount-hide">
             <td><div style="overflow:hidden"></td>
-            <td class="iw400-bdr" style="vertical-align : middle;" rowspan="3">Roof Deck and Surface</td>
+            <td class="iw400-bdr" style="vertical-align : middle;" rowspan="7" id="label-D-0-{{ $conditionId }}">Roof Construction</td>
+            <td class="w400-bdr">D-0</td>
+            <td class="iw400-right-bdr" colspan="2">Roof Deck Material</td>
+            <td class="iw400-bdr">select</td>
+            <td class="w400-green-bdr" colspan="2">
+                <select id="d-0-{{ $conditionId }}" tabindex="44">
+                    @foreach($deckMaterials as $material)
+                        <option data-value="{{ $material['id'] }}">{{ $material['material'] }}</option>
+                    @endforeach
+                </select>
+            </td>
+            <td class="right-bdr"><div style="overflow:hidden"></td>
+        </tr>
+        <tr class="h13 class-GroundMount-hide">
+            <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">D-1</td>
-            <td class="iw400-right-bdr" colspan="2">Plywood Thickness</td>
+            <td class="iw400-right-bdr" colspan="2">Roof Deck Material Thickness</td>
             <td class="iw400-bdr">in</td>
             <td class="w400-yellow-bdr" colspan="2"><input type="text" class="txt-center-align" id="d-1-{{ $conditionId }}"  tabindex="42" value="0.50"></input></td>
             <td class="right-bdr"><div style="overflow:hidden"></td>
@@ -298,14 +312,13 @@
         <tr class="h13 class-GroundMount-hide">
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">D-2</td>
-            <td class="iw400-right-bdr" colspan="2">Shingle Type</td>
+            <td class="iw400-right-bdr" colspan="2">Roof Surface Material</td>
             <td class="iw400-bdr">select</td>
             <td class="w400-green-bdr" colspan="2">
                 <select id="d-2-{{ $conditionId }}" tabindex="43">
-                    <option data-value="Standard" selected="">Standard</option>
-                    <option data-value="Architecture">Architectural - Heavy</option>
-                    <option data-value="Metal Deck">Metal Deck</option>
-                    <option data-value="Roof Tile">Roof Tile</option>
+                    @foreach($surfaceMaterials as $material)
+                        <option data-value="{{ $material['id'] }}">{{ $material['material'] }}</option>
+                    @endforeach
                 </select>
             </td>
             <td class="right-bdr"><div style="overflow:hidden"></td>
@@ -313,7 +326,7 @@
         <tr class="h13 class-GroundMount-hide">
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">D-3</td>
-            <td class="iw400-right-bdr" colspan="2"># Shingle Layers</td>
+            <td class="iw400-right-bdr" colspan="2"># Roof Surface Material Layers</td>
             <td class="iw400-bdr">#</td>
             <td class="w400-yellow-bdr" colspan="2">
                 <select id="d-3-{{ $conditionId }}" tabindex="44">
@@ -322,6 +335,76 @@
                     <option data-value="3">3</option>
                 </select>
             </td>
+            <td class="right-bdr"><div style="overflow:hidden"></td>
+        </tr>
+        <tr class="h13 class-GroundMount-hide">
+            <td><div style="overflow:hidden"></td>
+            <td class="w400-bdr">D-4</td>
+            <td class="iw400-right-bdr" colspan="2">Insulation Type</td>
+            <td class="iw400-bdr">select</td>
+            <td class="w400-green-bdr" colspan="2">
+                <select id="d-4-{{ $conditionId }}" tabindex="44">
+                    @foreach($insulationMaterials as $material)
+                        <option data-value="{{ $material['id'] }}">{{ $material['material'] }}</option>
+                    @endforeach
+                </select>
+            </td>
+            <td class="right-bdr"><div style="overflow:hidden"></td>
+        </tr>
+        <tr class="h13 class-GroundMount-hide">
+            <td><div style="overflow:hidden"></td>
+            <td class="w400-bdr">D-5</td>
+            <td class="iw400-right-bdr" colspan="2">Insulation Thickness</td>
+            <td class="iw400-bdr">in</td>
+            <td class="w400-green-bdr" colspan="2">
+                <select id="d-5-{{ $conditionId }}" tabindex="44">
+                    <option data-value="1" selected="">1</option>
+                    <option data-value="2">2</option>
+                    <option data-value="3">3</option>
+                    <option data-value="3.5">3.5</option>
+                    <option data-value="5.5">5.5</option>
+                    <option data-value="7.5">7.5</option>
+                    <option data-value="9.5">9.5</option>
+                </select>
+            </td>
+            <td class="right-bdr"><div style="overflow:hidden"></td>
+        </tr>
+        <tr class="h13 class-GroundMount-hide">
+            <td><div style="overflow:hidden"></td>
+            <td class="w400-bdr">D-6</td>
+            <td class="iw400-right-bdr" colspan="2">Ceiling Material</td>
+            <td class="iw400-bdr">select</td>
+            <td class="w400-green-bdr" colspan="2">
+                <select id="d-6-{{ $conditionId }}" tabindex="44">
+                    @foreach($ceilingMaterials as $material)
+                        <option data-value="{{ $material['id'] }}">{{ $material['material'] }}</option>
+                    @endforeach
+                </select>
+            </td>
+            <td class="right-bdr"><div style="overflow:hidden"></td>
+        </tr>
+        <tr class="h13 class-GroundMount-hide class-IBC-only" style="display: none;">
+            <td><div style="overflow:hidden"></td>
+            <td class="w400-bdr">D-7</td>
+            <td class="iw400-right-bdr" colspan="2">MEP Loads</td>
+            <td class="iw400-bdr">psf</td>
+            <td class="w400-yellow-bdr" colspan="2"><input type="text" class="txt-center-align" id="d-7-{{ $conditionId }}"  tabindex="44" value=""></input></td>
+            <td class="right-bdr"><div style="overflow:hidden"></td>
+        </tr>
+        <tr class="h13 class-GroundMount-hide class-IBC-only" style="display: none;">
+            <td><div style="overflow:hidden"></td>
+            <td class="w400-bdr">D-8</td>
+            <td class="iw400-right-bdr" colspan="2">Miscellaneous Loads</td>
+            <td class="iw400-bdr">psf</td>
+            <td class="w400-yellow-bdr" colspan="2"><input type="text" class="txt-center-align" id="d-8-{{ $conditionId }}"  tabindex="44" value=""></input></td>
+            <td class="right-bdr"><div style="overflow:hidden"></td>
+        </tr>
+        <tr class="h13 class-GroundMount-hide class-IBC-only" style="display: none;">
+            <td><div style="overflow:hidden"></td>
+            <td class="w400-bdr">D-9</td>
+            <td class="iw400-right-bdr" colspan="2">Miscellaneous Load Description</td>
+            <td class="iw400-bdr">text</td>
+            <td class="w400-yellow-bdr" colspan="2"><input type="text" class="txt-center-align" id="d-9-{{ $conditionId }}"  tabindex="44" value=""></input></td>
             <td class="right-bdr"><div style="overflow:hidden"></td>
         </tr>
         <tr class="h13 class-IBC-hide class-GroundMount-hide">

@@ -35,6 +35,7 @@ use App\TownNameLocations;
 use App\BillingInfo;
 use App\BillingHistory;
 use App\SystemMsgs;
+use App\BlgMaterials;
 use Kunnu\Dropbox\DropboxApp;
 use Kunnu\Dropbox\Dropbox;
 use Kunnu\Dropbox\DropboxFile;
@@ -363,6 +364,10 @@ class GeneralController extends Controller
     public function rsinput(Request $request)
     {
         $company = Company::where('id', Auth::user()->companyid)->first();
+        $insulationMaterials = BlgMaterials::where('location', 'Insulation')->get(array('id', 'material'));
+        $ceilingMaterials = BlgMaterials::where('location', 'Interior')->get(array('id', 'material'));
+        $deckMaterials = BlgMaterials::where('location', 'Decking')->get(array('id', 'material'));
+        $surfaceMaterials = BlgMaterials::where('location', 'Roof Surface')->get(array('id', 'material'));
         if( $company )
         {
             $project = JobRequest::where('id', '=', $request['projectId'])->first();
@@ -380,7 +385,11 @@ class GeneralController extends Controller
                     ->with('asBuilt', $project ? $project->asBuilt : 0)
                     ->with('projectId', $request['projectId'] ? $request['projectId'] : -1)
                     ->with('userId', $project ? $project['userId'] : 0)
-                    ->with('offset', $company['offset']);
+                    ->with('offset', $company['offset'])
+                    ->with('insulationMaterials', $insulationMaterials)
+                    ->with('ceilingMaterials', $ceilingMaterials)
+                    ->with('deckMaterials', $deckMaterials)
+                    ->with('surfaceMaterials', $surfaceMaterials);
         }
         else
         {
@@ -395,7 +404,11 @@ class GeneralController extends Controller
                     ->with('asBuilt', 0)
                     ->with('projectId', $request['projectId'] ? $request['projectId'] : -1)
                     ->with('userId', $project ? $project['userId'] : 0)
-                    ->with('offset', 0.5);
+                    ->with('offset', 0.5)
+                    ->with('insulationMaterials', $insulationMaterials)
+                    ->with('ceilingMaterials', $ceilingMaterials)
+                    ->with('deckMaterials', $deckMaterials)
+                    ->with('surfaceMaterials', $surfaceMaterials);
         }
     }
 
@@ -789,7 +802,7 @@ class GeneralController extends Controller
                 "C2_feet" => number_format(floatval($caseInput["cf-2-{$number}"]), 2), "C2_inches" => number_format(floatval($caseInput["ci-2-{$number}"]), 2), "C2" => number_format(floatval(isset($caseInput["c-2-{$number}"]) ? $caseInput["c-2-{$number}"] : 0), 2),
                 "C3" => number_format(floatval(isset($caseInput["c-3-{$number}"]) ? $caseInput["c-3-{$number}"] : 0), 2),
                 "C4_feet" => number_format(floatval($caseInput["cf-4-{$number}"]), 2), "C4_inches" => number_format(floatval($caseInput["ci-4-{$number}"]), 2), "C4" => number_format(floatval(isset($caseInput["c-4-{$number}"]) ? $caseInput["c-4-{$number}"] : 0), 2));
-            $caseData['RoofDeckSurface'] = array("D1" => number_format(floatval($caseInput["d-1-{$number}"]), 2), "D2" => $caseInput["d-2-{$number}"], "D3" => $caseInput["d-3-{$number}"]);
+            $caseData['RoofDeckSurface'] = array("D0" => $caseInput["d-0-{$number}"], "D1" => number_format(floatval($caseInput["d-1-{$number}"]), 2), "D2" => $caseInput["d-2-{$number}"], "D3" => $caseInput["d-3-{$number}"], "D4" => $caseInput["d-4-{$number}"], "D5" => $caseInput["d-5-{$number}"], "D6" => $caseInput["d-6-{$number}"], "D7" => $caseInput["d-7-{$number}"], "D8" => $caseInput["d-8-{$number}"], "D9" => $caseInput["d-9-{$number}"]);
             $caseData['Location'] = array(
                 "E1_feet" => number_format(floatval($caseInput["ef-1-{$number}"]), 2), "E1_inches" => number_format(floatval($caseInput["ei-1-{$number}"]), 2), "E1" => number_format(floatval($caseInput["e-1-{$number}"]), 2),
                 "E2_feet" => number_format(floatval($caseInput["ef-2-{$number}"]), 2), "E2_inches" => number_format(floatval($caseInput["ei-2-{$number}"]), 2), "E2" => number_format(floatval($caseInput["e-2-{$number}"]), 2));
@@ -1229,7 +1242,7 @@ class GeneralController extends Controller
                     </a>". 
                     "<input class='mr-1 plancheck' type='checkbox' " . (Auth::user()->userrole == 4 ? "style='pointer-events: none;'" : "onchange='togglePlanCheck(this, {$job['id']})'") . ($job['plancheck'] == 1 ? " checked" : "") . ">" . 
                     "<input class='mr-2 asbuilt' type='checkbox' " . (Auth::user()->userrole == 4 ? "style='pointer-events: none;'" : "onchange='toggleAsBuilt(this, {$job['id']})'") . ($job['asbuilt'] == 1 ? " checked" : "") . ">" . 
-                    (Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4? "<button onclick='openReviewTab({$job['id']})' class='mr-1 btn' style='padding: 7px 4px; background-image: -webkit-linear-gradient(-45deg, #".$sealCol." 0%, #".$sealCol." 47%, #FFFFFF 48%, #FFFFFF 53%, #".$asbuiltCol." 54%, #".$asbuiltCol." 100%); border: 1px solid white;'>
+                    (Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4? "<button onclick='openReviewTab({$job['id']})' class='mr-1 btn' style='padding: 7px 4px; background-image: -webkit-linear-gradient(-90deg, #{$sealCol} 0%, #{$sealCol} 30%, #FFFFFF 31%, #FFFFFF 35%, #{$asbuiltCol} 36%, #{$asbuiltCol} 65%, #FFFFFF 66%, #FFFFFF 72%, #000000 71%, #000000 100%); border: 1px solid white;'>
                         <div style='width:16px; height: 16px;'></div>
                     </a>" : "") . 
                     (Auth::user()->userrole == 2 ? "<button type='button' class='js-swal-confirm btn btn-danger mr-1' onclick='delProject(this,{$nestedData['id']})' style='padding: 3px 4px;'>

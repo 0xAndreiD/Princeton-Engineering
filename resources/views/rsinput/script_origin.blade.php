@@ -84,6 +84,9 @@ function fcChangeType( conditionId, type ){
         </select>`);
         maxModuleNumChange(conditionId);
 
+        $(`#label-D-0-${conditionId}`).attr('rowspan', 7);
+        $(`#inputform-${conditionId} .class-IBC-only`).css('display', 'none');
+
         $(`#f-1-${conditionId}`).on('change', function() {
             drawTrussGraph(window.conditionId);
             drawStickGraph(window.conditionId);
@@ -138,6 +141,9 @@ function fcChangeType( conditionId, type ){
         </select>`);
         maxModuleNumChange(conditionId);
 
+        $(`#label-D-0-${conditionId}`).attr('rowspan', 7);
+        $(`#inputform-${conditionId} .class-IBC-only`).css('display', 'none');
+
         $(`#f-1-${conditionId}`).on('change', function() {
             drawTrussGraph(window.conditionId);
             drawStickGraph(window.conditionId);
@@ -185,6 +191,9 @@ function fcChangeType( conditionId, type ){
                 return false;
             }
         });
+
+        $(`#label-D-0-${conditionId}`).attr('rowspan', 10);
+        $(`#inputform-${conditionId} .class-IBC-only`).css('display', 'table-row');
 
         $(`#f-1-${conditionId}`).on('change', function() {
             drawTrussGraph(window.conditionId);
@@ -235,6 +244,9 @@ function fcChangeType( conditionId, type ){
             <option data-value="12">12</option>\
         </select>`);
         maxModuleNumChange(conditionId);
+
+        $(`#label-D-0-${conditionId}`).attr('rowspan', 7);
+        $(`#inputform-${conditionId} .class-IBC-only`).css('display', 'none');
 
         $(`#f-1-${conditionId}`).on('change', function() {
             drawTrussGraph(window.conditionId);
@@ -1402,7 +1414,7 @@ var updateNumberOfConditions = function(conditions) {
     }
 }
 
-var ignorable = ['a-7-', 'a-8-', 'af-8-', 'ai-8-', 'a-9-', 'af-9-', 'ai-9-', 'a-10-', 'af-10-', 'ai-10-', 'ac-7-', 'ac-8-', 'ac-9-', 'ac-10-', 'c-1-', 'c-2-', 'cf-2-', 'ci-2-', 'c-3-', 'cf-3-', 'ci-3-', 'c-4-', 'cf-4-', 'ci-4-', 'calc-algorithm-', 'collarHeights'];
+var ignorable = ['a-7-', 'a-8-', 'af-8-', 'ai-8-', 'a-9-', 'af-9-', 'ai-9-', 'a-10-', 'af-10-', 'ai-10-', 'ac-7-', 'ac-8-', 'ac-9-', 'ac-10-', 'c-1-', 'c-2-', 'cf-2-', 'ci-2-', 'c-3-', 'cf-3-', 'ci-3-', 'c-4-', 'cf-4-', 'ci-4-', 'calc-algorithm-', 'collarHeights', 'd-7-', 'd-8-', 'd-9-'];
 
 var isIgnorable = function(id) {
     let canIgnore = false;
@@ -4226,9 +4238,16 @@ var loadPreloadedData = function() {
                                 }
                                 $(`#c-4-${i + 1}`).val(caseData['CollarTieInformation']['C4']);
 
+                                $(`#d-0-${i + 1}`).val(caseData['RoofDeckSurface']['D0']);
                                 $(`#d-1-${i + 1}`).val(caseData['RoofDeckSurface']['D1']);
                                 $(`#d-2-${i + 1}`).val(caseData['RoofDeckSurface']['D2']);
                                 $(`#d-3-${i + 1}`).val(caseData['RoofDeckSurface']['D3']);
+                                $(`#d-4-${i + 1}`).val(caseData['RoofDeckSurface']['D4']);
+                                $(`#d-5-${i + 1}`).val(caseData['RoofDeckSurface']['D5']);
+                                $(`#d-6-${i + 1}`).val(caseData['RoofDeckSurface']['D6']);
+                                $(`#d-7-${i + 1}`).val(caseData['RoofDeckSurface']['D7']);
+                                $(`#d-8-${i + 1}`).val(caseData['RoofDeckSurface']['D8']);
+                                $(`#d-9-${i + 1}`).val(caseData['RoofDeckSurface']['D9']);
 
                                 if(!caseData['Location']['E1_feet'] && !caseData['Location']['E1_inches'])
                                 {
