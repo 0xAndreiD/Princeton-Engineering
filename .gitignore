@@ -12,6 +12,7 @@ public/storage
 public/hot
 public/sealfiles
 public/logos
+public/pdf
 
 # Laravel 5 & Lumen specific with changed public path
 public_html/storage
@@ -22,6 +23,7 @@ storage/input/
 storage/output/
 storage/db/
 storage/invoice/
+storage/upload/
 .env
 Homestead.yaml
 Homestead.json

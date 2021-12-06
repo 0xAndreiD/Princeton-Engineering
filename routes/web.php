@@ -93,6 +93,7 @@ Route::post('/togglePlanCheck', 'GeneralController@togglePlanCheck')->name('togg
 Route::post('/toggleAsBuilt', 'GeneralController@toggleAsBuilt')->name('toggleAsBuilt');
 Route::post('/checkChatList', 'GeneralController@checkChatList')->name('checkChatList');
 Route::post('/getPermitList', 'GeneralController@getPermitList')->name('getPermitList');
+Route::post('/getPILList', 'GeneralController@getPILList')->name('getPILList');
 Route::post('/getCompanyInfo', 'GeneralController@getCompanyInfo')->name('getCompanyInfo');
 Route::get('/onreview', 'GeneralController@onReview')->name('onReview');
 Route::get('/jobFiles', 'GeneralController@jobFiles')->name('jobFiles');

@@ -451,7 +451,7 @@ html, body {
     height: 64px;
 }
 
-#defaultPermitContent{
+#defaultPermitContent, #defaultPILContent{
     margin: auto;
     height: 200px;
     align-items: center;
