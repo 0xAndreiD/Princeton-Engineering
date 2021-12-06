@@ -9,10 +9,10 @@
         <div class="content content-full content-top">
             <div class="pt-5 pb-4 text-center">
                 <h1 class="h2 font-w700 mb-2 text-white">
-                    Construction Permit PDF Files
+                    Construction Permit & PIL PDF Files
                 </h1>
                 <h2 class="h5 text-white-75 mb-0">
-                    You can manage permit PDF files here.
+                    You can manage permit & PIL PDF files here.
                 </h2>
             </div>
         </div>
@@ -40,8 +40,9 @@
                             <th class="text-center" style="width: 10%;">ID</th>
                             <th style="width:15%">File Name</th>
                             <th style="width:10%;">State</th>
-                            <th style="width:25%;">Description</th>
-                            <th style="width:20%;">TabName</th>
+                            <th style="width:20%;">Description</th>
+                            <th style="width:15%;">TabName</th>
+                            <th style="width:10%;">Form Type</th>
                             <th style="width:10%;">Configured</th>
                             <th style="min-width: 200px;">Actions</th>
                         </tr>
@@ -77,29 +78,37 @@
 
     <!-- Side Content -->
     <div class="content-side">
+        <form class="js-validation" onsubmit="return false;" method="POST" id="pdfForm">
         <!-- Side Overlay Tabs -->
         <div class="block block-transparent pull-x pull-t">
             <div class="block-content tab-content overflow-hidden side-view">
                 <div class="form-group">
                     <label for="file">Upload PDF file</label>
-                    <input type="file" class="form-control" id="file">
+                    <input type="file" class="form-control" id="file" name="file">
                 </div>
                 <div class="form-group">
                     <label for="filename">Filename</label>
-                    <input type="text" class="form-control" id="filename" value="" disabled>
+                    <input type="text" class="form-control" id="filename" name="filename" value="" disabled>
                 </div>
                 <div class="form-group">
                     <label for="state">State</label>
-                    <select id="state" class="form-control">
+                    <select id="state" name="state" class="form-control">
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="description">Description</label>
-                    <input type="text" class="form-control" id="description" value="">
+                    <input type="text" class="form-control" id="description" name="description" value="">
                 </div>
                 <div class="form-group">
                     <label for="tabname">Tab Name</label>
-                    <input type="text" class="form-control" id="tabname" value="">
+                    <input type="text" class="form-control" id="tabname" name="tabname" value="">
+                </div>
+                <div class="form-group">
+                    <label for="formtype">Form Type</label>
+                    <select id="formtype" name="formtype" class="form-control">
+                        <option data-value="Permit">Permit</option>
+                        <option data-value="PIL">PIL</option>
+                    </select>
                 </div>
                 <div class="block-content row justify-content-center border-top">
                     <div class="col-9">
@@ -111,14 +120,21 @@
             </div>
         </div>
         <!-- END Side Overlay Tabs -->
+        </form>
     </div>
     <!-- END Side Content -->
 </aside>
 
 <script src="{{ asset('js/pages/common.js') }}"></script>
+<script src="{{ asset('js/jquery.form.js') }}"></script>
 
 <script>
     $(document).ready(function () {
+        $.ajaxSetup({
+            headers:
+            { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
+        });
+
         var table = $('#permitFiles').DataTable({
             "processing": true,
             "serverSide": true,
@@ -137,6 +153,7 @@
                 { "data": "state" },
                 { "data": "description" },
                 { "data": "tabname" },
+                { "data": "typebadge", "orderable": false },
                 { "data": "configured" },
                 { "data": "actions", "orderable": false }
             ]	 

@@ -237,7 +237,7 @@
                         <li class="nav-main-item">
                             <a class="nav-main-link" href="{{ route('permit') }}">
                                 <i class="nav-main-link-icon fa fa-file-pdf"></i>
-                                <span class="nav-main-link-name">Permit PDF</span>
+                                <span class="nav-main-link-name">Permit & PILs</span>
                             </a>
                         </li>
                         <li class="nav-main-item">

@@ -34,7 +34,7 @@ class PermitController extends Controller
     public function index()
     {
         $pdfList = PermitFiles::orderBy('id', 'asc')->get();
-        return view('admin.permit.list')->with('pdfList', $pdfList);
+        return view('admin.permit.list');
     }
 
     /**
@@ -48,7 +48,8 @@ class PermitController extends Controller
             1 =>'filename',
             2 =>'state',
             3 =>'description',
-            4 =>'tabname'
+            4 =>'tabname',
+            5 =>'formtype'
         );
 
         $handler = new PermitFiles;
@@ -71,7 +72,7 @@ class PermitController extends Controller
                 ->orderBy($order,$dir)
                 ->get(
                     array(
-                        'id', 'filename', 'state', 'description', 'tabname'
+                        'id', 'filename', 'state', 'description', 'tabname', 'formtype'
                     )
                 );
         }
@@ -85,7 +86,7 @@ class PermitController extends Controller
                         ->orderBy($order,$dir)
                         ->get(
                             array(
-                                'id', 'filename', 'state', 'description', 'tabname'
+                                'id', 'filename', 'state', 'description', 'tabname', 'formtype'
                             )
                         );
 
@@ -108,6 +109,15 @@ class PermitController extends Controller
                     <button type='button' class='btn btn-primary' onclick='configPermit(this,{$file['id']})'><i class='fa fa-cogs'></i></button>
                     <button type='button' class='js-swal-confirm btn btn-danger' style='margin-left:5px;' onclick='delPermit(this,{$file['id']})'><i class='fa fa-trash'></i></button>
                 </div>";
+
+                if($file['formtype'] == 1){
+                    $file['typebadge'] = "<span class='badge badge-success'>Permit</span>";
+                    $file['formtype'] = 'Permit';
+                }
+                else {
+                    $file['typebadge'] = "<span class='badge badge-danger'>PIL</span>";
+                    $file['formtype'] = 'PIL';
+                }
 
                 $fields = PermitFields::where('filename', $file['filename'])->get();
                 if(count($fields) > 0)
@@ -166,17 +176,21 @@ class PermitController extends Controller
      * @return JSON
      */
     public function submitPermit(Request $request){
-        $request->validate([
-            'file' => 'required|mimes:pdf|max:4096',
-        ]);
+        // $request->validate([
+        //     'file' => 'required|mimes:pdf|max:4096',
+        // ]);
         
         if(!empty($request->permitId)){
             $permit = PermitFiles::where('id', $request->permitId)->first();
             if($permit){
-                $permit['filename'] = $request->filename;
-                $permit['state'] = $request->state;
-                $permit['description'] = $request->description;
-                $permit['tabname'] = $request->tabname;
+                $permit['filename'] = $request['filename'];
+                $permit['state'] = $request['state'];
+                $permit['description'] = $request['description'];
+                $permit['tabname'] = $request['tabname'];
+                if($request['formtype'] == 'Permit')
+                    $permit['formtype'] = 1;
+                else
+                    $permit['formtype'] = 2;
                 $permit->save();
                 return response()->json(['success' => true]);
             } else {
@@ -184,6 +198,10 @@ class PermitController extends Controller
                 $permit['state'] = $request->state;
                 $permit['description'] = $request->description;
                 $permit['tabname'] = $request->tabname;
+                if($request['formtype'] == 'Permit')
+                    $permit['formtype'] = 1;
+                else
+                    $permit['formtype'] = 2;
                 
                 $list = PermitFiles::where('filename', $request->filename)->where('state', $request->state)->first();
 
@@ -229,6 +247,7 @@ class PermitController extends Controller
         if(!empty($request['permitId'])){
             $permit = PermitFiles::where('id', $request['permitId'])->first();
             if($permit){
+                PermitFields::where('filename', $permit->filename)->delete();
                 $permit->delete();
                 return response()->json(['success' => true]);
             } else {

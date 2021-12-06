@@ -3,7 +3,7 @@
 var permitId = -1;
 function showAddPermit(){
     permitId = -1;
-    $("#sidebar-title").html("Create Permit");
+    $("#sidebar-title").html("Create Permit Or PIL");
     $(".form-control").val("");
     $(".form-control").css('background-color', '#FFFFFF');
     $("#page-container").addClass('side-overlay-o');
@@ -13,7 +13,7 @@ function showAddPermit(){
 
 function showEditPermit(obj, id){
     permitId = id;
-    $("#sidebar-title").html("Edit Permit");
+    $("#sidebar-title").html("Edit Form");
     $(".form-control").val("");
     $(".form-control").css('background-color', '#FFFFFF');
     $("#file").attr('disabled', true);
@@ -25,7 +25,7 @@ function showEditPermit(obj, id){
     var data = $('#permitFiles').DataTable().row(current_row).data();
     
     for(let key in data){
-        if(key != 'id' && key != 'actions')
+        if(key != 'id' && key != 'actions' && key != 'typebadge')
             $(`#${key}`).val(data[key]);
     }
     
@@ -60,33 +60,65 @@ function submitPermit(){
         return; 
     }
 
-    var formData = new FormData();
+    // var formData = new FormData();
 
-    formData.append('permitId', permitId);
-    $('.side-view .form-control').each(function() { 
-        alldata[$(this).attr('id')] = $(this).val();
-        formData.append($(this).attr('id'), $(this).val());
-    });
+    // formData.append('permitId', permitId);
+    // $('.side-view .form-control').each(function() { 
+    //     alldata[$(this).attr('id')] = $(this).val();
+    //     formData.append($(this).attr('id'), $(this).val());
+    // });
 
-    if (permitId == -1)
-        formData.append('file', $('#file')[0].files[0]);
+    // if (permitId == -1)
+    //     formData.append('file', $('#file')[0].files[0]);
 
-    $.ajax({
-        url:"submitPermit",
-        type:'post',
-        contentType: false,
-        processData: false,
-        dataType: 'text',
-        enctype: 'multipart/form-data',
-        data: formData,
-        success:function(res){
+    // $.ajax({
+    //     url:"submitPermit",
+    //     type:'post',
+    //     contentType: false,
+    //     processData: false,
+    //     dataType: 'text',
+    //     enctype: 'multipart/form-data',
+    //     data: formData,
+    //     success:function(res){
+    //         $("#page-container").removeClass('side-overlay-o');
+    //         res = JSON.parse(res);
+    //         if (res.success == true) {
+    //             if(permitId == -1)
+    //                 swal.fire({ title: "Created!", text: "Form file has been created.", icon: "success", confirmButtonText: `OK` });
+    //             else
+    //                 swal.fire({ title: "Updated!", text: "Form file has been updated.", icon: "success", confirmButtonText: `OK` });
+    //             $('#permitFiles').DataTable().ajax.reload();
+    //         } else {
+    //             // error handling
+    //             swal.fire({ title: "Error",
+    //             text: res.message,
+    //             icon: "error",
+    //             confirmButtonText: `OK` });
+    //         }
+    //     },
+    //     error: function(xhr, status, error) {
+    //         $("#page-container").removeClass('side-overlay-o');
+    //         res = JSON.parse(xhr.responseText);
+    //         message = res.message;
+    //         swal.fire({ title: "Error",
+    //                 text: message == "" ? "Error happened while processing. Please try again later." : message,
+    //                 icon: "error",
+    //                 confirmButtonText: `OK` });
+    //     }
+    // });
+        console.log('here');
+    $("#pdfForm").ajaxSubmit({
+        type: "POST",
+        url: "submitPermit",
+        data: { permitId: permitId, filename: $("#filename").val(), state: $("#state").val() },
+        dataType: 'json',
+        success: function(res){
             $("#page-container").removeClass('side-overlay-o');
-            res = JSON.parse(res);
             if (res.success == true) {
                 if(permitId == -1)
-                    swal.fire({ title: "Created!", text: "Permit file has been created.", icon: "success", confirmButtonText: `OK` });
+                    swal.fire({ title: "Created!", text: "Form file has been created.", icon: "success", confirmButtonText: `OK` });
                 else
-                    swal.fire({ title: "Updated!", text: "Permit file has been updated.", icon: "success", confirmButtonText: `OK` });
+                    swal.fire({ title: "Updated!", text: "Form file has been updated.", icon: "success", confirmButtonText: `OK` });
                 $('#permitFiles').DataTable().ajax.reload();
             } else {
                 // error handling
@@ -106,8 +138,6 @@ function submitPermit(){
                     confirmButtonText: `OK` });
         }
     });
-
-    
 }
 
 function configPermit(obj, id) {
@@ -117,7 +147,7 @@ function configPermit(obj, id) {
 function delPermit(obj, id){
     swal.fire({
         title: 'Are you sure?',
-        text: 'You will not be able to recover this permit file!',
+        text: 'You will not be able to recover this file!',
         icon: 'warning',
         showCancelButton: true,
         customClass: {
@@ -142,7 +172,7 @@ function delPermit(obj, id){
                 data:{permitId: id},
                 success:function(res){
                     if (res.success == true) {
-                        swal.fire({ title: "Deleted!", text: "Permit has been deleted.", icon: "success", confirmButtonText: `OK` });
+                        swal.fire({ title: "Deleted!", text: "Form has been deleted.", icon: "success", confirmButtonText: `OK` });
                         $('#permitFiles').DataTable().ajax.reload();
                     } else {
                         // error handling
@@ -162,7 +192,7 @@ function delPermit(obj, id){
                 }
             });
         } else if (result.dismiss === 'cancel') {
-            swal.fire({ title: "Cancelled", text: "Permit file is safe :)", icon: "info", confirmButtonText: `OK` });
+            swal.fire({ title: "Cancelled", text: "Form is safe :)", icon: "info", confirmButtonText: `OK` });
         }
     });
 }

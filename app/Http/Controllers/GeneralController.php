@@ -664,32 +664,58 @@ class GeneralController extends Controller
             if($project){
                 if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || $project->companyId == Auth::user()->companyid)
                 {
+                    $file = PermitFiles::where('id', $request->id)->first();
+                    if(!$file)
+                        return response()->json(["message" => "PDF File ID mismatch.", "status" => false]);
+
                     $company = Company::where('id', $project->companyId)->first();
                     $companyNumber = $company ? $company['company_number'] : 0;
                     
                     $folderPrefix = '/' . $companyNumber . ". " . $project['companyName'] . '/';
                     $filepath = $folderPrefix . $project['clientProjectNumber'] . '. ' . $project['clientProjectName'] . ' ' . $project['state'];
-                    
-                    $user = User::where('companyid', $project['companyId'])->where('usernumber', $project['userId'])->first();
 
-                    if( Storage::disk('output')->exists($folderPrefix . $request->filename) ) {
-                        Storage::disk('output')->delete($folderPrefix . $request->filename);
-                    }
-                        
-                    Storage::disk('output')->put($folderPrefix . $request->filename, file_get_contents($request->data));
+                    if($file->formtype == 1){ // Permit
+                        $user = User::where('companyid', $project['companyId'])->where('usernumber', $project['userId'])->first();
 
-                    //Backup pdf file to dropbox
-                    try{
-                        $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
-                        $dropbox = new Dropbox($app);
-                        $dropboxFile = new DropboxFile(storage_path('/output/') . $companyNumber. '. ' . $project['companyName'] . '/' . $request->filename);
-                        $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_OUT') . $filepath. '/' . $request->filename, ['autorename' => TRUE]);
-                        $file = $dropbox->getMetadata(env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_OUT') . $filepath. '/' . $request->filename);
-                        $info = array('name' => $file->getName(), 'id' => $file->getId(), 'type' => 'file', 'path' => env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_OUT') . $filepath. '/' . $request->filename);
-                        return response()->json(["message" => "Success!", "status" => true, "info" => $info]);
-                    } catch (DropboxClientException $e) { 
-                        $info = array();
-                        return response()->json(["message" => "Uploading PDF to dropbox failed!", "status" => false]);
+                        if( Storage::disk('output')->exists($folderPrefix . $request->filename) ) {
+                            Storage::disk('output')->delete($folderPrefix . $request->filename);
+                        }
+                            
+                        Storage::disk('output')->put($folderPrefix . $request->filename, file_get_contents($request->data));
+
+                        //Backup pdf file to dropbox
+                        try{
+                            $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
+                            $dropbox = new Dropbox($app);
+                            $dropboxFile = new DropboxFile(storage_path('/output/') . $companyNumber. '. ' . $project['companyName'] . '/' . $request->filename);
+                            $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_OUT') . $filepath. '/' . $request->filename, ['autorename' => TRUE]);
+                            $file = $dropbox->getMetadata(env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_OUT') . $filepath. '/' . $request->filename);
+                            $info = array('name' => $file->getName(), 'id' => $file->getId(), 'type' => 'file', 'path' => env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_OUT') . $filepath. '/' . $request->filename);
+                            return response()->json(["message" => "Success!", "status" => true, "addtotree" => true, "info" => $info]);
+                        } catch (DropboxClientException $e) { 
+                            $info = array();
+                            return response()->json(["message" => "Uploading PDF to dropbox failed!", "status" => false]);
+                        }   
+                    } else { // PIL
+                        $filename = $project['clientProjectNumber'] . '. ' . $project['clientProjectName'] . ' ' . $project['state'] . ' ' . $file->description . ' PIL.pdf';
+
+                        if( Storage::disk('upload')->exists($folderPrefix . $filename) ) {
+                            Storage::disk('upload')->delete($folderPrefix . $filename);
+                        }
+
+                        Storage::disk('upload')->put($folderPrefix . $filename, file_get_contents($request->data));
+
+                        //Backup pdf file to dropbox
+                        try{
+                            $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
+                            $dropbox = new Dropbox($app);
+                            $dropboxFile = new DropboxFile(storage_path('/upload/') . $companyNumber. '. ' . $project['companyName'] . '/' . $filename);
+                            $dropbox->upload($dropboxFile, env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_INCOPY') . $filepath. '/' . $filename, ['autorename' => TRUE]);
+                            return response()->json(["message" => "Success!", "status" => true, "addtotree" => false]);
+                        } catch (DropboxClientException $e) { 
+                            $info = array();
+                            return response()->json(["message" => "Uploading PDF to dropbox failed!", "status" => false]);
+                        }  
                     }
                 }
                 else
@@ -2700,17 +2726,34 @@ class GeneralController extends Controller
     }
 
     /**
-     * Check job chat messages count and return updated ones
+     * Return Permit Files List for the state
      *
      * @return JSON
      */
     public function getPermitList(Request $request){
         if(!empty($request['state'])){
             if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->allow_permit > 0){
-                $list = PermitFiles::where('state', $request['state'])->get();
+                $list = PermitFiles::where('state', $request['state'])->where('formtype', '1')->get();
                 return response()->json(["data" => $list, "success" => true]);
             } else {
                 return response()->json(["message" => "You don't have permission to permit tab.", "success" => false]);
+            }
+        } else 
+            return response()->json(["message" => "Wrong Parameters.", "success" => false]);
+    }
+
+    /**
+     * Return PIL Files list for a state
+     *
+     * @return JSON
+     */
+    public function getPILList(Request $request){
+        if(!empty($request['state'])){
+            if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->allow_permit > 0){
+                $list = PermitFiles::where('state', $request['state'])->where('formtype', '2')->get();
+                return response()->json(["data" => $list, "success" => true]);
+            } else {
+                return response()->json(["message" => "You don't have permission to PIL tab.", "success" => false]);
             }
         } else 
             return response()->json(["message" => "Wrong Parameters.", "success" => false]);

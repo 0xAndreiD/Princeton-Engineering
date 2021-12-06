@@ -32,6 +32,7 @@
         <button class="tablinks" onclick="openRfdTab(event, 'tab_override')" id="overrideTab">Overrides</button>
         @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->allow_permit > 0)
         <button class="tablinks" onclick="openRfdTab(event, 'tab_permit')" id="permitTab">Permit</button>
+        <button class="tablinks" onclick="openRfdTab(event, 'tab_PIL')" id="pilTab">PIL</button>
         @endif
         <button class="tablinks" onclick="openRfdTab(event, 'tab_upload')" id="uploadTab">Files</button>
     </div>
@@ -55,6 +56,9 @@
     @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->allow_permit > 0)
         <div id="tab_permit" class="rfdTabContent">
             @include('rsinput.permit')
+        </div>
+        <div id="tab_PIL" class="rfdTabContent">
+            @include('rsinput.pil')
         </div>
     @endif
     <!-- <div id="ucc_f100" class="pdfForm">

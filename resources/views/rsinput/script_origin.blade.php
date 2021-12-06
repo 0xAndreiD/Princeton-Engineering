@@ -24,6 +24,8 @@ function openRfdTab(evt, tabName) {
         document.getElementById('subPageTitle').innerHTML = 'Multiple Documents Upload';
     else if( tabName == "tab_permit" )
         document.getElementById('subPageTitle').innerHTML = 'Permit Info Filling';
+    else if( tabName == "tab_PIL" )
+        document.getElementById('subPageTitle').innerHTML = 'Post Installation Letter Filling';
     else 
     {
         window.conditionId = parseInt(tabName.slice(3));
@@ -2962,6 +2964,7 @@ $(document).ready(function() {
         detectCorrectTown();
         loadASCEOptions($(this).val());
         loadPermitList($(this).val());
+        loadPILList($(this).val());
 
         $("button.permit").hide();
         $("div.permit").hide();
@@ -4505,6 +4508,7 @@ var loadPreloadedData = function() {
                             }
                             loadASCEOptions(preloaded_data['ProjectInfo']['State']);
                             loadPermitList(preloaded_data['ProjectInfo']['State']);
+                            loadPILList(preloaded_data['ProjectInfo']['State']);
 
                             $(`#wind-speed`).val(preloaded_data['Wind']);
                             $(`#wind-speed-override`).prop('checked', preloaded_data['WindCheckbox']);
@@ -4545,6 +4549,7 @@ var loadPreloadedData = function() {
         else{
             loadASCEOptions("MA");
             loadPermitList("MA");
+            loadPILList("MA");
             resolve(true);
         }
     });
@@ -4585,7 +4590,7 @@ var loadPreloadedData = function() {
                                     //     openPermitTab(5, res.data[i].filename,'Form Fire');
                                     // }
                                     if(res.fileinfos[i].id)
-                                        openPermitTab(res.fileinfos[i].id, res.data[i].filename, res.fileinfos[i].tabname, preloaded_data);
+                                        openPermitTab(res.fileinfos[i].id, res.data[i].filename, res.fileinfos[i].tabname, preloaded_data, false, res.fileinfos[i].formtype);
                                 }
                                 catch(e){
                                     resolve(false);
@@ -4638,12 +4643,34 @@ var loadPreloadedData = function() {
                     for(let i = 0; i < res.data.length; i ++){
                         let html ='<div class="row mb-3" style="align-items: center;">' + 
                             "<img class='mr-3 pdfIcon' src='public/img/pdf.png'></img>" + 
-                            '<a class="link-fx font-size-base" style="cursor:pointer;" onclick="openPermitTab(\'' + res.data[i].id + '\', \'' + res.data[i].filename + '\', \'' + res.data[i].tabname + '\', null, true)">' + res.data[i].description + '</a>' + 
+                            '<a class="link-fx font-size-base" style="cursor:pointer;" onclick="openPermitTab(\'' + res.data[i].id + '\', \'' + res.data[i].filename + '\', \'' + res.data[i].tabname + '\', null, true, 1)">' + res.data[i].description + '</a>' + 
                         '</div>';
                         $("#permitContent").append(html);
                     }
                 } else {
                     $("#permitContent").html('<div id="defaultPermitContent">No state forms available at this time</div>');
+                }
+            }
+        });
+    }
+
+    var loadPILList = function(state){
+        $.ajax({
+            url:"getPILList",
+            type:'post',
+            data:{state: state},
+            success: function(res){
+                if(res.success && res.data && res.data.length > 0 && state == $('#option-state').val()){
+                    $("#pilContent").html("");
+                    for(let i = 0; i < res.data.length; i ++){
+                        let html ='<div class="row mb-3" style="align-items: center;">' + 
+                            "<img class='mr-3 pdfIcon' src='public/img/pdf.png'></img>" + 
+                            '<a class="link-fx font-size-base" style="cursor:pointer;" onclick="openPermitTab(\'' + res.data[i].id + '\', \'' + res.data[i].filename + '\', \'' + res.data[i].tabname + '\', null, true, 2)">' + res.data[i].description + '</a>' + 
+                        '</div>';
+                        $("#pilContent").append(html);
+                    }
+                } else {
+                    $("#pilContent").html('<div id="defaultPILContent">No state forms available at this time</div>');
                 }
             }
         });
@@ -4918,11 +4945,12 @@ function editFile(){
 //     }
 // }
 
-var submitPdfData = async function(filename, data, status) {
+var submitPdfData = async function(id, filename, data, status) {
     var message = '';
     // swal.fire({ title: "Please wait...", showConfirmButton: false });
     // swal.showLoading();
     var fd = new FormData();
+    fd.append("id", id);
     fd.append("projectId", $('#projectId').val());
     fd.append("status", status);
     fd.append("filename", filename);
@@ -4938,7 +4966,9 @@ var submitPdfData = async function(filename, data, status) {
         success:function(res){
             // swal.close();
             if (res.status == true) {
-                addFileNode("OUT", res.info, false);
+                if(res.addtotree == true)
+                    addFileNode("OUT", res.info, false);
+
                 message = 'Succeeded to send pdf data!';
 
                 swal.fire({
@@ -5212,14 +5242,20 @@ function buildPermitFields(id, filename){
     });
 }
 
-async function openPermitTab(id, filename, tabname, permitData = null, openTab = false){
+async function openPermitTab(id, filename, tabname, permitData = null, openTab = false, formType = 1){
     if($("#permitTab_" + id).length)
         $("#permitTab_" + id).remove();
-    if($("#tab_permit" + id).length)
-        $("#tab_permit" + id).remove();
-    $("#permitTab").after('<button class="tablinks permit" onclick="openRfdTab(event, \'tab_permit_' + id + '\')" id="permitTab_' + id + '">' + tabname + '</button>');
-
-    $("#tab_permit").after('<div id="tab_permit_' + id + '" class="rfdTabContent permit" style="position:relative;"></div>');
+    if($("#tab_permit_" + id).length)
+        $("#tab_permit_" + id).remove();
+    
+    if(formType == 1){
+        $("#permitTab").after('<button class="tablinks permit" onclick="openRfdTab(event, \'tab_permit_' + id + '\')" id="permitTab_' + id + '">' + tabname + '</button>');
+        $("#tab_permit").after('<div id="tab_permit_' + id + '" class="rfdTabContent permit" style="position:relative;"></div>');
+    }
+    else {
+        $("#pilTab").after('<button class="tablinks permit" onclick="openRfdTab(event, \'tab_permit_' + id + '\')" id="permitTab_' + id + '">' + tabname + '</button>');
+        $("#tab_PIL").after('<div id="tab_permit_' + id + '" class="rfdTabContent permit" style="position:relative;"></div>');
+    }
     
     swal.fire({ title: "Please wait...", showConfirmButton: false });
     swal.showLoading();
@@ -5343,7 +5379,8 @@ function updatePermitPDF(id, filename){
         try {
             filled_pdf = pdfform().transform(buf, fields);
         } catch (e) {
-            return on_error(e);
+            console.log(e);
+            return;
         }
 
         $("#permitViewer_" + id).attr("src", URL.createObjectURL(new Blob([filled_pdf], {
@@ -5851,7 +5888,7 @@ function savePermit(id, filename){
         download(url, filename);
         
         submitPermitJson(id, filename);
-        submitPdfData(filename, jsonBlob, 0);
+        submitPdfData(id, filename, jsonBlob, 0);
     });
 }
 
