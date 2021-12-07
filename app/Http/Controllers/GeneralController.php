@@ -389,7 +389,8 @@ class GeneralController extends Controller
                     ->with('insulationMaterials', $insulationMaterials)
                     ->with('ceilingMaterials', $ceilingMaterials)
                     ->with('deckMaterials', $deckMaterials)
-                    ->with('surfaceMaterials', $surfaceMaterials);
+                    ->with('surfaceMaterials', $surfaceMaterials)
+                    ->with('date_report', $project->date_report);
         }
         else
         {
@@ -408,7 +409,8 @@ class GeneralController extends Controller
                     ->with('insulationMaterials', $insulationMaterials)
                     ->with('ceilingMaterials', $ceilingMaterials)
                     ->with('deckMaterials', $deckMaterials)
-                    ->with('surfaceMaterials', $surfaceMaterials);
+                    ->with('surfaceMaterials', $surfaceMaterials)
+                    ->with('date_report', NULL);
         }
     }
 

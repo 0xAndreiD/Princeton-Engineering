@@ -5081,6 +5081,10 @@ function buildPermitFields(id, filename){
                                             defaultvalue = $("#option-state").val();
                                         else if(field.dbinfo == 'zip_code')
                                             defaultvalue = $("#txt-zip").val();
+                                        else if(field.dbinfo == 'project_manager'){
+                                            if($("#option-user-id").length > 0)
+                                                defaultvalue = $("#option-user-id").children("option:selected").text();
+                                        }
                                         else if(field.dbinfo == 'company_name')
                                             defaultvalue = companyInfo ? companyInfo.company_name : '';
                                         else if(field.dbinfo == 'company_telno')
@@ -5123,6 +5127,15 @@ function buildPermitFields(id, filename){
                                             defaultvalue = $("#inverter-watts").val() / 1000;
                                         else if(field.dbinfo == 'inverter_model_mfr')
                                             defaultvalue = $("#option-inverter-type").val() + " / " + $("#option-inverter-subtype").val();
+                                        else if(field.dbinfo == 'date_today'){
+                                            var today = new Date();
+                                            var dd = String(today.getDate()).padStart(2, '0');
+                                            var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+                                            var yyyy = today.getFullYear();
+
+                                            defaultvalue = yyyy + '-' + mm + '-' + dd;
+                                        } else if(field.dbinfo == 'date_report')
+                                            defaultvalue = $("#date_report").val();
                                             
                                         else if(field.defaultvalue)
                                             defaultvalue = field.defaultvalue;
