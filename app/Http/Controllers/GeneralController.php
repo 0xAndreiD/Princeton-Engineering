@@ -390,7 +390,7 @@ class GeneralController extends Controller
                     ->with('ceilingMaterials', $ceilingMaterials)
                     ->with('deckMaterials', $deckMaterials)
                     ->with('surfaceMaterials', $surfaceMaterials)
-                    ->with('date_report', $project->date_report);
+                    ->with('date_report', $project ? $project->date_report : NULL);
         }
         else
         {
@@ -400,9 +400,9 @@ class GeneralController extends Controller
                     ->with('companyName', "")
                     ->with('companyNumber', "")
                     ->with('companyMembers', $companymembers)
-                    ->with('projectState', 0)
-                    ->with('planCheck', 0)
-                    ->with('asBuilt', 0)
+                    ->with('projectState', $project ? $project->projectState : 0)
+                    ->with('planCheck', $project ? $project->planCheck : 0)
+                    ->with('asBuilt', $project ? $project->asBuilt : 0)
                     ->with('projectId', $request['projectId'] ? $request['projectId'] : -1)
                     ->with('userId', $project ? $project['userId'] : 0)
                     ->with('offset', 0.5)
@@ -410,7 +410,7 @@ class GeneralController extends Controller
                     ->with('ceilingMaterials', $ceilingMaterials)
                     ->with('deckMaterials', $deckMaterials)
                     ->with('surfaceMaterials', $surfaceMaterials)
-                    ->with('date_report', NULL);
+                    ->with('date_report', $project ? $project->date_report : NULL);
         }
     }
 
