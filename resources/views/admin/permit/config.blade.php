@@ -105,6 +105,7 @@
                                 <option value='site_city' <?php echo $field['dbinfo'] == 'site_city' ? 'selected' : ''; ?>>City</option>
                                 <option value='state_code' <?php echo $field['dbinfo'] == 'state_code' ? 'selected' : ''; ?>>State Code</option>
                                 <option value='zip_code' <?php echo $field['dbinfo'] == 'zip_code' ? 'selected' : ''; ?>>Zip Code</option>
+                                <option value='project_manager' <?php echo $field['dbinfo'] == 'project_manager' ? 'selected' : ''; ?>>Project Manager</option>
                                 <option value='company_name' <?php echo $field['dbinfo'] == 'company_name' ? 'selected' : ''; ?>>Company Name</option>
                                 <option value='company_telno' <?php echo $field['dbinfo'] == 'company_telno' ? 'selected' : ''; ?>>Company Telephone</option>
                                 <option value='company_address' <?php echo $field['dbinfo'] == 'company_address' ? 'selected' : ''; ?>>Company Address</option>
@@ -126,6 +127,8 @@
                                 <option value='inverter_qty' <?php echo $field['dbinfo'] == 'inverter_qty' ? 'selected' : ''; ?>>Inverter Quantity</option>
                                 <option value='inverter_watts' <?php echo $field['dbinfo'] == 'inverter_watts' ? 'selected' : ''; ?>>Inverter Watts</option>
                                 <option value='inverter_model_mfr' <?php echo $field['dbinfo'] == 'inverter_model_mfr' ? 'selected' : ''; ?>>Inverter MFR / MODEL</option>
+                                <option value='date_today' <?php echo $field['dbinfo'] == 'date_today' ? 'selected' : ''; ?>>Date Today</option>
+                                <option value='date_report' <?php echo $field['dbinfo'] == 'date_report' ? 'selected' : ''; ?>>Date Report</option>
                             </select>
                         </td>
                         <td class='w400-green-bdr'>
@@ -285,7 +288,7 @@
                                 <option value='site_city'>City</option>\
                                 <option value='state_code'>State Code</option>\
                                 <option value='zip_code'>Zip Code</option>\
-                                <option value='site_address'>Site Address</option>\
+                                <option value='project_manager'>Project Manager</option>\
                                 <option value='company_name'>Company Name</option>\
                                 <option value='company_telno'>Company Telephone</option>\
                                 <option value='company_address'>Company Address</option>\
@@ -307,6 +310,8 @@
                                 <option value='inverter_qty'>Inverter Quantity</option>\
                                 <option value='inverter_watts'>Inverter Watts</option>\
                                 <option value='inverter_model_mfr'>Inverter MFR / MODEL</option>\
+                                <option value='date_today'>Date Today</option>\
+                                <option value='date_report'>Date Report</option>\
                             </select>\
                         </td>";
                 row += "<td class='w400-green-bdr'>\

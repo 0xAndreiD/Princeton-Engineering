@@ -67,9 +67,7 @@
             <select id="option-user-id" tabindex="6">
                 <option value="0">Select User</option>
                 @foreach ($companyMembers as $item)
-                <option value="{{$item->usernumber}}" {{ $item->usernumber == $userId ? 'selected' : ''}}>
-                    {{ $item->username }}
-                </option>
+                <option value="{{$item->usernumber}}" {{ $item->usernumber == $userId ? 'selected' : ''}}>{{ $item->username }}</option>
                 @endforeach
             </select>
         </td>
@@ -804,4 +802,5 @@
 <input type="text" value="{{ $projectId }}" id="projectId" hidden>
 <input type="text" value="{{ $projectState }}" id="projectState" hidden>
 <input type="text" value="{{ $offset }}" id="companyOffset" hidden>
+<input type="text" value="{{ $date_report }}" id="date_report" hidden>
 </form>
