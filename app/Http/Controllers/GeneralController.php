@@ -478,11 +478,13 @@ class GeneralController extends Controller
                         $projectState = 2;
                         $project->planCheck = 0;
                         $project->asBuilt = 0;
+                        $project->PIL_status = 0;
                     }
                     else if($request['status'] == 'Submitted'){
                         $projectState = 4;
                         $project->planCheck = 0;
                         $project->asBuilt = 0;
+                        $project->PIL_status = 0;
                     }
                     $project->projectState = $projectState;
 
@@ -562,11 +564,13 @@ class GeneralController extends Controller
                     $projectState = 2;
                     $project->planCheck = 0;
                     $project->asBuilt = 0;
+                    $project->PIL_status = 0;
                 }
                 else if($request['status'] == 'Submitted'){
                     $projectState = 4;
                     $project->planCheck = 0;
                     $project->asBuilt = 0;
+                    $project->PIL_status = 0;
                 }
                 $project = JobRequest::create([
                     'companyName' => $company['company_name'],
@@ -1059,6 +1063,10 @@ class GeneralController extends Controller
         if(!empty($request->input("asbuilt")) && $request["asbuilt"] == 1){
             $handler = $handler->where('job_request.asBuilt', 1);
         }
+        // filter PIL
+        if(!empty($request->input("pil")) && $request["pil"] == 1){
+            $handler = $handler->where('job_request.PIL_status', 1);
+        }
         // filter chatIcon
         if(!empty($request->input("chat")) && $request->input("chat") != "")
         {
@@ -1121,7 +1129,9 @@ class GeneralController extends Controller
                         'job_planstatus.color as statuscolor',
                         'job_pstatus.color as statecolor',
                         'job_request.eSeal as eSeal',
-                        'job_request.eSeal_asbuilt as eSeal_asbuilt'
+                        'job_request.eSeal_asbuilt as eSeal_asbuilt',
+                        'job_request.PIL_status as PIL_status',
+                        'job_request.eSeal_PIL as eSeal_PIL'
                     )
                 );
             //if($handler->offset($start)->count() > 0)
@@ -1160,7 +1170,9 @@ class GeneralController extends Controller
                                 'job_planstatus.color as statuscolor',
                                 'job_pstatus.color as statecolor',
                                 'job_request.eSeal as eSeal',
-                                'job_request.eSeal_asbuilt as eSeal_asbuilt'
+                                'job_request.eSeal_asbuilt as eSeal_asbuilt',
+                                'job_request.PIL_status as PIL_status',
+                                'job_request.eSeal_PIL as eSeal_PIL'
                             )
                         );
 
@@ -1260,6 +1272,13 @@ class GeneralController extends Controller
                 else
                     $asbuiltCol = '000000';
 
+                if($job->eSeal_PIL == 1)
+                    $pilCol = '0000FF';
+                else if($job->eSeal_PIL == 2)
+                    $pilCol = '00FF00';
+                else
+                    $pilCol = '000000';
+
                 $nestedData['actions'] = "
                 <div class='text-center' style='display: flex; align-items: center; justify-content: center;'>
                     <a href='rsinput?projectId={$nestedData['id']}' class='btn btn-primary mr-1' style='padding: 3px 4px;'>
@@ -1269,8 +1288,9 @@ class GeneralController extends Controller
                         <i class='fab fa-rocketchat'></i>
                     </a>". 
                     "<input class='mr-1 plancheck' type='checkbox' " . (Auth::user()->userrole == 4 ? "style='pointer-events: none;'" : "onchange='togglePlanCheck(this, {$job['id']})'") . ($job['plancheck'] == 1 ? " checked" : "") . ">" . 
-                    "<input class='mr-2 asbuilt' type='checkbox' " . (Auth::user()->userrole == 4 ? "style='pointer-events: none;'" : "onchange='toggleAsBuilt(this, {$job['id']})'") . ($job['asbuilt'] == 1 ? " checked" : "") . ">" . 
-                    (Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4? "<button onclick='openReviewTab({$job['id']})' class='mr-1 btn' style='padding: 7px 4px; background-image: -webkit-linear-gradient(-90deg, #{$sealCol} 0%, #{$sealCol} 30%, #FFFFFF 31%, #FFFFFF 35%, #{$asbuiltCol} 36%, #{$asbuiltCol} 65%, #FFFFFF 66%, #FFFFFF 72%, #000000 71%, #000000 100%); border: 1px solid white;'>
+                    "<input class='mr-1 asbuilt' type='checkbox' " . (Auth::user()->userrole == 4 ? "style='pointer-events: none;'" : "onchange='toggleAsBuilt(this, {$job['id']})'") . ($job['asbuilt'] == 1 ? " checked" : "") . ">" . 
+                    (Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->allow_permit > 0 ? "<input class='mr-2 pilcheck' type='checkbox'" . (Auth::user()->userrole == 4 ? "style='pointer-events: none;'" : "onchange='togglePilStatus(this, {$job['id']})'") . ($job['PIL_status'] == 1 ? " checked" : "") . ">" : "") .
+                    (Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4? "<button onclick='openReviewTab({$job['id']})' class='mr-1 btn' style='padding: 7px 4px; background-image: -webkit-linear-gradient(-90deg, #{$sealCol} 0%, #{$sealCol} 30%, #FFFFFF 31%, #FFFFFF 35%, #{$asbuiltCol} 36%, #{$asbuiltCol} 65%, #FFFFFF 66%, #FFFFFF 72%, #{$pilCol} 71%, #{$pilCol} 100%); border: 1px solid white;'>
                         <div style='width:16px; height: 16px;'></div>
                     </a>" : "") . 
                     (Auth::user()->userrole == 2 ? "<button type='button' class='js-swal-confirm btn btn-danger mr-1' onclick='delProject(this,{$nestedData['id']})' style='padding: 3px 4px;'>
@@ -1635,6 +1655,7 @@ class GeneralController extends Controller
                         if($project->projectState == 2 || $project->projectState == 4){
                             $project->planCheck = 0;
                             $project->asBuilt = 0;
+                            $project->PIL_status = 0;
                         }
 
                         $project->save();
@@ -1699,8 +1720,13 @@ class GeneralController extends Controller
                         $project->eSeal_asbuilt = 1;
                         $project->reviewerAsbId = Auth::user()->id;
                     }
+                    if($request['PIL'] == 1){
+                        $project->eSeal_PIL = 1;
+                        $project->reviewerPIL = Auth::user()->id;
+                    }
                     $project->planCheck = 0;
                     $project->asBuilt = 0;
+                    $project->PIL_status = 0;
                     $project->chatIcon = 2;
                     $project->save();
                     JobChat::create([
@@ -2681,7 +2707,31 @@ class GeneralController extends Controller
     }
 
     /**
-     * Toggle the as built value of job.
+     * Toggle the as PIL_status value of job.
+     *
+     * @return JSON
+     */
+    public function togglePIL(Request $request){
+        $project = JobRequest::where('id', '=', $request['jobId'])->first();
+            if($project){
+                if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || $project->companyId == Auth::user()->companyid)
+                {
+                    if($project->PIL_status == 1)
+                        $project->PIL_status = 0;
+                    else
+                        $project->PIL_status = 1;
+                    $project->save();
+                    return response()->json(["message" => "Success!", "success" => true]);
+                }
+                else
+                    return response()->json(["message" => "You don't have permission to edit this project.", "success" => false]);
+            }
+            else
+                return response()->json(["message" => "Cannot find project.", "success" => false]);
+    }
+
+    /**
+     * Reset Review checks
      *
      * @return JSON
      */
@@ -2692,6 +2742,7 @@ class GeneralController extends Controller
                 {
                     $project->asBuilt = 0;
                     $project->planCheck = 0;
+                    $project->PIL_status = 0;
                     $project->save();
                     return response()->json(["message" => "Success!", "success" => true]);
                 }

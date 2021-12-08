@@ -168,7 +168,10 @@
                                 <span class="ml-1" style='writing-mode: vertical-lr;width: 18px;transform: rotateZ(180deg);'>Edit</span>
                                 <span class="ml-2" style='writing-mode: tb-rl;width: 28px;transform: rotateZ(180deg);'>Chat</span>
                                 <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 17px;'><input type='checkbox' id="planCheckFilter" style="transform: rotateZ(180deg);"> Review</span>
-                                <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 22px;'><input type='checkbox' id="asBuiltFilter" style="transform: rotateZ(180deg);"> As-built</span>
+                                <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 17px;'><input type='checkbox' id="asBuiltFilter" style="transform: rotateZ(180deg);"> As-built</span>
+                                @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->allow_permit > 0)
+                                <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 22px;'><input type='checkbox' id="pilFilter" style="transform: rotateZ(180deg);"> PIL</span>
+                                @endif
                                 <span class="ml-1" style='writing-mode: tb-rl;width: 28px;transform: rotateZ(180deg);'>Plan Check</span>
                                 @if(Auth::user()->userrole == 2)
                                 <span class="" style='writing-mode: tb-rl;width: 24px;transform: rotateZ(180deg);'>Delete</span>
@@ -262,7 +265,10 @@
                                 <span class="ml-1" style='writing-mode: vertical-lr;width: 22px;transform: rotateZ(180deg);'>Edit</span>
                                 <span class="ml-2" style='writing-mode: tb-rl;width: 32px;transform: rotateZ(180deg);'>Chat</span>
                                 <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 17px;'><input type='checkbox' id="planCheckFilter" style="transform: rotateZ(180deg);"> Review</span>
-                                <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 22px;'><input type='checkbox' id="asBuiltFilter" style="transform: rotateZ(180deg);"> As-built</span>
+                                <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 17px;'><input type='checkbox' id="asBuiltFilter" style="transform: rotateZ(180deg);"> As-built</span>
+                                @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->allow_permit > 0)
+                                <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 22px;'><input type='checkbox' id="pilFilter" style="transform: rotateZ(180deg);"> PIL</span>
+                                @endif
                             </th>
                             @endif
                         </tr>
@@ -339,6 +345,10 @@
                     if (filterJson[k] == 1) $("#asBuiltFilter").prop("checked", true);
                     else $("#asBuiltFilter").prop("checked", false);
                     break;
+                case 'pilFilter':
+                    if (filterJson[k] == 1) $("#pilFilter").prop("checked", true);
+                    else $("#pilFilter").prop("checked", false);
+                    break;
             }
         });
 
@@ -358,9 +368,9 @@
             localStorage.setItem('projectFilterJson', JSON.stringify(filterJson));
         });
 
-        $("#created_from, #created_to, #submitted_from, #submitted_to, #planCheckFilter, #asBuiltFilter, #chatFilter").on('change', function() {
+        $("#created_from, #created_to, #submitted_from, #submitted_to, #planCheckFilter, #asBuiltFilter, #pilFilter, #chatFilter").on('change', function() {
             let key = $(this).attr('id');
-            if (key == 'planCheckFilter' || key == 'asBuiltFilter') {
+            if (key == 'planCheckFilter' || key == 'asBuiltFilter' || key == 'pilFilter') {
                 filterJson[key] = $("#"+key)[0].checked ? $(this).val(1) : $(this).val(0);
             }
             filterJson[key] = $(this).val();
@@ -428,6 +438,7 @@
                         data.submitted_to = $("#submitted_to").val();
                         data.plancheck = $("#planCheckFilter")[0].checked ? 1 : 0;
                         data.asbuilt = $("#asBuiltFilter")[0].checked ? 1 : 0;
+                        data.pil = $("#pilFilter").length > 0 && $("#pilFilter")[0].checked ? 1 : 0;
                         data.chat = $("#chatFilter").val();
                     }
                 },
@@ -480,6 +491,7 @@
             $("#submitted_to").val('');
             $("#planCheckFilter").prop("checked", false);
             $("#asBuiltFilter").prop("checked", false);
+            $("#pilFilter").prop("checked", false);
             $("#chatFilter").val('');
             $("#companyFilter").val('');
             $("#userFilter").val('');
@@ -531,7 +543,7 @@
         }
         @endif
 
-        if($(obj)[0].checked == true && $(obj).parents('tr').find(".asbuilt")[0].checked == true){
+        if($(obj)[0].checked == true && ($(obj).parents('tr').find(".asbuilt")[0].checked == true || ($(obj).parents('tr').find(".pilcheck").length > 0 && $(obj).parents('tr').find(".pilcheck")[0].checked == true ))){
             swal.fire({ title: "Warning", text: "Only one type of review checkbox at a time please.", icon: "warning", confirmButtonText: `OK` });
             $(obj)[0].checked = false;
             return;
@@ -569,7 +581,7 @@
         }
         @endif
 
-        if($(obj)[0].checked == true && $(obj).parents('tr').find(".plancheck")[0].checked == true){
+        if($(obj)[0].checked == true && ($(obj).parents('tr').find(".plancheck")[0].checked == true || ($(obj).parents('tr').find(".pilcheck").length > 0 && $(obj).parents('tr').find(".pilcheck")[0].checked == true ))){
             swal.fire({ title: "Warning", text: "Only one type of review checkbox at a time please.", icon: "warning", confirmButtonText: `OK` });
             $(obj)[0].checked = false;
             return;
@@ -577,6 +589,44 @@
 
         $.ajax({
             url:"toggleAsBuilt",
+            type:'post',
+            data:{jobId: jobId},
+            success: function(res){
+                if(res.success){
+                    return;
+                    // $('#projects').DataTable().draw();
+                }else
+                    swal.fire({ title: "Error", text: res.message, icon: "error", confirmButtonText: `OK` });
+            },
+            error: function(xhr, status, error) {
+                res = JSON.parse(xhr.responseText);
+                message = res.message;
+                swal.fire({ title: "Error",
+                    text: message == "" ? "Error happened while processing. Please try again later." : message,
+                    icon: "error",
+                    confirmButtonText: `OK` });
+            }
+        });
+    }
+
+    async function togglePilStatus(obj, jobId){
+        @if(Auth::user()->userrole == 0)
+        let state = await getProjectState(jobId);
+        if(state != 3 && state < 5){
+            swal.fire({ title: "Warning", text: 'Project must be calculated before asking for a PIL.', icon: "warning", confirmButtonText: `OK` });
+            $(obj)[0].checked = false;
+            return;
+        }
+        @endif
+
+        if($(obj)[0].checked == true && ($(obj).parents('tr').find(".plancheck")[0].checked == true || $(obj).parents('tr').find(".asbuilt")[0].checked == true)){
+            swal.fire({ title: "Warning", text: "Only one type of review checkbox at a time please.", icon: "warning", confirmButtonText: `OK` });
+            $(obj)[0].checked = false;
+            return;
+        }
+
+        $.ajax({
+            url:"togglePIL",
             type:'post',
             data:{jobId: jobId},
             success: function(res){

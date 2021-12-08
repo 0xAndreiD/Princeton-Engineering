@@ -201,8 +201,16 @@
                         <input type='checkbox' id="Asbuilt" onchange='toggleAsBuilt({{$job["id"]}})' <?php echo $job['asBuilt'] == 1 ? "checked" : ""; ?>> <label for="Asbuilt" class="mb-0 ml-2 text-left">As-built</label>
                         @endif
                     </div>
+                    <div class="flexRow">
+                        @if(Auth::user()->userrole == 4)
+                        <input type='checkbox' id="PIL" style='pointer-events: none;' <?php echo $job['PIL_status'] == 1 ? "checked" : ""; ?>> <label for="PIL" class="mb-0 ml-2 text-left" style='pointer-events: none;'>PIL</label>
+                        @else
+                        <input type='checkbox' id="PIL" onchange='togglePIL({{$job["id"]}})' <?php echo $job['PIL_status'] == 1 ? "checked" : ""; ?>> <label for="PIL" class="mb-0 ml-2 text-left">PIL</label>
+                        @endif
+                    </div>
                     <input type="hidden" id="planCheckVal" value="{{ $job['planCheck'] }}">
                     <input type="hidden" id="asBuiltVal" value="{{ $job['asBuilt'] }}">
+                    <input type="hidden" id="pilVal" value="{{ $job['PIL_status'] }}">
                 </div>
             </div>
         </div>
