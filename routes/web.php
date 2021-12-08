@@ -91,6 +91,7 @@ Route::post('/delChat', 'GeneralController@delChat')->name('delChat');
 Route::post('/updateChat', 'GeneralController@updateChat')->name('updateChat');
 Route::post('/togglePlanCheck', 'GeneralController@togglePlanCheck')->name('togglePlanCheck');
 Route::post('/toggleAsBuilt', 'GeneralController@toggleAsBuilt')->name('toggleAsBuilt');
+Route::post('/togglePIL', 'GeneralController@togglePIL')->name('togglePIL');
 Route::post('/checkChatList', 'GeneralController@checkChatList')->name('checkChatList');
 Route::post('/getPermitList', 'GeneralController@getPermitList')->name('getPermitList');
 Route::post('/getPILList', 'GeneralController@getPILList')->name('getPILList');

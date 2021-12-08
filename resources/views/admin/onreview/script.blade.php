@@ -151,6 +151,7 @@ $(document).ready(function(){
                             if (res.success == true) {
                                 $("#Review")[0].checked = false;
                                 $("#Asbuilt")[0].checked = false;
+                                $("#PIL")[0].checked = false;
                             }
                         },
                         error: function(xhr, status, error) {
@@ -212,7 +213,7 @@ $(document).ready(function(){
 
 function checkboxAll(){
     $("input[type=checkbox]:enabled").each(function() {
-        if($(this).attr('id') != 'Review' && $(this).attr('id') != 'Asbuilt'){
+        if($(this).attr('id') != 'Review' && $(this).attr('id') != 'Asbuilt' && $(this).attr('id') != 'PIL'){
             $(this).prop('checked', $("#ControlCheck")[0].checked);
         }
     });
@@ -244,6 +245,29 @@ function togglePlanCheck(jobId){
 function toggleAsBuilt(jobId){
     $.ajax({
         url:"toggleAsBuilt",
+        type:'post',
+        data:{jobId: jobId},
+        success: function(res){
+            if(res.success){
+                return;
+                // $('#projects').DataTable().draw();
+            }else
+                swal.fire({ title: "Error", text: res.message, icon: "error", confirmButtonText: `OK` });
+        },
+        error: function(xhr, status, error) {
+            res = JSON.parse(xhr.responseText);
+            message = res.message;
+            swal.fire({ title: "Error",
+                text: message == "" ? "Error happened while processing. Please try again later." : message,
+                icon: "error",
+                confirmButtonText: `OK` });
+        }
+    });
+}
+
+function togglePIL(jobId){
+    $.ajax({
+        url:"togglePIL",
         type:'post',
         data:{jobId: jobId},
         success: function(res){
@@ -331,12 +355,13 @@ function eSealUpload(){
     $.ajax({
         url:"setESeal",
         type:'post',
-        data:{projectId: $('#projectId').val(), planCheck: $("#planCheckVal").val(), asBuilt: $("#asBuiltVal").val()},
+        data:{projectId: $('#projectId').val(), planCheck: $("#planCheckVal").val(), asBuilt: $("#asBuiltVal").val(), PIL: $("#pilVal").val()},
         success:function(res){
             swal.close();
             if (res.success == true) {
                 $("#Review").attr('checked', false);
                 $("#Asbuilt").attr('checked', false);
+                $("#PIL").attr('checked', false);
                 window.location.href = "{{ route('projectlist') }}";
             }
         },
