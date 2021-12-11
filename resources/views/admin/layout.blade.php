@@ -150,6 +150,12 @@
                                 <span class="nav-main-link-name">Manage Companies</span>
                             </a>
                         </li>
+                        <li class="nav-main-item">
+                            <a class="nav-main-link" href="{{ route('subclients') }}">
+                                <i class="nav-main-link-icon fa fa-users"></i>
+                                <span class="nav-main-link-name">Sub Clients</span>
+                            </a>
+                        </li>
                         <li class="nav-main-heading">Projects</li>
                         <li class="nav-main-item">
                             <a class="nav-main-link" href="{{ route('projectlist') }}">

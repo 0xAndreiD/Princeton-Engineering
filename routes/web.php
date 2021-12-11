@@ -42,8 +42,13 @@ Route::post('/recommendUserNum', 'UserController@recommendUserNum')->name('recom
 
 // Manage Companies
 Route::get('/companyList', 'CompanyController@index')->name('companyList');
+Route::get('/subclients', 'CompanyController@subclients')->name('subclients');
 Route::get('/editCompany', 'CompanyController@editCompany')->name('editCompany');
 Route::post('/getCompanyData', 'CompanyController@getCompanyData')->name('getCompanyData');
+Route::post('/getSubClients', 'CompanyController@getSubClients')->name('getSubClients');
+Route::post('/getSubClient', 'CompanyController@getSubClient')->name('getSubClient');
+Route::post('/updateSubClient', 'CompanyController@updateSubClient')->name('updateSubClient');
+Route::post('/delSubClient', 'CompanyController@delSubClient')->name('delSubClient');
 Route::post('/getCompany', 'CompanyController@getCompany')->name('getCompany');
 Route::post('/updateCompany', 'CompanyController@updateCompany')->name('updateCompany');
 Route::post('/delCompany', 'CompanyController@delete')->name('delCompany');
@@ -104,6 +109,7 @@ Route::get('/in/{jobId}/{file}', 'GeneralController@getINFile');
 Route::post('/setReviewer', 'GeneralController@setReviewer')->name('setReviewer');
 Route::post('/checkReviewer', 'GeneralController@checkReviewer')->name('checkReviewer');
 Route::post('/checkCorrectTown', 'GeneralController@checkCorrectTown')->name('checkCorrectTown');
+Route::post('/getJobSubClients', 'GeneralController@getJobSubClients')->name('getJobSubClients');
 
 // APIs for list, update, download, db backup, bill request
 Route::get('/getJobList', 'APIController@getJobList')->name('getJobList');
