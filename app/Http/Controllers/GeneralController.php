@@ -36,6 +36,7 @@ use App\BillingInfo;
 use App\BillingHistory;
 use App\SystemMsgs;
 use App\BlgMaterials;
+use App\SubClients;
 use Kunnu\Dropbox\DropboxApp;
 use Kunnu\Dropbox\Dropbox;
 use Kunnu\Dropbox\DropboxFile;
@@ -380,6 +381,7 @@ class GeneralController extends Controller
                     ->with('companyName', $company['company_name'])
                     ->with('companyNumber', $company['company_number'])
                     ->with('companyMembers', $companymembers)
+                    ->with('allowSubClient', $company['allow_subclient'])
                     ->with('projectState', $project ? $project->projectState : 0)
                     ->with('planCheck', $project ? $project->planCheck : 0)
                     ->with('asBuilt', $project ? $project->asBuilt : 0)
@@ -400,6 +402,7 @@ class GeneralController extends Controller
                     ->with('companyName', "")
                     ->with('companyNumber', "")
                     ->with('companyMembers', $companymembers)
+                    ->with('allowSubClient', $company['allow_subclient'])
                     ->with('projectState', $project ? $project->projectState : 0)
                     ->with('planCheck', $project ? $project->planCheck : 0)
                     ->with('asBuilt', $project ? $project->asBuilt : 0)
@@ -787,6 +790,10 @@ class GeneralController extends Controller
         $data['ProjectInfo']['State'] = $input['option-state'];
         $data['ProjectInfo']['Zip'] = $input['txt-zip'];
         $data['ProjectInfo']['Type'] = $input['option-project-type'];
+        if(isset($input['option-sub-client']))
+            $data['ProjectInfo']['SubClient'] = $input['option-sub-client'];
+        if(isset($input['txt-sub-project-number']))
+            $data['ProjectInfo']['SubProjectNo'] = $input['txt-sub-project-number'];
         
         //Personnel
         $data['Personnel'] = array();
@@ -2969,4 +2976,23 @@ class GeneralController extends Controller
         $msg = SystemMsgs::first();
         return response()->json($msg);
       }
+
+     /**
+     * Return the Sub Clients of project
+     *
+     * @return JSON
+     */
+    public function getJobSubClients(Request $request){
+        if($request['jobId'] > 0){
+            $job = JobRequest::where('id', $request['jobId'])->first();
+            if($job){
+                $clients = SubClients::where('client_id', $job->companyId)->get(array('id', 'name'));
+                return response()->json(['success' => true, 'clients' => $clients]);
+            } else
+                return response()->json(['success' => false, 'message' => 'Cannot find the project.']);
+        } else {
+            $clients = SubClients::where('client_id', Auth::user()->companyid)->get(array('id', 'name'));
+            return response()->json(['success' => true, 'clients' => $clients]);
+        }
+    }
 }

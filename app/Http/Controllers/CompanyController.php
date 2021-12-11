@@ -16,6 +16,7 @@ use App\SealData;
 use App\SealObjects;
 use App\BillingInfo;
 use App\BillingHistory;
+use App\SubClients;
 use Kunnu\Dropbox\DropboxApp;
 use Kunnu\Dropbox\Dropbox;
 use Kunnu\Dropbox\DropboxFile;
@@ -240,6 +241,7 @@ class CompanyController extends Controller
             $company->company_email = $data['email'];
             $company->company_website = $data['website'];
             $company->max_allowable_skip = $data['max_allowable_skip'];
+            $company->allow_subclient = $data['allow_subclient'] == 'on' ? 1 : 0;
             // $company->bill_notifiers = $data['bill_notifiers'];
             if(!empty($data->file('logofile'))){
                 $file = $request->file('logofile');
@@ -248,10 +250,10 @@ class CompanyController extends Controller
                 $company->company_logo = $filename;
 
                 //Backup json file to dropbox
-                // $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
-                // $dropbox = new Dropbox($app);
-                // $dropboxFile = new DropboxFile(public_path() . '/logos/' . $filename);
-                // $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_LOGO_PATH') . $filename, ['autorename' => TRUE]);
+                $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
+                $dropbox = new Dropbox($app);
+                $dropboxFile = new DropboxFile(public_path() . '/logos/' . $filename);
+                $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_LOGO_PATH') . $filename, ['autorename' => TRUE]);
             } 
             // else {
             //     $company->company_logo = $data['logolink'];
@@ -298,6 +300,7 @@ class CompanyController extends Controller
             $company->company_email = $data['email'];
             $company->company_website = $data['website'];
             $company->max_allowable_skip = $data['max_allowable_skip'];
+            $company->allow_subclient = $data['allow_subclient'] == 'on' ? 1 : 0;
             // $company->bill_notifiers = $data['bill_notifiers'];
             if(!empty($data->file('logofile'))){
                 $file = $request->file('logofile');
@@ -305,10 +308,10 @@ class CompanyController extends Controller
                 $file->move(public_path() . '/logos', $filename);
                 $company->company_logo = $filename;
 
-                // $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
-                // $dropbox = new Dropbox($app);
-                // $dropboxFile = new DropboxFile(public_path() . '/logos/' . $filename);
-                // $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_LOGO_PATH') . $filename, ['autorename' => TRUE]);
+                $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
+                $dropbox = new Dropbox($app);
+                $dropboxFile = new DropboxFile(public_path() . '/logos/' . $filename);
+                $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_LOGO_PATH') . $filename, ['autorename' => TRUE]);
             }
             // else {
             //     $company->company_logo = $data['logolink'];
@@ -1766,5 +1769,265 @@ class CompanyController extends Controller
             return response()->json(["success" => true]);
         } else
             return response()->json(["success" => false, "message" => "Empty company ids."]);
+    }
+
+    /**
+     * Show the sub-client management page.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function subclients()
+    {
+        if(Auth::user()->userrole == 2){
+            $companyList = Company::orderBy('company_name', 'asc')->get();
+            return view('admin.subclients.view')->with('companyList', $companyList);
+        }
+        else
+            return redirect('home');
+    }
+
+    /**
+     * Return sub-clients list.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getSubClients(Request $request)
+    {
+        $columns = array( 
+            0 =>'id', 
+            1 =>'company',
+            2 =>'name',
+            3 =>'subc_client_number',
+            4 =>'telno',
+            5 =>'street_1',
+            6 =>'website'
+        );
+        $totalData = SubClients::count();
+        $totalFiltered = $totalData; 
+
+        $limit = $request->input('length');
+        $start = $request->input('start');
+        $order = $columns[$request->input('order.0.column')];
+        $dir = $request->input('order.0.dir');
+
+        $handler = SubClients::leftjoin('company_info', "company_info.id", "=", "sub_clients.client_id");
+        if(!empty($request->input("columns.1.search.value")))
+            $handler = $handler->where('company_info.company_name', 'LIKE', "%{$request->input("columns.1.search.value")}%");
+        if(!empty($request->input("columns.2.search.value")))
+            $handler = $handler->where('sub_clients.name', 'LIKE', "%{$request->input("columns.2.search.value")}%");
+        if(!empty($request->input("columns.3.search.value")))
+            $handler = $handler->where('sub_clients.subc_client_number', 'LIKE', "%{$request->input("columns.3.search.value")}%");
+        if(!empty($request->input("columns.4.search.value")))
+            $handler = $handler->where('sub_clients.telno', 'LIKE', "%{$request->input("columns.4.search.value")}%");
+        if(!empty($request->input("columns.5.search.value")))
+            $handler = $handler->where('sub_clients.street_1', 'LIKE', "%{$request->input("columns.5.search.value")}%");
+        if(!empty($request->input("columns.6.search.value")))
+            $handler = $handler->where('sub_clients.website', 'LIKE', "%{$request->input("columns.6.search.value")}%");
+
+        if(empty($request->input('search.value')))
+        {            
+            $totalFiltered = $handler->count();
+            $clients = $handler->offset($start)
+                ->limit($limit)
+                ->orderBy($order,$dir)
+                ->get(
+                    array(
+                        'sub_clients.id as id',
+                        'company_info.company_name as company',
+                        'sub_clients.name as name',
+                        'sub_clients.subc_client_number as number',
+                        'sub_clients.telno as telno',
+                        'sub_clients.street_1 as address',
+                        'sub_clients.website as website'
+                    )
+                );
+        }
+        else {
+            $search = $request->input('search.value'); 
+            $clients =  $handler->where(function ($q) use ($search) {
+                            $q->where('sub_clients.id','LIKE',"%{$search}%")
+                            ->orWhere('company_info.company_name', 'LIKE',"%{$search}%")
+                            ->orWhere('sub_clients.name', 'LIKE',"%{$search}%")
+                            ->orWhere('sub_clients.subc_client_number', 'LIKE',"%{$search}%")
+                            ->orWhere('sub_clients.telno', 'LIKE',"%{$search}%")
+                            ->orWhere('sub_clients.street_1', 'LIKE',"%{$search}%")
+                            ->orWhere('sub_clients.website', 'LIKE',"%{$search}%");
+                        })
+                        ->offset($start)
+                        ->limit($limit)
+                        ->orderBy($order,$dir)
+                        ->get(
+                            array(
+                                'sub_clients.id as id',
+                                'company_info.company_name as company',
+                                'sub_clients.name as name',
+                                'sub_clients.subc_client_number as number',
+                                'sub_clients.telno as telno',
+                                'sub_clients.street_1 as address',
+                                'sub_clients.website as website'
+                            )
+                        );
+
+            $totalFiltered = $handler->where(function ($q) use ($search) {
+                            $q->where('sub_clients.id','LIKE',"%{$search}%")
+                            ->orWhere('company_info.company_name', 'LIKE',"%{$search}%")
+                            ->orWhere('sub_clients.name', 'LIKE',"%{$search}%")
+                            ->orWhere('sub_clients.subc_client_number', 'LIKE',"%{$search}%")
+                            ->orWhere('sub_clients.telno', 'LIKE',"%{$search}%")
+                            ->orWhere('sub_clients.street_1', 'LIKE',"%{$search}%")
+                            ->orWhere('sub_clients.website', 'LIKE',"%{$search}%");
+                        })
+                        ->count();
+        }
+
+        $data = array();
+
+        if(!empty($clients))
+        {
+            foreach ($clients as $client)
+            {
+                $nestedData['id'] = $client->id;
+                $nestedData['company'] = $client->company;
+                $nestedData['name'] = $client->name;
+                $nestedData['number'] = $client->number;
+                $nestedData['telno'] = $client->telno;
+                $nestedData['address'] = $client->address;
+                $nestedData['website'] = $client->website;
+
+                $nestedData['actions'] = "
+                <div class='text-center'>
+                    <button type='button' class='btn btn-primary' 
+                        onclick='showEditClient(this,{$nestedData['id']})'
+                        data-toggle='modal' data-target='#modal-block-normal'>
+                        <i class='fa fa-pencil-alt'></i>
+                    </button>
+                    <button type='button' class='js-swal-confirm btn btn-danger' onclick='delClient(this,{$nestedData['id']})'>
+                        <i class='fa fa-trash'></i>
+                    </button>
+                </div>";
+                $data[] = $nestedData;
+            }
+        }
+        $json_data = array(
+            "draw"            => intval($request->input('draw')),  
+            "recordsTotal"    => intval($totalData),  
+            "recordsFiltered" => intval($totalFiltered), 
+            "data"            => $data   
+            );
+        echo json_encode($json_data);
+    }
+
+    /**
+     * Return sub-client data.
+     *
+     * JSON
+     */
+    public function getSubClient(Request $request){
+        $client = SubClients::where('id', $request['data'])->first();
+        
+        return response()->json($client);
+    }
+
+    /**
+     * Delete sub-client .
+     *
+     * JSON
+     */
+    public function delSubClient(Request $request){
+        if(Auth::user()->userrole == 2){
+            if($request['data']){
+                $client = SubClients::where('id', $request['data']);
+                if($client){
+                    $client->delete();
+                    return response()->json(["success" => true]);
+                } else
+                    return response()->json(["success" => false, "message" => "Cannot find the client."]);
+            } else
+                return response()->json(["success" => false, "message" => "Missing parameter."]);
+        } else 
+            return response()->json(["success" => false, "message" => "You do not have permission."]);
+    }
+
+    /**
+     * Sub-Client Add / Update
+     *
+     * @return JSON
+     */
+    function updateSubClient(Request $request){
+        if(Auth::user()->userrole != 2){
+            return response()->json(["success" => false, "message" => "You do not have permission."]);
+        }
+
+        $data = $request;
+        
+        if ($data['id'] == 0){
+            // $isExist = SubClients::where('company_name', $data['name'])->get()->first();
+            // if ($isExist) {
+            //     return response()->json(["success" => false, "message" => "Company already exists with the same name."]);
+            //     return;
+            // }
+            $client = new SubClients;
+            $client->client_id = $data['company'];
+            $client->name = $data['name'];
+            $client->subc_client_number = $data['number'];
+            $client->street_1 = $data['address1'];
+            $client->street_2 = $data['address2'];
+            $client->telno = $data['telno'];
+            $client->city = $data['city'];
+            $client->state = $data['state'];
+            $client->zip = $data['zip'];
+            $client->website = $data['website'];
+            $client->country_code = $data['country_code'];
+            $client->contact_name = $data['contact_name'];
+            if(!empty($data->file('logofile'))){
+                $company = Company::where('id', $data['company'])->first();
+                $file = $request->file('logofile');
+                $filename = $company['company_number'] . '.' . $data['number'] . ". " . $data['name'] . ' ' . $file->getClientOriginalName();
+                $file->move(public_path() . '/logos', $filename);
+                $client->logo = $filename;
+
+                //Backup json file to dropbox
+                $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
+                $dropbox = new Dropbox($app);
+                $dropboxFile = new DropboxFile(public_path() . '/logos/' . $filename);
+                $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_LOGO_PATH') . $filename, ['autorename' => TRUE]);
+            } 
+            // else {
+            //     $company->company_logo = $data['logolink'];
+            // }
+            $client->save();
+            return response()->json(["success" => true]);
+        } else {
+            $client = SubClients::where('id', $data['id'])->first();
+            $client->client_id = $data['company'];
+            $client->name = $data['name'];
+            $client->subc_client_number = $data['number'];
+            $client->street_1 = $data['address1'];
+            $client->street_2 = $data['address2'];
+            $client->telno = $data['telno'];
+            $client->city = $data['city'];
+            $client->state = $data['state'];
+            $client->zip = $data['zip'];
+            $client->website = $data['website'];
+            $client->country_code = $data['country_code'];
+            $client->contact_name = $data['contact_name'];
+            if(!empty($data->file('logofile'))){
+                $company = Company::where('id', $data['company'])->first();
+                $file = $request->file('logofile');
+                $filename = $company['company_number'] . '.' . $data['number'] . ". " . $data['name'] . ' ' . $file->getClientOriginalName();
+                $file->move(public_path() . '/logos', $filename);
+                $client->logo = $filename;
+
+                $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
+                $dropbox = new Dropbox($app);
+                $dropboxFile = new DropboxFile(public_path() . '/logos/' . $filename);
+                $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_LOGO_PATH') . $filename, ['autorename' => TRUE]);
+            }
+            // else {
+            //     $company->company_logo = $data['logolink'];
+            // }
+            $client->save();
+            return response()->json(["success" => true]);
+        }
     }
 }

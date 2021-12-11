@@ -1327,6 +1327,43 @@ var loadStateOptions = function() {
     });
 }
 
+// Load Sub-Client options
+var loadSubClients = function() {
+    return new Promise((resolve, reject) => {
+        var selectedClient = '0';
+        if (typeof preloaded_data != 'undefined' && typeof preloaded_data['ProjectInfo'] !== 'undefined' && typeof preloaded_data['ProjectInfo']['SubClient'] !== 'undefined') {
+            selectedClient = preloaded_data['ProjectInfo']['SubClient'];
+        }
+
+        $.ajax({
+            url:"getJobSubClients",
+            type:'post',
+            data:{ jobId: $('#projectId').val() },
+            success:function(res){
+                if(res && res.success){
+                    res.clients.forEach(client => {
+                        if(client.id == selectedClient){
+                            $('#option-sub-client').append(`<option value="${client.id}" selected=""> 
+                                ${client.name} 
+                            </option>`);
+                        } else {
+                            $('#option-sub-client').append(`<option value="${client.id}"> 
+                                ${client.name} 
+                            </option>`);
+                        }
+                    })
+                }
+                resolve(true);
+            },
+            error: function(xhr, status, error) {
+                res = JSON.parse(xhr.responseText);
+                swal.fire({ title: "Error", text: res.message, icon: "error", confirmButtonText: `OK` });
+                resolve(false);
+            }
+        });
+    })
+}
+
 var updateUserOption = function(userId) {
     // call ajax
     $.ajax({
@@ -1416,7 +1453,7 @@ var updateNumberOfConditions = function(conditions) {
     }
 }
 
-var ignorable = ['a-7-', 'a-8-', 'af-8-', 'ai-8-', 'a-9-', 'af-9-', 'ai-9-', 'a-10-', 'af-10-', 'ai-10-', 'ac-7-', 'ac-8-', 'ac-9-', 'ac-10-', 'c-1-', 'c-2-', 'cf-2-', 'ci-2-', 'c-3-', 'cf-3-', 'ci-3-', 'c-4-', 'cf-4-', 'ci-4-', 'calc-algorithm-', 'collarHeights', 'd-7-', 'd-8-', 'd-9-', 'date_report'];
+var ignorable = ['a-7-', 'a-8-', 'af-8-', 'ai-8-', 'a-9-', 'af-9-', 'ai-9-', 'a-10-', 'af-10-', 'ai-10-', 'ac-7-', 'ac-8-', 'ac-9-', 'ac-10-', 'c-1-', 'c-2-', 'cf-2-', 'ci-2-', 'c-3-', 'cf-3-', 'ci-3-', 'c-4-', 'cf-4-', 'ci-4-', 'calc-algorithm-', 'collarHeights', 'd-7-', 'd-8-', 'd-9-', 'date_report', 'txt-sub-project-number'];
 
 var isIgnorable = function(id) {
     let canIgnore = false;
@@ -4101,6 +4138,10 @@ var loadPreloadedData = function() {
                                 else
                                     $("#option-project-type").val('Roof Mount');
                             }
+                            if(preloaded_data['ProjectInfo']['SubClient'])
+                                $('#option-sub-client').val(preloaded_data['ProjectInfo']['SubClient']);
+                            if(preloaded_data['ProjectInfo']['SubProjectNo'])
+                                $("#txt-sub-project-number").val(preloaded_data['ProjectInfo']['SubProjectNo']);
 
                             $('#txt-name-of-field-personnel').val(preloaded_data['Personnel']['Name']);
                             $('#date-of-field-visit').val(preloaded_data['Personnel']['DateOfFieldVisit']);
@@ -4713,6 +4754,8 @@ var loadPreloadedData = function() {
         applyUserSetting();
         await loadPreloadedData();
         await loadStateOptions();
+        if($("#option-sub-client").length > 0)
+            await loadSubClients();
         await loadDataCheck();
         await loadPreloadedPermitData();
         loadEquipmentSection();
