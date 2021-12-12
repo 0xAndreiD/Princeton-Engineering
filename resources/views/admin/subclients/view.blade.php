@@ -97,33 +97,30 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="number">Number <span class="text-danger">*</span></label>
+                                    <label for="number">Client Number <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="number" name="number" placeholder="Enter A Number.." style="border: 1px solid pink;">
                                     <input type="hidden" class="form-control" id="id" name="id">
                                 </div>
                                 <div class="form-group">
-                                    <label for="name">Name <span class="text-danger">*</span></label>
+                                    <label for="name">Client Company Name <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="name" name="name" placeholder="Enter A Name.." style="border: 1px solid pink;">
                                 </div>
                                 <div class="form-group">
-                                    <label for="telno">Tel No <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="telno" name="telno" placeholder="212-999-0000" style="border: 1px solid pink;">
-                                </div>
-                                <div class="form-group">
-                                    <label for="address1">Street Address 1 <span class="text-danger">*</span></label>
+                                    <label for="address1">Client Address 1 <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="address1" name="address1" placeholder="Street Address.." style="border: 1px solid pink;">
                                 </div>
                                 <div class="form-group">
-                                    <label for="address1">Street Address 2 <span class="text-danger">*</span></label>
+                                    <label for="address1">Client Address 2 <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="address2" name="address2" placeholder="Secondary Street Address(Optional)" style="border: 1px solid pink;">
                                 </div>
                                 <div class="form-group">
-                                    <label for="city">City <span class="text-danger">*</span></label>
+                                    <label for="city">Client City <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="city" name="city" placeholder="City.." style="border: 1px solid pink;">
                                 </div>
                                 <div class="form-group">
-                                    <label for="state">State <span class="text-danger">*</span></label>
-                                    <select id="state" style="border: 1px solid pink;">
+                                    <label for="state">Client State <span class="text-danger">*</span></label>
+                                    <select id="state" name="state" style="border: 1px solid pink; height: 36px; border-radius: 4px;">
+                                        <option value="">Select State</option>
                                         <option value="AL">AL</option>
                                         <option value="AZ">AZ</option>
                                         <option value="AR">AR</option>
@@ -176,23 +173,29 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="zip">Zip <span class="text-danger">*</span></label>
+                                    <label for="zip">Client Zip <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="zip" name="zip" placeholder="Zip.." style="border: 1px solid pink;">
                                 </div>
                                 <div class="form-group">
-                                    <label for="contact_name">Contact Name <span class="text-danger">*</span></label>
+                                    <label for="contact_name">Client Contact Name <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="contact_name" name="contact_name" placeholder="Person name.." style="border: 1px solid pink;">
                                 </div>
-                                <div class="form-group">
-                                    <label for="country_code">Country Code <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="country_code" name="country_code" placeholder="Code.." style="border: 1px solid pink;">
+                                <div class="row">
+                                    <div class="col-4 form-group">
+                                        <label for="country_code">Client Country Code <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="country_code" name="country_code" placeholder="Code.." style="border: 1px solid pink;">
+                                    </div>
+                                    <div class="col-8 form-group">
+                                        <label for="telno">Client's Telephone Number <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="telno" name="telno" placeholder="212-999-0000" style="border: 1px solid pink;">
+                                    </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="website">Website <span class="text-danger">*</span></label>
+                                    <label for="website">Client Website <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="website" name="website" placeholder="http://example.com" style="border: 1px solid pink;">
                                 </div>
                                 <div class="form-group">
-                                    <label for="logolink">Company Logo <span class="text-danger">*</span></label>
+                                    <label for="logolink">Client Company Logo <span class="text-danger">*</span></label>
                                     <div class="input-group">
                                         <input type="text" style="border: 1px solid pink; margin-top: 0px;" class="form-control" id="logolink" name="logolink" placeholder="None Uploaded..." disabled>
                                         <div class="input-group-append">
