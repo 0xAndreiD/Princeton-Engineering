@@ -175,7 +175,7 @@ function showEditClient(obj, id) {
             $('input#address1').val(result.street_1);
             $('input#address2').val(result.street_2);
             $('input#city').val(result.city);
-            $('input#state').val(result.state);
+            $('select#state').val(result.state);
             $('input#zip').val(result.zip);
             $('input#contact_name').val(result.contact_name);
             $('input#country_code').val(result.country_code);
@@ -196,7 +196,7 @@ function showAddClient() {
     $('input#address1').val('');
     $('input#address2').val('');
     $('input#city').val('');
-    $('input#state').val('');
+    $('select#state').val('');
     $('input#zip').val('');
     $('input#contact_name').val('');
     $('input#country_code').val('');
