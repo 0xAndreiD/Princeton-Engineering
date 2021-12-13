@@ -563,18 +563,11 @@ class GeneralController extends Controller
                 $projectState = 0;
                 if($request['status'] == 'Saved')
                     $projectState = 1;
-                else if($request['status'] == 'Data Check'){
+                else if($request['status'] == 'Data Check')
                     $projectState = 2;
-                    $project->planCheck = 0;
-                    $project->asBuilt = 0;
-                    $project->PIL_status = 0;
-                }
-                else if($request['status'] == 'Submitted'){
+                else if($request['status'] == 'Submitted')
                     $projectState = 4;
-                    $project->planCheck = 0;
-                    $project->asBuilt = 0;
-                    $project->PIL_status = 0;
-                }
+
                 $project = JobRequest::create([
                     'companyName' => $company['company_name'],
                     'companyId' => Auth::user()->companyid,
