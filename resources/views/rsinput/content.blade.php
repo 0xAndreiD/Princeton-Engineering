@@ -388,7 +388,7 @@
             <td class="w400-bdr">D-7</td>
             <td class="iw400-right-bdr" colspan="2">MEP Loads</td>
             <td class="iw400-bdr">psf</td>
-            <td class="w400-yellow-bdr" colspan="2"><input type="text" class="txt-center-align" id="d-7-{{ $conditionId }}"  tabindex="44" value=""></input></td>
+            <td class="w400-yellow-bdr" colspan="2"><input type="text" class="txt-center-align" id="d-7-{{ $conditionId }}"  tabindex="44" value="0"></input></td>
             <td class="right-bdr"><div style="overflow:hidden"></td>
         </tr>
         <tr class="h13 class-GroundMount-hide class-IBC-only" style="display: none;">
@@ -396,7 +396,7 @@
             <td class="w400-bdr">D-8</td>
             <td class="iw400-right-bdr" colspan="2">Miscellaneous Loads</td>
             <td class="iw400-bdr">psf</td>
-            <td class="w400-yellow-bdr" colspan="2"><input type="text" class="txt-center-align" id="d-8-{{ $conditionId }}"  tabindex="44" value=""></input></td>
+            <td class="w400-yellow-bdr" colspan="2"><input type="text" class="txt-center-align" id="d-8-{{ $conditionId }}"  tabindex="44" value="0"></input></td>
             <td class="right-bdr"><div style="overflow:hidden"></td>
         </tr>
         <tr class="h13 class-GroundMount-hide class-IBC-only" style="display: none;">
