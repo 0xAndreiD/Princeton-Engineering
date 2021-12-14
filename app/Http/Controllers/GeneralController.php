@@ -2988,4 +2988,17 @@ class GeneralController extends Controller
             return response()->json(['success' => true, 'clients' => $clients]);
         }
     }
+
+    /**
+     * Return subclient is allowed
+     *
+     * @return JSON
+     */
+    public function isSubClientAllowed(Request $request){
+        $company = Company::where('id', Auth::user()->companyid)->first();
+        if($company && $company->allow_subclient == 1)
+            return response()->json(['success' => true]);
+        else
+            return response()->json(['success' => false]);
+    }
 }

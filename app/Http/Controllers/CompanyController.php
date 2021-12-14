@@ -1781,8 +1781,13 @@ class CompanyController extends Controller
         if(Auth::user()->userrole == 2){
             $companyList = Company::orderBy('company_name', 'asc')->get();
             return view('admin.subclients.view')->with('companyList', $companyList);
-        }
-        else
+        } else if(Auth::user()->userrole == 1){
+            $company = Company::where('id', Auth::user()->companyid)->first();
+            if($company && $company->allow_subclient == 1)
+                return view('clientadmin.subclients.view');
+            else
+                return redirect('home');
+        } else
             return redirect('home');
     }
 
@@ -1793,16 +1798,29 @@ class CompanyController extends Controller
      */
     public function getSubClients(Request $request)
     {
-        $columns = array( 
-            0 =>'id', 
-            1 =>'company',
-            2 =>'name',
-            3 =>'subc_client_number',
-            4 =>'telno',
-            5 =>'street_1',
-            6 =>'website'
-        );
-        $totalData = SubClients::count();
+        if(Auth::user()->userrole == 2){
+            $columns = array( 
+                0 =>'id', 
+                1 =>'company',
+                2 =>'name',
+                3 =>'subc_client_number',
+                4 =>'telno',
+                5 =>'street_1',
+                6 =>'website'
+            );
+            $handler = new SubClients;
+        } else {
+            $columns = array( 
+                0 =>'id', 
+                1 =>'name',
+                2 =>'subc_client_number',
+                3 =>'telno',
+                4 =>'street_1',
+                5 =>'website'
+            );
+            $handler = SubClients::where('client_id', Auth::user()->companyid);
+        }
+        $totalData = $handler->count();
         $totalFiltered = $totalData; 
 
         $limit = $request->input('length');
@@ -1810,7 +1828,7 @@ class CompanyController extends Controller
         $order = $columns[$request->input('order.0.column')];
         $dir = $request->input('order.0.dir');
 
-        $handler = SubClients::leftjoin('company_info', "company_info.id", "=", "sub_clients.client_id");
+        $handler = $handler->leftjoin('company_info', "company_info.id", "=", "sub_clients.client_id");
         if(!empty($request->input("columns.1.search.value")))
             $handler = $handler->where('company_info.company_name', 'LIKE', "%{$request->input("columns.1.search.value")}%");
         if(!empty($request->input("columns.2.search.value")))
@@ -1887,7 +1905,8 @@ class CompanyController extends Controller
             foreach ($clients as $client)
             {
                 $nestedData['id'] = $client->id;
-                $nestedData['company'] = $client->company;
+                if(Auth::user()->userrole == 2)
+                    $nestedData['company'] = $client->company;
                 $nestedData['name'] = $client->name;
                 $nestedData['number'] = $client->number;
                 $nestedData['telno'] = $client->telno;
@@ -1924,8 +1943,10 @@ class CompanyController extends Controller
      */
     public function getSubClient(Request $request){
         $client = SubClients::where('id', $request['data'])->first();
-        
-        return response()->json($client);
+        if(Auth::user()->userrole == 2 || $client && $client->client_id == Auth::user()->companyid){
+            return response()->json($client);
+        } else
+            return response()->json(array());
     }
 
     /**
@@ -1934,18 +1955,18 @@ class CompanyController extends Controller
      * JSON
      */
     public function delSubClient(Request $request){
-        if(Auth::user()->userrole == 2){
-            if($request['data']){
-                $client = SubClients::where('id', $request['data']);
-                if($client){
+        if($request['data']){
+            $client = SubClients::where('id', $request['data'])->first();
+            if($client){
+                if(Auth::user()->userrole == 2 || Auth::user()->userrole == 1 && $client->client_id == Auth::user()->companyid){
                     $client->delete();
                     return response()->json(["success" => true]);
-                } else
-                    return response()->json(["success" => false, "message" => "Cannot find the client."]);
+                } else 
+                    return response()->json(["success" => false, "message" => "You do not have permission."]);
             } else
-                return response()->json(["success" => false, "message" => "Missing parameter."]);
-        } else 
-            return response()->json(["success" => false, "message" => "You do not have permission."]);
+                return response()->json(["success" => false, "message" => "Cannot find the client."]);
+        } else
+            return response()->json(["success" => false, "message" => "Missing parameter."]);
     }
 
     /**
@@ -1954,7 +1975,11 @@ class CompanyController extends Controller
      * @return JSON
      */
     function updateSubClient(Request $request){
-        if(Auth::user()->userrole != 2){
+        if(Auth::user()->userrole == 1){
+            $company = Company::where('id', Auth::user()->companyid)->first();
+            if(!$company || $company->allow_subclient == 0)
+                return response()->json(["success" => false, "message" => "You do not have permission."]);
+        } else if(Auth::user()->userrole != 2){
             return response()->json(["success" => false, "message" => "You do not have permission."]);
         }
 
@@ -1967,7 +1992,10 @@ class CompanyController extends Controller
             //     return;
             // }
             $client = new SubClients;
-            $client->client_id = $data['company'];
+            if(Auth::user()->userrole == 2)
+                $client->client_id = $data['company'];
+            else
+                $client->client_id = Auth::user()->companyid;
             $client->name = $data['name'];
             $client->subc_client_number = $data['number'];
             $client->street_1 = $data['address1'];
@@ -1999,7 +2027,8 @@ class CompanyController extends Controller
             return response()->json(["success" => true]);
         } else {
             $client = SubClients::where('id', $data['id'])->first();
-            $client->client_id = $data['company'];
+            if(Auth::user()->userrole == 2)
+                $client->client_id = $data['company'];
             $client->name = $data['name'];
             $client->subc_client_number = $data['number'];
             $client->street_1 = $data['address1'];
