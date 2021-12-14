@@ -593,10 +593,10 @@ class GeneralController extends Controller
                 Storage::disk('input')->put($folderPrefix . $filename, json_encode($data));
 
                 //Backup json file to dropbox
-                $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
-                $dropbox = new Dropbox($app);
-                $dropboxFile = new DropboxFile(storage_path('/input/') . $companyNumber. '. ' . $company['company_name'] . '/' . $filename);
-                $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_JSON_INPUT') . $companyNumber. '. ' . $company['company_name'] . '/' . $filename, ['autorename' => TRUE]);
+                // $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
+                // $dropbox = new Dropbox($app);
+                // $dropboxFile = new DropboxFile(storage_path('/input/') . $companyNumber. '. ' . $company['company_name'] . '/' . $filename);
+                // $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_JSON_INPUT') . $companyNumber. '. ' . $company['company_name'] . '/' . $filename, ['autorename' => TRUE]);
             }
             catch(Exception $e) {
                 return response()->json(["message" => "Failed to generate RS json data file", "status" => false]);
@@ -834,7 +834,7 @@ class GeneralController extends Controller
                 "C2_feet" => number_format(floatval($caseInput["cf-2-{$number}"]), 2), "C2_inches" => number_format(floatval($caseInput["ci-2-{$number}"]), 2), "C2" => number_format(floatval(isset($caseInput["c-2-{$number}"]) ? $caseInput["c-2-{$number}"] : 0), 2),
                 "C3" => number_format(floatval(isset($caseInput["c-3-{$number}"]) ? $caseInput["c-3-{$number}"] : 0), 2),
                 "C4_feet" => number_format(floatval($caseInput["cf-4-{$number}"]), 2), "C4_inches" => number_format(floatval($caseInput["ci-4-{$number}"]), 2), "C4" => number_format(floatval(isset($caseInput["c-4-{$number}"]) ? $caseInput["c-4-{$number}"] : 0), 2));
-            $caseData['RoofDeckSurface'] = array("D0" => $caseInput["d-0-{$number}"], "D1" => number_format(floatval($caseInput["d-1-{$number}"]), 2), "D2" => $caseInput["d-2-{$number}"], "D3" => $caseInput["d-3-{$number}"], "D4" => $caseInput["d-4-{$number}"], "D5" => $caseInput["d-5-{$number}"], "D6" => $caseInput["d-6-{$number}"], "D7" => $caseInput["d-7-{$number}"], "D8" => $caseInput["d-8-{$number}"], "D9" => $caseInput["d-9-{$number}"]);
+            $caseData['RoofDeckSurface'] = array("D0" => $caseInput["d-0-{$number}"], "D1" => number_format(floatval($caseInput["d-1-{$number}"]), 2), "D2" => $caseInput["d-2-{$number}"], "D3" => $caseInput["d-3-{$number}"], "D4" => $caseInput["d-4-{$number}"], "D5" => $caseInput["d-5-{$number}"], "D6" => $caseInput["d-6-{$number}"], "D7" => $caseInput["d-7-{$number}"], "D8" => $caseInput["d-8-{$number}"], "D9" => $caseInput["d-9-{$number}"] ? $caseInput["d-9-{$number}"] : "");
             $caseData['Location'] = array(
                 "E1_feet" => number_format(floatval($caseInput["ef-1-{$number}"]), 2), "E1_inches" => number_format(floatval($caseInput["ei-1-{$number}"]), 2), "E1" => number_format(floatval($caseInput["e-1-{$number}"]), 2),
                 "E2_feet" => number_format(floatval($caseInput["ef-2-{$number}"]), 2), "E2_inches" => number_format(floatval($caseInput["ei-2-{$number}"]), 2), "E2" => number_format(floatval($caseInput["e-2-{$number}"]), 2));
