@@ -147,6 +147,12 @@
                                 <span class="nav-main-link-name">Manage Users</span>
                             </a>
                         </li>
+                        <li class="nav-main-item" style="display: none;" id="subclients-menu">
+                            <a class="nav-main-link" href="{{ route('subclients') }}">
+                                <i class="nav-main-link-icon fa fa-user-friends"></i>
+                                <span class="nav-main-link-name">Sub Clients</span>
+                            </a>
+                        </li>
                         <li class="nav-main-heading">Projects</li>
                         <li class="nav-main-item">
                             <a class="nav-main-link" href="{{ route('projectlist') }}">
@@ -394,8 +400,24 @@
         <script>
             $(document).ready(function(){
                 var scrollpos = localStorage.getItem('scrollpos');
-                console.log(scrollpos);
                 if (scrollpos) document.getElementsByClassName('simplebar-content-wrapper')[0].scrollTo(0, scrollpos);
+
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+
+                $.ajax({
+                    url:"isSubClientAllowed",
+                    type:'post',
+                    success:function(res){
+                        if (res.success == true) {
+                            $("#subclients-menu").css("display", "flex");
+                        }
+                    },
+                    error: function(xhr, status, error) { }
+                });
             })
 
             window.onbeforeunload = function(e) {

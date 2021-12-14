@@ -80,8 +80,7 @@
         <td class="w400-yellow-bdr"><input type="text" id="txt-project-number" tabindex="6" value="624"></input></td>
         <td class="iw400" id="project-id-comment" colspan="2" style="text-align: left;"></td>
     </tr>
-    @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || $allowSubClient == 1)
-    <tr class="h13">
+    <tr class="h13" id="subclient-select" style="display: none;">
         <td><div style="overflow:hidden"></div></td>
         <td class="iw400-right-bdr">Sub Client</td>
         <td class="w400-green-bdr">
@@ -91,14 +90,13 @@
         </td>
         <td><div style="overflow:hidden"></div></td>
     </tr>
-    <tr class="h13">
+    <tr class="h13" id="subproject-num" style="display: none;">
         <td><div style="overflow:hidden"></div></td>
         <td class="iw400-right-bdr">Sub Project Number</td>
         <td class="w400-yellow-bdr"><input type="text" id="txt-sub-project-number" tabindex="7" value="1"></input></td>
         <td><div style="overflow:hidden"></div></td>
         <td><div style="overflow:hidden"></div></td>
     </tr>
-    @endif
     <tr class="h13">
         <td><div style="overflow:hidden"></div></td>
         <td class="iw400-right-bdr">Project Name</td>
@@ -146,7 +144,7 @@
         <col width="160">
         <col width="160">
         <col width="160">
-        <col width="80">
+        <col width="1000">
     </colgroup>
 <tbody>
     <tr class="h13">
@@ -198,7 +196,7 @@
         <col width="160">
         <col width="200">
         <col width="300">
-        <col width="80">
+        <col width="720">
     </colgroup>
 <tbody>
     <tr class="h13">
@@ -243,7 +241,7 @@
         <col width="160">
         <col width="70">
         <col width="300">
-        <col width="80">
+        <col width="960">
     </colgroup>
 <tbody>
     <tr class="h13">

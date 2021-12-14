@@ -381,7 +381,6 @@ class GeneralController extends Controller
                     ->with('companyName', $company['company_name'])
                     ->with('companyNumber', $company['company_number'])
                     ->with('companyMembers', $companymembers)
-                    ->with('allowSubClient', $company['allow_subclient'])
                     ->with('projectState', $project ? $project->projectState : 0)
                     ->with('planCheck', $project ? $project->planCheck : 0)
                     ->with('asBuilt', $project ? $project->asBuilt : 0)
@@ -402,7 +401,6 @@ class GeneralController extends Controller
                     ->with('companyName', "")
                     ->with('companyNumber', "")
                     ->with('companyMembers', $companymembers)
-                    ->with('allowSubClient', $company['allow_subclient'])
                     ->with('projectState', $project ? $project->projectState : 0)
                     ->with('planCheck', $project ? $project->planCheck : 0)
                     ->with('asBuilt', $project ? $project->asBuilt : 0)
@@ -2986,6 +2984,41 @@ class GeneralController extends Controller
         } else {
             $clients = SubClients::where('client_id', Auth::user()->companyid)->get(array('id', 'name'));
             return response()->json(['success' => true, 'clients' => $clients]);
+        }
+    }
+
+    /**
+     * Return subclient is allowed
+     *
+     * @return JSON
+     */
+    public function isSubClientAllowed(Request $request){
+        $company = Company::where('id', Auth::user()->companyid)->first();
+        if($company && $company->allow_subclient == 1)
+            return response()->json(['success' => true]);
+        else
+            return response()->json(['success' => false]);
+    }
+
+    /**
+     * Return subclient is allowed for a job
+     *
+     * @return JSON
+     */
+    public function jobSubClientAllowed(Request $request){
+        $job = JobRequest::where('id', $request['jobId'])->first();
+        if($job){
+            $company = Company::where('id', $job->companyId)->first();
+            if($company && $company->allow_subclient == 1)
+                return response()->json(['success' => true]);
+            else
+                return response()->json(['success' => false]);
+        } else {
+            $company = Company::where('id', Auth::user()->companyid)->first();
+            if($company && $company->allow_subclient == 1)
+                return response()->json(['success' => true]);
+            else
+                return response()->json(['success' => false]);
         }
     }
 }

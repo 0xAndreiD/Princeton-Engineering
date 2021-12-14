@@ -37,24 +37,15 @@
                     <thead>
                         <tr>
                             <th class="text-center" style="width: 5%;">ID</th>
-                            <th style="width:25%">Company Name</th>
-                            <th style="width:15%">Name</th>
-                            <th style="width:10%;">Number</th>
-                            <th style="width:10%;">Tel No</th>
-                            <th style="width:15%;">Address</th>
-                            <th style="width:10%;">Website</th>
+                            <th style="width:20%">Name</th>
+                            <th style="width:15%;">Number</th>
+                            <th style="width:15%;">Tel No</th>
+                            <th style="width:20%;">Address</th>
+                            <th style="width:15%;">Website</th>
                             <th style="min-width:150px;">Action</th>
                         </tr>
                         <tr>
                             <th></th>
-                            <th class="searchHead"> 
-                                <select placeholder="Search Company" class="searchBox" id="companyFilter">
-                                    <option value="">All</option>
-                                    @foreach($companyList as $company)
-                                        <option value="{{ $company['company_name'] }}">{{ $company['company_name'] }}</option>
-                                    @endforeach
-                                </select>
-                            </th>
                             <th class="searchHead"> <input type="text" placeholder="Search Name" class="searchBox" id="nameFilter"> </th>
                             <th class="searchHead"> <input type="text" placeholder="Search Number" class="searchBox" id="numberFilter"> </th>
                             <th class="searchHead"> <input type="text" placeholder="Search Phone" class="searchBox" id="phoneFilter"> </th>
@@ -88,14 +79,6 @@
                     <div class="block-content" style="max-height: 700px;overflow: auto;">
                         <div class="row items-push">
                             <div class="col-lg-12">
-                                <div class="form-group">
-                                    <label for="company">Company <span class="text-danger">*</span></label><br/>
-                                    <select class="form-control" id="company" name="company" style="border: 1px solid pink;">
-                                        @foreach ($companyList as $company)
-                                            <option value="{{$company->id}}">{{ $company->company_name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
                                 <div class="form-group">
                                     <label for="number">Client Number <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="number" name="number" placeholder="Enter A Number.." style="border: 1px solid pink;">
@@ -236,7 +219,6 @@
                 },
             "columns": [
                 { "data": "id" },
-                { "data": "company" },
                 { "data": "name" },
                 { "data": "number" },
                 { "data": "telno" },
@@ -251,7 +233,7 @@
             { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
         });
 
-        $("#companyFilter, #nameFilter, #numberFilter, #phoneFilter, #addressFilter, #siteFilter").on('keyup change', function() {
+        $("#nameFilter, #numberFilter, #phoneFilter, #addressFilter, #siteFilter").on('keyup change', function() {
             table.column($(this).parent().index() + ':visible').search(this.value).draw();
         });
     });

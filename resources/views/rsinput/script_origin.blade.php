@@ -1327,6 +1327,29 @@ var loadStateOptions = function() {
     });
 }
 
+var isSubClientAllowed = function() {
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            url:"jobSubClientAllowed",
+            type:'post',
+            data:{ jobId: $('#projectId').val() },
+            success:function(res){
+                if(res && res.success == true){
+                    $("#subclient-select").css("display", "table-row");
+                    $("#subproject-num").css("display", "table-row");
+                    resolve(true);
+                } else
+                    resolve(false);
+            },
+            error: function(xhr, status, error) {
+                res = JSON.parse(xhr.responseText);
+                swal.fire({ title: "Error", text: res.message, icon: "error", confirmButtonText: `OK` });
+                resolve(false);
+            }
+        });
+    })
+}
+
 // Load Sub-Client options
 var loadSubClients = function() {
     return new Promise((resolve, reject) => {
@@ -4754,7 +4777,7 @@ var loadPreloadedData = function() {
         applyUserSetting();
         await loadPreloadedData();
         await loadStateOptions();
-        if($("#option-sub-client").length > 0)
+        if(await isSubClientAllowed())
             await loadSubClients();
         await loadDataCheck();
         await loadPreloadedPermitData();

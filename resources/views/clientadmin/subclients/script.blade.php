@@ -169,7 +169,6 @@ function showEditClient(obj, id) {
     $.post("getSubClient", {data: id}, function(result){
         if (result){
             $('input#id').val(result.id);
-            $('select#company').val(result.client_id);
             $('input#number').val(result.subc_client_number);
             $('input#name').val(result.name);
             $('input#telno').val(result.telno);
@@ -190,7 +189,6 @@ function showEditClient(obj, id) {
 
 function showAddClient() {
     $('input#id').val('');
-    $('select#company').val('1');
     $('input#number').val('');
     $('input#name').val('');
     $('input#telno').val('');
