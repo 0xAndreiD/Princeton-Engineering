@@ -111,6 +111,7 @@ Route::post('/checkReviewer', 'GeneralController@checkReviewer')->name('checkRev
 Route::post('/checkCorrectTown', 'GeneralController@checkCorrectTown')->name('checkCorrectTown');
 Route::post('/getJobSubClients', 'GeneralController@getJobSubClients')->name('getJobSubClients');
 Route::post('/isSubClientAllowed', 'GeneralController@isSubClientAllowed')->name('isSubClientAllowed');
+Route::post('/jobSubClientAllowed', 'GeneralController@jobSubClientAllowed')->name('jobSubClientAllowed');
 
 // APIs for list, update, download, db backup, bill request
 Route::get('/getJobList', 'APIController@getJobList')->name('getJobList');
