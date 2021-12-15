@@ -301,7 +301,7 @@ ul.social li{
 					<td style="text-align: center; width: 80%;">
 						<h2 style="font-family: 'Helvetica'; margin: 0;font-size: 22px; color: blue;">TectoniCorp, P. C.</h2>
 						<h2 style="font-family: 'Helvetica'; margin: 0;font-size: 22px; color: blue; line-height: initial;">Princeton Engineering</h2>
-						<h2 style="margin: 0;font-size: 16px; color: blue; ">
+						<h2 style="font-family: 'Helvetica'; margin: 0;font-size: 18px; color: blue; font-style: italic;">
 							Solar, Structural, Electrical and Site Engineering
 						</h2>
 					</td>
@@ -310,7 +310,7 @@ ul.social li{
           </td>
 	      </tr><!-- end tr -->
 		<tr>
-			<td style="text-align:center; width: 100%; font-size: 18px; color: black; padding-top: 10px;" class="hero bg_white">
+			<td style="text-align:center; width: 100%; font-size: 20px; color: black; padding-top: 10px;" class="hero bg_white">
 				<b>iRoof™</b> Residential Roof Framing Analysis for Solar Installations
 			</td>
 		</tr>
@@ -396,10 +396,10 @@ ul.social li{
 					<tr>
 						<td>
 							<div class="text" style="text-align: center; ">
-								<h3 style="text-align:center; color: blue; margin: 0;"> 35091 Paxson Road - Round Hill, VA 20141 </h3>
+								<h3 style="font-family: 'Helvetica'; text-align:center; color: blue; margin: 0;"> 35091 Paxson Road - Round Hill, VA 20141 </h3>
 							</div>
 							<div class="text" style="text-align: center;">
-								<h3 style="text-align:center; color: blue; margin:0;"> tel: 540.313.5317 - fax: 877.455.5641 - www.Princeton-Engineering.com </h3>
+								<h3 style="font-family: 'Helvetica'; text-align:center; color: blue; margin:0;"> tel: 540.313.5317 - fax: 877.455.5641 - www.Princeton-Engineering.com </h3>
 							</div>
 						</td>
 					</tr>
