@@ -1740,8 +1740,9 @@ class GeneralController extends Controller
 
                     foreach($users as $user){
                         if ($user) {
-                            Mail::send('mail.chatnotification', $data, function ($m) use ($user) {
-                                $m->from(env('MAIL_FROM_ADDRESS'), 'Princeton Engineering')->to($user->email)->subject('Chat is updated on the project');
+                            $info = array('to' => $user->email, 'subject' => "Updated iRoof chat for project {$project->clientProjectNumber}. {$project->clientProjectName} {$project->state}");
+                            Mail::send('mail.chatnotification', $data, function ($m) use ($info) {
+                                $m->from(env('MAIL_FROM_ADDRESS'), 'Princeton Engineering')->to($info['to'])->subject($info['subject']);
                             });
                         }
                     }
@@ -2533,8 +2534,9 @@ class GeneralController extends Controller
 
                     foreach($users as $user){
                         if ($user) {
-                            Mail::send('mail.chatnotification', $data, function ($m) use ($user) {
-                                $m->from(env('MAIL_FROM_ADDRESS'), 'Princeton Engineering')->to($user->email)->subject('Chat is updated on the project');
+                            $info = array('to' => $user->email, 'subject' => "Updated iRoof chat for project {$project->clientProjectNumber}. {$project->clientProjectName} {$project->state}");
+                            Mail::send('mail.chatnotification', $data, function ($m) use ($info) {
+                                $m->from(env('MAIL_FROM_ADDRESS'), 'Princeton Engineering')->to($info['to'])->subject($info['subject']);
                             });
                         }
                     }
@@ -2585,8 +2587,9 @@ class GeneralController extends Controller
 
                         foreach($users as $user){
                             if ($user) {
-                                Mail::send('mail.chatnotification', $data, function ($m) use ($user) {
-                                    $m->from(env('MAIL_FROM_ADDRESS'), 'Princeton Engineering')->to($user->email)->subject('Chat is updated on the project');
+                                $info = array('to' => $user->email, 'subject' => "Updated iRoof chat for project {$project->clientProjectNumber}. {$project->clientProjectName} {$project->state}");
+                                Mail::send('mail.chatnotification', $data, function ($m) use ($info) {
+                                    $m->from(env('MAIL_FROM_ADDRESS'), 'Princeton Engineering')->to($info['to'])->subject($info['subject']);
                                 });
                             }
                         }
@@ -2624,8 +2627,9 @@ class GeneralController extends Controller
         //Mailing
         foreach($users as $user){
             if ($user) {
-                Mail::send('mail.chatnotification', $data, function ($m) use ($user) {
-                    $m->from(env('MAIL_FROM_ADDRESS'), 'Princeton Engineering')->to($user->email)->subject('Chat is deleted on the project');
+                $info = array('to' => $user->email, 'subject' => "Deleted iRoof chat for project {$project->clientProjectNumber}. {$project->clientProjectName} {$project->state}");
+                Mail::send('mail.chatnotification', $data, function ($m) use ($info) {
+                    $m->from(env('MAIL_FROM_ADDRESS'), 'Princeton Engineering')->to($info['to'])->subject($info['subject']);
                 });
             }
         }
