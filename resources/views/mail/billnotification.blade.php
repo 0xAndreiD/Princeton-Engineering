@@ -296,7 +296,7 @@ ul.social li{
           	<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
           		<tr>
           			<td class="logo" style="text-align: center;width: 20%;">
-					  	<img src="https://princeton.engineering/iRoof/public/img/logo.jpg" alt="iRoof Logo" style="width: 100px;"></img>
+					  	<img src="https://princeton.engineering/iRoof/public/img/logo.jpg" alt="iRoof Logo" style="width: 100px;" width="100" height="85"></img>
 			        </td>
 					<td style="text-align: center; width: 80%;">
 						<h2 style="font-family: 'Helvetica'; margin: 0;font-size: 22px; color: blue;">TectoniCorp, P. C.</h2>
