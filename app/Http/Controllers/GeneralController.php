@@ -697,7 +697,7 @@ class GeneralController extends Controller
                             return response()->json(["message" => "Uploading PDF to dropbox failed!", "status" => false]);
                         }   
                     } else { // PIL
-                        $filename = $project['clientProjectNumber'] . '. ' . $project['clientProjectName'] . ' ' . $project['state'] . ' ' . $file->description . ' PIL.pdf';
+                        $filename = $project['clientProjectNumber'] . '. ' . $project['clientProjectName'] . ' ' . $project['state'] . ' - ' . $file->description . '_PIL.pdf';
 
                         if( Storage::disk('upload')->exists($folderPrefix . $filename) ) {
                             Storage::disk('upload')->delete($folderPrefix . $filename);
