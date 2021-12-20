@@ -688,7 +688,7 @@ class GeneralController extends Controller
                         try{
                             $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
                             $dropbox = new Dropbox($app);
-                            $dropboxFile = new DropboxFile(storage_path('/output/') . $companyNumber. '. ' . $project['companyName'] . '/' . $request->filename);
+                            $dropboxFile = new DropboxFile(storage_path('output') . '/' . $companyNumber. '. ' . $project['companyName'] . '/' . $request->filename);
                             $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_OUT') . $filepath. '/' . $request->filename, ['autorename' => TRUE]);
                             $file = $dropbox->getMetadata(env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_OUT') . $filepath. '/' . $request->filename);
                             $info = array('name' => $file->getName(), 'id' => $file->getId(), 'type' => 'file', 'path' => env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_OUT') . $filepath. '/' . $request->filename);
@@ -712,10 +712,10 @@ class GeneralController extends Controller
                         try{
                             $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
                             $dropbox = new Dropbox($app);
-                            $dropboxFile = new DropboxFile(storage_path('/upload/') . $companyNumber. '. ' . $project['companyName'] . '/' . $filename);
+                            $dropboxFile = new DropboxFile(storage_path('upload') . '/'  . $companyNumber. '. ' . $project['companyName'] . '/' . $filename);
                             $dropbox->upload($dropboxFile, env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_INCOPY') . $filepath. '/' . $filename, ['autorename' => TRUE]);
 
-                            $flattenFile = new DropboxFile(storage_path('/upload/') . $companyNumber. '. ' . $project['companyName'] . '/' . $flatten);
+                            $flattenFile = new DropboxFile(storage_path('upload') . '/' . $companyNumber. '. ' . $project['companyName'] . '/' . $flatten);
                             $dropbox->upload($flattenFile, env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_INCOPY') . $filepath. '/' . $flatten, ['autorename' => TRUE]);
                             return response()->json(["message" => "Success!", "status" => true, "addtotree" => false, "dropbox" => env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_INCOPY') . $filepath. '/' . $flatten, "godaddy" => storage_path('/upload/') . $companyNumber. '. ' . $project['companyName'] . '/' . $flatten]);
                         } catch (DropboxClientException $e) { 
