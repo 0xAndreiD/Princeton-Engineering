@@ -710,7 +710,7 @@ class GeneralController extends Controller
 
                         //Convert pdf doc 1.7 to 1.5
                         $converted = preg_replace('/(\.[^.]+)$/', sprintf('%s$1', '_f_1.5'), $filename);
-                        exec("gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.5 -dNOPAUSE -dBATCH -sOutputFile=\"" . storage_path('/upload/') . $companyNumber. '. ' . $project['companyName'] . '/' . $flatten . "\" \"" . storage_path('/upload/') . $companyNumber. '. ' . $project['companyName'] . '/' . $converted . "\"" );
+                        exec("gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.5 -dNOPAUSE -dBATCH -sOutputFile=\"" . storage_path('/upload/') . $companyNumber. '. ' . $project['companyName'] . '/' . $converted . "\" \"" . storage_path('/upload/') . $companyNumber. '. ' . $project['companyName'] . '/' . $flatten . "\"" );
 
                         //Backup pdf file to dropbox
                         try{
@@ -721,10 +721,10 @@ class GeneralController extends Controller
 
                             $flattenFile = new DropboxFile(storage_path('upload') . '/' . $companyNumber. '. ' . $project['companyName'] . '/' . $converted);
                             $dropbox->upload($flattenFile, env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_INCOPY') . $filepath. '/' . $flatten, ['autorename' => TRUE]);
-                            return response()->json(["message" => "Success!", "status" => true, "addtotree" => false, "command" => "gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.5 -dNOPAUSE -dBATCH -sOutputFile=\"" . storage_path('/upload/') . $companyNumber. '. ' . $project['companyName'] . '/' . $flatten . "\" \"" . storage_path('/upload/') . $companyNumber. '. ' . $project['companyName'] . '/' . $converted . "\"" ]);
+                            return response()->json(["message" => "Success!", "status" => true, "addtotree" => false]);
                         } catch (DropboxClientException $e) { 
                             $info = array();
-                            return response()->json(["message" => "Uploading PDF to dropbox failed!", "status" => false, "command" => "gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.5 -dNOPAUSE -dBATCH -sOutputFile=\"" . storage_path('/upload/') . $companyNumber. '. ' . $project['companyName'] . '/' . $flatten . "\" \"" . storage_path('/upload/') . $companyNumber. '. ' . $project['companyName'] . '/' . $converted . "\""]);
+                            return response()->json(["message" => "Uploading PDF to dropbox failed!", "status" => false]);
                         }  
                     }
                 }
