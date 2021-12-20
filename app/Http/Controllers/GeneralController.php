@@ -714,7 +714,10 @@ class GeneralController extends Controller
                             $dropbox = new Dropbox($app);
                             $dropboxFile = new DropboxFile(storage_path('/upload/') . $companyNumber. '. ' . $project['companyName'] . '/' . $filename);
                             $dropbox->upload($dropboxFile, env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_INCOPY') . $filepath. '/' . $filename, ['autorename' => TRUE]);
-                            return response()->json(["message" => "Success!", "status" => true, "addtotree" => false]);
+
+                            $flattenFile = new DropboxFile(storage_path('/upload/') . $companyNumber. '. ' . $project['companyName'] . '/' . $flatten);
+                            $dropbox->upload($flattenFile, env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_INCOPY') . $filepath. '/' . $flatten, ['autorename' => TRUE]);
+                            return response()->json(["message" => "Success!", "status" => true, "addtotree" => false, "dropbox" => env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_INCOPY') . $filepath. '/' . $flatten, "godaddy" => storage_path('/upload/') . $companyNumber. '. ' . $project['companyName'] . '/' . $flatten]);
                         } catch (DropboxClientException $e) { 
                             $info = array();
                             return response()->json(["message" => "Uploading PDF to dropbox failed!", "status" => false]);
