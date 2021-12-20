@@ -90,6 +90,7 @@
 <script src="{{ asset('/js/plugins/minipdf.js') }}"></script>
 <script src="{{ asset('/js/plugins/pako.min.js') }}"></script>
 <script src="{{ asset('/js/plugins/pdfform.js') }}"></script>
+<script src="{{ asset('/js/pdf-lib.min.js') }}"></script>
 
 @include('rsinput.script_obfuscate')
 

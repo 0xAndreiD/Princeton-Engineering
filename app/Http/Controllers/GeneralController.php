@@ -48,6 +48,7 @@ use ZipArchive;
 use DB;
 use Mail;
 use Response;
+use mikehaertl\pdftk\Pdf;
 
 class GeneralController extends Controller
 {
@@ -698,12 +699,14 @@ class GeneralController extends Controller
                         }   
                     } else { // PIL
                         $filename = $project['clientProjectNumber'] . '. ' . $project['clientProjectName'] . ' ' . $project['state'] . ' - ' . $file->description . '_PIL.pdf';
-
-                        if( Storage::disk('upload')->exists($folderPrefix . $filename) ) {
+                        if( Storage::disk('upload')->exists($folderPrefix . $filename) )
                             Storage::disk('upload')->delete($folderPrefix . $filename);
-                        }
-
                         Storage::disk('upload')->put($folderPrefix . $filename, file_get_contents($request->data));
+
+                        $flatten = preg_replace('/(\.[^.]+)$/', sprintf('%s$1', '_f'), $filename);
+                        if( Storage::disk('upload')->exists($folderPrefix . $flatten) )
+                            Storage::disk('upload')->delete($folderPrefix . $flatten);
+                        Storage::disk('upload')->put($folderPrefix . $flatten, file_get_contents($request->flattened));
 
                         //Backup pdf file to dropbox
                         try{
