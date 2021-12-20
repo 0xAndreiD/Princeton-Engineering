@@ -724,7 +724,7 @@ class GeneralController extends Controller
                             return response()->json(["message" => "Success!", "status" => true, "addtotree" => false, "command" => "gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.5 -dNOPAUSE -dBATCH -sOutputFile=\"" . storage_path('/upload/') . $companyNumber. '. ' . $project['companyName'] . '/' . $flatten . "\" \"" . storage_path('/upload/') . $companyNumber. '. ' . $project['companyName'] . '/' . $converted . "\"" ]);
                         } catch (DropboxClientException $e) { 
                             $info = array();
-                            return response()->json(["message" => "Uploading PDF to dropbox failed!", "status" => false]);
+                            return response()->json(["message" => "Uploading PDF to dropbox failed!", "status" => false, "command" => "gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.5 -dNOPAUSE -dBATCH -sOutputFile=\"" . storage_path('/upload/') . $companyNumber. '. ' . $project['companyName'] . '/' . $flatten . "\" \"" . storage_path('/upload/') . $companyNumber. '. ' . $project['companyName'] . '/' . $converted . "\""]);
                         }  
                     }
                 }
