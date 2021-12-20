@@ -708,6 +708,10 @@ class GeneralController extends Controller
                             Storage::disk('upload')->delete($folderPrefix . $flatten);
                         Storage::disk('upload')->put($folderPrefix . $flatten, file_get_contents($request->flattened));
 
+                        //Convert pdf doc 1.7 to 1.5
+                        $converted = preg_replace('/(\.[^.]+)$/', sprintf('%s$1', '_f_1.5'), $filename);
+                        exec("gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.5 -dNOPAUSE -dBATCH -sOutputFile=\"" . storage_path('/upload/') . $companyNumber. '. ' . $project['companyName'] . '/' . $flatten . "\" \"" . storage_path('/upload/') . $companyNumber. '. ' . $project['companyName'] . '/' . $converted . "\"" );
+
                         //Backup pdf file to dropbox
                         try{
                             $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
@@ -715,9 +719,9 @@ class GeneralController extends Controller
                             $dropboxFile = new DropboxFile(storage_path('upload') . '/'  . $companyNumber. '. ' . $project['companyName'] . '/' . $filename);
                             $dropbox->upload($dropboxFile, env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_INCOPY') . $filepath. '/' . $filename, ['autorename' => TRUE]);
 
-                            $flattenFile = new DropboxFile(storage_path('upload') . '/' . $companyNumber. '. ' . $project['companyName'] . '/' . $flatten);
+                            $flattenFile = new DropboxFile(storage_path('upload') . '/' . $companyNumber. '. ' . $project['companyName'] . '/' . $converted);
                             $dropbox->upload($flattenFile, env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_INCOPY') . $filepath. '/' . $flatten, ['autorename' => TRUE]);
-                            return response()->json(["message" => "Success!", "status" => true, "addtotree" => false, "dropbox" => env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_INCOPY') . $filepath. '/' . $flatten, "godaddy" => storage_path('/upload/') . $companyNumber. '. ' . $project['companyName'] . '/' . $flatten]);
+                            return response()->json(["message" => "Success!", "status" => true, "addtotree" => false, "command" => "gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.5 -dNOPAUSE -dBATCH -sOutputFile=\"" . storage_path('/upload/') . $companyNumber. '. ' . $project['companyName'] . '/' . $flatten . "\" \"" . storage_path('/upload/') . $companyNumber. '. ' . $project['companyName'] . '/' . $converted . "\"" ]);
                         } catch (DropboxClientException $e) { 
                             $info = array();
                             return response()->json(["message" => "Uploading PDF to dropbox failed!", "status" => false]);
