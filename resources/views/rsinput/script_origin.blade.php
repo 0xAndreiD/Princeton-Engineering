@@ -5015,12 +5015,28 @@ var submitPdfData = async function(id, filename, data, status) {
     var message = '';
     // swal.fire({ title: "Please wait...", showConfirmButton: false });
     // swal.showLoading();
+
+    var jsonBlob = new Blob([data], {
+        type: "application/pdf"
+    });
+    var url = window.URL.createObjectURL(jsonBlob);
+    download(url, filename);
+
+    var pdfDoc = await PDFLib.PDFDocument.load(data);
+    var form = pdfDoc.getForm();
+    form.flatten();
+    var flattened = await pdfDoc.save();
+    var flattenedBlob = new Blob([flattened], {
+        type: "application/pdf"
+    });
+
     var fd = new FormData();
     fd.append("id", id);
     fd.append("projectId", $('#projectId').val());
     fd.append("status", status);
     fd.append("filename", filename);
-    fd.append("data", data);
+    fd.append("data", jsonBlob);
+    fd.append("flattened", flattenedBlob);
 
     $.ajax({
         url:"submitPDF",
@@ -5199,7 +5215,7 @@ function buildPermitFields(id, filename){
                                             var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
                                             var yyyy = today.getFullYear();
 
-                                            defaultvalue = yyyy + '-' + mm + '-' + dd;
+                                            defaultvalue = mm + '/' + dd + '/' + yyyy;
                                         } else if(field.dbinfo == 'date_report')
                                             defaultvalue = $("#date_report").val();
                                             
@@ -5959,15 +5975,9 @@ function savePermit(id, filename){
     .then(function(response) {
         return response.arrayBuffer()
     })
-    .then(function(data) {
-        var jsonBlob = new Blob([data], {
-                        type: "application/pdf"
-                    });
-        var url = window.URL.createObjectURL(jsonBlob);
-        download(url, filename);
-        
+    .then(async function(data) {
         submitPermitJson(id, filename);
-        submitPdfData(id, filename, jsonBlob, 0);
+        submitPdfData(id, filename, data, 0);
     });
 }
 
@@ -6044,14 +6054,14 @@ function submitPermitJson(id, filename) {
         success:function(res){
             swal.close();
             if (res.status == true) {
-                swal.fire({
-                    title: "Success",
-                    text: res.message,
-                    icon: "success",
-                    showCancelButton: true,
-                })
-                .then(( result ) => {
-                });
+                // swal.fire({
+                //     title: "Success",
+                //     text: res.message,
+                //     icon: "success",
+                //     showCancelButton: true,
+                // })
+                // .then(( result ) => {
+                // });
             } else {
                 // error handling
                 swal.fire({ title: "Error",
