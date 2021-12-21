@@ -703,6 +703,8 @@ class GeneralController extends Controller
                             return response()->json(["message" => "Uploading PDF to dropbox failed!", "status" => false]);
                         }   
                     } else { // PIL
+                        $project->PIL_filler_id = Auth::user()->id;
+                        $project->save();
                         $filename = $project['clientProjectNumber'] . '. ' . $project['clientProjectName'] . ' ' . $project['state'] . ' - ' . $file->description . '_PIL.pdf';
                         if( Storage::disk('upload')->exists($folderPrefix . $filename) )
                             Storage::disk('upload')->delete($folderPrefix . $filename);
@@ -2741,8 +2743,10 @@ class GeneralController extends Controller
                 {
                     if($project->PIL_status == 1)
                         $project->PIL_status = 0;
-                    else
+                    else{
                         $project->PIL_status = 1;
+                        $project->PIL_checkbox_id = Auth::user()->id;
+                    }
                     $project->save();
                     return response()->json(["message" => "Success!", "success" => true]);
                 }
