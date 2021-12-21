@@ -2741,7 +2741,7 @@ $(document).ready(function() {
         });
     }
     var togglePlanCheck = function (){
-        if($("#togglePlanCheck")[0].checked == true && $("#toggleAsBuilt")[0].checked == true){
+        if($("#togglePlanCheck")[0].checked == true && ($("#toggleAsBuilt")[0].checked == true || $("#togglePIL")[0].checked == true)){
             swal.fire({ title: "Warning", text: "Only one type of review checkbox at a time please.", icon: "warning", confirmButtonText: `OK` });
             $("#togglePlanCheck")[0].checked = false;
             return;
@@ -2771,7 +2771,7 @@ $(document).ready(function() {
     }
 
     var toggleAsBuilt = function(){
-        if($("#togglePlanCheck")[0].checked == true && $("#toggleAsBuilt")[0].checked == true){
+        if($("#toggleAsBuilt")[0].checked == true && ($("#togglePlanCheck")[0].checked == true || $("#togglePIL")[0].checked == true)){
             swal.fire({ title: "Warning", text: "Only one type of review checkbox at a time please.", icon: "warning", confirmButtonText: `OK` });
             $("#toggleAsBuilt")[0].checked = false;
             return;
@@ -2800,12 +2800,46 @@ $(document).ready(function() {
         });
     }
 
+    var togglePIL = function(){
+        if($("#togglePIL")[0].checked == true && ($("#togglePlanCheck")[0].checked == true || $("#toggleAsBuilt")[0].checked == true)){
+            swal.fire({ title: "Warning", text: "Only one type of review checkbox at a time please.", icon: "warning", confirmButtonText: `OK` });
+            $("#togglePIL")[0].checked = false;
+            return;
+        }
+        
+        var jobId = $('#projectId').val();
+
+        $.ajax({
+            url:"togglePIL",
+            type:'post',
+            data:{jobId: jobId},
+            success: function(res){
+                if(res.success){
+                    return;
+                }else
+                    swal.fire({ title: "Error", text: res.message, icon: "error", confirmButtonText: `OK` });
+            },
+            error: function(xhr, status, error) {
+                res = JSON.parse(xhr.responseText);
+                message = res.message;
+                swal.fire({ title: "Error",
+                    text: message == "" ? "Error happened while processing. Please try again later." : message,
+                    icon: "error",
+                    confirmButtonText: `OK` });
+            }
+        });
+    }
+
     $("#togglePlanCheck").change(function(){
         togglePlanCheck();
     });
 
     $("#toggleAsBuilt").change(function(){
         toggleAsBuilt();
+    });
+
+    $("#togglePIL").change(function(){
+        togglePIL();
     });
 
     var loadDataCheck = function(){
@@ -5012,6 +5046,8 @@ function editFile(){
 // }
 
 var submitPdfData = async function(id, filename, data, status) {
+    swal.fire({ title: "Please wait...", showConfirmButton: false });
+    swal.showLoading();
     var message = '';
     // swal.fire({ title: "Please wait...", showConfirmButton: false });
     // swal.showLoading();
@@ -5019,8 +5055,8 @@ var submitPdfData = async function(id, filename, data, status) {
     var jsonBlob = new Blob([data], {
         type: "application/pdf"
     });
-    var url = window.URL.createObjectURL(jsonBlob);
-    download(url, filename);
+    //var url = window.URL.createObjectURL(jsonBlob);
+    //download(url, filename);
 
     var pdfDoc = await PDFLib.PDFDocument.load(data);
     var form = pdfDoc.getForm();
@@ -5046,23 +5082,16 @@ var submitPdfData = async function(id, filename, data, status) {
         type:'POST',
         
         success:function(res){
-            // swal.close();
+            swal.close();
             if (res.status == true) {
                 if(res.addtotree == true)
                     addFileNode("OUT", res.info, false);
 
-                message = 'Succeeded to send pdf data!';
-
                 swal.fire({
                     title: "Success",
-                    text: message,
+                    text: res.message,
                     icon: "success",
-                    showCancelButton: true,
-                    confirmButtonText: `Yes`,
-                    cancelButtonText: `No`,
-                })
-                .then(( result ) => {
-                    return;
+                    confirmButtonText: `OK`
                 });
             } else {
                 // error handling
@@ -6045,14 +6074,14 @@ var getPermitData = function(id, filename) {
 
 function submitPermitJson(id, filename) {
     var data = getPermitData(id, filename);
-    swal.fire({ title: "Please wait...", showConfirmButton: false });
-    swal.showLoading();
+    //swal.fire({ title: "Please wait...", showConfirmButton: false });
+    //swal.showLoading();
     $.ajax({
         url:"submitPermitInput",
         type:'post',
         data:{data: data, filename: filename},
         success:function(res){
-            swal.close();
+            //swal.close();
             if (res.status == true) {
                 // swal.fire({
                 //     title: "Success",
@@ -6071,7 +6100,7 @@ function submitPermitJson(id, filename) {
             }
         },
         error: function(xhr, status, error) {
-            swal.close();
+            //swal.close();
             res = JSON.parse(xhr.responseText);
             message = res.message;
             swal.fire({ title: "Error",

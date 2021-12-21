@@ -799,13 +799,17 @@
     <tr>
         <td><div style="overflow:hidden"></div></td>
         <td style="color: black;">
-            <div class="text-center" style="display:flex; align-items: center; justify-content: center;">
+            <div class="text-center" style="display:flex; align-items: center;">
                 <input id='togglePlanCheck' name='togglePlanCheck' style='cursor: pointer;' class='mr-1 ml-2' type='checkbox' {{ $planCheck == 1 ? 'checked' : '' }}/> 
                  Review Request 
             </div>
-            <div class="text-center" style="display:flex; align-items: center; justify-content: center;">
+            <div class="text-center" style="display:flex; align-items: center;">
                 <input id='toggleAsBuilt' name='toggleAsBuilt' style='cursor: pointer;' class='mr-1 ml-2' type='checkbox' {{ $asBuilt == 1 ? 'checked' : '' }}/> 
                  As-Built Request 
+            </div>
+            <div class="text-center" style="display:flex; align-items: center;">
+                <input id='togglePIL' name='togglePIL' style='cursor: pointer;' class='mr-1 ml-2' type='checkbox' {{ $PIL_status == 1 ? 'checked' : '' }}/> 
+                 PIL Request 
             </div>
         </td>
         <td style="padding: 10px;">

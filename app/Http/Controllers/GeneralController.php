@@ -385,6 +385,7 @@ class GeneralController extends Controller
                     ->with('projectState', $project ? $project->projectState : 0)
                     ->with('planCheck', $project ? $project->planCheck : 0)
                     ->with('asBuilt', $project ? $project->asBuilt : 0)
+                    ->with('PIL_status', $project ? $project->PIL_status : 0)
                     ->with('projectId', $request['projectId'] ? $request['projectId'] : -1)
                     ->with('userId', $project ? $project['userId'] : 0)
                     ->with('offset', $company['offset'])
@@ -405,6 +406,7 @@ class GeneralController extends Controller
                     ->with('projectState', $project ? $project->projectState : 0)
                     ->with('planCheck', $project ? $project->planCheck : 0)
                     ->with('asBuilt', $project ? $project->asBuilt : 0)
+                    ->with('PIL_status', $project ? $project->PIL_status : 0)
                     ->with('projectId', $request['projectId'] ? $request['projectId'] : -1)
                     ->with('userId', $project ? $project['userId'] : 0)
                     ->with('offset', 0.5)
@@ -689,10 +691,13 @@ class GeneralController extends Controller
                             $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
                             $dropbox = new Dropbox($app);
                             $dropboxFile = new DropboxFile(storage_path('output') . '/' . $companyNumber. '. ' . $project['companyName'] . '/' . $request->filename);
-                            $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_OUT') . $filepath. '/' . $request->filename, ['autorename' => TRUE]);
+                            try{
+                                $dropbox->delete(env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_OUT') . $filepath. '/' . $request->filename);
+                            } catch (DropboxClientException $e) { }
+                            $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_OUT') . $filepath. '/' . $request->filename, ['autorename' => false]);
                             $file = $dropbox->getMetadata(env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_OUT') . $filepath. '/' . $request->filename);
                             $info = array('name' => $file->getName(), 'id' => $file->getId(), 'type' => 'file', 'path' => env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_OUT') . $filepath. '/' . $request->filename);
-                            return response()->json(["message" => "Success!", "status" => true, "addtotree" => true, "info" => $info]);
+                            return response()->json(["message" => "Permit is saved.", "status" => true, "addtotree" => true, "info" => $info]);
                         } catch (DropboxClientException $e) { 
                             $info = array();
                             return response()->json(["message" => "Uploading PDF to dropbox failed!", "status" => false]);
@@ -716,12 +721,18 @@ class GeneralController extends Controller
                         try{
                             $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
                             $dropbox = new Dropbox($app);
+                            try{
+                                $dropbox->delete(env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_INCOPY') . $filepath. '/' . $filename);
+                            } catch (DropboxClientException $e) { }
                             $dropboxFile = new DropboxFile(storage_path('upload') . '/'  . $companyNumber. '. ' . $project['companyName'] . '/' . $filename);
-                            $dropbox->upload($dropboxFile, env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_INCOPY') . $filepath. '/' . $filename, ['autorename' => TRUE]);
+                            $dropbox->upload($dropboxFile, env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_INCOPY') . $filepath. '/' . $filename, ['autorename' => false]);
 
+                            try{
+                                $dropbox->delete(env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_INCOPY') . $filepath. '/' . $flatten);
+                            } catch (DropboxClientException $e) { }
                             $flattenFile = new DropboxFile(storage_path('upload') . '/' . $companyNumber. '. ' . $project['companyName'] . '/' . $converted);
-                            $dropbox->upload($flattenFile, env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_INCOPY') . $filepath. '/' . $flatten, ['autorename' => TRUE]);
-                            return response()->json(["message" => "Success!", "status" => true, "addtotree" => false]);
+                            $dropbox->upload($flattenFile, env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_INCOPY') . $filepath. '/' . $flatten, ['autorename' => false]);
+                            return response()->json(["message" => "Post Installation Letter(PIL) is saved.", "status" => true, "addtotree" => false]);
                         } catch (DropboxClientException $e) { 
                             $info = array();
                             return response()->json(["message" => "Uploading PDF to dropbox failed!", "status" => false]);
