@@ -5202,6 +5202,8 @@ function buildPermitFields(id, filename){
                                             defaultvalue = companyInfo ? companyInfo.company_telno : '';
                                         else if(field.dbinfo == 'company_address')
                                             defaultvalue = companyInfo ? companyInfo.company_address : '';
+                                        else if(field.dbinfo == 'company_name_address')
+                                            defaultvalue = companyInfo ? companyInfo.company_name + ', ' + companyInfo.company_address : '';
                                         else if(field.dbinfo == 'contact_person')
                                             defaultvalue = permitInfo ? permitInfo.contact_person : '';
                                         else if(field.dbinfo == 'contact_phone')
@@ -5247,7 +5249,8 @@ function buildPermitFields(id, filename){
                                             defaultvalue = mm + '/' + dd + '/' + yyyy;
                                         } else if(field.dbinfo == 'date_report')
                                             defaultvalue = $("#date_report").val();
-                                            
+                                        else if(field.dbinfo == 'pe_project_id')
+                                            defaultvalue = companyInfo ? ( companyInfo.company_number + '.' + $("#txt-project-number").val() + ( $("#subproject-num").css('display') != 'none' ? '.' + $("#txt-sub-project-number").val() : '' ) ) : '';
                                         else if(field.defaultvalue)
                                             defaultvalue = field.defaultvalue;
                                         

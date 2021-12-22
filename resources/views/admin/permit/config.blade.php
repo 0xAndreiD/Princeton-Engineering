@@ -109,6 +109,7 @@
                                 <option value='company_name' <?php echo $field['dbinfo'] == 'company_name' ? 'selected' : ''; ?>>Company Name</option>
                                 <option value='company_telno' <?php echo $field['dbinfo'] == 'company_telno' ? 'selected' : ''; ?>>Company Telephone</option>
                                 <option value='company_address' <?php echo $field['dbinfo'] == 'company_address' ? 'selected' : ''; ?>>Company Address</option>
+                                <option value='company_name_address' <?php echo $field['dbinfo'] == 'company_name_address' ? 'selected' : ''; ?>>Company Name And Address</option>
                                 <option value='contact_person' <?php echo $field['dbinfo'] == 'contact_person' ? 'selected' : ''; ?>>Contact Person</option>
                                 <option value='contact_phone' <?php echo $field['dbinfo'] == 'contact_phone' ? 'selected' : ''; ?>>Contact Phone</option>
                                 <option value='FAX' <?php echo $field['dbinfo'] == 'FAX' ? 'selected' : ''; ?>>FAX</option>
@@ -129,6 +130,7 @@
                                 <option value='inverter_model_mfr' <?php echo $field['dbinfo'] == 'inverter_model_mfr' ? 'selected' : ''; ?>>Inverter MFR / MODEL</option>
                                 <option value='date_today' <?php echo $field['dbinfo'] == 'date_today' ? 'selected' : ''; ?>>Date Today</option>
                                 <option value='date_report' <?php echo $field['dbinfo'] == 'date_report' ? 'selected' : ''; ?>>Date Report</option>
+                                <option value='pe_project_id' <?php echo $field['dbinfo'] == 'pe_project_id' ? 'selected' : ''; ?>>PE Project ID</option>
                             </select>
                         </td>
                         <td class='w400-green-bdr'>
@@ -292,6 +294,7 @@
                                 <option value='company_name'>Company Name</option>\
                                 <option value='company_telno'>Company Telephone</option>\
                                 <option value='company_address'>Company Address</option>\
+                                <option value='company_name_address'>Company Name And Address</option>\
                                 <option value='contact_person'>Contact Person</option>\
                                 <option value='contact_phone'>Contact Phone</option>\
                                 <option value='FAX'>FAX</option>\
@@ -312,6 +315,7 @@
                                 <option value='inverter_model_mfr'>Inverter MFR / MODEL</option>\
                                 <option value='date_today'>Date Today</option>\
                                 <option value='date_report'>Date Report</option>\
+                                <option value='pe_project_id'>PE Project ID</option>\
                             </select>\
                         </td>";
                 row += "<td class='w400-green-bdr'>\
