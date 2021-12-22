@@ -5203,7 +5203,7 @@ function buildPermitFields(id, filename){
                                         else if(field.dbinfo == 'company_address')
                                             defaultvalue = companyInfo ? companyInfo.company_address : '';
                                         else if(field.dbinfo == 'company_name_address')
-                                            defaultvalue = companyInfo ? companyInfo.company_name + ', ' + companyInfo.company_address : '';
+                                            defaultvalue = companyInfo ? companyInfo.company_name + ', ' + companyInfo.company_address + ', ' + companyInfo.city + ', ' + companyInfo.state + ' ' + companyInfo.zip : '';
                                         else if(field.dbinfo == 'contact_person')
                                             defaultvalue = permitInfo ? permitInfo.contact_person : '';
                                         else if(field.dbinfo == 'contact_phone')
