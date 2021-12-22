@@ -2342,7 +2342,7 @@ class GeneralController extends Controller
                         $listFolderContents = $dropbox->listFolder(env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_INCOPY') . $filepath . '/');
                         $files = $listFolderContents->getItems()->all();
                         foreach($files as $file){
-                            if(str_contains($file->getName(), 'PIL.pdf') || str_contains($file->getName(), 'PIL_f.pdf')){
+                            if(str_contains($file->getName(), 'PIL_f.pdf')){
                                 if(!file_exists(storage_path('upload') . $filepath . '/' . $file->getName()) || filesize(storage_path('upload') . $filepath . '/' . $file->getName()) != $file->getSize()){
                                     $dropbox->download(env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_INCOPY') . $filepath . '/' . $file->getName(), storage_path('upload') . $filepath . '/' . $file->getName());
                                 }
@@ -2443,7 +2443,7 @@ class GeneralController extends Controller
                         $listFolderContents = $dropbox->listFolder(env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_INCOPY') . $filepath . '/');
                         $files = $listFolderContents->getItems()->all();
                         foreach($files as $file){
-                            if(str_contains($file->getName(), 'PIL.pdf') || str_contains($file->getName(), 'PIL_f.pdf')){
+                            if(str_contains($file->getName(), 'PIL_f.pdf')){
                                 if(!file_exists(storage_path('upload') . $filepath . '/' . $file->getName()) || filesize(storage_path('upload') . $filepath . '/' . $file->getName()) != $file->getSize()){
                                     $dropbox->download(env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_INCOPY') . $filepath . '/' . $file->getName(), storage_path('upload') . $filepath . '/' . $file->getName());
                                 }
