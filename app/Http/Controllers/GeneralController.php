@@ -2338,6 +2338,19 @@ class GeneralController extends Controller
                         $infiles = array();
                     }
 
+                    try{
+                        $listFolderContents = $dropbox->listFolder(env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_INCOPY') . $filepath . '/');
+                        $files = $listFolderContents->getItems()->all();
+                        foreach($files as $file){
+                            if(str_contains($file->getName(), 'PIL_f.pdf')){
+                                if(!file_exists(storage_path('upload') . $filepath . '/' . $file->getName()) || filesize(storage_path('upload') . $filepath . '/' . $file->getName()) != $file->getSize()){
+                                    $dropbox->download(env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_INCOPY') . $filepath . '/' . $file->getName(), storage_path('upload') . $filepath . '/' . $file->getName());
+                                }
+                                array_push($reportfiles, array('filename' => $file->getName(), 'size' => $file->getSize(), 'modifiedDate' => $file->getServerModified(), 'link' => env('APP_URL') . 'in/' . $request['projectId'] . '/' . $file->getName()));
+                            }
+                        }
+                    } catch (DropboxClientException $e) { }
+
                     return view('admin.onreview.filelist')->with('reportfiles', $reportfiles)->with('infiles', $infiles)->with('projecttitle', $job['companyName'] . ' - ' . $job['clientProjectNumber'] . '. ' . $job['clientProjectName'] . ' ' . $job['state']);
                 } else
                     return redirect('home');
@@ -2430,7 +2443,7 @@ class GeneralController extends Controller
                         $listFolderContents = $dropbox->listFolder(env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_INCOPY') . $filepath . '/');
                         $files = $listFolderContents->getItems()->all();
                         foreach($files as $file){
-                            if(str_contains($file->getName(), 'PIL.pdf') || str_contains($file->getName(), 'PIL_f.pdf')){
+                            if(str_contains($file->getName(), 'PIL_f.pdf')){
                                 if(!file_exists(storage_path('upload') . $filepath . '/' . $file->getName()) || filesize(storage_path('upload') . $filepath . '/' . $file->getName()) != $file->getSize()){
                                     $dropbox->download(env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_INCOPY') . $filepath . '/' . $file->getName(), storage_path('upload') . $filepath . '/' . $file->getName());
                                 }
