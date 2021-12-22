@@ -2426,6 +2426,19 @@ class GeneralController extends Controller
                     }
                     array_push($reportfiles, $infile);
 
+                    try{
+                        $listFolderContents = $dropbox->listFolder(env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_INCOPY') . $filepath . '/');
+                        $files = $listFolderContents->getItems()->all();
+                        foreach($files as $file){
+                            if(str_contains($file->getName(), 'PIL.pdf') || str_contains($file->getName(), 'PIL_f.pdf')){
+                                if(!file_exists(storage_path('upload') . $filepath . '/' . $file->getName()) || filesize(storage_path('upload') . $filepath . '/' . $file->getName()) != $file->getSize()){
+                                    $dropbox->download(env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_INCOPY') . $filepath . '/' . $file->getName(), storage_path('upload') . $filepath . '/' . $file->getName());
+                                }
+                                array_push($reportfiles, array('filename' => $file->getName(), 'size' => $file->getSize(), 'modifiedDate' => $file->getServerModified(), 'link' => env('APP_URL') . 'in/' . $request['projectId'] . '/' . $file->getName()));
+                            }
+                        }
+                    } catch (DropboxClientException $e) { }
+
                     return response()->json(['success' => true, 'files' => $reportfiles]);
                 } else
                     return response()->json(['success' => false, 'message' => 'No permission.']);
