@@ -974,8 +974,15 @@ class GeneralController extends Controller
         $companyList = Company::orderBy('company_name', 'asc')->get();
         $projectStatusList = JobProjectStatus::orderBy('id', 'asc')->get();
         $planStatusList = JobPlanStatus::orderBy('id', 'asc')->get();
-        return view('general.projectlist')->with('companyList', $companyList)
-        ->with('planStatusList', $planStatusList)->with('projectStatusList', $projectStatusList);
+        if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4)
+            $users = User::get(array('id', 'username'));
+        else
+            $users = User::where('companyid', Auth::user()->companyid)->get(array('id', 'username'));
+        return view('general.projectlist')
+                ->with('companyList', $companyList)
+                ->with('planStatusList', $planStatusList)
+                ->with('projectStatusList', $projectStatusList)
+                ->with('users', $users);
     }
 
     //protected $globalStates = array("None", "Saved", "Check Requested", "Reviewed", "Submitted", "Report Prepared", "Plan Requested", "Plan Reviewed", "Link Sent", "Completed");
@@ -1038,7 +1045,10 @@ class GeneralController extends Controller
                 $join->on('job_request.userId', '=', 'users.usernumber');
             })
             ->leftjoin('job_planstatus', "job_planstatus.id", "=", "job_request.planStatus")
-            ->leftjoin('job_pstatus', "job_pstatus.id", "=", "job_request.projectState");
+            ->leftjoin('job_pstatus', "job_pstatus.id", "=", "job_request.projectState")
+            ->leftjoin('job_chat', function($join){
+                $join->on('job_request.id', '=', 'job_chat.jobId')->whereRaw('job_chat.id IN (select MAX(job_chat.id) from job_chat join job_request on job_request.id = job_chat.jobId group by job_request.id )');
+            });
 
         // sort by company when $order == 'userId'
         if($order == 'userId')
@@ -1088,12 +1098,7 @@ class GeneralController extends Controller
         if(!empty($request->input("pil")) && $request["pil"] == 1){
             $handler = $handler->where('job_request.PIL_status', 1);
         }
-        // filter chatIcon
-        if(!empty($request->input("chat")) && $request->input("chat") != "")
-        {
-            $handler = $handler->where('job_request.chatIcon', 'LIKE', "%{$request->input("chat")}%");
-        }
-
+        
         // admin filter company name, user, project name, project number, project state, plan status
         if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4){
             if(!empty($request->input("columns.1.search.value")))
@@ -1110,6 +1115,12 @@ class GeneralController extends Controller
                 $handler = $handler->where('job_request.projectState', 'LIKE', "%{$request->input('columns.9.search.value')}%");
             if(isset($request["columns.10.search.value"]))
                 $handler = $handler->where('job_request.planStatus', 'LIKE', "%{$request->input('columns.10.search.value')}%");
+            // filter chatIcon
+            if(!empty($request["columns.11.search.value"]) && $request["columns.11.search.value"] != "")
+            {
+                $userIds = User::where('companyid', $request["columns.11.search.value"])->get('id')->toArray();
+                $handler = $handler->whereIn('job_chat.userId', $userIds);
+            }
         }
         else{ // client filter user, project name, project number
             if(!empty($request->input("columns.0.search.value")))
@@ -1124,6 +1135,9 @@ class GeneralController extends Controller
                 $handler = $handler->where('job_request.projectState', 'LIKE', "%{$request->input('columns.6.search.value')}%");
             if(isset($request["columns.7.search.value"]))
                 $handler = $handler->where('job_request.planStatus', 'LIKE', "%{$request->input('columns.7.search.value')}%");
+            // filter chatIcon
+            if(!empty($request["columns.8.search.value"]) && $request["columns.8.search.value"] != "")
+                $handler = $handler->where('job_chat.userId', $request["columns.8.search.value"]);
         }
 
         if(empty($request->input('search.value')))
