@@ -10,7 +10,8 @@
         else if(role == 4) userrole = 'Reviewer';
 
         var html="";
-        if (role == 2 || role == 3){
+        // if (role == 2 || role == 3){
+        @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3)
             html = "<div class='col-md-10 col-sm-10'>" + 
                 "<div class='block block-bordered'>" +
                     "<div class='block-header' style='background-color: #e9eaec; display: block;'>" +
@@ -31,7 +32,8 @@
                     "</div>" + 
                 "</div>" + 
             "</div>";
-        } else if(role == 1 || role == 0 || role == 4) {
+        // } else if(role == 1 || role == 0 || role == 4) {
+        @else
             html = "<div class='col-md-10 col-sm-10'>" + 
                 "<div class='block block-bordered'>" +
                     "<div class='block-header' style='background-color: #e9eaec; display: block;'>" +
@@ -46,7 +48,8 @@
                     "</div>" + 
                 "</div>" + 
             "</div>";
-        }
+        @endif
+        // }
         
         $("#chatPane").prepend(html);
         
@@ -71,6 +74,8 @@
                     if(data.msgCount > 0 && data.msgCount > window.msgCount){
                         for(let i = 0; i < data.msgs.length; i ++)
                             addChat(data.msgs[i].user, data.msgs[i].role, data.msgs[i].message, data.msgs[i].datetime, data.msgs[i].id);
+
+                        window.msgCount += data.msgCount;
                     }
                 }
                 updateChat();

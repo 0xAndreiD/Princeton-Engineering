@@ -63,13 +63,6 @@
                         <tr>
                             @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4)
                             <th class="searchHead">
-                                <select placeholder="Chat Filter" class="searchBox" id="chatFilter">
-                                    <option value="">All</option>
-                                    <option value="1">User/Client Admin</option>
-                                    <option value="2">Junior/Super Admin</option>
-                                    <option value="3">Error chat</option>
-                                    <option value="4">Completed</option>
-                                </select>
                             </th>
                             <th class="searchHead">
                                 <select placeholder="Search Company" class="searchBox" id="companyFilter">
@@ -166,7 +159,13 @@
                             </th>
                             <th style="display: flex; align-items: center; justify-content: center;">
                                 <span class="ml-1" style='writing-mode: vertical-lr;width: 18px;transform: rotateZ(180deg);'>Edit</span>
-                                <span class="ml-2" style='writing-mode: tb-rl;width: 28px;transform: rotateZ(180deg);'>Chat</span>
+                                <span class="ml-2" style='writing-mode: tb-rl;width: 28px;transform: rotateZ(180deg);cursor: pointer;' class="badge dropdown-toggle job-dropdown" id="chatFilter" data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>Chat</span>
+                                <div class="dropdown-menu"  aria-labelledby="chatFilter">
+                                    <a class="dropdown-item chat-dropdown" id="chat-dropdown-" href="javascript:changeChatFilter('')">All</a>
+                                    @foreach($companyList as $company)
+                                        <a class="dropdown-item chat-dropdown" id="chat-dropdown-{{ $company['id'] }}" href="javascript:changeChatFilter({{ $company['id'] }})">{{ $company['company_name'] }}</a>
+                                    @endforeach
+                                </div>
                                 <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 17px;'><input type='checkbox' id="planCheckFilter" style="transform: rotateZ(180deg);"> Review</span>
                                 <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 17px;'><input type='checkbox' id="asBuiltFilter" style="transform: rotateZ(180deg);"> As-built</span>
                                 @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->allow_permit > 0)
@@ -263,7 +262,13 @@
                             </th>
                             <th style="display: flex; align-items: center; justify-content: center;">
                                 <span class="ml-1" style='writing-mode: vertical-lr;width: 22px;transform: rotateZ(180deg);'>Edit</span>
-                                <span class="ml-2" style='writing-mode: tb-rl;width: 32px;transform: rotateZ(180deg);'>Chat</span>
+                                <span class="ml-2" style='writing-mode: tb-rl;width: 28px;transform: rotateZ(180deg);cursor: pointer;' class="badge dropdown-toggle job-dropdown" id="chatFilter" data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>Chat</span>
+                                <div class="dropdown-menu"  aria-labelledby="chatFilter">
+                                    <a class="dropdown-item chat-dropdown" id="chat-dropdown-" href="javascript:changeChatFilter('')">All</a>
+                                    @foreach($users as $user)
+                                        <a class="dropdown-item chat-dropdown" id="chat-dropdown-{{ $user['id'] }}" href="javascript:changeChatFilter({{ $user['id'] }})">{{ $user['username'] }}</a>
+                                    @endforeach
+                                </div>
                                 <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 17px;'><input type='checkbox' id="planCheckFilter" style="transform: rotateZ(180deg);"> Review</span>
                                 <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 17px;'><input type='checkbox' id="asBuiltFilter" style="transform: rotateZ(180deg);"> As-built</span>
                                 @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->allow_permit > 0)
@@ -349,6 +354,11 @@
                     if (filterJson[k] == 1) $("#pilFilter").prop("checked", true);
                     else $("#pilFilter").prop("checked", false);
                     break;
+                case 'chatFilter':
+                    console.log(filterJson[k]);
+                    if (filterJson[k] != '')
+                        $(`#chat-dropdown-${filterJson[k]}`).addClass('active');
+                    break;
             }
         });
 
@@ -368,7 +378,7 @@
             localStorage.setItem('projectFilterJson', JSON.stringify(filterJson));
         });
 
-        $("#created_from, #created_to, #submitted_from, #submitted_to, #planCheckFilter, #asBuiltFilter, #pilFilter, #chatFilter").on('change', function() {
+        $("#created_from, #created_to, #submitted_from, #submitted_to, #planCheckFilter, #asBuiltFilter, #pilFilter").on('change', function() {
             let key = $(this).attr('id');
             if (key == 'planCheckFilter' || key == 'asBuiltFilter' || key == 'pilFilter') {
                 filterJson[key] = $("#"+key)[0].checked ? $(this).val(1) : $(this).val(0);
@@ -413,6 +423,21 @@
             changeStateFilterLabel(status);
         }
 
+        changeChatFilter = function(id){
+            filterJson.chatFilter = id;
+            localStorage.setItem('projectFilterJson', JSON.stringify(filterJson));
+
+            @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4)
+            table.column('11:visible').search(id).draw();
+            @else
+            table.column('8:visible').search(id).draw();
+            @endif
+
+            table.draw();
+            $(".chat-dropdown").removeClass('active');
+            $(`#chat-dropdown-${id}`).addClass('active');
+        }
+
         var table = $('#projects').DataTable({
             "processing": true,
             "serverSide": true,
@@ -439,7 +464,6 @@
                         data.plancheck = $("#planCheckFilter")[0].checked ? 1 : 0;
                         data.asbuilt = $("#asBuiltFilter")[0].checked ? 1 : 0;
                         data.pil = $("#pilFilter").length > 0 && $("#pilFilter")[0].checked ? 1 : 0;
-                        data.chat = $("#chatFilter").val();
                     }
                 },
             "columns": [
