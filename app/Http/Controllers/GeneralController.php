@@ -1298,21 +1298,21 @@ class GeneralController extends Controller
                     $chatbadge = 'warning';
                 
                 if($job->eSeal == 1)
-                    $sealCol = '0000FF';
+                    $sealCol = 'ffc34b';
                 else if($job->eSeal == 2)
                     $sealCol = '00FF00';
                 else
                     $sealCol = '000000';
                 
                 if($job->eSeal_asbuilt == 1)
-                    $asbuiltCol = '0000FF';
+                    $asbuiltCol = 'ffc34b';
                 else if($job->eSeal_asbuilt == 2)
                     $asbuiltCol = '00FF00';
                 else
                     $asbuiltCol = '000000';
 
                 if($job->eSeal_PIL == 1)
-                    $pilCol = '0000FF';
+                    $pilCol = 'ffc34b';
                 else if($job->eSeal_PIL == 2)
                     $pilCol = '00FF00';
                 else
