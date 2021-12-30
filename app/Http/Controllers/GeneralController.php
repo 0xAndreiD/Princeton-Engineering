@@ -1045,10 +1045,7 @@ class GeneralController extends Controller
                 $join->on('job_request.userId', '=', 'users.usernumber');
             })
             ->leftjoin('job_planstatus', "job_planstatus.id", "=", "job_request.planStatus")
-            ->leftjoin('job_pstatus', "job_pstatus.id", "=", "job_request.projectState")
-            ->leftjoin('job_chat', function($join){
-                $join->on('job_request.id', '=', 'job_chat.jobId')->whereRaw('job_chat.id IN (select MAX(job_chat.id) from job_chat join job_request on job_request.id = job_chat.jobId group by job_request.id )');
-            });
+            ->leftjoin('job_pstatus', "job_pstatus.id", "=", "job_request.projectState");
 
         // sort by company when $order == 'userId'
         if($order == 'userId')
@@ -1118,6 +1115,9 @@ class GeneralController extends Controller
             // filter chatIcon
             if(!empty($request["columns.11.search.value"]) && $request["columns.11.search.value"] != "")
             {
+                $handler = $handler->leftjoin('job_chat', function($join){
+                    $join->on('job_request.id', '=', 'job_chat.jobId')->whereRaw('job_chat.id IN (select MAX(job_chat.id) from job_chat join job_request on job_request.id = job_chat.jobId group by job_request.id )');
+                });
                 $userIds = User::where('companyid', $request["columns.11.search.value"])->get('id')->toArray();
                 $handler = $handler->whereIn('job_chat.userId', $userIds);
             }
@@ -1136,8 +1136,12 @@ class GeneralController extends Controller
             if(isset($request["columns.7.search.value"]))
                 $handler = $handler->where('job_request.planStatus', 'LIKE', "%{$request->input('columns.7.search.value')}%");
             // filter chatIcon
-            if(!empty($request["columns.8.search.value"]) && $request["columns.8.search.value"] != "")
+            if(!empty($request["columns.8.search.value"]) && $request["columns.8.search.value"] != ""){
+                $handler = $handler->leftjoin('job_chat', function($join){
+                    $join->on('job_request.id', '=', 'job_chat.jobId')->whereRaw('job_chat.id IN (select MAX(job_chat.id) from job_chat join job_request on job_request.id = job_chat.jobId group by job_request.id )');
+                });
                 $handler = $handler->where('job_chat.userId', $request["columns.8.search.value"]);
+            }
         }
 
         if(empty($request->input('search.value')))
