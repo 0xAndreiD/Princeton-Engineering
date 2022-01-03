@@ -17,7 +17,7 @@ class TwoFactorController extends Controller
     public function index() 
     {
         if(auth()->user()){
-            if(auth()->user()->two_factor_expires_at->lt(now()))
+            if(auth()->user()->two_factor_expires_at && auth()->user()->two_factor_expires_at->lt(now()))
                 return redirect()->route('login')->withErrors(['username' => 'The two factor code has expired. Please login again.']);
             else
                 return view('auth.twofactor');
