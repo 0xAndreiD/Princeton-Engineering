@@ -2347,7 +2347,7 @@ class GeneralController extends Controller
                             Storage::disk('upload')->makeDirectory($filepath);
 
                         foreach($files as $file){
-                            if(!file_exists(storage_path('upload') . $filepath . '/' . $file->getName()) || filesize(storage_path('upload') . $filepath . '/' . $file->getName()) != $file->getSize()){
+                            if($file->getDataProperty('.tag') === 'file' && (!file_exists(storage_path('upload') . $filepath . '/' . $file->getName()) || filesize(storage_path('upload') . $filepath . '/' . $file->getName()) != $file->getSize())){
                                 $dropbox->download(env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_IN') . $filepath . '/' . $file->getName(), storage_path('upload') . $filepath . '/' . $file->getName());
                             }
                             $infiles[] = array('filename' => $file->getName(), 'size' => $file->getSize(), 'modifiedDate' => $file->getServerModified(), 'link' => env('APP_URL') . 'in/' . $request['projectId'] . '/' . $file->getName());
@@ -2444,7 +2444,7 @@ class GeneralController extends Controller
                         $listFolderContents = $dropbox->listFolder(env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_IN') . $filepath . '/');
                         $files = $listFolderContents->getItems()->all();
                         foreach($files as $file){
-                            if(!file_exists(storage_path('upload') . $filepath . '/' . $file->getName()) || filesize(storage_path('upload') . $filepath . '/' . $file->getName()) != $file->getSize()){
+                            if($file->getDataProperty('.tag') === 'file' && (!file_exists(storage_path('upload') . $filepath . '/' . $file->getName()) || filesize(storage_path('upload') . $filepath . '/' . $file->getName()) != $file->getSize())){
                                 $dropbox->download(env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_IN') . $filepath . '/' . $file->getName(), storage_path('upload') . $filepath . '/' . $file->getName());
                             }
                             if($file->getSize() > $bigsize){
@@ -2526,7 +2526,7 @@ class GeneralController extends Controller
                         $listFolderContents = $dropbox->listFolder(env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_IN') . $filepath . '/');
                         $files = $listFolderContents->getItems()->all();
                         foreach($files as $file){
-                            if(!file_exists(storage_path('upload') . $filepath . '/' . $file->getName()) || filesize(storage_path('upload') . $filepath . '/' . $file->getName()) != $file->getSize()){
+                            if($file->getDataProperty('.tag') === 'file' && (!file_exists(storage_path('upload') . $filepath . '/' . $file->getName()) || filesize(storage_path('upload') . $filepath . '/' . $file->getName()) != $file->getSize())){
                                 $dropbox->download(env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_IN') . $filepath . '/' . $file->getName(), storage_path('upload') . $filepath . '/' . $file->getName());
                             }
                             $infiles[] = array('filename' => $file->getName(), 'size' => $file->getSize(), 'modifiedDate' => $file->getServerModified(), 'link' => env('APP_URL') . 'in/' . $request['projectId'] . '/' . $file->getName());
