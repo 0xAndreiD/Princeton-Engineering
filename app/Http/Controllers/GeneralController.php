@@ -1855,7 +1855,7 @@ class GeneralController extends Controller
                 //     $jobData = json_decode(Storage::disk('input')->get($folderPrefix . $job['requestFile']), true);
                 //     $state = $jobData['ProjectInfo']['State'];
                 // }
-                $filename = str_replace(array(":",";", "#", "&", "@", "/"), array(""), $file->getClientOriginalName());
+                $filename = str_replace(array(":",";", "#", "&", "@", "/", "'"), array(""), $file->getClientOriginalName());
 
                 $filepath = $folderPrefix . $job['clientProjectNumber'] . '. ' . $job['clientProjectName'] . ' ' . $job['state'];
                 $file->move(storage_path('upload') . $filepath, $filename);
