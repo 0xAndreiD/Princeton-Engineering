@@ -442,8 +442,10 @@ class UserController extends Controller
             $me->username = $request['username'];
             $me->email = $request['email'];
             $me->password = $request['password'];
-            if(($me->userrole == 2 || $me->userrole == 3 || $me->userrole == 4))
+            if($me->userrole == 2 || $me->userrole == 3 || $me->userrole == 4)
                 $me->auto_report_open = $request['autoOpen'];
+            if($me->userrole == 1)
+                $me->allow_cc = $request['allowCC'];
             $me->save();
             return response()->json(['success' => true]);
         } else

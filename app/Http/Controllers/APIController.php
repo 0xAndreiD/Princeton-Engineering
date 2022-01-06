@@ -421,6 +421,14 @@ class APIController extends Controller
                 $subject = $request['subject'];
                 $title = $request['title'];
 
+                $ccUser = User::where('email', $cc)->first();
+                if($ccUser && $ccUser->allow_cc == 0)
+                    $cc = null;
+                
+                $bccUser = User::where('email', $bcc)->first();
+                if($bccUser && $bccUser->allow_cc == 0)
+                    $bcc = null;
+                
                 // print_r($request['bcc']);
                 // print_r($request['subject']);
                 // print_r($request['title']);
