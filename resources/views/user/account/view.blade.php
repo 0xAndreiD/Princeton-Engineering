@@ -48,6 +48,14 @@
             </div>
             @endif
 
+            @if(Auth::user()->userrole == 1)
+            <h2 class="content-heading pt-0">Administrative Settings</h2>
+            <div class="custom-control custom-checkbox custom-control-danger mb-4">
+                <input type="checkbox" class="custom-control-input" id="allow-cc" name="allow-cc" <?php echo Auth::user()->allow_cc ? 'checked' : ''; ?>>
+                <label class="custom-control-label" for="allow-cc">Allow Email CC'ed</label>
+            </div>
+            @endif
+
             <div class="form-group text-center">
                 <button class="btn btn-primary" onclick="saveAccount()"> Save Account Settings </button>
             </div>
