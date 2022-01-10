@@ -978,11 +978,14 @@ class GeneralController extends Controller
             $users = User::get(array('id', 'username'));
         else
             $users = User::where('companyid', Auth::user()->companyid)->get(array('id', 'username'));
+
+        $company = Company::where('id', Auth::user()->companyid)->first();
         return view('general.projectlist')
                 ->with('companyList', $companyList)
                 ->with('planStatusList', $planStatusList)
                 ->with('projectStatusList', $projectStatusList)
-                ->with('users', $users);
+                ->with('users', $users)
+                ->with('companyName', $company? $company->company_name : '');
     }
 
     //protected $globalStates = array("None", "Saved", "Check Requested", "Reviewed", "Submitted", "Report Prepared", "Plan Requested", "Plan Reviewed", "Link Sent", "Completed");
@@ -1000,17 +1003,18 @@ class GeneralController extends Controller
         {
             $handler = new JobRequest;
             $columns = array( 
-                0 =>'id', 
-                1 =>'job_request.companyId',
-                2 =>'userId',
-                3 =>'clientProjectNumber',
-                4 =>'clientProjectName',
-                5 => 'state',
-                6 =>'requestFile',
-                7 =>'createdTime',
-                8 =>'submittedTime',
-                9 =>'projectState',
-                10 =>'planStatus',
+                0 =>'idx',
+                1 =>'id', 
+                2 =>'job_request.companyId',
+                3 =>'userId',
+                4 =>'clientProjectNumber',
+                5 =>'clientProjectName',
+                6 => 'state',
+                7 =>'requestFile',
+                8 =>'createdTime',
+                9 =>'submittedTime',
+                10 =>'projectState',
+                11 =>'planStatus',
             );
         }
         else
@@ -1020,14 +1024,15 @@ class GeneralController extends Controller
             //else
                 //$handler = new JobRequest;
             $columns = array( 
-                0 =>'userId',
-                1 =>'clientProjectNumber',
-                2 =>'clientProjectName',
-                3 => 'state',
-                4 =>'createdTime',
-                5 =>'submittedTime',
-                6 =>'projectState',
-                7 =>'planStatus',
+                0 =>'idx',
+                1 =>'userId',
+                2 =>'clientProjectNumber',
+                3 =>'clientProjectName',
+                4 => 'state',
+                5 =>'createdTime',
+                6 =>'submittedTime',
+                7 =>'projectState',
+                8 =>'planStatus',
             );
         }
         
@@ -1098,49 +1103,49 @@ class GeneralController extends Controller
         
         // admin filter company name, user, project name, project number, project state, plan status
         if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4){
-            if(!empty($request->input("columns.1.search.value")))
-                $handler = $handler->where('company_info.company_name', 'LIKE', "%{$request->input("columns.1.search.value")}%");
             if(!empty($request->input("columns.2.search.value")))
-                $handler = $handler->where('users.username', 'LIKE', "%{$request->input('columns.2.search.value')}%");
+                $handler = $handler->where('company_info.company_name', 'LIKE', "%{$request->input("columns.2.search.value")}%");
             if(!empty($request->input("columns.3.search.value")))
-                $handler = $handler->where('job_request.clientProjectNumber', 'LIKE', "%{$request->input('columns.3.search.value')}%");
+                $handler = $handler->where('users.username', 'LIKE', "%{$request->input('columns.3.search.value')}%");
             if(!empty($request->input("columns.4.search.value")))
-                $handler = $handler->where('job_request.clientProjectName', 'LIKE', "%{$request->input('columns.4.search.value')}%");
-            if(isset($request["columns.5.search.value"]))
-                $handler = $handler->where('job_request.state', 'LIKE', "%{$request->input('columns.5.search.value')}%");
-            if(isset($request["columns.9.search.value"]))
-                $handler = $handler->where('job_request.projectState', 'LIKE', "%{$request->input('columns.9.search.value')}%");
+                $handler = $handler->where('job_request.clientProjectNumber', 'LIKE', "%{$request->input('columns.4.search.value')}%");
+            if(!empty($request->input("columns.5.search.value")))
+                $handler = $handler->where('job_request.clientProjectName', 'LIKE', "%{$request->input('columns.5.search.value')}%");
+            if(isset($request["columns.6.search.value"]))
+                $handler = $handler->where('job_request.state', 'LIKE', "%{$request->input('columns.6.search.value')}%");
             if(isset($request["columns.10.search.value"]))
-                $handler = $handler->where('job_request.planStatus', 'LIKE', "%{$request->input('columns.10.search.value')}%");
+                $handler = $handler->where('job_request.projectState', 'LIKE', "%{$request->input('columns.10.search.value')}%");
+            if(isset($request["columns.11.search.value"]))
+                $handler = $handler->where('job_request.planStatus', 'LIKE', "%{$request->input('columns.11.search.value')}%");
             // filter chatIcon
-            if(!empty($request["columns.11.search.value"]) && $request["columns.11.search.value"] != "")
+            if(!empty($request["columns.12.search.value"]) && $request["columns.12.search.value"] != "")
             {
                 $handler = $handler->leftjoin('job_chat', function($join){
                     $join->on('job_request.id', '=', 'job_chat.jobId')->whereRaw('job_chat.id IN (select MAX(job_chat.id) from job_chat join job_request on job_request.id = job_chat.jobId group by job_request.id )');
                 });
-                $userIds = User::where('companyid', $request["columns.11.search.value"])->get('id')->toArray();
+                $userIds = User::where('companyid', $request["columns.12.search.value"])->get('id')->toArray();
                 $handler = $handler->whereIn('job_chat.userId', $userIds);
             }
         }
         else{ // client filter user, project name, project number
-            if(!empty($request->input("columns.0.search.value")))
-                $handler = $handler->where('users.username', 'LIKE', "%{$request->input('columns.0.search.value')}%");
             if(!empty($request->input("columns.1.search.value")))
-                $handler = $handler->where('job_request.clientProjectNumber', 'LIKE', "%{$request->input('columns.1.search.value')}%");
+                $handler = $handler->where('users.username', 'LIKE', "%{$request->input('columns.1.search.value')}%");
             if(!empty($request->input("columns.2.search.value")))
-                $handler = $handler->where('job_request.clientProjectName', 'LIKE', "%{$request->input('columns.2.search.value')}%");
-            if(isset($request["columns.3.search.value"]))
-                $handler = $handler->where('job_request.state', 'LIKE', "%{$request->input('columns.3.search.value')}%");
-            if(isset($request["columns.6.search.value"]))
-                $handler = $handler->where('job_request.projectState', 'LIKE', "%{$request->input('columns.6.search.value')}%");
+                $handler = $handler->where('job_request.clientProjectNumber', 'LIKE', "%{$request->input('columns.2.search.value')}%");
+            if(!empty($request->input("columns.3.search.value")))
+                $handler = $handler->where('job_request.clientProjectName', 'LIKE', "%{$request->input('columns.3.search.value')}%");
+            if(isset($request["columns.4.search.value"]))
+                $handler = $handler->where('job_request.state', 'LIKE', "%{$request->input('columns.4.search.value')}%");
             if(isset($request["columns.7.search.value"]))
-                $handler = $handler->where('job_request.planStatus', 'LIKE', "%{$request->input('columns.7.search.value')}%");
+                $handler = $handler->where('job_request.projectState', 'LIKE', "%{$request->input('columns.7.search.value')}%");
+            if(isset($request["columns.8.search.value"]))
+                $handler = $handler->where('job_request.planStatus', 'LIKE', "%{$request->input('columns.8.search.value')}%");
             // filter chatIcon
-            if(!empty($request["columns.8.search.value"]) && $request["columns.8.search.value"] != ""){
+            if(!empty($request["columns.9.search.value"]) && $request["columns.9.search.value"] != ""){
                 $handler = $handler->leftjoin('job_chat', function($join){
                     $join->on('job_request.id', '=', 'job_chat.jobId')->whereRaw('job_chat.id IN (select MAX(job_chat.id) from job_chat join job_request on job_request.id = job_chat.jobId group by job_request.id )');
                 });
-                $handler = $handler->where('job_chat.userId', $request["columns.8.search.value"]);
+                $handler = $handler->where('job_chat.userId', $request["columns.9.search.value"]);
             }
         }
 
@@ -1230,8 +1235,10 @@ class GeneralController extends Controller
 
         if(!empty($jobs))
         {
+            $idx = 1;
             foreach ($jobs as $job)
             {
+                $nestedData['idx'] = $idx; $idx ++;
                 $nestedData['id'] = $job->id;
                 if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4)
                 {
@@ -1255,6 +1262,8 @@ class GeneralController extends Controller
 
                 $statenote = isset($globalStates[intval($job->projectstate)]) ? $globalStates[intval($job->projectstate)]->notes : 'Unknown State';
                 $statusnote = isset($globalStatus[intval($job->planstatus)]) ? $globalStatus[intval($job->planstatus)]->notes : 'Unknown Status';
+                $nestedData['statenote'] = $statenote;
+                $nestedData['statusnote'] = $statusnote;
                 if(!isset($globalStates[intval($job->projectstate)])) $job->statecolor = '#ff0000';
                 if(!isset($globalStatus[intval($job->planstatus)])) $job->statuscolor = '#ff0000';
 
