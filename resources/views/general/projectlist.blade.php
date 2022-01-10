@@ -1,5 +1,15 @@
 @extends((Auth::user()->userrole == 2)? 'admin.layout': ((Auth::user()->userrole == 1 || Auth::user()->userrole == 3) ? 'clientadmin.layout' : (Auth::user()->userrole == 4 ? 'reviewer.layout' : 'user.layout')))
 
+@section('css_after')
+<style>
+    @media print {
+        body * {
+            display: none;
+        }
+    }
+</style>
+@endsection
+
 @section('content')
 
 <div class="bg-image" style="background-image: url('{{ asset('img/bg_admin.jpg') }}');">
@@ -36,8 +46,9 @@
                     <thead>
                         <tr>
                             @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4)
-                            <th class="text-center" style="width: 7%;">ID</th>
-                            <th style="width:10%">Company Name</th>
+                            <th class="text-center" style="width: 5%;">No</th>
+                            <th class="text-center" style="width: 5%;">Job ID</th>
+                            <th style="width:8%">Company Name</th>
                             <th style="width:8%;">User</th>
                             <th style="width:7%;">Project Number</th>
                             <th style="width:8%;">Project Name</th>
@@ -49,21 +60,22 @@
                             <th style="width:8%;">Plan Status</th>
                             <th style="min-width: 180px;">Action</th>
                             @else
-                            <th style="width:14%;">User</th>
+                            <th class="text-center" style="width: 7%;">No</th>
+                            <th style="width:12%;">User</th>
                             <th style="width:8%;">Project Number</th>
-                            <th style="width:14%;">Project Name</th>
+                            <th style="width:12%;">Project Name</th>
                             <th style="width:6%;">State</th>
                             <th style="width:10%;">Created Time</th>
                             <th style="width:10%;">Submitted Time</th>
-                            <th style="width:11%;">Project Status</th>
-                            <th style="width:11%;">Plan Status</th>
+                            <th style="width:10%;">Project Status</th>
+                            <th style="width:10%;">Plan Status</th>
                             <th style="min-width: 100px;">Action</th>
                             @endif
                         </tr>
                         <tr>
                             @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4)
-                            <th class="searchHead">
-                            </th>
+                            <th class="searchHead"> </th>
+                            <th class="searchHead"> </th>
                             <th class="searchHead">
                                 <select placeholder="Search Company" class="searchBox" id="companyFilter">
                                     <option value="">All</option>
@@ -159,7 +171,7 @@
                             </th>
                             <th style="display: flex; align-items: center; justify-content: center;">
                                 <span class="ml-1" style='writing-mode: vertical-lr;width: 18px;transform: rotateZ(180deg);'>Edit</span>
-                                <span class="ml-2" style='writing-mode: tb-rl;width: 28px;transform: rotateZ(180deg);cursor: pointer;' class="badge dropdown-toggle job-dropdown" id="chatFilter" data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>Chat</span>
+                                <span class="ml-2" style='writing-mode: tb-rl;width: 28px;transform: rotateZ(180deg);cursor: pointer;' class="badge dropdown-toggle job-dropdown" id="chatFilter" data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'><i class='fa fa-angle-up'></i>Chat</span>
                                 <div class="dropdown-menu"  aria-labelledby="chatFilter">
                                     <a class="dropdown-item chat-dropdown" id="chat-dropdown-" href="javascript:changeChatFilter('')">All</a>
                                     @foreach($companyList as $company)
@@ -177,6 +189,7 @@
                                 @endif
                             </th>
                             @else
+                            <th class="searchHead"> </th>
                             <th class="searchHead"> <input type="text" placeholder="Search User" class="searchBox" id="userFilter"> </th>
                             <th class="searchHead"> <input type="text" placeholder="Search Number" class="searchBox" id="projectNumberFilter"> </th>
                             <th class="searchHead"> <input type="text" placeholder="Search Name" class="searchBox" id="projectNameFilter"> </th>
@@ -279,6 +292,39 @@
                         </tr>
                     </thead>
                 </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-print" tabindex="-1" role="dialog" aria-labelledby="modal-block-fadein" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="block block-themed block-transparent mb-0">
+                <div class="block-header bg-primary-dark">
+                    <h3 class="block-title">Print Range</h3>
+                    <div class="block-options">
+                        <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                            <i class="fa fa-fw fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="block-content">
+                    <div class="row">
+                        <div class="form-group col-6">
+                            <label for="print-from">From</label>
+                            <input type="number" class="form-control" id="print-from" name="print-from" value="1" min="1">
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="print-to">To</label>
+                            <input type="number" class="form-control" id="print-to" name="print-to" value="1" min="1">
+                        </div>
+                    </div>
+                </div>
+                <div class="block-content block-content-full text-right bg-light">
+                    <button type="button" class="btn btn-sm btn-light" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal" onclick="callPrint()">Done</button>
+                </div>
             </div>
         </div>
     </div>
@@ -401,9 +447,9 @@
             localStorage.setItem('projectFilterJson', JSON.stringify(filterJson));
 
             @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4)
-            table.column('9:visible').search(status).draw();
+            table.column('10:visible').search(status).draw();
             @else
-            table.column('6:visible').search(status).draw();
+            table.column('7:visible').search(status).draw();
             @endif
             
             changeStatusFilterLabel(status);
@@ -415,9 +461,9 @@
             localStorage.setItem('projectFilterJson', JSON.stringify(filterJson));
 
             @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4)
-            table.column('10:visible').search(status).draw();
+            table.column('11:visible').search(status).draw();
             @else
-            table.column('7:visible').search(status).draw();
+            table.column('8:visible').search(status).draw();
             @endif
 
             changeStateFilterLabel(status);
@@ -428,9 +474,9 @@
             localStorage.setItem('projectFilterJson', JSON.stringify(filterJson));
 
             @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4)
-            table.column('11:visible').search(id).draw();
+            table.column('12:visible').search(id).draw();
             @else
-            table.column('8:visible').search(id).draw();
+            table.column('9:visible').search(id).draw();
             @endif
 
             table.draw();
@@ -451,6 +497,7 @@
             // "dom": '<"toolbar">frtip',
             "fnInitComplete": function(){
                 $('div#projects_filter').append("<input type='button' class='btn btn-hero-primary' value='Clear Filter' style='line-height:0.8' onclick='clearFilter()'/>");
+                $('div#projects_length').append("<input type='button' class='btn btn-hero-primary ml-3' value='Print' style='line-height:0.8' onclick='printDlgShow()'/>");
             },
             "ajax":{
                     "url": "{{ url('getProjectList') }}",
@@ -468,6 +515,7 @@
                 },
             "columns": [
                 @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4)
+                { "data": "idx", "orderable": false },
                 { "data": "id" },
                 { "data": "companyname" },
                 { "data": "username" },
@@ -481,6 +529,7 @@
                 { "data": "planstatus" },
                 { "data": "actions", "orderable": false }
                 @else
+                { "data": "idx", "orderable": false },
                 { "data": "username" },
                 { "data": "projectnumber" },
                 { "data": "projectname" },
@@ -687,6 +736,147 @@
                         window.top.location.href = "{{route('onReview')}}" + '?projectId=' + jobId;
                 } else
                     swal.fire({ title: "Error", text: res.message, icon: "error", confirmButtonText: `OK` });
+            },
+            error: function(xhr, status, error) {
+                res = JSON.parse(xhr.responseText);
+                message = res.message;
+                swal.fire({ title: "Error",
+                        text: message == "" ? "Error happened while processing. Please try again later." : message,
+                        icon: "error",
+                        confirmButtonText: `OK` });
+            }
+        });
+    }
+
+    function printDlgShow(){
+        jQuery('#modal-print').modal('show');
+    }
+
+    function Printer($c){
+        var h = $c;
+        return {
+            doPrint: function(){
+                var d = $("<div>").html(h).appendTo("html");
+                //$("body").hide();
+                window.print();
+                d.remove();
+                //$("body").show();
+            },
+            setContent: function($c){
+                h = $c;
+            }
+        };
+    }
+    
+    function callPrint(){
+        if(parseInt($("#print-from").val()) > parseInt($("#print-to").val()))
+        {
+            swal.fire({ title: "Warning", text: "Please input correct numbers!", icon: "info", confirmButtonText: `OK` });
+            return;
+        }
+        
+        jQuery('#modal-print').modal('hide');
+        swal.fire({ title: "Please wait...", showConfirmButton: false });
+        swal.showLoading();
+        
+        var params = $('#projects').DataTable().ajax.params();
+        params['start'] = parseInt($("#print-from").val()) - 1;
+        params['length'] = parseInt($("#print-to").val()) - parseInt($("#print-from").val()) + 1;
+        $.ajax({
+            url:"getProjectList",
+            type:'post',
+            data: $('#projects').DataTable().ajax.params(),
+            success:function(res){
+                swal.close();
+                var response = JSON.parse(res);
+                if(response && response.data && response.data.length > 0){
+                    let html = '';
+                    
+                    @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4)
+                    html += "<table id='projects' class='table table-bordered table-striped table-vcenter text-center' style='width:100%;'>\
+                    <thead>\
+                        <tr>\
+                            <th class='text-center' style='width: 5%;'>No</th>\
+                            <th class='text-center' style='width: 7%;'>Job ID</th>\
+                            <th style='width:10%'>Company Name</th>\
+                            <th style='width:10%;'>User</th>\
+                            <th style='width:9%;'>Project Number</th>\
+                            <th style='width:9%;'>Project Name</th>\
+                            <th style='width:5%;'>State</th>\
+                            <th style='width:7%;'>File Name</th>\
+                            <th style='width:10%;'>Created Time</th>\
+                            <th style='width:10%;'>Submitted Time</th>\
+                            <th style='width:10%;'>Project Status</th>\
+                            <th style='width:10%;'>Plan Status</th>\
+                        </tr>\
+                    </thead>\
+                    <tbody>";
+                    
+                    let i = parseInt($("#print-from").val());
+                    response.data.forEach(job => {
+                        html += `<tr>\
+                            <td>${i}</td>\
+                            <td>${job.id}</td>\
+                            <td>${job.companyname}</td>\
+                            <td>${job.username}</td>\
+                            <td>${job.projectnumber}</td>\
+                            <td>${job.projectname}</td>\
+                            <td>${job.state}</td>\
+                            <td>${job.requestfile}</td>\
+                            <td>${job.createdtime}</td>\
+                            <td>${job.submittedtime}</td>\
+                            <td>${job.statenote}</td>\
+                            <td>${job.statusnote}</td>\
+                        <tr/>`;
+                        i ++;
+                    });
+                    html += "</tbody>";
+
+                    var order = $('#projects').DataTable().order();
+                    var today = new Date();
+                    html = `<h2 style='text-align: center;'>Project List ${$("#print-from").val()} to ${i - 1}, Sorted by ${$($('#projects').DataTable().column(order[0][0]).header()).html()}, Print Date ${String(today.getMonth() + 1).padStart(2, '0') + '/' + String(today.getDate()).padStart(2, '0') + '/' + today.getFullYear()}</h2>` + html;
+                    @else
+                    html += "<table id='projects' class='table table-bordered table-striped table-vcenter text-center' style='width:100%;'>\
+                    <thead>\
+                        <tr>\
+                            <th class='text-center' style='width: 7%;'>No</th>\
+                            <th style='width:14%;'>User</th>\
+                            <th style='width:10%;'>Project Number</th>\
+                            <th style='width:14%;'>Project Name</th>\
+                            <th style='width:7%;'>State</th>\
+                            <th style='width:12%;'>Created Time</th>\
+                            <th style='width:12%;'>Submitted Time</th>\
+                            <th style='width:12%;'>Project Status</th>\
+                            <th style='width:12%;'>Plan Status</th>\
+                        </tr>\
+                    </thead>\
+                    <tbody>";
+                    
+                    let i = parseInt($("#print-from").val());
+                    response.data.forEach(job => {
+                        html += `<tr>\
+                            <td>${i}</td>\
+                            <td>${job.username}</td>\
+                            <td>${job.projectnumber}</td>\
+                            <td>${job.projectname}</td>\
+                            <td>${job.state}</td>\
+                            <td>${job.createdtime}</td>\
+                            <td>${job.submittedtime}</td>\
+                            <td>${job.statenote}</td>\
+                            <td>${job.statusnote}</td>\
+                        <tr/>`;
+                        i ++;
+                    });
+                    html += "</tbody>";
+
+                    var order = $('#projects').DataTable().order();
+                    var today = new Date();
+                    html = `<h2 style='text-align: center;'>{{ $companyName }} - Project List ${$("#print-from").val()} to ${i - 1}, Sorted by ${$($('#projects').DataTable().column(order[0][0]).header()).html()}, Print Date ${String(today.getMonth() + 1).padStart(2, '0') + '/' + String(today.getDate()).padStart(2, '0') + '/' + today.getFullYear()}</h2>` + html;
+                    @endif
+
+                    var printer = new Printer(html);
+                    printer.doPrint();
+                }
             },
             error: function(xhr, status, error) {
                 res = JSON.parse(xhr.responseText);
