@@ -1571,8 +1571,16 @@ class GeneralController extends Controller
                     $folderPrefix = "/" . $companyNumber. '. ' . $project['companyName'] . '/';
                     if( Storage::disk('input')->exists($folderPrefix . $project['requestFile']) )
                         return response()->json(['success' => true, 'data' => Storage::disk('input')->get($folderPrefix . $project['requestFile'])]);
-                    else
-                        return response()->json(['success' => false, 'message' => "Cannot find the project file."] );
+                    else {
+                        try{
+                            $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
+                            $dropbox = new Dropbox($app);
+                            $dropbox->download(env('DROPBOX_JSON_INPUT') . $companyNumber. '. ' . $project['companyName'] . '/' . $project['requestFile'], storage_path('input') . $folderPrefix . $project['requestFile']);
+                            return response()->json(['success' => true, 'data' => Storage::disk('input')->get($folderPrefix . $project['requestFile'])]);
+                        } catch(DropboxClientException $e) {
+                            return response()->json(['success' => false, 'message' => "Cannot find the project file."] );
+                        }
+                    }
                 }
                 else
                 {
