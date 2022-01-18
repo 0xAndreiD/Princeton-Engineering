@@ -561,8 +561,8 @@ class CompanyController extends Controller
                                         'Page_Y' => $request['pageHeight'],
                                         'Top_Lx_rel' => $object['left'] * $request['pageWidth'] / $request['canvasWidth'],
                                         'Top_Ly_rel' => $object['top'] * $request['pageHeight'] / $request['canvasHeight'],
-                                        'Bot_Rx_rel' => ($object['left'] + $object['width'] * $object['scaleX']) * $request['pageWidth'] / $request['canvasWidth'],
-                                        'Bot_Ry_rel' => ($object['top'] + $object['height'] * $object['scaleY']) * $request['pageHeight'] / $request['canvasHeight']
+                                        'Bot_Rx_rel' => ($object['left'] + $object['width'] * (isset($object['scaleX']) ? $object['scaleX'] : 1)) * $request['pageWidth'] / $request['canvasWidth'],
+                                        'Bot_Ry_rel' => ($object['top'] + $object['height'] * (isset($object['scaleY']) ? $object['scaleY'] : 1)) * $request['pageHeight'] / $request['canvasHeight']
                                     ]);
                                 } else{
                                     $sealobj->ImageScale = $object['scaleX'];
@@ -570,8 +570,8 @@ class CompanyController extends Controller
                                     $sealobj->Page_Y = $request['pageHeight'];
                                     $sealobj->Top_Lx_rel = $object['left'] * $request['pageWidth'] / $request['canvasWidth'];
                                     $sealobj->Top_Ly_rel = $object['top'] * $request['pageHeight'] / $request['canvasHeight'];
-                                    $sealobj->Bot_Rx_rel = ($object['left'] + $object['width'] * $object['scaleX']) * $request['pageWidth'] / $request['canvasWidth'];
-                                    $sealobj->Bot_Ry_rel = ($object['top'] + $object['height'] * $object['scaleY']) * $request['pageHeight'] / $request['canvasHeight'];
+                                    $sealobj->Bot_Rx_rel = ($object['left'] + $object['width'] * (isset($object['scaleX']) ? $object['scaleX'] : 1)) * $request['pageWidth'] / $request['canvasWidth'];
+                                    $sealobj->Bot_Ry_rel = ($object['top'] + $object['height'] * (isset($object['scaleY']) ? $object['scaleY'] : 1)) * $request['pageHeight'] / $request['canvasHeight'];
                                     $sealobj->save();
                                 }
                             } else if($object['type'] == 'textbox'){
