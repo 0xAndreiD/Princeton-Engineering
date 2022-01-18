@@ -109,8 +109,8 @@ function saveContent(){
     swal.showLoading();
     var objects = [];
     canvas.getObjects().forEach(object => {
-        if(object.type == 'image') objects.push({type: object.type, scaleX: object.scaleX, left: object.left, top: object.top, width: object.width, height: object.height});
-        if(object.type == 'textbox') objects.push({type: object.type, fontSize: object.fontSize, text: object.text, left: object.left, top: object.top, width: object.width, height: object.height});
+        if(object.type == 'image') objects.push({type: object.type, scaleX: object.scaleX, scaleY: object.scaleY, left: object.left, top: object.top, width: object.width, height: object.height});
+        if(object.type == 'textbox') objects.push({type: object.type, scaleX: object.scaleX, scaleY: object.scaleY, fontSize: object.fontSize, text: object.text, left: object.left, top: object.top, width: object.width, height: object.height});
     });
 
     $.ajax({

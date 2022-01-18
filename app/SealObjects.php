@@ -15,7 +15,7 @@ class SealObjects extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'id', 'client_id', 'jurisdiction_abbrev', 'location', 'Execute_Command', 'text', 'OnTop', 'OnScreen', 'FixedPrint', 'OnPrint', 'Opacity', 'Rotation', 'FontSize', 'ImageScale', 'HorizAlign', 'VertAlign', 'TextAlign', 'Date', 'Page_X', 'Page_Y', 'Top_Lx_rel', 'Top_Ly_rel', 'Bot_Rx_rel', 'Bot_Ry_rel', 'dwg_template'
+        'id', 'client_id', 'State', 'sub_client_id', 'Command', 'text', 'Page_X', 'Page_Y', 'Top_Lx_rel', 'Top_Ly_rel', 'Bot_Rx_rel', 'Bot_Ry_rel', 'dwg_template'
     ];
 
     protected $table = 'seal_objects';
