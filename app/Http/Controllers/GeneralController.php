@@ -594,10 +594,10 @@ class GeneralController extends Controller
                 Storage::disk('input')->put($folderPrefix . $filename, json_encode($data));
 
                 //Backup json file to dropbox
-                // $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
-                // $dropbox = new Dropbox($app);
-                // $dropboxFile = new DropboxFile(storage_path('/input/') . $companyNumber. '. ' . $company['company_name'] . '/' . $filename);
-                // $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_JSON_INPUT') . $companyNumber. '. ' . $company['company_name'] . '/' . $filename, ['autorename' => TRUE]);
+                $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
+                $dropbox = new Dropbox($app);
+                $dropboxFile = new DropboxFile(storage_path('/input/') . $companyNumber. '. ' . $company['company_name'] . '/' . $filename);
+                $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_JSON_INPUT') . $companyNumber. '. ' . $company['company_name'] . '/' . $filename, ['autorename' => TRUE]);
             }
             catch(Exception $e) {
                 return response()->json(["message" => "Failed to generate RS json data file", "status" => false]);
