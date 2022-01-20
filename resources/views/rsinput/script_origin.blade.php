@@ -788,7 +788,7 @@ var getPVModuleTypes = function() {
                 bFound = true;
             }
         }
-        if (bFound == false && (!moduleCEC || availablePVModules[index][10] == 1))
+        if (bFound == false && (moduleCEC || availablePVModules[index][10] != 1))
             mainTypes.push(availablePVModules[index][0]);
     }
     return mainTypes;
@@ -807,7 +807,7 @@ var getPVModuleSubTypes = function(mainType) {
                 bFound = true;
             }
         }
-        if (bFound == false && (!moduleCEC || availablePVModules[index][10] == 1)){
+        if (bFound == false && (moduleCEC || availablePVModules[index][10] != 1)){
             if(moduleSetting == 0 || (moduleSetting == 1 && !availablePVModules[index][7]) || (moduleSetting == 2 && availablePVModules[index][8] == true))
                 subTypes.push(availablePVModules[index]);
         }
