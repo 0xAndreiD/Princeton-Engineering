@@ -788,7 +788,7 @@ var getPVModuleTypes = function() {
                 bFound = true;
             }
         }
-        if (bFound == false)
+        if (bFound == false && (!moduleCEC || availablePVModules[index][10] == 1))
             mainTypes.push(availablePVModules[index][0]);
     }
     return mainTypes;
@@ -807,7 +807,7 @@ var getPVModuleSubTypes = function(mainType) {
                 bFound = true;
             }
         }
-        if (bFound == false){
+        if (bFound == false && (!moduleCEC || availablePVModules[index][10] == 1)){
             if(moduleSetting == 0 || (moduleSetting == 1 && !availablePVModules[index][7]) || (moduleSetting == 2 && availablePVModules[index][8] == true))
                 subTypes.push(availablePVModules[index]);
         }
@@ -1164,7 +1164,7 @@ var updateRailSupportSubField = function(mainType, subType = "") {
     loadASCEOptions($('#option-state').val());
 }
 
-var moduleSetting = 0, inverterSetting = 0, railSetting = 0, stanchionSetting = 0;
+var moduleSetting = 0, inverterSetting = 0, railSetting = 0, stanchionSetting = 0, moduleCEC = 0;
 function updateModuleSetting(setting){
     moduleSetting = setting;
     $('#option-module-type').find('option').remove();
@@ -1196,6 +1196,12 @@ function updateModuleSetting(setting){
     }
 
     updatePVSubmoduleField($('#option-module-type').children("option:selected").val());
+}
+
+function toggleModuleCEC(){
+    moduleCEC = !moduleCEC;
+    localStorage.setItem('moduleCEC', moduleCEC ? '1' : '0');
+    updateModuleSetting(moduleSetting);
 }
 
 function updateInverterSetting(setting){
@@ -2567,9 +2573,15 @@ $(document).ready(function() {
                 if(res.length > 0)
                 {
                     for(let i = 0; i < res.length; i ++){
-                        availablePVModules.push([res[i]['mfr'], res[i]['model'], res[i]['rating'], res[i]['length'], res[i]['width'], res[i]['depth'], res[i]['weight'], res[i]['custom'], res[i]['favorite'], res[i]['crc32']]);
+                        availablePVModules.push([res[i]['mfr'], res[i]['model'], res[i]['rating'], res[i]['length'], res[i]['width'], res[i]['depth'], res[i]['weight'], res[i]['custom'], res[i]['favorite'], res[i]['crc32'], res[i]['CEC']]);
                     }
                 }
+
+                if(localStorage.getItem('moduleCEC') == '1'){
+                    moduleCEC = 1;
+                    $("#module-cec")[0].checked = true;
+                }
+
                 // ------------------- First Line ---------------------
                 // pv module section
                 $('#option-module-type').find('option').remove();

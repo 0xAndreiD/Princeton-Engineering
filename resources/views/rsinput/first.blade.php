@@ -274,9 +274,11 @@
         <col width="80">
         <col width="80">
         <col width="80">
+        <col width="80">
     </colgroup>
 <tbody>
     <tr class="h13">
+        <td><div style="overflow:hidden"></td>
         <td><div style="overflow:hidden"></td>
         <td><div style="overflow:hidden"></td>
         <td><div style="overflow:hidden"></td>
@@ -289,7 +291,7 @@
     <tr class="h13">
         <td><div style="overflow:hidden"></div></td>
         <td class="iw400-bdr" colspan="6">Equipment section</td>
-        <td class="iw400-bdr" colspan="4">Product Selection Filters</td>
+        <td class="iw400-bdr" colspan="5">Product Selection Filters</td>
     </tr>
     <tr class="h13">
         <td ><div style="overflow:hidden"></div></td>
@@ -302,6 +304,7 @@
         <td class="iw400-bdr">Mixed</td>
         <td class="iw400-bdr">Standard</td>
         <td class="iw400-bdr">Favorite</td>
+        <td class="iw400-bdr">CEC</td>
     </tr>
     <tr class="h13">
         <td><div style="overflow:hidden"></div></td>
@@ -329,10 +332,16 @@
                 <label class="custom-control-label" for="module-standard"></label>
             </div>
         </td>
-        <td class="text-center right-bdr">
+        <td class="text-center">
             <div class="custom-control custom-radio custom-control-success">
                 <input type="radio" class="custom-control-input" id="module-favorite" name="module-settings" onclick="updateModuleSetting(2)">
                 <label class="custom-control-label" for="module-favorite"></label>
+            </div>
+        </td>
+        <td class="text-center right-bdr">
+            <div class="custom-control custom-checkbox custom-control-danger">
+                <input type="checkbox" class="custom-control-input" id="module-cec" name="module-cec" onclick="toggleModuleCEC()">
+                <label class="custom-control-label" for="module-cec"></label>
             </div>
         </td>
         <input class="w400-bdr" id="pv-module-length" hidden>
@@ -366,12 +375,13 @@
                 <label class="custom-control-label" for="inverter-standard"></label>
             </div>
         </td>
-        <td class="text-center right-bdr">
+        <td class="text-center">
             <div class="custom-control custom-radio custom-control-success">
                 <input type="radio" class="custom-control-input" id="inverter-favorite" name="inverter-settings" onclick="updateInverterSetting(2)">
                 <label class="custom-control-label" for="inverter-favorite"></label>
             </div>
         </td>
+        <td class="right-bdr"></td>
         <input class="w400-bdr" id="inverter-custom" hidden>
         <input class="w400-bdr" id="inverter-crc32" hidden>
         <input class="w400-bdr" id="inverter-watts" hidden>
@@ -402,12 +412,13 @@
                 <label class="custom-control-label" for="stanchion-standard"></label>
             </div>
         </td>
-        <td class="text-center right-bdr">
+        <td class="text-center">
             <div class="custom-control custom-radio custom-control-success">
                 <input type="radio" class="custom-control-input" id="stanchion-favorite" name="stanchion-settings" onclick="updateStanchionSetting(2)">
                 <label class="custom-control-label" for="stanchion-favorite"></label>
             </div>
         </td>
+        <td class="right-bdr"></td>
         <input class="w400-bdr" id="stanchion-custom" hidden>
         <input class="w400-bdr" id="stanchion-crc32" hidden>
     </tr>
@@ -437,12 +448,13 @@
                 <label class="custom-control-label" for="rail-standard"></label>
             </div>
         </td>
-        <td class="text-center right-bdr bottom-bdr">
+        <td class="text-center bottom-bdr">
             <div class="custom-control custom-radio custom-control-success">
                 <input type="radio" class="custom-control-input" id="rail-favorite" name="rail-settings" onclick="updateRailSetting(2)">
                 <label class="custom-control-label" for="rail-favorite"></label>
             </div>
         </td>
+        <td class="right-bdr bottom-bdr"></td>
         <input class="w400-bdr" id="railsupport-custom" hidden>
         <input class="w400-bdr" id="railsupport-crc32" hidden>
     </tr>
