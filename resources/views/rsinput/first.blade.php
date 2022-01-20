@@ -339,7 +339,7 @@
             </div>
         </td>
         <td class="text-center right-bdr">
-            <div class="custom-control custom-checkbox custom-control-danger">
+            <div class="custom-control custom-checkbox custom-control-info">
                 <input type="checkbox" class="custom-control-input" id="module-cec" name="module-cec" onclick="toggleModuleCEC()">
                 <label class="custom-control-label" for="module-cec"></label>
             </div>

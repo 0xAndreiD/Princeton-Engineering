@@ -846,7 +846,9 @@ var updatePVSubmoduleField = function(mainType, subType="") {
         for (index=0; index<subTypes.length; index++) 
         {
             let background = '';
-            if(subTypes[index][8] == true)
+            if(subTypes[index][10] == 1)
+                background = '#c9dbee';
+            else if(subTypes[index][8] == true)
                 background = '#90EE90';
             else if(subTypes[index][7])
                 background = '#FED8B1';
