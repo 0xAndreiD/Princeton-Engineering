@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class PVModule extends Authenticatable
+class PVModuleCEC extends Authenticatable
 {
     use Notifiable;
 
@@ -18,7 +18,7 @@ class PVModule extends Authenticatable
         'id', 'mfr', 'model', 'rating', 'length', 'width', 'depth', 'weight', 'crc32', 'VAC', 'watts'
     ];
 
-    protected $table = 'pv_module';
+    protected $table = 'pv_module_cec';
 
     public $timestamps = false;
 }

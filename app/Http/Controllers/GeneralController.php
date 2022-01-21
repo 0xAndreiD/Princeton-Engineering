@@ -11,6 +11,7 @@ use App\User;
 use App\Company;
 use App\JobProjectStatus;
 use App\JobPlanStatus;
+use App\PVModuleCEC;
 use App\PVModule;
 use App\PVInverter;
 use App\Stanchion;
@@ -1379,6 +1380,17 @@ class GeneralController extends Controller
         }
         else
             return "Sorry, We cannot find the file.";
+    }
+
+    /**
+     * Return the list of cec pv modules.
+     *
+     * @return JSON
+     */
+    public function getCECPVModules(Request $request){
+        $cec_modules = PVModuleCEC::all();
+        $cec_modules = $cec_modules->toArray();
+        return json_encode($cec_modules);
     }
 
     /**
