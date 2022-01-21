@@ -131,6 +131,7 @@ Route::post('/sendEmail', 'APIController@sendEmail')->name('sendEmail');
 Route::get('/removeSpecialChars', 'APIController@removeSpecialChars')->name('removeSpecialChars');
 
 // PV Modules
+Route::post('/getCECPVModules', 'GeneralController@getCECPVModules')->name('getCECPVModules');
 Route::post('/getPVModules', 'GeneralController@getPVModules')->name('getPVModules');
 // PV Inverters
 Route::post('/getPVInverters', 'GeneralController@getPVInverters')->name('getPVInverters');

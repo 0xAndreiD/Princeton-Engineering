@@ -1166,7 +1166,7 @@ var updateRailSupportSubField = function(mainType, subType = "") {
     loadASCEOptions($('#option-state').val());
 }
 
-var moduleSetting = 0, inverterSetting = 0, railSetting = 0, stanchionSetting = 0, moduleCEC = 0;
+var moduleSetting = 0, inverterSetting = 0, railSetting = 0, stanchionSetting = 0, moduleCEC = 0, cecLoaded = 0;
 function updateModuleSetting(setting){
     moduleSetting = setting;
     $('#option-module-type').find('option').remove();
@@ -1200,9 +1200,47 @@ function updateModuleSetting(setting){
     updatePVSubmoduleField($('#option-module-type').children("option:selected").val());
 }
 
-function toggleModuleCEC(){
+function loadCECEquipmentSection(){
+    return new Promise((resolve, reject) => {
+        if(cecLoaded)
+            resolve(true);
+        else{
+            swal.fire({ title: "Please wait...", showConfirmButton: false });
+            swal.showLoading();
+            $.ajax({
+                url:"getCECPVModules",
+                type:'post',
+                dataType: "json",
+                success:function(res){
+                    swal.close();
+                    if(res && res.length > 0)
+                    {
+                        for(let i = 0; i < res.length; i ++){
+                            availablePVModules.push([res[i]['mfr'], res[i]['model'], res[i]['rating'], res[i]['length'], res[i]['width'], res[i]['depth'], res[i]['weight'], res[i]['custom'], res[i]['favorite'], res[i]['crc32'], 1]);
+                        }
+                    }
+                    resolve(true);
+
+                },
+                error: function(xhr, status, error) {
+                    swal.close();
+                    res = JSON.parse(xhr.responseText);
+                    console.log(res);
+                    resolve(false);
+                }
+            });
+        }
+    });
+}
+
+async function toggleModuleCEC(){
     moduleCEC = !moduleCEC;
     localStorage.setItem('moduleCEC', moduleCEC ? '1' : '0');
+    if(moduleCEC && !cecLoaded){
+        console.log('here');
+        await loadCECEquipmentSection();
+        cecLoaded = 1;
+    }
     updateModuleSetting(moduleSetting);
 }
 
@@ -2571,17 +2609,19 @@ $(document).ready(function() {
             url:"getPVModules",
             type:'post',
             dataType: "json",
-            success:function(res){
+            success:async function(res){
                 if(res.length > 0)
                 {
                     for(let i = 0; i < res.length; i ++){
-                        availablePVModules.push([res[i]['mfr'], res[i]['model'], res[i]['rating'], res[i]['length'], res[i]['width'], res[i]['depth'], res[i]['weight'], res[i]['custom'], res[i]['favorite'], res[i]['crc32'], res[i]['CEC']]);
+                        availablePVModules.push([res[i]['mfr'], res[i]['model'], res[i]['rating'], res[i]['length'], res[i]['width'], res[i]['depth'], res[i]['weight'], res[i]['custom'], res[i]['favorite'], res[i]['crc32'], 0]);
                     }
                 }
 
                 if(localStorage.getItem('moduleCEC') == '1'){
                     moduleCEC = 1;
                     $("#module-cec")[0].checked = true;
+                    await loadCECEquipmentSection();
+                    cecLoaded = 1;
                 }
 
                 // ------------------- First Line ---------------------
