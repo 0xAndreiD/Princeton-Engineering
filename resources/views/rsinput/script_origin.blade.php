@@ -791,6 +791,12 @@ var getPVModuleTypes = function() {
         if (bFound == false && (moduleCEC || availablePVModules[index][10] != 1))
             mainTypes.push(availablePVModules[index][0]);
     }
+
+    mainTypes.sort(function (a, b) {
+        if (a > b) return 1;
+        if (b > a) return -1;
+        return 0;
+    })
     return mainTypes;
 }
 
@@ -869,6 +875,7 @@ var updatePVSubmoduleField = function(mainType, subType="") {
     $('#pv-module-width').val(optionPVModule(mainType, subType, 4));
     $('#pv-module-custom').val(optionPVModule(mainType, subType, 7) ? true : false);
     $('#pv-module-crc32').val(optionPVModule(mainType, subType, 9));
+    $('#pv-module-cec').val(optionPVModule(mainType, subType, 10));
 }
 
 var getPVInvertorTypes = function() {

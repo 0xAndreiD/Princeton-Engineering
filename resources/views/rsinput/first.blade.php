@@ -348,6 +348,7 @@
         <input class="w400-bdr" id="pv-module-width" hidden>
         <input class="w400-bdr" id="pv-module-custom" hidden>
         <input class="w400-bdr" id="pv-module-crc32" hidden>
+        <input class="w400-bdr" id="pv-module-cec" hidden>
     </tr>
     <tr class="h13">
         <td><div style="overflow:hidden"></div></td>
