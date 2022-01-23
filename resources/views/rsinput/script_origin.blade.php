@@ -4731,7 +4731,7 @@ var loadPreloadedData = function() {
                         console.log(res);
                         if(res && res.success == true) {
                             for (var i=0; i<res.data.length; i++) {
-                                preloaded_data = JSON.parse(res.data[i].data);
+                                var permit_data = JSON.parse(res.data[i].data);
                                 try{ 
                                     // if (res.data[i].filename == "ucc_f100_cpa.pdf") {
                                     //     updateUccForm(preloaded_data, res.data[i].filename);
@@ -4754,7 +4754,7 @@ var loadPreloadedData = function() {
                                     //     openPermitTab(5, res.data[i].filename,'Form Fire');
                                     // }
                                     if(res.fileinfos[i].id)
-                                        openPermitTab(res.fileinfos[i].id, res.data[i].filename, res.fileinfos[i].tabname, preloaded_data, false, res.fileinfos[i].formtype);
+                                        openPermitTab(res.fileinfos[i].id, res.data[i].filename, res.fileinfos[i].tabname, permit_data, false, res.fileinfos[i].formtype);
                                 }
                                 catch(e){
                                     resolve(false);
