@@ -26,6 +26,7 @@ use Kunnu\Dropbox\Exceptions\DropboxClientException;
 use Ifsnop\Mysqldump as IMysqldump;
 use net\authorize\api\contract\v1 as AnetAPI;
 use net\authorize\api\controller as AnetController;
+use Illuminate\Filesystem\Filesystem;
 
 use DateTime;
 use DateTimeZone;
@@ -991,5 +992,24 @@ class APIController extends Controller
             return true;
         } else
             return false;
+    }
+
+    /**
+     * Delete All unnecessary storage files
+     *
+     * @return JSON
+     */
+    public function cronStorageDelete() {
+        $file = new Filesystem;
+        try{
+            $file->cleanDirectory(storage_path('invoice'));
+            $file->cleanDirectory(storage_path('output'));
+            $file->cleanDirectory(storage_path('report'));
+            $file->cleanDirectory(storage_path('upload'));
+            $file->cleanDirectory(storage_path('download'));
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false]);
+        }
     }
 }
