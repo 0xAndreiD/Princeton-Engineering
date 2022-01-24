@@ -793,8 +793,10 @@ var getPVModuleTypes = function() {
     }
 
     mainTypes.sort(function (a, b) {
-        if (a > b) return 1;
-        if (b > a) return -1;
+        if(typeof a != 'string') a = '' + a;
+        if(typeof b != 'string') b = '' + b;
+        if (a.toLowerCase() > b.toLowerCase()) return 1;
+        if (b.toLowerCase() > a.toLowerCase()) return -1;
         return 0;
     })
     return mainTypes;
@@ -820,8 +822,10 @@ var getPVModuleSubTypes = function(mainType) {
     }
 
     subTypes.sort(function (a, b) {
-        if (a > b) return 1;
-        if (b > a) return -1;
+        if(typeof a != 'string') a = '' + a;
+        if(typeof b != 'string') b = '' + b;
+        if (a.toLowerCase() > b.toLowerCase()) return 1;
+        if (b.toLowerCase() > a.toLowerCase()) return -1;
         return 0;
     })
     return subTypes;
@@ -1249,7 +1253,6 @@ async function toggleModuleCEC(){
     moduleCEC = !moduleCEC;
     localStorage.setItem('moduleCEC', moduleCEC ? '1' : '0');
     if(moduleCEC && !cecLoaded){
-        console.log('here');
         await loadCECEquipmentSection();
         cecLoaded = 1;
     }
