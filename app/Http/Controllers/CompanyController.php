@@ -1242,6 +1242,11 @@ class CompanyController extends Controller
 
         $curBill->invoice = $company->company_number . '. '. $company->company_name . ' ' . $curtime . '.pdf';
         $curBill->save();
+
+        $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
+        $dropbox = new Dropbox($app);
+        $dropboxFile = new DropboxFile(storage_path('invoice') . '/' . $company->company_number . '. '. $company->company_name . ' ' . $curtime . '.pdf');
+        $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_INVOICE_BACKUP') . $company->company_number . '. '. $company->company_name . '/' . $company->company_number . '. '. $company->company_name . ' ' . $curtime . '.pdf', ['mode' => 'overwrite']);
     }
 
     /**
