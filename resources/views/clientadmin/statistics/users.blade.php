@@ -97,8 +97,17 @@
 
 <div class="content" style="text-align:left">
     <div class="block block-rounded block-bordered">
-        <div class="block-header block-header-default">
+        <div class="block-header block-header-default" style="display: flex; ">
             <h3 class="block-title">Users Summary</h3>
+            <div class="input-daterange input-group" data-date-format="yyyy-mm-dd" data-week-start="1" data-autoclose="true" data-today-highlight="true" style="width: 500px;">
+                <input type="text" class="form-control backupInput" id="date-from" name="date-from" placeholder="From" data-week-start="1" data-autoclose="true" data-today-highlight="true">
+                <div class="input-group-prepend input-group-append">
+                    <span class="input-group-text font-w600">
+                        <i class="fa fa-fw fa-arrow-right"></i>
+                    </span>
+                </div>
+                <input type="text" class="form-control backupInput" id="date-to" name="date-to" placeholder="To" data-week-start="1" data-autoclose="true" data-today-highlight="true">
+            </div>
         </div>
         <div class="block-content block-content-full">
             <div class="table-responsive">
@@ -164,7 +173,11 @@
                     "url": "{{ url('getUserMetrics') }}",
                     "dataType": "json",
                     "type": "POST",
-                    "data":{ _token: "{{csrf_token()}}"}
+                    "data": function(data){ 
+                        data._token = "{{csrf_token()}}";
+                        data.date_from = $("#date-from").val();
+                        data.date_to = $("#date-to").val();
+                    }
                 },
             "columns": [
                 { "data": "id" },
@@ -175,6 +188,10 @@
                 { "data": "avgchats" },
                 { "data": "actions", "orderable": false }
             ]	 
+        });
+
+        $("#date-from, #date-to").on('change', function() {
+            table.draw();
         });
     })
 </script>
