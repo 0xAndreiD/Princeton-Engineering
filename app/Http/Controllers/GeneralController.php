@@ -204,14 +204,31 @@ class GeneralController extends Controller
 
         if(!empty($request->input("columns.1.search.value")))
             $handler = $handler->where('companyid', '=', $request->input("columns.1.search.value"));
-
+        
+        $dateFilter = '';
+        // filter date_from
+        if(!empty($request->input("date_from")) && $request->input("date_from") != "")
+        {
+            $date = new DateTime($request->input("date_from"), new DateTimeZone('EST'));
+            $date->setTimezone(new DateTimeZone('UTC'));
+            $dateFilter = " AND job_request.createdTime >= '" . $date->format("Y-m-d H:i:s") . "'";
+        }
+        // filter date_to
+        if(!empty($request->input("date_to")) && $request->input("date_to") != "")
+        {
+            $dateTo = date('Y-m-d H:i:s',strtotime('+23 hour +59 minutes +59 seconds',strtotime($request->input("date_to"))));
+            $date = new DateTime($dateTo, new DateTimeZone('EST'));
+            $date->setTimezone(new DateTimeZone('UTC'));
+            $dateFilter .= " AND job_request.createdTime <= '" . $date->format("Y-m-d H:i:s") . "'";
+        }
+        
         if(empty($request->input('search.value')))
         {            
             $totalFiltered = $handler->count();
             $users = $handler->offset($start)
                 ->limit($limit)
                 ->orderBy($order,$dir)
-                ->select(DB::raw('users.id as id, (SELECT company_name from company_info WHERE company_info.id = users.companyid) as companyname, users.username as username, users.companyId as cur_companyId, users.usernumber as cur_usernum, ( SELECT COUNT(*) FROM job_request WHERE job_request.companyId = cur_companyId AND job_request.creator = cur_usernum AND job_request.projectState != 9) as opened, ( SELECT COUNT(*) FROM job_request WHERE job_request.companyId = cur_companyId AND job_request.creator = cur_usernum AND job_request.projectState = 9) as completed, ( SELECT COUNT(*) FROM job_chat WHERE job_chat.userId = users.id) as totalchats, ( SELECT COUNT(*) FROM job_chat WHERE job_chat.userId = users.id) / ( SELECT COUNT(distinct job_chat.jobId) FROM job_chat WHERE job_chat.userId = users.id ) as avgchats'))
+                ->select(DB::raw("users.id as id, (SELECT company_name from company_info WHERE company_info.id = users.companyid) as companyname, users.username as username, users.companyId as cur_companyId, users.usernumber as cur_usernum, ( SELECT COUNT(*) FROM job_request WHERE job_request.companyId = cur_companyId AND job_request.creator = cur_usernum AND job_request.projectState != 9{$dateFilter}) as opened, ( SELECT COUNT(*) FROM job_request WHERE job_request.companyId = cur_companyId AND job_request.creator = cur_usernum AND job_request.projectState = 9{$dateFilter}) as completed, ( SELECT COUNT(*) FROM job_chat WHERE job_chat.userId = users.id) as totalchats, ( SELECT COUNT(*) FROM job_chat WHERE job_chat.userId = users.id) / ( SELECT COUNT(distinct job_chat.jobId) FROM job_chat WHERE job_chat.userId = users.id ) as avgchats"))
                 ->get();
         }
         else {
@@ -221,7 +238,7 @@ class GeneralController extends Controller
                         ->offset($start)
                         ->limit($limit)
                         ->orderBy($order,$dir)
-                        ->select(DB::raw('users.id as id, (SELECT company_name from company_info WHERE company_info.id = users.companyid) as companyname, users.username as username, users.companyId as cur_companyId, users.usernumber as cur_usernum, ( SELECT COUNT(*) FROM job_request WHERE job_request.companyId = cur_companyId AND job_request.creator = cur_usernum AND job_request.projectState != 9) as opened, ( SELECT COUNT(*) FROM job_request WHERE job_request.companyId = cur_companyId AND job_request.creator = cur_usernum AND job_request.projectState = 9) as completed, ( SELECT COUNT(*) FROM job_chat WHERE job_chat.userId = users.id) as totalchats, ( SELECT COUNT(*) FROM job_chat WHERE job_chat.userId = users.id) / ( SELECT COUNT(distinct job_chat.jobId) FROM job_chat WHERE job_chat.userId = users.id ) as avgchats'))
+                        ->select(DB::raw("users.id as id, (SELECT company_name from company_info WHERE company_info.id = users.companyid) as companyname, users.username as username, users.companyId as cur_companyId, users.usernumber as cur_usernum, ( SELECT COUNT(*) FROM job_request WHERE job_request.companyId = cur_companyId AND job_request.creator = cur_usernum AND job_request.projectState != 9{$dateFilter}) as opened, ( SELECT COUNT(*) FROM job_request WHERE job_request.companyId = cur_companyId AND job_request.creator = cur_usernum AND job_request.projectState = 9{$dateFilter}) as completed, ( SELECT COUNT(*) FROM job_chat WHERE job_chat.userId = users.id) as totalchats, ( SELECT COUNT(*) FROM job_chat WHERE job_chat.userId = users.id) / ( SELECT COUNT(distinct job_chat.jobId) FROM job_chat WHERE job_chat.userId = users.id ) as avgchats"))
                         ->get();
 
             $totalFiltered = $handler->where('id', 'LIKE',"%{$search}%")

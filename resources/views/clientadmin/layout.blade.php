@@ -43,6 +43,7 @@
         <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.6/css/responsive.bootstrap.min.css">
 
         <link rel="stylesheet" href="{{ asset('js/plugins/flatpickr/flatpickr.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('js/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css') }}">
         <link rel="stylesheet" href="{{ asset('js/plugins/jstree/themes/default/style.min.css') }}">
         <link rel="stylesheet" href="{{ asset('css/jquery.ui.min.css') }}">
         <!-- END Stylesheets -->
@@ -391,8 +392,9 @@
         <!-- Date Time Picker Plugins -->
         <script src="{{ asset('js/plugins/flatpickr/flatpickr.min.js') }}"></script>
 
-        <script>jQuery(function(){ Dashmix.helpers('select2'); });</script>
-        <script>jQuery(function(){ Dashmix.helpers(['flatpickr', 'notify']); });</script>
+        <script src="{{ asset('js/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
+
+        <script>jQuery(function(){ Dashmix.helpers(['flatpickr', 'datepicker', 'select2', 'sparkline', 'notify']); });</script>
         <script src="{{ asset('/js/plugins/jquery-validation/jquery.validate.min.js') }}"></script>
         <script src="{{ asset('/js/plugins/jquery-validation/additional-methods.js') }}"></script>
 
