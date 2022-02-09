@@ -840,6 +840,14 @@ class GeneralController extends Controller
         $data['Equipment'] = array();
         $data['Equipment']['PVModule'] = array('Type' => $input['option-module-type'], 'SubType' => $input['option-module-subtype'], 'Option1' => number_format(floatval($input['option-module-option1']), 2), 'Option2' => $input['option-module-option2'], 'Quantity' => $input['option-module-quantity'], 'Custom' => $input['pv-module-custom'], 'CRC32' => $input['pv-module-crc32'], 'CEC' => number_format($input['pv-module-cec']));
         $data['Equipment']['PVInverter'] = array('Type' => $input['option-inverter-type'], 'SubType' => $input['option-inverter-subtype'], 'Option1' => number_format(floatval($input['option-inverter-option1']), 2), 'Option2' => $input['option-inverter-option2'], 'Quantity' => $input['option-inverter-quantity'], 'Custom' => $input['inverter-custom'], 'CRC32' => $input['inverter-crc32']);
+        if($input['pv-inverter-2'] == 1)
+            $data['Equipment']['PVInverter_2'] = array('Type' => $input['option-inverter2-type'], 'SubType' => $input['option-inverter2-subtype'], 'Option1' => number_format(floatval($input['option-inverter2-option1']), 2), 'Option2' => $input['option-inverter2-option2'], 'Quantity' => $input['option-inverter2-quantity'], 'Custom' => $input['inverter2-custom'], 'CRC32' => $input['inverter2-crc32']);
+        else
+            $data['Equipment']['PVInverter_2'] = array('Type' => '', 'SubType' => '', 'Option1' => '', 'Option2' => '', 'Quantity' => '0', 'Custom' => '', 'CRC32' => '');
+        if($input['pv-inverter-3'] == 1)
+            $data['Equipment']['PVInverter_3'] = array('Type' => $input['option-inverter3-type'], 'SubType' => $input['option-inverter3-subtype'], 'Option1' => number_format(floatval($input['option-inverter3-option1']), 2), 'Option2' => $input['option-inverter3-option2'], 'Quantity' => $input['option-inverter3-quantity'], 'Custom' => $input['inverter3-custom'], 'CRC32' => $input['inverter3-crc32']);
+        else
+            $data['Equipment']['PVInverter_3'] = array('Type' => '', 'SubType' => '', 'Option1' => '', 'Option2' => '', 'Quantity' => '0', 'Custom' => '', 'CRC32' => '');
         $data['Equipment']['Stanchion'] = array('Type' => $input['option-stanchion-type'], 'SubType' => $input['option-stanchion-subtype'], 'Option1' => number_format(floatval($input['option-stanchion-option1']), 2), 'Option2' => $input['option-stanchion-option2'], 'Custom' => $input['stanchion-custom'], 'CRC32' => $input['stanchion-crc32']);
         $data['Equipment']['RailSupportSystem'] = array('Type' => $input['option-railsupport-type'], 'SubType' => $input['option-railsupport-subtype'], 'Option1' => number_format(floatval($input['option-railsupport-option1']), 2), 'Option2' => $input['option-railsupport-option2'], 'Custom' => $input['railsupport-custom'], 'CRC32' => $input['railsupport-crc32']);
 
