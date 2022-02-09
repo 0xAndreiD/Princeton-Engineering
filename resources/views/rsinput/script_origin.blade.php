@@ -935,21 +935,38 @@ var optionPVInverter = function(mainType, subType, idx) {
     return "N/A";
 }
 
-var updatePVInvertorSubField = function(mainType, subType = "") {
+var updatePVInvertorSubField = function(mainType, subType = "", invId = 1) {
     if (subType == "") 
     {
         selectedSubType = "";
-        $('#option-inverter-subtype').find('option').remove();
+        $(`#option-inverter${invId == 1 ? '' : invId}-subtype`).find('option').remove();
         subTypes = getPVInvertorSubTypes(mainType);
 
         if(subTypes.length > 0)
             selectedSubType = subTypes[0][1];
-        if ( typeof preloaded_data != "undefined"
+        if ( invId == 1
+          && typeof preloaded_data != "undefined"
           && typeof preloaded_data['Equipment'] != "undefined" 
           && typeof preloaded_data['Equipment']['PVInverter'] != "undefined"
           && typeof preloaded_data['Equipment']['PVInverter']['SubType'] != "undefined" ) {
             if(preloaded_data['Equipment']['PVInverter']['Type'] == mainType)
                 selectedSubType = preloaded_data['Equipment']['PVInverter']['SubType'];
+        }
+        if ( invId == 2
+          && typeof preloaded_data != "undefined"
+          && typeof preloaded_data['Equipment'] != "undefined" 
+          && typeof preloaded_data['Equipment']['PVInverter_2'] != "undefined"
+          && typeof preloaded_data['Equipment']['PVInverter_2']['SubType'] != "undefined" ) {
+            if(preloaded_data['Equipment']['PVInverter_2']['Type'] == mainType)
+                selectedSubType = preloaded_data['Equipment']['PVInverter_2']['SubType'];
+        }
+        if ( invId == 3
+          && typeof preloaded_data != "undefined"
+          && typeof preloaded_data['Equipment'] != "undefined" 
+          && typeof preloaded_data['Equipment']['PVInverter_3'] != "undefined"
+          && typeof preloaded_data['Equipment']['PVInverter_3']['SubType'] != "undefined" ) {
+            if(preloaded_data['Equipment']['PVInverter_3']['Type'] == mainType)
+                selectedSubType = preloaded_data['Equipment']['PVInverter_3']['SubType'];
         }
 
         for (index=0; index<subTypes.length; index++) 
@@ -961,21 +978,32 @@ var updatePVInvertorSubField = function(mainType, subType = "") {
                 background = '#FED8B1';
 
             if (subTypes[index][1] == selectedSubType) {
-                $('#option-inverter-subtype').append(`<option data-value="${subTypes[index][1]}" ${background != '' ? "style='background-color: " + background + "'" : ''} selected> ${subTypes[index][1]}</option>`);
+                $(`#option-inverter${invId == 1 ? '' : invId}-subtype`).append(`<option data-value="${subTypes[index][1]}" ${background != '' ? "style='background-color: " + background + "'" : ''} selected> ${subTypes[index][1]}</option>`);
             }
             else {
-                $('#option-inverter-subtype').append(`<option data-value="${subTypes[index][1]}" ${background != '' ? "style='background-color: " + background + "'" : ''}> ${subTypes[index][1]} </option>`);
+                $(`#option-inverter${invId == 1 ? '' : invId}-subtype`).append(`<option data-value="${subTypes[index][1]}" ${background != '' ? "style='background-color: " + background + "'" : ''}> ${subTypes[index][1]} </option>`);
             }
         }
 
         subType = selectedSubType;
     }
 
-    $('#option-inverter-option1').html(optionPVInverter(mainType, subType, 2));
-    $('#option-inverter-option2').html(optionPVInverter(mainType, subType, 3));   
-    $('#inverter-custom').val(optionPVInverter(mainType, subType, 4) ? true : false);
-    $('#inverter-crc32').val(optionPVInverter(mainType, subType, 6));
-    $('#inverter-watts').val(optionPVInverter(mainType, subType, 7));
+    $(`#option-inverter${invId == 1 ? '' : invId}-option1`).html(optionPVInverter(mainType, subType, 2));
+    $(`#option-inverter${invId == 1 ? '' : invId}-option2`).html(optionPVInverter(mainType, subType, 3));   
+    $(`#inverter${invId == 1 ? '' : invId}-custom`).val(optionPVInverter(mainType, subType, 4) ? true : false);
+    $(`#inverter${invId == 1 ? '' : invId}-crc32`).val(optionPVInverter(mainType, subType, 6));
+    $(`#inverter${invId == 1 ? '' : invId}-watts`).val(optionPVInverter(mainType, subType, 7));
+}
+
+var addPVInverter = function() {
+    if($("#pv-inverter-2")[0].style.display == "none")
+        $("#pv-inverter-2").css('display', 'table-row');
+    else if($("#pv-inverter-3")[0].style.display == "none")
+        $("#pv-inverter-3").css('display', 'table-row');
+}
+
+var removePVInverter = function(id) {
+    $(`#pv-inverter-${id}`).css('display', 'none');
 }
 
 var getStanchionTypes = function() {
@@ -1259,9 +1287,9 @@ async function toggleModuleCEC(){
     updateModuleSetting(moduleSetting);
 }
 
-function updateInverterSetting(setting){
+function updateInverterSetting(setting, invId = 1){
     inverterSetting = setting;
-    $('#option-inverter-type').find('option').remove();
+    $(`#option-inverter${invId == 1 ? '' : invId}-type`).find('option').remove();
     var tmpMainTypes = getPVInvertorTypes();
     var mainTypes = [];
     tmpMainTypes.forEach(type => {
@@ -1282,13 +1310,13 @@ function updateInverterSetting(setting){
     for (index=0; index<mainTypes.length; index++) 
     {
         if (mainTypes[index] == selectedMainType) {
-            $('#option-inverter-type').append(`<option data-value="${mainTypes[index]}" selected> ${mainTypes[index]}</option>`);
+            $(`#option-inverter${invId == 1 ? '' : invId}-type`).append(`<option data-value="${mainTypes[index]}" selected> ${mainTypes[index]}</option>`);
         }
         else {
-            $('#option-inverter-type').append(`<option data-value="${mainTypes[index]}"> ${mainTypes[index]} </option>`);
+            $(`#option-inverter${invId == 1 ? '' : invId}-type`).append(`<option data-value="${mainTypes[index]}"> ${mainTypes[index]} </option>`);
         }
     }
-    updatePVInvertorSubField($('#option-inverter-type').children("option:selected").val());
+    updatePVInvertorSubField($(`#option-inverter${invId == 1 ? '' : invId}-type`).children("option:selected").val(), "", invId);
     updateStanchionSubField($('#option-stanchion-type').children("option:selected").val());
     updateRailSupportSubField($('#option-railsupport-type').children("option:selected").val());
 }
@@ -1537,7 +1565,7 @@ var updateNumberOfConditions = function(conditions) {
     }
 }
 
-var ignorable = ['a-7-', 'a-8-', 'af-8-', 'ai-8-', 'a-9-', 'af-9-', 'ai-9-', 'a-10-', 'af-10-', 'ai-10-', 'ac-7-', 'ac-8-', 'ac-9-', 'ac-10-', 'c-1-', 'c-2-', 'cf-2-', 'ci-2-', 'c-3-', 'cf-3-', 'ci-3-', 'c-4-', 'cf-4-', 'ci-4-', 'calc-algorithm-', 'collarHeights', 'd-7-', 'd-8-', 'd-9-', 'date_report', 'txt-sub-project-number'];
+var ignorable = ['a-7-', 'a-8-', 'af-8-', 'ai-8-', 'a-9-', 'af-9-', 'ai-9-', 'a-10-', 'af-10-', 'ai-10-', 'ac-7-', 'ac-8-', 'ac-9-', 'ac-10-', 'c-1-', 'c-2-', 'cf-2-', 'ci-2-', 'c-3-', 'cf-3-', 'ci-3-', 'c-4-', 'cf-4-', 'ci-4-', 'calc-algorithm-', 'collarHeights', 'd-7-', 'd-8-', 'd-9-', 'date_report', 'txt-sub-project-number', 'inverter2-', 'inverter3-'];
 
 var isIgnorable = function(id) {
     let canIgnore = false;
@@ -1674,10 +1702,24 @@ var getData = function(caseCount = 10) {
     alldata['option-inverter-option1'] = $('#option-inverter-option1').html();
     alldata['option-inverter-option2'] = $('#option-inverter-option2').html();
     alldata['option-inverter-quantity'] = $('#option-inverter-quantity').val();
+    alldata['option-inverter2-option1'] = $('#option-inverter2-option1').html();
+    alldata['option-inverter2-option2'] = $('#option-inverter2-option2').html();
+    alldata['option-inverter2-quantity'] = $('#option-inverter2-quantity').val();
+    alldata['option-inverter3-option1'] = $('#option-inverter3-option1').html();
+    alldata['option-inverter3-option2'] = $('#option-inverter3-option2').html();
+    alldata['option-inverter3-quantity'] = $('#option-inverter3-quantity').val();
     alldata['option-stanchion-option1'] = $('#option-stanchion-option1').html();
     alldata['option-stanchion-option2'] = $('#option-stanchion-option2').html();
     alldata['option-railsupport-option1'] = $('#option-railsupport-option1').html();
     alldata['option-railsupport-option2'] = $('#option-railsupport-option2').html();
+    if($("#pv-inverter-2")[0].style.display != 'none')
+        alldata['pv-inverter-2'] = 1;
+    else
+        alldata['pv-inverter-2'] = 0;
+    if($("#pv-inverter-3")[0].style.display != 'none')
+        alldata['pv-inverter-3'] = 1;
+    else
+        alldata['pv-inverter-3'] = 0;
     alldata['caseInputs'] = [];
 
     for(i = 1; i <= caseCount; i ++ )
@@ -2691,6 +2733,8 @@ $(document).ready(function() {
                 // ------------------- Second Line ---------------------
                 // inverter module section
                 $('#option-inverter-type').find('option').remove();
+                $('#option-inverter2-type').find('option').remove();
+                $('#option-inverter3-type').find('option').remove();
                 mainTypes = getPVInvertorTypes();
 
                 // load selected from preloaded_data
@@ -2701,19 +2745,41 @@ $(document).ready(function() {
                   && typeof preloaded_data['Equipment']['PVInverter']['Type'] != "undefined" ) {
                     selectedMainType = preloaded_data['Equipment']['PVInverter']['Type'];
                 }
+                selectedMainType2 = mainTypes[0];
+                if ( typeof preloaded_data != "undefined"
+                  && typeof preloaded_data['Equipment'] != "undefined" 
+                  && typeof preloaded_data['Equipment']['PVInverter_2'] != "undefined"
+                  && typeof preloaded_data['Equipment']['PVInverter_2']['Type'] != "undefined" && preloaded_data['Equipment']['PVInverter_2']['Type'] != '') {
+                    selectedMainType2 = preloaded_data['Equipment']['PVInverter_2']['Type'];
+                }
+                selectedMainType3 = mainTypes[0];
+                if ( typeof preloaded_data != "undefined"
+                  && typeof preloaded_data['Equipment'] != "undefined" 
+                  && typeof preloaded_data['Equipment']['PVInverter_3'] != "undefined"
+                  && typeof preloaded_data['Equipment']['PVInverter_3']['Type'] != "undefined" && preloaded_data['Equipment']['PVInverter_3']['Type'] != '') {
+                    selectedMainType3 = preloaded_data['Equipment']['PVInverter_3']['Type'];
+                }
 
                 for (index=0; index<mainTypes.length; index++) 
                 {
-                    if (mainTypes[index] == selectedMainType) {
+                    if (mainTypes[index] == selectedMainType) 
                         $('#option-inverter-type').append(`<option data-value="${mainTypes[index]}" selected> ${mainTypes[index]}</option>`);
-                    }
-                    else {
+                    else
                         $('#option-inverter-type').append(`<option data-value="${mainTypes[index]}"> ${mainTypes[index]} </option>`);
-                    }
+                    if (mainTypes[index] == selectedMainType2) 
+                        $('#option-inverter2-type').append(`<option data-value="${mainTypes[index]}" selected> ${mainTypes[index]}</option>`);
+                    else
+                        $('#option-inverter2-type').append(`<option data-value="${mainTypes[index]}"> ${mainTypes[index]} </option>`);
+                    if (mainTypes[index] == selectedMainType3) 
+                        $('#option-inverter3-type').append(`<option data-value="${mainTypes[index]}" selected> ${mainTypes[index]}</option>`);
+                    else
+                        $('#option-inverter3-type').append(`<option data-value="${mainTypes[index]}"> ${mainTypes[index]} </option>`);                        
                 }
 
                 // inverter submodule section
                 updatePVInvertorSubField(selectedMainType);
+                updatePVInvertorSubField(selectedMainType2, "", 2);
+                updatePVInvertorSubField(selectedMainType3, "", 3);
             },
             error: function(xhr, status, error) {
                 res = JSON.parse(xhr.responseText);
@@ -3166,9 +3232,23 @@ $(document).ready(function() {
     $('#option-inverter-type').on('change', function() {
         updatePVInvertorSubField($(this).children("option:selected").val());
     });
+    $('#option-inverter2-type').on('change', function() {
+        updatePVInvertorSubField($(this).children("option:selected").val(), "", 2);
+    });
+    $('#option-inverter3-type').on('change', function() {
+        updatePVInvertorSubField($(this).children("option:selected").val(), "", 3);
+    });
     $('#option-inverter-subtype').on('change', function() {
         updatePVInvertorSubField( $('#option-inverter-type').children("option:selected").val(), 
                                 $(this).children("option:selected").val());
+    });
+    $('#option-inverter2-subtype').on('change', function() {
+        updatePVInvertorSubField( $('#option-inverter2-type').children("option:selected").val(), 
+                                $(this).children("option:selected").val(), 2);
+    });
+    $('#option-inverter3-subtype').on('change', function() {
+        updatePVInvertorSubField( $('#option-inverter3-type').children("option:selected").val(), 
+                                $(this).children("option:selected").val(), 3);
     });
     $('#option-stanchion-type').on('change', function() {
         updateStanchionSubField($(this).children("option:selected").val());
@@ -4277,6 +4357,14 @@ var loadPreloadedData = function() {
 
                             $('#option-module-quantity').val(preloaded_data['Equipment']['PVModule']['Quantity']);
                             $('#option-inverter-quantity').val(preloaded_data['Equipment']['PVInverter']['Quantity']);
+                            if(preloaded_data['Equipment']['PVInverter_2']['Type'] != ''){
+                                $("#pv-inverter-2").css('display', 'table-row');
+                                $('#option-inverter2-quantity').val(preloaded_data['Equipment']['PVInverter_2']['Quantity']);
+                            }
+                            if(preloaded_data['Equipment']['PVInverter_3']['Type'] != ''){
+                                $("#pv-inverter-3").css('display', 'table-row');
+                                $('#option-inverter3-quantity').val(preloaded_data['Equipment']['PVInverter_3']['Quantity']);
+                            }
 
                             $("#option-number-of-conditions").val(preloaded_data['NumberLoadingConditions']);
                             updateNumberOfConditions(parseInt(preloaded_data['NumberLoadingConditions']));

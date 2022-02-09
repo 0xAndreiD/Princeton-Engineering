@@ -275,6 +275,7 @@
         <col width="80">
         <col width="80">
         <col width="80">
+        <col width="60">
     </colgroup>
 <tbody>
     <tr class="h13">
@@ -291,7 +292,7 @@
     <tr class="h13">
         <td><div style="overflow:hidden"></div></td>
         <td class="iw400-bdr" colspan="6">Equipment section</td>
-        <td class="iw400-bdr" colspan="5">Product Selection Filters</td>
+        <td class="iw400-bdr" colspan="4">Product Selection Filters</td>
     </tr>
     <tr class="h13">
         <td ><div style="overflow:hidden"></div></td>
@@ -352,7 +353,7 @@
     </tr>
     <tr class="h13">
         <td><div style="overflow:hidden"></div></td>
-        <td class="iw400-right-bdr">PV inverter</td>
+        <td class="iw400-right-bdr">PV Inverter 1</td>
         <td class="w400-green-bdr">
             <select id="option-inverter-type" tabindex="19">
             </select>
@@ -383,9 +384,98 @@
             </div>
         </td>
         <td class="right-bdr"></td>
+        <td class="text-center">
+            <span class="btn btn-success" style="padding: 0px 4px; height: 22px;" onclick="addPVInverter()">
+                <i class="fa fa-plus" style="font-size: 12px; top: -2px;"></i>
+            </span>
+        </td>
         <input class="w400-bdr" id="inverter-custom" hidden>
         <input class="w400-bdr" id="inverter-crc32" hidden>
         <input class="w400-bdr" id="inverter-watts" hidden>
+    </tr>
+    <tr class="h13" style="display: none;" id="pv-inverter-2">
+        <td><div style="overflow:hidden"></div></td>
+        <td class="iw400-right-bdr">PV Inverter 2</td>
+        <td class="w400-green-bdr">
+            <select id="option-inverter2-type" tabindex="19">
+            </select>
+        </td>
+        <td class="w400-green-bdr">
+            <select id="option-inverter2-subtype" tabindex="20">
+            </select>
+        </td>
+        <td class="w400-bdr" id="option-inverter2-option1"></td>
+        <td class="w400-bdr" id="option-inverter2-option2"></td>
+        <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="option-inverter2-quantity" tabindex="20" value="0"></td>
+        <td class="text-center">
+            <div class="custom-control custom-radio custom-control-dark">
+                <input type="radio" class="custom-control-input" id="inverter2-mixed" name="inverter2-settings" onclick="updateInverterSetting(0, 2)" checked>
+                <label class="custom-control-label" for="inverter2-mixed"></label>
+            </div>
+        </td>
+        <td class="text-center">
+            <div class="custom-control custom-radio custom-control-info">
+                <input type="radio" class="custom-control-input" id="inverter2-standard" name="inverter2-settings" onclick="updateInverterSetting(1, 2)">
+                <label class="custom-control-label" for="inverter2-standard"></label>
+            </div>
+        </td>
+        <td class="text-center">
+            <div class="custom-control custom-radio custom-control-success">
+                <input type="radio" class="custom-control-input" id="inverter2-favorite" name="inverter2-settings" onclick="updateInverterSetting(2, 2)">
+                <label class="custom-control-label" for="inverter2-favorite"></label>
+            </div>
+        </td>
+        <td class="right-bdr"></td>
+        <td class="text-center">
+            <span class="btn btn-danger" style="padding: 0px 5px; height: 22px;" onclick="removePVInverter(2)">
+                <i class="fa fa-times" style="font-size: 12px; top: -2px;"></i>
+            </span>
+        </td>
+        <input class="w400-bdr" id="inverter2-custom" hidden>
+        <input class="w400-bdr" id="inverter2-crc32" hidden>
+        <input class="w400-bdr" id="inverter2-watts" hidden>
+    </tr>
+    <tr class="h13" style="display: none;" id="pv-inverter-3">
+        <td><div style="overflow:hidden"></div></td>
+        <td class="iw400-right-bdr">PV Inverter 3</td>
+        <td class="w400-green-bdr">
+            <select id="option-inverter3-type" tabindex="19">
+            </select>
+        </td>
+        <td class="w400-green-bdr">
+            <select id="option-inverter3-subtype" tabindex="20">
+            </select>
+        </td>
+        <td class="w400-bdr" id="option-inverter3-option1"></td>
+        <td class="w400-bdr" id="option-inverter3-option2"></td>
+        <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="option-inverter3-quantity" tabindex="20" value="0"></td>
+        <td class="text-center">
+            <div class="custom-control custom-radio custom-control-dark">
+                <input type="radio" class="custom-control-input" id="inverter3-mixed" name="inverter3-settings" onclick="updateInverterSetting(0, 3)" checked>
+                <label class="custom-control-label" for="inverter3-mixed"></label>
+            </div>
+        </td>
+        <td class="text-center">
+            <div class="custom-control custom-radio custom-control-info">
+                <input type="radio" class="custom-control-input" id="inverter3-standard" name="inverter3-settings" onclick="updateInverterSetting(1, 3)">
+                <label class="custom-control-label" for="inverter3-standard"></label>
+            </div>
+        </td>
+        <td class="text-center">
+            <div class="custom-control custom-radio custom-control-success">
+                <input type="radio" class="custom-control-input" id="inverter3-favorite" name="inverter3-settings" onclick="updateInverterSetting(2, 3)">
+                <label class="custom-control-label" for="inverter3-favorite"></label>
+            </div>
+        </td>
+        <td class="right-bdr"></td>
+        <td class="text-center">
+            <span class="btn btn-danger" style="padding: 0px 5px; height: 22px;" onclick="removePVInverter(3)">
+                <i class="fa fa-times" style="font-size: 12px; top: -2px;"></i>
+            </span>
+        </td>
+        <input class="w400-bdr" id="inverter3-custom" hidden>
+        <input class="w400-bdr" id="inverter3-crc32" hidden>
+        <input class="w400-bdr" id="inverter3-watts" hidden>
     </tr>
     <tr class="h13">
         <td><div style="overflow:hidden"></div></td>
