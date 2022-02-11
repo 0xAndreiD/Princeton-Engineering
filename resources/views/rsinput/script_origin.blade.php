@@ -16,6 +16,8 @@ function openRfdTab(evt, tabName) {
     
     if (tabName == "tab_test")
         document.getElementById('subPageTitle').innerHTML = 'test';
+    else if (tabName == "electric")
+        document.getElementById('subPageTitle').innerHTML = 'Electrical Data Input';
     else if( tabName == "tab_first" )
         document.getElementById('subPageTitle').innerHTML = 'Site and Equipment Data Input';
     else if( tabName == "tab_override" )
@@ -1691,6 +1693,9 @@ var getData = function(caseCount = 10) {
     $('#inputform-first select:enabled').each(function() { 
         alldata[$(this).attr('id')] = $(this).val();
     });
+    $('#inputform-electric input:text:enabled').each(function() { 
+        alldata[$(this).attr('id')] = $(this).val();
+    });
 
     alldata['txt-company-name'] = $('#txt-company-name').val();
     alldata['txt-company-number'] = $('#txt-company-number').val();
@@ -1784,6 +1789,9 @@ var getData = function(caseCount = 10) {
     alldata['nec-year'] = $('#nec-year').val();
     alldata['wind-exposure'] = $('#wind-exposure').val();
     alldata['override-unit'] = $('#override-unit').val();
+
+    if($("#PV-breaker-recommended").length > 0)
+        alldata['PV-breaker-recommended'] = $("#PV-breaker-recommended").html();
 
     return alldata;
 }
@@ -3141,6 +3149,27 @@ $(document).ready(function() {
         });
     }
 
+    var loadElectric = function(){
+        if($("#R1-Inv").length > 0 && preloaded_data && preloaded_data['Electrical']) {
+            $("#R1-Inv").val(preloaded_data['Electrical']['StrTable']['R1']['InvNo']); $("#R1-String").val(preloaded_data['Electrical']['StrTable']['R1']['StringNumber']); $("#R1-Mod-Str").val(preloaded_data['Electrical']['StrTable']['R1']['ModulesPerString']); $("#R1-Str-MPPT").val(preloaded_data['Electrical']['StrTable']['R1']['StringsPerMPPT']);
+            $("#R2-Inv").val(preloaded_data['Electrical']['StrTable']['R2']['InvNo']); $("#R2-String").val(preloaded_data['Electrical']['StrTable']['R2']['StringNumber']); $("#R2-Mod-Str").val(preloaded_data['Electrical']['StrTable']['R2']['ModulesPerString']); $("#R2-Str-MPPT").val(preloaded_data['Electrical']['StrTable']['R2']['StringsPerMPPT']);
+            $("#R3-Inv").val(preloaded_data['Electrical']['StrTable']['R3']['InvNo']); $("#R3-String").val(preloaded_data['Electrical']['StrTable']['R3']['StringNumber']); $("#R3-Mod-Str").val(preloaded_data['Electrical']['StrTable']['R3']['ModulesPerString']); $("#R3-Str-MPPT").val(preloaded_data['Electrical']['StrTable']['R3']['StringsPerMPPT']);
+            $("#R4-Inv").val(preloaded_data['Electrical']['StrTable']['R4']['InvNo']); $("#R4-String").val(preloaded_data['Electrical']['StrTable']['R4']['StringNumber']); $("#R4-Mod-Str").val(preloaded_data['Electrical']['StrTable']['R4']['ModulesPerString']); $("#R4-Str-MPPT").val(preloaded_data['Electrical']['StrTable']['R4']['StringsPerMPPT']);
+            $("#R5-Inv").val(preloaded_data['Electrical']['StrTable']['R5']['InvNo']); $("#R5-String").val(preloaded_data['Electrical']['StrTable']['R5']['StringNumber']); $("#R5-Mod-Str").val(preloaded_data['Electrical']['StrTable']['R5']['ModulesPerString']); $("#R5-Str-MPPT").val(preloaded_data['Electrical']['StrTable']['R5']['StringsPerMPPT']);
+            $("#R6-Inv").val(preloaded_data['Electrical']['StrTable']['R6']['InvNo']); $("#R6-String").val(preloaded_data['Electrical']['StrTable']['R6']['StringNumber']); $("#R6-Mod-Str").val(preloaded_data['Electrical']['StrTable']['R6']['ModulesPerString']); $("#R6-Str-MPPT").val(preloaded_data['Electrical']['StrTable']['R6']['StringsPerMPPT']);
+            $("#R7-Inv").val(preloaded_data['Electrical']['StrTable']['R7']['InvNo']); $("#R7-String").val(preloaded_data['Electrical']['StrTable']['R7']['StringNumber']); $("#R7-Mod-Str").val(preloaded_data['Electrical']['StrTable']['R7']['ModulesPerString']); $("#R7-Str-MPPT").val(preloaded_data['Electrical']['StrTable']['R7']['StringsPerMPPT']);
+            $("#R8-Inv").val(preloaded_data['Electrical']['StrTable']['R8']['InvNo']); $("#R8-String").val(preloaded_data['Electrical']['StrTable']['R8']['StringNumber']); $("#R8-Mod-Str").val(preloaded_data['Electrical']['StrTable']['R8']['ModulesPerString']); $("#R8-Str-MPPT").val(preloaded_data['Electrical']['StrTable']['R8']['StringsPerMPPT']);
+            $("#R9-Inv").val(preloaded_data['Electrical']['StrTable']['R9']['InvNo']); $("#R9-String").val(preloaded_data['Electrical']['StrTable']['R9']['StringNumber']); $("#R9-Mod-Str").val(preloaded_data['Electrical']['StrTable']['R9']['ModulesPerString']); $("#R9-Str-MPPT").val(preloaded_data['Electrical']['StrTable']['R9']['StringsPerMPPT']);
+            $("#R10-Inv").val(preloaded_data['Electrical']['StrTable']['R10']['InvNo']); $("#R10-String").val(preloaded_data['Electrical']['StrTable']['R10']['StringNumber']); $("#R10-Mod-Str").val(preloaded_data['Electrical']['StrTable']['R10']['ModulesPerString']); $("#R10-Str-MPPT").val(preloaded_data['Electrical']['StrTable']['R10']['StringsPerMPPT']);
+
+            $("#bus-bar-rating").val(preloaded_data['Electrical']['Main']['BusBarRating']);
+            $("#main-breaker-rating").val(preloaded_data['Electrical']['Main']['MainBreakerRating']);
+            $("#downgraded-breaker-rating").val(preloaded_data['Electrical']['Main']['DowngradedBreakerRating']);
+            $("#PV-breaker-recommended").html($('#RecommendOCPD').html());
+            $("#pv-breaker-selected").val(preloaded_data['Electrical']['Main']['PVBreakerSelected']);
+        }
+    }
+
     // component hander functions
     $("#txt-project-number").change(function(){
         setProjectIdComment();
@@ -3807,6 +3836,19 @@ $(document).ready(function() {
                         return;
                     }
                 }
+            }
+        }
+
+        if($("#bus-bar-rating").length > 0){
+            if(parseFloat($("#main-breaker-rating").val()) > parseFloat($("#bus-bar-rating").val())) {
+                $("#submitBtns input").attr('disabled', false);
+                swal.fire({ title: "Warning", text: "Main Breaker Rating cannot be larger than Bus Bar Rating.", icon: "warning", confirmButtonText: `OK` });
+                return;
+            }
+            if(parseFloat($("#downgraded-breaker-rating").val()) > parseFloat($("#bus-bar-rating").val())) {
+                $("#submitBtns input").attr('disabled', false);
+                swal.fire({ title: "Warning", text: "Downgraded Breaker Rating cannot be larger than Bus Bar Rating.", icon: "warning", confirmButtonText: `OK` });
+                return;
             }
         }
 
@@ -4971,6 +5013,7 @@ var loadPreloadedData = function() {
         if(await isSubClientAllowed())
             await loadSubClients();
         await loadDataCheck();
+        loadElectric();
         await loadPreloadedPermitData();
         loadEquipmentSection();
         await setProjectIdComment();

@@ -242,6 +242,7 @@ class CompanyController extends Controller
             $company->company_website = $data['website'];
             $company->max_allowable_skip = $data['max_allowable_skip'];
             $company->allow_subclient = $data['allow_subclient'] == 'on' ? 1 : 0;
+            $company->AutoCAD = $data['AutoCAD'] == 'on' ? 1 : 0;
             // $company->bill_notifiers = $data['bill_notifiers'];
             if(!empty($data->file('logofile'))){
                 $file = $request->file('logofile');
@@ -301,6 +302,7 @@ class CompanyController extends Controller
             $company->company_website = $data['website'];
             $company->max_allowable_skip = $data['max_allowable_skip'];
             $company->allow_subclient = $data['allow_subclient'] == 'on' ? 1 : 0;
+            $company->AutoCAD = $data['AutoCAD'] == 'on' ? 1 : 0;
             // $company->bill_notifiers = $data['bill_notifiers'];
             if(!empty($data->file('logofile'))){
                 $file = $request->file('logofile');

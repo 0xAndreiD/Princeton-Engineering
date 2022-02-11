@@ -19,6 +19,9 @@
 <div class="rfdContainer">
     <div class="rfdTab">
         <button class="tablinks" onclick="openRfdTab(event, 'tab_first')" id="defaultOpen">Common Data Entry</button>
+        @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || $AutoCAD == 1)
+        <button class="tablinks" onclick="openRfdTab(event, 'electric')" style="display: block;" id="fcTab-1">Electric</button>
+        @endif
         <button class="tablinks" onclick="openRfdTab(event, 'fc-1')" style="display: block;" id="fcTab-1">FC 1</button>
         <button class="tablinks" onclick="openRfdTab(event, 'fc-2')" style="display: none;" id="fcTab-2">FC 2</button>
         <button class="tablinks" onclick="openRfdTab(event, 'fc-3')" style="display: none;" id="fcTab-3">FC 3</button>
@@ -41,6 +44,11 @@
     <div id="tab_first" class="rfdTabContent domChange">
         @include('rsinput.first')
     </div>
+    @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || $AutoCAD == 1)
+    <div id="electric" class="rfdTabContent domChange">
+        @include('rsinput.electric')
+    </div>
+    @endif
     @for($i = 1; $i <= 10; $i ++)
         @php
             $conditionId = $i;    

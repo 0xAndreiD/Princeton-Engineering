@@ -411,7 +411,8 @@ class GeneralController extends Controller
                     ->with('ceilingMaterials', $ceilingMaterials)
                     ->with('deckMaterials', $deckMaterials)
                     ->with('surfaceMaterials', $surfaceMaterials)
-                    ->with('date_report', $project ? $project->date_report : NULL);
+                    ->with('date_report', $project ? $project->date_report : NULL)
+                    ->with('AutoCAD', $company['AutoCAD']);
         }
         else
         {
@@ -432,7 +433,8 @@ class GeneralController extends Controller
                     ->with('ceilingMaterials', $ceilingMaterials)
                     ->with('deckMaterials', $deckMaterials)
                     ->with('surfaceMaterials', $surfaceMaterials)
-                    ->with('date_report', $project ? $project->date_report : NULL);
+                    ->with('date_report', $project ? $project->date_report : NULL)
+                    ->with('AutoCAD', 0);
         }
     }
 
@@ -987,6 +989,27 @@ class GeneralController extends Controller
         $data['NEC'] = $input['nec-year'];
         $data['WindExposure'] = $input['wind-exposure'];
         $data['Units'] = $input['override-unit'];
+
+        //Electrical
+        if(isset($input['R1-Inv'])){
+            $data['Electrical'] = array('StrTable' => array(), 'Main' => array());
+            $data['Electrical']['StrTable']['R1'] = array('InvNo' => $input['R1-Inv'], 'StringNumber' => intval($input['R1-String']), 'ModulesPerString' => intval($input['R1-Mod-Str']), 'StringsPerMPPT' => intval($input['R1-Str-MPPT']));
+            $data['Electrical']['StrTable']['R2'] = array('InvNo' => $input['R2-Inv'], 'StringNumber' => intval($input['R2-String']), 'ModulesPerString' => intval($input['R2-Mod-Str']), 'StringsPerMPPT' => intval($input['R2-Str-MPPT']));
+            $data['Electrical']['StrTable']['R3'] = array('InvNo' => $input['R3-Inv'], 'StringNumber' => intval($input['R3-String']), 'ModulesPerString' => intval($input['R3-Mod-Str']), 'StringsPerMPPT' => intval($input['R3-Str-MPPT']));
+            $data['Electrical']['StrTable']['R4'] = array('InvNo' => $input['R4-Inv'], 'StringNumber' => intval($input['R4-String']), 'ModulesPerString' => intval($input['R4-Mod-Str']), 'StringsPerMPPT' => intval($input['R4-Str-MPPT']));
+            $data['Electrical']['StrTable']['R5'] = array('InvNo' => $input['R5-Inv'], 'StringNumber' => intval($input['R5-String']), 'ModulesPerString' => intval($input['R5-Mod-Str']), 'StringsPerMPPT' => intval($input['R5-Str-MPPT']));
+            $data['Electrical']['StrTable']['R6'] = array('InvNo' => $input['R6-Inv'], 'StringNumber' => intval($input['R6-String']), 'ModulesPerString' => intval($input['R6-Mod-Str']), 'StringsPerMPPT' => intval($input['R6-Str-MPPT']));
+            $data['Electrical']['StrTable']['R7'] = array('InvNo' => $input['R7-Inv'], 'StringNumber' => intval($input['R7-String']), 'ModulesPerString' => intval($input['R7-Mod-Str']), 'StringsPerMPPT' => intval($input['R7-Str-MPPT']));
+            $data['Electrical']['StrTable']['R8'] = array('InvNo' => $input['R8-Inv'], 'StringNumber' => intval($input['R8-String']), 'ModulesPerString' => intval($input['R8-Mod-Str']), 'StringsPerMPPT' => intval($input['R8-Str-MPPT']));
+            $data['Electrical']['StrTable']['R9'] = array('InvNo' => $input['R9-Inv'], 'StringNumber' => intval($input['R9-String']), 'ModulesPerString' => intval($input['R9-Mod-Str']), 'StringsPerMPPT' => intval($input['R9-Str-MPPT']));
+            $data['Electrical']['StrTable']['R10'] = array('InvNo' => $input['R10-Inv'], 'StringNumber' => intval($input['R10-String']), 'ModulesPerString' => intval($input['R10-Mod-Str']), 'StringsPerMPPT' => intval($input['R10-Str-MPPT']));
+
+            $data['Electrical']['Main']['BusBarRating'] = intval($input['bus-bar-rating']);
+            $data['Electrical']['Main']['MainBreakerRating'] = intval($input['main-breaker-rating']);
+            $data['Electrical']['Main']['DowngradedBreakerRating'] = intval($input['downgraded-breaker-rating']);
+            $data['Electrical']['Main']['PVBreakerRecommended'] = intval($input['PV-breaker-recommended']);
+            $data['Electrical']['Main']['PVBreakerSelected'] = intval($input['pv-breaker-selected']);
+        }
 
         return $data;
     }
