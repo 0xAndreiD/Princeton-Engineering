@@ -72,10 +72,10 @@
 }
 
 *.iw400-left-bdr {
-    border-bottom: 1.00pt solid windowtext;
-    border-left: 1.00pt solid windowtext;
-    border-right: 1.00pt solid black;
-    border-top: 1.00pt solid windowtext;
+    border-bottom: .75pt solid windowtext;
+    border-left: .75pt solid windowtext;
+    border-right: .75pt solid black;
+    border-top: .75pt solid windowtext;
     color: black;
     font-family: Arial,sans-serif;
     font-size: 10.00pt;
@@ -89,10 +89,10 @@
 }
 
 *.iw400-right-bdr {
-    border-bottom: 1.00pt solid windowtext;
-    border-left: 1.00pt solid windowtext;
-    border-right: 1.00pt solid black;
-    border-top: 1.00pt solid windowtext;
+    border-bottom: .75pt solid windowtext;
+    border-left: .75pt solid windowtext;
+    border-right: .75pt solid black;
+    border-top: .75pt solid windowtext;
     color: black;
     font-family: Arial,sans-serif;
     font-size: 10.00pt;
@@ -106,10 +106,10 @@
 }
 
 *.iw400-bdr {
-    border-bottom: 1.00pt solid windowtext;
-    border-left: 1.00pt solid windowtext;
-    border-right: 1.00pt solid black;
-    border-top: 1.00pt solid windowtext;
+    border-bottom: .75pt solid windowtext;
+    border-left: .75pt solid windowtext;
+    border-right: .75pt solid black;
+    border-top: .75pt solid windowtext;
     color: black;
     font-family: Arial,sans-serif;
     font-size: 10.00pt;
@@ -212,8 +212,8 @@ input.permit {
 *.w400-left-bdr {
     border-bottom: .75pt solid windowtext;
     border-left: .75pt solid windowtext;
-    border-right: 1.00pt solid black;
-    border-top: 1.00pt solid windowtext;
+    border-right: .75pt solid black;
+    border-top: .75pt solid windowtext;
     color: black;
     font-family: Arial,sans-serif;
     font-size: 10.00pt;
@@ -229,8 +229,8 @@ input.permit {
 *.w400-bdr {
     border-bottom: .75pt solid windowtext;
     border-left: .75pt solid windowtext;
-    border-right: 1.00pt solid black;
-    border-top: 1.00pt solid windowtext;
+    border-right: .75pt solid black;
+    border-top: .75pt solid windowtext;
     color: black;
     font-family: Arial,sans-serif;
     font-size: 10.00pt;

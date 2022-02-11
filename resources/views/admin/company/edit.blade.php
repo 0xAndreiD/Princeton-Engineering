@@ -114,6 +114,10 @@
                                     <input type="checkbox" class="custom-control-input" id="allow_subclient" name="allow_subclient" {{ $company->allow_subclient == 1 ? 'checked' : '' }}>
                                     <label class="custom-control-label" for="allow_subclient" style="cursor: pointer;">Enable SubClient Inputs</label>
                                 </div>
+                                <div class="custom-control custom-checkbox custom-control-primary custom-control-lg mb-4">
+                                    <input type="checkbox" class="custom-control-input" id="AutoCAD" name="AutoCAD" {{ $company->AutoCAD == 1 ? 'checked' : '' }}>
+                                    <label class="custom-control-label" for="AutoCAD" style="cursor: pointer;">Enable AutoCAD</label>
+                                </div>
                                 {{-- <div class="form-group">
                                     <div class="input-group">
                                         <input type="text" class="form-control" id="import-file-name" name="import-file-name" placeholder="Max. 3Mb | *.csv">
