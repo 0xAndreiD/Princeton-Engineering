@@ -883,12 +883,12 @@ class GeneralController extends Controller
                 "C2_feet" => number_format(floatval($caseInput["cf-2-{$number}"]), 2), "C2_inches" => number_format(floatval($caseInput["ci-2-{$number}"]), 2), "C2" => number_format(floatval(isset($caseInput["c-2-{$number}"]) ? $caseInput["c-2-{$number}"] : 0), 2),
                 "C3" => number_format(floatval(isset($caseInput["c-3-{$number}"]) ? $caseInput["c-3-{$number}"] : 0), 2),
                 "C4_feet" => number_format(floatval($caseInput["cf-4-{$number}"]), 2), "C4_inches" => number_format(floatval($caseInput["ci-4-{$number}"]), 2), "C4" => number_format(floatval(isset($caseInput["c-4-{$number}"]) ? $caseInput["c-4-{$number}"] : 0), 2));
-            $caseData['RoofDeckSurface'] = array("D0" => $caseInput["d-0-{$number}"], "D1" => number_format(floatval($caseInput["d-1-{$number}"]), 2), "D2" => $caseInput["d-2-{$number}"], "D3" => $caseInput["d-3-{$number}"], "D4" => $caseInput["d-4-{$number}"], "D5" => $caseInput["d-5-{$number}"], "D6" => $caseInput["d-6-{$number}"], "D7" => $caseInput["d-7-{$number}"], "D8" => $caseInput["d-8-{$number}"], "D9" => $caseInput["d-9-{$number}"] ? $caseInput["d-9-{$number}"] : "");
+            $caseData['RoofDeckSurface'] = array("D0" => $caseInput["d-0-{$number}"], "D1" => number_format(floatval($caseInput["d-1-{$number}"]), 2), "D2" => $caseInput["d-2-{$number}"], "D3" => $caseInput["d-3-{$number}"], "D4" => $caseInput["d-4-{$number}"], "D5" => $caseInput["d-5-{$number}"], "D6" => $caseInput["d-6-{$number}"], "D7" => $caseInput["d-7-{$number}"], "D8" => $caseInput["d-8-{$number}"], "D9" => $caseInput["d-9-{$number}"] ? $caseInput["d-9-{$number}"] : "", "D10" => $caseInput["d-10-{$number}"] ? $caseInput["d-10-{$number}"] : "", "D11" => $caseInput["d-11-{$number}"] ? $caseInput["d-11-{$number}"] : "", "D12" => $caseInput["d-12-{$number}"] ? $caseInput["d-12-{$number}"] : "");
             $caseData['Location'] = array(
                 "E1_feet" => number_format(floatval($caseInput["ef-1-{$number}"]), 2), "E1_inches" => number_format(floatval($caseInput["ei-1-{$number}"]), 2), "E1" => number_format(floatval($caseInput["e-1-{$number}"]), 2),
                 "E2_feet" => number_format(floatval($caseInput["ef-2-{$number}"]), 2), "E2_inches" => number_format(floatval($caseInput["ei-2-{$number}"]), 2), "E2" => number_format(floatval($caseInput["e-2-{$number}"]), 2));
             $caseData['NumberOfModules'] = array("F1" => $caseInput["f-1-{$number}"]);
-            $caseData['NSGap'] = array("G1" => number_format(floatval($caseInput["g-1-{$number}"]), 2), "G2" => number_format(floatval($caseInput["g-2-{$number}"]), 2));
+            $caseData['NSGap'] = array("G1" => number_format(floatval($caseInput["g-1-{$number}"]), 2), "G2" => number_format(floatval($caseInput["g-2-{$number}"]), 2), "G3" => $caseInput["g-3-{$number}"], "G4" => $caseInput["g-4-{$number}"]);
             $caseData['ModuleRelativeTilt'] = array("G1" => number_format(floatval($caseInput["g-1-{$number}"]), 2));
             $caseData['RotateModuleOrientation'] = array("H1" => filter_var($caseInput["h-1-{$number}"], FILTER_VALIDATE_BOOLEAN), "H2" => filter_var($caseInput["h-2-{$number}"], FILTER_VALIDATE_BOOLEAN), "H3" => filter_var($caseInput["h-3-{$number}"], FILTER_VALIDATE_BOOLEAN), "H4" => filter_var($caseInput["h-4-{$number}"], FILTER_VALIDATE_BOOLEAN), "H5" => filter_var($caseInput["h-5-{$number}"], FILTER_VALIDATE_BOOLEAN), "H6" => filter_var($caseInput["h-6-{$number}"], FILTER_VALIDATE_BOOLEAN), "H7" => filter_var($caseInput["h-7-{$number}"], FILTER_VALIDATE_BOOLEAN), "H8" => filter_var($caseInput["h-8-{$number}"], FILTER_VALIDATE_BOOLEAN), "H9" => filter_var($caseInput["h-9-{$number}"], FILTER_VALIDATE_BOOLEAN), "H10" => filter_var($caseInput["h-10-{$number}"], FILTER_VALIDATE_BOOLEAN), "H11" => filter_var($caseInput["h-11-{$number}"], FILTER_VALIDATE_BOOLEAN), "H12" => filter_var($caseInput["h-12-{$number}"], FILTER_VALIDATE_BOOLEAN));
             $caseData['Notes'] = array("I1" => $caseInput["i-1-{$number}"] ? $caseInput["i-1-{$number}"] : "");
@@ -991,24 +991,20 @@ class GeneralController extends Controller
         $data['Units'] = $input['override-unit'];
 
         //Electrical
-        if(isset($input['R1-Inv'])){
+        if(isset($input['StrTable'])){
             $data['Electrical'] = array('StrTable' => array(), 'Main' => array());
-            $data['Electrical']['StrTable']['R1'] = array('InvNo' => $input['R1-Inv'], 'StringNumber' => intval($input['R1-String']), 'ModulesPerString' => intval($input['R1-Mod-Str']), 'StringsPerMPPT' => intval($input['R1-Str-MPPT']));
-            $data['Electrical']['StrTable']['R2'] = array('InvNo' => $input['R2-Inv'], 'StringNumber' => intval($input['R2-String']), 'ModulesPerString' => intval($input['R2-Mod-Str']), 'StringsPerMPPT' => intval($input['R2-Str-MPPT']));
-            $data['Electrical']['StrTable']['R3'] = array('InvNo' => $input['R3-Inv'], 'StringNumber' => intval($input['R3-String']), 'ModulesPerString' => intval($input['R3-Mod-Str']), 'StringsPerMPPT' => intval($input['R3-Str-MPPT']));
-            $data['Electrical']['StrTable']['R4'] = array('InvNo' => $input['R4-Inv'], 'StringNumber' => intval($input['R4-String']), 'ModulesPerString' => intval($input['R4-Mod-Str']), 'StringsPerMPPT' => intval($input['R4-Str-MPPT']));
-            $data['Electrical']['StrTable']['R5'] = array('InvNo' => $input['R5-Inv'], 'StringNumber' => intval($input['R5-String']), 'ModulesPerString' => intval($input['R5-Mod-Str']), 'StringsPerMPPT' => intval($input['R5-Str-MPPT']));
-            $data['Electrical']['StrTable']['R6'] = array('InvNo' => $input['R6-Inv'], 'StringNumber' => intval($input['R6-String']), 'ModulesPerString' => intval($input['R6-Mod-Str']), 'StringsPerMPPT' => intval($input['R6-Str-MPPT']));
-            $data['Electrical']['StrTable']['R7'] = array('InvNo' => $input['R7-Inv'], 'StringNumber' => intval($input['R7-String']), 'ModulesPerString' => intval($input['R7-Mod-Str']), 'StringsPerMPPT' => intval($input['R7-Str-MPPT']));
-            $data['Electrical']['StrTable']['R8'] = array('InvNo' => $input['R8-Inv'], 'StringNumber' => intval($input['R8-String']), 'ModulesPerString' => intval($input['R8-Mod-Str']), 'StringsPerMPPT' => intval($input['R8-Str-MPPT']));
-            $data['Electrical']['StrTable']['R9'] = array('InvNo' => $input['R9-Inv'], 'StringNumber' => intval($input['R9-String']), 'ModulesPerString' => intval($input['R9-Mod-Str']), 'StringsPerMPPT' => intval($input['R9-Str-MPPT']));
-            $data['Electrical']['StrTable']['R10'] = array('InvNo' => $input['R10-Inv'], 'StringNumber' => intval($input['R10-String']), 'ModulesPerString' => intval($input['R10-Mod-Str']), 'StringsPerMPPT' => intval($input['R10-Str-MPPT']));
+            $idx = 1;
+            foreach($input['StrTable'] as $StrRow){
+                $data['Electrical']['StrTable']['R' . $idx] = $StrRow;
+                $idx ++;
+            }
 
-            $data['Electrical']['Main']['BusBarRating'] = intval($input['bus-bar-rating']);
-            $data['Electrical']['Main']['MainBreakerRating'] = intval($input['main-breaker-rating']);
-            $data['Electrical']['Main']['DowngradedBreakerRating'] = intval($input['downgraded-breaker-rating']);
-            $data['Electrical']['Main']['PVBreakerRecommended'] = intval($input['PV-breaker-recommended']);
-            $data['Electrical']['Main']['PVBreakerSelected'] = intval($input['pv-breaker-selected']);
+            $data['Electrical']['Main']['InterconnectionType'] = $input['type-interconnection'];
+            $data['Electrical']['Main']['BusBarRating'] = $input['bus-bar-rating'];
+            $data['Electrical']['Main']['MainBreakerRating'] = $input['main-breaker-rating'];
+            $data['Electrical']['Main']['DowngradedBreakerRating'] = $input['downgraded-breaker-rating'];
+            $data['Electrical']['Main']['PVBreakerRecommended'] = $input['PV-breaker-recommended'];
+            $data['Electrical']['Main']['PVBreakerSelected'] = $input['pv-breaker-selected'];
         }
 
         return $data;

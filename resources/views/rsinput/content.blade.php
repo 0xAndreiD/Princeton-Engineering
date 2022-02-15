@@ -288,7 +288,7 @@
         </tr>
         <tr class="h13 class-GroundMount-hide">
             <td><div style="overflow:hidden"></td>
-            <td class="iw400-bdr" style="vertical-align : middle;" rowspan="7" id="label-D-0-{{ $conditionId }}">Roof Construction</td>
+            <td class="iw400-bdr" style="vertical-align : middle;" rowspan="10" id="label-D-0-{{ $conditionId }}">Roof Construction</td>
             <td class="w400-bdr">D-0</td>
             <td class="iw400-right-bdr" colspan="2">Roof Deck Material</td>
             <td class="iw400-bdr">select</td>
@@ -407,6 +407,36 @@
             <td class="w400-yellow-bdr" colspan="2"><input type="text" class="txt-center-align" id="d-9-{{ $conditionId }}"  tabindex="44" value=""></input></td>
             <td class="right-bdr"><div style="overflow:hidden"></td>
         </tr>
+        <tr class="h13">
+            <td><div style="overflow:hidden"></td>
+            <td class="w400-bdr">D-10</td>
+            <td class="iw400-right-bdr" colspan="2">Stanchion Manufacturer</td>
+            <td class="iw400-bdr">select</td>
+            <td class="w400-yellow-bdr" colspan="2">
+                <select id="d-10-{{ $conditionId }}" tabindex="44">
+                </select>
+            </td>
+            <td class="right-bdr"><div style="overflow:hidden"></div></td>
+        </tr>
+        <tr class="h13">
+            <td><div style="overflow:hidden"></td>
+            <td class="w400-bdr">D-11</td>
+            <td class="iw400-right-bdr" colspan="2">Stanchion Model</td>
+            <td class="iw400-bdr">select</td>
+            <td class="w400-yellow-bdr" colspan="2">
+                <select id="d-11-{{ $conditionId }}" tabindex="44">
+                </select>
+            </td>
+            <td class="right-bdr"><div style="overflow:hidden"></div></td>
+        </tr>
+        <tr class="h13">
+            <td><div style="overflow:hidden"></td>
+            <td class="w400-bdr">D-12</td>
+            <td class="iw400-right-bdr" colspan="2">Total # of Stanchions</td>
+            <td class="iw400-bdr">#</td>
+            <td class="w400-yellow-bdr" colspan="2"><input type="text" class="txt-center-align" id="d-12-{{ $conditionId }}"  tabindex="44" value="0"></input></td>
+            <td class="right-bdr"><div style="overflow:hidden"></div></td>
+        </tr>
         <tr class="h13 class-IBC-hide class-GroundMount-hide">
             <td><div style="overflow:hidden"></td>
             <td class="iw400-bdr" style="vertical-align : middle;" rowspan="2">Location</td>
@@ -454,7 +484,7 @@
         </tr>
         <tr class="h13 class-IBC-hide">
             <td><div style="overflow:hidden"></td>
-            <td class="iw400-bdr" id="label-G-1-{{ $conditionId }}" rowspan="2">Module Geometry</td>
+            <td class="iw400-bdr" id="label-G-1-{{ $conditionId }}" rowspan="4">Module Geometry</td>
             <td class="w400-bdr">G-1</td>
             <td class="iw400-right-bdr" colspan="2">Uphill Gap Between Modules</td>
             <td class="iw400-bdr">in</td>
@@ -467,6 +497,22 @@
             <td class="iw400-right-bdr" colspan="2">Module relative tilt</td>
             <td class="iw400-bdr">deg</td>
             <td class="w400-yellow-bdr" colspan="2"><input type="text" class="txt-center-align" id="g-2-{{ $conditionId }}" tabindex="48" value="0.00"></input></td>
+            <td class="right-bdr"><div style="overflow:hidden"></td>
+        </tr>
+        <tr class="h13 class-IBC-hide class-GroundMount-hide">
+            <td><div style="overflow:hidden"></td>
+            <td class="w400-bdr">G-3</td>
+            <td class="iw400-right-bdr" colspan="2">Module Azimuth</td>
+            <td class="iw400-bdr">deg</td>
+            <td class="w400-yellow-bdr" colspan="2"><input type="text" class="txt-center-align" id="g-3-{{ $conditionId }}" tabindex="48" value="0.00"></input></td>
+            <td class="right-bdr"><div style="overflow:hidden"></td>
+        </tr>
+        <tr class="h13 class-IBC-hide class-GroundMount-hide">
+            <td><div style="overflow:hidden"></td>
+            <td class="w400-bdr">G-4</td>
+            <td class="iw400-right-bdr" colspan="2">Total # Modules</td>
+            <td class="iw400-bdr">ea</td>
+            <td class="w400-yellow-bdr" colspan="2"><input type="text" class="txt-center-align" id="g-4-{{ $conditionId }}" tabindex="48" value="0"></input></td>
             <td class="right-bdr"><div style="overflow:hidden"></td>
         </tr>
         <tr class="h13" id="Module-1-{{ $conditionId }}">

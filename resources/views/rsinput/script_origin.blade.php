@@ -47,7 +47,7 @@ function fcChangeType( conditionId, type ){
         $(`#label-B-1-${conditionId}`).attr('rowspan', 5);
         $(`#label-B-1-${conditionId}`)[0].style.display = "none";
         $(`#title-B-3-${conditionId}`)[0].style.display = "table-cell";
-        $(`#label-G-1-${conditionId}`).attr('rowspan', 2);
+        $(`#label-G-1-${conditionId}`).attr('rowspan', 4);
         
         var elements = $(`#inputform-${conditionId} .class-IBC-hide`); // show all IBC
         for(let i = 0; i < elements.length; i ++)
@@ -88,7 +88,7 @@ function fcChangeType( conditionId, type ){
         </select>`);
         maxModuleNumChange(conditionId);
 
-        $(`#label-D-0-${conditionId}`).attr('rowspan', 7);
+        $(`#label-D-0-${conditionId}`).attr('rowspan', 10);
         $(`#inputform-${conditionId} .class-IBC-only`).css('display', 'none');
 
         $(`#f-1-${conditionId}`).on('change', function() {
@@ -104,7 +104,7 @@ function fcChangeType( conditionId, type ){
         $(`#label-B-1-${conditionId}`).attr('rowspan', 5);
         $(`#label-B-1-${conditionId}`)[0].style.display = "table-cell";
         $(`#title-B-3-${conditionId}`)[0].style.display = "none";
-        $(`#label-G-1-${conditionId}`).attr('rowspan', 2);
+        $(`#label-G-1-${conditionId}`).attr('rowspan', 4);
         
         var elements = $(`#inputform-${conditionId} .class-IBC-hide`); // show all IBC
         for(let i = 0; i < elements.length; i ++)
@@ -145,7 +145,7 @@ function fcChangeType( conditionId, type ){
         </select>`);
         maxModuleNumChange(conditionId);
 
-        $(`#label-D-0-${conditionId}`).attr('rowspan', 7);
+        $(`#label-D-0-${conditionId}`).attr('rowspan', 10);
         $(`#inputform-${conditionId} .class-IBC-only`).css('display', 'none');
 
         $(`#f-1-${conditionId}`).on('change', function() {
@@ -159,7 +159,7 @@ function fcChangeType( conditionId, type ){
         $(`#label-B-1-${conditionId}`).attr('rowspan', 3);
         $(`#label-B-1-${conditionId}`)[0].style.display = "table-cell";
         $(`#title-B-3-${conditionId}`)[0].style.display = "none";
-        $(`#label-G-1-${conditionId}`).attr('rowspan', 2);
+        $(`#label-G-1-${conditionId}`).attr('rowspan', 4);
         
         var elements = $(`#inputform-${conditionId} .class-truss-hide`); // show all Truss
         for(let i = 0; i < elements.length; i ++)
@@ -196,7 +196,7 @@ function fcChangeType( conditionId, type ){
             }
         });
 
-        $(`#label-D-0-${conditionId}`).attr('rowspan', 10);
+        $(`#label-D-0-${conditionId}`).attr('rowspan', 13);
         $(`#inputform-${conditionId} .class-IBC-only`).css('display', 'table-row');
 
         $(`#f-1-${conditionId}`).on('change', function() {
@@ -210,7 +210,7 @@ function fcChangeType( conditionId, type ){
         $(`#label-B-1-${conditionId}`).attr('rowspan', 3);
         $(`#label-B-1-${conditionId}`)[0].style.display = "table-cell";
         $(`#title-B-3-${conditionId}`)[0].style.display = "none";
-        $(`#label-G-1-${conditionId}`).attr('rowspan', 1);
+        $(`#label-G-1-${conditionId}`).attr('rowspan', 3);
         
         var elements = $(`#inputform-${conditionId} .class-truss-hide`); // show all truss
         for(let i = 0; i < elements.length; i ++)
@@ -249,7 +249,7 @@ function fcChangeType( conditionId, type ){
         </select>`);
         maxModuleNumChange(conditionId);
 
-        $(`#label-D-0-${conditionId}`).attr('rowspan', 7);
+        $(`#label-D-0-${conditionId}`).attr('rowspan', 10);
         $(`#inputform-${conditionId} .class-IBC-only`).css('display', 'none');
 
         $(`#f-1-${conditionId}`).on('change', function() {
@@ -1008,6 +1008,31 @@ var removePVInverter = function(id) {
     $(`#pv-inverter-${id}`).css('display', 'none');
 }
 
+var addStrTable = function() {
+    if($("#R2")[0].style.display == "none")
+        $("#R2").css('display', 'table-row');
+    else if($("#R3")[0].style.display == "none")
+        $("#R3").css('display', 'table-row');
+    else if($("#R4")[0].style.display == "none")
+        $("#R4").css('display', 'table-row');
+    else if($("#R5")[0].style.display == "none")
+        $("#R5").css('display', 'table-row');
+    else if($("#R6")[0].style.display == "none")
+        $("#R6").css('display', 'table-row');
+    else if($("#R7")[0].style.display == "none")
+        $("#R7").css('display', 'table-row');
+    else if($("#R8")[0].style.display == "none")
+        $("#R8").css('display', 'table-row');
+    else if($("#R9")[0].style.display == "none")
+        $("#R9").css('display', 'table-row');
+    else if($("#R10")[0].style.display == "none")
+        $("#R10").css('display', 'table-row');
+}
+
+var removeStrTable = function(id) {
+    $(`#R${id}`).css('display', 'none');
+}
+
 var getStanchionTypes = function() {
     var mainTypes = [];
     for (index = 0; index < availableStanchions.length; index++) {
@@ -1096,6 +1121,32 @@ var updateStanchionSubField = function(mainType, subType = "") {
     $('#option-stanchion-option2').html(optionStanchion(mainType, subType, 3));
     $('#stanchion-custom').val(optionStanchion(mainType, subType, 4) ? true : false);
     $('#stanchion-crc32').val(optionStanchion(mainType, subType, 6));
+}
+
+var updateFCStanchionSubField = function(mainType, caseIdx) {
+    if (mainType != "") {
+        selectedSubType = "";
+        $(`#d-11-${caseIdx + 1}`).find('option').remove();
+        subTypes = getStanchionSubTypes(mainType);
+
+        if(subTypes.length > 0)
+            selectedSubType = subTypes[0][1];
+        if(preloaded_data && preloaded_data['LoadingCase'] && preloaded_data['LoadingCase'][caseIdx] && preloaded_data['LoadingCase'][caseIdx]['RoofDeckSurface'] && preloaded_data['LoadingCase'][caseIdx]['RoofDeckSurface']['D11']) {
+            if(preloaded_data['LoadingCase'][caseIdx]['RoofDeckSurface']['D10'] == mainType)
+                selectedSubType = preloaded_data['LoadingCase'][caseIdx]['RoofDeckSurface']['D11'];
+        }
+
+        for (index=0; index<subTypes.length; index++) 
+        {
+            if (subTypes[index][1] == selectedSubType)
+                $(`#d-11-${caseIdx + 1}`).append(`<option data-value="${subTypes[index][1]}" selected> ${subTypes[index][1]}</option>`);
+            else
+                $(`#d-11-${caseIdx + 1}`).append(`<option data-value="${subTypes[index][1]}"> ${subTypes[index][1]} </option>`);
+        }
+    } else {
+        $(`#d-11-${caseIdx + 1}`).find('option').remove();
+        $(`#d-11-${caseIdx + 1}`).append(`<option data-value="" selected></option>`);
+    }
 }
 
 var getRailSupportTypes = function() {
@@ -1790,8 +1841,18 @@ var getData = function(caseCount = 10) {
     alldata['wind-exposure'] = $('#wind-exposure').val();
     alldata['override-unit'] = $('#override-unit').val();
 
-    if($("#PV-breaker-recommended").length > 0)
+    if($("#inputform-electric").length > 0){
+        alldata['type-interconnection'] = $("#type-interconnection").val();
+        alldata['bus-bar-rating'] = $("#bus-bar-rating").val();
+        alldata['main-breaker-rating'] = $("#main-breaker-rating").val();
+        alldata['downgraded-breaker-rating'] = $("#downgraded-breaker-rating").val();
+        alldata['StrTable'] = [];
+        for(i = 1; i <= 10; i ++) {
+            if($(`#R${i}`)[0].style.display != "none")
+                alldata['StrTable'].push({'InvNo': $(`#R${i} .Inv`).val(), 'StringNumber': $(`#R${i} .String`).val(), 'ModulesPerString': $(`#R${i} .ModStr`).val(), 'StringsPerMPPT': $(`#R${i} .StrMPPT`).val()});
+        }
         alldata['PV-breaker-recommended'] = $("#PV-breaker-recommended").html();
+    }
 
     return alldata;
 }
@@ -2832,6 +2893,22 @@ $(document).ready(function() {
 
                 // Stanchion submodule section
                 updateStanchionSubField(selectedMainType);
+
+                mainTypes.unshift('');
+                for(let i = 0; i < 10; i ++) {
+                    $(`#d-10-${i + 1}`).find('option').remove();
+                    selectedMainType = mainTypes[0];
+                    if(preloaded_data && preloaded_data['LoadingCase'] && preloaded_data['LoadingCase'][i] && preloaded_data['LoadingCase'][i]['RoofDeckSurface'] && preloaded_data['LoadingCase'][i]['RoofDeckSurface']['D10'])
+                        selectedMainType = preloaded_data['LoadingCase'][i]['RoofDeckSurface']['D10'];
+                    for (index=0; index<mainTypes.length; index++) 
+                    {
+                        if (mainTypes[index] == selectedMainType) 
+                            $(`#d-10-${i + 1}`).append(`<option data-value="${mainTypes[index]}" selected> ${mainTypes[index]}</option>`);
+                        else 
+                            $(`#d-10-${i + 1}`).append(`<option data-value="${mainTypes[index]}"> ${mainTypes[index]} </option>`);
+                    }
+                    updateFCStanchionSubField(selectedMainType, i);
+                }
             },
             error: function(xhr, status, error) {
                 res = JSON.parse(xhr.responseText);
@@ -3150,18 +3227,18 @@ $(document).ready(function() {
     }
 
     var loadElectric = function(){
-        if($("#R1-Inv").length > 0 && preloaded_data && preloaded_data['Electrical']) {
-            $("#R1-Inv").val(preloaded_data['Electrical']['StrTable']['R1']['InvNo']); $("#R1-String").val(preloaded_data['Electrical']['StrTable']['R1']['StringNumber']); $("#R1-Mod-Str").val(preloaded_data['Electrical']['StrTable']['R1']['ModulesPerString']); $("#R1-Str-MPPT").val(preloaded_data['Electrical']['StrTable']['R1']['StringsPerMPPT']);
-            $("#R2-Inv").val(preloaded_data['Electrical']['StrTable']['R2']['InvNo']); $("#R2-String").val(preloaded_data['Electrical']['StrTable']['R2']['StringNumber']); $("#R2-Mod-Str").val(preloaded_data['Electrical']['StrTable']['R2']['ModulesPerString']); $("#R2-Str-MPPT").val(preloaded_data['Electrical']['StrTable']['R2']['StringsPerMPPT']);
-            $("#R3-Inv").val(preloaded_data['Electrical']['StrTable']['R3']['InvNo']); $("#R3-String").val(preloaded_data['Electrical']['StrTable']['R3']['StringNumber']); $("#R3-Mod-Str").val(preloaded_data['Electrical']['StrTable']['R3']['ModulesPerString']); $("#R3-Str-MPPT").val(preloaded_data['Electrical']['StrTable']['R3']['StringsPerMPPT']);
-            $("#R4-Inv").val(preloaded_data['Electrical']['StrTable']['R4']['InvNo']); $("#R4-String").val(preloaded_data['Electrical']['StrTable']['R4']['StringNumber']); $("#R4-Mod-Str").val(preloaded_data['Electrical']['StrTable']['R4']['ModulesPerString']); $("#R4-Str-MPPT").val(preloaded_data['Electrical']['StrTable']['R4']['StringsPerMPPT']);
-            $("#R5-Inv").val(preloaded_data['Electrical']['StrTable']['R5']['InvNo']); $("#R5-String").val(preloaded_data['Electrical']['StrTable']['R5']['StringNumber']); $("#R5-Mod-Str").val(preloaded_data['Electrical']['StrTable']['R5']['ModulesPerString']); $("#R5-Str-MPPT").val(preloaded_data['Electrical']['StrTable']['R5']['StringsPerMPPT']);
-            $("#R6-Inv").val(preloaded_data['Electrical']['StrTable']['R6']['InvNo']); $("#R6-String").val(preloaded_data['Electrical']['StrTable']['R6']['StringNumber']); $("#R6-Mod-Str").val(preloaded_data['Electrical']['StrTable']['R6']['ModulesPerString']); $("#R6-Str-MPPT").val(preloaded_data['Electrical']['StrTable']['R6']['StringsPerMPPT']);
-            $("#R7-Inv").val(preloaded_data['Electrical']['StrTable']['R7']['InvNo']); $("#R7-String").val(preloaded_data['Electrical']['StrTable']['R7']['StringNumber']); $("#R7-Mod-Str").val(preloaded_data['Electrical']['StrTable']['R7']['ModulesPerString']); $("#R7-Str-MPPT").val(preloaded_data['Electrical']['StrTable']['R7']['StringsPerMPPT']);
-            $("#R8-Inv").val(preloaded_data['Electrical']['StrTable']['R8']['InvNo']); $("#R8-String").val(preloaded_data['Electrical']['StrTable']['R8']['StringNumber']); $("#R8-Mod-Str").val(preloaded_data['Electrical']['StrTable']['R8']['ModulesPerString']); $("#R8-Str-MPPT").val(preloaded_data['Electrical']['StrTable']['R8']['StringsPerMPPT']);
-            $("#R9-Inv").val(preloaded_data['Electrical']['StrTable']['R9']['InvNo']); $("#R9-String").val(preloaded_data['Electrical']['StrTable']['R9']['StringNumber']); $("#R9-Mod-Str").val(preloaded_data['Electrical']['StrTable']['R9']['ModulesPerString']); $("#R9-Str-MPPT").val(preloaded_data['Electrical']['StrTable']['R9']['StringsPerMPPT']);
-            $("#R10-Inv").val(preloaded_data['Electrical']['StrTable']['R10']['InvNo']); $("#R10-String").val(preloaded_data['Electrical']['StrTable']['R10']['StringNumber']); $("#R10-Mod-Str").val(preloaded_data['Electrical']['StrTable']['R10']['ModulesPerString']); $("#R10-Str-MPPT").val(preloaded_data['Electrical']['StrTable']['R10']['StringsPerMPPT']);
+        if($("#inputform-electric").length > 0 && preloaded_data && preloaded_data['Electrical']) {
+            for(let i = 1; i <= 10; i ++) {
+                if(preloaded_data['Electrical']['StrTable'][`R${i}`]) {
+                    $(`#R${i}`).css('display', 'table-row');
+                    $(`#R${i} .Inv`).val(preloaded_data['Electrical']['StrTable'][`R${i}`]['InvNo']);
+                    $(`#R${i} .String`).val(preloaded_data['Electrical']['StrTable'][`R${i}`]['StringNumber']);
+                    $(`#R${i} .ModStr`).val(preloaded_data['Electrical']['StrTable'][`R${i}`]['ModulesPerString']);
+                    $(`#R${i} .StrMPPT`).val(preloaded_data['Electrical']['StrTable'][`R${i}`]['StringsPerMPPT']);
+                }
+            }
 
+            $("#type-interconnection").val(preloaded_data['Electrical']['Main']['InterconnectionType']);
             $("#bus-bar-rating").val(preloaded_data['Electrical']['Main']['BusBarRating']);
             $("#main-breaker-rating").val(preloaded_data['Electrical']['Main']['MainBreakerRating']);
             $("#downgraded-breaker-rating").val(preloaded_data['Electrical']['Main']['DowngradedBreakerRating']);
@@ -3431,6 +3508,9 @@ $(document).ready(function() {
         });
         $(`#delete-${i}`).click(function() {
             deleteTab(window.conditionId);
+        });
+        $(`#d-10-${i}`).on('change', function() {
+            updateFCStanchionSubField($(this).children("option:selected").val(), window.conditionId - 1);
         });
     }
 
@@ -4220,6 +4300,10 @@ var doDuplicate = async function (targetTabId, curTabId, checkOverwrite){
         elementId = elementId.slice(0, elementId.length  - 2) + '-' + targetTabId;
         $(`#${elementId}`).prop('checked', $(this)[0].checked);
     });
+    if($(`#d-10-${curTabId}`).val() != ''){ // Update Stanchion in FC
+        updateFCStanchionSubField($(`#d-10-${curTabId}`).val(), targetTabId - 1);
+        $(`#d-11-${targetTabId}`).val($(`#d-11-${curTabId}`).val());
+    }
     if(tabType != 2) // If Stick or Truss
         maxModuleNumChange(targetTabId);
     updateRoofMemberType(targetTabId, $(`#option-roof-member-type-${curTabId}`).val());
@@ -4548,6 +4632,8 @@ var loadPreloadedData = function() {
                                 $(`#d-7-${i + 1}`).val(caseData['RoofDeckSurface']['D7']);
                                 $(`#d-8-${i + 1}`).val(caseData['RoofDeckSurface']['D8']);
                                 $(`#d-9-${i + 1}`).val(caseData['RoofDeckSurface']['D9']);
+                                if(caseData['RoofDeckSurface']['D12'] > 0)
+                                    $(`#d-12-${i + 1}`).val(caseData['RoofDeckSurface']['D12']);
 
                                 if(!caseData['Location']['E1_feet'] && !caseData['Location']['E1_inches'])
                                 {
@@ -4575,6 +4661,8 @@ var loadPreloadedData = function() {
                                     maxModuleNumChange(i + 1);
                                 $(`#g-1-${i + 1}`).val(caseData['NSGap']['G1']);
                                 if(caseData['NSGap']['G2']) $(`#g-2-${i + 1}`).val(caseData['NSGap']['G2']);
+                                if(caseData['NSGap']['G3']) $(`#g-3-${i + 1}`).val(caseData['NSGap']['G3']);
+                                if(caseData['NSGap']['G4']) $(`#g-4-${i + 1}`).val(caseData['NSGap']['G4']);
                                 
                                 $(`#h-1-${i + 1}`).prop('checked', caseData['RotateModuleOrientation']['H1']);
                                 $(`#h-2-${i + 1}`).prop('checked', caseData['RotateModuleOrientation']['H2']);
