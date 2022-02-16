@@ -1033,6 +1033,31 @@ var removeStrTable = function(id) {
     $(`#R${id}`).css('display', 'none');
 }
 
+var addACTable = function() {
+    if($("#AC2")[0].style.display == "none")
+        $("#AC2").css('display', 'table-row');
+    else if($("#AC3")[0].style.display == "none")
+        $("#AC3").css('display', 'table-row');
+    else if($("#AC4")[0].style.display == "none")
+        $("#AC4").css('display', 'table-row');
+    else if($("#AC5")[0].style.display == "none")
+        $("#AC5").css('display', 'table-row');
+    else if($("#AC6")[0].style.display == "none")
+        $("#AC6").css('display', 'table-row');
+    else if($("#AC7")[0].style.display == "none")
+        $("#AC7").css('display', 'table-row');
+    else if($("#AC8")[0].style.display == "none")
+        $("#AC8").css('display', 'table-row');
+    else if($("#AC9")[0].style.display == "none")
+        $("#AC9").css('display', 'table-row');
+    else if($("#AC10")[0].style.display == "none")
+        $("#AC10").css('display', 'table-row');
+}
+
+var removeACTable = function(id) {
+    $(`#AC${id}`).css('display', 'none');
+}
+
 var getStanchionTypes = function() {
     var mainTypes = [];
     for (index = 0; index < availableStanchions.length; index++) {
@@ -1846,10 +1871,14 @@ var getData = function(caseCount = 10) {
         alldata['bus-bar-rating'] = $("#bus-bar-rating").val();
         alldata['main-breaker-rating'] = $("#main-breaker-rating").val();
         alldata['downgraded-breaker-rating'] = $("#downgraded-breaker-rating").val();
+        alldata['pv-breaker-selected'] = $("#pv-breaker-selected").val();
         alldata['StrTable'] = [];
+        alldata['ACTable'] = [];
         for(i = 1; i <= 10; i ++) {
             if($(`#R${i}`)[0].style.display != "none")
-                alldata['StrTable'].push({'InvNo': $(`#R${i} .Inv`).val(), 'StringNumber': $(`#R${i} .String`).val(), 'ModulesPerString': $(`#R${i} .ModStr`).val(), 'StringsPerMPPT': $(`#R${i} .StrMPPT`).val()});
+                alldata['StrTable'].push({'InvNo': $(`#R${i} .Inv`).val(), 'StringNumber': $(`#R${i} .String`).val(), 'ModulesPerString': $(`#R${i} .ModStr`).val(), 'StringsPerMPPT': $(`#R${i} .StrMPPT`).val(), 'StringLength': $(`#R${i} .StrLength`).val()});
+            if($(`#AC${i}`)[0].style.display != "none")
+                alldata['ACTable'].push({'InvNo': $(`#AC${i} .Inv`).val(), 'WireLength': $(`#AC${i} .WireLength`).val(), 'MinWireSize': $(`#AC${i} .MinWireSize`).val(), 'Material': $(`#AC${i} .Material`).val(), 'InsulRating': $(`#AC${i} .InsulRating`).val(), 'Circuits': $(`#AC${i} .Circuits`).val()});
         }
         alldata['PV-breaker-recommended'] = $("#PV-breaker-recommended").html();
     }
@@ -3235,6 +3264,17 @@ $(document).ready(function() {
                     $(`#R${i} .String`).val(preloaded_data['Electrical']['StrTable'][`R${i}`]['StringNumber']);
                     $(`#R${i} .ModStr`).val(preloaded_data['Electrical']['StrTable'][`R${i}`]['ModulesPerString']);
                     $(`#R${i} .StrMPPT`).val(preloaded_data['Electrical']['StrTable'][`R${i}`]['StringsPerMPPT']);
+                    $(`#R${i} .StrLength`).val(preloaded_data['Electrical']['StrTable'][`R${i}`]['StringLength']);
+                }
+
+                if(preloaded_data['Electrical']['ACTable'][`AC${i}`]) {
+                    $(`#AC${i}`).css('display', 'table-row');
+                    $(`#AC${i} .Inv`).val(preloaded_data['Electrical']['ACTable'][`AC${i}`]['InvNo']);
+                    $(`#AC${i} .WireLength`).val(preloaded_data['Electrical']['ACTable'][`AC${i}`]['WireLength']);
+                    $(`#AC${i} .MinWireSize`).val(preloaded_data['Electrical']['ACTable'][`AC${i}`]['MinWireSize']);
+                    $(`#AC${i} .Material`).val(preloaded_data['Electrical']['ACTable'][`AC${i}`]['Material']);
+                    $(`#AC${i} .InsulRating`).val(preloaded_data['Electrical']['ACTable'][`AC${i}`]['InsulRating']);
+                    $(`#AC${i} .Circuits`).val(preloaded_data['Electrical']['ACTable'][`AC${i}`]['Circuits']);
                 }
             }
 
@@ -3387,6 +3427,11 @@ $(document).ready(function() {
             $('#date-of-field-visit').val($('#date-of-plan-set').val());
         }
         $(this).css('background-color', 'transparent');
+    });
+    $('.StrLength, .WireLength').keyup(function(){
+        var val = $(this).val();
+        var regex = /\d*\.?\d?/g;
+        $(this).val(regex.exec(val)); 
     });
 
     // $(".permit").on('change', function(obj) {

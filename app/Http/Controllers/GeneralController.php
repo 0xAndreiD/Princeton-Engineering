@@ -992,10 +992,15 @@ class GeneralController extends Controller
 
         //Electrical
         if(isset($input['StrTable'])){
-            $data['Electrical'] = array('StrTable' => array(), 'Main' => array());
+            $data['Electrical'] = array('StrTable' => array(), 'ACTable' => array(), 'Main' => array());
             $idx = 1;
             foreach($input['StrTable'] as $StrRow){
                 $data['Electrical']['StrTable']['R' . $idx] = $StrRow;
+                $idx ++;
+            }
+            $idx = 1;
+            foreach($input['ACTable'] as $StrRow){
+                $data['Electrical']['ACTable']['AC' . $idx] = $StrRow;
                 $idx ++;
             }
 
