@@ -288,7 +288,7 @@
         </tr>
         <tr class="h13 class-GroundMount-hide">
             <td><div style="overflow:hidden"></td>
-            <td class="iw400-bdr" style="vertical-align : middle;" rowspan="10" id="label-D-0-{{ $conditionId }}">Roof Construction</td>
+            <td class="iw400-bdr" style="vertical-align : middle;" rowspan="7" id="label-D-0-{{ $conditionId }}">Roof Construction</td>
             <td class="w400-bdr">D-0</td>
             <td class="iw400-right-bdr" colspan="2">Roof Deck Material</td>
             <td class="iw400-bdr">select</td>
@@ -406,36 +406,6 @@
             <td class="iw400-bdr">text</td>
             <td class="w400-yellow-bdr" colspan="2"><input type="text" class="txt-center-align" id="d-9-{{ $conditionId }}"  tabindex="44" value=""></input></td>
             <td class="right-bdr"><div style="overflow:hidden"></td>
-        </tr>
-        <tr class="h13">
-            <td><div style="overflow:hidden"></td>
-            <td class="w400-bdr">D-10</td>
-            <td class="iw400-right-bdr" colspan="2">Stanchion Manufacturer</td>
-            <td class="iw400-bdr">select</td>
-            <td class="w400-yellow-bdr" colspan="2">
-                <select id="d-10-{{ $conditionId }}" tabindex="44">
-                </select>
-            </td>
-            <td class="right-bdr"><div style="overflow:hidden"></div></td>
-        </tr>
-        <tr class="h13">
-            <td><div style="overflow:hidden"></td>
-            <td class="w400-bdr">D-11</td>
-            <td class="iw400-right-bdr" colspan="2">Stanchion Model</td>
-            <td class="iw400-bdr">select</td>
-            <td class="w400-yellow-bdr" colspan="2">
-                <select id="d-11-{{ $conditionId }}" tabindex="44">
-                </select>
-            </td>
-            <td class="right-bdr"><div style="overflow:hidden"></div></td>
-        </tr>
-        <tr class="h13">
-            <td><div style="overflow:hidden"></td>
-            <td class="w400-bdr">D-12</td>
-            <td class="iw400-right-bdr" colspan="2">Total # of Stanchions</td>
-            <td class="iw400-bdr">#</td>
-            <td class="w400-yellow-bdr" colspan="2"><input type="text" class="txt-center-align" id="d-12-{{ $conditionId }}"  tabindex="44" value="0"></input></td>
-            <td class="right-bdr"><div style="overflow:hidden"></div></td>
         </tr>
         <tr class="h13 class-IBC-hide class-GroundMount-hide">
             <td><div style="overflow:hidden"></td>
@@ -612,10 +582,42 @@
             <td class="w400-yellow-bdr" colspan="2"><input type="checkbox" id="h-12-{{ $conditionId }}" tabindex="55"></input></td>
             <td class="right-bdr"><div style="overflow:hidden"></td>
         </tr>
+        <tr class="h13 class-GroundMount-hide">
+            <td><div style="overflow:hidden"></td>
+            <td class="iw400-bdr" rowspan="3" style="vertical-align : middle;">New Construction</td>
+            <td class="w400-bdr">I-1</td>
+            <td class="iw400-right-bdr" colspan="2">Stanchion Manufacturer</td>
+            <td class="iw400-bdr">select</td>
+            <td class="w400-yellow-bdr" colspan="2">
+                <select id="j-1-{{ $conditionId }}" tabindex="55">
+                </select>
+            </td>
+            <td class="right-bdr"><div style="overflow:hidden"></div></td>
+        </tr>
+        <tr class="h13 class-GroundMount-hide">
+            <td><div style="overflow:hidden"></td>
+            <td class="w400-bdr">I-2</td>
+            <td class="iw400-right-bdr" colspan="2">Stanchion Model</td>
+            <td class="iw400-bdr">select</td>
+            <td class="w400-yellow-bdr" colspan="2">
+                <select id="j-2-{{ $conditionId }}" tabindex="55">
+                </select>
+            </td>
+            <td class="right-bdr"><div style="overflow:hidden"></div></td>
+        </tr>
+        <tr class="h13 class-GroundMount-hide">
+            <td><div style="overflow:hidden"></td>
+            <td class="w400-bdr">I-3</td>
+            <td class="iw400-right-bdr" colspan="2">Total # of Stanchions</td>
+            <td class="iw400-bdr">#</td>
+            <td class="w400-yellow-bdr" colspan="2"><input type="text" class="txt-center-align" id="j-3-{{ $conditionId }}"  tabindex="55" value="0"></input></td>
+            <td class="right-bdr"><div style="overflow:hidden"></div></td>
+            <input type="text" value="0" id="j-4-{{ $conditionId }}" hidden>
+        </tr>
         <tr class="h13">
             <td><div style="overflow:hidden"></td>
             <td class="iw400-bdr" style="vertical-align : middle;">Notes</td>
-            <td class="w400-bdr">I-1</td>
+            <td class="w400-bdr">J-1</td>
             <td class="iw400-right-bdr" colspan="2"></td>
             <td class="iw400-bdr"></td>
             <td class="w400-yellow-bdr" colspan="2"><input type="text" class="txt-center-align" id="i-1-{{ $conditionId }}" tabindex="56"></input></td>

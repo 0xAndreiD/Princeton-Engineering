@@ -124,7 +124,7 @@
                 <input type="text" class="StrLength text-center" tabindex="11" value="0">
             </td>
             <td class="text-left">
-                <span class="btn btn-success" style="padding: 0px 4px; height: 22px; margin-left: 10px;" onclick="addStrTable()">
+                <span class="btn btn-success" style="padding: 0px 5px; height: 22px; margin-left: 10px;" onclick="addStrTable()">
                     <i class="fa fa-plus" style="font-size: 12px; top: -2px;"></i>
                 </span>
             </td>
@@ -1101,7 +1101,7 @@
                 </select>
             </td>
             <td class="text-center">
-                <span class="btn btn-success" style="padding: 0px 4px; height: 22px;" onclick="addACTable()">
+                <span class="btn btn-success" style="padding: 0px 5px; height: 22px;" onclick="addACTable()">
                     <i class="fa fa-plus" style="font-size: 12px; top: -2px;"></i>
                 </span>
             </td>
