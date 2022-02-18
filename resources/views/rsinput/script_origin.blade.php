@@ -88,7 +88,7 @@ function fcChangeType( conditionId, type ){
         </select>`);
         maxModuleNumChange(conditionId);
 
-        $(`#label-D-0-${conditionId}`).attr('rowspan', 10);
+        $(`#label-D-0-${conditionId}`).attr('rowspan', 7);
         $(`#inputform-${conditionId} .class-IBC-only`).css('display', 'none');
 
         $(`#f-1-${conditionId}`).on('change', function() {
@@ -145,7 +145,7 @@ function fcChangeType( conditionId, type ){
         </select>`);
         maxModuleNumChange(conditionId);
 
-        $(`#label-D-0-${conditionId}`).attr('rowspan', 10);
+        $(`#label-D-0-${conditionId}`).attr('rowspan', 7);
         $(`#inputform-${conditionId} .class-IBC-only`).css('display', 'none');
 
         $(`#f-1-${conditionId}`).on('change', function() {
@@ -196,7 +196,7 @@ function fcChangeType( conditionId, type ){
             }
         });
 
-        $(`#label-D-0-${conditionId}`).attr('rowspan', 13);
+        $(`#label-D-0-${conditionId}`).attr('rowspan', 10);
         $(`#inputform-${conditionId} .class-IBC-only`).css('display', 'table-row');
 
         $(`#f-1-${conditionId}`).on('change', function() {
@@ -249,7 +249,7 @@ function fcChangeType( conditionId, type ){
         </select>`);
         maxModuleNumChange(conditionId);
 
-        $(`#label-D-0-${conditionId}`).attr('rowspan', 10);
+        $(`#label-D-0-${conditionId}`).attr('rowspan', 7);
         $(`#inputform-${conditionId} .class-IBC-only`).css('display', 'none');
 
         $(`#f-1-${conditionId}`).on('change', function() {
@@ -1149,29 +1149,29 @@ var updateStanchionSubField = function(mainType, subType = "") {
 }
 
 var updateFCStanchionSubField = function(mainType, caseIdx) {
-    if (mainType != "") {
+    // if (mainType != "") {
         selectedSubType = "";
-        $(`#d-11-${caseIdx + 1}`).find('option').remove();
+        $(`#j-2-${caseIdx + 1}`).find('option').remove();
         subTypes = getStanchionSubTypes(mainType);
 
         if(subTypes.length > 0)
             selectedSubType = subTypes[0][1];
-        if(preloaded_data && preloaded_data['LoadingCase'] && preloaded_data['LoadingCase'][caseIdx] && preloaded_data['LoadingCase'][caseIdx]['RoofDeckSurface'] && preloaded_data['LoadingCase'][caseIdx]['RoofDeckSurface']['D11']) {
-            if(preloaded_data['LoadingCase'][caseIdx]['RoofDeckSurface']['D10'] == mainType)
-                selectedSubType = preloaded_data['LoadingCase'][caseIdx]['RoofDeckSurface']['D11'];
+        if(preloaded_data && preloaded_data['LoadingCase'] && preloaded_data['LoadingCase'][caseIdx] && preloaded_data['LoadingCase'][caseIdx]['Stanchions'] && preloaded_data['LoadingCase'][caseIdx]['Stanchions']['J2']) {
+            if(preloaded_data['LoadingCase'][caseIdx]['Stanchions']['J1'] == mainType)
+                selectedSubType = preloaded_data['LoadingCase'][caseIdx]['Stanchions']['J2'];
         }
 
         for (index=0; index<subTypes.length; index++) 
         {
             if (subTypes[index][1] == selectedSubType)
-                $(`#d-11-${caseIdx + 1}`).append(`<option data-value="${subTypes[index][1]}" selected> ${subTypes[index][1]}</option>`);
+                $(`#j-2-${caseIdx + 1}`).append(`<option data-value="${subTypes[index][1]}" selected> ${subTypes[index][1]}</option>`);
             else
-                $(`#d-11-${caseIdx + 1}`).append(`<option data-value="${subTypes[index][1]}"> ${subTypes[index][1]} </option>`);
+                $(`#j-2-${caseIdx + 1}`).append(`<option data-value="${subTypes[index][1]}"> ${subTypes[index][1]} </option>`);
         }
-    } else {
-        $(`#d-11-${caseIdx + 1}`).find('option').remove();
-        $(`#d-11-${caseIdx + 1}`).append(`<option data-value="" selected></option>`);
-    }
+    // } else {
+    //     $(`#j-2-${caseIdx + 1}`).find('option').remove();
+    //     $(`#j-2-${caseIdx + 1}`).append(`<option data-value="" selected></option>`);
+    // }
 }
 
 var getRailSupportTypes = function() {
@@ -2923,18 +2923,20 @@ $(document).ready(function() {
                 // Stanchion submodule section
                 updateStanchionSubField(selectedMainType);
 
-                mainTypes.unshift('');
                 for(let i = 0; i < 10; i ++) {
-                    $(`#d-10-${i + 1}`).find('option').remove();
-                    selectedMainType = mainTypes[0];
-                    if(preloaded_data && preloaded_data['LoadingCase'] && preloaded_data['LoadingCase'][i] && preloaded_data['LoadingCase'][i]['RoofDeckSurface'] && preloaded_data['LoadingCase'][i]['RoofDeckSurface']['D10'])
-                        selectedMainType = preloaded_data['LoadingCase'][i]['RoofDeckSurface']['D10'];
+                    $(`#j-1-${i + 1}`).find('option').remove();
+                    selectedMainType = $("#option-stanchion-type").val();
+                    if(preloaded_data && preloaded_data['LoadingCase'] && preloaded_data['LoadingCase'][i] && preloaded_data['LoadingCase'][i]['Stanchions'] && preloaded_data['LoadingCase'][i]['Stanchions']['J1']){
+                        selectedMainType = preloaded_data['LoadingCase'][i]['Stanchions']['J1'];
+                        if(preloaded_data['LoadingCase'][i]['Stanchions']['J1'] != $("#option-stanchion-type").val() || preloaded_data['LoadingCase'][i]['Stanchions']['J2'] != $("#option-stanchion-subtype").val())
+                            $(`#j-4-${i + 1}`).val("1");
+                    }
                     for (index=0; index<mainTypes.length; index++) 
                     {
                         if (mainTypes[index] == selectedMainType) 
-                            $(`#d-10-${i + 1}`).append(`<option data-value="${mainTypes[index]}" selected> ${mainTypes[index]}</option>`);
+                            $(`#j-1-${i + 1}`).append(`<option data-value="${mainTypes[index]}" selected> ${mainTypes[index]}</option>`);
                         else 
-                            $(`#d-10-${i + 1}`).append(`<option data-value="${mainTypes[index]}"> ${mainTypes[index]} </option>`);
+                            $(`#j-1-${i + 1}`).append(`<option data-value="${mainTypes[index]}"> ${mainTypes[index]} </option>`);
                     }
                     updateFCStanchionSubField(selectedMainType, i);
                 }
@@ -3398,10 +3400,20 @@ $(document).ready(function() {
     });
     $('#option-stanchion-type').on('change', function() {
         updateStanchionSubField($(this).children("option:selected").val());
+        for(let i = 1; i <= 10; i ++){
+            if($(`#j-4-${i}`).val() != "1") {
+                $(`#j-1-${i}`).val($(this).children("option:selected").val());
+                updateFCStanchionSubField($(this).children("option:selected").val(), i - 1);
+            }
+        }
     });
     $('#option-stanchion-subtype').on('change', function() {
         updateStanchionSubField( $('#option-stanchion-type').children("option:selected").val(), 
                                 $(this).children("option:selected").val());
+        for(let i = 1; i <= 10; i ++){
+            if($(`#j-4-${i}`).val() != "1")
+                $(`#j-2-${i}`).val($(this).children("option:selected").val());
+        }
     });
     $('#option-railsupport-type').on('change', function() {
         updateRailSupportSubField($(this).children("option:selected").val());
@@ -3554,8 +3566,12 @@ $(document).ready(function() {
         $(`#delete-${i}`).click(function() {
             deleteTab(window.conditionId);
         });
-        $(`#d-10-${i}`).on('change', function() {
+        $(`#j-1-${i}`).on('change', function() {
             updateFCStanchionSubField($(this).children("option:selected").val(), window.conditionId - 1);
+            $(`#j-4-${window.conditionId}`).val("1");
+        });
+        $(`#j-2-${i}`).on('change', function() {
+            $(`#j-4-${window.conditionId}`).val("1");
         });
     }
 
@@ -4345,9 +4361,9 @@ var doDuplicate = async function (targetTabId, curTabId, checkOverwrite){
         elementId = elementId.slice(0, elementId.length  - 2) + '-' + targetTabId;
         $(`#${elementId}`).prop('checked', $(this)[0].checked);
     });
-    if($(`#d-10-${curTabId}`).val() != ''){ // Update Stanchion in FC
-        updateFCStanchionSubField($(`#d-10-${curTabId}`).val(), targetTabId - 1);
-        $(`#d-11-${targetTabId}`).val($(`#d-11-${curTabId}`).val());
+    if($(`#j-1-${curTabId}`).val() != ''){ // Update Stanchion in FC
+        updateFCStanchionSubField($(`#j-1-${curTabId}`).val(), targetTabId - 1);
+        $(`#j-2-${targetTabId}`).val($(`#j-2-${curTabId}`).val());
     }
     if(tabType != 2) // If Stick or Truss
         maxModuleNumChange(targetTabId);
@@ -4677,8 +4693,8 @@ var loadPreloadedData = function() {
                                 $(`#d-7-${i + 1}`).val(caseData['RoofDeckSurface']['D7']);
                                 $(`#d-8-${i + 1}`).val(caseData['RoofDeckSurface']['D8']);
                                 $(`#d-9-${i + 1}`).val(caseData['RoofDeckSurface']['D9']);
-                                if(caseData['RoofDeckSurface']['D12'] > 0)
-                                    $(`#d-12-${i + 1}`).val(caseData['RoofDeckSurface']['D12']);
+                                if(caseData['Stanchions'] && caseData['Stanchions']['J3'] > 0)
+                                    $(`#j-3-${i + 1}`).val(caseData['Stanchions']['J3']);
 
                                 if(!caseData['Location']['E1_feet'] && !caseData['Location']['E1_inches'])
                                 {
