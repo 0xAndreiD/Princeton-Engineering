@@ -937,7 +937,29 @@ var optionPVInverter = function(mainType, subType, idx) {
     return "N/A";
 }
 
-var updatePVInvertorSubField = function(mainType, subType = "", invId = 1) {
+var updateElectricRating = function() {
+    if($("#inputform-electric").length > 0) {
+        let amp = parseFloat($("#option-inverter-option1").html()) * parseInt($("#option-inverter-quantity").val());
+        if($("#pv-inverter-2")[0].style.display != "none")
+            amp += (parseFloat($("#option-inverter2-option1").html()) * parseInt($("#option-inverter2-quantity").val()));
+        if($("#pv-inverter-3")[0].style.display != "none")
+            amp += (parseFloat($("#option-inverter3-option1").html()) * parseInt($("#option-inverter3-quantity").val()));
+
+        amp = amp * 1.25;
+        $("#PV-breaker-recommended").html(amp);
+
+        var ratingValues = [];
+        $(`#pv-breaker-selected`).find('option').each(function() {
+            let value = parseInt($(this).html());
+            if(value >= amp)
+                ratingValues.push(value);
+        });
+        if(ratingValues[0])
+            $("#pv-breaker-selected").val(ratingValues[0]);
+    }
+}
+
+var updatePVInvertorSubField = function(mainType, subType = "", invId = 1, updateElectric = true) {
     if (subType == "") 
     {
         selectedSubType = "";
@@ -995,6 +1017,9 @@ var updatePVInvertorSubField = function(mainType, subType = "", invId = 1) {
     $(`#inverter${invId == 1 ? '' : invId}-custom`).val(optionPVInverter(mainType, subType, 4) ? true : false);
     $(`#inverter${invId == 1 ? '' : invId}-crc32`).val(optionPVInverter(mainType, subType, 6));
     $(`#inverter${invId == 1 ? '' : invId}-watts`).val(optionPVInverter(mainType, subType, 7));
+
+    if(updateElectric)
+        updateElectricRating();
 }
 
 var addPVInverter = function() {
@@ -1002,10 +1027,12 @@ var addPVInverter = function() {
         $("#pv-inverter-2").css('display', 'table-row');
     else if($("#pv-inverter-3")[0].style.display == "none")
         $("#pv-inverter-3").css('display', 'table-row');
+    updateElectricRating();
 }
 
 var removePVInverter = function(id) {
     $(`#pv-inverter-${id}`).css('display', 'none');
+    updateElectricRating();
 }
 
 var addStrTable = function() {
@@ -2875,9 +2902,9 @@ $(document).ready(function() {
                 }
 
                 // inverter submodule section
-                updatePVInvertorSubField(selectedMainType);
-                updatePVInvertorSubField(selectedMainType2, "", 2);
-                updatePVInvertorSubField(selectedMainType3, "", 3);
+                updatePVInvertorSubField(selectedMainType, "", 1, false);
+                updatePVInvertorSubField(selectedMainType2, "", 2, false);
+                updatePVInvertorSubField(selectedMainType3, "", 3, false);
             },
             error: function(xhr, status, error) {
                 res = JSON.parse(xhr.responseText);
@@ -3445,6 +3472,9 @@ $(document).ready(function() {
         var regex = /\d*\.?\d?/g;
         $(this).val(regex.exec(val)); 
     });
+    $("#option-inverter-quantity, #option-inverter2-quantity, option-inverter3-quantity").on('change', function() {
+        updateElectricRating();
+    })
 
     // $(".permit").on('change', function(obj) {
     //     var classes = $(obj.target).attr('class').split(' ');
