@@ -1057,13 +1057,13 @@
                 <select class="MinWireSize" tabindex="11">
                     <option value="#14">#14</option>
                     <option value="#12">#12</option>
-                    <option value="#10">#10</option>
+                    <option value="#10" selected="">#10</option>
                     <option value="#8">#8</option>
                     <option value="#6">#6</option>
                     <option value="#4">#4</option>
                     <option value="#3">#3</option>
                     <option value="#2">#2</option>
-                    <option value="#1" selected="">#1</option>
+                    <option value="#1">#1</option>
                     <option value="1/0">1/0</option>
                     <option value="2/0">2/0</option>
                     <option value="3/0">3/0</option>
@@ -1129,13 +1129,13 @@
                 <select class="MinWireSize" tabindex="11">
                     <option value="#14">#14</option>
                     <option value="#12">#12</option>
-                    <option value="#10">#10</option>
+                    <option value="#10" selected="">#10</option>
                     <option value="#8">#8</option>
                     <option value="#6">#6</option>
                     <option value="#4">#4</option>
                     <option value="#3">#3</option>
                     <option value="#2">#2</option>
-                    <option value="#1" selected="">#1</option>
+                    <option value="#1">#1</option>
                     <option value="1/0">1/0</option>
                     <option value="2/0">2/0</option>
                     <option value="3/0">3/0</option>
@@ -1201,13 +1201,13 @@
                 <select class="MinWireSize" tabindex="11">
                     <option value="#14">#14</option>
                     <option value="#12">#12</option>
-                    <option value="#10">#10</option>
+                    <option value="#10" selected="">#10</option>
                     <option value="#8">#8</option>
                     <option value="#6">#6</option>
                     <option value="#4">#4</option>
                     <option value="#3">#3</option>
                     <option value="#2">#2</option>
-                    <option value="#1" selected="">#1</option>
+                    <option value="#1">#1</option>
                     <option value="1/0">1/0</option>
                     <option value="2/0">2/0</option>
                     <option value="3/0">3/0</option>
@@ -1273,13 +1273,13 @@
                 <select class="MinWireSize" tabindex="11">
                     <option value="#14">#14</option>
                     <option value="#12">#12</option>
-                    <option value="#10">#10</option>
+                    <option value="#10" selected="">#10</option>
                     <option value="#8">#8</option>
                     <option value="#6">#6</option>
                     <option value="#4">#4</option>
                     <option value="#3">#3</option>
                     <option value="#2">#2</option>
-                    <option value="#1" selected="">#1</option>
+                    <option value="#1">#1</option>
                     <option value="1/0">1/0</option>
                     <option value="2/0">2/0</option>
                     <option value="3/0">3/0</option>
@@ -1345,13 +1345,13 @@
                 <select class="MinWireSize" tabindex="11">
                     <option value="#14">#14</option>
                     <option value="#12">#12</option>
-                    <option value="#10">#10</option>
+                    <option value="#10" selected="">#10</option>
                     <option value="#8">#8</option>
                     <option value="#6">#6</option>
                     <option value="#4">#4</option>
                     <option value="#3">#3</option>
                     <option value="#2">#2</option>
-                    <option value="#1" selected="">#1</option>
+                    <option value="#1">#1</option>
                     <option value="1/0">1/0</option>
                     <option value="2/0">2/0</option>
                     <option value="3/0">3/0</option>
@@ -1417,13 +1417,13 @@
                 <select class="MinWireSize" tabindex="11">
                     <option value="#14">#14</option>
                     <option value="#12">#12</option>
-                    <option value="#10">#10</option>
+                    <option value="#10" selected="">#10</option>
                     <option value="#8">#8</option>
                     <option value="#6">#6</option>
                     <option value="#4">#4</option>
                     <option value="#3">#3</option>
                     <option value="#2">#2</option>
-                    <option value="#1" selected="">#1</option>
+                    <option value="#1">#1</option>
                     <option value="1/0">1/0</option>
                     <option value="2/0">2/0</option>
                     <option value="3/0">3/0</option>
@@ -1489,13 +1489,13 @@
                 <select class="MinWireSize" tabindex="11">
                     <option value="#14">#14</option>
                     <option value="#12">#12</option>
-                    <option value="#10">#10</option>
+                    <option value="#10" selected="">#10</option>
                     <option value="#8">#8</option>
                     <option value="#6">#6</option>
                     <option value="#4">#4</option>
                     <option value="#3">#3</option>
                     <option value="#2">#2</option>
-                    <option value="#1" selected="">#1</option>
+                    <option value="#1">#1</option>
                     <option value="1/0">1/0</option>
                     <option value="2/0">2/0</option>
                     <option value="3/0">3/0</option>
@@ -1561,13 +1561,13 @@
                 <select class="MinWireSize" tabindex="11">
                     <option value="#14">#14</option>
                     <option value="#12">#12</option>
-                    <option value="#10">#10</option>
+                    <option value="#10" selected="">#10</option>
                     <option value="#8">#8</option>
                     <option value="#6">#6</option>
                     <option value="#4">#4</option>
                     <option value="#3">#3</option>
                     <option value="#2">#2</option>
-                    <option value="#1" selected="">#1</option>
+                    <option value="#1">#1</option>
                     <option value="1/0">1/0</option>
                     <option value="2/0">2/0</option>
                     <option value="3/0">3/0</option>
@@ -1633,13 +1633,13 @@
                 <select class="MinWireSize" tabindex="11">
                     <option value="#14">#14</option>
                     <option value="#12">#12</option>
-                    <option value="#10">#10</option>
+                    <option value="#10" selected="">#10</option>
                     <option value="#8">#8</option>
                     <option value="#6">#6</option>
                     <option value="#4">#4</option>
                     <option value="#3">#3</option>
                     <option value="#2">#2</option>
-                    <option value="#1" selected="">#1</option>
+                    <option value="#1">#1</option>
                     <option value="1/0">1/0</option>
                     <option value="2/0">2/0</option>
                     <option value="3/0">3/0</option>
@@ -1705,13 +1705,13 @@
                 <select class="MinWireSize" tabindex="11">
                     <option value="#14">#14</option>
                     <option value="#12">#12</option>
-                    <option value="#10">#10</option>
+                    <option value="#10" selected="">#10</option>
                     <option value="#8">#8</option>
                     <option value="#6">#6</option>
                     <option value="#4">#4</option>
                     <option value="#3">#3</option>
                     <option value="#2">#2</option>
-                    <option value="#1" selected="">#1</option>
+                    <option value="#1">#1</option>
                     <option value="1/0">1/0</option>
                     <option value="2/0">2/0</option>
                     <option value="3/0">3/0</option>
@@ -1866,14 +1866,14 @@
         </tr>
         <tr>
             <td><div style="overflow:hidden"></div></td>
-            <td class="w400-bdr text-right" id="PV-breaker-recommended">40</td>
+            <td class="w400-bdr text-center" id="PV-breaker-recommended">0</td>
             <td class="iw400-left-bdr" colspan="4">PV Breaker Recommended</td>
         </tr>
         <tr>
             <td><div style="overflow:hidden"></div></td>
             <td class="w400-yellow-bdr">
                 <select class="Inv" tabindex="11" id="pv-breaker-selected">
-                    <option value="10">10</option>
+                    <option value="10" selected="">10</option>
                     <option value="15">15</option>
                     <option value="20">20</option>
                     <option value="25">25</option>
@@ -1891,7 +1891,7 @@
                     <option value="125">125</option>
                     <option value="150">150</option>
                     <option value="175">175</option>
-                    <option value="200" selected="">200</option>
+                    <option value="200">200</option>
                     <option value="225">225</option>
                     <option value="250">250</option>
                     <option value="300">300</option>

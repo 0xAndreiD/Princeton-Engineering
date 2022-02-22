@@ -480,7 +480,7 @@
         <tr class="h13 class-IBC-hide class-GroundMount-hide">
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">G-4</td>
-            <td class="iw400-right-bdr" colspan="2">Total # Modules</td>
+            <td class="iw400-right-bdr" colspan="2">Total # Modules for this FC</td>
             <td class="iw400-bdr">ea</td>
             <td class="w400-yellow-bdr" colspan="2"><input type="text" class="txt-center-align" id="g-4-{{ $conditionId }}" tabindex="48" value="0"></input></td>
             <td class="right-bdr"><div style="overflow:hidden"></td>
