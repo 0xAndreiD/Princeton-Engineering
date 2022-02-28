@@ -843,6 +843,16 @@ var optionPVModule = function(mainType, subType, idx) {
     return "N/A";
 }
 
+var getPVModule = function(mainType, subType) {
+    for (index = 0; index < availablePVModules.length; index++) {
+        if ((availablePVModules[index][0] == mainType) 
+            && (availablePVModules[index][1] == subType))
+            return availablePVModules[index];
+    }
+
+    return null;
+}
+
 var updatePVSubmoduleField = function(mainType, subType="") {
     if (subType == "") 
     {
@@ -887,6 +897,20 @@ var updatePVSubmoduleField = function(mainType, subType="") {
     $('#pv-module-custom').val(optionPVModule(mainType, subType, 7) ? true : false);
     $('#pv-module-crc32').val(optionPVModule(mainType, subType, 9));
     $('#pv-module-cec').val(optionPVModule(mainType, subType, 10));
+
+    if($('#pv-module-cec').val() == 1) {
+        let module = getPVModule(mainType, subType);
+        if(module && (module[10] == 1 || module[2] == 0 || module[3] == 0 || module[4] == 0 || module[5] == 0 || module[6] == 0 || module[11] == 0)) {
+            $("#cec-module-rating").val(module[2]);
+            $("#cec-module-length").val(module[3]);
+            $("#cec-module-width").val(module[4]);
+            $("#cec-module-depth").val(module[5]);
+            $("#cec-module-weight").val(module[6]);
+            $("#cec-module-watts").val(module[11]);
+            $("#cec-module-id").val(module[12]);
+            $("#cec-check").modal('show');
+        }
+    }
 }
 
 var getPVInvertorTypes = function() {
@@ -1027,11 +1051,33 @@ var addPVInverter = function() {
         $("#pv-inverter-2").css('display', 'table-row');
     else if($("#pv-inverter-3")[0].style.display == "none")
         $("#pv-inverter-3").css('display', 'table-row');
+
+    for(let i = 1; i <= 10; i ++)
+        $(`#AC${i} .InvType`).find('option')[1].style.display = 'block';
+    if($("#pv-inverter-2")[0].style.display != "none" && $("#pv-inverter-3")[0].style.display != "none") {
+        for(let i = 1; i <= 10; i ++)
+            $(`#AC${i} .InvType`).find('option')[2].style.display = 'block';
+    } else {
+        for(let i = 1; i <= 10; i ++)
+            $(`#AC${i} .InvType`).find('option')[2].style.display = 'none';
+    }
+
     updateElectricRating();
 }
 
 var removePVInverter = function(id) {
     $(`#pv-inverter-${id}`).css('display', 'none');
+
+    for(let i = 1; i <= 10; i ++)
+        $(`#AC${i} .InvType`).find('option')[2].style.display = 'none';
+    if($("#pv-inverter-2")[0].style.display != "none" || $("#pv-inverter-3")[0].style.display != "none") {
+        for(let i = 1; i <= 10; i ++)
+            $(`#AC${i} .InvType`).find('option')[1].style.display = 'block';
+    } else {
+        for(let i = 1; i <= 10; i ++)
+            $(`#AC${i} .InvType`).find('option')[1].style.display = 'none';
+    }
+
     updateElectricRating();
 }
 
@@ -1349,6 +1395,51 @@ function updateModuleSetting(setting){
     updatePVSubmoduleField($('#option-module-type').children("option:selected").val());
 }
 
+function resetCECModule() {
+    swal.fire({ title: "Please wait...", showConfirmButton: false });
+    swal.showLoading();
+    $.ajax({
+        url:"resetCEC",
+        type:'post',
+        dataType: "json",
+        data: {
+            id: $("#cec-module-id").val(),
+            rating: $("#cec-module-rating").val(),
+            length: $("#cec-module-length").val(),
+            width: $("#cec-module-width").val(),
+            depth: $("#cec-module-depth").val(),
+            weight: $("#cec-module-weight").val(),
+            watts: $("#cec-module-watts").val(),
+            dimunit: $('input[name=dimension-unit]:checked').val(),
+            weiunit: $('input[name=weight-unit]:checked').val()
+        },
+        success:function(res){
+            swal.close();
+            if(res && res.success) {
+                swal.fire({ title: "Success", text: "Your updates are successfully saved.", icon: "success", confirmButtonText: `OK` });
+                let module = availablePVModules.find(e => e && e[12] == $("#cec-module-id").val());
+                if(module) {
+                    module[2] = res.module.rating;
+                    module[3] = res.module.length;
+                    module[4] = res.module.width;
+                    module[5] = res.module.depth;
+                    module[6] = res.module.weight;
+                    module[11] = res.module.watts;
+                    $('#pv-module-length').val(module[3]);
+                    $('#pv-module-width').val(module[4]);
+                }
+            }
+            else
+                swal.fire({ title: "Error", text: res.message, icon: "error", confirmButtonText: `OK` });
+        },
+        error: function(xhr, status, error) {
+            swal.close();
+            res = JSON.parse(xhr.responseText);
+            swal.fire({ title: "Error", text: res.message, icon: "error", confirmButtonText: `OK` });
+        }
+    });
+}
+
 function loadCECEquipmentSection(){
     return new Promise((resolve, reject) => {
         if(cecLoaded)
@@ -1365,7 +1456,7 @@ function loadCECEquipmentSection(){
                     if(res && res.length > 0)
                     {
                         for(let i = 0; i < res.length; i ++){
-                            availablePVModules.push([res[i]['mfr'], res[i]['model'], res[i]['rating'], res[i]['length'], res[i]['width'], res[i]['depth'], res[i]['weight'], res[i]['custom'], res[i]['favorite'], res[i]['crc32'], 1]);
+                            availablePVModules.push([res[i]['mfr'], res[i]['model'], res[i]['rating'], res[i]['length'], res[i]['width'], res[i]['depth'], res[i]['weight'], res[i]['custom'], res[i]['favorite'], res[i]['crc32'], 1, res[i]['watts'], res[i]['id']]);
                         }
                     }
                     resolve(true);
@@ -1905,7 +1996,7 @@ var getData = function(caseCount = 10) {
             if($(`#R${i}`)[0].style.display != "none")
                 alldata['StrTable'].push({'InvNo': $(`#R${i} .Inv`).val(), 'StringNumber': $(`#R${i} .String`).val(), 'ModulesPerString': $(`#R${i} .ModStr`).val(), 'StringsPerMPPT': $(`#R${i} .StrMPPT`).val(), 'StringLength': $(`#R${i} .StrLength`).val()});
             if($(`#AC${i}`)[0].style.display != "none")
-                alldata['ACTable'].push({'InvNo': $(`#AC${i} .Inv`).val(), 'WireLength': $(`#AC${i} .WireLength`).val(), 'MinWireSize': $(`#AC${i} .MinWireSize`).val(), 'Material': $(`#AC${i} .Material`).val(), 'InsulRating': $(`#AC${i} .InsulRating`).val(), 'Circuits': $(`#AC${i} .Circuits`).val()});
+                alldata['ACTable'].push({'InvNo': $(`#AC${i} .Inv`).val(), 'InvType': $(`#AC${i} .InvType`).val(), 'WireLength': $(`#AC${i} .WireLength`).val(), 'MinWireSize': $(`#AC${i} .MinWireSize`).val(), 'Material': $(`#AC${i} .Material`).val(), 'InsulRating': $(`#AC${i} .InsulRating`).val(), 'Circuits': $(`#AC${i} .Circuits`).val()});
         }
         alldata['PV-breaker-recommended'] = $("#PV-breaker-recommended").html();
     }
@@ -3299,6 +3390,7 @@ $(document).ready(function() {
                 if(preloaded_data['Electrical']['ACTable'][`AC${i}`]) {
                     $(`#AC${i}`).css('display', 'table-row');
                     $(`#AC${i} .Inv`).val(preloaded_data['Electrical']['ACTable'][`AC${i}`]['InvNo']);
+                    $(`#AC${i} .InvType`).val(preloaded_data['Electrical']['ACTable'][`AC${i}`]['InvType']);
                     $(`#AC${i} .WireLength`).val(preloaded_data['Electrical']['ACTable'][`AC${i}`]['WireLength']);
                     $(`#AC${i} .MinWireSize`).val(preloaded_data['Electrical']['ACTable'][`AC${i}`]['MinWireSize']);
                     $(`#AC${i} .Material`).val(preloaded_data['Electrical']['ACTable'][`AC${i}`]['Material']);
@@ -4574,13 +4666,25 @@ var loadPreloadedData = function() {
 
                             $('#option-module-quantity').val(preloaded_data['Equipment']['PVModule']['Quantity']);
                             $('#option-inverter-quantity').val(preloaded_data['Equipment']['PVInverter']['Quantity']);
+                            let additionalInvs = 0;
                             if(preloaded_data['Equipment'] && preloaded_data['Equipment']['PVInverter_2'] && preloaded_data['Equipment']['PVInverter_2']['Type'] != ''){
                                 $("#pv-inverter-2").css('display', 'table-row');
+                                additionalInvs ++;
                                 $('#option-inverter2-quantity').val(preloaded_data['Equipment']['PVInverter_2']['Quantity']);
                             }
                             if(preloaded_data['Equipment'] && preloaded_data['Equipment']['PVInverter_3'] && preloaded_data['Equipment']['PVInverter_3']['Type'] != ''){
                                 $("#pv-inverter-3").css('display', 'table-row');
+                                additionalInvs ++;
                                 $('#option-inverter3-quantity').val(preloaded_data['Equipment']['PVInverter_3']['Quantity']);
+                            }
+                            if(additionalInvs == 1) {
+                                for(let i = 1; i <= 10; i ++)
+                                    $(`#AC${i} .InvType`).find('option')[1].style.display = 'block';
+                            } else if(additionalInvs == 2) {
+                                for(let i = 1; i <= 10; i ++) {
+                                    $(`#AC${i} .InvType`).find('option')[1].style.display = 'block';
+                                    $(`#AC${i} .InvType`).find('option')[2].style.display = 'block';
+                                }
                             }
 
                             $("#option-number-of-conditions").val(preloaded_data['NumberLoadingConditions']);

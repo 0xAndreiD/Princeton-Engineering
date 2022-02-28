@@ -8,6 +8,7 @@
         <col width="100">
         <col width="100">
         <col width="100">
+        <col width="100">
         <col width="50">
     </colgroup>
     <tbody>
@@ -1027,6 +1028,7 @@
         <tr class="h13">
             <td><div style="overflow:hidden"></div></td>
             <td class="iw400-bdr">Inverter #</td>
+            <td class="iw400-bdr">Inverter Type</td>
             <td class="iw400-bdr">Wire Length (1 way)</td>
             <td class="iw400-bdr">Min Wire Size</td>
             <td class="iw400-bdr">Material</td>
@@ -1048,6 +1050,13 @@
                     <option value="8">8</option>
                     <option value="9">9</option>
                     <option value="10">10</option>
+                </select>
+            </td>
+            <td class="w400-yellow-bdr">
+                <select class="InvType" tabindex="11">
+                    <option value="1" selected="">1</option>
+                    <option value="2" style="display: none;">2</option>
+                    <option value="3" style="display: none;">3</option>
                 </select>
             </td>
             <td class="w400-yellow-bdr">
@@ -1123,6 +1132,13 @@
                 </select>
             </td>
             <td class="w400-yellow-bdr">
+                <select class="InvType" tabindex="11">
+                    <option value="1" selected="">1</option>
+                    <option value="2" style="display: none;">2</option>
+                    <option value="3" style="display: none;">3</option>
+                </select>
+            </td>
+            <td class="w400-yellow-bdr">
                 <input type="text" class="WireLength text-center" tabindex="11" value="0">
             </td>
             <td class="w400-yellow-bdr">
@@ -1192,6 +1208,13 @@
                     <option value="8">8</option>
                     <option value="9">9</option>
                     <option value="10">10</option>
+                </select>
+            </td>
+            <td class="w400-yellow-bdr">
+                <select class="InvType" tabindex="11">
+                    <option value="1" selected="">1</option>
+                    <option value="2" style="display: none;">2</option>
+                    <option value="3" style="display: none;">3</option>
                 </select>
             </td>
             <td class="w400-yellow-bdr">
@@ -1267,6 +1290,13 @@
                 </select>
             </td>
             <td class="w400-yellow-bdr">
+                <select class="InvType" tabindex="11">
+                    <option value="1" selected="">1</option>
+                    <option value="2" style="display: none;">2</option>
+                    <option value="3" style="display: none;">3</option>
+                </select>
+            </td>
+            <td class="w400-yellow-bdr">
                 <input type="text" class="WireLength text-center" tabindex="11" value="0">
             </td>
             <td class="w400-yellow-bdr">
@@ -1336,6 +1366,13 @@
                     <option value="8">8</option>
                     <option value="9">9</option>
                     <option value="10">10</option>
+                </select>
+            </td>
+            <td class="w400-yellow-bdr">
+                <select class="InvType" tabindex="11">
+                    <option value="1" selected="">1</option>
+                    <option value="2" style="display: none;">2</option>
+                    <option value="3" style="display: none;">3</option>
                 </select>
             </td>
             <td class="w400-yellow-bdr">
@@ -1411,6 +1448,13 @@
                 </select>
             </td>
             <td class="w400-yellow-bdr">
+                <select class="InvType" tabindex="11">
+                    <option value="1" selected="">1</option>
+                    <option value="2" style="display: none;">2</option>
+                    <option value="3" style="display: none;">3</option>
+                </select>
+            </td>
+            <td class="w400-yellow-bdr">
                 <input type="text" class="WireLength text-center" tabindex="11" value="0">
             </td>
             <td class="w400-yellow-bdr">
@@ -1480,6 +1524,13 @@
                     <option value="8">8</option>
                     <option value="9">9</option>
                     <option value="10">10</option>
+                </select>
+            </td>
+            <td class="w400-yellow-bdr">
+                <select class="InvType" tabindex="11">
+                    <option value="1" selected="">1</option>
+                    <option value="2" style="display: none;">2</option>
+                    <option value="3" style="display: none;">3</option>
                 </select>
             </td>
             <td class="w400-yellow-bdr">
@@ -1555,6 +1606,13 @@
                 </select>
             </td>
             <td class="w400-yellow-bdr">
+                <select class="InvType" tabindex="11">
+                    <option value="1" selected="">1</option>
+                    <option value="2" style="display: none;">2</option>
+                    <option value="3" style="display: none;">3</option>
+                </select>
+            </td>
+            <td class="w400-yellow-bdr">
                 <input type="text" class="WireLength text-center" tabindex="11" value="0">
             </td>
             <td class="w400-yellow-bdr">
@@ -1627,6 +1685,13 @@
                 </select>
             </td>
             <td class="w400-yellow-bdr">
+                <select class="InvType" tabindex="11">
+                    <option value="1" selected="">1</option>
+                    <option value="2" style="display: none;">2</option>
+                    <option value="3" style="display: none;">3</option>
+                </select>
+            </td>
+            <td class="w400-yellow-bdr">
                 <input type="text" class="WireLength text-center" tabindex="11" value="0">
             </td>
             <td class="w400-yellow-bdr">
@@ -1696,6 +1761,13 @@
                     <option value="8">8</option>
                     <option value="9">9</option>
                     <option value="10">10</option>
+                </select>
+            </td>
+            <td class="w400-yellow-bdr">
+                <select class="InvType" tabindex="11">
+                    <option value="1" selected="">1</option>
+                    <option value="2" style="display: none;">2</option>
+                    <option value="3" style="display: none;">3</option>
                 </select>
             </td>
             <td class="w400-yellow-bdr">

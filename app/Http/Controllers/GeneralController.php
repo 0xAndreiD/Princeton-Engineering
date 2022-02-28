@@ -3179,4 +3179,52 @@ class GeneralController extends Controller
                 return response()->json(['success' => false]);
         }
     }
+
+    /**
+     * Reset CEC Module Values and send email to super
+     *
+     * @return JSON
+     */
+    public function resetCEC(Request $request){
+        if($request['id']) {
+            $module = PVModuleCEC::where('id', $request['id'])->first();
+            if($module) {
+                $module['rating'] = $request['rating'];
+                if($request['dimunit'] == 'mm') {
+                    $module['length'] = $request['length'] * 0.0393701;
+                    $module['width'] = $request['width'] * 0.0393701;
+                    $module['depth'] = $request['depth'] * 0.0393701;
+                } else {
+                    $module['length'] = $request['length'];
+                    $module['width'] = $request['width'];
+                    $module['depth'] = $request['depth'];
+                }
+                if($request['weiunit'] == 'kg')
+                    $module['weight'] = $request['weight'] * 2.20462;
+                else
+                    $module['weight'] = $request['weight'];
+                $module['watts'] = $request['watts'];
+                $module->save();
+
+                $user = User::where('id', Auth::user()->id)->first();
+                $company = Company::where('id', Auth::user()->companyid)->first();
+                $data = array('dimunit' => $request['dimunit'], 'weiunit' => $request['weiunit'], 'manufacturer' => $module['mfr'], 'model' => $module['model'],
+                        'request' => array('rating' => $request['rating'], 'length' => $request['length'], 'width' => $request['width'], 'depth' => $request['depth'], 'weight' => $request['weight'], 'watts' => $request['watts']), 
+                        'saved' => array('rating' => $module['rating'], 'length' => $module['length'], 'width' => $module['width'], 'depth' => $module['depth'], 'weight' => $module['weight'], 'watts' => $module['watts']),
+                        'user' => $user, 'company' => $company);
+                $supers = User::where('userrole', 2)->get();
+                foreach($supers as $super) {
+                    Mail::send('mail.cecnotification', $data, function ($m) use ($super) {
+                        $m->from(env('MAIL_FROM_ADDRESS'), 'Princeton Engineering')->to($super->email)->subject('CEC Module Updated.');
+                    });
+                }
+
+                return response()->json(['success' => true, 'module' => $module]);
+            } else {
+                return response()->json(['success' => false, 'message' => "Cannot find the module."]);
+            }
+        } else {
+            return response()->json(['success' => false, 'message' => "Missing Id."]);
+        }
+    }
 }
