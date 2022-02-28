@@ -90,6 +90,9 @@
     </div>
 
 </div>
+
+@include('rsinput.ceccheck')
+
 <script src="{{ asset('/js/plugins/jquery.knob.js') }}"></script>
 <script src="{{ asset('/js/plugins/jquery.ui.widget.js') }}"></script>
 <script src="{{ asset('/js/plugins/jquery.iframe-transport.js') }}"></script>

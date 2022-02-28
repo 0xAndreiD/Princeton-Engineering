@@ -133,6 +133,7 @@ Route::get('/removeSpecialChars', 'APIController@removeSpecialChars')->name('rem
 
 // PV Modules
 Route::post('/getCECPVModules', 'GeneralController@getCECPVModules')->name('getCECPVModules');
+Route::post('/resetCEC', 'GeneralController@resetCEC')->name('resetCEC');
 Route::post('/getPVModules', 'GeneralController@getPVModules')->name('getPVModules');
 // PV Inverters
 Route::post('/getPVInverters', 'GeneralController@getPVInverters')->name('getPVInverters');
