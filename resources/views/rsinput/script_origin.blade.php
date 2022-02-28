@@ -900,7 +900,7 @@ var updatePVSubmoduleField = function(mainType, subType="") {
 
     if($('#pv-module-cec').val() == 1) {
         let module = getPVModule(mainType, subType);
-        if(module && (module[10] == 1 || module[2] == 0 || module[3] == 0 || module[4] == 0 || module[5] == 0 || module[6] == 0 || module[11] == 0)) {
+        if(module && module[10] == 1 && (module[2] == 0 || module[3] == 0 || module[4] == 0 || module[5] == 0 || module[6] == 0 || module[11] == 0)) {
             $("#cec-module-rating").val(module[2]);
             $("#cec-module-length").val(module[3]);
             $("#cec-module-width").val(module[4]);
