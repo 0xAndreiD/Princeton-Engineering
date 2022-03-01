@@ -908,6 +908,7 @@ var updatePVSubmoduleField = function(mainType, subType="") {
             $("#cec-module-weight").val(module[6]);
             // $("#cec-module-watts").val(module[11]);
             $("#cec-module-id").val(module[12]);
+            $("#cec-reset-title").html(`CEC PV Module Data Update for module ${module[0]} / ${module[1]}`);
             $("#cec-check").modal('show');
         }
     }

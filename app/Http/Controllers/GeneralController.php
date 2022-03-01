@@ -3189,6 +3189,7 @@ class GeneralController extends Controller
         if($request['id']) {
             $module = PVModuleCEC::where('id', $request['id'])->first();
             if($module) {
+                $original = array('id' => $module['id'], 'rating' => $module['rating'], 'length' => $module['length'], 'width' => $module['width'], 'depth' => $module['depth'], 'weight' => $module['weight']);
                 $module['rating'] = $request['rating'];
                 if($request['dimunit'] == 'mm') {
                     $module['length'] = $request['length'] * 0.0393701;
@@ -3209,8 +3210,9 @@ class GeneralController extends Controller
                 $user = User::where('id', Auth::user()->id)->first();
                 $company = Company::where('id', Auth::user()->companyid)->first();
                 $data = array('dimunit' => $request['dimunit'], 'weiunit' => $request['weiunit'], 'manufacturer' => $module['mfr'], 'model' => $module['model'],
-                        'request' => array('rating' => $request['rating'], 'length' => $request['length'], 'width' => $request['width'], 'depth' => $request['depth'], 'weight' => $request['weight'], 'watts' => $request['watts']), 
-                        'saved' => array('rating' => $module['rating'], 'length' => $module['length'], 'width' => $module['width'], 'depth' => $module['depth'], 'weight' => $module['weight'], 'watts' => $module['watts']),
+                        'original' => $original,
+                        'request' => array('rating' => $request['rating'], 'length' => $request['length'], 'width' => $request['width'], 'depth' => $request['depth'], 'weight' => $request['weight']), 
+                        'saved' => array('rating' => $module['rating'], 'length' => $module['length'], 'width' => $module['width'], 'depth' => $module['depth'], 'weight' => $module['weight']),
                         'user' => $user, 'company' => $company);
                 $supers = User::where('userrole', 2)->get();
                 foreach($supers as $super) {
