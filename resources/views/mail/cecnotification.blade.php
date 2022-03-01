@@ -165,8 +165,6 @@ body{
 a{
 	color: #30e3ca;
 }
-table{
-}
 /*LOGO*/
 .logo h1{
 	margin: 0;
@@ -302,83 +300,147 @@ ul.social li{
                   <tr>
                       <td>
                           <div class="text" style="padding: 0 2.5em; text-align: left;">
-                              <h3 style="margin: 0; color: black;">Username: {{ $user && $user->username ? $user->username : "None" }}</h3>
-                              <h3 style="margin: 0; color: black;">Company: {{ $company && $company->company_name ? $company->company_name : "None" }}</h3>
-                          </div>
-                      </td>
-                  </tr>
-              </table>
-            </td>
-          </tr><!-- end tr -->
-		<tr>
-        <tr>
-            <td valign="middle" class="hero bg_white" style="padding: 1em 0 0 0;">
-                <table style="margin: 0 !important;">
-                    <tr>
-                        <td>
-                            <div class="text" style="padding: 0 2.5em; text-align: left;">
-                                <h3 style="margin: 0; color: black;">Manufacturer: {{ $manufacturer }}</h3>
-                                <h3 style="margin: 0; color: black;">Model: {{ $model }}</h3>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-            </tr><!-- end tr -->
-        <tr>
-        <tr>
-            <td valign="middle" class="hero bg_white" style="padding: 1em 0 0 0;">
-              <table style="margin: 0 !important;">
-                  <tr>
-                      <td>
-                          <div class="text" style="padding: 0 2.5em; text-align: left;">
-                              <h3 style="margin: 0; color: black;">Unit</h3>
-                              <h3 style="margin: 0px 0px 0px 0px; color: black;">	Dimension:	{{$dimunit}}</h3>
-                              <h3 style="margin: 0px 0px 0px 0px; color: black;">	Weight:		{{$weiunit}}</h3>
+                              <h3 style="margin: 0; color: black;">Update verification requested for CEC PV Module: {{ $manufacturer }} / {{ $model }}</h3>
                           </div>
                       </td>
                   </tr>
               </table>
             </td>
         </tr><!-- end tr -->
-		<tr>
-          <td valign="middle" class="hero bg_white" style="padding: 1em 0 0 0;">
-            <table style="margin: 0 !important;">
-            	<tr>
-            		<td>
-            			<div class="text" style="padding: 0 2.5em; text-align: left;">
-                            <h3 style="margin: 0; color: black;">Request</h3>
-							<h3 style="margin: 0px 0px 0px 0px; color: black;">	Rating:		{{$request['rating']}}</h3>
-							<h3 style="margin: 0px 0px 0px 0px; color: black;">	Length:		{{$request['length']}}</h3>
-							<h3 style="margin: 0px 0px 0px 0px; color: black;">	Width:		{{$request['width']}}</h3>
-                            <h3 style="margin: 0px 0px 0px 0px; color: black;">	Depth:		{{$request['depth']}}</h3>
-                            <h3 style="margin: 0px 0px 0px 0px; color: black;">	Weight:		{{$request['weight']}}</h3>
-                            <h3 style="margin: 0px 0px 0px 0px; color: black;">	Watts:		{{$request['watts']}}</h3>
-            			</div>
-            		</td>
-            	</tr>
-            </table>
-          </td>
-	    </tr><!-- end tr -->
-		<tr>
+        <tr>
             <td valign="middle" class="hero bg_white" style="padding: 1em 0 0 0;">
               <table style="margin: 0 !important;">
                   <tr>
                       <td>
                           <div class="text" style="padding: 0 2.5em; text-align: left;">
-                              <h3 style="margin: 0; color: black;">Saved</h3>
-                              <h3 style="margin: 0px 0px 0px 0px; color: black;">	Rating:		{{$saved['rating']}}</h3>
-                              <h3 style="margin: 0px 0px 0px 0px; color: black;">	Length:		{{$saved['length']}}</h3>
-                              <h3 style="margin: 0px 0px 0px 0px; color: black;">	Width:		{{$saved['width']}}</h3>
-                              <h3 style="margin: 0px 0px 0px 0px; color: black;">	Depth:		{{$saved['depth']}}</h3>
-                              <h3 style="margin: 0px 0px 0px 0px; color: black;">	Weight:		{{$saved['weight']}}</h3>
-                              <h3 style="margin: 0px 0px 0px 0px; color: black;">	Watts:		{{$saved['watts']}}</h3>
+                              <h3 style="margin: 0; color: black;">Entity requesting change:</h3>
+                              <h3 style="margin: 0 50px; color: black;">Company:        {{ $company && $company->company_name ? $company->company_name : "None" }}</h3>
+                              <h3 style="margin: 0 50px; color: black;">Username:       {{ $user && $user->username ? $user->username : "None" }}</h3>
+                              <h3 style="margin: 0 50px; color: black;">Co/User No's:   {{ $user && $user->username ? $user->username : "None" }}</h3>
                           </div>
                       </td>
                   </tr>
               </table>
             </td>
-          </tr><!-- end tr -->
+        </tr><!-- end tr -->
+        <tr>
+            <td valign="middle" class="hero bg_white" style="padding: 1em 0 0 0;">
+                <table style="margin: 0 !important;">
+                    <tr>
+                        <td>
+                            <div class="text" style="padding: 0 2.5em; text-align: left;">
+                                <h3 style="margin: 0; color: black;">Module Data:</h3>
+                                <h3 style="margin: 0 50px; color: black;">Manufacturer:  {{ $manufacturer }}</h3>
+                                <h3 style="margin: 0 50px; color: black;">Model:         {{ $model }}</h3>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr><!-- end tr -->
+        <tr>
+            <td valign="middle" class="hero bg_white" style="padding: 1em 0 0 0;">
+                <table style="margin: 0 !important;">
+                    <tr>
+                        <td>
+                            <div class="text" style="padding: 0 2.5em; text-align: left;">
+                                <h3 style="margin: 0; color: black;">Physical Properties:</h3>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr><!-- end tr -->
+		<tr>
+          <td valign="middle" class="hero bg_white" style="padding: 1em 0 0 0;">
+            <table style="margin: 0 50px; border: 1px solid; border-collapse: collapse;">
+                <colgroup>
+                    <col width="80">
+                    <col width="100">
+                    <col width="80">
+                    <col width="80">
+                    <col width="80">
+                    <col width="80">
+                    <col width="80">
+                </colgroup>
+                <tbody>
+                    <tr>
+                        <td style="border: 1px solid; text-align: center;"></td>
+                        <td style="border: 1px solid; text-align: center;" colspan="2"><b>Existing</b></td>
+                        <td style="border: 1px solid; text-align: center;" colspan="2"><b>Requested Updates</b></td>
+                        <td style="border: 1px solid; text-align: center;" colspan="2"><b>Final Values</b></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="border: 1px solid; text-align: center; font-style: italic;">Values</td>
+                        <td style="border: 1px solid; text-align: center; font-style: italic;">Units</td>
+                        <td style="border: 1px solid; text-align: center; font-style: italic;">Values</td>
+                        <td style="border: 1px solid; text-align: center; font-style: italic;">Units</td>
+                        <td style="border: 1px solid; text-align: center; font-style: italic;">Values</td>
+                        <td style="border: 1px solid; text-align: center; font-style: italic;">Units</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid; text-align: left !important; font-style: italic;">Length</td>
+                        <td style="border: 1px solid; text-align: center;">{{ $original['length'] }}</td>
+                        <td style="border: 1px solid; text-align: center; font-style: italic;">in</td>
+                        <td style="border: 1px solid; text-align: center;">{{ $request['length'] }}</td>
+                        <td style="border: 1px solid; text-align: center; font-style: italic;">{{ $dimunit }}</td>
+                        <td style="border: 1px solid; text-align: center;">{{ $saved['length'] }}</td>
+                        <td style="border: 1px solid; text-align: center; font-style: italic;">in</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid; text-align: left !important; font-style: italic;">Width</td>
+                        <td style="border: 1px solid; text-align: center;">{{ $original['width'] }}</td>
+                        <td style="border: 1px solid; text-align: center; font-style: italic;">in</td>
+                        <td style="border: 1px solid; text-align: center;">{{ $request['width'] }}</td>
+                        <td style="border: 1px solid; text-align: center; font-style: italic;">{{ $dimunit }}</td>
+                        <td style="border: 1px solid; text-align: center;">{{ $saved['width'] }}</td>
+                        <td style="border: 1px solid; text-align: center; font-style: italic;">in</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid; text-align: left !important; font-style: italic;">Depth</td>
+                        <td style="border: 1px solid; text-align: center;">{{ $original['depth'] }}</td>
+                        <td style="border: 1px solid; text-align: center; font-style: italic;">in</td>
+                        <td style="border: 1px solid; text-align: center;">{{ $request['depth'] }}</td>
+                        <td style="border: 1px solid; text-align: center; font-style: italic;">{{ $dimunit }}</td>
+                        <td style="border: 1px solid; text-align: center;">{{ $saved['depth'] }}</td>
+                        <td style="border: 1px solid; text-align: center; font-style: italic;">in</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid; text-align: left !important; font-style: italic;">Weight</td>
+                        <td style="border: 1px solid; text-align: center;">{{ $original['weight'] }}</td>
+                        <td style="border: 1px solid; text-align: center; font-style: italic;">lb</td>
+                        <td style="border: 1px solid; text-align: center;">{{ $request['weight'] }}</td>
+                        <td style="border: 1px solid; text-align: center; font-style: italic;">{{ $weiunit }}</td>
+                        <td style="border: 1px solid; text-align: center;">{{ $saved['weight'] }}</td>
+                        <td style="border: 1px solid; text-align: center; font-style: italic;">lb</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid; text-align: left !important; font-style: italic;">Raiting</td>
+                        <td style="border: 1px solid; text-align: center;">{{ $original['rating'] }}</td>
+                        <td style="border: 1px solid; text-align: center; font-style: italic;">watts</td>
+                        <td style="border: 1px solid; text-align: center;">{{ $request['rating'] }}</td>
+                        <td style="border: 1px solid; text-align: center; font-style: italic;">watts</td>
+                        <td style="border: 1px solid; text-align: center;">{{ $saved['rating'] }}</td>
+                        <td style="border: 1px solid; text-align: center; font-style: italic;">watts</td>
+                    </tr>
+                </tbody>
+            </table>
+          </td>
+	    </tr><!-- end tr -->
+		<tr>
+            <td valign="middle" class="hero bg_white" style="padding: 1em 0 0 0;">
+                <table style="margin: 0 !important;">
+                    <tr>
+                        <td>
+                            <div class="text" style="padding: 0 2.5em; text-align: left;">
+                                <h3 style="margin: 0; color: black;">To edit PV module:    SELECT * FROM `pv_module_cec` where id={{ $original['id'] }}</h3>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr><!-- end tr -->
       </table>
     </div>
   </center>
