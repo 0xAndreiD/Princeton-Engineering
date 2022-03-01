@@ -37,7 +37,7 @@
                     </div>
                     <div class="row">
                         <div class="form-group col-3 text-right p-0">
-                            <label style="margin: 3px 0px;">Rating</label>
+                            <label style="margin: 3px 0px;">Watts</label>
                         </div>
                         <div class="form-group col-8 text-right">
                             <input type="text" id="cec-module-rating" class="form-control" style="border: 1px solid pink; width: 100%; height: 32px;">
@@ -74,16 +74,16 @@
                         <div class="form-group col-8 text-right">
                             <input type="text" id="cec-module-weight" class="form-control" style="border: 1px solid pink; width: 100%; height: 32px;">
                         </div>
+                        <input type="hidden" id="cec-module-id">
                     </div>
-                    <div class="row">
+                    {{-- <div class="row">
                         <div class="form-group col-3 text-right p-0">
                             <label style="margin: 3px 0px;">Watts</label>
                         </div>
                         <div class="form-group col-8 text-right">
                             <input type="text" id="cec-module-watts" class="form-control" style="border: 1px solid pink; width: 100%; height: 32px;">
                         </div>
-                        <input type="hidden" id="cec-module-id">
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="block-content block-content-full text-right bg-light">
                     <button type="button" class="btn btn-sm btn-light" data-dismiss="modal">Close</button>

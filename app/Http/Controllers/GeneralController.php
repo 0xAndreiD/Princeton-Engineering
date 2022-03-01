@@ -3203,7 +3203,7 @@ class GeneralController extends Controller
                     $module['weight'] = $request['weight'] * 2.20462;
                 else
                     $module['weight'] = $request['weight'];
-                $module['watts'] = $request['watts'];
+                // $module['watts'] = $request['watts'];
                 $module->save();
 
                 $user = User::where('id', Auth::user()->id)->first();
