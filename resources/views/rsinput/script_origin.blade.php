@@ -900,13 +900,13 @@ var updatePVSubmoduleField = function(mainType, subType="") {
 
     if($('#pv-module-cec').val() == 1) {
         let module = getPVModule(mainType, subType);
-        if(module && module[10] == 1 && (module[2] == 0 || module[3] == 0 || module[4] == 0 || module[5] == 0 || module[6] == 0 || module[11] == 0)) {
+        if(module && module[10] == 1 && (module[2] == 0 || module[3] == 0 || module[4] == 0 || module[5] == 0 || module[6] == 0)) {
             $("#cec-module-rating").val(module[2]);
             $("#cec-module-length").val(module[3]);
             $("#cec-module-width").val(module[4]);
             $("#cec-module-depth").val(module[5]);
             $("#cec-module-weight").val(module[6]);
-            $("#cec-module-watts").val(module[11]);
+            // $("#cec-module-watts").val(module[11]);
             $("#cec-module-id").val(module[12]);
             $("#cec-check").modal('show');
         }
@@ -1396,48 +1396,59 @@ function updateModuleSetting(setting){
 }
 
 function resetCECModule() {
-    swal.fire({ title: "Please wait...", showConfirmButton: false });
-    swal.showLoading();
-    $.ajax({
-        url:"resetCEC",
-        type:'post',
-        dataType: "json",
-        data: {
-            id: $("#cec-module-id").val(),
-            rating: $("#cec-module-rating").val(),
-            length: $("#cec-module-length").val(),
-            width: $("#cec-module-width").val(),
-            depth: $("#cec-module-depth").val(),
-            weight: $("#cec-module-weight").val(),
-            watts: $("#cec-module-watts").val(),
-            dimunit: $('input[name=dimension-unit]:checked').val(),
-            weiunit: $('input[name=weight-unit]:checked').val()
-        },
-        success:function(res){
-            swal.close();
-            if(res && res.success) {
-                swal.fire({ title: "Success", text: "Your updates are successfully saved.", icon: "success", confirmButtonText: `OK` });
-                let module = availablePVModules.find(e => e && e[12] == $("#cec-module-id").val());
-                if(module) {
-                    module[2] = res.module.rating;
-                    module[3] = res.module.length;
-                    module[4] = res.module.width;
-                    module[5] = res.module.depth;
-                    module[6] = res.module.weight;
-                    module[11] = res.module.watts;
-                    $('#pv-module-length').val(module[3]);
-                    $('#pv-module-width').val(module[4]);
-                }
-            }
-            else
-                swal.fire({ title: "Error", text: res.message, icon: "error", confirmButtonText: `OK` });
-        },
-        error: function(xhr, status, error) {
-            swal.close();
-            res = JSON.parse(xhr.responseText);
-            swal.fire({ title: "Error", text: res.message, icon: "error", confirmButtonText: `OK` });
+    var data = {
+        id: $("#cec-module-id").val(),
+        rating: $("#cec-module-rating").val(),
+        length: $("#cec-module-length").val(),
+        width: $("#cec-module-width").val(),
+        depth: $("#cec-module-depth").val(),
+        weight: $("#cec-module-weight").val(),
+        dimunit: $('input[name=dimension-unit]:checked').val(),
+        weiunit: $('input[name=weight-unit]:checked').val()
+    };
+    console.log(data);
+    if(data.rating == 0 || data.length == 0 || data.width == 0 || data.depth == 0 || data.weight == 0) {
+        swal.fire({ title: "Error", text: "All values must be non-zero.  Reverting module to system default PV module.", icon: "error", confirmButtonText: `OK` });
+        let systemDefault = availablePVModules.filter(module => module && !(module[10]))[0];
+        console.log(systemDefault);
+        if(systemDefault) {
+            $("#option-module-type").val(systemDefault[0]);
+            updatePVSubmoduleField(systemDefault[0]);
         }
-    });
+    } else {
+        swal.fire({ title: "Please wait...", showConfirmButton: false });
+        swal.showLoading();
+        $.ajax({
+            url:"resetCEC",
+            type:'post',
+            dataType: "json",
+            data: data,
+            success:function(res){
+                swal.close();
+                if(res && res.success) {
+                    swal.fire({ title: "Success", text: "Your updates are successfully saved.", icon: "success", confirmButtonText: `OK` });
+                    let module = availablePVModules.find(e => e && e[12] == $("#cec-module-id").val());
+                    if(module) {
+                        module[2] = res.module.rating;
+                        module[3] = res.module.length;
+                        module[4] = res.module.width;
+                        module[5] = res.module.depth;
+                        module[6] = res.module.weight;
+                        module[11] = res.module.watts;
+                        $('#pv-module-length').val(module[3]);
+                        $('#pv-module-width').val(module[4]);
+                    }
+                }
+                else
+                    swal.fire({ title: "Error", text: res.message, icon: "error", confirmButtonText: `OK` });
+            },
+            error: function(xhr, status, error) {
+                swal.close();
+                res = JSON.parse(xhr.responseText);
+                swal.fire({ title: "Error", text: res.message, icon: "error", confirmButtonText: `OK` });
+            }
+        });
+    }
 }
 
 function loadCECEquipmentSection(){
