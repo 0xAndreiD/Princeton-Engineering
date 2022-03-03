@@ -1435,7 +1435,7 @@ function resetCECModule() {
                         module[4] = res.module.width;
                         module[5] = res.module.depth;
                         module[6] = res.module.weight;
-                        module[11] = res.module.watts;
+                        //module[11] = res.module.watts;
                         $('#pv-module-length').val(module[3]);
                         $('#pv-module-width').val(module[4]);
                     }
@@ -3578,7 +3578,28 @@ $(document).ready(function() {
     });
     $("#option-inverter-quantity, #option-inverter2-quantity, option-inverter3-quantity").on('change', function() {
         updateElectricRating();
-    })
+    });
+
+    $("input[name=dimension-unit]").on('change', function(){ 
+        console.log($("#dimension-unit-inch")[0].checked);
+        if($("#dimension-unit-inch")[0].checked) {
+            $("#cec-module-length").val(parseFloat($("#cec-module-length").val()) * 0.0393701);
+            $("#cec-module-width").val(parseFloat($("#cec-module-width").val()) * 0.0393701);
+            $("#cec-module-depth").val(parseFloat($("#cec-module-depth").val()) * 0.0393701);
+        } else {
+            $("#cec-module-length").val(parseFloat($("#cec-module-length").val()) * 25.4);
+            $("#cec-module-width").val(parseFloat($("#cec-module-width").val()) * 25.4);
+            $("#cec-module-depth").val(parseFloat($("#cec-module-depth").val()) * 25.4);
+        }
+    });
+
+    $("input[name=weight-unit]").on('change', function(){ 
+        if($("#weight-unit-lb")[0].checked) {
+            $("#cec-module-weight").val(parseFloat($("#cec-module-weight").val()) * 2.20462);
+        } else {
+            $("#cec-module-weight").val(parseFloat($("#cec-module-weight").val()) * 0.45359237);
+        }
+    });
 
     // $(".permit").on('change', function(obj) {
     //     var classes = $(obj.target).attr('class').split(' ');
@@ -4111,6 +4132,12 @@ $(document).ready(function() {
                         return;
                     }
                 }
+            }
+
+            let module = getPVModule($("#option-module-type").val(), $("#option-module-subtype").val());
+            if(module && module[10] == 1 && (module[2] == 0 || module[3] == 0 || module[4] == 0 || module[5] == 0 || module[6] == 0)) {
+                swal.fire({ title: "Warning", text: "Please change PV Module or reset 0 values.", icon: "warning", confirmButtonText: `OK` });
+                return;
             }
         }
 
