@@ -316,7 +316,7 @@ ul.social li{
                               <h3 style="margin: 0; color: black;">Entity requesting change:</h3>
                               <h3 style="margin: 0 50px; color: black;">Company:        {{ $company && $company->company_name ? $company->company_name : "None" }}</h3>
                               <h3 style="margin: 0 50px; color: black;">Username:       {{ $user && $user->username ? $user->username : "None" }}</h3>
-                              <h3 style="margin: 0 50px; color: black;">Co/User No's:   {{ $user && $user->username ? $user->username : "None" }}</h3>
+                              <h3 style="margin: 0 50px; color: black;">Co/User No's:   {{ ($company && $company->company_number ? $company->company_number : "None") . " / " .  ($user && $user->usernumber ? $user->usernumber: "None") }}</h3>
                           </div>
                       </td>
                   </tr>
@@ -355,12 +355,12 @@ ul.social li{
           <td valign="middle" class="hero bg_white" style="padding: 1em 0 0 0;">
             <table style="margin: 0 50px; border: 1px solid; border-collapse: collapse;">
                 <colgroup>
+                    <col width="60">
+                    <col width="100">
                     <col width="80">
                     <col width="100">
                     <col width="80">
-                    <col width="80">
-                    <col width="80">
-                    <col width="80">
+                    <col width="100">
                     <col width="80">
                 </colgroup>
                 <tbody>
