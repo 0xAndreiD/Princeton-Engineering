@@ -3708,7 +3708,7 @@ $(document).ready(function() {
         .click( function(){
             drawTrussGraph(window.conditionId);
         });
-        $(`#af-2-${i}, #ai-2-${i}, #af-3-${i}, #ai-3-${i}, #af-4-${i}, #ai-4-${i}, #af-8-${i}, #ai-8-${i}, #af-9-${i}, #ai-9-${i}, #af-10-${i}, #ai-10-${i}, #af-11-${i}, #ai-11-${i}, #cf-2-${i}, #ci-2-${i}, #cf-4-${i}, #ci-4-${i}, #ai-4-${i}, #ef-1-${i}, #ei-1-${i}, #ef-2-${i}, #ei-2-${i}`).on('change', function() {
+        $(`#af-2-${i}, #ai-2-${i}, #af-3-${i}, #ai-3-${i}, #af-4-${i}, #ai-4-${i}, #af-8-${i}, #ai-8-${i}, #af-9-${i}, #ai-9-${i}, #af-10-${i}, #ai-10-${i}, #af-11-${i}, #ai-11-${i}, #cf-2-${i}, #ci-2-${i}, #cf-4-${i}, #ci-4-${i}, #ai-4-${i}, #ef-1-${i}, #ei-1-${i}, #ef-2-${i}, #ei-2-${i}, #ef-3-${i}, #ei-3-${i}, #ef-4-${i}, #ei-4-${i}`).on('change', function() {
             calcDecimalFeet($(this).attr('id'));
         });
         $(`#txt-length-of-roof-plane-f-${i}, #txt-length-of-roof-plane-i-${i}, #txt-roof-segment1-length-f-${i}, #txt-roof-segment1-length-i-${i}, #txt-roof-segment2-length-f-${i}, #txt-roof-segment2-length-i-${i}, #txt-roof-segment3-length-f-${i}, #txt-roof-segment3-length-i-${i}, #txt-roof-segment4-length-f-${i}, #txt-roof-segment4-length-i-${i}, #txt-roof-segment5-length-f-${i}, #txt-roof-segment5-length-i-${i}, #txt-roof-segment6-length-f-${i}, #txt-roof-segment6-length-i-${i},
@@ -4879,6 +4879,7 @@ var loadPreloadedData = function() {
                                     $(`#ei-1-${i + 1}`).val(caseData['Location']['E1_inches']);
                                 }
                                 $(`#e-1-${i + 1}`).val(caseData['Location']['E1']);
+
                                 if(!caseData['Location']['E2_feet'] && !caseData['Location']['E2_inches'])
                                 {
                                     $(`#ef-2-${i + 1}`).val(caseData['Location']['E2']);
@@ -4889,6 +4890,28 @@ var loadPreloadedData = function() {
                                     $(`#ei-2-${i + 1}`).val(caseData['Location']['E2_inches']);
                                 }
                                 $(`#e-2-${i + 1}`).val(caseData['Location']['E2']);
+
+                                if(!caseData['Location']['E3_feet'] && !caseData['Location']['E3_inches'])
+                                {
+                                    $(`#ef-3-${i + 1}`).val(caseData['Location']['E3']);
+                                    $(`#ei-3-${i + 1}`).val("0.00");
+                                }
+                                else{
+                                    $(`#ef-3-${i + 1}`).val(caseData['Location']['E3_feet']);
+                                    $(`#ei-3-${i + 1}`).val(caseData['Location']['E3_inches']);
+                                }
+                                $(`#e-3-${i + 1}`).val(caseData['Location']['E3']);
+
+                                if(!caseData['Location']['E4_feet'] && !caseData['Location']['E4_inches'])
+                                {
+                                    $(`#ef-4-${i + 1}`).val(caseData['Location']['E4']);
+                                    $(`#ei-4-${i + 1}`).val("0.00");
+                                }
+                                else{
+                                    $(`#ef-4-${i + 1}`).val(caseData['Location']['E4_feet']);
+                                    $(`#ei-4-${i + 1}`).val(caseData['Location']['E4_inches']);
+                                }
+                                $(`#e-4-${i + 1}`).val(caseData['Location']['E4']);
 
                                 $(`#f-1-${i + 1}`).val(caseData['NumberOfModules']['F1']);
                                 if(tabType != 2) // If Stick or Truss
