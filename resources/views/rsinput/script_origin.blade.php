@@ -89,6 +89,8 @@ function fcChangeType( conditionId, type ){
         maxModuleNumChange(conditionId);
 
         $(`#label-D-0-${conditionId}`).attr('rowspan', 7);
+        $(`#label-E-3-${conditionId}`).css('display', 'none');
+        $(`#label-G-2-${conditionId}`).css('display', 'none');
         $(`#inputform-${conditionId} .class-IBC-only`).css('display', 'none');
 
         $(`#f-1-${conditionId}`).on('change', function() {
@@ -146,6 +148,8 @@ function fcChangeType( conditionId, type ){
         maxModuleNumChange(conditionId);
 
         $(`#label-D-0-${conditionId}`).attr('rowspan', 7);
+        $(`#label-E-3-${conditionId}`).css('display', 'none');
+        $(`#label-G-2-${conditionId}`).css('display', 'none');
         $(`#inputform-${conditionId} .class-IBC-only`).css('display', 'none');
 
         $(`#f-1-${conditionId}`).on('change', function() {
@@ -197,6 +201,8 @@ function fcChangeType( conditionId, type ){
         });
 
         $(`#label-D-0-${conditionId}`).attr('rowspan', 10);
+        $(`#label-E-3-${conditionId}`).css('display', 'table-cell');
+        $(`#label-G-2-${conditionId}`).css('display', 'table-cell');
         $(`#inputform-${conditionId} .class-IBC-only`).css('display', 'table-row');
 
         $(`#f-1-${conditionId}`).on('change', function() {
@@ -250,6 +256,8 @@ function fcChangeType( conditionId, type ){
         maxModuleNumChange(conditionId);
 
         $(`#label-D-0-${conditionId}`).attr('rowspan', 7);
+        $(`#label-E-3-${conditionId}`).css('display', 'none');
+        $(`#label-G-2-${conditionId}`).css('display', 'none');
         $(`#inputform-${conditionId} .class-IBC-only`).css('display', 'none');
 
         $(`#f-1-${conditionId}`).on('change', function() {

@@ -428,8 +428,9 @@
             <td class="td-dec-feet right-bdr"><input type="text" class="txt-calced" id="e-2-{{ $conditionId }}" tabindex="-1" value="4.25" readonly></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
-        <tr class="h13 class-IBC-hide class-GroundMount-hide">
+        <tr class="h13 class-GroundMount-hide">
             <td><div style="overflow:hidden"></td>
+            <td class="iw400-bdr" style="vertical-align : middle; display: none;" rowspan="2" id="label-E-3-{{ $conditionId }}">Location</td>
             <td class="w400-bdr">E-3</td>
             <td class="iw400-right-bdr" colspan="2">Minimum Distance from Roof Edge to Array (d1)</td>
             <td class="iw400-bdr">ft | in</td>
@@ -438,7 +439,7 @@
             <td class="td-dec-feet right-bdr"><input type="text" class="txt-calced" id="e-3-{{ $conditionId }}" tabindex="-1" value="0.00" readonly></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
-        <tr class="h13 class-IBC-hide class-GroundMount-hide">
+        <tr class="h13 class-GroundMount-hide">
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">E-4</td>
             <td class="iw400-right-bdr" colspan="2">Max Slope Distance Between Arrays on Same Roof Plane (d2)</td>
@@ -481,8 +482,9 @@
             <td class="w400-yellow-bdr" colspan="2"><input type="text" class="txt-center-align" id="g-1-{{ $conditionId }}" tabindex="48" value="1"></input></td>
             <td class="right-bdr"><div style="overflow:hidden"></td>
         </tr>
-        <tr class="h13 class-IBC-hide class-GroundMount-hide">
+        <tr class="h13 class-GroundMount-hide">
             <td><div style="overflow:hidden"></td>
+            <td class="iw400-bdr" id="label-G-2-{{ $conditionId }}" style="display: none;">Module Geometry</td>
             <td class="w400-bdr">G-2</td>
             <td class="iw400-right-bdr" colspan="2">Module relative tilt</td>
             <td class="iw400-bdr">deg</td>
