@@ -43,7 +43,7 @@ document.getElementById("defaultOpen").click();
 function fcChangeType( conditionId, type ){
     if( type == 1 ) // Truss
     {
-        $(`#label-A-1-${conditionId}`).attr('rowspan', 8);
+        $(`#label-A-1-${conditionId}`).attr('rowspan', 10);
         $(`#label-B-1-${conditionId}`).attr('rowspan', 5);
         $(`#label-B-1-${conditionId}`)[0].style.display = "none";
         $(`#title-B-3-${conditionId}`)[0].style.display = "table-cell";
@@ -102,7 +102,7 @@ function fcChangeType( conditionId, type ){
     }    
     else if(type == 0) // Stick
     {
-        $(`#label-A-1-${conditionId}`).attr('rowspan', 12);
+        $(`#label-A-1-${conditionId}`).attr('rowspan', 14);
         $(`#label-B-1-${conditionId}`).attr('rowspan', 5);
         $(`#label-B-1-${conditionId}`)[0].style.display = "table-cell";
         $(`#title-B-3-${conditionId}`)[0].style.display = "none";
@@ -159,7 +159,7 @@ function fcChangeType( conditionId, type ){
 
         drawStickGraph(conditionId);
     } else if(type == 2){ // IBC 5%
-        $(`#label-A-1-${conditionId}`).attr('rowspan', 10);
+        $(`#label-A-1-${conditionId}`).attr('rowspan', 13);
         $(`#label-B-1-${conditionId}`).attr('rowspan', 3);
         $(`#label-B-1-${conditionId}`)[0].style.display = "table-cell";
         $(`#title-B-3-${conditionId}`)[0].style.display = "none";
@@ -3276,6 +3276,10 @@ $(document).ready(function() {
                             $('#OCPDRating').html(res.data.OCPDRating);
                             $('#RecommendOCPD').html(res.data.RecommendOCPD);
                             $('#MinCu').html(res.data.MinCu);
+                            if(res.data.additional_html) {
+                                $("#additionalHTML").css("display", "block");
+                                $("#additionalHTML").html(res.data.additional_html);
+                            }
                             
                             var collarHeights = res.data.collarHeights;
                             var haveChanges = false;
@@ -3716,7 +3720,7 @@ $(document).ready(function() {
         .click( function(){
             drawTrussGraph(window.conditionId);
         });
-        $(`#af-2-${i}, #ai-2-${i}, #af-3-${i}, #ai-3-${i}, #af-4-${i}, #ai-4-${i}, #af-8-${i}, #ai-8-${i}, #af-9-${i}, #ai-9-${i}, #af-10-${i}, #ai-10-${i}, #af-11-${i}, #ai-11-${i}, #cf-2-${i}, #ci-2-${i}, #cf-4-${i}, #ci-4-${i}, #ai-4-${i}, #ef-1-${i}, #ei-1-${i}, #ef-2-${i}, #ei-2-${i}, #ef-3-${i}, #ei-3-${i}, #ef-4-${i}, #ei-4-${i}`).on('change', function() {
+        $(`#af-2-${i}, #ai-2-${i}, #af-3-${i}, #ai-3-${i}, #af-4-${i}, #ai-4-${i}, #af-8-${i}, #ai-8-${i}, #af-9-${i}, #ai-9-${i}, #af-10-${i}, #ai-10-${i}, #af-11-${i}, #ai-11-${i}, #af-13-${i}, #ai-13-${i}, #af-14-${i}, #ai-14-${i}, #cf-2-${i}, #ci-2-${i}, #cf-4-${i}, #ci-4-${i}, #ai-4-${i}, #ef-1-${i}, #ei-1-${i}, #ef-2-${i}, #ei-2-${i}, #ef-3-${i}, #ei-3-${i}, #ef-4-${i}, #ei-4-${i}`).on('change', function() {
             calcDecimalFeet($(this).attr('id'));
         });
         $(`#txt-length-of-roof-plane-f-${i}, #txt-length-of-roof-plane-i-${i}, #txt-roof-segment1-length-f-${i}, #txt-roof-segment1-length-i-${i}, #txt-roof-segment2-length-f-${i}, #txt-roof-segment2-length-i-${i}, #txt-roof-segment3-length-f-${i}, #txt-roof-segment3-length-i-${i}, #txt-roof-segment4-length-f-${i}, #txt-roof-segment4-length-i-${i}, #txt-roof-segment5-length-f-${i}, #txt-roof-segment5-length-i-${i}, #txt-roof-segment6-length-f-${i}, #txt-roof-segment6-length-i-${i},
@@ -4815,6 +4819,26 @@ var loadPreloadedData = function() {
                                     $(`#ai-10-${i + 1}`).val(caseData['RoofDataInput']['A10_inches']);
                                 }
                                 $(`#a-10-${i + 1}`).val(caseData['RoofDataInput']['A10']);
+                                if(!caseData['RoofDataInput']['A13_feet'] && !caseData['RoofDataInput']['A13_inches'])
+                                {
+                                    $(`#af-13-${i + 1}`).val(caseData['RoofDataInput']['A13']);
+                                    $(`#ai-13-${i + 1}`).val("0.00");    
+                                }
+                                else{
+                                    $(`#af-13-${i + 1}`).val(caseData['RoofDataInput']['A13_feet']);
+                                    $(`#ai-13-${i + 1}`).val(caseData['RoofDataInput']['A13_inches']);
+                                }
+                                $(`#a-13-${i + 1}`).val(caseData['RoofDataInput']['A13']);
+                                if(!caseData['RoofDataInput']['A14_feet'] && !caseData['RoofDataInput']['A14_inches'])
+                                {
+                                    $(`#af-14-${i + 1}`).val(caseData['RoofDataInput']['A14']);
+                                    $(`#ai-14-${i + 1}`).val("0.00");    
+                                }
+                                else{
+                                    $(`#af-14-${i + 1}`).val(caseData['RoofDataInput']['A14_feet']);
+                                    $(`#ai-14-${i + 1}`).val(caseData['RoofDataInput']['A14_inches']);
+                                }
+                                $(`#a-14-${i + 1}`).val(caseData['RoofDataInput']['A14']);
 
                                 switch (caseData['RoofDataInput']['A_calc_algorithm']){
                                     case 'diagnol':

@@ -67,7 +67,7 @@
         </tr>
         <tr class="h13">
             <td><div style="overflow:hidden"></td>
-            <td class="iw400-bdr" style="vertical-align : middle" rowspan="12" id="label-A-1-{{ $conditionId }}">Roof Data Input</td>
+            <td class="iw400-bdr" style="vertical-align : middle" rowspan="14" id="label-A-1-{{ $conditionId }}">Roof Data Input</td>
             <td class="w400-bdr">A-1</td>
             <td class="iw400-right-bdr" colspan="2">Framing Condition Number</td>
             <td class="iw400-bdr"></td>
@@ -189,7 +189,7 @@
             <td class="td-dec-feet right-bdr"><input type="text" class="txt-calced right-bdr" id="a-11-{{ $conditionId }}"  tabindex="-1" value="0.83" readonly></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
-        <tr class="h13 class-IBC-hide class-GroundMount-hide">
+        <tr class="h13 class-GroundMount-hide">
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">A-12</td>
             <td class="iw400-right-bdr" colspan="2">Roof Shape</td>
@@ -199,6 +199,26 @@
                 </select>
             </td>
             <td class="right-bdr"><div style="overflow:hidden"></td>
+        </tr>
+        <tr class="h13 class-GroundMount-hide">
+            <td><div style="overflow:hidden"></td>
+            <td class="w400-bdr">A-13</td>
+            <td class="iw400-right-bdr" id="label-A-13-{{ $conditionId }}" colspan="2">Modify for Hip roofs only: Eave Length</td>
+            <td class="iw400-bdr">ft | in</td>
+            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="af-13-{{ $conditionId }}"  tabindex="35" value="0.00"></input></td>
+            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="ai-13-{{ $conditionId }}"  tabindex="35" value="0.00"></input></td>
+            <td class="td-dec-feet right-bdr"><input type="text" class="txt-calced right-bdr" id="a-13-{{ $conditionId }}"  tabindex="-1" value="0.00" readonly></input></td>
+            <td><div style="overflow:hidden"></td>
+        </tr>
+        <tr class="h13 class-GroundMount-hide">
+            <td><div style="overflow:hidden"></td>
+            <td class="w400-bdr">A-14</td>
+            <td class="iw400-right-bdr" id="label-A-14-{{ $conditionId }}" colspan="2">Modify for Hip roofs only: Ridge Length</td>
+            <td class="iw400-bdr">ft | in</td>
+            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="af-14-{{ $conditionId }}"  tabindex="35" value="0.00"></input></td>
+            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="ai-14-{{ $conditionId }}"  tabindex="35" value="0.00"></input></td>
+            <td class="td-dec-feet right-bdr"><input type="text" class="txt-calced right-bdr" id="a-14-{{ $conditionId }}"  tabindex="-1" value="0.0" readonly></input></td>
+            <td><div style="overflow:hidden"></td>
         </tr>
         <tr class="h13 class-truss-hide class-GroundMount-hide">
             <td><div style="overflow:hidden"></td>

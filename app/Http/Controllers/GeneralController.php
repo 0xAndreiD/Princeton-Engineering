@@ -876,7 +876,9 @@ class GeneralController extends Controller
                 "A10_feet" => number_format(floatval($caseInput["af-10-{$number}"]), 2), "A10_inches" => number_format(floatval($caseInput["ai-10-{$number}"]), 2), "A10" => number_format(floatval(isset($caseInput["a-10-{$number}"]) ? $caseInput["a-10-{$number}"] : 0), 2), "A10calc" => number_format(floatval(isset($caseInput["ac-10-{$number}"]) ? $caseInput["ac-10-{$number}"] : 0), 2),
                 "A_calc_algorithm" => $caseInput["calc-algorithm-{$number}"],
                 "A11" => number_format(floatval(isset($caseInput["a-11-{$number}"]) ? $caseInput["a-11-{$number}"] : 0), 2),
-                "A12" => $caseInput["a-12-{$number}"]);
+                "A12" => $caseInput["a-12-{$number}"],
+                "A13_feet" => number_format(floatval($caseInput["af-13-{$number}"]), 2), "A13_inches" => number_format(floatval($caseInput["ai-13-{$number}"]), 2), "A13" => number_format(floatval(isset($caseInput["a-13-{$number}"]) ? $caseInput["a-13-{$number}"] : 0), 2), "A13calc" => number_format(floatval(isset($caseInput["ac-13-{$number}"]) ? $caseInput["ac-13-{$number}"] : 0), 2),
+                "A14_feet" => number_format(floatval($caseInput["af-14-{$number}"]), 2), "A14_inches" => number_format(floatval($caseInput["ai-14-{$number}"]), 2), "A14" => number_format(floatval(isset($caseInput["a-14-{$number}"]) ? $caseInput["a-14-{$number}"] : 0), 2), "A14calc" => number_format(floatval(isset($caseInput["ac-14-{$number}"]) ? $caseInput["ac-14-{$number}"] : 0), 2));
             $caseData['RafterDataInput'] = array("B1" => number_format(floatval(isset($caseInput["b-1-{$number}"]) ? $caseInput["b-1-{$number}"] : 0), 2), "B2" => number_format(floatval(isset($caseInput["b-2-{$number}"]) ? $caseInput["b-2-{$number}"] : 0), 2), "B3" => number_format(floatval($caseInput["b-3-{$number}"]), 2), "B4" => $caseInput["b-4-{$number}"], "B5" => $caseInput["b-5-{$number}"]);
             $caseData['CollarTieInformation'] = array(
                 "C1" => isset($caseInput["c-1-{$number}"]) ? $caseInput["c-1-{$number}"] : "",

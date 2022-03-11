@@ -891,6 +891,9 @@
 </tbody>
 </table>
 
+<div id="additionalHTML" style="display: none; margin:0px 80px 20px 80px; max-width: 730px;">
+</div>
+
 @if($projectState == 3 || $projectState >= 5)
 <table id="review-check-table" cellspacing="0" cellpadding="0" style="border-spacing:0;" class="mb-2">
     <colgroup>
