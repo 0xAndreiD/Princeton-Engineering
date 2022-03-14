@@ -1795,7 +1795,7 @@ var updateNumberOfConditions = function(conditions) {
     }
 }
 
-var ignorable = ['a-7-', 'a-8-', 'af-8-', 'ai-8-', 'a-9-', 'af-9-', 'ai-9-', 'a-10-', 'af-10-', 'ai-10-', 'ac-7-', 'ac-8-', 'ac-9-', 'ac-10-', 'c-1-', 'c-2-', 'cf-2-', 'ci-2-', 'c-3-', 'cf-3-', 'ci-3-', 'c-4-', 'cf-4-', 'ci-4-', 'calc-algorithm-', 'collarHeights', 'd-7-', 'd-8-', 'd-9-', 'date_report', 'txt-sub-project-number', 'inverter2-', 'inverter3-'];
+var ignorable = ['a-7-', 'a-8-', 'af-8-', 'ai-8-', 'a-9-', 'af-9-', 'ai-9-', 'a-10-', 'af-10-', 'ai-10-', 'ac-7-', 'ac-8-', 'ac-9-', 'ac-10-', 'a-13-', 'af-13-', 'ai-13-', 'a-14-', 'af-14-', 'ai-14-', 'c-1-', 'c-2-', 'cf-2-', 'ci-2-', 'c-3-', 'cf-3-', 'ci-3-', 'c-4-', 'cf-4-', 'ci-4-', 'calc-algorithm-', 'collarHeights', 'd-7-', 'd-8-', 'd-9-', 'date_report', 'txt-sub-project-number', 'inverter2-', 'inverter3-'];
 
 var isIgnorable = function(id) {
     let canIgnore = false;
