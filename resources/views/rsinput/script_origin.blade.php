@@ -159,7 +159,15 @@ function fcChangeType( conditionId, type ){
 
         drawStickGraph(conditionId);
     } else if(type == 2){ // IBC 5%
-        $(`#label-A-1-${conditionId}`).attr('rowspan', 13);
+        if($(`#a-12-${conditionId}`).val() == "Hip" || $(`#a-12-${conditionId}`).val() == "Gable / Hip") { 
+            $(`#label-A-1-${conditionId}`).attr('rowspan', 13);
+            $(`#tr-13-${conditionId}`).css('display', 'table-row');
+            $(`#tr-14-${conditionId}`).css('display', 'table-row');
+        } else {
+            $(`#label-A-1-${conditionId}`).attr('rowspan', 11);
+            $(`#tr-13-${conditionId}`).css('display', 'none');
+            $(`#tr-14-${conditionId}`).css('display', 'none');
+        }
         $(`#label-B-1-${conditionId}`).attr('rowspan', 3);
         $(`#label-B-1-${conditionId}`)[0].style.display = "table-cell";
         $(`#title-B-3-${conditionId}`)[0].style.display = "none";
@@ -3711,6 +3719,19 @@ $(document).ready(function() {
             checkRoofInput(window.conditionId);
             drawStickGraph(window.conditionId);
         });
+        $(`#a-12-${i}`).on('change', function() {
+            if($(`#trussFlagOption-${window.conditionId}-3`)[0].checked) {
+                if(this.value == "Hip" || this.value == "Gable / Hip") { 
+                    $(`#label-A-1-${window.conditionId}`).attr('rowspan', 13);
+                    $(`#tr-13-${window.conditionId}`).css('display', 'table-row');
+                    $(`#tr-14-${window.conditionId}`).css('display', 'table-row');
+                } else {
+                    $(`#label-A-1-${window.conditionId}`).attr('rowspan', 11);
+                    $(`#tr-13-${window.conditionId}`).css('display', 'none');
+                    $(`#tr-14-${window.conditionId}`).css('display', 'none');
+                }
+            }
+        });
         $(`#h-1-${i}, #h-2-${i}, #h-3-${i}, #h-4-${i}, #h-5-${i}, #h-6-${i}, #h-7-${i}, #h-8-${i}, #h-9-${i}, #h-10-${i}, #h-11-${i}, #h-12-${i}`)
         .click( function() {
             drawStickGraph(window.conditionId);
@@ -3722,6 +3743,17 @@ $(document).ready(function() {
         });
         $(`#af-2-${i}, #ai-2-${i}, #af-3-${i}, #ai-3-${i}, #af-4-${i}, #ai-4-${i}, #af-8-${i}, #ai-8-${i}, #af-9-${i}, #ai-9-${i}, #af-10-${i}, #ai-10-${i}, #af-11-${i}, #ai-11-${i}, #af-13-${i}, #ai-13-${i}, #af-14-${i}, #ai-14-${i}, #cf-2-${i}, #ci-2-${i}, #cf-4-${i}, #ci-4-${i}, #ai-4-${i}, #ef-1-${i}, #ei-1-${i}, #ef-2-${i}, #ei-2-${i}, #ef-3-${i}, #ei-3-${i}, #ef-4-${i}, #ei-4-${i}`).on('change', function() {
             calcDecimalFeet($(this).attr('id'));
+            let id = $(this).attr('id');
+            
+            if(id && id.includes('ai-3-') || id.includes('af-3-')) {
+                console.log(id);
+                $(`#ai-13-${window.conditionId}`).val($(`#ai-3-${window.conditionId}`).val());
+                $(`#af-13-${window.conditionId}`).val($(`#af-3-${window.conditionId}`).val());
+                $(`#a-13-${window.conditionId}`).val($(`#a-3-${window.conditionId}`).val());
+                $(`#ai-14-${window.conditionId}`).val($(`#ai-3-${window.conditionId}`).val());
+                $(`#af-14-${window.conditionId}`).val($(`#af-3-${window.conditionId}`).val());
+                $(`#a-14-${window.conditionId}`).val($(`#a-3-${window.conditionId}`).val());
+            }
         });
         $(`#txt-length-of-roof-plane-f-${i}, #txt-length-of-roof-plane-i-${i}, #txt-roof-segment1-length-f-${i}, #txt-roof-segment1-length-i-${i}, #txt-roof-segment2-length-f-${i}, #txt-roof-segment2-length-i-${i}, #txt-roof-segment3-length-f-${i}, #txt-roof-segment3-length-i-${i}, #txt-roof-segment4-length-f-${i}, #txt-roof-segment4-length-i-${i}, #txt-roof-segment5-length-f-${i}, #txt-roof-segment5-length-i-${i}, #txt-roof-segment6-length-f-${i}, #txt-roof-segment6-length-i-${i},
            #txt-length-of-floor-plane-f-${i}, #txt-length-of-floor-plane-i-${i}, #txt-floor-segment1-length-f-${i}, #txt-floor-segment1-length-i-${i}, #txt-floor-segment2-length-f-${i}, #txt-floor-segment2-length-i-${i}, #txt-floor-segment3-length-f-${i}, #txt-floor-segment3-length-i-${i}, #txt-floor-segment4-length-f-${i}, #txt-floor-segment4-length-i-${i}, #txt-floor-segment5-length-f-${i}, #txt-floor-segment5-length-i-${i}, #txt-floor-segment6-length-f-${i}, #txt-floor-segment6-length-i-${i}`).on('change', function() {
@@ -4550,6 +4582,17 @@ var doDuplicate = async function (targetTabId, curTabId, checkOverwrite){
     stick_input_changed[targetTabId] = stick_input_changed[curTabId];
     stick_right_input[targetTabId] = stick_right_input[curTabId];
     checkRoofInput(targetTabId);
+
+    if($(`#a-12-${targetTabId}`).val() == "Hip" || $(`#a-12-${targetTabId}`).val() == "Gable / Hip") { 
+        $(`#label-A-1-${targetTabId}`).attr('rowspan', 13);
+        $(`#tr-13-${targetTabId}`).css('display', 'table-row');
+        $(`#tr-14-${targetTabId}`).css('display', 'table-row');
+    } else {
+        $(`#label-A-1-${targetTabId}`).attr('rowspan', 11);
+        $(`#tr-13-${targetTabId}`).css('display', 'none');
+        $(`#tr-14-${targetTabId}`).css('display', 'none');
+    }
+
     var i, tabcontent, tablinks, tabName = 'fc-' + targetTabId;
     tabcontent = document.getElementsByClassName("rfdTabContent");
     for (i = 0; i < tabcontent.length; i++) {

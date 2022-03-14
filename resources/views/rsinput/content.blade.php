@@ -200,7 +200,7 @@
             </td>
             <td class="right-bdr"><div style="overflow:hidden"></td>
         </tr>
-        <tr class="h13 class-IBC-only" style="display: none;">
+        <tr class="h13" style="display: none;" id="tr-13-{{ $conditionId }}">
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">A-13</td>
             <td class="iw400-right-bdr" id="label-A-13-{{ $conditionId }}" colspan="2">Modify for Hip roofs only: Eave Length</td>
@@ -210,7 +210,7 @@
             <td class="td-dec-feet right-bdr"><input type="text" class="txt-calced right-bdr" id="a-13-{{ $conditionId }}"  tabindex="-1" value="31.17" readonly></input></td>
             <td><div style="overflow:hidden"></td>
         </tr>
-        <tr class="h13 class-IBC-only" style="display: none;">
+        <tr class="h13" style="display: none;" id="tr-14-{{ $conditionId }}">
             <td><div style="overflow:hidden"></td>
             <td class="w400-bdr">A-14</td>
             <td class="iw400-right-bdr" id="label-A-14-{{ $conditionId }}" colspan="2">Modify for Hip roofs only: Ridge Length</td>
