@@ -44,6 +44,8 @@ function fcChangeType( conditionId, type ){
     if( type == 1 ) // Truss
     {
         $(`#label-A-1-${conditionId}`).attr('rowspan', 8);
+        $(`#tr-13-${conditionId}`).css('display', 'none');
+        $(`#tr-14-${conditionId}`).css('display', 'none');
         $(`#label-B-1-${conditionId}`).attr('rowspan', 5);
         $(`#label-B-1-${conditionId}`)[0].style.display = "none";
         $(`#title-B-3-${conditionId}`)[0].style.display = "table-cell";
@@ -103,6 +105,8 @@ function fcChangeType( conditionId, type ){
     else if(type == 0) // Stick
     {
         $(`#label-A-1-${conditionId}`).attr('rowspan', 12);
+        $(`#tr-13-${conditionId}`).css('display', 'none');
+        $(`#tr-14-${conditionId}`).css('display', 'none');
         $(`#label-B-1-${conditionId}`).attr('rowspan', 5);
         $(`#label-B-1-${conditionId}`)[0].style.display = "table-cell";
         $(`#title-B-3-${conditionId}`)[0].style.display = "none";
@@ -221,6 +225,8 @@ function fcChangeType( conditionId, type ){
         drawStickGraph(conditionId);
     } else if(type == 3){ // Ground Mount
         $(`#label-A-1-${conditionId}`).attr('rowspan', 11);
+        $(`#tr-13-${conditionId}`).css('display', 'none');
+        $(`#tr-14-${conditionId}`).css('display', 'none');
         $(`#label-B-1-${conditionId}`).attr('rowspan', 3);
         $(`#label-B-1-${conditionId}`)[0].style.display = "table-cell";
         $(`#title-B-3-${conditionId}`)[0].style.display = "none";
