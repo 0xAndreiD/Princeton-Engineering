@@ -15,7 +15,7 @@ class StandardFavorite extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'id', 'client_no', 'type', 'crc32_ids'
+        'id', 'client_no', 'type', 'CEC', 'product_id', 'path_filename', 'pages'
     ];
 
     protected $table = 'standard_favorite';

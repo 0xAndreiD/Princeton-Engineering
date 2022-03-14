@@ -1454,14 +1454,9 @@ class GeneralController extends Controller
      */
     public function getPVModules(Request $request){
         $pv_modules = PVModule::all();
-        $favorite = StandardFavorite::where('client_no', Auth::user()->companyid)->where('type', 0)->first();
-        if(!$favorite)
-            $favorite_ids = '';
-        else
-            $favorite_ids = $favorite->crc32_ids;
-        $favorites = explode(",", $favorite_ids);
+        $favorites = StandardFavorite::where('client_no', Auth::user()->companyid)->where('type', 0)->pluck('product_id')->toArray();
         foreach($pv_modules as $module){
-            if(in_array(strval($module['crc32']), $favorites))
+            if(in_array($module['id'], $favorites))
                 $module['favorite'] = true;
         }
         $pv_modules = $pv_modules->toArray();
@@ -1496,14 +1491,9 @@ class GeneralController extends Controller
      */
     public function getPVInverters(Request $request){
         $pv_inverters = PVInverter::all();
-        $favorite = StandardFavorite::where('client_no', Auth::user()->companyid)->where('type', 1)->first();
-        if(!$favorite)
-            $favorite_ids = '';
-        else
-            $favorite_ids = $favorite->crc32_ids;
-        $favorites = explode(",", $favorite_ids);
+        $favorites = StandardFavorite::where('client_no', Auth::user()->companyid)->where('type', 1)->pluck('product_id')->toArray();
         foreach($pv_inverters as $inverter){
-            if(in_array(strval($inverter['crc32']), $favorites))
+            if(in_array($inverter['id'], $favorites))
                 $inverter['favorite'] = true;
         }
         $pv_inverters = $pv_inverters->toArray();
@@ -1540,14 +1530,9 @@ class GeneralController extends Controller
      */
     public function getStanchions(Request $request){
         $stanchions = Stanchion::all();
-        $favorite = StandardFavorite::where('client_no', Auth::user()->companyid)->where('type', 3)->first();
-        if(!$favorite)
-            $favorite_ids = '';
-        else
-            $favorite_ids = $favorite->crc32_ids;
-        $favorites = explode(",", $favorite_ids);
+        $favorites = StandardFavorite::where('client_no', Auth::user()->companyid)->where('type', 3)->pluck('product_id')->toArray();
         foreach($stanchions as $stanchion){
-            if(in_array(strval($stanchion['crc32']), $favorites))
+            if(in_array($stanchion['id'], $favorites))
                 $stanchion['favorite'] = true;
         }
         $stanchions = $stanchions->toArray();
@@ -1583,14 +1568,9 @@ class GeneralController extends Controller
      */
     public function getRailsupport(Request $request){
         $railsupport = RailSupport::all();
-        $favorite = StandardFavorite::where('client_no', Auth::user()->companyid)->where('type', 2)->first();
-        if(!$favorite)
-            $favorite_ids = '';
-        else
-            $favorite_ids = $favorite->crc32_ids;
-        $favorites = explode(",", $favorite_ids);
+        $favorites = StandardFavorite::where('client_no', Auth::user()->companyid)->where('type', 2)->pluck('product_id')->toArray();
         foreach($railsupport as $support){
-            if(in_array(strval($support['crc32']), $favorites))
+            if(in_array($support['id'], $favorites))
                 $support['favorite'] = true;
         }
         $railsupport = $railsupport->toArray();

@@ -270,11 +270,59 @@ function delModules(){
 }
 
 @endif
-function toggleFavourite(obj, id){
+
+var moduleId, cec = 0;
+
+function toggleFavourite(id, isFavorite, isCEC = 0) {
+    if(isFavorite) {
+        moduleId = id;
+        saveFavorite();
+    } else {
+        $("#path_filename").val('');
+        $("#pages").val('');
+        moduleId = id;
+        cec = isCEC;
+        $("#details_modal").modal('show');
+    }   
+}
+
+function doToggle() {
+    if($("#path_filename").val() == '' || $("#pages").val() == '') {
+        swal.fire({
+            icon: 'warning',
+            showCancelButton: true,
+            customClass: {
+                confirmButton: 'btn btn-danger m-1',
+                cancelButton: 'btn btn-secondary m-1'
+            },
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No',
+            html: 'No product cut sheet path / file name entered.  Automatic insertion of this product will not be available.  <br>  Retry or accept this condition?',
+            preConfirm: e => {
+                return new Promise(resolve => {
+                    setTimeout(() => {
+                        resolve();
+                    }, 50);
+                });
+            }
+        })
+        .then(( result ) => {
+            if ( result.value ) {
+                saveFavorite();
+                $("#details_modal").modal('hide');
+            }
+        });
+    } else {
+        saveFavorite();
+        $("#details_modal").modal('hide');
+    }
+}
+
+function saveFavorite() {
     $.ajax({
         url:"standardModuleToggleFavorite",
         type:'post',
-        data:{moduleId: id},
+        data:{path_filename: $("#path_filename").val(), pages: $("#pages").val(), moduleId: moduleId, CEC: cec},
         success:function(res){
             if (res.success == true) {
                 $('#equipments').DataTable().ajax.reload();

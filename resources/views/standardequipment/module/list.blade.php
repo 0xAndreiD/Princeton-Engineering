@@ -51,8 +51,9 @@
                             <th class="text-center" style="width: 5%;"></th>
                             @endif
                             <th class="text-center" style="width: 10%;">ID</th>
-                            <th style="width:40%">Manufacturer</th>
-                            <th style="width:40%;">Model</th>
+                            <th style="width:35%">Manufacturer</th>
+                            <th style="width:35%;">Model</th>
+                            <th style="width:10%;">Type</th>
                             <th style="min-width: 200px;">Actions</th>
                         </tr>
                         @if(Auth::user()->userrole == 2)
@@ -62,10 +63,50 @@
                             <th class="searchHead"> <input type="text" placeholder="Search Manufacturer" class="searchBox" id="mfrFilter"> </th>
                             <th></th>
                             <th></th>
+                            <th></th>
                         </tr>
                         @endif
                     </thead>
                 </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="details_modal" tabindex="-1" role="dialog" aria-labelledby="modal-block-fadein" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="block block-themed block-transparent mb-0">
+                <div class="block-header bg-primary-dark">
+                    <h3 class="block-title" id="cec-reset-title">Favorite Product Details</h3>
+                    <div class="block-options">
+                        <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                            <i class="fa fa-fw fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="block-content">
+                    <div class="row">
+                        <div class="form-group col-3 text-right p-0">
+                            <label style="margin: 3px 0px;">Path Filename</label>
+                        </div>
+                        <div class="form-group col-8 text-right">
+                            <input type="text" id="path_filename" class="form-control" style="border: 1px solid pink; width: 100%; height: 32px;">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-3 text-right p-0">
+                            <label style="margin: 3px 0px;">Pages</label>
+                        </div>
+                        <div class="form-group col-8 text-right">
+                            <input type="text" id="pages" class="form-control" style="border: 1px solid pink; width: 100%; height: 32px;">
+                        </div>
+                    </div>
+                </div>
+                <div class="block-content block-content-full text-right bg-light">
+                    <button type="button" class="btn btn-sm btn-light" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-sm btn-primary" onclick="doToggle()">Save</button>
+                </div>
             </div>
         </div>
     </div>
@@ -164,6 +205,7 @@
                 { "data": "id" },
                 { "data": "mfr" },
                 { "data": "model" },
+                { "data": "type" },
                 { "data": "actions", "orderable": false }
             ],
             @if(Auth::user()->userrole == 2)
