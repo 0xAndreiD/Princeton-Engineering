@@ -71,6 +71,45 @@
     </div>
 </div>
 
+<div class="modal fade" id="details_modal" tabindex="-1" role="dialog" aria-labelledby="modal-block-fadein" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="block block-themed block-transparent mb-0">
+                <div class="block-header bg-primary-dark">
+                    <h3 class="block-title" id="cec-reset-title">Favorite Product Details</h3>
+                    <div class="block-options">
+                        <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                            <i class="fa fa-fw fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="block-content">
+                    <div class="row">
+                        <div class="form-group col-3 text-right p-0">
+                            <label style="margin: 3px 0px;">Path Filename</label>
+                        </div>
+                        <div class="form-group col-8 text-right">
+                            <input type="text" id="path_filename" class="form-control" style="border: 1px solid pink; width: 100%; height: 32px;">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-3 text-right p-0">
+                            <label style="margin: 3px 0px;">Pages</label>
+                        </div>
+                        <div class="form-group col-8 text-right">
+                            <input type="text" id="pages" class="form-control" style="border: 1px solid pink; width: 100%; height: 32px;">
+                        </div>
+                    </div>
+                </div>
+                <div class="block-content block-content-full text-right bg-light">
+                    <button type="button" class="btn btn-sm btn-light" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-sm btn-primary" onclick="doToggle()">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <aside id="side-overlay">
     <!-- Side Header -->
     <div class="bg-image">

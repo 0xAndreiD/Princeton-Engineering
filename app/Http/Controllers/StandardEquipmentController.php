@@ -9,6 +9,7 @@ use Illuminate\Contracts\Routing\ResponseFactory;
 use App\User;
 use App\Company;
 use App\PVModule;
+use App\PVModuleCEC;
 use App\PVInverter;
 use App\RailSupport;
 use App\Stanchion;
@@ -72,12 +73,15 @@ class StandardEquipmentController extends Controller
             );
         }
         $handler = new PVModule;
+        $cecHandler = new PVModuleCEC;
 
-        $totalData = $handler->count();
+        $totalData = $handler->count() + $cecHandler->count();
         $totalFiltered = $totalData; 
 
-        if(Auth::user()->userrole == 2 && !empty($request->input("columns.1.search.value")))
-            $handler = $handler->where('mfr', 'LIKE', "%{$request->input("columns.1.search.value")}%");
+        if(Auth::user()->userrole == 2 && !empty($request->input("columns.2.search.value"))) {
+            $handler = $handler->where('mfr', 'LIKE', "%{$request->input("columns.2.search.value")}%");
+            $cecHandler = $cecHandler->where('mfr', 'LIKE', "%{$request->input("columns.2.search.value")}%");
+        }
 
         $limit = $request->input('length');
         $start = $request->input('start');
@@ -86,60 +90,83 @@ class StandardEquipmentController extends Controller
 
         if(empty($request->input('search.value')))
         {            
-            $totalFiltered = $handler->count();
-            $modules = $handler->offset($start)
-                ->limit($limit)
+            $totalFiltered = $handler->count() + $cecHandler->count();
+            $pvmodules = $handler
                 ->orderBy($order,$dir)
                 ->get(
                     array(
                         'id', 'mfr', 'model', 'rating', 'length', 'width', 'depth', 'weight', 'crc32'
                     )
-                );
+                )->toArray();
+            
+            $cecModules = $cecHandler
+                ->orderBy($order,$dir)
+                ->get(
+                    array(
+                        'id', 'mfr', 'model', 'rating', 'length', 'width', 'depth', 'weight', 'crc32', 'id as cec'
+                    )
+                )->toArray();
+
+            $modules = array_slice(array_merge($pvmodules, $cecModules), $start, $limit);
         }
         else {
             $search = $request->input('search.value'); 
-            $modules =  $handler->where('mfr', 'LIKE',"%{$search}%")
+            $pvmodules =  $handler->where('mfr', 'LIKE',"%{$search}%")
                         ->orWhere('model', 'LIKE',"%{$search}%")
-                        ->offset($start)
-                        ->limit($limit)
                         ->orderBy($order,$dir)
                         ->get(
                             array(
                                 'id', 'mfr', 'model', 'rating', 'length', 'width', 'depth', 'weight', 'crc32'
                             )
-                        );
-
-            $totalFiltered = $handler->where('mfr', 'LIKE',"%{$search}%")
+                        )->toArray();
+            
+            $cecModules =  $cecHandler->where('mfr', 'LIKE',"%{$search}%")
                         ->orWhere('model', 'LIKE',"%{$search}%")
-                        ->count();
-        }
+                        ->orderBy($order,$dir)
+                        ->get(
+                            array(
+                                'id', 'mfr', 'model', 'rating', 'length', 'width', 'depth', 'weight', 'crc32', 'id as cec'
+                            )
+                        )->toArray();
 
-        $data = array();
+            $modules = array_slice(array_merge($pvmodules, $cecModules), $start, $limit);
+
+            $totalFiltered = $handler->where('mfr', 'LIKE',"%{$search}%")->orWhere('model', 'LIKE',"%{$search}%")->count() + $cecHandler->where('mfr', 'LIKE',"%{$search}%")->orWhere('model', 'LIKE',"%{$search}%")->count();
+        }
 
         if(!empty($modules))
         {
-            $favorite = StandardFavorite::where('client_no', Auth::user()->companyid)->where('type', 0)->first();
-            if(!$favorite)
-                $favorite_ids = '';
-            else
-                $favorite_ids = $favorite->crc32_ids;
-            $favorites = explode(",", $favorite_ids);
+            $stdFavorites = StandardFavorite::where('client_no', Auth::user()->companyid)->where('type', 0)->where('cec', 0)->pluck('product_id')->toArray();
+            $cecFavorites = StandardFavorite::where('client_no', Auth::user()->companyid)->where('type', 0)->where('cec', 1)->pluck('product_id')->toArray();
             $id = 1;
             foreach ($modules as $module)
             {
-                if(Auth::user()->userrole == 2)
-                    $module['bulkcheck'] = "
-                        <div class='text-center'>
-                            <input type='checkbox' id='bulkcheck_{$module['id']}' class='bulkcheck' style='cursor: pointer;'>
-                        </div>";
+                if(Auth::user()->userrole == 2) {
+                    if(isset($module['cec']))
+                        $module['bulkcheck'] = "<div></div>";
+                    else
+                        $module['bulkcheck'] = "
+                            <div class='text-center'>
+                                <input type='checkbox' id='bulkcheck_{$module['id']}' class='bulkcheck' style='cursor: pointer;'>
+                            </div>";
+                }
+                if(isset($module['cec']))
+                    $module['type'] = "<span class='badge badge-danger'> CEC </span>";
+                else
+                    $module['type'] = "<span class='badge badge-primary'> Standard </span>";
+
+                $isFavorite = 0;
+                if(isset($module['cec']) && in_array($module['id'], $cecFavorites))
+                    $isFavorite = 1;
+                else if(!isset($module['cec']) && in_array($module['id'], $stdFavorites))
+                    $isFavorite = 1;
                 $module['actions'] = "
                 <div class='text-center'>
-                    <button type='button' class='btn' onclick='toggleFavourite(this,{$module['id']})'>
-                        " . (in_array(strval($module->crc32), $favorites) ? "<i class='fa fa-star'></i>" : "<i class='far fa-star'></i>") . 
+                    <button type='button' class='btn' onclick='toggleFavourite({$module['id']}, " . ($isFavorite ? "1, " : "0, ") . (isset($module['cec']) ? "1" : "0") . ")'>
+                        " . ($isFavorite ? "<i class='fa fa-star'></i>" : "<i class='far fa-star'></i>") . 
                     "</button>" . 
-                    (Auth::user()->userrole == 2 ? "<button type='button' class='btn btn-primary' onclick='showEditModule(this,{$module['id']})'><i class='fa fa-pencil-alt'></i></button>" . "<button type='button' class='js-swal-confirm btn btn-danger' style='margin-left:5px;' onclick='delModule(this,{$module['id']})'><i class='fa fa-trash'></i></button>" : "")
+                    (Auth::user()->userrole == 2 && !isset($module['cec']) ? "<button type='button' class='btn btn-primary' onclick='showEditModule(this,{$module['id']})'><i class='fa fa-pencil-alt'></i></button>" . "<button type='button' class='js-swal-confirm btn btn-danger' style='margin-left:5px;' onclick='delModule(this,{$module['id']})'><i class='fa fa-trash'></i></button>" : "")
                     . "</div>";
-                $module['favorite_ids'] = $favorites;
                 $data[] = $module;
             }
         }
@@ -241,33 +268,28 @@ class StandardEquipmentController extends Controller
      */
     public function moduleToggleFavorite(Request $request){
         if(!empty($request['moduleId'])){
-            $module = PVModule::where('id', $request['moduleId'])->first();
-            if($module){
-                $favorite = StandardFavorite::where('client_no', Auth::user()->companyid)->where('type', 0)->first();
+            // $module = PVModule::where('id', $request['moduleId'])->first();
+            // if($module){
+                if($request['CEC'] == 1)
+                    $favorite = StandardFavorite::where('client_no', Auth::user()->companyid)->where('type', 0)->where('product_id', $request['moduleId'])->where('CEC', 1)->first();
+                else
+                    $favorite = StandardFavorite::where('client_no', Auth::user()->companyid)->where('type', 0)->where('product_id', $request['moduleId'])->where('CEC', 0)->first();
                 if(!$favorite){
                     StandardFavorite::create([
                         'client_no' => Auth::user()->companyid,
                         'type' => 0,
-                        'crc32_ids' => $module->crc32
+                        'CEC' => $request['CEC'],
+                        'product_id' => $request['moduleId'],
+                        'path_filename' => $request['path_filename'],
+                        'pages' => $request['pages']
                     ]);
                 } else {
-                    $crc32_ids = explode(",", $favorite->crc32_ids);
-                    if(in_array(strval($module->crc32), $crc32_ids))
-                    {
-                        $pos = array_search(strval($module->crc32), $crc32_ids);
-                        unset($crc32_ids[$pos]);
-                        $favorite->crc32_ids = implode(",", $crc32_ids);
-                        $favorite->save();
-                    } else {
-                        $crc32_ids[] = $module->crc32;
-                        $favorite->crc32_ids = implode(",", $crc32_ids);
-                        $favorite->save();
-                    }
+                    $favorite->delete();
                 }
                 return response()->json(['success' => true]);
-            } else {
-                return response()->json(['success' => false, 'message' => 'Cannot find module.']);
-            }
+            // } else {
+            //     return response()->json(['success' => false, 'message' => 'Cannot find module.']);
+            // }
         } else {
             return response()->json(['success' => false, 'message' => 'Empty moduleId.']);
         }
@@ -395,12 +417,7 @@ class StandardEquipmentController extends Controller
 
         if(!empty($inverters))
         {
-            $favorite = StandardFavorite::where('client_no', Auth::user()->companyid)->where('type', 1)->first();
-            if(!$favorite)
-                $favorite_ids = '';
-            else
-                $favorite_ids = $favorite->crc32_ids;
-            $favorites = explode(",", $favorite_ids);
+            $favorites = StandardFavorite::where('client_no', Auth::user()->companyid)->where('type', 1)->pluck('product_id')->toArray();
             $id = 1;
             foreach ($inverters as $inverter)
             {
@@ -409,9 +426,10 @@ class StandardEquipmentController extends Controller
                         <div class='text-center'>
                             <input type='checkbox' id='bulkcheck_{$inverter['id']}' class='bulkcheck' style='cursor: pointer;'>
                         </div>";
+                $isFavorite = in_array($inverter->id, $favorites);
                 $inverter['actions'] = "
                 <div class='text-center'>" . 
-                    "<button type='button' class='btn' onclick='toggleFavourite(this,{$inverter['id']})'>" . (in_array(strval($inverter->crc32), $favorites) ? "<i class='fa fa-star'></i>" : "<i class='far fa-star'></i>") . "</button>" . 
+                    "<button type='button' class='btn' onclick='toggleFavourite({$inverter['id']}, " . $isFavorite . ")'>" . ($isFavorite ? "<i class='fa fa-star'></i>" : "<i class='far fa-star'></i>") . "</button>" . 
                     (Auth::user()->userrole == 2 ? "<button type='button' class='btn btn-primary' onclick='showEditInverter(this,{$inverter['id']})'><i class='fa fa-pencil-alt'></i></button>" . "<button type='button' class='js-swal-confirm btn btn-danger' style='margin-left:5px;' onclick='delInverter(this,{$inverter['id']})'><i class='fa fa-trash'></i></button>" : "")
                 . "</div>";
                 
@@ -501,32 +519,24 @@ class StandardEquipmentController extends Controller
      */
     public function inverterToggleFavorite(Request $request){
         if(!empty($request['inverterId'])){
-            $inverter = PVInverter::where('id', $request['inverterId'])->first();
-            if($inverter){
-                $favorite = StandardFavorite::where('client_no', Auth::user()->companyid)->where('type', 1)->first();
+            // $inverter = PVInverter::where('id', $request['inverterId'])->first();
+            // if($inverter){
+                $favorite = StandardFavorite::where('client_no', Auth::user()->companyid)->where('type', 1)->where('product_id', $request['inverterId'])->first();
                 if(!$favorite){
                     StandardFavorite::create([
                         'client_no' => Auth::user()->companyid,
                         'type' => 1,
-                        'crc32_ids' => $inverter->crc32
+                        'CEC' => 0,
+                        'product_id' => $request['inverterId'],
+                        'path_filename' => $request['path_filename'],
+                        'pages' => $request['pages']
                     ]);
                 } else {
-                    $crc32_ids = explode(",", $favorite->crc32_ids);
-                    if(in_array(strval($inverter->crc32), $crc32_ids))
-                    {
-                        $pos = array_search(strval($inverter->crc32), $crc32_ids);
-                        unset($crc32_ids[$pos]);
-                        $favorite->crc32_ids = implode(",", $crc32_ids);
-                        $favorite->save();
-                    } else {
-                        $crc32_ids[] = $inverter->crc32;
-                        $favorite->crc32_ids = implode(",", $crc32_ids);
-                        $favorite->save();
-                    }
+                    $favorite->delete();
                 }
                 return response()->json(['success' => true]);
-            } else
-                return response()->json(['success' => false, 'message' => 'Cannot find inverter.']);
+            // } else
+            //     return response()->json(['success' => false, 'message' => 'Cannot find inverter.']);
         } else
             return response()->json(['success' => false, 'message' => 'Empty inverterId.']);
     }
@@ -653,12 +663,7 @@ class StandardEquipmentController extends Controller
 
         if(!empty($rackings))
         {
-            $favorite = StandardFavorite::where('client_no', Auth::user()->companyid)->where('type', 2)->first();
-            if(!$favorite)
-                $favorite_ids = '';
-            else
-                $favorite_ids = $favorite->crc32_ids;
-            $favorites = explode(",", $favorite_ids);
+            $favorites = StandardFavorite::where('client_no', Auth::user()->companyid)->where('type', 2)->pluck('product_id')->toArray();
             $id = 1;
             foreach ($rackings as $racking)
             {
@@ -667,10 +672,11 @@ class StandardEquipmentController extends Controller
                         <div class='text-center'>
                             <input type='checkbox' id='bulkcheck_{$racking['id']}' class='bulkcheck' style='cursor: pointer;'>
                         </div>";
+                $isFavorite = in_array($racking->id, $favorites);
                 $racking['actions'] = "
                 <div class='text-center'>
-                    <button type='button' class='btn' onclick='toggleFavourite(this,{$racking['id']})'>
-                        " . (in_array(strval($racking->crc32), $favorites) ? "<i class='fa fa-star'></i>" : "<i class='far fa-star'></i>") . 
+                    <button type='button' class='btn' onclick='toggleFavourite({$racking['id']}, " . $isFavorite . ")'>
+                        " . ($isFavorite ? "<i class='fa fa-star'></i>" : "<i class='far fa-star'></i>") . 
                     "</button>" . 
                     (Auth::user()->userrole == 2 ? "<button type='button' class='btn btn-primary' 
                         onclick='showEditRacking(this,{$racking['id']})'>
@@ -767,33 +773,25 @@ class StandardEquipmentController extends Controller
      */
     public function rackingToggleFavorite(Request $request){
         if(!empty($request['rackingId'])){
-            $racking = RailSupport::where('id', $request['rackingId'])->first();
-            if($racking){
-                $favorite = StandardFavorite::where('client_no', Auth::user()->companyid)->where('type', 2)->first();
+            // $racking = RailSupport::where('id', $request['rackingId'])->first();
+            // if($racking){
+                $favorite = StandardFavorite::where('client_no', Auth::user()->companyid)->where('type', 2)->where('product_id', $request['rackingId'])->first();
                 if(!$favorite){
                     StandardFavorite::create([
                         'client_no' => Auth::user()->companyid,
                         'type' => 2,
-                        'crc32_ids' => $racking->crc32
+                        'CEC' => 0,
+                        'product_id' => $request['rackingId'],
+                        'path_filename' => $request['path_filename'],
+                        'pages' => $request['pages']
                     ]);
                 } else {
-                    $crc32_ids = explode(",", $favorite->crc32_ids);
-                    if(in_array(strval($racking->crc32), $crc32_ids))
-                    {
-                        $pos = array_search(strval($racking->crc32), $crc32_ids);
-                        unset($crc32_ids[$pos]);
-                        $favorite->crc32_ids = implode(",", $crc32_ids);
-                        $favorite->save();
-                    } else {
-                        $crc32_ids[] = $racking->crc32;
-                        $favorite->crc32_ids = implode(",", $crc32_ids);
-                        $favorite->save();
-                    }
+                    $favorite->delete();
                 }
                 return response()->json(['success' => true]);
-            } else {
-                return response()->json(['success' => false, 'message' => 'Cannot find racking.']);
-            }
+            // } else {
+            //     return response()->json(['success' => false, 'message' => 'Cannot find racking.']);
+            // }
         } else {
             return response()->json(['success' => false, 'message' => 'Empty rackingId.']);
         }
@@ -921,12 +919,7 @@ class StandardEquipmentController extends Controller
 
         if(!empty($stanchions))
         {
-            $favorite = StandardFavorite::where('client_no', Auth::user()->companyid)->where('type', 3)->first();
-            if(!$favorite)
-                $favorite_ids = '';
-            else
-                $favorite_ids = $favorite->crc32_ids;
-            $favorites = explode(",", $favorite_ids);
+            $favorites = StandardFavorite::where('client_no', Auth::user()->companyid)->where('type', 3)->pluck('product_id')->toArray();
             $id = 1;
             foreach ($stanchions as $stanchion)
             {
@@ -935,10 +928,11 @@ class StandardEquipmentController extends Controller
                         <div class='text-center'>
                             <input type='checkbox' id='bulkcheck_{$stanchion['id']}' class='bulkcheck' style='cursor: pointer;'>
                         </div>";
+                $isFavorite = in_array($stanchion->id, $favorites);
                 $stanchion['actions'] = "
                 <div class='text-center'>
-                    <button type='button' class='btn' onclick='toggleFavourite(this,{$stanchion['id']})'>
-                        " . (in_array(strval($stanchion->crc32), $favorites) ? "<i class='fa fa-star'></i>" : "<i class='far fa-star'></i>") . 
+                    <button type='button' class='btn' onclick='toggleFavourite({$stanchion['id']}, " . $isFavorite . ")'>
+                        " . ($isFavorite ? "<i class='fa fa-star'></i>" : "<i class='far fa-star'></i>") . 
                     "</button>" . 
                     (Auth::user()->userrole == 2 ? "<button type='button' class='btn btn-primary' 
                         onclick='showEditStanchion(this,{$stanchion['id']})'>
@@ -1036,33 +1030,25 @@ class StandardEquipmentController extends Controller
      */
     public function stanchionToggleFavorite(Request $request){
         if(!empty($request['stanchionId'])){
-            $stanchion = Stanchion::where('id', $request['stanchionId'])->first();
-            if($stanchion){
-                $favorite = StandardFavorite::where('client_no', Auth::user()->companyid)->where('type', 3)->first();
+            // $stanchion = Stanchion::where('id', $request['stanchionId'])->first();
+            // if($stanchion){
+                $favorite = StandardFavorite::where('client_no', Auth::user()->companyid)->where('type', 3)->where('product_id', $request['stanchionId'])->first();
                 if(!$favorite){
                     StandardFavorite::create([
                         'client_no' => Auth::user()->companyid,
                         'type' => 3,
-                        'crc32_ids' => $stanchion->crc32
+                        'CEC' => 0,
+                        'product_id' => $request['stanchionId'],
+                        'path_filename' => $request['path_filename'],
+                        'pages' => $request['pages']
                     ]);
                 } else {
-                    $crc32_ids = explode(",", $favorite->crc32_ids);
-                    if(in_array(strval($stanchion->crc32), $crc32_ids))
-                    {
-                        $pos = array_search(strval($stanchion->crc32), $crc32_ids);
-                        unset($crc32_ids[$pos]);
-                        $favorite->crc32_ids = implode(",", $crc32_ids);
-                        $favorite->save();
-                    } else {
-                        $crc32_ids[] = $stanchion->crc32;
-                        $favorite->crc32_ids = implode(",", $crc32_ids);
-                        $favorite->save();
-                    }
+                    $favorite->delete();
                 }
                 return response()->json(['success' => true]);
-            } else {
-                return response()->json(['success' => false, 'message' => 'Cannot find stanchion.']);
-            }
+            // } else {
+            //     return response()->json(['success' => false, 'message' => 'Cannot find stanchion.']);
+            // }
         } else {
             return response()->json(['success' => false, 'message' => 'Empty stanchionId.']);
         }
