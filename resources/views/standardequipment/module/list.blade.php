@@ -74,7 +74,7 @@
 </div>
 
 <div class="modal fade" id="details_modal" tabindex="-1" role="dialog" aria-labelledby="modal-block-fadein" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog" role="document" style="max-width: 700px;">
         <div class="modal-content">
             <div class="block block-themed block-transparent mb-0">
                 <div class="block-header bg-primary-dark">
@@ -87,11 +87,18 @@
                 </div>
                 <div class="block-content">
                     <div class="row">
+                        <div class="col-12">
+                            <span>AutoCAD Automation</span>
+                            <p>Please enter the complete path and filename and which pages you would like inserted into your AutoCAD template.</p>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="form-group col-3 text-right p-0">
                             <label style="margin: 3px 0px;">Path Filename</label>
                         </div>
                         <div class="form-group col-8 text-right">
-                            <input type="text" id="path_filename" class="form-control" style="border: 1px solid pink; width: 100%; height: 32px;">
+                            <input type="text" id="path_filename" class="form-control mb-1" style="border: 1px solid pink; width: 100%; height: 32px;">
+                            <div class="text-left">i.e. G:\Common product sheets\Inverter 1.pdf</div>
                         </div>
                     </div>
                     <div class="row">
@@ -99,13 +106,15 @@
                             <label style="margin: 3px 0px;">Pages</label>
                         </div>
                         <div class="form-group col-8 text-right">
-                            <input type="text" id="pages" class="form-control" style="border: 1px solid pink; width: 100%; height: 32px;">
+                            <input type="text" id="pages" class="form-control mb-1" style="border: 1px solid pink; width: 100%; height: 32px;">
+                            <div class="text-left">i.e. 1,3 or 2-4, etc.</div>
                         </div>
                     </div>
                 </div>
                 <div class="block-content block-content-full text-right bg-light">
-                    <button type="button" class="btn btn-sm btn-light" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" onclick="saveFavorite()">Select as Favorite without Path</button>
                     <button type="button" class="btn btn-sm btn-primary" onclick="doToggle()">Save</button>
+                    <button type="button" class="btn btn-sm btn-light" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>

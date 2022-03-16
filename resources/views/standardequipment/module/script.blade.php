@@ -295,8 +295,8 @@ function doToggle() {
                 confirmButton: 'btn btn-danger m-1',
                 cancelButton: 'btn btn-secondary m-1'
             },
-            confirmButtonText: 'Yes',
-            cancelButtonText: 'No',
+            confirmButtonText: 'Accept',
+            cancelButtonText: 'Retry',
             html: 'No product cut sheet path / file name entered.  Automatic insertion of this product will not be available.  <br>  Retry or accept this condition?',
             preConfirm: e => {
                 return new Promise(resolve => {

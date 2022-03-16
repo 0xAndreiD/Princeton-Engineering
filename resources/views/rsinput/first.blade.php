@@ -345,6 +345,7 @@
                 <label class="custom-control-label" for="module-cec"></label>
             </div>
         </td>
+        <input class="w400-bdr" id="pv-module-id" hidden>
         <input class="w400-bdr" id="pv-module-length" hidden>
         <input class="w400-bdr" id="pv-module-width" hidden>
         <input class="w400-bdr" id="pv-module-custom" hidden>
@@ -389,6 +390,7 @@
                 <i class="fa fa-plus" style="font-size: 12px; top: -2px;"></i>
             </span>
         </td>
+        <input class="w400-bdr" id="inverter-id" hidden>
         <input class="w400-bdr" id="inverter-custom" hidden>
         <input class="w400-bdr" id="inverter-crc32" hidden>
         <input class="w400-bdr" id="inverter-watts" hidden>
@@ -431,6 +433,7 @@
                 <i class="fa fa-times" style="font-size: 12px; top: -2px;"></i>
             </span>
         </td>
+        <input class="w400-bdr" id="inverter2-id" hidden>
         <input class="w400-bdr" id="inverter2-custom" hidden>
         <input class="w400-bdr" id="inverter2-crc32" hidden>
         <input class="w400-bdr" id="inverter2-watts" hidden>
@@ -473,6 +476,7 @@
                 <i class="fa fa-times" style="font-size: 12px; top: -2px;"></i>
             </span>
         </td>
+        <input class="w400-bdr" id="inverter3-id" hidden>
         <input class="w400-bdr" id="inverter3-custom" hidden>
         <input class="w400-bdr" id="inverter3-crc32" hidden>
         <input class="w400-bdr" id="inverter3-watts" hidden>
@@ -510,6 +514,7 @@
             </div>
         </td>
         <td class="right-bdr"></td>
+        <input class="w400-bdr" id="stanchion-id" hidden>
         <input class="w400-bdr" id="stanchion-custom" hidden>
         <input class="w400-bdr" id="stanchion-crc32" hidden>
     </tr>
@@ -546,6 +551,7 @@
             </div>
         </td>
         <td class="right-bdr bottom-bdr"></td>
+        <input class="w400-bdr" id="railsupport-id" hidden>
         <input class="w400-bdr" id="railsupport-custom" hidden>
         <input class="w400-bdr" id="railsupport-crc32" hidden>
     </tr>

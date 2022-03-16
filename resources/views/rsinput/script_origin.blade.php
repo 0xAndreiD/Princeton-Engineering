@@ -913,7 +913,7 @@ var updatePVSubmoduleField = function(mainType, subType="") {
     }
 
     $('#option-module-option1').html(optionPVModule(mainType, subType, 2));
-    
+    $('#pv-module-id').val(optionPVModule(mainType, subType, 12));
     $('#pv-module-length').val(optionPVModule(mainType, subType, 3));
     $('#pv-module-width').val(optionPVModule(mainType, subType, 4));
     $('#pv-module-custom').val(optionPVModule(mainType, subType, 7) ? true : false);
@@ -1061,6 +1061,7 @@ var updatePVInvertorSubField = function(mainType, subType = "", invId = 1, updat
 
     $(`#option-inverter${invId == 1 ? '' : invId}-option1`).html(optionPVInverter(mainType, subType, 2));
     $(`#option-inverter${invId == 1 ? '' : invId}-option2`).html(optionPVInverter(mainType, subType, 3));   
+    $(`#inverter${invId == 1 ? '' : invId}-id`).val(optionPVInverter(mainType, subType, 8));
     $(`#inverter${invId == 1 ? '' : invId}-custom`).val(optionPVInverter(mainType, subType, 4) ? true : false);
     $(`#inverter${invId == 1 ? '' : invId}-crc32`).val(optionPVInverter(mainType, subType, 6));
     $(`#inverter${invId == 1 ? '' : invId}-watts`).val(optionPVInverter(mainType, subType, 7));
@@ -1240,6 +1241,7 @@ var updateStanchionSubField = function(mainType, subType = "") {
 
     $('#option-stanchion-option1').html(optionStanchion(mainType, subType, 2));
     $('#option-stanchion-option2').html(optionStanchion(mainType, subType, 3));
+    $('#stanchion-id').val(optionStanchion(mainType, subType, 7));
     $('#stanchion-custom').val(optionStanchion(mainType, subType, 4) ? true : false);
     $('#stanchion-crc32').val(optionStanchion(mainType, subType, 6));
 }
@@ -1379,6 +1381,7 @@ var updateRailSupportSubField = function(mainType, subType = "") {
 
     $('#option-railsupport-option1').html(optionRailSupport(mainType, subType, 2));
     $('#option-railsupport-option2').html(optionRailSupport(mainType, subType, 3));
+    $('#railsupport-id').val(optionRailSupport(mainType, subType, 7));
     $('#railsupport-custom').val(optionRailSupport(mainType, subType, 4) ? true : false);
     $('#railsupport-crc32').val(optionRailSupport(mainType, subType, 6));
     loadASCEOptions($('#option-state').val());
@@ -2920,7 +2923,7 @@ $(document).ready(function() {
                 if(res.length > 0)
                 {
                     for(let i = 0; i < res.length; i ++){
-                        availablePVModules.push([res[i]['mfr'], res[i]['model'], res[i]['rating'], res[i]['length'], res[i]['width'], res[i]['depth'], res[i]['weight'], res[i]['custom'], res[i]['favorite'], res[i]['crc32'], 0]);
+                        availablePVModules.push([res[i]['mfr'], res[i]['model'], res[i]['rating'], res[i]['length'], res[i]['width'], res[i]['depth'], res[i]['weight'], res[i]['custom'], res[i]['favorite'], res[i]['crc32'], 0, res[i]['watts'], res[i]['id']]);
                     }
                 }
 
@@ -2977,7 +2980,7 @@ $(document).ready(function() {
                 if(res.length > 0)
                 {
                     for(let i = 0; i < res.length; i ++){
-                        availablePVInverters.push([res[i]['module'], res[i]['submodule'], res[i]['option1'], res[i]['option2'], res[i]['custom'], res[i]['favorite'], res[i]['crc32'], res[i]['watts']]);
+                        availablePVInverters.push([res[i]['module'], res[i]['submodule'], res[i]['option1'], res[i]['option2'], res[i]['custom'], res[i]['favorite'], res[i]['crc32'], res[i]['watts'], res[i]['id']]);
                     }
                 }
                 // ------------------- Second Line ---------------------
@@ -3045,7 +3048,7 @@ $(document).ready(function() {
                 if(res.length > 0)
                 {
                     for(let i = 0; i < res.length; i ++){
-                        availableStanchions.push([res[i]['module'], res[i]['submodule'], res[i]['option1'], res[i]['option2'], res[i]['custom'], res[i]['favorite'], res[i]['crc32']]);
+                        availableStanchions.push([res[i]['module'], res[i]['submodule'], res[i]['option1'], res[i]['option2'], res[i]['custom'], res[i]['favorite'], res[i]['crc32'], res[i]['id']]);
                     }
                 }
                 // ------------------- Third Line ---------------------
@@ -3107,7 +3110,7 @@ $(document).ready(function() {
                 if(res.length > 0)
                 {
                     for(let i = 0; i < res.length; i ++){
-                        availableRailSupports.push([res[i]['module'], res[i]['submodule'], res[i]['option1'], res[i]['option2'], res[i]['custom'], res[i]['favorite'], res[i]['crc32']]);
+                        availableRailSupports.push([res[i]['module'], res[i]['submodule'], res[i]['option1'], res[i]['option2'], res[i]['custom'], res[i]['favorite'], res[i]['crc32'], res[i]['id']]);
                     }
                 }
                 // ------------------- Fourth Line ---------------------
