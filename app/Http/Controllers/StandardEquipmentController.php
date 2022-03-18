@@ -134,6 +134,7 @@ class StandardEquipmentController extends Controller
             $totalFiltered = $handler->where('mfr', 'LIKE',"%{$search}%")->orWhere('model', 'LIKE',"%{$search}%")->count() + $cecHandler->where('mfr', 'LIKE',"%{$search}%")->orWhere('model', 'LIKE',"%{$search}%")->count();
         }
 
+        $data = array();
         if(!empty($modules))
         {
             $stdFavorites = StandardFavorite::where('client_no', Auth::user()->companyid)->where('type', 0)->where('cec', 0)->pluck('product_id')->toArray();
