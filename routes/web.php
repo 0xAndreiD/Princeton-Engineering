@@ -130,6 +130,7 @@ Route::post('/updateChatApi', 'APIController@updateChat')->name('updateChatApi')
 Route::get('/getCsrfToken', 'APIController@getCsrfToken')->name('getCsrfToken');
 Route::post('/sendEmail', 'APIController@sendEmail')->name('sendEmail');
 Route::get('/removeSpecialChars', 'APIController@removeSpecialChars')->name('removeSpecialChars');
+Route::post('/createJob', 'APIController@createJob')->name('createJob');
 
 // PV Modules
 Route::post('/getCECPVModules', 'GeneralController@getCECPVModules')->name('getCECPVModules');

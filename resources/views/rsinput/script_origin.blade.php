@@ -4770,12 +4770,12 @@ var loadPreloadedData = function() {
                             $('#option-module-quantity').val(preloaded_data['Equipment']['PVModule']['Quantity']);
                             $('#option-inverter-quantity').val(preloaded_data['Equipment']['PVInverter']['Quantity']);
                             let additionalInvs = 0;
-                            if(preloaded_data['Equipment'] && preloaded_data['Equipment']['PVInverter_2'] && preloaded_data['Equipment']['PVInverter_2']['Type'] != ''){
+                            if(preloaded_data['Equipment'] && preloaded_data['Equipment']['PVInverter_2'] && preloaded_data['Equipment']['PVInverter_2']['Type'] && preloaded_data['Equipment']['PVInverter_2']['Type'] != ''){
                                 $("#pv-inverter-2").css('display', 'table-row');
                                 additionalInvs ++;
                                 $('#option-inverter2-quantity').val(preloaded_data['Equipment']['PVInverter_2']['Quantity']);
                             }
-                            if(preloaded_data['Equipment'] && preloaded_data['Equipment']['PVInverter_3'] && preloaded_data['Equipment']['PVInverter_3']['Type'] != ''){
+                            if(preloaded_data['Equipment'] && preloaded_data['Equipment']['PVInverter_3'] && preloaded_data['Equipment']['PVInverter_3']['Type'] && preloaded_data['Equipment']['PVInverter_3']['Type'] != ''){
                                 $("#pv-inverter-3").css('display', 'table-row');
                                 additionalInvs ++;
                                 $('#option-inverter3-quantity').val(preloaded_data['Equipment']['PVInverter_3']['Quantity']);

@@ -1012,4 +1012,119 @@ class APIController extends Controller
             return response()->json(['success' => false]);
         }
     }
+
+    /**
+     * Create a new Job and saves JSON
+     *
+     * @return JSON
+     */
+    public function createJob(Request $request) {
+        if(isset($request['username']) && isset($request['password'])){
+            $user = User::where('username', '=', $request['username'])->where('password', '=', $request['password'])->first();
+            if($user) {
+                if( Storage::disk('input')->exists("sample.json") ) {
+                    $data = json_decode(Storage::disk('input')->get("sample.json"), true);
+
+                    // Project Number
+                    $maxProject = DB::select(DB::raw('select max(convert(clientProjectNumber, signed integer)) as maxNumber from job_request where companyId=' . $user->companyid))[0];
+                    if($maxProject)
+                        $projectNum = $maxProject->maxNumber + 1;
+                    else
+                        $projectNum = 1;
+
+                    $data['ProgramData']['Version'] = array("Rev" => "3.0.0", "RevDate" => gmdate("m/d/Y", time()));
+
+                    $company = Company::where('id', $user->companyid)->first();
+
+                    //CompanyInfo
+                    $data['CompanyInfo']['Name'] = $company['company_name'];
+                    $data['CompanyInfo']['Number'] = $company['company_number'];
+                    $data['CompanyInfo']['UserId'] = $company['company_number'] . "." . ($user ? $user['usernumber'] : $user->usernumber);
+                    $data['CompanyInfo']['Username'] = $user ? $user['username'] : $user->username;
+                    $data['CompanyInfo']['UserEmail'] = $user ? $user['email'] : $user->email;
+
+                    if($request['ProjectInfo']) $data['ProjectInfo'] = $request['ProjectInfo'];
+                    if($request['Personnel']) $data['Personnel'] = $request['Personnel'];
+                    if($request['BuildingAge']) $data['BuildingAge'] = $request['BuildingAge'];
+                    if($request['Equipment']) $data['Equipment'] = $request['Equipment'];
+                    if($request['NumberLoadingConditions']) $data['NumberLoadingConditions'] = $request['NumberLoadingConditions'];
+
+                    $data['ProjectInfo']['Number'] = $projectNum;
+
+                    
+                    if($request['LoadingCase'] && count($request['LoadingCase']) > 0) {
+                        $sample = $data['LoadingCase'][0];
+                        $data['LoadingCase'] = array();
+                        $i = 1;
+                        foreach($request['LoadingCase'] as $caseInput) {
+                            $case = $sample;
+                            if($caseInput['RoofDataInput']) {
+                                if(isset($caseInput['RoofDataInput']['A1'])) $case['RoofDataInput']['A1'] = $caseInput['RoofDataInput']['A1'];
+                                if(isset($caseInput['RoofDataInput']['A2_feet'])) $case['RoofDataInput']['A2_feet'] = $caseInput['RoofDataInput']['A2_feet'];
+                                if(isset($caseInput['RoofDataInput']['A2_inches'])) $case['RoofDataInput']['A2_inches'] = $caseInput['RoofDataInput']['A2_inches'];
+                                if(isset($caseInput['RoofDataInput']['A3_feet'])) $case['RoofDataInput']['A3_feet'] = $caseInput['RoofDataInput']['A3_feet'];
+                                if(isset($caseInput['RoofDataInput']['A3_inches'])) $case['RoofDataInput']['A3_inches'] = $caseInput['RoofDataInput']['A3_inches'];
+                                if(isset($caseInput['RoofDataInput']['A3'])) $case['RoofDataInput']['A3'] = $caseInput['RoofDataInput']['A3'];
+                                if(isset($caseInput['RoofDataInput']['A4_feet'])) $case['RoofDataInput']['A4_feet'] = $caseInput['RoofDataInput']['A4_feet'];
+                                if(isset($caseInput['RoofDataInput']['A4_inches'])) $case['RoofDataInput']['A4_inches'] = $caseInput['RoofDataInput']['A4_inches'];
+                                if(isset($caseInput['RoofDataInput']['A4'])) $case['RoofDataInput']['A4'] = $caseInput['RoofDataInput']['A4'];
+                                if(isset($caseInput['RoofDataInput']['A5'])) $case['RoofDataInput']['A5'] = $caseInput['RoofDataInput']['A5'];
+                            }
+                            array_push($data['LoadingCase'], $case);
+                        }
+                    }
+
+                    if($request['Wind']) $data['Wind'] = $request['Wind'];
+                    if($request['WindCheckbox']) $data['WindCheckbox'] = $request['WindCheckbox'];
+                    if($request['Snow']) $data['Snow'] = $request['Snow'];
+                    if($request['SnowCheckbox']) $data['SnowCheckbox'] = $request['SnowCheckbox'];
+                    if($request['IBC']) $data['IBC'] = $request['IBC'];
+                    if($request['ASCE']) $data['ASCE'] = $request['ASCE'];
+                    if($request['NEC']) $data['NEC'] = $request['NEC'];
+                    if($request['WindExposure']) $data['WindExposure'] = $request['WindExposure'];
+                    if($request['Units']) $data['Units'] = $request['Units'];
+
+                    $current_time = time();
+                    $company = Company::where('id', $user->companyid)->first();
+                    $companyNumber = $company ? $company['company_number'] : 0;
+                    $folderPrefix = "/" . $companyNumber. '. ' . $company['company_name'] . '/';
+                    $filename = ($company ? sprintf("%06d", $company['company_number']) : "000000") . "-" . sprintf("%04d", $user->id) . "-" . $current_time . ".json";
+
+                    $project = JobRequest::create([
+                        'companyName' => $company['company_name'],
+                        'companyId' => $user->companyid,
+                        'userId' => $user->usernumber,
+                        'creator' => $user->usernumber,
+                        'clientProjectName' => $data['ProjectInfo']['Name'],
+                        'clientProjectNumber' => $data['ProjectInfo']['Number'],
+                        'requestFile' => $filename,
+                        'planStatus' => 0,
+                        'projectState' => 1,
+                        'analysisType' => 0,
+                        'createdTime' => gmdate("Y-m-d\TH:i:s", $current_time),
+                        'submittedTime' => gmdate("Y-m-d\TH:i:s", $current_time),
+                        'timesDownloaded' => 0,
+                        'timesEmailed' => 0,
+                        'timesComputed' => 0,
+                        'state' => $data['ProjectInfo']['State']
+                    ]);
+                    
+                    $company->last_accessed = gmdate("Y-m-d", time());
+                    $company->save();
+                    Storage::disk('input')->put($folderPrefix . $filename, json_encode($data));
+
+                    //Backup json file to dropbox
+                    $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
+                    $dropbox = new Dropbox($app);
+                    $dropboxFile = new DropboxFile(storage_path('/input/') . $companyNumber. '. ' . $company['company_name'] . '/' . $filename);
+                    $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_JSON_INPUT') . $companyNumber. '. ' . $company['company_name'] . '/' . $filename, ['autorename' => TRUE]);
+
+                    return response()->json(['success' => true, 'jobId' => $project->id, "projectNumber" => $data['ProjectInfo']['Number']]);
+                } else
+                    return response()->json(['success' => false, 'message' => 'Sample not found.']);
+            } else 
+                return response()->json(['success' => false, 'message' => 'Auth failed.']);
+        } else
+            return response()->json(['success' => false, 'message' => 'Auth required.']);
+    }
 }
