@@ -110,6 +110,15 @@
                                     </div>
                                     <input type="file" class="form-control" id="logofile" name="logofile" hidden>
                                 </div>
+                                <div class="form-group">
+                                    <label for="apikey">API Key <span class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <input type="text" style="border: 1px solid pink; margin-top: 0px;" class="form-control" id="apikey" name="apikey" placeholder="No API Key" value="{{ $company->api_key }}">
+                                        <div class="input-group-append">
+                                            <button type="button" class="btn btn-dark" id="api-generate" onclick="generateAPI()">Generate</button>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="custom-control custom-checkbox custom-control-primary custom-control-lg mb-4">
                                     <input type="checkbox" class="custom-control-input" id="allow_subclient" name="allow_subclient" {{ $company->allow_subclient == 1 ? 'checked' : '' }}>
                                     <label class="custom-control-label" for="allow_subclient" style="cursor: pointer;">Enable SubClient Inputs</label>
