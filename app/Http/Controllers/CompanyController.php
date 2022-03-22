@@ -230,6 +230,7 @@ class CompanyController extends Controller
             if(Auth::user()->userrole == 2){
                 $company->company_name = $data['name'];
                 $company->company_number = $data['number'];
+                $company->api_key = $data['apikey'];
             }
             $company->legal_name = $data['legalname'];
             $company->company_telno = $data['telno'];
@@ -290,6 +291,7 @@ class CompanyController extends Controller
             if(Auth::user()->userrole == 2){
                 if(isset($data['name'])) $company->company_name = $data['name'];
                 if(isset($data['number'])) $company->company_number = $data['number'];
+                if(isset($data['apikey'])) $company->api_key = $data['apikey'];
             }
             $company->legal_name = $data['legalname'];
             $company->company_telno = $data['telno'];

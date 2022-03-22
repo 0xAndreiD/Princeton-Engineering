@@ -750,4 +750,15 @@ function onBlockChange(){
         $("#block_days_after")[0].disabled = false;
 }
 
+function generateAPI(){
+    var randomString     = '';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < 10; i++ ) {
+        randomString += characters.charAt(Math.floor(Math.random() * charactersLength));
+   }
+
+   $("#apikey").val(randomString);
+}
+
 </script>
