@@ -1079,7 +1079,7 @@ class APIController extends Controller
                             $data['CompanyInfo']['UserEmail'] = $user ? $user['email'] : $user->email;
         
                             if(isset($request['ProjectInfo'])) {
-                                $keys = array('City', 'Name', 'Number', 'State', 'Street', 'Type', 'Zip');
+                                $keys = array('City', 'Name', 'State', 'Street', 'Type', 'Zip');
                                 foreach($keys as $key) {
                                     if(!isset($request['ProjectInfo'][$key])) {
                                         $this->externalAPINotify('ProjectInfo->' . $key . ' is missing.', $company, null, 0);
