@@ -1320,7 +1320,7 @@ class APIController extends Controller
                             $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_JSON_INPUT') . $companyNumber. '. ' . $company['company_name'] . '/' . $filename, ['autorename' => TRUE]);
         
                             $this->externalAPINotify("You can now work on {$data['ProjectInfo']['Number']}. {$data['ProjectInfo']['Name']} {$data['ProjectInfo']['State']}.", $company, $user, 1);
-                            return response()->json(['success' => true, 'jobId' => $project->id, "projectNumber" => $data['ProjectInfo']['Number']]);
+                            return response()->json(['success' => true, 'ProjectName' => $data['ProjectInfo']['Name'], "ProjectNumber" => $data['ProjectInfo']['Number']]);
                         } else {
                             $this->externalAPINotify('Sample not found.', $company, null, 0);
                             return response()->json(['success' => false, 'message' => 'Sample not found.']);
