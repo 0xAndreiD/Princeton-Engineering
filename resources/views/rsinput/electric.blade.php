@@ -1907,15 +1907,39 @@
         </tr>
         <tr>
             <td><div style="overflow:hidden"></div></td>
-            <td class="w400-bdr">
-                <input type="text" class="text-center" tabindex="11" value="" id="PropLoadCenter">
+            <td class="w400-yellow-bdr">
+                <select tabindex="11" id="PropLoadCenter">
+                    <option value="" selected=""></option>
+                    <option value="30">30</option>
+                    <option value="60">60</option>
+                    <option value="100">100</option>
+                    <option value="125">125</option>
+                    <option value="150">150</option>
+                    <option value="200">200</option>
+                    <option value="250">250</option>
+                    <option value="300">300</option>
+                    <option value="350">350</option>
+                    <option value="400">400</option>
+                </select>
             </td>
             <td class="iw400-left-bdr" colspan="4">Proposed Replacement Load Center Rating</td>
         </tr>
         <tr>
             <td><div style="overflow:hidden"></div></td>
-            <td class="w400-bdr">
-                <input type="text" class="text-center" tabindex="11" value="" id="PropLCBreaker">
+            <td class="w400-yellow-bdr">
+                <select tabindex="11" id="PropLCBreaker">
+                    <option value="" selected=""></option>
+                    <option value="30">30</option>
+                    <option value="60">60</option>
+                    <option value="100">100</option>
+                    <option value="125">125</option>
+                    <option value="150">150</option>
+                    <option value="200">200</option>
+                    <option value="250">250</option>
+                    <option value="300">300</option>
+                    <option value="350">350</option>
+                    <option value="400">400</option>
+                </select>
             </td>
             <td class="iw400-left-bdr" colspan="4">Proposed Replacement LC Main Breaker Rating</td>
         </tr>
