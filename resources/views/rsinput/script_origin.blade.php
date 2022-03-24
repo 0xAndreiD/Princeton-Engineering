@@ -1798,7 +1798,7 @@ var updateNumberOfConditions = function(conditions) {
     }
 }
 
-var ignorable = ['a-7-', 'a-8-', 'af-8-', 'ai-8-', 'a-9-', 'af-9-', 'ai-9-', 'a-10-', 'af-10-', 'ai-10-', 'ac-7-', 'ac-8-', 'ac-9-', 'ac-10-', 'a-13-', 'af-13-', 'ai-13-', 'a-14-', 'af-14-', 'ai-14-', 'c-1-', 'c-2-', 'cf-2-', 'ci-2-', 'c-3-', 'cf-3-', 'ci-3-', 'c-4-', 'cf-4-', 'ci-4-', 'calc-algorithm-', 'collarHeights', 'd-7-', 'd-8-', 'd-9-', 'date_report', 'txt-sub-project-number', 'inverter2-', 'inverter3-'];
+var ignorable = ['a-7-', 'a-8-', 'af-8-', 'ai-8-', 'a-9-', 'af-9-', 'ai-9-', 'a-10-', 'af-10-', 'ai-10-', 'ac-7-', 'ac-8-', 'ac-9-', 'ac-10-', 'a-13-', 'af-13-', 'ai-13-', 'a-14-', 'af-14-', 'ai-14-', 'c-1-', 'c-2-', 'cf-2-', 'ci-2-', 'c-3-', 'cf-3-', 'ci-3-', 'c-4-', 'cf-4-', 'ci-4-', 'calc-algorithm-', 'collarHeights', 'd-7-', 'd-8-', 'd-9-', 'date_report', 'txt-sub-project-number', 'inverter2-', 'inverter3-', 'PropLoadCenter', 'PropLCBreaker'];
 
 var isIgnorable = function(id) {
     let canIgnore = false;
@@ -2025,6 +2025,8 @@ var getData = function(caseCount = 10) {
         alldata['type-interconnection'] = $("#type-interconnection").val();
         alldata['bus-bar-rating'] = $("#bus-bar-rating").val();
         alldata['main-breaker-rating'] = $("#main-breaker-rating").val();
+        alldata['PropLoadCenter'] = $("#PropLoadCenter").val();
+        alldata['PropLCBreaker'] = $("#PropLCBreaker").val();
         alldata['downgraded-breaker-rating'] = $("#downgraded-breaker-rating").val();
         alldata['pv-breaker-selected'] = $("#pv-breaker-selected").val();
         alldata['StrTable'] = [];
@@ -3443,6 +3445,8 @@ $(document).ready(function() {
             $("#type-interconnection").val(preloaded_data['Electrical']['Main']['InterconnectionType']);
             $("#bus-bar-rating").val(preloaded_data['Electrical']['Main']['BusBarRating']);
             $("#main-breaker-rating").val(preloaded_data['Electrical']['Main']['MainBreakerRating']);
+            $("#PropLoadCenter").val(preloaded_data['Electrical']['Main']['PropLoadCenter']);
+            $("#PropLCBreaker").val(preloaded_data['Electrical']['Main']['PropLCBreaker']);
             $("#downgraded-breaker-rating").val(preloaded_data['Electrical']['Main']['DowngradedBreakerRating']);
             $("#PV-breaker-recommended").html($('#RecommendOCPD').html());
             $("#pv-breaker-selected").val(preloaded_data['Electrical']['Main']['PVBreakerSelected']);
