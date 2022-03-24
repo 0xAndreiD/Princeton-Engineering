@@ -22,7 +22,7 @@
         </tr>
         <tr class="h13">
             <td><div style="overflow:hidden"></div></td>
-            <td class="w400-bdr" colspan="5"><b>DC Stringing Table</b></td>
+            <td class="w400-bdr" colspan="5"><b>AC / DC Stringing Table</b></td>
         </tr>
         <tr class="h13">
             <td><div style="overflow:hidden"></div></td>
@@ -1872,7 +1872,7 @@
                     <option value="350">350</option>
                     <option value="400">400</option>
                 </select>
-            <td class="iw400-left-bdr" colspan="4">Bus Bar Rating</td>
+            <td class="iw400-left-bdr" colspan="4">Existing Bus Bar Rating</td>
         </tr>
         <tr>
             <td><div style="overflow:hidden"></div></td>
@@ -1903,7 +1903,21 @@
                     <option value="350">350</option>
                     <option value="400">400</option>
                 </select>
-            <td class="iw400-left-bdr" colspan="4">Main Breaker Rating</td>
+            <td class="iw400-left-bdr" colspan="4">Existing Main Breaker Rating</td>
+        </tr>
+        <tr>
+            <td><div style="overflow:hidden"></div></td>
+            <td class="w400-bdr">
+                <input type="text" class="text-center" tabindex="11" value="" id="PropLoadCenter">
+            </td>
+            <td class="iw400-left-bdr" colspan="4">Proposed Replacement Load Center Rating</td>
+        </tr>
+        <tr>
+            <td><div style="overflow:hidden"></div></td>
+            <td class="w400-bdr">
+                <input type="text" class="text-center" tabindex="11" value="" id="PropLCBreaker">
+            </td>
+            <td class="iw400-left-bdr" colspan="4">Proposed Replacement LC Main Breaker Rating</td>
         </tr>
         <tr>
             <td><div style="overflow:hidden"></div></td>
