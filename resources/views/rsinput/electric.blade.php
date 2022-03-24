@@ -1023,7 +1023,7 @@
         </tr>
         <tr class="h13">
             <td><div style="overflow:hidden"></div></td>
-            <td class="w400-bdr" colspan="6"><b>AC Wire Table</b></td>
+            <td class="w400-bdr" colspan="7"><b>AC Wire Table</b></td>
         </tr>
         <tr class="h13">
             <td><div style="overflow:hidden"></div></td>
