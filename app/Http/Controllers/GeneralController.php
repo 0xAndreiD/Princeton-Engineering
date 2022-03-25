@@ -1445,6 +1445,11 @@ class GeneralController extends Controller
      */
     public function getCECPVModules(Request $request){
         $cec_modules = PVModuleCEC::all();
+        $favorites = StandardFavorite::where('client_no', Auth::user()->companyid)->where('type', 0)->where('CEC', 1)->pluck('product_id')->toArray();
+        foreach($cec_modules as $module){
+            if(in_array($module['id'], $favorites))
+                $module['favorite'] = true;
+        }
         $cec_modules = $cec_modules->toArray();
         return json_encode($cec_modules);
     }
@@ -1456,7 +1461,7 @@ class GeneralController extends Controller
      */
     public function getPVModules(Request $request){
         $pv_modules = PVModule::all();
-        $favorites = StandardFavorite::where('client_no', Auth::user()->companyid)->where('type', 0)->pluck('product_id')->toArray();
+        $favorites = StandardFavorite::where('client_no', Auth::user()->companyid)->where('type', 0)->where('CEC', 0)->pluck('product_id')->toArray();
         foreach($pv_modules as $module){
             if(in_array($module['id'], $favorites))
                 $module['favorite'] = true;
