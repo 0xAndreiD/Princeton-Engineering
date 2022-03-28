@@ -52,12 +52,9 @@
             <td class="iw400-right-bdr">IBC Years</td>
             <td class="w400-green-bdr">
                 <select id="ibc-year">
-                    <option data-value="Default" selected="">Default</option>
-                    <option data-value="2009">2009</option>
-                    <option data-value="2012">2012</option>
-                    <option data-value="2015">2015</option>
-                    <option data-value="2015">2018</option>
-                    <option data-value="2015">2020</option>
+                    @foreach($ibcOverrides as $ibc)
+                        <option data-value="{{ $ibc->value }}" >{{ $ibc->value }}</option>
+                    @endforeach
                 </select>
             </td>
         </tr>
@@ -66,10 +63,9 @@
             <td class="iw400-right-bdr">ASCE 7- Years</td>
             <td class="w400-green-bdr">
                 <select id="asce-year">
-                    <option data-value="Default" selected="">Default</option>
-                    <option data-value="ASCE 7-05">ASCE 7-05</option>
-                    <option data-value="ASCE 7-10">ASCE 7-10</option>
-                    <option data-value="ASCE 7-16">ASCE 7-16</option>
+                    @foreach($asceOverrides as $asce)
+                        <option data-value="{{ $asce->value }}" >{{ $asce->value }}</option>
+                    @endforeach
                 </select>
             </td>
         </tr>
@@ -78,12 +74,9 @@
             <td class="iw400-right-bdr">NEC Years</td>
             <td class="w400-green-bdr">
                 <select id="nec-year">
-                    <option data-value="Default" selected="">Default</option>
-                    <option data-value="2008" >2008</option>
-                    <option data-value="2011">2011</option>
-                    <option data-value="2014">2014</option>
-                    <option data-value="2017">2017</option>
-                    <option data-value="2020">2020</option>
+                    @foreach($necOverrides as $nec)
+                        <option data-value="{{ $nec->value }}" >{{ $nec->value }}</option>
+                    @endforeach
                 </select>
             </td>
         </tr>
@@ -99,10 +92,9 @@
             <td class="iw400-right-bdr">Wind Exposure Category</td>
             <td class="w400-green-bdr">
                 <select id="wind-exposure">
-                    <option data-value="A">A</option>
-                    <option data-value="B" selected="">B</option>
-                    <option data-value="C">C</option>
-                    <option data-value="D">D</option>
+                    @foreach($exposureOverrides as $exposure)
+                        <option data-value="{{ $exposure->value }}" >{{ $exposure->value }}</option>
+                    @endforeach
                 </select>
             </td>
         </tr>
