@@ -38,6 +38,7 @@ use App\BillingHistory;
 use App\SystemMsgs;
 use App\BlgMaterials;
 use App\SubClients;
+use App\Overrides;
 use Kunnu\Dropbox\DropboxApp;
 use Kunnu\Dropbox\Dropbox;
 use Kunnu\Dropbox\DropboxFile;
@@ -388,6 +389,12 @@ class GeneralController extends Controller
         $ceilingMaterials = BlgMaterials::where('location', 'Interior')->get(array('id', 'material'));
         $deckMaterials = BlgMaterials::where('location', 'Decking')->get(array('id', 'material'));
         $surfaceMaterials = BlgMaterials::where('location', 'Roof Surface')->get(array('id', 'material'));
+
+        $ibc = Overrides::where('type', 'IBC')->get();
+        $asce = Overrides::where('type', 'ASCE')->get();
+        $nec = Overrides::where('type', 'NEC')->get();
+        $exposure = Overrides::where('type', 'EXPOSURE')->get();
+
         if( $company )
         {
             $project = JobRequest::where('id', '=', $request['projectId'])->first();
@@ -412,7 +419,11 @@ class GeneralController extends Controller
                     ->with('deckMaterials', $deckMaterials)
                     ->with('surfaceMaterials', $surfaceMaterials)
                     ->with('date_report', $project ? $project->date_report : NULL)
-                    ->with('AutoCAD', $company['AutoCAD']);
+                    ->with('AutoCAD', $company['AutoCAD'])
+                    ->with('ibcOverrides', $ibc)
+                    ->with('asceOverrides', $asce)
+                    ->with('necOverrides', $nec)
+                    ->with('exposureOverrides', $exposure);
         }
         else
         {
@@ -434,7 +445,11 @@ class GeneralController extends Controller
                     ->with('deckMaterials', $deckMaterials)
                     ->with('surfaceMaterials', $surfaceMaterials)
                     ->with('date_report', $project ? $project->date_report : NULL)
-                    ->with('AutoCAD', 0);
+                    ->with('AutoCAD', 0)
+                    ->with('ibcOverrides', $ibc)
+                    ->with('asceOverrides', $asce)
+                    ->with('necOverrides', $nec)
+                    ->with('exposureOverrides', $exposure);
         }
     }
 
