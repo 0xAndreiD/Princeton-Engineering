@@ -1362,31 +1362,31 @@ class APIController extends Controller
                                 $data['Electrical'] = array('StrTable' => array(), 'ACTable' => array(), 'Main' => array());
 
                             if(isset($request['StrTable'])) {
-                                $i = 1;
-                                foreach($request['StrTable'] as $StrRow) {
-                                    $keys = array('InvNo', 'StringNumber', 'ModulesPerString', 'StringsPerMPPT', 'StringLength');
-                                    foreach($keys as $key) {
-                                        if(!isset($StrRow[$key])) {
-                                            return response()->json(['success' => false, 'message' => 'StrTable' . $i . '->' . $key . ' is missing.']);
+                                for($i = 1; $i <= 10; $i ++) {
+                                    if(isset($request['StrTable']["R{$i}"])){
+                                        $keys = array('InvNo', 'StringNumber', 'ModulesPerString', 'StringsPerMPPT', 'StringLength');
+                                        foreach($keys as $key) {
+                                            if(!isset($request['StrTable']["R{$i}"][$key])) {
+                                                return response()->json(['success' => false, 'message' => 'StrTable->R' . $i . '->' . $key . ' is missing.']);
+                                            }
                                         }
                                     }
-                                    $i ++;
                                 }
                                 $data['Electrical']['StrTable'] = $request['StrTable'];
                             }
 
                             if(isset($request['ACTable'])) {
-                                $i = 1;
-                                foreach($request['ACTable'] as $StrRow) {
-                                    $keys = array('InvNo', 'InvType', 'WireLength', 'MinWireSize', 'Material', 'InsulRating', 'Circuits');
-                                    foreach($keys as $key) {
-                                        if(!isset($StrRow[$key])) {
-                                            return response()->json(['success' => false, 'message' => 'ACTable' . $i . '->' . $key . ' is missing.']);
+                                for($i = 1; $i <= 10; $i ++) {
+                                    if(isset($request['ACTable']["AC{$i}"])) {
+                                        $keys = array('InvNo', 'InvType', 'WireLength', 'MinWireSize', 'Material', 'InsulRating', 'Circuits');
+                                        foreach($keys as $key) {
+                                            if(!isset($request['ACTable']["AC{$i}"][$key])) {
+                                                return response()->json(['success' => false, 'message' => 'ACTable->AC' . $i . '->' . $key . ' is missing.']);
+                                            }
                                         }
                                     }
-                                    $i ++;
                                 }
-                                $data['Electrical']['StrTable'] = $request['StrTable'];
+                                $data['Electrical']['ACTable'] = $request['ACTable'];
                             }
 
                             if(isset($request['Main'])) {
