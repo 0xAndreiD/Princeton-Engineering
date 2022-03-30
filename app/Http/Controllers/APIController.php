@@ -1018,10 +1018,10 @@ class APIController extends Controller
         }
     }
 
-    private function externalAPINotify($message, $company, $user, $success) {
+    private function externalAPINotify($message, $company, $user, $success, $disableCompany = false) {
         $title = ($success == 1 ? 'iRoof API Request Success' : 'iRoof API Request Failed');
         $data = array('title' => $title, 'msg' => $message);
-        if($company) {
+        if($company && $disableCompany) {
             $clients = User::where('userrole', 1)->where('companyid', $company->id)->get();
             foreach($clients as $client) {
                 $info = array('email' => $client->email, 'title' => $title);
@@ -1038,6 +1038,7 @@ class APIController extends Controller
             });
         }
 
+        $data['msg'] = $data['msg'] . " ({$company->company_name})";
         $supers = User::where('userrole', 2)->get();
         foreach($supers as $super) {
             $info = array('email' => $super->email, 'title' => $title);
@@ -1271,6 +1272,7 @@ class APIController extends Controller
                                             $case['RoofDataInput']['A5'] = $caseInput['RoofDataInput']['A5'];
                                     }
                                     array_push($data['LoadingCase'], $case);
+                                    $i ++;
                                 }
                             }
         
@@ -1333,6 +1335,97 @@ class APIController extends Controller
                     $this->externalAPINotify('Missing User Number.', $company, null, 0);
                     return response()->json(['success' => false, 'message' => 'Missing User Number.']);
                 }
+            } else
+                return response()->json(['success' => false, 'message' => 'Auth failed.']);
+        } else
+            return response()->json(['success' => false, 'message' => 'Auth required.']);
+    }
+
+    /**
+     * Update Electric JSON
+     *
+     * @return JSON
+     */
+    public function updateElectric(Request $request) {
+        if(isset($request['CompanyId']) && isset($request['APIKey'])){
+            $company = Company::where('id', '=', $request['CompanyId'])->where('api_key', '=', $request['APIKey'])->first();
+            if($company) {
+                if(isset($request['ProjectNumber'])) {
+                    $project = JobRequest::where('companyId', $company['id'])->where('clientProjectNumber', $request['ProjectNumber'])->first();
+                    if($project) {
+                        $companyNumber = $company ? $company['company_number'] : 0;
+                        $folderPrefix = "/" . $companyNumber. '. ' . $project['companyName'] . '/';
+                        if( Storage::disk('input')->exists($folderPrefix . $project['requestFile']) ) {
+                            $data = json_decode(Storage::disk('input')->get($folderPrefix . $project['requestFile']), true);
+
+                            if(!isset($data['Electrical']))
+                                $data['Electrical'] = array('StrTable' => array(), 'ACTable' => array(), 'Main' => array());
+
+                            if(isset($request['StrTable'])) {
+                                $i = 1;
+                                foreach($request['StrTable'] as $StrRow) {
+                                    $keys = array('InvNo', 'StringNumber', 'ModulesPerString', 'StringsPerMPPT', 'StringLength');
+                                    foreach($keys as $key) {
+                                        if(!isset($StrRow[$key])) {
+                                            return response()->json(['success' => false, 'message' => 'StrTable' . $i . '->' . $key . ' is missing.']);
+                                        }
+                                    }
+                                    $i ++;
+                                }
+                                $data['Electrical']['StrTable'] = $request['StrTable'];
+                            }
+
+                            if(isset($request['ACTable'])) {
+                                $i = 1;
+                                foreach($request['ACTable'] as $StrRow) {
+                                    $keys = array('InvNo', 'InvType', 'WireLength', 'MinWireSize', 'Material', 'InsulRating', 'Circuits');
+                                    foreach($keys as $key) {
+                                        if(!isset($StrRow[$key])) {
+                                            return response()->json(['success' => false, 'message' => 'ACTable' . $i . '->' . $key . ' is missing.']);
+                                        }
+                                    }
+                                    $i ++;
+                                }
+                                $data['Electrical']['StrTable'] = $request['StrTable'];
+                            }
+
+                            if(isset($request['Main'])) {
+                                if(isset($request['Main']['InterconnectionType'])) 
+                                    $data['Electrical']['Main']['InterconnectionType'] = $request['Main']['InterconnectionType'];
+                                if(isset($request['Main']['BusBarRating'])) 
+                                    $data['Electrical']['Main']['BusBarRating'] = $request['Main']['BusBarRating'];
+                                if(isset($request['Main']['MainBreakerRating'])) 
+                                    $data['Electrical']['Main']['MainBreakerRating'] = $request['Main']['MainBreakerRating'];
+                                if(isset($request['Main']['PropLoadCenter'])) 
+                                    $data['Electrical']['Main']['PropLoadCenter'] = $request['Main']['PropLoadCenter'];
+                                if(isset($request['Main']['PropLCBreaker'])) 
+                                    $data['Electrical']['Main']['PropLCBreaker'] = $request['Main']['PropLCBreaker'];
+                                if(isset($request['Main']['DowngradedBreakerRating'])) 
+                                    $data['Electrical']['Main']['DowngradedBreakerRating'] = $request['Main']['DowngradedBreakerRating'];
+                                if(isset($request['Main']['PVBreakerRecommended'])) 
+                                    $data['Electrical']['Main']['PVBreakerRecommended'] = $request['Main']['PVBreakerRecommended'];
+                                if(isset($request['Main']['PVBreakerSelected'])) 
+                                    $data['Electrical']['Main']['PVBreakerSelected'] = $request['Main']['PVBreakerSelected'];
+                            }
+
+                            Storage::disk('input')->delete($folderPrefix . $project['requestFile']);
+                            Storage::disk('input')->put($folderPrefix . $project['requestFile'], json_encode($data));
+
+                            //Backup json file to dropbox
+                            $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
+                            $dropbox = new Dropbox($app);
+                            $dropboxFile = new DropboxFile(storage_path('/input/') . $companyNumber. '. ' . $project['companyName'] . '/' . $project['requestFile']);
+                            $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_JSON_INPUT') . $companyNumber. '. ' . $project['companyName'] . '/' . $project['requestFile'], ['mode' => 'overwrite']);
+
+                            $this->externalAPINotify("Electric Data Updated on {$data['ProjectInfo']['Number']}. {$data['ProjectInfo']['Name']} {$data['ProjectInfo']['State']}.", $company, null, 1, true);
+                            return response()->json(['success' => true]);
+
+                        } else
+                            return response()->json(['success' => false, 'message' => 'Cannot find the job file.']);
+                    } else
+                        return response()->json(['success' => false, 'message' => 'Cannot find the job.']);
+                } else
+                    return response()->json(['success' => false, 'message' => 'Missing Project Number.']);
             } else
                 return response()->json(['success' => false, 'message' => 'Auth failed.']);
         } else
