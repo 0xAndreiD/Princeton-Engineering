@@ -123,6 +123,7 @@
         <td class="w400-green-bdr">
             <select id="option-state" tabindex="10">
             </select>
+            <input type="hidden" id="asce7" value="710">
         </td>
         <td><div style="overflow:hidden"></div></td>
         <td><div style="overflow:hidden"></div></td>

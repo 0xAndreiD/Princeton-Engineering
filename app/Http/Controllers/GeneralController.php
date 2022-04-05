@@ -2224,7 +2224,7 @@ class GeneralController extends Controller
                     foreach($roof_types as $type)
                         $data[] = $type->roof_type;
                 }
-                return response()->json(['success' => true, 'data' => $data]);
+                return response()->json(['success' => true, 'data' => $data, 'asce7' => $year_value->asce7_in_years]);
             } else
                 return response()->json(['success' => false, 'message' => 'Cannot find state']);
         } else
