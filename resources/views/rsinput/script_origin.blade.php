@@ -1330,6 +1330,7 @@ var loadASCEOptions = function(state){
         data:{state: state, crc32: $("#railsupport-crc32").val() },
         success: function(res){
             if(res.success && res.data && state == $('#option-state').val()){
+                $("#asce7").val(res.asce7);
                 for(let i = 0; i < res.data.length; i ++){
                     for(let j = 0; j < 10; j ++){
                         if(preloaded_data && preloaded_data['LoadingCase'] && preloaded_data['LoadingCase'][j] && preloaded_data['LoadingCase'][j]['RoofDataInput']
@@ -1837,6 +1838,7 @@ var isEmptyInputBox = function() {
     }
     
     var empty_textboxes = $('.rfdContainer input:text:enabled').filter(function() { return this.value === ""; });
+    console.log(empty_textboxes);
     empty_textboxes.each(function() { 
         // skip note 
         if (typeof $(this).attr('id') == "string" && ($(this).attr('id').includes("i-1-") || isIgnorable($(this).attr('id')) )) {
@@ -1854,6 +1856,16 @@ var isEmptyInputBox = function() {
             return;
         if(typeof $(this).attr('id') == "string" && ($(this).attr('id').includes("i-") && $('#' + $(this).attr('id').replace('i-', 'f-')).val() != ""))
             return;
+
+        // skip e-3, e-4 for asce7_in_years < 716, ASCE override < 716, IBC override < 2018
+        if (typeof $(this).attr('id') == "string" && ($(this).attr('id').includes("e-3-") || $(this).attr('id').includes("e-4-"))) {
+            if(parseInt($("#asce7").val()) < 716)
+                return;
+            if($("#asce-year").val().match(/\d/g) && parseInt($("#asce-year").val().match(/\d/g).join("")) < 716)
+                return;
+            if($("#ibc-year").val() == "Default" || parseInt($("#ibc-year").val()) < 2018)
+                return;
+        }
 
         $(this).css('background-color', '#FFC7CE');
         console.log($(this).attr('id'));
