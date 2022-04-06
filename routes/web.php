@@ -132,6 +132,7 @@ Route::post('/sendEmail', 'APIController@sendEmail')->name('sendEmail');
 Route::get('/removeSpecialChars', 'APIController@removeSpecialChars')->name('removeSpecialChars');
 Route::post('/createJob', 'APIController@createJob')->name('createJob');
 Route::post('/updateElectric', 'APIController@updateElectric')->name('updateElectric');
+Route::post('/uploadJobFile', 'APIController@uploadJobFile')->name('uploadJobFile');
 
 // PV Modules
 Route::post('/getCECPVModules', 'GeneralController@getCECPVModules')->name('getCECPVModules');
