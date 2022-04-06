@@ -1431,4 +1431,49 @@ class APIController extends Controller
         } else
             return response()->json(['success' => false, 'message' => 'Auth required.']);
     }
+
+    /**
+     * Update Electric JSON
+     *
+     * @return JSON
+     */
+    public function uploadJobFile(Request $request) {
+        if(isset($request['CompanyId']) && isset($request['APIKey'])){
+            $company = Company::where('id', '=', $request['CompanyId'])->where('api_key', '=', $request['APIKey'])->first();
+            if($company) {
+                if(isset($request['ProjectNumber'])) {
+                    $project = JobRequest::where('companyId', $company['id'])->where('clientProjectNumber', $request['ProjectNumber'])->first();
+                    if($project) {
+                        if(!empty($request->file('upl'))) {
+                            $companyNumber = $company ? $company['company_number'] : 0;
+                            $folderPrefix = "/" . $companyNumber. '. ' . $project['companyName'] . '/';
+
+                            $file = $request->file('upl');
+
+                            $filename = str_replace(array(":",";", "#", "&", "@", "/", "'"), array(""), $file->getClientOriginalName());
+
+                            $filepath = $folderPrefix . $project['clientProjectNumber'] . '. ' . $project['clientProjectName'] . ' ' . $project['state'];
+                            $file->move(storage_path('upload') . $filepath, $filename);
+                            $localpath = storage_path('upload') . $filepath . '/' . $filename;
+
+                            $project->planStatus = 1;
+                            $project->save();
+
+                            $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
+                            $dropbox = new Dropbox($app);
+                            $dropboxFile = new DropboxFile($localpath);
+                            $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_IN') . $filepath . '/' . $file->getClientOriginalName(), ['autorename' => TRUE]);
+
+                            return response()->json(['success' => true, 'message' => 'Uploaded Successfully', 'filename' => $filename]);
+                        } else 
+                            return response()->json(['success' => false, 'message' => 'Empty File.']);
+                    } else
+                        return response()->json(['success' => false, 'message' => 'Cannot find the job.']);
+                } else
+                    return response()->json(['success' => false, 'message' => 'Missing Project Number.']);
+            } else
+                return response()->json(['success' => false, 'message' => 'Auth failed.']);
+        } else
+            return response()->json(['success' => false, 'message' => 'Auth required.']);
+    }
 }
