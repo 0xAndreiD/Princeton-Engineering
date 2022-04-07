@@ -1456,7 +1456,8 @@ class APIController extends Controller
                             $file->move(storage_path('upload') . $filepath, $filename);
                             $localpath = storage_path('upload') . $filepath . '/' . $filename;
 
-                            $project->planStatus = 1;
+                            if($project->planStatus == 0)
+                                $project->planStatus = 1;
                             $project->save();
 
                             $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
