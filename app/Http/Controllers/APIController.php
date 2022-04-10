@@ -1515,7 +1515,7 @@ class APIController extends Controller
                     $project = JobRequest::where('companyId', $company['id'])->where('clientProjectNumber', $request['ProjectNumber'])->first();
                     if($project) {
                         $zip = new ZipArchive();
-                        $filename = $job['clientProjectNumber'] . '. ' . $job['clientProjectName'] . ' ' . $job['state'] . ".zip";
+                        $filename = $project['clientProjectNumber'] . '. ' . $project['clientProjectName'] . ' ' . $project['state'] . ".zip";
 
                         if(file_exists(storage_path('download') . '/' . $filename))
                             unlink(storage_path('download') . '/' . $filename);
