@@ -39,6 +39,7 @@ use Mail;
 use DB;
 use Dompdf\Dompdf;
 use Dompdf\Options;
+use ZipArchive;
 
 class APIController extends Controller
 {
@@ -1499,5 +1500,63 @@ class APIController extends Controller
                 return response()->json(['success' => false, 'message' => 'Auth failed.']);
         } else
             return response()->json(['success' => false, 'message' => 'Auth required.']);
+    }
+
+    /**
+     * Return Job Files as a ZIP
+     *
+     * @return JSON OR FILE
+     */
+    public function downloadJobFiles(Request $request) {
+        if(isset($request['CompanyId']) && isset($request['APIKey'])){
+            $company = Company::where('id', '=', $request['CompanyId'])->where('api_key', '=', $request['APIKey'])->first();
+            if($company) {
+                if(isset($request['ProjectNumber'])) {
+                    $project = JobRequest::where('companyId', $company['id'])->where('clientProjectNumber', $request['ProjectNumber'])->first();
+                    if($project) {
+                        $zip = new ZipArchive();
+                        $filename = $job['clientProjectNumber'] . '. ' . $job['clientProjectName'] . ' ' . $job['state'] . ".zip";
+
+                        if(file_exists(storage_path('download') . '/' . $filename))
+                            unlink(storage_path('download') . '/' . $filename);
+                        
+                        $zip->open(storage_path('download') . '/' . $filename, ZipArchive::CREATE);
+
+                        $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
+                        $dropbox = new Dropbox($app);
+                        try{
+                            $this->iterateDropboxToZip($dropbox, $zip, env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_OUT') . $filepath . '/', '');
+                        } catch (DropboxClientException $e) { 
+                            return response()->json(['success' => false, 'message' => 'Error while zipping.']);
+                        }
+
+                        return response()->download(storage_path('download') . '/' . $filename, null, ['Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0']);
+                    } else
+                        return response()->json(['success' => false, 'message' => 'Cannot find the job.']);
+                } else
+                    return response()->json(['success' => false, 'message' => 'Missing Project Number.']);
+            } else
+                return response()->json(['success' => false, 'message' => 'Auth failed.']);
+        } else
+            return response()->json(['success' => false, 'message' => 'Auth required.']);
+    }
+
+    /**
+     * Iterate all the subdirectories from the dropbox.
+     *
+     * @return Object
+     */
+    private function iterateDropboxToZip(Dropbox $dropbox, ZipArchive $zip, String $dropboxPath, String $folderPath) {
+        $listFolderContents = $dropbox->listFolder($dropboxPath);
+        $files = $listFolderContents->getItems()->all();
+        foreach($files as $file){
+            if($file->getDataProperty('.tag') === 'file') {
+                $file = $dropbox->download($dropboxPath . $file->getName());
+                $path = $folderPath . '/' . $file->getName();
+                $zip->addFromString($path, $file->getContents());
+            }
+            else
+                $this->iterateDropboxToZip($dropbox, $zip, $dropboxPath . $file->getName() . '/', $folderPath . '/' . $file->getName());
+        }
     }
 }
