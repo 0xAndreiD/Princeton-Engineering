@@ -133,6 +133,7 @@ Route::get('/removeSpecialChars', 'APIController@removeSpecialChars')->name('rem
 Route::post('/createJob', 'APIController@createJob')->name('createJob');
 Route::post('/updateElectric', 'APIController@updateElectric')->name('updateElectric');
 Route::post('/uploadJobFile', 'APIController@uploadJobFile')->name('uploadJobFile');
+Route::post('/getJobStatus', 'APIController@getJobStatus')->name('getJobStatus');
 
 // PV Modules
 Route::post('/getCECPVModules', 'GeneralController@getCECPVModules')->name('getCECPVModules');
