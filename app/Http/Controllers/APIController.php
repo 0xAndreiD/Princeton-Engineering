@@ -1433,7 +1433,7 @@ class APIController extends Controller
     }
 
     /**
-     * Update Electric JSON
+     * Upload Job File
      *
      * @return JSON
      */
@@ -1468,6 +1468,29 @@ class APIController extends Controller
                             return response()->json(['success' => true, 'message' => 'Uploaded Successfully', 'filename' => $filename]);
                         } else 
                             return response()->json(['success' => false, 'message' => 'Empty File.']);
+                    } else
+                        return response()->json(['success' => false, 'message' => 'Cannot find the job.']);
+                } else
+                    return response()->json(['success' => false, 'message' => 'Missing Project Number.']);
+            } else
+                return response()->json(['success' => false, 'message' => 'Auth failed.']);
+        } else
+            return response()->json(['success' => false, 'message' => 'Auth required.']);
+    }
+
+    /**
+     * Return Job Status
+     *
+     * @return JSON
+     */
+    public function getJobStatus(Request $request) {
+        if(isset($request['CompanyId']) && isset($request['APIKey'])){
+            $company = Company::where('id', '=', $request['CompanyId'])->where('api_key', '=', $request['APIKey'])->first();
+            if($company) {
+                if(isset($request['ProjectNumber'])) {
+                    $project = JobRequest::where('companyId', $company['id'])->where('clientProjectNumber', $request['ProjectNumber'])->first();
+                    if($project) {
+                        return response()->json(['success' => true, 'status' => $project->planStatus]);
                     } else
                         return response()->json(['success' => false, 'message' => 'Cannot find the job.']);
                 } else
