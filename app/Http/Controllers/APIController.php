@@ -1522,6 +1522,10 @@ class APIController extends Controller
                         
                         $zip->open(storage_path('download') . '/' . $filename, ZipArchive::CREATE);
 
+                        $companyNumber = $company ? $company['company_number'] : 0;
+                        $folderPrefix = '/' . $companyNumber . ". " . $project['companyName'] . '/';
+                        $filepath = $folderPrefix . $project['clientProjectNumber'] . '. ' . $project['clientProjectName'] . ' ' . $project['state'];
+
                         $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
                         $dropbox = new Dropbox($app);
                         try{
