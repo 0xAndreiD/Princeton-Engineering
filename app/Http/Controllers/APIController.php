@@ -1531,9 +1531,11 @@ class APIController extends Controller
                         try{
                             $this->iterateDropboxToZip($dropbox, $zip, env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_OUT') . $filepath . '/', '');
                         } catch (DropboxClientException $e) { 
+                            $zip->close();
                             return response()->json(['success' => false, 'message' => 'Error while zipping.']);
                         }
 
+                        $zip->close();
                         return response()->download(storage_path('download') . '/' . $filename, null, ['Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0']);
                     } else
                         return response()->json(['success' => false, 'message' => 'Cannot find the job.']);
