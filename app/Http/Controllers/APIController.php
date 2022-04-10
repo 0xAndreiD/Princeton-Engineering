@@ -1555,9 +1555,9 @@ class APIController extends Controller
         $files = $listFolderContents->getItems()->all();
         foreach($files as $file){
             if($file->getDataProperty('.tag') === 'file') {
-                $file = $dropbox->download($dropboxPath . $file->getName());
+                $dropfile = $dropbox->download($dropboxPath . $file->getName());
                 $path = $folderPath . '/' . $file->getName();
-                $zip->addFromString($path, $file->getContents());
+                $zip->addFromString($path, $dropfile->getContents());
             }
             else
                 $this->iterateDropboxToZip($dropbox, $zip, $dropboxPath . $file->getName() . '/', $folderPath . '/' . $file->getName());
