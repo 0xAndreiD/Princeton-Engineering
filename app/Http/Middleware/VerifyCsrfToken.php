@@ -23,6 +23,7 @@ class VerifyCsrfToken extends Middleware
         'createJob',
         'updateElectric',
         'uploadJobFile',
-        'getJobStatus'
+        'getJobStatus',
+        'downloadJobFiles'
     ];
 }
