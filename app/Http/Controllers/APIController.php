@@ -1558,7 +1558,7 @@ class APIController extends Controller
         foreach($files as $file){
             if($file->getDataProperty('.tag') === 'file') {
                 $dropfile = $dropbox->download($dropboxPath . $file->getName());
-                $path = $folderPath . '/' . $file->getName();
+                $path = ($folderPath == '' ? $file->getName() : $folderPath . '/' . $file->getName());
                 $zip->addFromString($path, $dropfile->getContents());
             }
             else
