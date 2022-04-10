@@ -1562,7 +1562,7 @@ class APIController extends Controller
                 $zip->addFromString($path, $dropfile->getContents());
             }
             else
-                $this->iterateDropboxToZip($dropbox, $zip, $dropboxPath . $file->getName() . '/', $folderPath . '/' . $file->getName());
+                $this->iterateDropboxToZip($dropbox, $zip, $dropboxPath . $file->getName() . '/', ($folderPath == '' ? $file->getName() : $folderPath . '/' . $file->getName()));
         }
     }
 }
