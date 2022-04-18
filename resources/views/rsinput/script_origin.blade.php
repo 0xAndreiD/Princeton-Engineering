@@ -2941,7 +2941,7 @@ $(document).ready(function() {
                     }
                 }
 
-                if(localStorage.getItem('moduleCEC') == '1'){
+                if(localStorage.getItem('moduleCEC') == '1' || (preloaded_data && preloaded_data['Equipment'] && preloaded_data['Equipment']['PVModule'] && preloaded_data['Equipment']['PVModule']['CEC'] == 1)){
                     moduleCEC = 1;
                     $("#module-cec")[0].checked = true;
                     await loadCECEquipmentSection();
