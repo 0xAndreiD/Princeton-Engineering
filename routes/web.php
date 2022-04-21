@@ -260,11 +260,15 @@ Route::get('/storeLocation/{id}', 'Auth\TwoFactorController@storeLocation');
 // Seal Positioning
 Route::get('/sealtemplate', 'CompanyController@sealtemplate')->name('sealtemplate');
 Route::get('/sealassign', 'CompanyController@sealassign')->name('sealassign');
+Route::get('/sealmanage', 'CompanyController@sealmanage')->name('sealmanage');
 Route::post('/extractImgFromPDF', 'CompanyController@extractImgFromPDF')->name('extractImgFromPDF');
 Route::post('/saveSealData', 'CompanyController@saveSealData')->name('saveSealData');
 Route::post('/loadSealData', 'CompanyController@loadSealData')->name('loadSealData');
 Route::post('/saveSealTemplate', 'CompanyController@saveSealTemplate')->name('saveSealTemplate');
+Route::post('/editSealTemplate', 'CompanyController@editSealTemplate')->name('editSealTemplate');
 Route::post('/getSealTemplateList', 'CompanyController@getSealTemplateList')->name('getSealTemplateList');
+Route::post('/getTemplateData', 'CompanyController@getTemplateData')->name('getTemplateData');
+Route::post('/delTemplate', 'CompanyController@deleteTemplate')->name('deleteTemplate');
 
 // Pull System Msgs
 Route::post('/getSystemMsgs', 'GeneralController@getSystemMsgs')->name('getSystemMsgs');

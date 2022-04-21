@@ -193,6 +193,125 @@ class CompanyController extends Controller
             );
         echo json_encode($json_data);
     }
+    /**
+     * Get the Template Data
+     *
+     * @return JSON
+     */
+    public function getTemplateData(Request $request){
+        if(Auth::user()->userrole == 2)
+        {
+            $columns = array( 
+                0 =>'id', 
+                1 =>'companyname',
+                2 =>'template',
+            );
+            $handler = new SealData;
+        }
+        else if(Auth::user()->userrole == 1 || Auth::user()->userrole == 3)
+        {
+            $columns = array( 
+                0 =>'id', 
+                1 =>'companyname',
+                2 =>'template',
+            );
+            $handler = SealData::where('companyid', Auth::user()->companyid);
+        }
+        $totalData = $handler->count();
+        $totalFiltered = $totalData; 
+
+        $limit = $request->input('length');
+        $start = $request->input('start');
+        $order = $columns[$request->input('order.0.column')];
+        $dir = $request->input('order.0.dir');
+
+        $handler = $handler->leftjoin('company_info', "company_info.id", "=", "seal_data.companyid");
+
+        if(Auth::user()->userrole == 2){
+            if(!empty($request->input("columns.1.search.value")))
+                $handler = $handler->where('company_info.company_name', 'LIKE', "%{$request->input("columns.1.search.value")}%");
+            if(!empty($request->input("columns.2.search.value")))
+                $handler = $handler->where('seal_data.template', 'LIKE', "%{$request->input("columns.2.search.value")}%");
+        } else {
+            if(!empty($request->input("columns.1.search.value")))
+                $handler = $handler->where('company_info.company_name', 'LIKE', "%{$request->input("columns.1.search.value")}%");
+            if(!empty($request->input("columns.2.search.value")))
+                $handler = $handler->where('seal_data.template', 'LIKE', "%{$request->input("columns.2.search.value")}%");
+        }
+
+        if(empty($request->input('search.value')))
+        {            
+            $totalFiltered = $handler->count();
+            $templates = $handler->offset($start)
+                ->limit($limit)
+                ->orderBy($order,$dir)
+                ->get(
+                    array(
+                        'seal_data.id as id',
+                        'company_info.company_name as companyname',
+                        'seal_data.template as template',
+
+                    )
+                );
+        }
+        else {
+            $search = $request->input('search.value'); 
+            $templates =  $handler->where(function ($q) use ($search) {
+                        $q->where('seal_data.state','LIKE',"%{$search}%")
+                        ->orWhere('seal_data.template', 'LIKE',"%{$search}%");
+                        })
+                        ->offset($start)
+                        ->limit($limit)
+                        ->orderBy($order,$dir)
+                        ->get(
+                            array(
+                                'seal_data.id as id',
+                                'company_info.company_name as companyname',
+                                'seal_data.template as template',
+                            )
+                        );
+
+            $totalFiltered = $handler->where(function ($q) use ($search) {
+                        $q->where('seal_data.state','LIKE',"%{$search}%")
+                        ->orWhere('seal_data.template', 'LIKE',"%{$search}%");
+                        })
+                        ->count();
+        }
+
+        $data = array();
+
+        if(!empty($templates))
+        {
+            foreach ($templates as $template)
+            {
+                if($template->template){
+                    $nestedData['id'] = $template->id;
+                    $nestedData['companyname'] = $template->companyname;
+                    $nestedData['state'] = $template->state;
+                    $nestedData['template'] = $template->template;
+                    $nestedData['actions'] = "
+                    <div class='text-center'>
+                        <a type='button' class='btn btn-primary' 
+                            href='" . route('sealtemplate') . "?id={$nestedData['id']}'>
+                            <i class='fa fa-pencil-alt'></i>
+                        </a>
+                        <button type='button' class='js-swal-confirm btn btn-danger' onclick='delTemplate(this,{$nestedData['id']})'>
+                            <i class='fa fa-trash'></i>
+                        </button>
+                        
+                    </div>";
+                    $data[] = $nestedData;
+                }
+            }
+        }
+        $json_data = array(
+            "draw"            => intval($request->input('draw')),  
+            "recordsTotal"    => intval($totalData),  
+            "recordsFiltered" => intval($totalFiltered), 
+            "data"            => $data   
+            );
+        echo json_encode($json_data);
+    }
 
     /**
      * Edit Company Page.
@@ -337,6 +456,17 @@ class CompanyController extends Controller
     }
 
     /**
+     * Delete Seal Template
+     *
+     * @return JSON
+     */
+    function deleteTemplate(Request $request){
+        $id = $request->input('data');
+        $res = SealData::where('id', $id)->delete();
+        return $res;
+    }
+
+    /**
      * Get Company By ID
      *
      * @return JSON
@@ -449,12 +579,17 @@ class CompanyController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     function sealtemplate(Request $request){
+        if(isset($request['id']))
+            $id = $request['id'];
+        else
+            $id = 0;
+
         if(Auth::user()->userrole == 2){
             $companyList = Company::orderBy('company_name', 'asc')->get();
-            return view('admin.sealpos.templateview')->with('companyList', $companyList);
+            return view('admin.sealpos.templateview')->with('companyList', $companyList)->with('id', $id);
         }
         else if(Auth::user()->userrole != 0 && Auth::user()->userrole != 4)
-            return view('clientadmin.sealpos.templateview');
+            return view('clientadmin.sealpos.templateview')->with('id', $id);
         else
             return redirect('home');
     }
@@ -471,6 +606,22 @@ class CompanyController extends Controller
         }
         else if(Auth::user()->userrole != 0 && Auth::user()->userrole != 4)
             return view('clientadmin.sealpos.view');
+        else
+            return redirect('home');
+    }
+    
+    /**
+     * Show the seal positioning page
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    function sealmanage(Request $request){
+        if(Auth::user()->userrole == 2){
+            $companyList = Company::orderBy('company_name', 'asc')->get();
+            return view('admin.sealpos.templatesmanage')->with('companyList', $companyList);
+        }
+        else if(Auth::user()->userrole != 0 && Auth::user()->userrole != 4)
+            return view('clientadmin.sealpos.templatesmanage');
         else
             return redirect('home');
     }
@@ -626,23 +777,23 @@ class CompanyController extends Controller
     function loadSealData(Request $request){
         if(Auth::user()->userrole != 0 && Auth::user()->userrole != 4){
             if(!empty($request['state']) || !empty($request['templateId'])){
-                $company = Company::where('id', (Auth::user()->userrole == 2 && !empty($request['companyId']) ? $request['companyId'] : Auth::user()->companyid))->first();
-                if($company){
-                    if($request['state']){
+                if($request['state']){
+                    $company = Company::where('id', (Auth::user()->userrole == 2 && !empty($request['companyId']) ? $request['companyId'] : Auth::user()->companyid))->first();
+                    if($company){
                         $sealdata = SealData::where('companyId', $company->id)->where('state', $request['state'])->first();
                         if($sealdata)
                             return response()->json(["status" => true, "data" => $sealdata->data]);
                         else
                             return response()->json(["message" => "Empty seal data.", "status" => false]);
-                    } else {
-                        $sealdata = SealData::where('companyId', $company->id)->where('id', $request['templateId'])->first();
-                        if($sealdata)
-                            return response()->json(["status" => true, "data" => $sealdata->data]);
-                        else
-                            return response()->json(["message" => "Empty seal data.", "status" => false]);
-                    }
-                } else
-                    return response()->json(["message" => "Cannot find the company.", "status" => false]);
+                    } else
+                        return response()->json(["message" => "Cannot find the company.", "status" => false]);
+               } else {
+                    $sealdata = SealData::where('id', $request['templateId'])->first();
+                    if($sealdata)
+                        return response()->json(["status" => true, "data" => $sealdata->data]);
+                    else
+                        return response()->json(["message" => "Empty seal data.", "status" => false]);
+                }
             } else 
                 return response()->json(["message" => "Missing state or templateId.", "status" => false]);
         }
@@ -668,6 +819,39 @@ class CompanyController extends Controller
                     return response()->json(["status" => true]);
                 } else
                     return response()->json(["message" => "Cannot find the company.", "status" => false]);
+            } else
+                return response()->json(["message" => "Missing state.", "status" => false]);
+        }
+        else 
+            return response()->json(["message" => "You don't have permission.", "status" => false]);
+    }
+
+    /**
+     * Save edited seal canvas data as a template
+     *
+     * @return JSON
+     */
+    function editSealTemplate(Request $request){
+        if(Auth::user()->userrole != 0 && Auth::user()->userrole != 4){
+            if(!empty($request['template'])){
+                // $company = Company::where('id', (Auth::user()->userrole == 2 && !empty($request['companyId']) ? $request['companyId'] : Auth::user()->companyid))->first();
+                // if($company){
+                //     SealData::create([
+                //         'companyId' => $company->id,
+                //         'data' => $request['data'],
+                //         'template' => $request['template']
+                //     ]);
+                //     return response()->json(["status" => true]);
+                // } else
+                //     return response()->json(["message" => "Cannot find the company.", "status" => false]);
+                $template = SealData::where('id', $request['templateId'])->first();
+                if($template) {
+                    $template->data = $request['data'];
+                    $template->template = $request['template'];
+                    $template->save();
+                    return response()->json(["status" => true]);
+                } else 
+                    return response()->json(["message" => "Cannot find the template.", "status" => false]);
             } else
                 return response()->json(["message" => "Missing state.", "status" => false]);
         }
