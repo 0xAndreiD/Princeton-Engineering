@@ -240,15 +240,15 @@
                         </li>
                         <li class="nav-main-heading">Seal Position</li>
                         <li class="nav-main-item">
-                            <a class="nav-main-link" href="{{ route('sealtemplate') }}">
-                                <i class="nav-main-link-icon fa fa-expand-arrows-alt"></i>
-                                <span class="nav-main-link-name">Create Template</span>
-                            </a>
-                        </li>
-                        <li class="nav-main-item">
                             <a class="nav-main-link" href="{{ route('sealassign') }}">
                                 <i class="nav-main-link-icon fa fa-flag-usa"></i>
                                 <span class="nav-main-link-name">Assign Template</span>
+                            </a>
+                        </li>
+                        <li class="nav-main-item">
+                            <a class="nav-main-link" href="{{ route('sealmanage') }}">
+                                <i class="nav-main-link-icon fa fa-expand-arrows-alt"></i>
+                                <span class="nav-main-link-name">Manage Templates</span>
                             </a>
                         </li>
 
