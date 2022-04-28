@@ -265,7 +265,7 @@
                                 <span class="nav-main-link-name">Billing Info</span>
                             </a>
                         </li> --}}
-                        <li class="nav-main-heading">DRAWING TEMPLATES</li>
+                        <li class="nav-main-heading">Seal Position</li>
                         {{-- <li class="nav-main-item">
                             <a class="nav-main-link" href="{{ route('sealtemplate') }}">
                                 <i class="nav-main-link-icon fa fa-expand-arrows-alt"></i>

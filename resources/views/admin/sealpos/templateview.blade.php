@@ -94,7 +94,6 @@
                     <input type="text" class="form-control" id="object-height" style="border: 1px solid #82b54b;">
                 </div>
                 <input type="hidden" value="{{ $id }}" id="templateId">
-                <input type="hidden" value="" id="templateName">
             </div>
         </div>
     </div>

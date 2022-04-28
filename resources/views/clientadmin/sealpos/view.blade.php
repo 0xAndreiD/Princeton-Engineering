@@ -23,7 +23,6 @@
             Select State
         </button>
         <div class="dropdown-menu" aria-labelledby="state-dropdown" style="height: 300px; overflow: auto;">
-            <a class="dropdown-item" href="javascript:stateChange('STD')">STD</a>
             <a class="dropdown-item" href="javascript:stateChange('AL')">AL</a>
             <a class="dropdown-item" href="javascript:stateChange('AZ')">AZ</a>
             <a class="dropdown-item" href="javascript:stateChange('AR')">AR</a>
