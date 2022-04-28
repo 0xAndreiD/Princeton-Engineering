@@ -238,7 +238,7 @@
                                 <span class="nav-main-link-name">My account</span>
                             </a>
                         </li>
-                        <li class="nav-main-heading">Seal Position</li>
+                        <li class="nav-main-heading">DRAWING TEMPLATES</li>
                         <li class="nav-main-item">
                             <a class="nav-main-link" href="{{ route('sealassign') }}">
                                 <i class="nav-main-link-icon fa fa-flag-usa"></i>
