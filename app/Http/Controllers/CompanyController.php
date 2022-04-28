@@ -782,7 +782,7 @@ class CompanyController extends Controller
                     if($company){
                         $sealdata = SealData::where('companyId', $company->id)->where('state', $request['state'])->first();
                         if($sealdata)
-                            return response()->json(["status" => true, "data" => $sealdata->data]);
+                            return response()->json(["status" => true, "data" => $sealdata->data, "template" => $sealdata->template]);
                         else
                             return response()->json(["message" => "Empty seal data.", "status" => false]);
                     } else
@@ -790,7 +790,7 @@ class CompanyController extends Controller
                } else {
                     $sealdata = SealData::where('id', $request['templateId'])->first();
                     if($sealdata)
-                        return response()->json(["status" => true, "data" => $sealdata->data]);
+                        return response()->json(["status" => true, "data" => $sealdata->data, "template" => $sealdata->template]);
                     else
                         return response()->json(["message" => "Empty seal data.", "status" => false]);
                 }

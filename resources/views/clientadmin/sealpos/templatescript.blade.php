@@ -93,36 +93,124 @@ function dimUpdateHandler(){
 }
 
 function saveTemplate(){
-    swal.fire({ title: "Input the template title", input: 'text', confirmButtonText: `OK`, showCancelButton: true }).then((result => {
+    var templateId;
+    var templateName;
+    templateId = $("#templateId").val();
+    templateName = $("#templateName").val();
+
+    swal.fire({ title: "Input the template title", input: 'text',inputValue:templateName, confirmButtonText: `OK`, showCancelButton: true }).then((result => {
         if(result && result.value){
             swal.fire({ title: "Please wait...", showConfirmButton: false });
             swal.showLoading();
-            $.ajax({
-                url:"saveSealTemplate",
-                type:'post',
-                data:{
-                    template: result.value,
-                    data: JSON.stringify(canvas.toJSON())
-                },
-                success:function(res){
-                    swal.close();
-                    if (res.status == true) {
-                        swal.fire({ title: "Success", text: "Successfully Saved!", icon: "success", confirmButtonText: `OK` });
-                        //updateTemplateList();
-                    } else 
-                        swal.fire({ title: "Error", text: res.message, icon: "error", confirmButtonText: `OK` });
-                },
-                error: function(xhr, status, error) {
-                    res = JSON.parse(xhr.responseText);
-                    var message = res.message;
-                    swal.fire({ title: "Error",
-                            text: message == "" ? "Error happened while processing. Please try again later." : message,
-                            icon: "error",
-                            confirmButtonText: `OK` });
-                }
-            });
+            if(templateId == 0 || result.value != templateName){
+                $.ajax({
+                    url:"saveSealTemplate",
+                    type:'post',
+                    data:{
+                        template: result.value,
+                        data: JSON.stringify(canvas.toJSON())
+                    },
+                    success:function(res){
+                        swal.close();
+                        if (res.status == true) {
+                            swal.fire({ title: "Success", text: "Successfully Saved!", icon: "success", confirmButtonText: `OK` });
+                            //updateTemplateList();
+                        } else 
+                            swal.fire({ title: "Error", text: res.message, icon: "error", confirmButtonText: `OK` });
+                    },
+                    error: function(xhr, status, error) {
+                        res = JSON.parse(xhr.responseText);
+                        var message = res.message;
+                        swal.fire({ title: "Error",
+                                text: message == "" ? "Error happened while processing. Please try again later." : message,
+                                icon: "error",
+                                confirmButtonText: `OK` });
+                    }
+                });
+            } else if(templateId != 0 && templateName == result.value){
+                $.ajax({
+                    url:" editSealTemplate",
+                    type:'post',
+                    data:{
+                        templateId: templateId,
+                        template: result.value,
+                        data: JSON.stringify(canvas.toJSON())
+                    },
+                    success:function(res){
+                        swal.close();
+                        if (res.status == true) {
+                            swal.fire({ title: "Success", text: "Successfully Saved!", icon: "success", confirmButtonText: `OK` });
+                            //updateTemplateList();
+                        } else 
+                            swal.fire({ title: "Error", text: res.message, icon: "error", confirmButtonText: `OK` });
+                    },
+                    error: function(xhr, status, error) {
+                        res = JSON.parse(xhr.responseText);
+                        var message = res.message;
+                        swal.fire({ title: "Error",
+                                text: message == "" ? "Error happened while processing. Please try again later." : message,
+                                icon: "error",
+                                confirmButtonText: `OK` });
+                    }
+                });
+            }
         }
     }));
+}
+
+function loadContent(identifier, isTemplate = false){
+    var formData;
+    formData = { 'templateId': identifier };
+
+    swal.fire({ title: "Please wait...", showConfirmButton: false });
+    swal.showLoading();
+    $.ajax({
+        url:"loadSealData",
+        type:'post',
+        data: formData,
+        success:function(res){
+            console.log('res: ', res);
+            swal.close();
+            if (res.status == true) {
+                $("#templateName").val(res.template);
+                var data = JSON.parse(res.data);
+                canvas.loadFromJSON(data, function(){
+                    canvas.getObjects().forEach(object => { 
+                        addEffect(object);
+                        if(object.type == 'textbox')
+                            object.set({editable: false});
+                    });
+                    canvas.renderAll();
+                });
+                if(data.backgroundImage && data.backgroundImage.src){
+                    fabric.Image.fromURL(data.backgroundImage.src, function(image) {
+                        canvas.setHeight(image.height * 900 / image.width);
+                        pageWidth = image.width / 200;
+                        pageHeight = image.height / 200;
+                        $("#page-width").val(pageWidth.toFixed(2));
+                        $("#page-height").val(pageHeight.toFixed(2));
+                        
+                        image.set({
+                            scaleX: canvas.width / image.width,
+                            scaleY: canvas.height / image.height
+                        })
+                        
+                        canvas.setBackgroundImage(image);
+                        fabric.Object.NUM_FRACTION_DIGITS = 17;
+                        canvas.renderAll();
+                    });
+                }
+            }
+        },
+        error: function(xhr, status, error) {
+            res = JSON.parse(xhr.responseText);
+            var message = res.message;
+            swal.fire({ title: "Error",
+                    text: message == "" ? "Error happened while processing. Please try again later." : message,
+                    icon: "error",
+                    confirmButtonText: `OK` });
+        }
+    });
 }
 
 $(document).ready(function() {
@@ -131,6 +219,11 @@ $(document).ready(function() {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+
+    var templateId = $("#templateId").val();
+    if(templateId != 0) {
+        loadContent(templateId);
+    }
 
     canvas = new fabric.Canvas('canvasPane');
     fabric.Object.NUM_FRACTION_DIGITS = 17;

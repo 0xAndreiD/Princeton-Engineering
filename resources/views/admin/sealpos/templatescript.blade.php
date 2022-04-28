@@ -96,7 +96,9 @@ function dimUpdateHandler(){
 
 function saveTemplate(){
     var templateId;
+    var templateName;
     templateId = $("#templateId").val();
+    templateName = $("#templateName").val();
     if(templateId == 0){
         if(!wantedCompany){
             swal.fire({ title: "Warning", text: 'Please select the company.', icon: "info", confirmButtonText: `OK` });
@@ -134,15 +136,42 @@ function saveTemplate(){
             }
         }));
     } else {
-        swal.fire({ title: "Input the template title", input: 'text', confirmButtonText: `OK`, showCancelButton: true }).then((result => {
+        swal.fire({ title: "Input the template title", input: 'text', inputValue: templateName ,confirmButtonText: `OK`, showCancelButton: true }).then((result => {
             if(result && result.value){
                 swal.fire({ title: "Please wait...", showConfirmButton: false });
                 swal.showLoading();
-                $.ajax({
-                    url:"editSealTemplate",
+                if(result.value == templateName){
+                    $.ajax({
+                        url:"editSealTemplate",
+                        type:'post',
+                        data:{
+                            templateId: templateId,
+                            template: result.value,
+                            data: JSON.stringify(canvas.toJSON())
+                        },
+                        success:function(res){
+                            swal.close();
+                            if (res.status == true) {
+                                swal.fire({ title: "Success", text: "Successfully Saved!", icon: "success", confirmButtonText: `OK` });
+                                updateTemplateList();
+                            } else 
+                                swal.fire({ title: "Error", text: res.message, icon: "error", confirmButtonText: `OK` });
+                        },
+                        error: function(xhr, status, error) {
+                            res = JSON.parse(xhr.responseText);
+                            var message = res.message;
+                            swal.fire({ title: "Error",
+                                    text: message == "" ? "Error happened while processing. Please try again later." : message,
+                                    icon: "error",
+                                    confirmButtonText: `OK` });
+                        }
+                    });
+                } else {
+                    $.ajax({
+                    url:"saveSealTemplate",
                     type:'post',
                     data:{
-                        templateId: templateId,
+                        companyId: wantedCompany,
                         template: result.value,
                         data: JSON.stringify(canvas.toJSON())
                     },
@@ -163,6 +192,7 @@ function saveTemplate(){
                                 confirmButtonText: `OK` });
                     }
                 });
+                }
             }
         }));
     }
@@ -192,6 +222,7 @@ function loadContent(identifier, isTemplate = false){
             console.log('res: ', res);
             swal.close();
             if (res.status == true) {
+                $("#templateName").val(res.template);
                 var data = JSON.parse(res.data);
                 canvas.loadFromJSON(data, function(){
                     canvas.getObjects().forEach(object => { 
