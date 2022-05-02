@@ -104,19 +104,19 @@
                 </div>
             </div>
             <div class="btn-group push">
-                <button type="button" class="btn btn-secondary draggable" id="sealImage" style="z-index: 1;">
+                <button type="button" class="btn btn-secondary draggable mr-2" id="sealImage" style="z-index: 1;">
                     <i class="far fa-file-image"></i>
                     Seal Image
                 </button>
-                <button type="button" class="btn btn-secondary draggable" id="sealText" style="z-index: 1;">
+                <button type="button" class="btn btn-secondary draggable mr-2" id="sealText" style="z-index: 1;">
                     <i class="fa fa-font"></i>
                     Seal Text
                 </button>
-                <button type="button" class="btn btn-secondary draggable" id="sealSupplement" style="z-index: 1;">
+                <button type="button" class="btn btn-secondary draggable mr-2" id="sealSupplement" style="z-index: 1;">
                     <i class="fa fa-font"></i>
                     Supplemental Seal Text
                 </button>
-                <button type="button" class="btn btn-secondary mr-5 draggable" id="eSign" style="z-index: 1;">
+                <button type="button" class="btn btn-secondary mr-5 draggable mr-2" id="eSign" style="z-index: 1;">
                     <i class="fa fa-file-signature"></i>
                     eSignature
                 </button>
@@ -142,6 +142,10 @@
                 <input type="text" class="form-control" id="page-height" disabled="">
             </div>
             <div id="object-dimension-pane" style="display: none;">
+                <div class="form-group mt-5">
+                    <label for="object-left">Selected Object</label>
+                    <input type="text" class="form-control" id="object-name" disabled="">
+                </div>
                 <div class="form-group">
                     <label for="object-left">Left (Inches)</label>
                     <input type="text" class="form-control" id="object-left" style="border: 1px solid #82b54b;">

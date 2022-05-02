@@ -85,6 +85,11 @@ function selectionHandler(){
 function dimUpdateHandler(){
     if(canvas.getActiveObjects().length == 1){
         let object = canvas.getActiveObject();
+        if(object.type == "image"){
+            $("#object-name").val("image");
+        } else {
+            $("#object-name").val(object.text);
+        }
         $("#object-left").val((object.left * pageWidth / canvas.width).toFixed(2));
         $("#object-top").val((object.top * pageHeight / canvas.height).toFixed(2));
         $("#object-width").val((object.width * object.scaleX * pageWidth / canvas.width).toFixed(2));
