@@ -105,7 +105,8 @@ function saveContent(){
         swal.fire({ title: "Warning", text: 'Please select the company.', icon: "info", confirmButtonText: `OK` });
         return;
     }
-    if(!wantedState || wantedState.length != 2){
+    // if(!wantedState || wantedState.length != 2){
+    if(!wantedState){
         swal.fire({ title: "Warning", text: 'Please select the state.', icon: "info", confirmButtonText: `OK` });
         return;
     }
@@ -273,7 +274,8 @@ $(document).ready(function() {
                 swal.fire({ title: "Warning", text: 'Please select the company.', icon: "info", confirmButtonText: `OK` });
                 return;
             }
-            if(!wantedState || wantedState.length != 2){
+            // if(!wantedState || wantedState.length != 2){
+            if(!wantedState){
                 $(".inputfile").val('');
                 swal.fire({ title: "Warning", text: 'Please select the state.', icon: "info", confirmButtonText: `OK` });
                 return;
