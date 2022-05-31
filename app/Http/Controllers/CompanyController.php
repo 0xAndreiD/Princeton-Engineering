@@ -1751,6 +1751,7 @@ class CompanyController extends Controller
      * @return JSON
      */
     public function saveBill(Request $request){
+        $curtime = time();
         if(Auth::user()->userrole == 2){
             if(!empty($request['id'])){
                 $bill = BillingHistory::where('id', $request['id'])->first();
@@ -1804,6 +1805,7 @@ class CompanyController extends Controller
                     $bill->expenses = json_encode($request['expenses']);
                 else
                     $bill->expenses = NULL;
+                // print_r($bill); exit;
                 $bill->save();
 
                 if($request['updatePDF'] == 'true'){

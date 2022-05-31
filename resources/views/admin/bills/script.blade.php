@@ -485,7 +485,7 @@ function addExpense(){
 function updateAmount(){
     let amount = 0;
     $(".expenseRow").each(function(){
-        console.log($(this).find("input[name='amount']").val());
+        // console.log("here",$(this).find("input[name='amount']").val());
         amount += parseFloat($(this).find("input[name='amount']").val());
     });
     $("#amount").val(amount);
