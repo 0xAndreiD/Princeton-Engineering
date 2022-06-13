@@ -623,6 +623,7 @@ All engineering and review work is performed by our personnel in our offices in 
           <br>
           
         </p>
+        <img src="https://www.princeton-engineering.com/images/map.jpg" alt="" style="width: 100%"/>
         <table style="width: 100%">
           <tr>
                 <td style="width:33%">
