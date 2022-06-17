@@ -1082,14 +1082,32 @@ class APIController extends Controller
         
                             if(isset($request['ProjectInfo'])) {
                                 $keys = array('City', 'Name', 'State', 'Street', 'Type', 'Zip');
+                                $error_keys = [];
                                 foreach($keys as $key) {
                                     if(!isset($request['ProjectInfo'][$key])) {
-                                        $this->externalAPINotify('ProjectInfo->' . $key . ' is missing.', $company, null, 0);
-                                        return response()->json(['success' => false, 'message' => 'ProjectInfo->' . $key . ' is missing.']);
+                                        // $this->externalAPINotify('ProjectInfo->' . $key . ' is missing.', $company, null, 0);
+                                        // return response()->json(['success' => false, 'message' => 'ProjectInfo->' . $key . ' is missing.']);
+                                        array_push($error_keys, $key);
                                     }
                                 }
 
+                                if(count($error_keys) != 0 ) {
+                                    $this->externalAPINotify('ProjectInfo->' . implode(",", $error_keys) . ' are missing.', $company, null, 0);
+                                    return response()->json(['success' => false, 'message' => 'ProjectInfo->' . implode(",", $error_keys) . ' are missing.']);
+                                }
+
+                                // $year_value = ASCEYear::where('jurisdiction_abbrev', $request['ProjectInfo']['State'])->first();
+
+                                // if(!$year_value) {
+                                //     $this->externalAPINotify('ProjectInfo->' . implode(",", $error_keys) . ' are missing.', $company, null, 0);
+                                //     return response()->json(['success' => false, 'message' => 'ProjectInfo->' . implode(",", $error_keys) . ' are missing.']);
+                                // }
+
                                 $data['ProjectInfo'] = $request['ProjectInfo'];
+                                foreach($keys as $key) {
+                                    $data['ProjectInfo'][$key] = preg_replace('/[^A-Za-z0-9\-]/', '', $data['ProjectInfo'][$key]);
+                                }
+
                             } else {
                                 $this->externalAPINotify('ProjectInfo is missing.', $company, null, 0);
                                 return response()->json(['success' => false, 'message' => 'ProjectInfo is missing.']);
