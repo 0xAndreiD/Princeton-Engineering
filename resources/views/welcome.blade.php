@@ -31,6 +31,11 @@
 
             p {
               line-height: 1.1;
+              margin-bottom: 1rem !important;
+            }
+
+            hr {
+                border-top: 1px solid #9da0a5 !important;
             }
 
             #centered {
@@ -446,139 +451,107 @@
                                                                 <font size="5"><strong>iRooFA</strong></font>
                                                                 <font size="3"> <sup>TM</sup></font>
                                                             </font>
-                                                            data form to enter field data and locate the proposed array on the roof structure.
+                                                            data intake form to enter field data the proposed array on the roof structure.
                                                             <br>
                                                             <br>
-                                                            Even use your smartphone to submit projects from the field!
+                                                            Even use your tablet or smartphone to submit projects from the field!
                                                             <br>
                                                             <br>
+                                                            For one low fee per project 
+                                                            <font style="font-family: arial,verdana;">
+                                                                <font size="5"><strong>iRooFA</strong></font>
+                                                                <font size="3"> <sup>TM</sup></font>
+                                                            </font>
+                                                            gives you:
+                                                            <ul>
+                                                                <li>
+                                                                    Error checking on your plan set's framing and electrical designs
+                                                                </li>
+                                                                <li>
+                                                                    Review of your plans for structural upgrades, code conformance and electrical design
+                                                                </li>
+                                                                <li>
+                                                                    <!-- iRoof with TM logo  -->
+
+                                                                    <font style="font-family: arial,verdana;">
+                                                                        <font size="5"><strong>iRooFA</strong></font>
+                                                                        <font size="3"> <sup>TM</sup></font>
+                                                                    </font>
+                                                                    structural engineering report with our Professional Engineer's Seal AND e-Signature
+                                                                </li>
+                                                                <li>
+                                                                    Our Professional Engineer's State Seal AND e-Signature on your Plan Set
+                                                                </li>
+                                                                <li>
+                                                                    Completed standard building permit forms
+                                                                </li>
+                                                            </ul>
+
                                                             <!-- iRoof with TM logo  -->
                                                             <font style="font-family: arial,verdana;">
                                                                 <font size="5"><strong>iRooFA</strong></font>
                                                                 <font size="3"> <sup>TM</sup></font>
                                                             </font>
 
-                                                            <font size="4" style="font-family: arial,verdana;"> gives you <font size="5">
-                                                                    <strong>INSTANT:</strong></font>
+                                                            <font size="4" style="font-family: arial,verdana;">
+                                                                INSTANTLY
                                                             </font>
+                                                            <br>
 
                                                             <font size="4" style="font-family: arial,verdana;">
 
                                                             <ul>
                                                                 <li>
-                                                                    Error checking on your data input
+                                                                    tells you if the roof can support a PV solar installation
                                                                 </li>
                                                                 <li>
-                                                                    <!-- iRoof with TM logo  -->
-
-                                                                    <font style="font-family: arial,verdana;">
-                                                                        <font size="5"><strong>iRooFA</strong></font>
-                                                                        <font size="3"> <sup>TM</sup></font>
-                                                                    </font>
-                                                                    structural engineering report
+                                                                    identifies problems and tells you how to strenghthen a weak roof
                                                                 </li>
                                                                 <li>
-                                                                    Professional Engineer's State Seal AND e-Signature on your
-                                                                    <!-- iRoof with TM logo  -->
-
-                                                                    <font style="font-family: arial,verdana;">
-                                                                        <font size="5"><strong>iRooFA</strong></font>
-                                                                        <font size="3"> <sup>TM</sup></font>
-                                                                    </font>
-                                                                    report
+                                                                    specifies minimum racking lag bolt requirements
                                                                 </li>
                                                             </ul>
+                                                            <p>
+                                                                <font size="4" style="font-family: arial,verdana;">
+                                                                    Use 
+                                                                    <font style="font-family: arial,verdana;">
+                                                                        <font size="5"><strong>iRooFA</strong></font>
+                                                                        <font size="3"> <sup>TM</sup></font>
+                                                                    </font>
+                                                                    as a design tool, performing different layout trails to minimize any required supplemental roof structure.
+                                                                </font>
+                                                            </p>
+                                                            <p>
+                                                                <font size="4" style="font-family: arial,verdana;">
+                                                                    Deliverables:
+                                                                </font>
+                                                            </p>
 
-                                                <!-- iRoof with TM logo  -->
+                                                            <font size="4" style="font-family: arial,verdana;">
 
-                                                <font style="font-family: arial,verdana;">
-                                                    <font size="5"><strong>iRooFA</strong></font>
-                                                    <font size="3"> <sup>TM</sup></font>
-                                                </font>
-
-                                                takes care of input data error checking and prepares a detailed structural
-                                                report for submission to AHJ's across the US and Canada.
-
-                                                <br>
-                                                <br>
-
-                                                <!-- iRoof with TM logo  -->
-
-                                                <font style="font-family: arial,verdana;">
-                                                    <font size="5"><strong>iRooFA</strong></font>
-                                                    <font size="3"> <sup>TM</sup></font>
-                                                </font>
-
-                                                INSTANTLY tells you if the roof can support a PV solar installation.
-
-                                                <br>
-
-                                                <!-- iRoof with TM logo  -->
-
-                                                <font style="font-family: arial,verdana;">
-                                                    <font size="5"><strong>iRooFA</strong></font>
-                                                    <font size="3"> <sup>TM</sup></font>
-                                                </font>
-
-                                                INSTANTLY identifies problems and tells you how to strengthen a weak roof
-
-                                                <br>
-
-                                                <!-- iRoof with TM logo  -->
-
-                                                <font style="font-family: arial,verdana;">
-                                                    <font size="5"><strong>iRooFA</strong></font>
-                                                    <font size="3"> <sup>TM</sup></font>
-                                                </font>
-
-                                                INSTANTLY specifies minimum racking lag bolt requirements
-
-                                                <br>
-
-                                                <!-- iRoof with TM logo  -->
-
-                                                <font style="font-family: arial,verdana;">
-                                                    <font size="5"><strong>iRooFA</strong></font>
-                                                    <font size="3"> <sup>TM</sup></font>
-                                                </font>
-
-                                                INSTANTLY creates a complete roof structural analysis report
-
-                                                <br>
-
-                                                <!-- iRoof with TM logo  -->
-
-                                                <font style="font-family: arial,verdana;">
-                                                    <font size="5"><strong>iRooFA</strong></font>
-                                                    <font size="3"> <sup>TM</sup></font>
-                                                </font>
-
-                                                INSTANTLY adds a Professional Engineer's State Seal and e-Signature on your
-
-                                                <!-- iRoof with TM logo  -->
-
-                                                <font style="font-family: arial,verdana;">
-                                                    <font size="5"><strong>iRooFA</strong></font>
-                                                    <font size="3"> <sup>TM</sup></font>
-                                                </font> report
-
-                                                <br>
-                                                <br>
-
-                                                The
-
-                                                <!-- iRoof with TM logo  -->
-
-                                                <font style="font-family: arial,verdana;">
-                                                    <font size="5"><strong>iRooFA</strong></font>
-                                                    <font size="3"> <sup>TM</sup></font>
-                                                </font>
-
-
-
-                                                report can be sealed by our Professional Engineers or your Licensed Design
-                                                Professional after their appropriate review. <br>
-                                                <br>
+                                                            <ul>
+                                                                <li>
+                                                                    The 
+                                                                    <font style="font-family: arial,verdana;">
+                                                                        <font size="5"><strong>iRooFA</strong></font>
+                                                                        <font size="3"> <sup>TM</sup></font>
+                                                                    </font>
+                                                                    structural engineering report is signed / sealed / eSigned by our licensed Professional Engineers.
+                                                                </li>
+                                                                <li>
+                                                                    Your structural AND electricals plans are reviewed then signed / sealed / eSigned by our licensed Professional Engineers.
+                                                                </li>
+                                                                <li>
+                                                                    Standard building permit forms are automatically filled in by 
+                                                                    <font style="font-family: arial,verdana;">
+                                                                        <font size="5"><strong>iRooFA</strong></font>
+                                                                        <font size="3"> <sup>TM</sup></font>
+                                                                    </font>.
+                                                                </li>
+                                                                <li>
+                                                                    We also offer Post Installation document review and certifications.
+                                                                </li>
+                                                            </ul>
 
 
                                                 <!-- iRoof with TM logo  -->
@@ -590,6 +563,9 @@
                                                 <ul>
                                                     <li>
                                                         Solar Contractors
+                                                    </li>
+                                                    <li>
+                                                        Permitting Teams
                                                     </li>
                                                     <li>
                                                         Licensed Engineers
@@ -609,7 +585,7 @@
                                         <font size="3"> <sup>TM</sup></font>
                                     </font>
 
-                                    analyzes:
+                                    offers 4 types of structural analysis:
 
                                     <br>
 
@@ -617,11 +593,17 @@
 
                                     <ul>
                                         <li>
-                                            <font size="4" style="font-family: arial,verdana;">Standard Framing</font>
+                                            <font size="4" style="font-family: arial,verdana;">Standard Roof Framing</font>
                                         </li>
 
                                         <li>
-                                            <font size="4" style="font-family: arial,verdana;"> Truss Framing</font>
+                                            <font size="4" style="font-family: arial,verdana;"> Truss Roof Framing</font>
+                                        </li>
+                                        <li>
+                                            <font size="4" style="font-family: arial,verdana;"> Roof Analyses for No-snow Areas</font>
+                                        </li>
+                                        <li>
+                                            <font size="4" style="font-family: arial,verdana;"> Ground Mounts</font>
                                         </li>
                                     </ul>
 
@@ -632,7 +614,7 @@
                                         <font size="5"><strong>iRooFA</strong></font>
                                         <font size="3"> <sup>TM</sup></font>
                                         <font size="4">
-                                            's large, customizable, database of equipment and building materials includes:
+                                            's large database of equipment and building materials includes:
 
 
                                             <br>
@@ -662,16 +644,16 @@
                                     </font>
 
 
-                                    <font size="4" style="font-family: arial,verdana;">
+                                    <!-- <font size="4" style="font-family: arial,verdana;">
                                         <font style="font-family: arial,verdana;">
                                             <font size="5"><strong>iRooFA</strong></font>
                                             <font size="3"> <sup>TM</sup></font>
                                             <font size="4"> reports include: <br>
                                             </font>
                                         </font>
-                                    </font>
+                                    </font> -->
 
-                                    <font size="4" style="font-family: arial,verdana;">
+                                    <!-- <font size="4" style="font-family: arial,verdana;">
                                         <ul>
 
                                             <li>Your logo and company address </li>
@@ -685,7 +667,7 @@
 
 
                                         </ul>
-                                    </font>
+                                    </font> -->
                                     </font>
                                 </div>
 
@@ -695,26 +677,15 @@
 
 
                             </div>
-                            <p>
-                                <font size="4" style="font-family: arial,verdana;">
-
-
-                                    <b>
-                                        <font size="5">Princeton Engineering</font>
-                                    </b> also offers electrical and structural plan set review / signing / sealing in 23
-                                    states: AZ, CA, CO, CT, DC, DE, FL, HI, IL, MA, MD, MI, MN, NC, NH, NJ, NV, NY, OH, PA,
-                                    RI, VA and WI.
-
-                                    <br><br>
-
-                                    All engineering and review work is performed by our personnel in our offices in the <b>
-                                        <font size="5">USA.</font>
-                                    </b>
-
-
+                            <p style="text-align: left;line-height: 1.3;">
+                               <font size="4" style="font-family: arial,verdana;">
+                                    Princeton Engineering offers
+                                    <font style="font-family: arial,verdana;">
+                                        <font size="5"><strong>iRooFA</strong></font>
+                                        <font size="3"> <sup>TM</sup></font>
+                                    </font>                                
+                                    in 34 states: AL, AZ, CA, CO, CT, DC, DE, FL, GA, IL, IN, LA, MA, MD, MI, MN, MS, NC, NH, NJ, NM, NY, NV, OH, OR, PA, RI, SC, TX, UT, VA, VT, WI and WV. These active licenses are highlighted in orange in the below map. Pending licenses are shown in green.
                                 </font>
-                                <br>
-
                             </p>
                             <img src="https://www.princeton-engineering.com/images/map.jpg" alt="" style="width: 100%" />
                             <p><br></p>
