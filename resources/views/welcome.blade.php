@@ -202,7 +202,7 @@
                                     <tr>
                                         <td style="vertical-align: top;">
                                             <a href="https://www.princeton-engineering.com/framinganalysis.html"> <span
-                                                    style="font-family: helvetica,arial,sans-serif;">iRoof&#8482;<br>
+                                                    style="font-family: helvetica,arial,sans-serif;">iRooFA&#8482;<br>
                                                 </span></a>
                                         </td>
                                     </tr>
@@ -315,7 +315,7 @@
                                             <!-- iRoof with TM logo  -->
 
                                             <font style="font-family: arial,verdana;">
-                                                <font size="7"><strong>iRooF</strong></font>
+                                                <font size="7"><strong>iRooFA</strong></font>
                                                 <font size="6"> <sup>TM</sup></font>
                                             </font>
                                         </div>
@@ -333,7 +333,7 @@
                                                                         <font color="#000000">
                                                                             <font size="5">Login to <br>
                                                                                 <font style="font-family: arial,verdana;">
-                                                                                    <font size="5"><strong>iRooF</strong></font>
+                                                                                    <font size="5"><strong>iRooFA</strong></font>
                                                                                     <font size="3"> <sup>TM</sup></font>
                                                                                 </font>
                                                                             </font>
