@@ -889,7 +889,7 @@
 
     <script>
         $(document).ready(function() {
-            window.location.replace("www.iroof.solar");
+            window.location.replace("http://www.iroof.solar");
         })
     </script>
 
