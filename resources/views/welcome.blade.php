@@ -889,7 +889,7 @@
 
     <script>
         $(document).ready(function() {
-            window.location.replace("https://princeton-engineering.com/iroof.html");
+            window.location.replace("www.iroof.solar");
         })
     </script>
 
