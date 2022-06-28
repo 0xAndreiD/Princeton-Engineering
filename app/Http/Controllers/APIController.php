@@ -1019,35 +1019,75 @@ class APIController extends Controller
         }
     }
 
-    private function externalAPINotify($message, $company, $user, $success, $disableCompany = false) {
-        $title = ($success == 1 ? 'iRoof API Request Success' : 'iRoof API Request Failed');
-        $data = array('title' => $title, 'msg' => $message);
-        if($company && $disableCompany) {
-            $clients = User::where('userrole', 1)->where('companyid', $company->id)->get();
-            foreach($clients as $client) {
-                $info = array('email' => $client->email, 'title' => $title);
+    private function externalAPINotify($errors, $company, $disableCompany = false) {
+        $datas = [];
+        $datas['msg'] = "";
+        foreach($errors as $error) {
+            $title = ($error['success'] == 1 ? 'iRoof API Request Success' : 'iRoof API Request Failed');
+            $data = array('title' => $title, 'msg' => $error['message'] );
+            if($company && $disableCompany) {
+                $clients = User::where('userrole', 1)->where('companyid', $company->id)->get();
+                foreach($clients as $client) {
+                    $info = array('email' => $client->email, 'title' => $title);
+                    Mail::send('mail.apiresponse', $data, function ($m) use ($info) {
+                        $m->from(env('MAIL_FROM_ADDRESS'), 'Princeton Engineering')->to($info['email'])->subject($info['title']);
+                    });
+                }
+            }
+            
+            if($error['user'] != null) {
+                $info = array('email' => $error['user']->email, 'title' => $title);
                 Mail::send('mail.apiresponse', $data, function ($m) use ($info) {
                     $m->from(env('MAIL_FROM_ADDRESS'), 'Princeton Engineering')->to($info['email'])->subject($info['title']);
                 });
             }
+    
+            // $data['msg'] = $data['msg'] . " ({$company->company_name})";
+            $datas['title'] = $data['title'];
+            $datas['msg'] =$datas['msg'].$data['msg']."\n";
         }
 
-        if($user) {
-            $info = array('email' => $user->email, 'title' => $title);
-            Mail::send('mail.apiresponse', $data, function ($m) use ($info) {
-                $m->from(env('MAIL_FROM_ADDRESS'), 'Princeton Engineering')->to($info['email'])->subject($info['title']);
-            });
-        }
 
-        $data['msg'] = $data['msg'] . " ({$company->company_name})";
+        $datas['company'] = $company->company_name;
+
         $supers = User::where('userrole', 2)->get();
         foreach($supers as $super) {
             $info = array('email' => $super->email, 'title' => $title);
-            Mail::send('mail.apiresponse', $data, function ($m) use ($info) {
+            // $info = array('email' => "huscartopdev@gmail.com", 'title' => $title);
+            Mail::send('mail.apiresponse', $datas, function ($m) use ($info) {
                 $m->from(env('MAIL_FROM_ADDRESS'), 'Princeton Engineering')->to($info['email'])->subject($info['title']);
             });
         }
     }
+    // private function externalAPINotify($message, $company, $user, $success, $disableCompany = false) {
+    //     $title = ($success == 1 ? 'iRoof API Request Success' : 'iRoof API Request Failed');
+    //     $data = array('title' => $title, 'msg' => $message);
+    //     if($company && $disableCompany) {
+    //         $clients = User::where('userrole', 1)->where('companyid', $company->id)->get();
+    //         foreach($clients as $client) {
+    //             $info = array('email' => $client->email, 'title' => $title);
+    //             Mail::send('mail.apiresponse', $data, function ($m) use ($info) {
+    //                 $m->from(env('MAIL_FROM_ADDRESS'), 'Princeton Engineering')->to($info['email'])->subject($info['title']);
+    //             });
+    //         }
+    //     }
+
+    //     if($user) {
+    //         $info = array('email' => $user->email, 'title' => $title);
+    //         Mail::send('mail.apiresponse', $data, function ($m) use ($info) {
+    //             $m->from(env('MAIL_FROM_ADDRESS'), 'Princeton Engineering')->to($info['email'])->subject($info['title']);
+    //         });
+    //     }
+
+    //     $data['msg'] = $data['msg'] . " ({$company->company_name})";
+    //     $supers = User::where('userrole', 2)->get();
+    //     foreach($supers as $super) {
+    //         $info = array('email' => $super->email, 'title' => $title);
+    //         Mail::send('mail.apiresponse', $data, function ($m) use ($info) {
+    //             $m->from(env('MAIL_FROM_ADDRESS'), 'Princeton Engineering')->to($info['email'])->subject($info['title']);
+    //         });
+    //     }
+    // }
 
     /**
      * Create a new Job and saves JSON
@@ -1055,6 +1095,8 @@ class APIController extends Controller
      * @return JSON
      */
     public function createJob(Request $request) {
+        $errors = array();
+
         if(isset($request['CompanyId']) && isset($request['APIKey'])){
             $company = Company::where('id', '=', $request['CompanyId'])->where('api_key', '=', $request['APIKey'])->first();
             if($company) {
@@ -1092,7 +1134,11 @@ class APIController extends Controller
                                 }
 
                                 if(count($error_keys) != 0 ) {
-                                    $this->externalAPINotify('ProjectInfo->' . implode(",", $error_keys) . ' are missing.', $company, null, 0);
+                                    array_push($errors, array(
+                                        'message' => 'ProjectInfo->' . implode(",", $error_keys) . ' are missing.',
+                                        'user' => null,
+                                        'success' => 0,
+                                    ));
                                     return response()->json(['success' => false, 'message' => 'ProjectInfo->' . implode(",", $error_keys) . ' are missing.']);
                                 }
 
@@ -1109,158 +1155,293 @@ class APIController extends Controller
                                 }
 
                             } else {
-                                $this->externalAPINotify('ProjectInfo is missing.', $company, null, 0);
-                                return response()->json(['success' => false, 'message' => 'ProjectInfo is missing.']);
+                                array_push($errors, array(
+                                    'message' => 'ProjectInfo is missing.',
+                                    'user' => null,
+                                    'success' => 0,
+                                ));
+                                // $this->externalAPINotify('ProjectInfo is missing.', $company, null, 0);
+                                // return response()->json(['success' => false, 'message' => 'ProjectInfo is missing.']);
                             }
 
                             if(isset($request['Personnel'])) {
                                 $keys = array('DateOfFieldVisit', 'DateOfPlanSet', 'Name');
                                 foreach($keys as $key) {
                                     if(!isset($request['Personnel'][$key])) {
-                                        $this->externalAPINotify('Personnel->' . $key . ' is missing.', $company, null, 0);
-                                        return response()->json(['success' => false, 'message' => 'Personnel->' . $key . ' is missing.']);
+                                        array_push($errors, array(
+                                            'message' => 'Personnel->' . $key . ' is missing.',
+                                            'user' => null,
+                                            'success' => 0,
+                                        ));
+                                        // $this->externalAPINotify('Personnel->' . $key . ' is missing.', $company, null, 0);
+                                        // return response()->json(['success' => false, 'message' => 'Personnel->' . $key . ' is missing.']);
                                     }
                                 }
 
                                 $data['Personnel'] = $request['Personnel'];
                             } else {
-                                $this->externalAPINotify('Personnel is missing.', $company, null, 0);
-                                return response()->json(['success' => false, 'message' => 'Personnel is missing.']);
+                                array_push($errors, array(
+                                    'message' => 'Personnel is missing.',
+                                    'user' => null,
+                                    'success' => 0,
+                                ));
+                                // $this->externalAPINotify('Personnel is missing.', $company, null, 0);
+                                // return response()->json(['success' => false, 'message' => 'Personnel is missing.']);
                             }
                             
                             if(isset($request['BuildingAge']))
                                 $data['BuildingAge'] = $request['BuildingAge'];
                             else {
-                                $this->externalAPINotify('BuildingAge is missing.', $company, null, 0);
-                                return response()->json(['success' => false, 'message' => 'BuildingAge is missing.']);
+                                array_push($errors, array(
+                                    'message' => 'BuildingAge is missing.',
+                                    'user' => null,
+                                    'success' => 0,
+                                ));
+                                // $this->externalAPINotify('BuildingAge is missing.', $company, null, 0);
+                                // return response()->json(['success' => false, 'message' => 'BuildingAge is missing.']);
                             }
 
                             if(isset($request['Equipment'])) {
                                 if(isset($request['Equipment']['PVModule'])) {
                                     if(!isset($request['Equipment']['PVModule']['Type'])) {
-                                        $this->externalAPINotify('Equipment->PVModule->Type is missing.', $company, null, 0);
-                                        return response()->json(['success' => false, 'message' => 'Equipment->PVModule->Type is missing.']);
+                                        array_push($errors, array(
+                                            'message' => 'Equipment->PVModule('.$request['Equipment']['PVModule']['Type'].')->Type is missing.',
+                                            'user' => null,
+                                            'success' => 0,
+                                        ));
+                                        // $this->externalAPINotify('Equipment->PVModule('.$request['Equipment']['PVModule'].')->Type is missing.', $company, null, 0);
+                                        // return response()->json(['success' => false, 'message' => 'Equipment->PVModule->Type is missing.']);
                                     } else if(!isset($request['Equipment']['PVModule']['SubType'])) {
-                                        $this->externalAPINotify('Equipment->PVModule->SubType is missing.', $company, null, 0);
-                                        return response()->json(['success' => false, 'message' => 'Equipment->PVModule->SubType is missing.']);
+                                        array_push($errors, array(
+                                            'message' => 'Equipment->PVModule('.$request['Equipment']['PVModule']['SubType'].')->SubType is missing.',
+                                            'user' => null,
+                                            'success' => 0,
+                                        ));
+                                        // $this->externalAPINotify('Equipment->PVModule('.$request['Equipment']['PVModule'].')->SubType is missing.', $company, null, 0);
+                                        // return response()->json(['success' => false, 'message' => 'Equipment->PVModule->SubType is missing.']);
                                     }
 
                                     $module = PVModule::where('mfr', $request['Equipment']['PVModule']['Type'])->where('model', $request['Equipment']['PVModule']['SubType'])->first();
                                     $cecModule = PVModuleCEC::where('mfr', $request['Equipment']['PVModule']['Type'])->where('model', $request['Equipment']['PVModule']['SubType'])->first();
                                     $customModule = CustomModule::where('mfr', $request['Equipment']['PVModule']['Type'])->where('model', $request['Equipment']['PVModule']['SubType'])->where('client_no', $company['id'])->first();
                                     if(!$module && !$cecModule && !$customModule) {
-                                        $this->externalAPINotify('Equipment->PVModule cannot be found on our module records.', $company, null, 0);
-                                        return response()->json(['success' => false, 'message' => 'Equipment->PVModule cannot be found on our module records.']);
+                                        array_push($errors, array(
+                                            'message' => 'Equipment->PVModule('.$request['Equipment']['PVModule']['Type'].') cannot be found on our module records.',
+                                            'user' => null,
+                                            'success' => 0,
+                                        ));
+                                        // $this->externalAPINotify('Equipment->PVModule('.$request['Equipment']['PVModule'].') cannot be found on our module records.', $company, null, 0);
+                                        // return response()->json(['success' => false, 'message' => 'Equipment->PVModule cannot be found on our module records.']);
                                     }
                                 } else {
-                                    return response()->json(['success' => false, 'message' => 'Equipment->PVModule is missing.']);
+                                    // return response()->json(['success' => false, 'message' => 'Equipment->PVModule is missing.']);
                                 }
 
                                 if(isset($request['Equipment']['PVInverter'])) {
                                     if(!isset($request['Equipment']['PVInverter']['Type'])) {
-                                        $this->externalAPINotify('Equipment->PVInverter->Type is missing.', $company, null, 0);
-                                        return response()->json(['success' => false, 'message' => 'Equipment->PVInverter->Type is missing.']);
+                                        array_push($errors, array(
+                                            'message' => 'Equipment->PVInverter('.$request['Equipment']['PVInverter']['Type'].')->Type is missing.',
+                                            'user' => null,
+                                            'success' => 0,
+                                        ));
+                                        // $this->externalAPINotify('Equipment->PVInverter('.$request['Equipment']['PVInverter'].')->Type is missing.', $company, null, 0);
+                                        // return response()->json(['success' => false, 'message' => 'Equipment->PVInverter->Type is missing.']);
                                     } else if(!isset($request['Equipment']['PVInverter']['SubType'])) {
-                                        $this->externalAPINotify('Equipment->PVInverter->SubType is missing.', $company, null, 0);
-                                        return response()->json(['success' => false, 'message' => 'Equipment->PVInverter->SubType is missing.']);
+                                        array_push($errors, array(
+                                            'message' => 'Equipment->PVInverter('.$request['Equipment']['PVInverter']['SubType'].')->SubType is missing.',
+                                            'user' => null,
+                                            'success' => 0,
+                                        ));
+                                        // $this->externalAPINotify('Equipment->PVInverter('.$request['Equipment']['PVInverter'].')->SubType is missing.', $company, null, 0);
+                                        // return response()->json(['success' => false, 'message' => 'Equipment->PVInverter->SubType is missing.']);
                                     }
 
                                     $inverter = PVInverter::where('module', $request['Equipment']['PVInverter']['Type'])->where('submodule', $request['Equipment']['PVInverter']['SubType'])->first();
                                     $customInverter = CustomInverter::where('mfr', $request['Equipment']['PVInverter']['Type'])->where('model', $request['Equipment']['PVInverter']['SubType'])->where('client_no', $company['id'])->first();
                                     if(!$inverter && !$customInverter) {
-                                        $this->externalAPINotify('Equipment->PVInverter cannot be found on our inverter records.', $company, null, 0);
-                                        return response()->json(['success' => false, 'message' => 'Equipment->PVInverter cannot be found on our inverter records.']);
+                                        array_push($errors, array(
+                                            'message' => 'Equipment->PVInverter('.$request['Equipment']['PVInverter']['Type'].') cannot be found on our inverter records.',
+                                            'user' => null,
+                                            'success' => 0,
+                                        ));
+                                        // $this->externalAPINotify('Equipment->PVInverter('.$request['Equipment']['PVInverter'].') cannot be found on our inverter records.', $company, null, 0);
+                                        // return response()->json(['success' => false, 'message' => 'Equipment->PVInverter cannot be found on our inverter records.']);
                                     }
                                 } else {
-                                    $this->externalAPINotify('Equipment->PVInverter is missing.', $company, null, 0);
-                                    return response()->json(['success' => false, 'message' => 'Equipment->PVInverter is missing.']);
+                                    array_push($errors, array(
+                                        'message' => 'Equipment->PVInverter is missing.',
+                                        'user' => null,
+                                        'success' => 0,
+                                    ));
+                                    // $this->externalAPINotify('Equipment->PVInverter is missing.', $company, null, 0);
+                                    // return response()->json(['success' => false, 'message' => 'Equipment->PVInverter is missing.']);
                                 }
 
                                 if(isset($request['Equipment']['PVInverter_2'])) {
                                     if(!isset($request['Equipment']['PVInverter_2']['Type'])) {
-                                        $this->externalAPINotify('Equipment->PVInverter_2->Type is missing.', $company, null, 0);
-                                        return response()->json(['success' => false, 'message' => 'Equipment->PVInverter_2->Type is missing.']);
+                                        array_push($errors, array(
+                                            'message' => 'Equipment->PVInverter_2('.$request['Equipment']['PVInverter_2']['Type'].')->Type is missing.',
+                                            'user' => null,
+                                            'success' => 0,
+                                        ));
+                                        // $this->externalAPINotify('Equipment->PVInverter_2('.$request['Equipment']['PVInverter_2'].')->Type is missing.', $company, null, 0);
+                                        // return response()->json(['success' => false, 'message' => 'Equipment->PVInverter_2->Type is missing.']);
                                     } else if(!isset($request['Equipment']['PVInverter_2']['SubType'])) {
-                                        $this->externalAPINotify('Equipment->PVInverter_2->SubType is missing.', $company, null, 0);
-                                        return response()->json(['success' => false, 'message' => 'Equipment->PVInverter_2->SubType is missing.']);
+                                        array_push($errors, array(
+                                            'message' => 'Equipment->PVInverter_2('.$request['Equipment']['PVInverter_2']['SubType'].')->SubType is missing.',
+                                            'user' => null,
+                                            'success' => 0,
+                                        ));
+                                        // $this->externalAPINotify('Equipment->PVInverter_2('.$request['Equipment']['PVInverter_2'].')->SubType is missing.', $company, null, 0);
+                                        // return response()->json(['success' => false, 'message' => 'Equipment->PVInverter_2->SubType is missing.']);
                                     }
 
                                     $inverter = PVInverter::where('module', $request['Equipment']['PVInverter_2']['Type'])->where('submodule', $request['Equipment']['PVInverter_2']['SubType'])->first();
                                     $customInverter = CustomInverter::where('mfr', $request['Equipment']['PVInverter_2']['Type'])->where('model', $request['Equipment']['PVInverter_2']['SubType'])->where('client_no', $company['id'])->first();
                                     if(!$inverter && !$customInverter) {
-                                        $this->externalAPINotify('Equipment->PVInverter_2 cannot be found on our inverter records.', $company, null, 0);
-                                        return response()->json(['success' => false, 'message' => 'Equipment->PVInverter_2 cannot be found on our inverter records.']);
+                                        array_push($errors, array(
+                                            'message' => 'Equipment->PVInverter_2('.$request['Equipment']['PVInverter_2']['Type'].') cannot be found on our inverter records.',
+                                            'user' => null,
+                                            'success' => 0,
+                                        ));
+                                        // $this->externalAPINotify('Equipment->PVInverter_2('.$request['Equipment']['PVInverter_2'].') cannot be found on our inverter records.', $company, null, 0);
+                                        // return response()->json(['success' => false, 'message' => 'Equipment->PVInverter_2 cannot be found on our inverter records.']);
                                     }
                                 }
 
                                 if(isset($request['Equipment']['PVInverter_3'])) {
                                     if(!isset($request['Equipment']['PVInverter_3']['Type'])) {
-                                        $this->externalAPINotify('Equipment->PVInverter_3->Type is missing.', $company, null, 0);
-                                        return response()->json(['success' => false, 'message' => 'Equipment->PVInverter_3->Type is missing.']);
+                                        array_push($errors, array(
+                                            'message' => 'Equipment->PVInverter_3('.$request['Equipment']['PVInverter_3']['Type'].')->Type is missing.',
+                                            'user' => null,
+                                            'success' => 0,
+                                        ));
+                                        // $this->externalAPINotify('Equipment->PVInverter_3('.$request['Equipment']['PVInverter_3'].')->Type is missing.', $company, null, 0);
+                                        // return response()->json(['success' => false, 'message' => 'Equipment->PVInverter_3->Type is missing.']);
                                     } else if(!isset($request['Equipment']['PVInverter_3']['SubType'])) {
-                                        $this->externalAPINotify('Equipment->PVInverter_3->SubType is missing.', $company, null, 0);
-                                        return response()->json(['success' => false, 'message' => 'Equipment->PVInverter_3->SubType is missing.']);
+                                        array_push($errors, array(
+                                            'message' => 'Equipment->PVInverter_3('.$request['Equipment']['PVInverter_3']['SubType'].')->SubType is missing.',
+                                            'user' => null,
+                                            'success' => 0,
+                                        ));
+                                        // $this->externalAPINotify('Equipment->PVInverter_3('.$request['Equipment']['PVInverter_3'].')->SubType is missing.', $company, null, 0);
+                                        // return response()->json(['success' => false, 'message' => 'Equipment->PVInverter_3->SubType is missing.']);
                                     }
 
                                     $inverter = PVInverter::where('module', $request['Equipment']['PVInverter_3']['Type'])->where('submodule', $request['Equipment']['PVInverter_3']['SubType'])->first();
                                     $customInverter = CustomInverter::where('mfr', $request['Equipment']['PVInverter_3']['Type'])->where('model', $request['Equipment']['PVInverter_3']['SubType'])->where('client_no', $company['id'])->first();
                                     if(!$inverter && !$customInverter) {
-                                        $this->externalAPINotify('Equipment->PVInverter_3 cannot be found on our inverter records.', $company, null, 0);
-                                        return response()->json(['success' => false, 'message' => 'Equipment->PVInverter_3 cannot be found on our inverter records.']);
+                                        array_push($errors, array(
+                                            'message' => 'Equipment->PVInverter_3('.$request['Equipment']['PVInverter_3']['Type'].') cannot be found on our inverter records.',
+                                            'user' => null,
+                                            'success' => 0,
+                                        ));
+                                        // $this->externalAPINotify('Equipment->PVInverter_3('.$request['Equipment']['PVInverter_3'].') cannot be found on our inverter records.', $company, null, 0);
+                                        // return response()->json(['success' => false, 'message' => 'Equipment->PVInverter_3 cannot be found on our inverter records.']);
                                     }
                                 }
 
                                 if(isset($request['Equipment']['RailSupportSystem'])) {
                                     if(!isset($request['Equipment']['RailSupportSystem']['Type'])) {
-                                        $this->externalAPINotify('Equipment->RailSupportSystem->Type is missing.', $company, null, 0);
-                                        return response()->json(['success' => false, 'message' => 'Equipment->RailSupportSystem->Type is missing.']);
+                                        array_push($errors, array(
+                                            'message' => 'Equipment->RailSupportSystem('.$request['Equipment']['RailSupportSystem']['Type'].')->Type is missing.',
+                                            'user' => null,
+                                            'success' => 0,
+                                        ));
+                                        // $this->externalAPINotify('Equipment->RailSupportSystem('.$request['Equipment']['RailSupportSystem'].')->Type is missing.', $company, null, 0);
+                                        // return response()->json(['success' => false, 'message' => 'Equipment->RailSupportSystem->Type is missing.']);
                                     } else if(!isset($request['Equipment']['RailSupportSystem']['SubType'])) {
-                                        $this->externalAPINotify('Equipment->RailSupportSystem->SubType is missing.', $company, null, 0);
-                                        return response()->json(['success' => false, 'message' => 'Equipment->RailSupportSystem->SubType is missing.']);
+                                        array_push($errors, array(
+                                            'message' => 'Equipment->RailSupportSystem('.$request['Equipment']['RailSupportSystem']['SubType'].')->SubType is missing.',
+                                            'user' => null,
+                                            'success' => 0,
+                                        ));
+                                        // $this->externalAPINotify('Equipment->RailSupportSystem('.$request['Equipment']['RailSupportSystem'].')->SubType is missing.', $company, null, 0);
+                                        // return response()->json(['success' => false, 'message' => 'Equipment->RailSupportSystem->SubType is missing.']);
                                     }
 
                                     $railsupport = RailSupport::where('module', $request['Equipment']['RailSupportSystem']['Type'])->where('submodule', $request['Equipment']['RailSupportSystem']['SubType'])->first();
                                     $customRail = CustomRacking::where('mfr', $request['Equipment']['RailSupportSystem']['Type'])->where('model', $request['Equipment']['RailSupportSystem']['SubType'])->where('client_no', $company['id'])->first();
                                     if(!$railsupport && !$customRail) {
-                                        $this->externalAPINotify('Equipment->RailSupportSystem cannot be found on our railsupport records.', $company, null, 0);
-                                        return response()->json(['success' => false, 'message' => 'Equipment->RailSupportSystem cannot be found on our railsupport records.']);
+                                        array_push($errors, array(
+                                            'message' => 'Equipment->RailSupportSystem('.$request['Equipment']['RailSupportSystem']['Type'].') cannot be found on our railsupport records.',
+                                            'user' => null,
+                                            'success' => 0,
+                                        ));
+                                        // $this->externalAPINotify('Equipment->RailSupportSystem('.$request['Equipment']['RailSupportSystem'].') cannot be found on our railsupport records.', $company, null, 0);
+                                        // return response()->json(['success' => false, 'message' => 'Equipment->RailSupportSystem cannot be found on our railsupport records.']);
                                     }
                                 } else {
-                                    $this->externalAPINotify('Equipment->RailSupportSystem is missing.', $company, null, 0);
-                                    return response()->json(['success' => false, 'message' => 'Equipment->RailSupportSystem is missing.']);
+                                    array_push($errors, array(
+                                        'message' => 'Equipment->RailSupportSystem is missing.',
+                                        'user' => null,
+                                        'success' => 0,
+                                    ));
+                                    // $this->externalAPINotify('Equipment->RailSupportSystem is missing.', $company, null, 0);
+                                    // return response()->json(['success' => false, 'message' => 'Equipment->RailSupportSystem is missing.']);
                                 }
 
                                 if(isset($request['Equipment']['Stanchion'])) {
                                     if(!isset($request['Equipment']['Stanchion']['Type'])) {
-                                        $this->externalAPINotify('Equipment->Stanchion->Type is missing.', $company, null, 0);
-                                        return response()->json(['success' => false, 'message' => 'Equipment->Stanchion->Type is missing.']);
+                                        array_push($errors, array(
+                                            'message' => 'Equipment->Stanchion('.$request['Equipment']['Stanchion']['Type'].')->Type is missing.',
+                                            'user' => null,
+                                            'success' => 0,
+                                        ));
+                                        // $this->externalAPINotify('Equipment->Stanchion('.$request['Equipment']['Stanchion'].')->Type is missing.', $company, null, 0);
+                                        // return response()->json(['success' => false, 'message' => 'Equipment->Stanchion->Type is missing.']);
                                     } else if(!isset($request['Equipment']['Stanchion']['SubType'])) {
-                                        $this->externalAPINotify('Equipment->Stanchion->SubType is missing.', $company, null, 0);
-                                        return response()->json(['success' => false, 'message' => 'Equipment->Stanchion->SubType is missing.']);
+                                        array_push($errors, array(
+                                            'message' => 'Equipment->Stanchion('.$request['Equipment']['Stanchion']['SubType'].')->SubType is missing.',
+                                            'user' => null,
+                                            'success' => 0,
+                                        ));
+                                        // $this->externalAPINotify('Equipment->Stanchion('.$request['Equipment']['Stanchion'].')->SubType is missing.', $company, null, 0);
+                                        // return response()->json(['success' => false, 'message' => 'Equipment->Stanchion->SubType is missing.']);
                                     }
 
                                     $stanchion = Stanchion::where('module', $request['Equipment']['Stanchion']['Type'])->where('submodule', $request['Equipment']['Stanchion']['SubType'])->first();
                                     $customStanchion = CustomStanchion::where('mfr', $request['Equipment']['Stanchion']['Type'])->where('model', $request['Equipment']['Stanchion']['SubType'])->where('client_no', $company['id'])->first();
                                     if(!$stanchion && !$customStanchion) {
-                                        $this->externalAPINotify('Equipment->Stanchion cannot be found on our stanchion records.', $company, null, 0);
-                                        return response()->json(['success' => false, 'message' => 'Equipment->Stanchion cannot be found on our stanchion records.']);
+                                        array_push($errors, array(
+                                            'message' => 'Equipment->Stanchion('.$request['Equipment']['Stanchion']['Type'].') cannot be found on our stanchion records.',
+                                            'user' => null,
+                                            'success' => 0,
+                                        ));
+                                        // $this->externalAPINotify('Equipment->Stanchion('.$request['Equipment']['Stanchion'].') cannot be found on our stanchion records.', $company, null, 0);
+                                        // return response()->json(['success' => false, 'message' => 'Equipment->Stanchion cannot be found on our stanchion records.']);
                                     }
                                 } else {
-                                    $this->externalAPINotify('Equipment->Stanchion is missing.', $company, null, 0);
-                                    return response()->json(['success' => false, 'message' => 'Equipment->Stanchion is missing.']);
+                                    array_push($errors, array(
+                                        'message' => 'Equipment->Stanchion is missing.',
+                                        'user' => null,
+                                        'success' => 0,
+                                    ));
+                                    // $this->externalAPINotify('Equipment->Stanchion is missing.', $company, null, 0);
+                                    // return response()->json(['success' => false, 'message' => 'Equipment->Stanchion is missing.']);
                                 }
 
                                 $data['Equipment'] = $request['Equipment'];
                             } else {
-                                $this->externalAPINotify('Equipment is missing.', $company, null, 0);
-                                return response()->json(['success' => false, 'message' => 'Equipment is missing.']);
+                                array_push($errors, array(
+                                    'message' => 'Equipment is missing.',
+                                    'user' => null,
+                                    'success' => 0,
+                                ));
+                                // $this->externalAPINotify('Equipment is missing.', $company, null, 0);
+                                // return response()->json(['success' => false, 'message' => 'Equipment is missing.']);
                             }
 
                             if($request['NumberLoadingConditions']) 
                                 $data['NumberLoadingConditions'] = $request['NumberLoadingConditions'];
                             else {
-                                $this->externalAPINotify('NumberLoadingConditions is missing.', $company, null, 0);
-                                return response()->json(['success' => false, 'message' => 'NumberLoadingConditions is missing.']);
+                                array_push($errors, array(
+                                    'message' => 'NumberLoadingConditions is missing.',
+                                    'user' => null,
+                                    'success' => 0,
+                                ));
+                                // $this->externalAPINotify('NumberLoadingConditions is missing.', $company, null, 0);
+                                // return response()->json(['success' => false, 'message' => 'NumberLoadingConditions is missing.']);
                             }
         
                             $data['ProjectInfo']['Number'] = $projectNum;
@@ -1275,8 +1456,13 @@ class APIController extends Controller
                                         $keys = array('A1', 'A2', 'A3', 'A4');
                                         foreach($keys as $key) {
                                             if(!isset($caseInput['RoofDataInput'][$key])) {
-                                                $this->externalAPINotify('LoadingCase' . $i . '->' . $key . ' is missing.', $company, null, 0);
-                                                return response()->json(['success' => false, 'message' => 'LoadingCase' . $i . '->' . $key . ' is missing.']);
+                                                array_push($errors, array(
+                                                    'message' => 'LoadingCase' . $i . '->' . $key . ' is missing.',
+                                                    'user' => null,
+                                                    'success' => 0,
+                                                ));
+                                                // $this->externalAPINotify('LoadingCase' . $i . '->' . $key . ' is missing.', $company, null, 0);
+                                                // return response()->json(['success' => false, 'message' => 'LoadingCase' . $i . '->' . $key . ' is missing.']);
                                             }
                                         }
 
@@ -1335,29 +1521,62 @@ class APIController extends Controller
                             Storage::disk('input')->put($folderPrefix . $filename, json_encode($data));
         
                             //Backup json file to dropbox
-                            $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
-                            $dropbox = new Dropbox($app);
-                            $dropboxFile = new DropboxFile(storage_path('/input/') . $companyNumber. '. ' . $company['company_name'] . '/' . $filename);
-                            $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_JSON_INPUT') . $companyNumber. '. ' . $company['company_name'] . '/' . $filename, ['autorename' => TRUE]);
+                            // $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
+                            // $dropbox = new Dropbox($app);
+                            // $dropboxFile = new DropboxFile(storage_path('/input/') . $companyNumber. '. ' . $company['company_name'] . '/' . $filename);
+                            // $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_JSON_INPUT') . $companyNumber. '. ' . $company['company_name'] . '/' . $filename, ['autorename' => TRUE]);
+
+                            if(count($errors) == 0){
+                                array_push($errors, array(
+                                    'message' => "You can now work on {$data['ProjectInfo']['Number']}. {$data['ProjectInfo']['Name']} {$data['ProjectInfo']['State']}.",
+                                    'user' => $user,
+                                    'success' => 1,
+                                ));
+                            }
         
-                            $this->externalAPINotify("You can now work on {$data['ProjectInfo']['Number']}. {$data['ProjectInfo']['Name']} {$data['ProjectInfo']['State']}.", $company, $user, 1);
-                            return response()->json(['success' => true, 'ProjectName' => $data['ProjectInfo']['Name'], "ProjectNumber" => $data['ProjectInfo']['Number']]);
+                            // $this->externalAPINotify("You can now work on {$data['ProjectInfo']['Number']}. {$data['ProjectInfo']['Name']} {$data['ProjectInfo']['State']}.", $company, $user, 1);
+                            // return response()->json(['success' => true, 'ProjectName' => $data['ProjectInfo']['Name'], "ProjectNumber" => $data['ProjectInfo']['Number']]);
                         } else {
-                            $this->externalAPINotify('Sample not found.', $company, null, 0);
-                            return response()->json(['success' => false, 'message' => 'Sample not found.']);
+                            array_push($errors, array(
+                                'message' => 'Sample not found.',
+                                'user' => null,
+                                'success' => 0,
+                            ));
+                            
+                            // $this->externalAPINotify('Sample not found.', $company, null, 0);
+                            // return response()->json(['success' => false, 'message' => 'Sample not found.']);
                         }
                     } else {
-                        $this->externalAPINotify('User Record Not Found.', $company, null, 0);
-                        return response()->json(['success' => false, 'message' => 'User Record Not Found.']);
+                        array_push($errors, array(
+                            'message' => 'User Record Not Found.',
+                            'user' => null,
+                            'success' => 0,
+                        ));
+                        // $this->externalAPINotify('User Record Not Found.', $company, null, 0);
+                        // return response()->json(['success' => false, 'message' => 'User Record Not Found.']);
                     }
                 } else {
-                    $this->externalAPINotify('Missing User Number.', $company, null, 0);
-                    return response()->json(['success' => false, 'message' => 'Missing User Number.']);
+                    array_push($errors, array(
+                        'message' => 'Missing User Number.',
+                        'user' => null,
+                        'success' => 0,
+                    ));
+                    // $this->externalAPINotify('Missing User Number.', $company, null, 0);
+                    // return response()->json(['success' => false, 'message' => 'Missing User Number.']);
                 }
             } else
                 return response()->json(['success' => false, 'message' => 'Auth failed.']);
-        } else
+        } else {
             return response()->json(['success' => false, 'message' => 'Auth required.']);
+        }
+        if (count($errors) > 0) {
+            $this->externalAPINotify($errors, $company);
+            $messages = "";
+            foreach($errors as $error) {
+                $messages .= $error["message"];
+            }
+            return response()->json(['success' => false, 'message' => $messages]);
+        }
     }
 
     /**
@@ -1436,7 +1655,14 @@ class APIController extends Controller
                             $dropboxFile = new DropboxFile(storage_path('/input/') . $companyNumber. '. ' . $project['companyName'] . '/' . $project['requestFile']);
                             $dropfile = $dropbox->upload($dropboxFile, env('DROPBOX_JSON_INPUT') . $companyNumber. '. ' . $project['companyName'] . '/' . $project['requestFile'], ['mode' => 'overwrite']);
 
-                            $this->externalAPINotify("Electric Data Updated on {$data['ProjectInfo']['Number']}. {$data['ProjectInfo']['Name']} {$data['ProjectInfo']['State']}.", $company, null, 1, true);
+                            $errors= [];
+                            array_push($errors, array(
+                                'message' => "Electric Data Updated on {$data['ProjectInfo']['Number']}. {$data['ProjectInfo']['Name']} {$data['ProjectInfo']['State']}.",
+                                'user' => null,
+                                'success' => 1,
+                            ));
+                            // $this->externalAPINotify("Electric Data Updated on {$data['ProjectInfo']['Number']}. {$data['ProjectInfo']['Name']} {$data['ProjectInfo']['State']}.", $company, null, 1, true);
+                            $this->externalAPINotify($errors, $company, true);
                             return response()->json(['success' => true]);
 
                         } else
