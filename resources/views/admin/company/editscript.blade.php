@@ -57,7 +57,7 @@ $(document).ready(function(){
         },
         'registration': {
             required: false,
-            digits: true
+            // digits: true
         },
         'exp_date': {
             required: false,
@@ -83,7 +83,7 @@ $(document).ready(function(){
             minlength: 'Your name must consist of at least 3 characters'
         },
         'construction_email': 'Please enter a valid email address',
-        'registration': 'Please enter only digits!',
+        'registration': 'Please enter only Alpha and Numbers!',
         'EIN': 'Please enter only digits!',
     },
     submitHandler: function(){
