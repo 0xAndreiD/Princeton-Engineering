@@ -39,6 +39,8 @@ use App\SystemMsgs;
 use App\BlgMaterials;
 use App\SubClients;
 use App\Overrides;
+use App\PrintInfo;
+use App\PrintAddress;
 use Kunnu\Dropbox\DropboxApp;
 use Kunnu\Dropbox\Dropbox;
 use Kunnu\Dropbox\DropboxFile;
@@ -1052,8 +1054,10 @@ class GeneralController extends Controller
             $users = User::where('companyid', Auth::user()->companyid)->get(array('id', 'username'));
 
         $company = Company::where('id', Auth::user()->companyid)->first();
+        $printAddress = PrintAddress::where('client_id', Auth::user()->companyid)->get();
         return view('general.projectlist')
                 ->with('companyList', $companyList)
+                ->with('printAddress', $printAddress)
                 ->with('planStatusList', $planStatusList)
                 ->with('projectStatusList', $projectStatusList)
                 ->with('users', $users)
@@ -1172,6 +1176,10 @@ class GeneralController extends Controller
         if(!empty($request->input("pil")) && $request["pil"] == 1){
             $handler = $handler->where('job_request.PIL_status', 1);
         }
+        // filter PRINT
+        if(!empty($request->input("print")) && $request["print"] == 1){
+            $handler = $handler->where('job_request.eSeal_Print', 2);
+        }
         
         // admin filter company name, user, project name, project number, project state, plan status
         if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4){
@@ -1247,7 +1255,8 @@ class GeneralController extends Controller
                         'job_request.eSeal as eSeal',
                         'job_request.eSeal_asbuilt as eSeal_asbuilt',
                         'job_request.PIL_status as PIL_status',
-                        'job_request.eSeal_PIL as eSeal_PIL'
+                        'job_request.eSeal_PIL as eSeal_PIL',
+                        'job_request.eSeal_Print as eSeal_Print',
                     )
                 );
             //if($handler->offset($start)->count() > 0)
@@ -1288,7 +1297,8 @@ class GeneralController extends Controller
                                 'job_request.eSeal as eSeal',
                                 'job_request.eSeal_asbuilt as eSeal_asbuilt',
                                 'job_request.PIL_status as PIL_status',
-                                'job_request.eSeal_PIL as eSeal_PIL'
+                                'job_request.eSeal_PIL as eSeal_PIL',
+                                'job_request.eSeal_Print as eSeal_Print'
                             )
                         );
 
@@ -1399,6 +1409,17 @@ class GeneralController extends Controller
                 else
                     $pilCol = '000000';
 
+                if($job->eSeal_Print == 1)
+                    $printCol = 'e4d800';
+                else if($job->eSeal_Print == 2)
+                    $printCol = '96ddcd';
+                else if($job->eSeal_Print == 3)
+                    $printCol = '7cb9e8';
+                else if($job->eSeal_Print == 4)
+                    $printCol = '00FF00';
+                else
+                    $printCol = '000000';
+
                 $nestedData['actions'] = "
                 <div class='text-center' style='display: flex; align-items: center; justify-content: center;'>
                     <a href='rsinput?projectId={$nestedData['id']}' class='btn btn-primary mr-1' style='padding: 3px 4px;'>
@@ -1409,10 +1430,20 @@ class GeneralController extends Controller
                     </a>". 
                     "<input class='mr-1 plancheck' type='checkbox' " . (Auth::user()->userrole == 4 ? "style='pointer-events: none;'" : "onchange='togglePlanCheck(this, {$job['id']})'") . ($job['plancheck'] == 1 ? " checked" : "") . ">" . 
                     "<input class='mr-1 asbuilt' type='checkbox' " . (Auth::user()->userrole == 4 ? "style='pointer-events: none;'" : "onchange='toggleAsBuilt(this, {$job['id']})'") . ($job['asbuilt'] == 1 ? " checked" : "") . ">" . 
-                    (Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->allow_permit > 0 ? "<input class='mr-2 pilcheck' type='checkbox'" . (Auth::user()->userrole == 4 ? "style='pointer-events: none;'" : "onchange='togglePilStatus(this, {$job['id']})'") . ($job['PIL_status'] == 1 ? " checked" : "") . ">" : "") .
-                    (Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4? "<button onclick='openReviewTab({$job['id']})' class='mr-1 btn' style='padding: 7px 4px; background-image: -webkit-linear-gradient(-90deg, #{$sealCol} 0%, #{$sealCol} 30%, #FFFFFF 31%, #FFFFFF 35%, #{$asbuiltCol} 36%, #{$asbuiltCol} 65%, #FFFFFF 66%, #FFFFFF 72%, #{$pilCol} 71%, #{$pilCol} 100%); border: 1px solid white;'>
-                        <div style='width:16px; height: 16px;'></div>
-                    </a>" : "") . 
+                    (Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->allow_permit > 0 ? "<input class='mr-1 pilcheck' type='checkbox'" . (Auth::user()->userrole == 4 ? "style='pointer-events: none;'" : "onchange='togglePilStatus(this, {$job['id']})'") . ($job['PIL_status'] == 1 ? " checked" : "") . ">" : "") .
+                    "<input class='mr-2 printcheck' type='checkbox' " . "onchange='togglePrintCheck(this, {$job['id']})'" . ($job['eSeal_Print'] == 2 || $job['eSeal_Print'] == 3 ? " checked" : "") . ">" . 
+                    (Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 ? 
+                    "<div class='four-check mr-2' onclick=". ($job['eSeal_Print'] == 2 || $job['eSeal_Print'] == 3 ? "'togglePrintCheck(this, {$job['id']})'" : "'openReviewTab({$job['id']})'") . " style='overflow: hidden; width: 30px; height: 30px; border-radius: 6px;'>".
+                        "<div style='width: 66px; height: 66px; display: flex; justify-content: start; flex-wrap: wrap; transform: translate(-18px, -18px) rotate(45deg);'>".
+                            "<div class='eseal'"  . " style='margin:1.5px; width: 30px; height: 30px; background-color:#{$sealCol};'></div>".
+                            "<div class='eseal_print'" . " style='margin:1.5px; width: 30px; height: 30px; background-color:#{$printCol};'></div>" .
+                            "<div class='asbuilt'" . " style='margin:1.5px; width: 30px; height: 30px; background-color:#{$asbuiltCol};'></div>".
+                            "<div class='pil'" . " style='margin:1.5px; width: 30px; height: 30px; background-color:#{$pilCol};'></div>".
+                        "</div>".
+                    "</div>" : "" ).
+                    // (Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4? "<button onclick='openReviewTab({$job['id']})' class='mr-1 btn' style='padding: 7px 4px; background-image: -webkit-linear-gradient(-90deg, #{$sealCol} 0%, #{$sealCol} 30%, #FFFFFF 31%, #FFFFFF 35%, #{$asbuiltCol} 36%, #{$asbuiltCol} 65%, #FFFFFF 66%, #FFFFFF 72%, #{$pilCol} 71%, #{$pilCol} 100%); border: 1px solid white;'>
+                    //     <div style='width:16px; height: 16px;'></div>
+                    // </a>" : "") . 
                     (Auth::user()->userrole == 2 ? "<button type='button' class='js-swal-confirm btn btn-danger mr-1' onclick='delProject(this,{$nestedData['id']})' style='padding: 3px 4px;'>
                     <i class='fa fa-trash'></i>
                 </button>" : "") .
@@ -2530,6 +2561,8 @@ class GeneralController extends Controller
                     try{
                         $listFolderContents = $dropbox->listFolder(env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_IN') . $filepath . '/');
                         $files = $listFolderContents->getItems()->all();
+                        if(!file_exists(storage_path('upload') . $filepath))
+                            Storage::disk('upload')->makeDirectory($filepath);
                         foreach($files as $file){
                             if($file->getDataProperty('.tag') === 'file'){
                                 if(!file_exists(storage_path('upload') . $filepath . '/' . $file->getName()) || filesize(storage_path('upload') . $filepath . '/' . $file->getName()) != $file->getSize()){
@@ -2893,6 +2926,29 @@ class GeneralController extends Controller
     }
 
     /**
+     * Toggle the as PRINTING_STATUS of job.
+     *
+     * @return JSON
+     */
+
+    public function togglePrintCheck(Request $request){
+        // if(Auth::user()->userrole == 2){
+            if(!empty($request['id'])){
+                $printingdata = PrintInfo::where('job_id', $request['id'])->first();
+                $job = JobRequest::where('id', $request['id'])->first();
+                if($printingdata){
+                    $printAddress = PrintAddress::where('id', $printingdata->address_id)->first();
+                    return response()->json(["success" => true, "job" => $job, "data" => $printingdata, "address" => $printAddress ]);
+                } else 
+                    $company = Company::where('id', $job->companyId);
+                    return response()->json(["success" => false, "job" => $job, "company" => $company ]);
+            } else
+                return response()->json(["success" => false, "message" => "Empty printing data id."]);
+        // } else
+        //     return response()->json(["success" => false, "message" => "You don't have any permission."]);
+    }
+
+    /**
      * Reset Review checks
      *
      * @return JSON
@@ -3234,5 +3290,557 @@ class GeneralController extends Controller
         } else {
             return response()->json(['success' => false, 'message' => "Missing Id."]);
         }
+    }
+
+    /**
+     * save the Print data
+     *
+     * @return JSON
+     */
+    public function savePrint (Request $request) {
+        $curtime = time();
+        $updatedAddress = [];
+        $created = false;
+        if(Auth::user()->userrole == 2){
+            if(!empty($request['company_name'])){
+                if(!empty($request['address_id'])) {
+                    $printAddress = PrintAddress::where('id', $request['address_id'])->first();
+                    // $printAddress->client_id = $request['companyId'];
+                    $printAddress->client_id = Auth::user()->companyid;
+                    $printAddress->company_name = $request['company_name'];
+                    $printAddress->contact_name = $request['contact_name'];
+                    $printAddress->address1 = $request['address1'];
+                    $printAddress->address2 = $request['address2'];
+                    $printAddress->zip = $request['zip'];
+                    $printAddress->city = $request['city'];
+                    $printAddress->state = $request['state'];
+                    $printAddress->telno = $request['telno'];
+                    $printAddress->extension = $request['extension'];
+
+                    $printAddress->save();
+                    $updatedAddress = $printAddress;
+                    $created = false;
+                } else {
+                    $printAddress = new PrintAddress;
+                        $printAddress->client_id = Auth::user()->companyid;
+                        if($request['company_name']) {
+                            $printAddress->company_name = $request['company_name'];
+                        } else {
+                            $printAddress->company_name = "";
+                        }
+                        if($request['contact_name']) {
+                            $printAddress->contact_name = $request['contact_name'];
+                        } 
+                        if($request['address1']) {
+                            $printAddress->address1 = $request['address1'];
+                        }
+                        if($request['address2']) {
+                            $printAddress->address2 = $request['address2'];
+                        } 
+                        if($request['zip']) {
+                            $printAddress->zip = $request['zip'];
+                        } 
+                        if($request['city']) {
+                            $printAddress->city = $request['city'];
+                        } 
+                        if($request['state']) {
+                            $printAddress->state = $request['state'];
+                        } 
+                        if($request['telno']) {
+                            $printAddress->telno = $request['telno'];
+                        } 
+                        if($request['extension']) {
+                            $printAddress->extension = $request['extension'];
+                        }
+                        $printAddress->save();
+
+                        $updatedAddress = $printAddress;
+                        $created = true;
+                }
+            }
+            
+            if(!empty($request['jobid'])){
+                $printInfo = PrintInfo::where('job_id', $request['jobid'])->first();
+                    if($printInfo){
+                        $printInfo->job_id = $request['jobid'];
+                        // $printInfo->client_id = $request['companyId'];
+                        $printInfo->client_id = Auth::user()->companyid;
+                        $printInfo->copies = $request['copies'];
+                        $printInfo->plan_sheets = $request['plan_sheets'];
+                        $printInfo->report_sheets = $request['report_sheets'];
+                        $printInfo->seal_type = $request['seal_type'];
+                        $printInfo->signature = $request['signature'];
+                        $printInfo->user_id = Auth::user()->id;
+                        if(!empty($request['company_name'])) {
+                            if($request['address_id']) {
+                                $printInfo->address_id = $request['address_id'];
+                            } else {
+                                $addressId = PrintAddress::latest('id')->first();
+                                $printInfo->address_id = $addressId->id;
+                            }
+                        } else {
+                            $printInfo->address_id = 0;
+                        }
+                        $printInfo->delivery_method = $request['delivery_method'];
+                        $printInfo->third_party_fedex = $request['fedex'];
+                        $printInfo->tracking = $request['tracking'];
+                        $printInfo->user_notes = $request['user_notes'];
+                        $printInfo->printer_notes = $request['printer_notes'];
+                        $printInfo->selected_files = json_encode($request['print_file']);
+                        if($request['printed']) {
+                            $printInfo->printed = $request['printed'];
+                        }
+                        if($request['sent']) {
+                            $printInfo->sent = $request['sent'];
+                        }
+
+                        $printInfo->save();
+
+                        $project = JobRequest::where('id', '=', $request['jobid'])->first();
+                        if($project->eSeal_Print < 2) {
+                            $project->eSeal_Print = 1;
+                        }
+                        $project->save();
+                            
+                        return response()->json(["success" => true, "updatedAddress" => $updatedAddress, "created" => $created]);
+                    } else {
+                            $printInfo = new PrintInfo;
+                            if($request['jobid']) {
+                                $printInfo->job_id = $request['jobid'];
+                            } else {
+                                return response()->json(["success" => false, "message" => "You don't have job id."]);
+                            }
+                            $printInfo->client_id = Auth::user()->companyid;
+                            if($request['copies']) {
+                                $printInfo->copies = $request['copies'];
+                            }
+                            if($request['plan_sheets']) {
+                                $printInfo->plan_sheets = $request['plan_sheets'];
+                            }
+                            if($request['report_sheets']) {
+                                $printInfo->report_sheets = $request['report_sheets'];
+                            }
+                            if($request['seal_type']) {
+                                $printInfo->seal_type = $request['seal_type'];
+                            }
+                            if($request['signature']) {
+                                $printInfo->signature = $request['signature'];
+                            } 
+
+                            $printInfo->user_id = Auth::user()->id;
+
+                            if($request['delivery_method']) {
+                                $printInfo->delivery_method = $request['delivery_method'];
+                            } 
+                            if($request['fedex']) {
+                                $printInfo->third_party_fedex = $request['fedex'];
+                            }
+
+                            if(!empty($request['company_name'])) {
+                                if($request['address_id']) {
+                                    $printInfo->address_id = $request['address_id'];
+                                } else {
+                                    $addressId = PrintAddress::latest('id')->first();
+                                    $printInfo->address_id = $addressId->id;
+                                }
+                            }
+                            
+                            if($request['tracking']) {
+                                $printInfo->tracking = $request['tracking'];
+                            }
+                            if($request['user_notes']) {
+                                $printInfo->user_notes = $request['user_notes'];
+                            }
+                            if($request['printer_notes']) {
+                                $printInfo->printer_notes = $request['printer_notes'];
+                            }
+                            if($request['printed']) {
+                                $printInfo->printed = $request['printed'];
+                            }
+                            if($request['sent']) {
+                                $printInfo->sent = $request['sent'];
+                            }
+                            
+                            // $printInfo->sent = gmdate("Y-m-d h:i:s", $curtime);
+                            
+                            $printInfo->selected_files = json_encode($request['print_file']);
+                            // print_r($printInfo); exit;
+                            $printInfo->save();
+
+                            $project = JobRequest::where('id', '=', $request['jobid'])->first();
+                            if($project->eSeal_Print < 2) {
+                                $project->eSeal_Print = 1;
+                            }
+                            $project->save();
+                            
+                            return response()->json(["success" => true, "updatedAddress" => $updatedAddress, "created" => $created]);
+                        }
+                } else {
+                        return response()->json(["success" => false, "message" => "You don't have job id."]);
+                }
+        } else
+            return response()->json(["success" => false, "message" => "You don't have any permission."]);
+    }
+    /**
+     * submit the Print data
+     *
+     * @return JSON
+     */
+    public function submitPrint (Request $request) {
+        $curtime = time();
+        $updatedAddress;
+        $created = false;
+        if(Auth::user()->userrole == 2){
+            if(!empty($request['address_id'])) {
+                $printAddress = PrintAddress::where('id', $request['address_id'])->first();
+                // $printAddress->client_id = $request['companyId'];
+                $printAddress->client_id = Auth::user()->companyid;
+                $printAddress->company_name = $request['company_name'];
+                $printAddress->contact_name = $request['contact_name'];
+                $printAddress->address1 = $request['address1'];
+                $printAddress->address2 = $request['address2'];
+                $printAddress->zip = $request['zip'];
+                $printAddress->city = $request['city'];
+                $printAddress->state = $request['state'];
+                $printAddress->telno = $request['telno'];
+                $printAddress->extension = $request['extension'];
+
+                $printAddress->save();
+                $updatedAddress = $printAddress;
+                $created = false;
+            } else {
+                $printAddress = new PrintAddress;
+                $printAddress->client_id = Auth::user()->companyid;
+                if($request['company_name']) {
+                    $printAddress->company_name = $request['company_name'];
+                } else {
+                    return response()->json(["success" => false, "message" => "You don't have company name."]);
+                }
+                if($request['contact_name']) {
+                    $printAddress->contact_name = $request['contact_name'];
+                } else {
+                    return response()->json(["success" => false, "message" => "You don't have contact name."]);
+                }
+                if($request['address1']) {
+                    $printAddress->address1 = $request['address1'];
+                } else {
+                    return response()->json(["success" => false, "message" => "You don't have address1."]);
+                }
+                if($request['address2']) {
+                    $printAddress->address2 = $request['address2'];
+                } else {
+                    $printAddress->address2 = "";
+                }
+                if($request['zip']) {
+                    $printAddress->zip = $request['zip'];
+                } else {
+                    return response()->json(["success" => false, "message" => "You don't have zip."]);
+                }
+                if($request['city']) {
+                    $printAddress->city = $request['city'];
+                } else {
+                    return response()->json(["success" => false, "message" => "You don't have city."]);
+                }
+                if($request['state']) {
+                    $printAddress->state = $request['state'];
+                } else {
+                    return response()->json(["success" => false, "message" => "You don't have state."]);
+                }
+                if($request['telno']) {
+                    $printAddress->telno = $request['telno'];
+                } else {
+                    return response()->json(["success" => false, "message" => "You don't have telno."]);
+                }
+                if($request['extension']) {
+                    $printAddress->extension = $request['extension'];
+                } else {
+                    $printAddress->extension = "";
+                }
+                $printAddress->save();
+                $updatedAddress = $printAddress;
+                $created = true;
+            }
+            if(!empty($request['jobid'])){
+                $printInfo = PrintInfo::where('job_id', $request['jobid'])->first();
+                    if($printInfo){
+                        if($request['jobid']) {
+                            $printInfo->job_id = $request['jobid'];
+                        } else {
+                            return response()->json(["success" => false, "message" => "You don't have job id."]);
+                        }
+                        $printInfo->client_id = Auth::user()->companyid;
+                        // $printInfo->client_id = $request['companyId'];
+                        if($request['copies']) {
+                            $printInfo->copies = $request['copies'];
+                        } else {
+                            return response()->json(["success" => false, "message" => "You don't have copies."]);
+                        }
+                        if($request['plan_sheets']) {
+                            $printInfo->plan_sheets = $request['plan_sheets'];
+                        }
+                        if($request['report_sheets']) {
+                            $printInfo->report_sheets = $request['report_sheets'];
+                        }
+                        
+                        $printInfo->seal_type = $request['seal_type'];
+                        $printInfo->signature = $request['signature'];
+
+                        $printInfo->user_id = Auth::user()->id;
+                        if($request['address_id']) {
+                            $printInfo->address_id = $request['address_id'];
+                        } else {
+                            $addressId = PrintAddress::latest('id')->first();
+                            $printInfo->address_id = $addressId->id;
+                        }
+
+                        $printInfo->delivery_method = $request['delivery_method'];
+
+                        if($request['fedex']) {
+                            $printInfo->third_party_fedex = $request['fedex'];
+                        }
+                        
+                        if($request['address_id']) {
+                            $printInfo->address_id = $request['address_id'];
+                        } else {
+                            $addressId = PrintAddress::latest('id')->first();
+                            $printInfo->address_id = $addressId->id;
+                        }
+                        
+                        if($request['tracking']) {
+                            $printInfo->tracking = $request['tracking'];
+                        }else {
+                            if( Auth::user()->userrole == 2 || Auth::user()->userrole == 3 ){
+                                $printInfo->tracking = "";
+                            } else {
+                                return response()->json(["success" => false, "message" => "You don't have tracking."]);
+                            }
+                        }
+                        if($request['user_notes']) {
+                            $printInfo->user_notes = $request['user_notes'];
+                        }
+                        if($request['printer_notes']) {
+                            $printInfo->printer_notes = $request['printer_notes'];
+                        }
+                        if($request['print_file']) {
+                            $printInfo->selected_files = json_encode($request['print_file']);
+                        }
+                        if($request['printed']) {
+                            $printInfo->printed = $request['printed'];
+                        }
+                        if($request['sent']) {
+                            $printInfo->sent = $request['sent'];
+                        }
+                        $printInfo->save();
+
+                        $project = JobRequest::where('id', '=', $request['jobid'])->first();
+                        if($request['printed'] && $request['sent']){
+                            $project->eSeal_Print = 4;
+                        } else if($request['printed']) {
+                            $project->eSeal_Print = 3;
+                        } else {
+                            $project->eSeal_Print = 2;
+                        }
+                        $project->save();
+                            
+                            return response()->json(["success" => true, "status" => $project->eSeal_Print, "updatedAddress" => $updatedAddress, "created" => $created]);
+                        } else {
+                            
+                            $addressId = PrintAddress::latest('id')->first();
+                            
+                            $printInfo = new PrintInfo;
+                            if($request['jobid']) {
+                                $printInfo->job_id = $request['jobid'];
+                            } else {
+                                return response()->json(["success" => false, "message" => "You don't have job id."]);
+                            }
+                            $printInfo->client_id = Auth::user()->companyid;
+                            if($request['copies']) {
+                                $printInfo->copies = $request['copies'];
+                            } else {
+                                return response()->json(["success" => false, "message" => "You don't have copies."]);
+                            }
+                            if($request['plan_sheets']) {
+                                $printInfo->plan_sheets = $request['plan_sheets'];
+                            }
+                            if($request['report_sheets']) {
+                                $printInfo->report_sheets = $request['report_sheets'];
+                            }
+                                
+                            $printInfo->seal_type = $request['seal_type'];
+                                
+                            $printInfo->signature = $request['signature'];
+
+                            $printInfo->user_id = Auth::user()->id;
+
+                            $printInfo->delivery_method = $request['delivery_method'];
+
+                            if($request['fedex']) {
+                                $printInfo->third_party_fedex = $request['fedex'];
+                            }
+                            
+                            if($request['address_id']) {
+                                $printInfo->address_id = $request['address_id'];
+                            } else {
+                                $addressId = PrintAddress::latest('id')->first();
+                                $printInfo->address_id = $addressId->id;
+                            }
+                            
+                            if($request['tracking']) {
+                                $printInfo->tracking = $request['tracking'];
+                            }else {
+                                if( Auth::user()->userrole == 2 || Auth::user()->userrole == 3 ){
+                                    $printInfo->tracking = "";
+                                } else {
+                                    return response()->json(["success" => false, "message" => "You don't have tracking."]);
+                                }
+                            }
+                            if($request['user_notes']) {
+                                $printInfo->user_notes = $request['user_notes'];
+                            }
+                            if($request['printer_notes']) {
+                                $printInfo->printer_notes = $request['printer_notes'];
+                            }
+
+                            if($request['print_file']) {
+                                $printInfo->selected_files = json_encode($request['print_file']);
+                            }
+                            if($request['printed']) {
+                                $printInfo->printed = $request['printed'];
+                            }
+                            if($request['sent']) {
+                                $printInfo->sent = $request['sent'];
+                            }
+
+                            // $printInfo->sent = gmdate("Y-m-d h:i:s", $curtime);
+                            
+                            $printInfo->selected_files = json_encode($request['jobIds']);
+                            // print_r($printInfo); exit;
+                            $printInfo->save();
+                            
+                            $project = JobRequest::where('id', '=', $request['jobid'])->first();
+                            if($request['printed'] && $request['sent']){
+                                $project->eSeal_Print = 4;
+                            } else if($request['printed']) {
+                                $project->eSeal_Print = 3;
+                            } else {
+                                $project->eSeal_Print = 2;
+                            }
+                            $project->save();
+                            
+                            return response()->json(["success" => true, "status" => $project->eSeal_Print ,"updatedAddress" => $updatedAddress, "created" => $created]);
+                        }
+                } else {
+                        return response()->json(["success" => false, "message" => "You don't have job id."]);
+                }
+        } else
+            return response()->json(["success" => false, "message" => "You don't have any permission."]);
+    }
+    /**
+     * Return report files and Biggest sized IN file.
+     *
+     * @return JSON
+     */
+    public function getPrintFiles(Request $request){
+        if(!empty($request['projectId'])){
+            $job = JobRequest::where('id', '=', $request['projectId'])->first();
+            if($job){
+                // if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4)
+                // {
+                    $jsonname = 'iRoofTM by Princeton Engineering ' . str_replace(".json", "", $job['requestFile']) . "-";
+                    $filename = $jsonname . $job['clientProjectNumber'] . '.' . $job['clientProjectName'] . ' ' . $job['state'];
+
+                    $reportfiles = array();
+                    $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
+                    $dropbox = new Dropbox($app);
+                    try {
+                        $meta = $dropbox->getMetaData(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $filename . ".pdf");
+                        if($meta){
+                            array_push($reportfiles, array("filename" => $filename . ".pdf", "size" => $meta->getSize(), "modifiedDate" => $meta->getServerModified(), "link" => env('APP_URL') . "report/" . $filename . ".pdf"));
+                        }
+                    } catch (DropboxClientException $e) { }
+                    try {
+                        $meta = $dropbox->getMetaData(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $filename . " s.pdf");
+                        if($meta){
+                            array_push($reportfiles, array("filename" => $filename . " s.pdf", "size" => $meta->getSize(), "modifiedDate" => $meta->getServerModified(), "link" => env('APP_URL') . "report/" . $filename . " s.pdf"));
+                        }
+                    } catch (DropboxClientException $e) { }
+                    try {
+                        $meta = $dropbox->getMetaData(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $filename . " binder s.pdf");
+                        if($meta){
+                            array_push($reportfiles, array("filename" => $filename . " binder s.pdf", "size" => $meta->getSize(), "modifiedDate" => $meta->getServerModified(), "link" => env('APP_URL') . "report/" . $filename . " binder s.pdf"));
+                        }
+                    } catch (DropboxClientException $e) { }
+                    try {
+                        $meta = $dropbox->getMetaData(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $filename . " Data Check.pdf");
+                        if($meta){
+                            array_push($reportfiles, array("filename" => $filename . " Data Check.pdf", "size" => $meta->getSize(), "modifiedDate" => $meta->getServerModified(), "link" => env('APP_URL') . "report/" . $filename . " Data Check.pdf"));
+                        }
+                    } catch (DropboxClientException $e) { }
+
+                    $company = Company::where('id', $job['companyId'])->first();
+                    $companyNumber = $company ? $company['company_number'] : 0;
+                    $folderPrefix = '/' . $companyNumber . ". " . $job['companyName'] . '/';
+                    
+                    $filepath = $folderPrefix . $job['clientProjectNumber'] . '. ' . $job['clientProjectName'] . ' ' . $job['state'];
+                        
+                    $infile = array();
+                    $bigsize = 0;
+                    try{
+                        $listFolderContents = $dropbox->listFolder(env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_IN') . $filepath . '/');
+                        $files = $listFolderContents->getItems()->all();
+                        foreach($files as $file){
+                            if($file->getDataProperty('.tag') === 'file'){
+                                if($file->getSize() > $bigsize){
+                                    $bigsize = $file->getSize();
+                                    $infile = array('filename' => $file->getName(), 'size' => $file->getSize(), 'modifiedDate' => $file->getServerModified(), 'link' => env('APP_URL') . 'in/' . $request['projectId'] . '/' . $file->getName());
+                                }
+                            }
+                        }
+                    } catch (DropboxClientException $e) { 
+                        $infile = array();
+                    }
+                    array_push($reportfiles, $infile);
+
+                    try{
+                        $listFolderContents = $dropbox->listFolder(env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_INCOPY') . $filepath . '/');
+                        $files = $listFolderContents->getItems()->all();
+                        foreach($files as $file){
+                            if(str_contains($file->getName(), 'PIL_f.pdf')){
+                                array_push($reportfiles, array('filename' => $file->getName(), 'size' => $file->getSize(), 'modifiedDate' => $file->getServerModified(), 'link' => env('APP_URL') . 'in/' . $request['projectId'] . '/' . $file->getName()));
+                            }
+                        }
+                    } catch (DropboxClientException $e) { }
+
+                    return response()->json(['success' => true, 'files' => $reportfiles]);
+                // } else
+                //     return response()->json(['success' => false, 'message' => 'No permission.']);
+            } else
+                return response()->json(['success' => false, 'message' => 'Cannot find the project.']);
+        } else 
+            return response()->json(['success' => false, 'message' => 'Empty projectId.']);
+    }
+    /**
+     * Delete Print Data.
+     *
+     * @return JSON
+     */
+    public function deletePrint (Request $request) {
+        $id = $request['jobId'];
+        $res = PrintInfo::where('job_id', $id)->delete();
+        $project = JobRequest::where('id', '=', $id)->first();
+        $project->eSeal_Print = 0;
+        $project->save();
+
+        return $res;
+    }
+    /**
+     * Get Print Address.
+     *
+     * @return JSON
+     */
+    public function getPrintAddress (Request $request) {
+        $client_id = Auth::user()->companyid;
+        $printAddress = PrintAddress::where('client_id', Auth::user()->companyid)->get();
+        return response()->json(["printAddress" => $printAddress, "success" => true]);
     }
 }
