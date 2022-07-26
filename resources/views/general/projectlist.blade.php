@@ -178,12 +178,15 @@
                                         <a class="dropdown-item chat-dropdown" id="chat-dropdown-{{ $company['id'] }}" href="javascript:changeChatFilter({{ $company['id'] }})">{{ $company['company_name'] }}</a>
                                     @endforeach
                                 </div>
-                                <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 17px;'><input type='checkbox' id="planCheckFilter" style="transform: rotateZ(180deg);"> Review</span>
-                                <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 17px;'><input type='checkbox' id="asBuiltFilter" style="transform: rotateZ(180deg);"> As-built</span>
-                                @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->allow_permit > 0)
-                                <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 22px;'><input type='checkbox' id="pilFilter" style="transform: rotateZ(180deg);"> PIL</span>
-                                @endif
-                                <span class="ml-1" style='writing-mode: tb-rl;width: 28px;transform: rotateZ(180deg);'>Plan Check</span>
+                                <div style="display:flex">
+                                    <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 17px;'><input type='checkbox' id="planCheckFilter" style="transform: rotateZ(180deg);"> Review</span>
+                                    <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 17px;'><input type='checkbox' id="asBuiltFilter" style="transform: rotateZ(180deg);"> As-built</span>
+                                    @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->allow_permit > 0)
+                                    <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 17px;'><input type='checkbox' id="pilFilter" style="transform: rotateZ(180deg);"> PIL</span>
+                                    @endif
+                                    <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 17px;'><input type='checkbox' id="printFilter" style="transform: rotateZ(180deg);">Print</span>
+                                </div>
+                                <span class="mx-2" style='writing-mode: tb-rl;width: 28px;transform: rotateZ(180deg); line-height: 1;'>Check Box <br />/ Status</span>
                                 @if(Auth::user()->userrole == 2)
                                 <span class="" style='writing-mode: tb-rl;width: 24px;transform: rotateZ(180deg);'>Delete</span>
                                 @endif
@@ -282,11 +285,14 @@
                                         <a class="dropdown-item chat-dropdown" id="chat-dropdown-{{ $user['id'] }}" href="javascript:changeChatFilter({{ $user['id'] }})">{{ $user['username'] }}</a>
                                     @endforeach
                                 </div>
-                                <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 17px;'><input type='checkbox' id="planCheckFilter" style="transform: rotateZ(180deg);"> Review</span>
-                                <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 17px;'><input type='checkbox' id="asBuiltFilter" style="transform: rotateZ(180deg);"> As-built</span>
-                                @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->allow_permit > 0)
-                                <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 22px;'><input type='checkbox' id="pilFilter" style="transform: rotateZ(180deg);"> PIL</span>
-                                @endif
+                                <div style="display:flex">
+                                    <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 17px;'><input type='checkbox' id="planCheckFilter" style="transform: rotateZ(180deg);"> Review</span>
+                                    <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 17px;'><input type='checkbox' id="asBuiltFilter" style="transform: rotateZ(180deg);"> As-built</span>
+                                    @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->allow_permit > 0)
+                                    <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 22px;'><input type='checkbox' id="pilFilter" style="transform: rotateZ(180deg);"> PIL</span>
+                                    @endif
+                                    <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 17px;'><input type='checkbox' id="printFilter" style="transform: rotateZ(180deg);">Print</span>
+                                </div>
                             </th>
                             @endif
                         </tr>
@@ -330,9 +336,313 @@
     </div>
 </div>
 
+<div class="modal" id="printmodal" tabindex="-1" role="dialog" aria-labelledby="printmodal" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="max-width: 1200px;">
+        <div class="modal-content">
+            <form class="js-validation" onsubmit="return false;" method="POST" id="printDataForm">
+                <div class="block block-themed block-transparent mb-0">
+                    <div class="block-header bg-primary-dark">
+                        <h3 class="block-title">iRoof Printing</h3>
+                        <div class="block-options">
+                            <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                                <i class="fa fa-fw fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="block-content" style="max-height: 700px; overflow: auto;">
+                        <div class="row items-push">
+                            <div class="col-lg-12">
+                                <!-- <div class="form-group">
+                                    <label for="company">Company <span class="text-danger">*</span></label><br/>
+                                    <select class="form-control" id="company" name="company" style="border: 1px solid pink;">
+                                        @foreach ($companyList as $company)
+                                            <option value="{{$company->id}}">{{ $company->company_name }}</option>
+                                        @endforeach
+                                    </select>
+                                    <input type="hidden" id="id" name="id">
+                                </div> -->
+                                <div class="form-group">
+                                    <label for="projectName">Project</label>
+                                    <input type="text" class="form-control" id="projectName" name="projectName" placeholder="Enter Project Name..." style="border: 1px solid #f1dfd2;" disabled>
+                                </div>
+                                <div class="form-group printFile-form">
+                                    <label for="filePrint">Select Files to Print</label>
+                                    <textarea type="text" class="form-control" id="filePrint" name="filePrint" rows="3" style="border: 1px solid #f1dfd2;" onclick="openJobFiles()"></textarea>
+                                </div>
+                                <lable style="color: #636b6f;font-weight:600;">Printing Instructions</label>
+                                <div class="pl-5">
+                                    <div class="form-group" style="width:46%;">
+                                        <label for="copies">#Copies </label>
+                                        <!-- <input type="text" class="form-control" id="issuedAt" name="issuedAt" style="border: 1px solid #f1dfd2; width: 20%;"> -->
+                                        <select class="form-control" id="copies" name="copies" style="border: 1px solid #f1dfd2; width: 20%">
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                            <option value="6">6</option>
+                                            <option value="7">7</option>
+                                            <option value="8">8</option>
+                                            <option value="9">9</option>
+                                            <option value="10">10</option>
+                                            <option value="11">11</option>
+                                            <option value="12">12</option>
+                                            <option value="13">13</option>
+                                            <option value="14">14</option>
+                                            <option value="15">15</option>
+                                            <option value="16">16</option>
+                                            <option value="17">17</option>
+                                            <option value="18">18</option>
+                                            <option value="19">19</option>
+                                            <option value="20">20</option>
+                                        </select>
+                                    </div>
+                                    <div class="row align-items-center">
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label for="plan-set" style="width: 35%">#Sheets / Plan Set</label>
+                                                <input type="text" class="form-control" id="plan-set" name="plan-set" placeholder="Enter Integer..." style="border: 1px solid #f1dfd2;">
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label for="report">#Report Pages</label>
+                                                <input type="text" class="form-control" id="report" name="report" placeholder="Enter Integer..." style="border: 1px solid #f1dfd2;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row align-items-center">
+                                        <div class="col-6">
+                                            <div class="form-group sealtype-form">
+                                                <label>Seal type </label>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="custom-control custom-radio custom-control-dark mb-1">
+                                                        <input type="radio" class="custom-control-input" id="rubber-stamp" name="seal-type" value="0">
+                                                        <label class="custom-control-label mr-3" for="rubber-stamp">rubber stamp</label>
+                                                    </div>
+                                                    <div class="custom-control custom-radio custom-control-dark mb-1">
+                                                        <input type="radio" class="custom-control-input" id="embossed" name="seal-type" value="1">
+                                                        <label class="custom-control-label mr-3" for="embossed">embossed</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="form-group signature-form">
+                                                <label for="issuedTo" style="width: 35%">Ink Signature </label>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="custom-control custom-radio custom-control-dark mb-1">
+                                                        <input type="radio" class="custom-control-input" id="yes" name="signature" value="1" >
+                                                        <label class="custom-control-label mr-5" for="yes">Yes</label>
+                                                    </div>
+                                                    <div class="custom-control custom-radio custom-control-dark mb-1">
+                                                        <input type="radio" class="custom-control-input" id="no" name="signature" value="0">
+                                                        <label class="custom-control-label mr-5" for="no">No</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row align-items-center">
+                                        <div class="col-6">
+                                            <div class="form-group username-form">
+                                                <label for="issuedFrom">User Name </label>
+                                                <input type="text" class="form-control" id="username" name="username" placeholder="Enter Your Name..." value={{ Auth::user()->username }} style="border: 1px solid #f1dfd2;">
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="form-group useremail-form">
+                                                <label for="issuedTo">Email Address </label>
+                                                <input type="text" class="form-control" id="useremail" name="useremail" placeholder="Enter Your Email..." value={{ Auth::user()->email }} style="border: 1px solid #f1dfd2;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="company-info">
+                                    <div class="form-group">
+                                        <label for="jobCount">Addressee </label>
+                                        <!-- <input type="text" class="form-control" id="jobCount" name="jobCount" placeholder="Enter Job Counts..." style="border: 1px solid #f1dfd2;"> -->
+                                        <!-- <label for="company">Company </label><br/> -->
+                                        <select class="form-control" id="company" name="company" style="border: 1px solid #f1dfd2;" onchange="selectCompany(this)">
+                                            <option value="0">New Company</option>
+                                            <!-- @foreach ($companyList as $company)
+                                                <option>{{ $company->company_name }}</option>
+                                            @endforeach -->
+                                            @foreach ($printAddress as $address)
+                                                <option value="{{$address->id}}">{{ $address->company_name }}</option>
+                                            @endforeach
+                                        </select>
+                                        <input type="hidden" id="id" name="id">
+                                    </div>
+                                    <div class="form-group companyName-form">
+                                        <label for="company-name">Company Name </label>
+                                        <input type="text" class="form-control" id="company-name" name="company-name" placeholder="Enter Company Name..." style="border: 1px solid #f1dfd2;">
+                                    </div>
+                                    <div class="form-group contactName-form">
+                                        <label for="contact-name">Contact Name </label>
+                                        <input type="text" class="form-control" id="contact-name" name="contact-name" placeholder="Enter Contact Name..." style="border: 1px solid #f1dfd2;">
+                                    </div>
+                                    <div class="form-group address1-form">
+                                        <label for="address1">Address1 </label>
+                                        <input type="text" class="form-control" id="address1" name="address1" placeholder="Enter Address1..." style="border: 1px solid #f1dfd2;">
+                                    </div>
+                                    <div class="form-group address2-form">
+                                        <label for="address2">Address2 </label>
+                                        <input type="text" class="form-control" id="address2" name="address2" placeholder="Enter Address2..." style="border: 1px solid #f1dfd2;">
+                                    </div>
+                                    <div class="form-group zip-form">
+                                        <label for="zip">Zip </label>
+                                        <input type="text" class="form-control" id="zip" name="zip" placeholder="Enter Zip Code..." style="border: 1px solid #f1dfd2;">
+                                    </div>
+                                    <div class="form-group city-form">
+                                        <label for="city">City </label>
+                                        <input type="text" class="form-control" id="city" name="city" placeholder="Enter City..." style="border: 1px solid #f1dfd2;">
+                                    </div>
+                                    <div class="form-group state-form">
+                                        <label for="state">State </label>
+                                        <input type="text" class="form-control" id="state" name="state" placeholder="Enter State..." style="border: 1px solid #f1dfd2;">
+                                    </div>
+                                    <div class="row align-items-center" style="margin-left:93px;">
+                                        <div class="col-6">
+                                            <div class="form-group phonenumber-form">
+                                                <label for="phonenumber">Phone Number </label>
+                                                <input type="text" class="form-control" id="phonenumber" name="phonenumber" placeholder="Enter Phone Number..." style="border: 1px solid #f1dfd2;">
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="form-group extension-form">
+                                                <label for="extension">Extension </label>
+                                                <input type="text" class="form-control" id="extension" name="extension" placeholder="Enter Extension..." style="border: 1px solid #f1dfd2;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row align-items-center">
+                                    <div class="col-7">
+                                        <div class="form-group deliver-form">
+                                            <label style="width: 35%">Delivery method </label>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <div class="custom-control custom-radio custom-control-dark mb-1">
+                                                    <input type="radio" class="custom-control-input" id="mail" name="delivery-method" value="0" >
+                                                    <label class="custom-control-label mr-3" for="mail">Mail</label>
+                                                </div>
+                                                <div class="custom-control custom-radio custom-control-dark mb-1">
+                                                    <input type="radio" class="custom-control-input" id="overnight" name="delivery-method" value="1" >
+                                                    <label class="custom-control-label mr-3" for="overnight">Overnight</label>
+                                                </div>
+                                                <div class="custom-control custom-radio custom-control-dark mb-1">
+                                                    <input type="radio" class="custom-control-input" id="2nd-day" name="delivery-method" value="2" >
+                                                    <label class="custom-control-label mr-3" for="2nd-day">2nd Day</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-5">
+                                        <div class="form-group">
+                                            <label for="fedex" style="width: 40%"><nobr>3rd Party FedEx #</nobr></label>
+                                            <input type="text" class="form-control" id="fedex" name="fedex" placeholder="Enter EedEx..." style="border: 1px solid #f1dfd2; width: 60%">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="user-textarea-input">User's Notes </label>
+                                    <textarea class="form-control" id="user-textarea-input" name="user-textarea-input" rows="4" placeholder="" spellcheck="false"></textarea>
+                                </div>
+                                <div class="form-group date-group">
+                                    <div class="row align-items-center">
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label for="printed-date">Printed Date</label>
+                                                @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4)
+                                                    <input type="text" class="form-control" id="printed-date" name="printed-date" placeholder="Printed Date" onfocus="(this.type='date')" style="border: 1px solid #f1dfd2; width: 100%;">
+                                                @else
+                                                    <input type="text" class="form-control" id="printed-date" name="printed-date" placeholder="Printed Date" onfocus="(this.type='date')" style="border: 1px solid #f1dfd2; width: 100%;" disabled>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label for="sent-date">Sent Date</label>
+                                                @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4)
+                                                    <input type="text" class="form-control" id="sent-date" name="sent-date" placeholder="Sent Date" onfocus="(this.type='date')" style="border: 1px solid #f1dfd2; width: 100%;">
+                                                @else
+                                                    <input type="text" class="form-control" id="sent-date" name="sent-date" placeholder="Sent Date" onfocus="(this.type='date')" style="border: 1px solid #f1dfd2; width: 100%;" disabled>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label for="tracking">Tracking</label>
+                                                <input type="text" class="form-control" id="tracking" name="tracking" placeholder="Tracking" style="border: 1px solid #f1dfd2; width: 100%;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="printer-textarea-input">Printer's Notes </label>
+                                    <textarea class="form-control" id="printer-textarea-input" name="printer-textarea-input" rows="4" placeholder="" spellcheck="false"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="block-content block-content-full text-left bg-light">
+                        <button type="submit" class="btn btn-sm btn-primary" onclick="savePrint()">Save</button>
+                        <button type="button" class="btn btn-sm btn-light" onclick="submitPrint()">Submit</button>
+                        <button type="button" class="btn btn-sm btn-light" onclick="exit()">Exit</button>
+                        <div class="float-right">
+                            <button type="button" class="btn btn-sm btn-light text-right" onclick="deletePrint()">Cancel Print Request</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="reportmodal" tabindex="-1" role="dialog" aria-labelledby="printmodal" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="max-width: 1200px;">
+        <div class="modal-content">
+            <form class="js-validation" onsubmit="return false;" method="POST" id="fileForm">
+                <div class="block block-themed block-transparent mb-0">
+                    <div class="block-header bg-primary-dark">
+                        <h3 class="block-title reportmodal-name">Print Files</h3>
+                        <div class="block-options">
+                            <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                                <i class="fa fa-fw fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="block-content" style="max-height: 700px; overflow: auto;">
+                        <div class="row items-push">
+                        <table class="sortable">
+                            <thead>
+                                <tr>
+                                    <th style='width: 5%;text-align:center;'></th>
+                                    <th style='width: 63%;'>Filename</th>
+                                    <th style='width: 10%;'>Size</th>
+                                    <th style='width: 17%;'>Date Modified</th>
+                                </tr>
+                            </thead>
+                            <tbody id="file-table">
+                            </tbody>
+                        </table>
+                        </div>
+                    </div>
+                    <div class="block-content block-content-full text-right bg-light">
+                        <button type="button" class="btn btn-sm btn-light" onclick="confirmFiles()">OK</button>
+                        <button type="button" class="btn btn-sm btn-light" data-dismiss="modal">Cancel</ >
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <script src="{{ asset('js/pages/common.js') }}"></script>
 
 <script>
+    window.popUpWnds = [];
+
     var projectStatus = [
         @foreach($projectStatusList as $item)
         { id:"{{ $item['id'] }}", notes: "{{ $item['notes'] }}", color: "{{ $item['color'] }}" },
@@ -344,6 +654,20 @@
         @endforeach
     ];
     var filterJson;
+    var companyList = [
+        @foreach($printAddress as $item)
+        { id:"{{ $item['id'] }}", company_name: "{{ $item['company_name'] }}",contact_name:"{{ $item['contact_name'] }}", address1: "{{ $item['address1'] }}", address2: "{{ $item['address2'] }}", city: "{{ $item['city'] }}", state: "{{ $item['state'] }}", zip: "{{ $item['zip'] }}", phonenumber: "{{ $item['telno'] }}", extension: "{{ $item['extension'] }}"  },
+        @endforeach
+    ];
+
+    var selectedFiles = new Array();
+
+    var hasChanges = false;
+
+    // @foreach($companyList as $item)
+    // { id:"{{ $item['id'] }}", company_name: "{{ $item['company_name'] }}", address1: "{{ $item['company_address'] }}", address2: "{{ $item['second_address'] }}", city: "{{ $item['city'] }}", state: "{{ $item['state'] }}", zip: "{{ $item['zip'] }}", phonenumber: "{{ $item['company_telno'] }}", extension: "{{ $item['company_number'] }}"  },
+    // @endforeach
+
     $(document).ready(function () {
         $.ajaxSetup({
             headers:
@@ -356,6 +680,14 @@
             filterJson = {};
             localStorage.setItem('projectFilterJson', JSON.stringify(filterJson));
         }
+
+        // $('#printmodal').on('hidden.bs.modal', function () {
+        //     $(".selected").removeClass("selected");
+        // })
+
+        $('#reportmodal').on('hidden.bs.modal', function () {
+            $('#printmodal').modal('toggle');
+        })
 
         changeStateFilterLabel = function(status){
             $(`#stateFilter`).css('color', 'black');
@@ -400,6 +732,10 @@
                     if (filterJson[k] == 1) $("#pilFilter").prop("checked", true);
                     else $("#pilFilter").prop("checked", false);
                     break;
+                case 'printFilter':
+                    if (filterJson[k] == 1) $("#printFilter").prop("checked", true);
+                    else $("#printFilter").prop("checked", false);
+                    break;
                 case 'chatFilter':
                     console.log(filterJson[k]);
                     if (filterJson[k] != '')
@@ -424,9 +760,9 @@
             localStorage.setItem('projectFilterJson', JSON.stringify(filterJson));
         });
 
-        $("#created_from, #created_to, #submitted_from, #submitted_to, #planCheckFilter, #asBuiltFilter, #pilFilter").on('change', function() {
+        $("#created_from, #created_to, #submitted_from, #submitted_to, #planCheckFilter, #asBuiltFilter, #pilFilter, #printFilter").on('change', function() {
             let key = $(this).attr('id');
-            if (key == 'planCheckFilter' || key == 'asBuiltFilter' || key == 'pilFilter') {
+            if (key == 'planCheckFilter' || key == 'asBuiltFilter' || key == 'pilFilter' || key == 'printFilter') {
                 filterJson[key] = $("#"+key)[0].checked ? $(this).val(1) : $(this).val(0);
             }
             filterJson[key] = $(this).val();
@@ -511,6 +847,7 @@
                         data.plancheck = $("#planCheckFilter")[0].checked ? 1 : 0;
                         data.asbuilt = $("#asBuiltFilter")[0].checked ? 1 : 0;
                         data.pil = $("#pilFilter").length > 0 && $("#pilFilter")[0].checked ? 1 : 0;
+                        data.print = $("#printFilter")[0].checked ? 1 : 0;
                     }
                 },
             "columns": [
@@ -565,6 +902,7 @@
             $("#planCheckFilter").prop("checked", false);
             $("#asBuiltFilter").prop("checked", false);
             $("#pilFilter").prop("checked", false);
+            $("#printFilter").prop("checked", false);
             $("#chatFilter").val('');
             $("#companyFilter").val('');
             $("#userFilter").val('');
@@ -616,7 +954,7 @@
         }
         @endif
 
-        if($(obj)[0].checked == true && ($(obj).parents('tr').find(".asbuilt")[0].checked == true || ($(obj).parents('tr').find(".pilcheck").length > 0 && $(obj).parents('tr').find(".pilcheck")[0].checked == true ))){
+        if($(obj)[0].checked == true && ($(obj).parents('tr').find(".asbuilt")[0].checked == true || ($(obj).parents('tr').find(".pilcheck").length > 0 && $(obj).parents('tr').find(".pilcheck")[0].checked == true || $(obj).parents('tr').find(".printcheck")[0].checked == true ))){
             swal.fire({ title: "Warning", text: "Only one type of review checkbox at a time please.", icon: "warning", confirmButtonText: `OK` });
             $(obj)[0].checked = false;
             return;
@@ -654,7 +992,7 @@
         }
         @endif
 
-        if($(obj)[0].checked == true && ($(obj).parents('tr').find(".plancheck")[0].checked == true || ($(obj).parents('tr').find(".pilcheck").length > 0 && $(obj).parents('tr').find(".pilcheck")[0].checked == true ))){
+        if($(obj)[0].checked == true && ($(obj).parents('tr').find(".plancheck")[0].checked == true || ($(obj).parents('tr').find(".pilcheck").length > 0 && $(obj).parents('tr').find(".pilcheck")[0].checked == true || $(obj).parents('tr').find(".printcheck")[0].checked == true))){
             swal.fire({ title: "Warning", text: "Only one type of review checkbox at a time please.", icon: "warning", confirmButtonText: `OK` });
             $(obj)[0].checked = false;
             return;
@@ -692,7 +1030,7 @@
         }
         @endif
 
-        if($(obj)[0].checked == true && ($(obj).parents('tr').find(".plancheck")[0].checked == true || $(obj).parents('tr').find(".asbuilt")[0].checked == true)){
+        if($(obj)[0].checked == true && ($(obj).parents('tr').find(".plancheck")[0].checked == true || $(obj).parents('tr').find(".asbuilt")[0].checked == true || $(obj).parents('tr').find(".printcheck")[0].checked == true)){
             swal.fire({ title: "Warning", text: "Only one type of review checkbox at a time please.", icon: "warning", confirmButtonText: `OK` });
             $(obj)[0].checked = false;
             return;
@@ -720,6 +1058,169 @@
         });
     }
 
+    async function togglePrintCheck(obj, jobId){
+
+        if($(obj)[0].checked == true && ($(obj).parents('tr').find(".plancheck")[0].checked == true || $(obj).parents('tr').find(".asbuilt")[0].checked == true || ($(obj).parents('tr').find(".pilcheck").length > 0 && $(obj).parents('tr').find(".pilcheck")[0].checked == true))){
+            swal.fire({ title: "Warning", text: "Only one type of review checkbox at a time please.", icon: "warning", confirmButtonText: `OK` });
+            $(obj)[0].checked = false;
+            return;
+        }
+        
+        $(".sealtype-form").css("color","#636b6f");
+        $(".signature-form").css("color","#636b6f");
+        $("#useremail").css("color","#636b6f");
+        $(".deliver-form").css("color","#636b6f");
+        $(".printFile-form").css("color","#636b6f");
+        $(".printFile-form").find("textarea").css("border-color","#f1dfd2");
+        $(".company-info input").css("border-color","#f1dfd2");
+        $(".company-info label").css("color","#636b6f");
+
+
+        $("#projects .selected").removeClass("selected");
+        $(obj).parents('tr').addClass("selected");
+        $("option:selected").removeAttr("selected");
+        $('#printmodal').modal('toggle');
+        if($(obj)[0].checked == true){
+            $(obj)[0].checked = false;
+        } else {
+            $(obj)[0].checked = true;
+        }
+        $('#expContainer').html('');
+
+        $("#printDataForm input").change(function () {
+            hasChanges = true;
+        })
+
+        $("#printDataForm textarea").change(function () {
+            hasChanges = true;
+        })
+
+        $("#printDataForm select").change(function () {
+            hasChanges = true;
+        })
+
+        $.post("togglePrintCheck", {id: jobId}, function(result){
+            console.log('here: ', result);
+            $(".reportmodal-name").html(result.job.clientProjectNumber + ". " + result.job.clientProjectName + " " + result.job.state)
+            if (result.success && result.job){
+                var jobStatus;
+                if(result.job.eSeal_Print == 1) {
+                    jobStatus = "SAVED";
+                } else if (result.job.eSeal_Print == 2) {
+                    jobStatus = "SUBMITTED";
+                } else if (result.job.eSeal_Print == 3) {
+                    jobStatus = "COMPLETED";
+                }
+                $("#projectName").val(result.job.clientProjectNumber + ". " + result.job.clientProjectName + " " + result.job.state + " (" + jobStatus +")" );
+                $("#id").val(result.job.id);
+                $("#company").val(result.data.address_id);
+                if(result.address) {
+                    $("#company-name").val(result.address.company_name);
+                    $("#contact-name").val(result.address.contact_name);
+                    $("#address1").val(result.address.address1);
+                    $("#address2").val(result.address.address2);
+                    $("#zip").val(result.address.zip);
+                    $("#city").val(result.address.city);
+                    $("#state").val(result.address.state);
+                    $("#phonenumber").val(result.address.telno);
+                    $("#extension").val(result.address.extension);
+                } else {
+                    $("#company-name").val("");
+                        $("#contact-name").val("");
+                        $("#address1").val("");
+                        $("#address2").val("");
+                        $("#zip").val("");
+                        $("#city").val("");
+                        $("#state").val("");
+                        $("#phonenumber").val("");
+                        $("#extension").val("");
+                }
+                // $("#company option[value='" + result.data.client_id + "']").attr('selected', 'selected');
+                // companyList.map((item, index) => {
+                //     if(result.data.companyId == item.id){
+                //         $("#company-name").val(item.company_name);
+                //         $("#address1").val(item.address1);
+                //         $("#address2").val(item.address2);
+                //         $("#zip").val(item.zip);
+                //         $("#city").val(item.city);
+                //         $("#state").val(item.state);
+                //         $("#phonenumber").val(item.phonenumber);
+                //         $("#extension").val(item.extension);
+                //     }
+                // })
+
+                $("#copies").val(result.data.copies);
+                $("#plan-set").val(result.data.plan_sheets);
+                $("#report").val(result.data.report_sheets);
+                if(result.data.seal_type == 0) {
+                    $("#rubber-stamp").attr('checked', 'checked');
+                } else if(result.data.seal_type == 1) {
+                    $("#embossed").attr('checked', 'checked');
+                }
+
+                if(result.data.signature == true) {
+                    $("#yes").attr('checked', 'checked');
+                } else {
+                    $("#no").attr('checked', 'checked');
+                }
+
+                if(result.data.delivery_method == 2) {
+                    $("#2nd-day").attr('checked', 'checked');
+                } else if (result.data.delivery_method == 1) {
+                    $("#overnight").attr('checked', 'checked');
+                } else if (result.data.delivery_method == 0) {
+                    $("#mail").attr('checked', 'checked');
+                }
+
+                $("#user-textarea-input").val(result.data.user_notes);
+                $("#printer-textarea-input").val(result.data.printer_notes);
+                $("#sent-date").val(result.data.sent);
+                $("#printed-date").val(result.data.printed);
+                $("#tracking").val(result.data.tracking);
+                $("#fedex").val(result.data.third_party_fedex);
+                if(result.data.selected_files != "null") {
+                    let file_names = [];
+                    file_names = result.data.selected_files.slice(1, result.data.selected_files.length - 1).split("\\n");
+                    $('#filePrint').val(file_names.join("\n"));
+                }
+            } else {
+                $("#id").val(result.job.id);
+                $("#projectName").val(result.job.clientProjectNumber + ". " + result.job.clientProjectName + " " + result.job.state +  " (NOT SAVED)" );
+                $("#company option[value='0']").attr('selected', 'selected');
+                        $("#company-name").val("");
+                        $("#contact-name").val("");
+                        $("#address1").val("");
+                        $("#address2").val("");
+                        $("#zip").val("");
+                        $("#city").val("");
+                        $("#state").val("");
+                        $("#phonenumber").val("");
+                        $("#extension").val("");
+                // $("#company option[value='" + result.data.companyId + "']").attr('selected', 'selected');
+                //         $("#company-name").val(item.company_name);
+                //         $("#address1").val(item.address1);
+                //         $("#address2").val(item.address2);
+                //         $("#zip").val(item.zip);
+                //         $("#city").val(item.city);
+                //         $("#state").val(item.state);
+                //         $("#phonenumber").val(item.phonenumber);
+                //         $("#extension").val(item.extension);
+                $("#copies").val(1);
+                $("#plan-set").val("");
+                $("#report").val("");
+                $("#user-textarea-input").val("");
+                $("#printer-textarea-input").val("");
+                $("#printed-date").val("");
+                $("#sent-date").val("");
+                $("#tracking").val("");
+                $("#fedex").val("");
+                $("#filePrint").val("");
+                $("input:radio").attr("checked", false);
+                $("input:radio").prop("checked", false);
+            }
+        });
+    }
+    
     function openReviewTab(jobId){
         swal.fire({ title: "Please wait...", showConfirmButton: false });
         swal.showLoading();
@@ -887,6 +1388,465 @@
                         confirmButtonText: `OK` });
             }
         });
+    }
+
+    function selectCompany(selected) {
+        var selectedCompanyId = selected.value;
+        if(selectedCompanyId == "0") {
+            $("#company-name").val("");
+            $("#contact-name").val("");
+            $("#address1").val("");
+            $("#address2").val("");
+            $("#zip").val("");
+            $("#city").val("");
+            $("#state").val("");
+            $("#phonenumber").val("");
+            $("#extension").val("");
+        } else {
+            companyList.map((item, index) => {
+                if(selectedCompanyId == item.id){
+                    $("#company-name").val(item.company_name);
+                    $("#contact-name").val(item.contact_name);
+                    $("#address1").val(item.address1);
+                    $("#address2").val(item.address2);
+                    $("#zip").val(item.zip);
+                    $("#city").val(item.city);
+                    $("#state").val(item.state);
+                    $("#phonenumber").val(item.phonenumber);
+                    $("#extension").val(item.extension);
+                }
+            })
+
+        }
+    }
+
+    function openJobFiles(){
+        // var selectedProjectID = $("#id").val();
+        // var url = "/jobFiles?projectId=" + selectedProjectID;
+        // window.popUpWnds.push(window.open(url,'targetWindow', `toolbar=no, location=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=1000, height=500`));
+        // return false;
+        $('#printmodal').modal('toggle');
+        $('#reportmodal').modal('toggle');
+        $('#file-table').empty();
+        const currentFiles = $('#filePrint').val().split("\n");
+        swal.fire({ title: "Please wait...", showConfirmButton: false });
+        swal.showLoading();
+        $.post("getPrintFiles", {projectId: $('#id').val()}, function(result){
+            swal.close();
+            if(result.success && result.files){
+                result.files.forEach(file => {
+                    const elem = $(`<tr class='file' style="cursor:pointer;">
+                            <td style="width: 5%; text-align:center">
+                                <input type='checkbox' class="selectFile" ${currentFiles.includes(file.filename) ? "checked" : ""}>
+                            </td>
+                            <td class="fileName" style="width: 63%">${file.filename}</td>
+                            <td style="width: 10%" sorttable_customkey="${file.size}">${parseInt(file.size / 1024) > 999 ? parseInt(file.size / 1024).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : parseInt(file.size / 1024)} KB</td>
+                                <td style="width: 17%" sorttable_customkey="${file.modifiedDate}">${file.modifiedDate.replace(/T/g, " ").replace(/Z/g, " ")}</td>
+                        </tr>`);
+                    $('#file-table').append(elem);
+                    elem.click(function () {
+                        addPrintFile(this);
+                    });
+                    $('.selectFile').on('click', function(e){
+                        e.stopPropagation()
+                    });
+                });
+                if(currentFiles == ""){
+                    selectedFiles = [];
+                } else {
+                    selectedFiles = currentFiles;
+                }
+            } else {
+                swal.fire({ title: "Warning", text: result.message, icon: "warning", confirmButtonText: `OK` });
+            }
+        })
+    }
+
+    function addPrintFile (elem) {
+        if(!$(elem).find(".selectFile").prop("checked")) {
+            $(elem).find(".selectFile").prop("checked", true);
+        } else {
+            $(elem).find(".selectFile").prop("checked", false);
+        }
+    }
+
+    function confirmFiles () {
+        const state = Array.from(document.querySelectorAll("#file-table .selectFile"))
+                        .map((elem) => elem.checked);
+        selectedFiles = Array.from(document.querySelectorAll("#file-table .fileName"))
+                            .map((elem, i) => state[i] ? elem.innerText : null).filter(fileName => !!fileName);
+        $('#reportmodal').modal('toggle');
+        $('#filePrint').val(selectedFiles.join("\n"))
+    }
+
+    function savePrint () {
+        let toast = Swal.mixin({
+        buttonsStyling: false,
+        customClass: {
+            confirmButton: 'btn btn-success m-1',
+            cancelButton: 'btn btn-danger m-1',
+            input: 'form-control'
+            }
+        });
+        
+        let data = {};
+        data.jobid = $("#id").val();
+        data.copies = $("#copies").val();
+        // data.companyId = $("#company").val();
+        data.address_id = $("#company").val();
+        data.plan_sheets = $("#plan-set").val();
+        data.report_sheets = $("#report").val();
+        data.seal_type = $('input[name="seal-type"]:checked').val();
+        if($('input[name="signature"]:checked').val() == "0") {
+            data.signature = false;
+        } else if ($('input[name="signature"]:checked').val() == "1"){
+            data.signature = true;
+        }
+        data.userEmail = $("#useremail").val();
+        data.delivery_method = $('input[name="delivery-method"]:checked').val();
+        data.fedex = $("#fedex").val();
+        // var today = new Date();
+        // var dd = String(today.getDate()).padStart(2, '0');
+        // var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        // var yyyy = today.getFullYear();
+        // data.sent = mm + '/' + dd + '/' + yyyy;
+        data.tracking = $("#tracking").val();
+        data.user_notes = $("#user-textarea-input").val();
+        data.printer_notes = $("#printer-textarea-input").val();
+        data.print_file = $("#filePrint").val();
+
+        data.company_name=$("#company-name").val();
+        data.contact_name = $("#contact-name").val();
+        data.address1 = $("#address1").val();
+        data.address2 = $("#address2").val();
+        data.zip = $("#zip").val();
+        data.city = $("#city").val();
+        data.state = $("#state").val();
+        data.telno = $("#phonenumber").val();
+        data.extension = $("#extension").val();
+
+        console.log('data: ', data);
+
+        // if($("#company-name").val() == "") {
+        //     toast.fire('Sorry', "Please fill the company name", 'error');
+        //     return;
+        // }
+
+        swal.fire({ title: "Please wait...", showConfirmButton: false });
+        swal.showLoading();
+        $.post("savePrint", data, function(result){
+            swal.close();
+            if (result.success){
+                // $("#infos").DataTable().draw(false);
+                toast.fire('Success', 'The print data is saved.', 'success');
+                if(!$(".selected").find(".printcheck").prop("checked")) {
+                    $(".selected").find(".eseal_print").css('background-color', '#e4d800');
+                };
+                hasChanges = false;
+                if(result.created) {
+                    $('#company').append(`<option value="${result.updatedAddress.id}">
+                                       ${result.updatedAddress.company_name}
+                                  </option>`);
+                    companyList.push({  id: result.updatedAddress.id, 
+                                        company_name: result.updatedAddress.company_name, 
+                                        contact_name: (result.updatedAddress.contact_name?result.updatedAddress.contact_name:""), 
+                                        address1:(result.updatedAddress.address1?result.updatedAddress.address1:""), 
+                                        address2: (result.updatedAddress.address2?result.updatedAddress.address2:""), 
+                                        city:(result.updatedAddress.city?result.updatedAddress.city:""), 
+                                        state:(result.updatedAddress.state?result.updatedAddress.state:""), 
+                                        zip:(result.updatedAddress.zip?result.updatedAddress.zip:""), 
+                                        phonenumber:(result.updatedAddress.telno?result.updatedAddress.telno:""), 
+                                        extension:(result.updatedAddress.extension?result.updatedAddress.extension:"")
+                                    })
+                } else {
+                    companyList.map((company) => {
+                        if(company.id == result.updatedAddress.id) {
+                            company.company_name = result.updatedAddress.company_name;
+                            company.contact_name = result.updatedAddress.contact_name;
+                            company.address1 = result.updatedAddress.address1;
+                            company.address2 = result.updatedAddress.address2;
+                            company.city = result.updatedAddress.city;
+                            company.state = result.updatedAddress.state;
+                            company.zip = result.updatedAddress.zip;
+                            company.phonenumber = result.updatedAddress.telno;
+                            company.extension = result.updatedAddress.extension;
+                        }
+                    })
+                }
+                // location.reload(true);
+            } else {
+                toast.fire('Error', result.message, 'error');
+            }
+        });
+    }
+
+    function submitPrint () {
+        var blankField = 0;
+        let toast = Swal.mixin({
+        buttonsStyling: false,
+        customClass: {
+            confirmButton: 'btn btn-success m-1',
+            cancelButton: 'btn btn-danger m-1',
+            input: 'form-control'
+            }
+        });
+        
+        let data = {};
+        data.jobid = $("#id").val();
+        data.copies = $("#copies").val();
+        // data.companyId = $("#company").val();
+        data.address_id = $("#company").val();
+        data.plan_sheets = $("#plan-set").val();
+        data.report_sheets = $("#report").val();
+
+        if($('input[name="seal-type"]:checked').val()){
+            data.seal_type = $('input[name="seal-type"]:checked').val();
+        } else {
+            blankField++;
+            $(".sealtype-form").css("color","#e04f1a");
+        }
+
+        if($('input[name="signature"]:checked').val()){
+            if($('input[name="signature"]:checked').val() == "0") {
+                data.signature = false;
+            } else if ($('input[name="signature"]:checked').val() == "1"){
+                data.signature = true;
+            }
+        } else {
+            blankField++;
+            $(".signature-form").css("color","#e04f1a");
+        }
+
+        if($("#useremail").val() == ""){
+            blankField++;
+            $("#useremail").css("color","#e04f1a");
+        } else {
+            data.userEmail = $("#useremail").val();
+        }
+
+        if($('input[name="delivery-method"]:checked').val()){
+            data.delivery_method = $('input[name="delivery-method"]:checked').val();
+        } else {
+            blankField++;
+            $(".deliver-form").css("color","#e04f1a");
+        }
+
+        data.fedex = $("#fedex").val();
+        // var today = new Date();
+        // var dd = String(today.getDate()).padStart(2, '0');
+        // var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        // var yyyy = today.getFullYear();
+        // data.sent = mm + '/' + dd + '/' + yyyy;
+        data.tracking = $("#tracking").val();
+        data.user_notes = $("#user-textarea-input").val();
+        data.printer_notes = $("#printer-textarea-input").val();
+        if($("#filePrint").val() == "") {
+            blankField++;
+            $(".printFile-form").css("color","#e04f1a");
+            $(".printFile-form").find("textarea").css("border-color","#e04f1a");
+        }
+        data.print_file = $("#filePrint").val();
+        data.printed = $("#printed-date").val();
+        data.sent = $("#sent-date").val();
+
+        data.company_name=$("#company-name").val();
+        data.contact_name = $("#contact-name").val();
+        data.address1 = $("#address1").val();
+        data.address2 = $("#address2").val();
+        data.zip = $("#zip").val();
+        data.city = $("#city").val();
+        data.state = $("#state").val();
+        data.telno = $("#phonenumber").val();
+        data.extension = $("#extension").val();
+
+        console.log('data: ', data);
+
+        if($("#company-name").val() == "") {
+            blankField++;
+            $(".companyName-form").css("color","#e04f1a");
+            $(".companyName-form").find("input").css("border-color","#e04f1a");
+        }
+        if($("#contact-name").val() == "") {
+            blankField++;
+            $(".contactName-form").css("color","#e04f1a");
+            $(".contactName-form").find("input").css("border-color","#e04f1a");
+        }
+        if($("#address1").val() == "") {
+            blankField++;
+            $(".address1-form").css("color","#e04f1a");
+            $(".address1-form").find("input").css("border-color","#e04f1a");
+        }
+        if($("#zip").val() == "") {
+            blankField++;
+            $(".zip-form").css("color","#e04f1a");
+            $(".zip-form").find("input").css("border-color","#e04f1a");
+        }
+        if($("#state").val() == "") {
+            blankField++;
+            $(".state-form").css("color","#e04f1a");
+            $(".state-form").find("input").css("border-color","#e04f1a");
+        }
+        if($("#city").val() == "") {
+            blankField++;
+            $(".city-form").css("color","#e04f1a");
+            $(".city-form").find("input").css("border-color","#e04f1a");
+        }
+        if($("#phonenumber").val() == "") {
+            blankField++;
+            $(".phonenumber-form").css("color","#e04f1a");
+            $(".phonenumber-form").find("input").css("border-color","#e04f1a");
+        }
+
+        if(blankField > 0) {
+            return;
+        }
+
+        swal.fire({ title: "Please wait...", showConfirmButton: false });
+        swal.showLoading();
+        $.post("submitPrint", data, function(result){
+            swal.close();
+            if (result.success){
+                // $("#infos").DataTable().draw(false);
+                toast.fire('Success', 'The print data is submitted.', 'success');
+                if(result.status == 2) {
+                    $(".selected").find(".eseal_print").css('background-color', '#96ddcd');
+                    $(".selected").find(".printcheck").prop("checked", true);
+                } else if(result.status == 3) {
+                    $(".selected").find(".eseal_print").css('background-color', '#7cb9e8');
+                    $(".selected").find(".printcheck").prop("checked", true);
+                } else if(result.status == 4) {
+                    $(".selected").find(".eseal_print").css('background-color', '#00ff00');
+                    $(".selected").find(".printcheck").prop("checked", false);
+                }
+                $(".selected").removeClass("selected");
+                $('#printmodal').modal('toggle');
+                hasChanges = false;
+                if(result.created) {
+                    $('#company').append(`<option value="${result.updatedAddress.id}">
+                                       ${result.updatedAddress.company_name}
+                                  </option>`);
+                    companyList.push({  id: result.updatedAddress.id, 
+                                        company_name: result.updatedAddress.company_name, 
+                                        contact_name: (result.updatedAddress.contact_name?result.updatedAddress.contact_name:""), 
+                                        address1:(result.updatedAddress.address1?result.updatedAddress.address1:""), 
+                                        address2: (result.updatedAddress.address2?result.updatedAddress.address2:""), 
+                                        city:(result.updatedAddress.city?result.updatedAddress.city:""), 
+                                        state:(result.updatedAddress.state?result.updatedAddress.state:""), 
+                                        zip:(result.updatedAddress.zip?result.updatedAddress.zip:""), 
+                                        phonenumber:(result.updatedAddress.telno?result.updatedAddress.telno:""), 
+                                        extension:(result.updatedAddress.extension?result.updatedAddress.extension:"")
+                                    })
+                } else {
+                    companyList.map((company) => {
+                        if(company.id == result.updatedAddress.id) {
+                            company.company_name = result.updatedAddress.company_name;
+                            company.contact_name = result.updatedAddress.contact_name;
+                            company.address1 = result.updatedAddress.address1;
+                            company.address2 = result.updatedAddress.address2;
+                            company.city = result.updatedAddress.city;
+                            company.state = result.updatedAddress.state;
+                            company.zip = result.updatedAddress.zip;
+                            company.phonenumber = result.updatedAddress.telno;
+                            company.extension = result.updatedAddress.extension;
+                        }
+                    })
+                }
+                // location.reload(true);
+            } else {
+                toast.fire('Error', result.message, 'error');
+            }
+        });
+    }
+
+    function deletePrint () {
+        let toast = Swal.mixin({
+        buttonsStyling: false,
+        customClass: {
+            confirmButton: 'btn btn-success m-1',
+            cancelButton: 'btn btn-danger m-1',
+            input: 'form-control'
+            }
+        });
+        toast.fire({
+            title: 'Are you sure?',
+            text: 'You will not be able to recover this print data!',
+            icon: 'warning',
+            showCancelButton: true,
+            customClass: {
+                confirmButton: 'btn btn-danger m-1',
+                cancelButton: 'btn btn-secondary m-1'
+            },
+            confirmButtonText: 'DELETE PRINT REQUEST',
+            cancelButtonText: 'CANCEL',
+            html: false,
+            preConfirm: e => {
+                return new Promise(resolve => {
+                    setTimeout(() => {
+                        resolve();
+                    }, 50);
+                });
+            }
+        }).then(result => {
+            if (result.value) {
+                swal.fire({ title: "Please wait...", showConfirmButton: false });
+                swal.showLoading();
+                $.post("deletePrint", {jobId: $('#id').val()}, function(result){
+                    swal.close();
+                    if(result == 1) {
+                        toast.fire('Success', "", 'success');
+                        $(".selected").find(".eseal_print").css('background-color', '#000');
+                        $(".selected").find(".printcheck").prop("checked", false);
+                        $(".selected").removeClass("selected");
+                        $('#printmodal').modal('toggle');
+                    } else {
+                        toast.fire('Error',"This data is not deleted", 'error');
+                    }
+                })
+            } else if (result.dismiss === 'cancel') {
+                toast.fire('Cancelled', 'Data is safe', 'info');
+            }
+        });
+    }
+
+    function exit () {
+        let toast = Swal.mixin({
+        buttonsStyling: false,
+        customClass: {
+            confirmButton: 'btn btn-success m-1',
+            cancelButton: 'btn btn-danger m-1',
+            input: 'form-control'
+            }
+        });
+        console.log(hasChanges);
+        if(hasChanges) {
+            toast.fire({
+                title: 'Save changes?',
+                icon: 'warning',
+                showCancelButton: true,
+                customClass: {
+                    confirmButton: 'btn btn-danger m-1',
+                    cancelButton: 'btn btn-secondary m-1',
+                },
+                confirmButtonText: 'SAVE CHANGES',
+                cancelButtonText: 'DISCARD CHANGES',
+                html: false,
+                preConfirm: e => {
+                    return new Promise(resolve => {
+                        setTimeout(() => {
+                            resolve();
+                        }, 50);
+                    });
+                }
+            }).then(result => {
+                if (result.value) {
+
+                } else if (result.dismiss === 'cancel') {
+                    $("#printmodal").modal('toggle');
+                }
+            });
+        } else  {
+            $("#printmodal").modal('toggle');
+        }
     }
 
 </script>

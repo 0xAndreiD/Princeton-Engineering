@@ -97,6 +97,7 @@ Route::post('/updateChat', 'GeneralController@updateChat')->name('updateChat');
 Route::post('/togglePlanCheck', 'GeneralController@togglePlanCheck')->name('togglePlanCheck');
 Route::post('/toggleAsBuilt', 'GeneralController@toggleAsBuilt')->name('toggleAsBuilt');
 Route::post('/togglePIL', 'GeneralController@togglePIL')->name('togglePIL');
+Route::post('/togglePrintCheck', 'GeneralController@togglePrintCheck')->name('togglePrintCheck');
 Route::post('/checkChatList', 'GeneralController@checkChatList')->name('checkChatList');
 Route::post('/getPermitList', 'GeneralController@getPermitList')->name('getPermitList');
 Route::post('/getPILList', 'GeneralController@getPILList')->name('getPILList');
@@ -104,6 +105,7 @@ Route::post('/getCompanyInfo', 'GeneralController@getCompanyInfo')->name('getCom
 Route::get('/onreview', 'GeneralController@onReview')->name('onReview');
 Route::get('/jobFiles', 'GeneralController@jobFiles')->name('jobFiles');
 Route::post('/getMainJobFiles', 'GeneralController@getMainJobFiles')->name('getMainJobFiles');
+Route::post('/getPrintFiles', 'GeneralController@getPrintFiles')->name('getPrintFiles');
 Route::get('/report/{file}', 'GeneralController@getReport');
 Route::get('/in/{jobId}/{file}', 'GeneralController@getINFile');
 Route::post('/setReviewer', 'GeneralController@setReviewer')->name('setReviewer');
@@ -112,6 +114,9 @@ Route::post('/checkCorrectTown', 'GeneralController@checkCorrectTown')->name('ch
 Route::post('/getJobSubClients', 'GeneralController@getJobSubClients')->name('getJobSubClients');
 Route::post('/isSubClientAllowed', 'GeneralController@isSubClientAllowed')->name('isSubClientAllowed');
 Route::post('/jobSubClientAllowed', 'GeneralController@jobSubClientAllowed')->name('jobSubClientAllowed');
+Route::post('/savePrint', 'GeneralController@savePrint')->name('savePrint');
+Route::post('/deletePrint', 'GeneralController@deletePrint')->name('deletePrint');
+Route::post('/submitPrint', 'GeneralController@submitPrint')->name('submitPrint');
 
 // APIs for list, update, download, db backup, bill request
 Route::get('/getJobList', 'APIController@getJobList')->name('getJobList');
