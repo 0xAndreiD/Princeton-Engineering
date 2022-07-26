@@ -2938,7 +2938,8 @@ class GeneralController extends Controller
                 $job = JobRequest::where('id', $request['id'])->first();
                 if($printingdata){
                     $printAddress = PrintAddress::where('id', $printingdata->address_id)->first();
-                    return response()->json(["success" => true, "job" => $job, "data" => $printingdata, "address" => $printAddress ]);
+                    $user = User::where('id', $printingdata->user_id)->first();
+                    return response()->json(["success" => true, "job" => $job, "data" => $printingdata, "address" => $printAddress, "user" => $user ]);
                 } else 
                     $company = Company::where('id', $job->companyId);
                     return response()->json(["success" => false, "job" => $job, "company" => $company ]);
@@ -3362,6 +3363,8 @@ class GeneralController extends Controller
             if(!empty($request['jobid'])){
                 $printInfo = PrintInfo::where('job_id', $request['jobid'])->first();
                     if($printInfo){
+                        $project = JobRequest::where('id', '=', $request['jobid'])->first();
+
                         $printInfo->job_id = $request['jobid'];
                         // $printInfo->client_id = $request['companyId'];
                         $printInfo->client_id = Auth::user()->companyid;
@@ -3370,7 +3373,9 @@ class GeneralController extends Controller
                         $printInfo->report_sheets = $request['report_sheets'];
                         $printInfo->seal_type = $request['seal_type'];
                         $printInfo->signature = $request['signature'];
-                        $printInfo->user_id = Auth::user()->id;
+                        if($project->eSeal_Print < 2) {
+                            $printInfo->user_id = Auth::user()->id;
+                        }
                         if(!empty($request['company_name'])) {
                             if($request['address_id']) {
                                 $printInfo->address_id = $request['address_id'];
@@ -3396,7 +3401,6 @@ class GeneralController extends Controller
 
                         $printInfo->save();
 
-                        $project = JobRequest::where('id', '=', $request['jobid'])->first();
                         if($project->eSeal_Print < 2) {
                             $project->eSeal_Print = 1;
                         }
@@ -3404,6 +3408,7 @@ class GeneralController extends Controller
                             
                         return response()->json(["success" => true, "updatedAddress" => $updatedAddress, "created" => $created]);
                     } else {
+                        $project = JobRequest::where('id', '=', $request['jobid'])->first();
                             $printInfo = new PrintInfo;
                             if($request['jobid']) {
                                 $printInfo->job_id = $request['jobid'];
@@ -3427,7 +3432,9 @@ class GeneralController extends Controller
                                 $printInfo->signature = $request['signature'];
                             } 
 
-                            $printInfo->user_id = Auth::user()->id;
+                            if($project->eSeal_Print < 2) {
+                                $printInfo->user_id = Auth::user()->id;
+                            }
 
                             if($request['delivery_method']) {
                                 $printInfo->delivery_method = $request['delivery_method'];
@@ -3467,7 +3474,7 @@ class GeneralController extends Controller
                             // print_r($printInfo); exit;
                             $printInfo->save();
 
-                            $project = JobRequest::where('id', '=', $request['jobid'])->first();
+                            
                             if($project->eSeal_Print < 2) {
                                 $project->eSeal_Print = 1;
                             }
@@ -3563,6 +3570,8 @@ class GeneralController extends Controller
             if(!empty($request['jobid'])){
                 $printInfo = PrintInfo::where('job_id', $request['jobid'])->first();
                     if($printInfo){
+                        $project = JobRequest::where('id', '=', $request['jobid'])->first();
+
                         if($request['jobid']) {
                             $printInfo->job_id = $request['jobid'];
                         } else {
@@ -3585,7 +3594,10 @@ class GeneralController extends Controller
                         $printInfo->seal_type = $request['seal_type'];
                         $printInfo->signature = $request['signature'];
 
-                        $printInfo->user_id = Auth::user()->id;
+                        if($project->eSeal_Print < 2) {
+                            $printInfo->user_id = Auth::user()->id;
+                        }
+
                         if($request['address_id']) {
                             $printInfo->address_id = $request['address_id'];
                         } else {
@@ -3632,7 +3644,6 @@ class GeneralController extends Controller
                         }
                         $printInfo->save();
 
-                        $project = JobRequest::where('id', '=', $request['jobid'])->first();
                         if($request['printed'] && $request['sent']){
                             $project->eSeal_Print = 4;
                         } else if($request['printed']) {
@@ -3644,6 +3655,7 @@ class GeneralController extends Controller
                             
                             return response()->json(["success" => true, "status" => $project->eSeal_Print, "updatedAddress" => $updatedAddress, "created" => $created]);
                         } else {
+                            $project = JobRequest::where('id', '=', $request['jobid'])->first();
                             
                             $addressId = PrintAddress::latest('id')->first();
                             
@@ -3670,7 +3682,9 @@ class GeneralController extends Controller
                                 
                             $printInfo->signature = $request['signature'];
 
-                            $printInfo->user_id = Auth::user()->id;
+                            if($project->eSeal_Print < 2) {
+                                $printInfo->user_id = Auth::user()->id;
+                            }
 
                             $printInfo->delivery_method = $request['delivery_method'];
 
@@ -3717,7 +3731,6 @@ class GeneralController extends Controller
                             // print_r($printInfo); exit;
                             $printInfo->save();
                             
-                            $project = JobRequest::where('id', '=', $request['jobid'])->first();
                             if($request['printed'] && $request['sent']){
                                 $project->eSeal_Print = 4;
                             } else if($request['printed']) {

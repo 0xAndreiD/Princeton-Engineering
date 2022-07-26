@@ -1109,11 +1109,20 @@
                 } else if (result.job.eSeal_Print == 2) {
                     jobStatus = "SUBMITTED";
                 } else if (result.job.eSeal_Print == 3) {
+                    jobStatus = "PRINTED";
+                } else if (result.job.eSeal_Print == 4) {
                     jobStatus = "COMPLETED";
                 }
                 $("#projectName").val(result.job.clientProjectNumber + ". " + result.job.clientProjectName + " " + result.job.state + " (" + jobStatus +")" );
                 $("#id").val(result.job.id);
                 $("#company").val(result.data.address_id);
+                if(result.job.eSeal_Print > 1) {
+                    $("#username").val(result.user.username);
+                    $("#useremail").val(result.user.email);
+                } else {
+                    $("#username").val("<?php echo Auth::user()->username?>");
+                    $("#useremail").val("<?php echo Auth::user()->email?>");
+                }
                 if(result.address) {
                     $("#company-name").val(result.address.company_name);
                     $("#contact-name").val(result.address.contact_name);
@@ -1215,6 +1224,8 @@
                 $("#tracking").val("");
                 $("#fedex").val("");
                 $("#filePrint").val("");
+                $("#username").val("<?php echo Auth::user()->username?>");
+                $("#useremail").val("<?php echo Auth::user()->email?>");
                 $("input:radio").attr("checked", false);
                 $("input:radio").prop("checked", false);
             }
