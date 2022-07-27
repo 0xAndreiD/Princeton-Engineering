@@ -1114,7 +1114,7 @@
 
         $.post("togglePrintCheck", {id: jobId}, function(result){
             console.log('here: ', result);
-            if(result.job.eSeal == 0 && result.job.eSeal_asbuilt == 0 && result.job.eSeal_PIL == 0 && result.job.eSeal_Print == 0){
+            if(result.job.eSeal.toString() == "0" && result.job.eSeal_asbuilt.toString() == "0" && result.job.eSeal_PIL.toString() == "0" && result.job.eSeal_Print.toString() == "0"){
                 console.log('block');
                 return;
             } else {
