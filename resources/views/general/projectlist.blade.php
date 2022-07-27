@@ -293,6 +293,7 @@
                                     @endif
                                     <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 17px;'><input type='checkbox' id="printFilter" style="transform: rotateZ(180deg);">Print</span>
                                 </div>
+                                <span class="mx-2" style='writing-mode: tb-rl;width: 28px;transform: rotateZ(180deg); line-height: 1;'>Check Box <br />/ Status</span>
                             </th>
                             @endif
                         </tr>
@@ -363,60 +364,46 @@
                                 <lable style="color: #636b6f;font-weight:600;">Printing Instructions</label>
                                 <div class="pl-5">
                                     <div class="row align-items-center">
-                                    <div class="col-4">
-                                        <div class="form-group">
-                                            <label for="copies">#Copies </label>
-                                            <select class="form-control" id="copies" name="copies" style="border: 1px solid #f1dfd2;">
-                                                <option value="1">1</option>
-                                                <option value="2">2</option>
-                                                <option value="3">3</option>
-                                                <option value="4">4</option>
-                                                <option value="5">5</option>
-                                                <option value="6">6</option>
-                                                <option value="7">7</option>
-                                                <option value="8">8</option>
-                                                <option value="9">9</option>
-                                                <option value="10">10</option>
-                                                <option value="11">11</option>
-                                                <option value="12">12</option>
-                                                <option value="13">13</option>
-                                                <option value="14">14</option>
-                                                <option value="15">15</option>
-                                                <option value="16">16</option>
-                                                <option value="17">17</option>
-                                                <option value="18">18</option>
-                                                <option value="19">19</option>
-                                                <option value="20">20</option>
-                                            </select>
+                                        <div class="col-4">
+                                            <div class="form-group align-items-center">
+                                                <label for="copies"># Copies </label>
+                                                <select class="form-control" id="copies" name="copies" style="border: 1px solid #f1dfd2;">
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                    <option value="5">5</option>
+                                                    <option value="6">6</option>
+                                                    <option value="7">7</option>
+                                                    <option value="8">8</option>
+                                                    <option value="9">9</option>
+                                                    <option value="10">10</option>
+                                                    <option value="11">11</option>
+                                                    <option value="12">12</option>
+                                                    <option value="13">13</option>
+                                                    <option value="14">14</option>
+                                                    <option value="15">15</option>
+                                                    <option value="16">16</option>
+                                                    <option value="17">17</option>
+                                                    <option value="18">18</option>
+                                                    <option value="19">19</option>
+                                                    <option value="20">20</option>
+                                                </select>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-4">
-                                            <div class="form-group">
-                                                <label for="plan-set" style="width: 35%">#Sheets / Plan Set</label>
+                                        <div class="col-4">
+                                            <div class="form-group align-items-center">
+                                                <label for="plan-set" style="width: 40%"><nobr># Sheets / Plan Set</nobr></label>
                                                 <input type="text" class="form-control" id="plan-set" name="plan-set" placeholder="Enter Integer..." style="border: 1px solid #f1dfd2;">
                                             </div>
                                         </div>
                                         <div class="col-4">
-                                            <div class="form-group">
-                                                <label for="report">#Report Pages</label>
+                                            <div class="form-group align-items-center">
+                                                <label for="report" style="width: 40%"><nobr># Report Pages</nobr></label>
                                                 <input type="text" class="form-control" id="report" name="report" placeholder="Enter Integer..." style="border: 1px solid #f1dfd2;">
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- <div class="row align-items-center">
-                                        <div class="col-4">
-                                            <div class="form-group">
-                                                <label for="plan-set" style="width: 35%">#Sheets / Plan Set</label>
-                                                <input type="text" class="form-control" id="plan-set" name="plan-set" placeholder="Enter Integer..." style="border: 1px solid #f1dfd2;">
-                                            </div>
-                                        </div>
-                                        <div class="col-4">
-                                            <div class="form-group">
-                                                <label for="report">#Report Pages</label>
-                                                <input type="text" class="form-control" id="report" name="report" placeholder="Enter Integer..." style="border: 1px solid #f1dfd2;">
-                                            </div>
-                                        </div>
-                                    </div> -->
                                     <div class="row align-items-center">
                                         <div class="col-6">
                                             <div class="form-group sealtype-form">
@@ -498,12 +485,6 @@
                                     </div>
                                     <div class="row" style="width: 88%; margin-left: auto;">
                                         <div class="col-4">
-                                            <div class="form-group zip-form">
-                                                <label for="zip">Zip </label>
-                                                <input type="text" class="form-control" id="zip" name="zip" placeholder="Enter Zip Code..." style="border: 1px solid #f1dfd2;">
-                                            </div>
-                                        </div>
-                                        <div class="col-4">
                                             <div class="form-group city-form">
                                                 <label for="city">City </label>
                                                 <input type="text" class="form-control" id="city" name="city" placeholder="Enter City..." style="border: 1px solid #f1dfd2;">
@@ -512,7 +493,64 @@
                                         <div class="col-4">
                                             <div class="form-group state-form">
                                                 <label for="state">State </label>
-                                                <input type="text" class="form-control" id="state" name="state" placeholder="Enter State..." style="border: 1px solid #f1dfd2;">
+                                                <!-- <input type="text" class="form-control" id="state" name="state" placeholder="Enter State..." style="border: 1px solid #f1dfd2;"> -->
+                                                <select placeholder="State" class="form-control" id="state" style="border: 1px solid #f1dfd2;">
+                                                    <option value="AL">AL</option>
+                                                    <option value="AZ">AZ</option>
+                                                    <option value="AR">AR</option>
+                                                    <option value="CA">CA</option>
+                                                    <option value="CO">CO</option>
+                                                    <option value="CT">CT</option>
+                                                    <option value="DE">DE</option>
+                                                    <option value="FL">FL</option>
+                                                    <option value="GA">GA</option>
+                                                    <option value="HI">HI</option>
+                                                    <option value="ID">ID</option>
+                                                    <option value="IL">IL</option>
+                                                    <option value="IN">IN</option>
+                                                    <option value="IA">IA</option>
+                                                    <option value="KS">KS</option>
+                                                    <option value="KY">KY</option>
+                                                    <option value="LA">LA</option>
+                                                    <option value="ME">ME</option>
+                                                    <option value="MD">MD</option>
+                                                    <option value="MA">MA</option>
+                                                    <option value="MI">MI</option>
+                                                    <option value="MN">MN</option>
+                                                    <option value="MS">MS</option>
+                                                    <option value="MO">MO</option>
+                                                    <option value="MT">MT</option>
+                                                    <option value="NE">NE</option>
+                                                    <option value="NV">NV</option>
+                                                    <option value="NH">NH</option>
+                                                    <option value="NJ">NJ</option>
+                                                    <option value="NM">NM</option>
+                                                    <option value="NY">NY</option>
+                                                    <option value="NC">NC</option>
+                                                    <option value="ND">ND</option>
+                                                    <option value="OH">OH</option>
+                                                    <option value="OK">OK</option>
+                                                    <option value="OR">OR</option>
+                                                    <option value="PA">PA</option>
+                                                    <option value="RI">RI</option>
+                                                    <option value="SC">SC</option>
+                                                    <option value="SD">SD</option>
+                                                    <option value="TN">TN</option>
+                                                    <option value="TX">TX</option>
+                                                    <option value="UT">UT</option>
+                                                    <option value="VT">VT</option>
+                                                    <option value="VA">VA</option>
+                                                    <option value="WA">WA</option>
+                                                    <option value="WV">WV</option>
+                                                    <option value="WI">WI</option>
+                                                    <option value="WY">WY</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-group zip-form">
+                                                <label for="zip">Zip </label>
+                                                <input type="text" class="form-control" id="zip" name="zip" placeholder="Enter Zip Code..." style="border: 1px solid #f1dfd2;">
                                             </div>
                                         </div>
                                     </div>
@@ -566,7 +604,7 @@
                                     <div class="row align-items-center">
                                         <div class="col-4">
                                             <div class="form-group">
-                                                <label for="printed-date">Printed Date</label>
+                                                <label for="printed-date"><nobr>Printed Date</nobr></label>
                                                 @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4)
                                                     <input type="text" class="form-control" id="printed-date" name="printed-date" placeholder="Printed Date" onfocus="(this.type='date')" style="border: 1px solid #f1dfd2; width: 100%;">
                                                 @else
@@ -576,7 +614,7 @@
                                         </div>
                                         <div class="col-4">
                                             <div class="form-group">
-                                                <label for="sent-date">Sent Date</label>
+                                                <label for="sent-date"><nobr>Sent Date</nobr></label>
                                                 @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4)
                                                     <input type="text" class="form-control" id="sent-date" name="sent-date" placeholder="Sent Date" onfocus="(this.type='date')" style="border: 1px solid #f1dfd2; width: 100%;">
                                                 @else
