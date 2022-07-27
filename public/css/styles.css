@@ -520,6 +520,7 @@ html, body {
 #printmodal .form-group label {
     width: 20%;
     text-align: left !important;
+    margin-bottom: 0;
 }
 
 #printmodal .form-group select {

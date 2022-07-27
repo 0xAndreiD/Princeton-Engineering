@@ -1435,15 +1435,14 @@ class GeneralController extends Controller
                     "<input class='mr-2 printcheck' type='checkbox' " . "onchange='togglePrintCheck(this, {$job['id']})'" . ($job['eSeal_Print'] == 2 || $job['eSeal_Print'] == 3 ? " checked" : "") . ">" . 
                     // ($job['asbuilt'] == 0 && $job['eSeal'] == 0 && $job['eSeal_PIL'] == 0 ? " disabled" : "") .
 
-                    (Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 ? 
-                    "<div class='four-check mr-2' onclick=". ($job['eSeal_Print'] == 2 || $job['eSeal_Print'] == 3 ? "'togglePrintCheck(this, {$job['id']})'" : "'openReviewTab({$job['id']})'") . " style='overflow: hidden; width: 30px; height: 30px; border-radius: 6px;'>".
+                    "<div class='four-check mr-2'".(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 ?  "onclick=". ($job['eSeal_Print'] == 2 || $job['eSeal_Print'] == 3 ? "'togglePrintCheck(this, {$job['id']})'" : "'openReviewTab({$job['id']})'")  : "" ). " style='overflow: hidden; width: 30px; height: 30px; border-radius: 6px;'>".
                         "<div style='width: 66px; height: 66px; display: flex; justify-content: start; flex-wrap: wrap; transform: translate(-18px, -18px) rotate(45deg);'>".
                             "<div class='eseal'"  . " style='margin:1.5px; width: 30px; height: 30px; background-color:#{$sealCol};'></div>".
                             "<div class='eseal_print'" . " style='margin:1.5px; width: 30px; height: 30px; background-color:#{$printCol};'></div>" .
                             "<div class='asbuilt'" . " style='margin:1.5px; width: 30px; height: 30px; background-color:#{$asbuiltCol};'></div>".
                             "<div class='pil'" . " style='margin:1.5px; width: 30px; height: 30px; background-color:#{$pilCol};'></div>".
                         "</div>".
-                    "</div>" : "" ).
+                    "</div>".
                     // (Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4? "<button onclick='openReviewTab({$job['id']})' class='mr-1 btn' style='padding: 7px 4px; background-image: -webkit-linear-gradient(-90deg, #{$sealCol} 0%, #{$sealCol} 30%, #FFFFFF 31%, #FFFFFF 35%, #{$asbuiltCol} 36%, #{$asbuiltCol} 65%, #FFFFFF 66%, #FFFFFF 72%, #{$pilCol} 71%, #{$pilCol} 100%); border: 1px solid white;'>
                     //     <div style='width:16px; height: 16px;'></div>
                     // </a>" : "") . 
@@ -3305,7 +3304,6 @@ class GeneralController extends Controller
         $curtime = time();
         $updatedAddress = [];
         $created = false;
-        if(Auth::user()->userrole == 2){
             if(!empty($request['company_name'])){
                 if(!empty($request['address_id'])) {
                     $printAddress = PrintAddress::where('id', $request['address_id'])->first();
@@ -3488,8 +3486,6 @@ class GeneralController extends Controller
                 } else {
                         return response()->json(["success" => false, "message" => "You don't have job id."]);
                 }
-        } else
-            return response()->json(["success" => false, "message" => "You don't have any permission."]);
     }
     /**
      * submit the Print data
@@ -3500,7 +3496,6 @@ class GeneralController extends Controller
         $curtime = time();
         $updatedAddress;
         $created = false;
-        if(Auth::user()->userrole == 2){
             if(!empty($request['address_id'])) {
                 $printAddress = PrintAddress::where('id', $request['address_id'])->first();
                 // $printAddress->client_id = $request['companyId'];
@@ -3748,8 +3743,6 @@ class GeneralController extends Controller
                 } else {
                         return response()->json(["success" => false, "message" => "You don't have job id."]);
                 }
-        } else
-            return response()->json(["success" => false, "message" => "You don't have any permission."]);
     }
     /**
      * Return report files and Biggest sized IN file.
