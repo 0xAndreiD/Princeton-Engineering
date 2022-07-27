@@ -504,3 +504,77 @@ html, body {
 .flexRow{
     display: flex;
 }
+
+#printmodal .form-group {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 0.5rem;
+}
+
+#printmodal .form-group input {
+    width: 80%;
+}
+
+#printmodal .form-group label {
+    width: 20%;
+    text-align: left !important;
+}
+
+#printmodal .form-group select {
+    width: 80%;
+}
+
+#printmodal .form-group textarea {
+    width: 80%;
+}
+
+#printmodal .form-group #company {
+    text-align: left;
+    text-align-last: left;
+    padding: 0;
+}
+
+#printmodal .custom-control input {
+    width: fit-content;
+}
+
+#printmodal .custom-control label {
+    width: fit-content;
+}
+
+#printmodal .company-info .form-group label {
+    text-align: right !important;
+}
+
+#printmodal .date-group label {
+    width: fit-content;
+}
+
+#reportmodal tr:nth-of-type(odd) {
+    background-color: #E6E6E6;
+}
+
+#reportmodal table {
+    background-color: #F3F3F3;
+    border-collapse: collapse;
+    width: 100%;
+    margin: 15px 0;
+}
+
+#reportmodal th {
+    background-color: #FE4902;
+    color: #FFF;
+    cursor: pointer;
+    padding: 5px 10px;
+}
+
+#reportmodal td, th {
+    text-align: left;
+}
+
+#reportmodal td {
+    color: #663300;
+    padding: 5px 10px;
+}

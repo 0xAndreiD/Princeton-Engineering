@@ -352,15 +352,6 @@
                     <div class="block-content" style="max-height: 700px; overflow: auto;">
                         <div class="row items-push">
                             <div class="col-lg-12">
-                                <!-- <div class="form-group">
-                                    <label for="company">Company <span class="text-danger">*</span></label><br/>
-                                    <select class="form-control" id="company" name="company" style="border: 1px solid pink;">
-                                        @foreach ($companyList as $company)
-                                            <option value="{{$company->id}}">{{ $company->company_name }}</option>
-                                        @endforeach
-                                    </select>
-                                    <input type="hidden" id="id" name="id">
-                                </div> -->
                                 <div class="form-group">
                                     <label for="projectName">Project</label>
                                     <input type="text" class="form-control" id="projectName" name="projectName" placeholder="Enter Project Name..." style="border: 1px solid #f1dfd2;" disabled>
@@ -371,34 +362,35 @@
                                 </div>
                                 <lable style="color: #636b6f;font-weight:600;">Printing Instructions</label>
                                 <div class="pl-5">
-                                    <div class="form-group" style="width:46%;">
-                                        <label for="copies">#Copies </label>
-                                        <!-- <input type="text" class="form-control" id="issuedAt" name="issuedAt" style="border: 1px solid #f1dfd2; width: 20%;"> -->
-                                        <select class="form-control" id="copies" name="copies" style="border: 1px solid #f1dfd2; width: 20%">
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
-                                            <option value="4">4</option>
-                                            <option value="5">5</option>
-                                            <option value="6">6</option>
-                                            <option value="7">7</option>
-                                            <option value="8">8</option>
-                                            <option value="9">9</option>
-                                            <option value="10">10</option>
-                                            <option value="11">11</option>
-                                            <option value="12">12</option>
-                                            <option value="13">13</option>
-                                            <option value="14">14</option>
-                                            <option value="15">15</option>
-                                            <option value="16">16</option>
-                                            <option value="17">17</option>
-                                            <option value="18">18</option>
-                                            <option value="19">19</option>
-                                            <option value="20">20</option>
-                                        </select>
-                                    </div>
                                     <div class="row align-items-center">
-                                        <div class="col-4">
+                                    <div class="col-4">
+                                        <div class="form-group">
+                                            <label for="copies">#Copies </label>
+                                            <select class="form-control" id="copies" name="copies" style="border: 1px solid #f1dfd2;">
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                                <option value="6">6</option>
+                                                <option value="7">7</option>
+                                                <option value="8">8</option>
+                                                <option value="9">9</option>
+                                                <option value="10">10</option>
+                                                <option value="11">11</option>
+                                                <option value="12">12</option>
+                                                <option value="13">13</option>
+                                                <option value="14">14</option>
+                                                <option value="15">15</option>
+                                                <option value="16">16</option>
+                                                <option value="17">17</option>
+                                                <option value="18">18</option>
+                                                <option value="19">19</option>
+                                                <option value="20">20</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
                                             <div class="form-group">
                                                 <label for="plan-set" style="width: 35%">#Sheets / Plan Set</label>
                                                 <input type="text" class="form-control" id="plan-set" name="plan-set" placeholder="Enter Integer..." style="border: 1px solid #f1dfd2;">
@@ -411,6 +403,20 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <!-- <div class="row align-items-center">
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label for="plan-set" style="width: 35%">#Sheets / Plan Set</label>
+                                                <input type="text" class="form-control" id="plan-set" name="plan-set" placeholder="Enter Integer..." style="border: 1px solid #f1dfd2;">
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label for="report">#Report Pages</label>
+                                                <input type="text" class="form-control" id="report" name="report" placeholder="Enter Integer..." style="border: 1px solid #f1dfd2;">
+                                            </div>
+                                        </div>
+                                    </div> -->
                                     <div class="row align-items-center">
                                         <div class="col-6">
                                             <div class="form-group sealtype-form">
@@ -490,19 +496,27 @@
                                         <label for="address2">Address2 </label>
                                         <input type="text" class="form-control" id="address2" name="address2" placeholder="Enter Address2..." style="border: 1px solid #f1dfd2;">
                                     </div>
-                                    <div class="form-group zip-form">
-                                        <label for="zip">Zip </label>
-                                        <input type="text" class="form-control" id="zip" name="zip" placeholder="Enter Zip Code..." style="border: 1px solid #f1dfd2;">
+                                    <div class="row" style="width: 88%; margin-left: auto;">
+                                        <div class="col-4">
+                                            <div class="form-group zip-form">
+                                                <label for="zip">Zip </label>
+                                                <input type="text" class="form-control" id="zip" name="zip" placeholder="Enter Zip Code..." style="border: 1px solid #f1dfd2;">
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-group city-form">
+                                                <label for="city">City </label>
+                                                <input type="text" class="form-control" id="city" name="city" placeholder="Enter City..." style="border: 1px solid #f1dfd2;">
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-group state-form">
+                                                <label for="state">State </label>
+                                                <input type="text" class="form-control" id="state" name="state" placeholder="Enter State..." style="border: 1px solid #f1dfd2;">
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="form-group city-form">
-                                        <label for="city">City </label>
-                                        <input type="text" class="form-control" id="city" name="city" placeholder="Enter City..." style="border: 1px solid #f1dfd2;">
-                                    </div>
-                                    <div class="form-group state-form">
-                                        <label for="state">State </label>
-                                        <input type="text" class="form-control" id="state" name="state" placeholder="Enter State..." style="border: 1px solid #f1dfd2;">
-                                    </div>
-                                    <div class="row align-items-center" style="margin-left:93px;">
+                                    <div class="row align-items-center" style="margin-left:113px;">
                                         <div class="col-6">
                                             <div class="form-group phonenumber-form">
                                                 <label for="phonenumber">Phone Number </label>
@@ -1079,13 +1093,12 @@
         $("#projects .selected").removeClass("selected");
         $(obj).parents('tr').addClass("selected");
         $("option:selected").removeAttr("selected");
-        $('#printmodal').modal('toggle');
+        
         if($(obj)[0].checked == true){
             $(obj)[0].checked = false;
         } else {
             $(obj)[0].checked = true;
         }
-        $('#expContainer').html('');
 
         $("#printDataForm input").change(function () {
             hasChanges = true;
@@ -1101,133 +1114,139 @@
 
         $.post("togglePrintCheck", {id: jobId}, function(result){
             console.log('here: ', result);
-            $(".reportmodal-name").html(result.job.clientProjectNumber + ". " + result.job.clientProjectName + " " + result.job.state)
-            if (result.success && result.job){
-                var jobStatus;
-                if(result.job.eSeal_Print == 1) {
-                    jobStatus = "SAVED";
-                } else if (result.job.eSeal_Print == 2) {
-                    jobStatus = "SUBMITTED";
-                } else if (result.job.eSeal_Print == 3) {
-                    jobStatus = "PRINTED";
-                } else if (result.job.eSeal_Print == 4) {
-                    jobStatus = "COMPLETED";
-                }
-                $("#projectName").val(result.job.clientProjectNumber + ". " + result.job.clientProjectName + " " + result.job.state + " (" + jobStatus +")" );
-                $("#id").val(result.job.id);
-                $("#company").val(result.data.address_id);
-                if(result.job.eSeal_Print > 1) {
-                    $("#username").val(result.user.username);
-                    $("#useremail").val(result.user.email);
+            if(result.job.eSeal == 0 && result.job.eSeal_asbuilt == 0 && result.job.eSeal_PIL == 0){
+                console.log('block');
+                return;
+            } else {
+                $('#printmodal').modal('toggle');
+                $(".reportmodal-name").html(result.job.clientProjectNumber + ". " + result.job.clientProjectName + " " + result.job.state)
+                if (result.success && result.job){
+                    var jobStatus;
+                    if(result.job.eSeal_Print == 1) {
+                        jobStatus = "SAVED";
+                    } else if (result.job.eSeal_Print == 2) {
+                        jobStatus = "SUBMITTED";
+                    } else if (result.job.eSeal_Print == 3) {
+                        jobStatus = "PRINTED";
+                    } else if (result.job.eSeal_Print == 4) {
+                        jobStatus = "COMPLETED";
+                    }
+                    $("#projectName").val(result.job.clientProjectNumber + ". " + result.job.clientProjectName + " " + result.job.state + " (" + jobStatus +")" );
+                    $("#id").val(result.job.id);
+                    $("#company").val(result.data.address_id);
+                    if(result.job.eSeal_Print > 1) {
+                        $("#username").val(result.user.username);
+                        $("#useremail").val(result.user.email);
+                    } else {
+                        $("#username").val("<?php echo Auth::user()->username?>");
+                        $("#useremail").val("<?php echo Auth::user()->email?>");
+                    }
+                    if(result.address) {
+                        $("#company-name").val(result.address.company_name);
+                        $("#contact-name").val(result.address.contact_name);
+                        $("#address1").val(result.address.address1);
+                        $("#address2").val(result.address.address2);
+                        $("#zip").val(result.address.zip);
+                        $("#city").val(result.address.city);
+                        $("#state").val(result.address.state);
+                        $("#phonenumber").val(result.address.telno);
+                        $("#extension").val(result.address.extension);
+                    } else {
+                        $("#company-name").val("");
+                            $("#contact-name").val("");
+                            $("#address1").val("");
+                            $("#address2").val("");
+                            $("#zip").val("");
+                            $("#city").val("");
+                            $("#state").val("");
+                            $("#phonenumber").val("");
+                            $("#extension").val("");
+                    }
+                    // $("#company option[value='" + result.data.client_id + "']").attr('selected', 'selected');
+                    // companyList.map((item, index) => {
+                    //     if(result.data.companyId == item.id){
+                    //         $("#company-name").val(item.company_name);
+                    //         $("#address1").val(item.address1);
+                    //         $("#address2").val(item.address2);
+                    //         $("#zip").val(item.zip);
+                    //         $("#city").val(item.city);
+                    //         $("#state").val(item.state);
+                    //         $("#phonenumber").val(item.phonenumber);
+                    //         $("#extension").val(item.extension);
+                    //     }
+                    // })
+    
+                    $("#copies").val(result.data.copies);
+                    $("#plan-set").val(result.data.plan_sheets);
+                    $("#report").val(result.data.report_sheets);
+                    if(result.data.seal_type == 0) {
+                        $("#rubber-stamp").attr('checked', 'checked');
+                    } else if(result.data.seal_type == 1) {
+                        $("#embossed").attr('checked', 'checked');
+                    }
+    
+                    if(result.data.signature == true) {
+                        $("#yes").attr('checked', 'checked');
+                    } else {
+                        $("#no").attr('checked', 'checked');
+                    }
+    
+                    if(result.data.delivery_method == 2) {
+                        $("#2nd-day").attr('checked', 'checked');
+                    } else if (result.data.delivery_method == 1) {
+                        $("#overnight").attr('checked', 'checked');
+                    } else if (result.data.delivery_method == 0) {
+                        $("#mail").attr('checked', 'checked');
+                    }
+    
+                    $("#user-textarea-input").val(result.data.user_notes);
+                    $("#printer-textarea-input").val(result.data.printer_notes);
+                    $("#sent-date").val(result.data.sent);
+                    $("#printed-date").val(result.data.printed);
+                    $("#tracking").val(result.data.tracking);
+                    $("#fedex").val(result.data.third_party_fedex);
+                    if(result.data.selected_files != "null") {
+                        let file_names = [];
+                        file_names = result.data.selected_files.slice(1, result.data.selected_files.length - 1).split("\\n");
+                        $('#filePrint').val(file_names.join("\n"));
+                    }
                 } else {
+                    $("#id").val(result.job.id);
+                    $("#projectName").val(result.job.clientProjectNumber + ". " + result.job.clientProjectName + " " + result.job.state +  " (NOT SAVED)" );
+                    $("#company option[value='0']").attr('selected', 'selected');
+                            $("#company-name").val("");
+                            $("#contact-name").val("");
+                            $("#address1").val("");
+                            $("#address2").val("");
+                            $("#zip").val("");
+                            $("#city").val("");
+                            $("#state").val("");
+                            $("#phonenumber").val("");
+                            $("#extension").val("");
+                    // $("#company option[value='" + result.data.companyId + "']").attr('selected', 'selected');
+                    //         $("#company-name").val(item.company_name);
+                    //         $("#address1").val(item.address1);
+                    //         $("#address2").val(item.address2);
+                    //         $("#zip").val(item.zip);
+                    //         $("#city").val(item.city);
+                    //         $("#state").val(item.state);
+                    //         $("#phonenumber").val(item.phonenumber);
+                    //         $("#extension").val(item.extension);
+                    $("#copies").val(1);
+                    $("#plan-set").val("");
+                    $("#report").val("");
+                    $("#user-textarea-input").val("");
+                    $("#printer-textarea-input").val("");
+                    $("#printed-date").val("");
+                    $("#sent-date").val("");
+                    $("#tracking").val("");
+                    $("#fedex").val("");
+                    $("#filePrint").val("");
                     $("#username").val("<?php echo Auth::user()->username?>");
                     $("#useremail").val("<?php echo Auth::user()->email?>");
+                    $("input:radio").attr("checked", false);
+                    $("input:radio").prop("checked", false);
                 }
-                if(result.address) {
-                    $("#company-name").val(result.address.company_name);
-                    $("#contact-name").val(result.address.contact_name);
-                    $("#address1").val(result.address.address1);
-                    $("#address2").val(result.address.address2);
-                    $("#zip").val(result.address.zip);
-                    $("#city").val(result.address.city);
-                    $("#state").val(result.address.state);
-                    $("#phonenumber").val(result.address.telno);
-                    $("#extension").val(result.address.extension);
-                } else {
-                    $("#company-name").val("");
-                        $("#contact-name").val("");
-                        $("#address1").val("");
-                        $("#address2").val("");
-                        $("#zip").val("");
-                        $("#city").val("");
-                        $("#state").val("");
-                        $("#phonenumber").val("");
-                        $("#extension").val("");
-                }
-                // $("#company option[value='" + result.data.client_id + "']").attr('selected', 'selected');
-                // companyList.map((item, index) => {
-                //     if(result.data.companyId == item.id){
-                //         $("#company-name").val(item.company_name);
-                //         $("#address1").val(item.address1);
-                //         $("#address2").val(item.address2);
-                //         $("#zip").val(item.zip);
-                //         $("#city").val(item.city);
-                //         $("#state").val(item.state);
-                //         $("#phonenumber").val(item.phonenumber);
-                //         $("#extension").val(item.extension);
-                //     }
-                // })
-
-                $("#copies").val(result.data.copies);
-                $("#plan-set").val(result.data.plan_sheets);
-                $("#report").val(result.data.report_sheets);
-                if(result.data.seal_type == 0) {
-                    $("#rubber-stamp").attr('checked', 'checked');
-                } else if(result.data.seal_type == 1) {
-                    $("#embossed").attr('checked', 'checked');
-                }
-
-                if(result.data.signature == true) {
-                    $("#yes").attr('checked', 'checked');
-                } else {
-                    $("#no").attr('checked', 'checked');
-                }
-
-                if(result.data.delivery_method == 2) {
-                    $("#2nd-day").attr('checked', 'checked');
-                } else if (result.data.delivery_method == 1) {
-                    $("#overnight").attr('checked', 'checked');
-                } else if (result.data.delivery_method == 0) {
-                    $("#mail").attr('checked', 'checked');
-                }
-
-                $("#user-textarea-input").val(result.data.user_notes);
-                $("#printer-textarea-input").val(result.data.printer_notes);
-                $("#sent-date").val(result.data.sent);
-                $("#printed-date").val(result.data.printed);
-                $("#tracking").val(result.data.tracking);
-                $("#fedex").val(result.data.third_party_fedex);
-                if(result.data.selected_files != "null") {
-                    let file_names = [];
-                    file_names = result.data.selected_files.slice(1, result.data.selected_files.length - 1).split("\\n");
-                    $('#filePrint').val(file_names.join("\n"));
-                }
-            } else {
-                $("#id").val(result.job.id);
-                $("#projectName").val(result.job.clientProjectNumber + ". " + result.job.clientProjectName + " " + result.job.state +  " (NOT SAVED)" );
-                $("#company option[value='0']").attr('selected', 'selected');
-                        $("#company-name").val("");
-                        $("#contact-name").val("");
-                        $("#address1").val("");
-                        $("#address2").val("");
-                        $("#zip").val("");
-                        $("#city").val("");
-                        $("#state").val("");
-                        $("#phonenumber").val("");
-                        $("#extension").val("");
-                // $("#company option[value='" + result.data.companyId + "']").attr('selected', 'selected');
-                //         $("#company-name").val(item.company_name);
-                //         $("#address1").val(item.address1);
-                //         $("#address2").val(item.address2);
-                //         $("#zip").val(item.zip);
-                //         $("#city").val(item.city);
-                //         $("#state").val(item.state);
-                //         $("#phonenumber").val(item.phonenumber);
-                //         $("#extension").val(item.extension);
-                $("#copies").val(1);
-                $("#plan-set").val("");
-                $("#report").val("");
-                $("#user-textarea-input").val("");
-                $("#printer-textarea-input").val("");
-                $("#printed-date").val("");
-                $("#sent-date").val("");
-                $("#tracking").val("");
-                $("#fedex").val("");
-                $("#filePrint").val("");
-                $("#username").val("<?php echo Auth::user()->username?>");
-                $("#useremail").val("<?php echo Auth::user()->email?>");
-                $("input:radio").attr("checked", false);
-                $("input:radio").prop("checked", false);
             }
         });
     }
