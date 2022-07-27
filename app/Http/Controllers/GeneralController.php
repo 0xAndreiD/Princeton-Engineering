@@ -1431,7 +1431,10 @@ class GeneralController extends Controller
                     "<input class='mr-1 plancheck' type='checkbox' " . (Auth::user()->userrole == 4 ? "style='pointer-events: none;'" : "onchange='togglePlanCheck(this, {$job['id']})'") . ($job['plancheck'] == 1 ? " checked" : "") . ">" . 
                     "<input class='mr-1 asbuilt' type='checkbox' " . (Auth::user()->userrole == 4 ? "style='pointer-events: none;'" : "onchange='toggleAsBuilt(this, {$job['id']})'") . ($job['asbuilt'] == 1 ? " checked" : "") . ">" . 
                     (Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->allow_permit > 0 ? "<input class='mr-1 pilcheck' type='checkbox'" . (Auth::user()->userrole == 4 ? "style='pointer-events: none;'" : "onchange='togglePilStatus(this, {$job['id']})'") . ($job['PIL_status'] == 1 ? " checked" : "") . ">" : "") .
+
                     "<input class='mr-2 printcheck' type='checkbox' " . "onchange='togglePrintCheck(this, {$job['id']})'" . ($job['eSeal_Print'] == 2 || $job['eSeal_Print'] == 3 ? " checked" : "") . ">" . 
+                    // ($job['asbuilt'] == 0 && $job['eSeal'] == 0 && $job['eSeal_PIL'] == 0 ? " disabled" : "") .
+
                     (Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 ? 
                     "<div class='four-check mr-2' onclick=". ($job['eSeal_Print'] == 2 || $job['eSeal_Print'] == 3 ? "'togglePrintCheck(this, {$job['id']})'" : "'openReviewTab({$job['id']})'") . " style='overflow: hidden; width: 30px; height: 30px; border-radius: 6px;'>".
                         "<div style='width: 66px; height: 66px; display: flex; justify-content: start; flex-wrap: wrap; transform: translate(-18px, -18px) rotate(45deg);'>".
