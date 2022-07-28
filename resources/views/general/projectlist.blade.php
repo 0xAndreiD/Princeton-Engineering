@@ -495,6 +495,7 @@
                                                 <label for="state">State </label>
                                                 <!-- <input type="text" class="form-control" id="state" name="state" placeholder="Enter State..." style="border: 1px solid #f1dfd2;"> -->
                                                 <select placeholder="State" class="form-control" id="state" style="border: 1px solid #f1dfd2;">
+                                                    <option value="" hidden>Enter State...</option>
                                                     <option value="AL">AL</option>
                                                     <option value="AZ">AZ</option>
                                                     <option value="AR">AR</option>
@@ -625,7 +626,11 @@
                                         <div class="col-4">
                                             <div class="form-group">
                                                 <label for="tracking">Tracking</label>
-                                                <input type="text" class="form-control" id="tracking" name="tracking" placeholder="Tracking" style="border: 1px solid #f1dfd2; width: 100%;">
+                                                @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4)
+                                                    <input type="text" class="form-control" id="tracking" name="tracking" placeholder="Tracking" style="border: 1px solid #f1dfd2; width: 100%;">
+                                                @else
+                                                    <input type="text" class="form-control" id="tracking" name="tracking" placeholder="Tracking" style="border: 1px solid #f1dfd2; width: 100%;" disabled>
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
@@ -711,6 +716,7 @@
         { id:"{{ $item['id'] }}", company_name: "{{ $item['company_name'] }}",contact_name:"{{ $item['contact_name'] }}", address1: "{{ $item['address1'] }}", address2: "{{ $item['address2'] }}", city: "{{ $item['city'] }}", state: "{{ $item['state'] }}", zip: "{{ $item['zip'] }}", phonenumber: "{{ $item['telno'] }}", extension: "{{ $item['extension'] }}"  },
         @endforeach
     ];
+    console.log('companyList:', companyList);
 
     var selectedFiles = new Array();
 
@@ -1649,6 +1655,15 @@
     }
 
     function submitPrint () {
+        $(".sealtype-form").css("color","#636b6f");
+        $(".signature-form").css("color","#636b6f");
+        $("#useremail").css("color","#636b6f");
+        $(".deliver-form").css("color","#636b6f");
+        $(".printFile-form").css("color","#636b6f");
+        $(".printFile-form").find("textarea").css("border-color","#f1dfd2");
+        $(".company-info input").css("border-color","#f1dfd2");
+        $(".company-info label").css("color","#636b6f");
+
         var blankField = 0;
         let toast = Swal.mixin({
         buttonsStyling: false,
@@ -1752,7 +1767,7 @@
         if($("#state").val() == "") {
             blankField++;
             $(".state-form").css("color","#e04f1a");
-            $(".state-form").find("input").css("border-color","#e04f1a");
+            $(".state-form").find("select").css("border-color","#e04f1a");
         }
         if($("#city").val() == "") {
             blankField++;
@@ -1777,7 +1792,7 @@
                 // $("#infos").DataTable().draw(false);
                 toast.fire('Success', 'The print data is submitted.', 'success');
                 if(result.status == 2) {
-                    $(".selected").find(".eseal_print").css('background-color', '#96ddcd');
+                    $(".selected").find(".eseal_print").css('background-color', '#ff9999');
                     $(".selected").find(".printcheck").prop("checked", true);
                 } else if(result.status == 3) {
                     $(".selected").find(".eseal_print").css('background-color', '#7cb9e8');

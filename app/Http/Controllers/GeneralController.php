@@ -1412,7 +1412,7 @@ class GeneralController extends Controller
                 if($job->eSeal_Print == 1)
                     $printCol = 'e4d800';
                 else if($job->eSeal_Print == 2)
-                    $printCol = '96ddcd';
+                    $printCol = 'ff9999';
                 else if($job->eSeal_Print == 3)
                     $printCol = '7cb9e8';
                 else if($job->eSeal_Print == 4)
@@ -3700,9 +3700,7 @@ class GeneralController extends Controller
                             if($request['tracking']) {
                                 $printInfo->tracking = $request['tracking'];
                             }else {
-                                if( Auth::user()->userrole == 2 || Auth::user()->userrole == 3 ){
-                                    $printInfo->tracking = "";
-                                } else {
+                                if( Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 ){
                                     return response()->json(["success" => false, "message" => "You don't have tracking."]);
                                 }
                             }

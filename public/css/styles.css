@@ -531,7 +531,7 @@ html, body {
     width: 80%;
 }
 
-#printmodal .form-group #company {
+#printmodal .form-group #company, #printmodal .form-group #state {
     text-align: left;
     text-align-last: left;
     padding: 0;
