@@ -3618,12 +3618,6 @@ class GeneralController extends Controller
                         
                         if($request['tracking']) {
                             $printInfo->tracking = $request['tracking'];
-                        }else {
-                            if( Auth::user()->userrole == 2 || Auth::user()->userrole == 3 ){
-                                $printInfo->tracking = "";
-                            } else {
-                                return response()->json(["success" => false, "message" => "You don't have tracking."]);
-                            }
                         }
                         if($request['user_notes']) {
                             $printInfo->user_notes = $request['user_notes'];
@@ -3699,10 +3693,6 @@ class GeneralController extends Controller
                             
                             if($request['tracking']) {
                                 $printInfo->tracking = $request['tracking'];
-                            }else {
-                                if( Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 ){
-                                    return response()->json(["success" => false, "message" => "You don't have tracking."]);
-                                }
                             }
                             if($request['user_notes']) {
                                 $printInfo->user_notes = $request['user_notes'];

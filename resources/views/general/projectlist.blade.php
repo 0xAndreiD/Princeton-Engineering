@@ -462,7 +462,7 @@
                                                 <option>{{ $company->company_name }}</option>
                                             @endforeach -->
                                             @foreach ($printAddress as $address)
-                                                <option value="{{$address->id}}">{{ $address->company_name }}</option>
+                                                <option value="{{$address->id}}">{{ $address->company_name }} -{{ $address->city}}, {{ $address->state}} -{{ $address->contact_name}}</option>
                                             @endforeach
                                         </select>
                                         <input type="hidden" id="id" name="id">
