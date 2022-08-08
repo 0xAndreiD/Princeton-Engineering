@@ -141,6 +141,7 @@
                                         <option value="3"><span class='badge badge-warning'> Junior Super Admin </span></option>
                                         <option value="2"><span class='badge badge-danger'> Super Admin </span></option>
                                         <option value="4"><span class='badge badge-secondary'> Reviewer </span></option>
+                                        <option value="5"><span class='badge badge-secondary'> Printer </span></option>
                                     </select>
                                 </div>
                                 <div class="form-group">
