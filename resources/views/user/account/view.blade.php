@@ -1,4 +1,4 @@
-@extends((Auth::user()->userrole == 2)? 'admin.layout': ((Auth::user()->userrole == 1 || Auth::user()->userrole == 3) ? 'clientadmin.layout' : (Auth::user()->userrole == 4 ? 'reviewer.layout' : 'user.layout')))
+@extends((Auth::user()->userrole == 2)? 'admin.layout': ((Auth::user()->userrole == 1 || Auth::user()->userrole == 3) ? 'clientadmin.layout' : (Auth::user()->userrole == 4 ? 'reviewer.layout' : (Auth::user()->userrole == 5 ? 'printer.layout' : 'user.layout'))))
 
 @section('css_after')
 <link rel="stylesheet" href="{{ asset('css/account.css') }}">

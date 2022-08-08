@@ -89,6 +89,8 @@ class GeneralController extends Controller
             return view('reviewer.home')->with('notify', $notify);
         else if( Auth::user()->userrole == 0 )
             return view('user.home')->with('notify', $notify);
+        else if( Auth::user()->userrole == 5 )
+            return view('printer.home')->with('notify', $notify);
     }
 
     /**
@@ -1048,7 +1050,7 @@ class GeneralController extends Controller
         $companyList = Company::orderBy('company_name', 'asc')->get();
         $projectStatusList = JobProjectStatus::orderBy('id', 'asc')->get();
         $planStatusList = JobPlanStatus::orderBy('id', 'asc')->get();
-        if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4)
+        if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->userrole == 5)
             $users = User::get(array('id', 'username'));
         else
             $users = User::where('companyid', Auth::user()->companyid)->get(array('id', 'username'));
@@ -1075,7 +1077,7 @@ class GeneralController extends Controller
      * @return JSON
      */
     public function getProjectList(Request $request){
-        if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4)
+        if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->userrole == 5)
         {
             $handler = new JobRequest;
             $columns = array( 
@@ -1178,11 +1180,11 @@ class GeneralController extends Controller
         }
         // filter PRINT
         if(!empty($request->input("print")) && $request["print"] == 1){
-            $handler = $handler->where('job_request.eSeal_Print', 2);
+            $handler = $handler->where('job_request.eSeal_Print_available', 1);
         }
         
         // admin filter company name, user, project name, project number, project state, plan status
-        if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4){
+        if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->userrole == 5){
             if(!empty($request->input("columns.2.search.value")))
                 $handler = $handler->where('company_info.company_name', 'LIKE', "%{$request->input("columns.2.search.value")}%");
             if(!empty($request->input("columns.3.search.value")))
@@ -1257,6 +1259,7 @@ class GeneralController extends Controller
                         'job_request.PIL_status as PIL_status',
                         'job_request.eSeal_PIL as eSeal_PIL',
                         'job_request.eSeal_Print as eSeal_Print',
+                        'job_request.eSeal_Print_available as eSeal_Print_available'
                     )
                 );
             //if($handler->offset($start)->count() > 0)
@@ -1298,7 +1301,8 @@ class GeneralController extends Controller
                                 'job_request.eSeal_asbuilt as eSeal_asbuilt',
                                 'job_request.PIL_status as PIL_status',
                                 'job_request.eSeal_PIL as eSeal_PIL',
-                                'job_request.eSeal_Print as eSeal_Print'
+                                'job_request.eSeal_Print as eSeal_Print',
+                                'job_request.eSeal_Print_available as eSeal_Print_available'
                             )
                         );
 
@@ -1322,7 +1326,7 @@ class GeneralController extends Controller
             {
                 $nestedData['idx'] = $idx; $idx ++;
                 $nestedData['id'] = $job->id;
-                if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4)
+                if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->userrole == 5)
                 {
                     $nestedData['companyname'] = $job->companyname;
                     $nestedData['requestfile'] = $job->requestfile;
@@ -1409,13 +1413,31 @@ class GeneralController extends Controller
                 else
                     $pilCol = '000000';
 
-                if($job->eSeal_Print == 1)
+                
+
+                $printinfo = PrintInfo::where('job_id', $job->id)->get();
+                $printStatus = 4;
+                $printAvailable = false;
+                if(count($printinfo) > 0){
+                    for($i = 0; $i < count($printinfo); $i++) {
+                        if ($printStatus > $printinfo[$i]->print_status) {
+                            $printStatus = $printinfo[$i]->print_status;
+                        }
+                        if($printinfo[$i]->print_status == 2 || $printinfo[$i]->print_status == 3) {
+                            $printAvailable = true;
+                        }
+                    }
+                } else {
+                    $printStatus = 0;
+                }
+
+                if($printStatus == 1)
                     $printCol = 'e4d800';
-                else if($job->eSeal_Print == 2)
+                else if($printStatus == 2)
                     $printCol = 'ff9999';
-                else if($job->eSeal_Print == 3)
+                else if($printStatus == 3)
                     $printCol = '7cb9e8';
-                else if($job->eSeal_Print == 4)
+                else if($printStatus == 4)
                     $printCol = '00FF00';
                 else
                     $printCol = '000000';
@@ -1428,14 +1450,14 @@ class GeneralController extends Controller
                     "<a href='jobchat?projectId={$nestedData['id']}' class='mr-2 btn btn-" . $chatbadge . "' style='padding: 3px 4px;'>
                         <i class='fab fa-rocketchat'></i>
                     </a>". 
-                    "<input class='mr-1 plancheck' type='checkbox' " . (Auth::user()->userrole == 4 ? "style='pointer-events: none;'" : "onchange='togglePlanCheck(this, {$job['id']})'") . ($job['plancheck'] == 1 ? " checked" : "") . ">" . 
-                    "<input class='mr-1 asbuilt' type='checkbox' " . (Auth::user()->userrole == 4 ? "style='pointer-events: none;'" : "onchange='toggleAsBuilt(this, {$job['id']})'") . ($job['asbuilt'] == 1 ? " checked" : "") . ">" . 
-                    (Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->allow_permit > 0 ? "<input class='mr-1 pilcheck' type='checkbox'" . (Auth::user()->userrole == 4 ? "style='pointer-events: none;'" : "onchange='togglePilStatus(this, {$job['id']})'") . ($job['PIL_status'] == 1 ? " checked" : "") . ">" : "") .
+                    "<input class='mr-1 plancheck' type='checkbox' " . (Auth::user()->userrole == 4 || Auth::user()->userrole == 5 ? "style='pointer-events: none;'" : "onchange='togglePlanCheck(this, {$job['id']})'") . ($job['plancheck'] == 1 ? " checked" : "") . ">" . 
+                    "<input class='mr-1 asbuilt' type='checkbox' " . (Auth::user()->userrole == 4 || Auth::user()->userrole == 5 ? "style='pointer-events: none;'" : "onchange='toggleAsBuilt(this, {$job['id']})'") . ($job['asbuilt'] == 1 ? " checked" : "") . ">" . 
+                    (Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->userrole == 5 || Auth::user()->allow_permit > 0 ? "<input class='mr-1 pilcheck' type='checkbox'" . (Auth::user()->userrole == 4 || Auth::user()->userrole == 5 ? "style='pointer-events: none;'" : "onchange='togglePilStatus(this, {$job['id']})'") . ($job['PIL_status'] == 1 ? " checked" : "") . ">" : "") .
 
-                    "<input class='mr-2 printcheck' type='checkbox' " . "onchange='togglePrintCheck(this, {$job['id']})'" . ($job['eSeal_Print'] == 2 || $job['eSeal_Print'] == 3 ? " checked" : "") . ">" . 
+                    "<input class='mr-2 printcheck' type='checkbox' " . "onchange='togglePrintCheck(this, {$job['id']})'" . ($printAvailable ? " checked" : "") . ">" . 
                     // ($job['asbuilt'] == 0 && $job['eSeal'] == 0 && $job['eSeal_PIL'] == 0 ? " disabled" : "") .
 
-                    "<div class='four-check mr-2'".(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 ?  "onclick=". ($job['eSeal_Print'] == 2 || $job['eSeal_Print'] == 3 ? "'togglePrintCheck(this, {$job['id']})'" : "'openReviewTab({$job['id']})'")  : "" ). " style='overflow: hidden; width: 30px; height: 30px; border-radius: 6px;'>".
+                    "<div class='four-check mr-2'".(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->userrole == 5 ?  "onclick=". ($printAvailable ? "'togglePrintCheck(this, {$job['id']})'" : "'openReviewTab({$job['id']})'")  : "" ). " style='overflow: hidden; width: 30px; height: 30px; border-radius: 6px;'>".
                         "<div style='width: 66px; height: 66px; display: flex; justify-content: start; flex-wrap: wrap; transform: translate(-18px, -18px) rotate(45deg);'>".
                             "<div class='eseal'"  . " style='margin:1.5px; width: 30px; height: 30px; background-color:#{$sealCol};'></div>".
                             "<div class='eseal_print'" . " style='margin:1.5px; width: 30px; height: 30px; background-color:#{$printCol};'></div>" .
@@ -2936,12 +2958,18 @@ class GeneralController extends Controller
     public function togglePrintCheck(Request $request){
         // if(Auth::user()->userrole == 2){
             if(!empty($request['id'])){
-                $printingdata = PrintInfo::where('job_id', $request['id'])->first();
+                $printingdata = PrintInfo::where('job_id', $request['id'])->get();
                 $job = JobRequest::where('id', $request['id'])->first();
-                if($printingdata){
-                    $printAddress = PrintAddress::where('id', $printingdata->address_id)->first();
-                    $user = User::where('id', $printingdata->user_id)->first();
-                    return response()->json(["success" => true, "job" => $job, "data" => $printingdata, "address" => $printAddress, "user" => $user ]);
+                if(count($printingdata) != 0){
+                    $printAddress = [];
+                    $users = [];
+                    foreach($printingdata as $onedata) {
+                        array_push($printAddress, PrintAddress::where('id', $onedata->address_id)->first());
+                        array_push($users, User::where('id', $onedata->user_id)->first());
+                    }
+                    // $printAddress = PrintAddress::where('id', $printingdata->address_id)->first();
+                    // $user = User::where('id', $printingdata->user_id)->first();
+                    return response()->json(["success" => true, "job" => $job, "data" => $printingdata, "address" => $printAddress, "users" => $users ]);
                 } else 
                     $company = Company::where('id', $job->companyId);
                     return response()->json(["success" => false, "job" => $job, "company" => $company ]);
@@ -3362,8 +3390,8 @@ class GeneralController extends Controller
             }
             
             if(!empty($request['jobid'])){
-                $printInfo = PrintInfo::where('job_id', $request['jobid'])->first();
-                    if($printInfo){
+                $printInfo = PrintInfo::where('job_id', $request['jobid'])->where('id', $request['requestId'])->first();
+                    if($printInfo && $request['addRequest'] == "false"){
                         $project = JobRequest::where('id', '=', $request['jobid'])->first();
 
                         $printInfo->job_id = $request['jobid'];
@@ -3374,7 +3402,7 @@ class GeneralController extends Controller
                         $printInfo->report_sheets = $request['report_sheets'];
                         $printInfo->seal_type = $request['seal_type'];
                         $printInfo->signature = $request['signature'];
-                        if($project->eSeal_Print < 2) {
+                        if($printInfo->print_status < 2) {
                             $printInfo->user_id = Auth::user()->id;
                         }
                         if(!empty($request['company_name'])) {
@@ -3399,15 +3427,28 @@ class GeneralController extends Controller
                         if($request['sent']) {
                             $printInfo->sent = $request['sent'];
                         }
+                        if($printInfo->print_status < 2) {
+                            $printInfo->print_status = 1;
+                        }
 
                         $printInfo->save();
 
-                        if($project->eSeal_Print < 2) {
-                            $project->eSeal_Print = 1;
-                        }
-                        $project->save();
+                        $printinfoGroup = PrintInfo::where('job_id', $request['jobid'])->get();
+                            $printStatus = 4;
+                            if(count($printinfoGroup) > 0){
+                                for($i = 0; $i < count($printinfoGroup); $i++) {
+                                    if ($printStatus > $printinfoGroup[$i]->print_status) {
+                                        $printStatus = $printinfoGroup[$i]->print_status;
+                                    }
+                                }
+                            } else {
+                                $printStatus = 0;
+                            }
                             
-                        return response()->json(["success" => true, "updatedAddress" => $updatedAddress, "created" => $created]);
+                            $project->eSeal_Print = $printStatus;
+                            $project->save();
+                            
+                        return response()->json(["success" => true, "updatedAddress" => $updatedAddress, "created" => $created, "newRequest" => false, "printInfo" => $printInfo, "job" => $project]);
                     } else {
                         $project = JobRequest::where('id', '=', $request['jobid'])->first();
                             $printInfo = new PrintInfo;
@@ -3432,10 +3473,7 @@ class GeneralController extends Controller
                             if($request['signature']) {
                                 $printInfo->signature = $request['signature'];
                             } 
-
-                            if($project->eSeal_Print < 2) {
-                                $printInfo->user_id = Auth::user()->id;
-                            }
+                            $printInfo->user_id = Auth::user()->id;
 
                             if($request['delivery_method']) {
                                 $printInfo->delivery_method = $request['delivery_method'];
@@ -3472,16 +3510,30 @@ class GeneralController extends Controller
                             // $printInfo->sent = gmdate("Y-m-d h:i:s", $curtime);
                             
                             $printInfo->selected_files = json_encode($request['print_file']);
+
+                            if($printInfo->print_status < 2) {
+                                $printInfo->print_status = 1;
+                            }
                             // print_r($printInfo); exit;
                             $printInfo->save();
 
                             
-                            if($project->eSeal_Print < 2) {
-                                $project->eSeal_Print = 1;
+                            $printinfoGroup = PrintInfo::where('job_id', $request['jobid'])->get();
+                            $printStatus = 4;
+                            if(count($printinfoGroup) > 0){
+                                for($i = 0; $i < count($printinfoGroup); $i++) {
+                                    if ($printStatus > $printinfoGroup[$i]->print_status) {
+                                        $printStatus = $printinfoGroup[$i]->print_status;
+                                    }
+                                }
+                            } else {
+                                $printStatus = 0;
                             }
+                            
+                            $project->eSeal_Print = $printStatus;
                             $project->save();
                             
-                            return response()->json(["success" => true, "updatedAddress" => $updatedAddress, "created" => $created]);
+                            return response()->json(["success" => true, "updatedAddress" => $updatedAddress, "created" => $created, "newRequest" => true, "printInfo" => $printInfo, "job" => $project]);
                         }
                 } else {
                         return response()->json(["success" => false, "message" => "You don't have job id."]);
@@ -3565,9 +3617,10 @@ class GeneralController extends Controller
                 $updatedAddress = $printAddress;
                 $created = true;
             }
+
             if(!empty($request['jobid'])){
-                $printInfo = PrintInfo::where('job_id', $request['jobid'])->first();
-                    if($printInfo){
+                $printInfo = PrintInfo::where('job_id', $request['jobid'])->where('id', $request['requestId'])->first();
+                if($printInfo && $request['addRequest'] == "false"){
                         $project = JobRequest::where('id', '=', $request['jobid'])->first();
 
                         if($request['jobid']) {
@@ -3592,7 +3645,7 @@ class GeneralController extends Controller
                         $printInfo->seal_type = $request['seal_type'];
                         $printInfo->signature = $request['signature'];
 
-                        if($project->eSeal_Print < 2) {
+                        if($printInfo->print_status < 2) {
                             $printInfo->user_id = Auth::user()->id;
                         }
 
@@ -3634,19 +3687,39 @@ class GeneralController extends Controller
                         if($request['sent']) {
                             $printInfo->sent = $request['sent'];
                         }
+                        if($request['printed'] && $request['sent']){
+                            $printInfo->print_status = 4;
+                        } else if($request['printed']) {
+                            $printInfo->print_status = 3;
+                        } else {
+                            $printInfo->print_status = 2;
+                        }
                         $printInfo->save();
 
-                        if($request['printed'] && $request['sent']){
-                            $project->eSeal_Print = 4;
-                        } else if($request['printed']) {
-                            $project->eSeal_Print = 3;
+                        $printinfoGroup = PrintInfo::where('job_id', $request['jobid'])->get();
+                        $printStatus = 4;
+                        $printAvailable = false;
+                        if(count($printinfoGroup) > 0){
+                            for($i = 0; $i < count($printinfoGroup); $i++) {
+                                if ($printStatus > $printinfoGroup[$i]->print_status) {
+                                    $printStatus = $printinfoGroup[$i]->print_status;
+                                }
+                                if($printinfoGroup[$i]->print_status == 2 || $printinfoGroup[$i]->print_status == 3) {
+                                    $printAvailable = true;
+                                }
+                            }
                         } else {
-                            $project->eSeal_Print = 2;
+                            $printStatus = 0;
+                        }
+                            
+                        $project->eSeal_Print = $printStatus;
+                        if($printAvailable) {
+                            $project->eSeal_Print_available = 1;
                         }
                         $project->save();
                             
-                            return response()->json(["success" => true, "status" => $project->eSeal_Print, "updatedAddress" => $updatedAddress, "created" => $created]);
-                        } else {
+                        return response()->json(["success" => true, "status" => $printStatus,"available" => $printAvailable, "updatedAddress" => $updatedAddress, "created" => $created, "job" => $project]);
+                    } else {
                             $project = JobRequest::where('id', '=', $request['jobid'])->first();
                             
                             $addressId = PrintAddress::latest('id')->first();
@@ -3669,12 +3742,12 @@ class GeneralController extends Controller
                             if($request['report_sheets']) {
                                 $printInfo->report_sheets = $request['report_sheets'];
                             }
-                                
+
                             $printInfo->seal_type = $request['seal_type'];
                                 
                             $printInfo->signature = $request['signature'];
 
-                            if($project->eSeal_Print < 2) {
+                            if($printInfo->print_status < 2) {
                                 $printInfo->user_id = Auth::user()->id;
                             }
 
@@ -3711,22 +3784,39 @@ class GeneralController extends Controller
                                 $printInfo->sent = $request['sent'];
                             }
 
-                            // $printInfo->sent = gmdate("Y-m-d h:i:s", $curtime);
-                            
-                            $printInfo->selected_files = json_encode($request['jobIds']);
+                            if($request['printed'] && $request['sent']){
+                                $printInfo->print_status = 4;
+                            } else if($request['printed']) {
+                                $printInfo->print_status = 3;
+                            } else {
+                                $printInfo->print_status = 2;
+                            }
                             // print_r($printInfo); exit;
                             $printInfo->save();
-                            
-                            if($request['printed'] && $request['sent']){
-                                $project->eSeal_Print = 4;
-                            } else if($request['printed']) {
-                                $project->eSeal_Print = 3;
+
+                            $printinfoGroup = PrintInfo::where('job_id', $request['jobid'])->get();
+                            $printStatus = 4;
+                            $printAvailable = false;
+                            if(count($printinfoGroup) > 0){
+                                for($i = 0; $i < count($printinfoGroup); $i++) {
+                                    if ($printStatus > $printinfoGroup[$i]->print_status) {
+                                        $printStatus = $printinfoGroup[$i]->print_status;
+                                    }
+                                    if($printinfoGroup[$i]->print_status == 2 || $printinfoGroup[$i]->print_status == 3) {
+                                        $printAvailable = true;
+                                    }
+                                }
                             } else {
-                                $project->eSeal_Print = 2;
+                                $printStatus = 0;
+                            }
+                            
+                            $project->eSeal_Print = $printStatus;
+                            if($printAvailable) {
+                                $project->eSeal_Print_available = 1;
                             }
                             $project->save();
                             
-                            return response()->json(["success" => true, "status" => $project->eSeal_Print ,"updatedAddress" => $updatedAddress, "created" => $created]);
+                            return response()->json(["success" => true, "status" => $printStatus, "available" => $printAvailable ,"updatedAddress" => $updatedAddress, "created" => $created,  "job" => $project]);
                         }
                 } else {
                         return response()->json(["success" => false, "message" => "You don't have job id."]);
@@ -3822,13 +3912,30 @@ class GeneralController extends Controller
      * @return JSON
      */
     public function deletePrint (Request $request) {
-        $id = $request['jobId'];
-        $res = PrintInfo::where('job_id', $id)->delete();
-        $project = JobRequest::where('id', '=', $id)->first();
-        $project->eSeal_Print = 0;
+        $id = $request['requestId'];
+        $res = PrintInfo::where('id', $id)->delete();
+        $project = JobRequest::where('id', '=', $request['jobId'])->first();
+
+        $printinfoGroup = PrintInfo::where('job_id', $request['jobId'])->get();
+        $printStatus = 4;
+        $printAvailable = false;
+        if(count($printinfoGroup) > 0){
+            for($i = 0; $i < count($printinfoGroup); $i++) {
+                if ($printStatus > $printinfoGroup[$i]->print_status) {
+                    $printStatus = $printinfoGroup[$i]->print_status;
+                }
+                if($printinfoGroup[$i]->print_status == 2 || $printinfoGroup[$i]->print_status == 3) {
+                    $printAvailable = true;
+                }
+            }
+        } else {
+            $printStatus = 0;
+        }
+                            
+        $project->eSeal_Print = $printStatus;
         $project->save();
 
-        return $res;
+        return response()->json(["success" => true, "status" => $printStatus, "available" => $printAvailable]);
     }
     /**
      * Get Print Address.

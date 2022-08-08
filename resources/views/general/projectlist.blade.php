@@ -1,4 +1,4 @@
-@extends((Auth::user()->userrole == 2)? 'admin.layout': ((Auth::user()->userrole == 1 || Auth::user()->userrole == 3) ? 'clientadmin.layout' : (Auth::user()->userrole == 4 ? 'reviewer.layout' : 'user.layout')))
+@extends((Auth::user()->userrole == 2)? 'admin.layout': ((Auth::user()->userrole == 1 || Auth::user()->userrole == 3) ? 'clientadmin.layout' : (Auth::user()->userrole == 4 ? 'reviewer.layout' : (Auth::user()->userrole == 5 ? 'printer.layout' : 'user.layout'))))
 
 @section('css_after')
 <style>
@@ -45,7 +45,7 @@
                 <table id="projects" class="table table-bordered table-striped table-vcenter text-center" style="width:100%; min-height: 350px;">
                     <thead>
                         <tr>
-                            @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4)
+                            @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->userrole == 5 )
                             <th class="text-center" style="width: 5%;">No</th>
                             <th class="text-center" style="width: 5%;">Job ID</th>
                             <th style="width:8%">Company Name</th>
@@ -73,7 +73,7 @@
                             @endif
                         </tr>
                         <tr>
-                            @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4)
+                            @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->userrole == 5)
                             <th class="searchHead"> </th>
                             <th class="searchHead"> </th>
                             <th class="searchHead">
@@ -181,7 +181,7 @@
                                 <div style="display:flex">
                                     <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 17px;'><input type='checkbox' id="planCheckFilter" style="transform: rotateZ(180deg);"> Review</span>
                                     <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 17px;'><input type='checkbox' id="asBuiltFilter" style="transform: rotateZ(180deg);"> As-built</span>
-                                    @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->allow_permit > 0)
+                                    @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->userrole == 5 || Auth::user()->allow_permit > 0)
                                     <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 17px;'><input type='checkbox' id="pilFilter" style="transform: rotateZ(180deg);"> PIL</span>
                                     @endif
                                     <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 17px;'><input type='checkbox' id="printFilter" style="transform: rotateZ(180deg);">Print</span>
@@ -288,7 +288,7 @@
                                 <div style="display:flex">
                                     <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 17px;'><input type='checkbox' id="planCheckFilter" style="transform: rotateZ(180deg);"> Review</span>
                                     <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 17px;'><input type='checkbox' id="asBuiltFilter" style="transform: rotateZ(180deg);"> As-built</span>
-                                    @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->allow_permit > 0)
+                                    @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->userrole == 5 || Auth::user()->allow_permit > 0)
                                     <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 22px;'><input type='checkbox' id="pilFilter" style="transform: rotateZ(180deg);"> PIL</span>
                                     @endif
                                     <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 17px;'><input type='checkbox' id="printFilter" style="transform: rotateZ(180deg);">Print</span>
@@ -345,7 +345,8 @@
                     <div class="block-header bg-primary-dark">
                         <h3 class="block-title">iRoof Printing</h3>
                         <div class="block-options">
-                            <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                            <!-- <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close"> -->
+                            <button type="button" class="btn-block-option" aria-label="Close" onclick="exit()">
                                 <i class="fa fa-fw fa-times"></i>
                             </button>
                         </div>
@@ -355,7 +356,18 @@
                             <div class="col-lg-12">
                                 <div class="form-group">
                                     <label for="projectName">Project</label>
-                                    <input type="text" class="form-control" id="projectName" name="projectName" placeholder="Enter Project Name..." style="border: 1px solid #f1dfd2;" disabled>
+                                    <div style="width: 80%" class="d-flex">
+                                        <input type="text" class="form-control" id="projectName" name="projectName" placeholder="Enter Project Name..." style="border: 1px solid #f1dfd2; width: 45%;" disabled>
+                                        <div class="form-group addRequest-form" style="width: 25%">
+                                            <label for="" style="width: 63%; margin-left: 20px">Add Print Request</label>
+                                            <button class="btn btn-primary mr-1" id="" onclick="addPrintRequest()">+</button>
+                                        </div>
+                                        <div class="form-group currentRequest-form" style="width: 30%">
+                                            <label for="currentPrintRequest" style="width: 190%;">Current Print Request</label>
+                                            <select class="form-control" id="currentPrintRequest" name="currentPrintRequest" style="border: 1px solid #f1dfd2; text-align: left; text-align-last: left;"></select>
+                                        </div>
+                                        <input id="request_id" type="hidden" name="request_id"/>
+                                    </div>
                                 </div>
                                 <div class="form-group printFile-form">
                                     <label for="filePrint">Select Files to Print</label>
@@ -602,11 +614,11 @@
                                     <textarea class="form-control" id="user-textarea-input" name="user-textarea-input" rows="4" placeholder="" spellcheck="false"></textarea>
                                 </div>
                                 <div class="form-group date-group">
-                                    <div class="row align-items-center">
+                                    <div class="row align-items-center" style="width: 100%;">
                                         <div class="col-4">
                                             <div class="form-group">
                                                 <label for="printed-date"><nobr>Printed Date</nobr></label>
-                                                @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4)
+                                                @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->userrole == 5)
                                                     <input type="text" class="form-control" id="printed-date" name="printed-date" placeholder="Printed Date" onfocus="(this.type='date')" style="border: 1px solid #f1dfd2; width: 100%;">
                                                 @else
                                                     <input type="text" class="form-control" id="printed-date" name="printed-date" placeholder="Printed Date" onfocus="(this.type='date')" style="border: 1px solid #f1dfd2; width: 100%;" disabled>
@@ -616,7 +628,7 @@
                                         <div class="col-4">
                                             <div class="form-group">
                                                 <label for="sent-date"><nobr>Sent Date</nobr></label>
-                                                @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4)
+                                                @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->userrole == 5)
                                                     <input type="text" class="form-control" id="sent-date" name="sent-date" placeholder="Sent Date" onfocus="(this.type='date')" style="border: 1px solid #f1dfd2; width: 100%;">
                                                 @else
                                                     <input type="text" class="form-control" id="sent-date" name="sent-date" placeholder="Sent Date" onfocus="(this.type='date')" style="border: 1px solid #f1dfd2; width: 100%;" disabled>
@@ -626,7 +638,7 @@
                                         <div class="col-4">
                                             <div class="form-group">
                                                 <label for="tracking">Tracking</label>
-                                                @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4)
+                                                @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->userrole == 5)
                                                     <input type="text" class="form-control" id="tracking" name="tracking" placeholder="Tracking" style="border: 1px solid #f1dfd2; width: 100%;">
                                                 @else
                                                     <input type="text" class="form-control" id="tracking" name="tracking" placeholder="Tracking" style="border: 1px solid #f1dfd2; width: 100%;" disabled>
@@ -716,15 +728,16 @@
         { id:"{{ $item['id'] }}", company_name: "{{ $item['company_name'] }}",contact_name:"{{ $item['contact_name'] }}", address1: "{{ $item['address1'] }}", address2: "{{ $item['address2'] }}", city: "{{ $item['city'] }}", state: "{{ $item['state'] }}", zip: "{{ $item['zip'] }}", phonenumber: "{{ $item['telno'] }}", extension: "{{ $item['extension'] }}"  },
         @endforeach
     ];
-    console.log('companyList:', companyList);
 
     var selectedFiles = new Array();
 
     var hasChanges = false;
 
-    // @foreach($companyList as $item)
-    // { id:"{{ $item['id'] }}", company_name: "{{ $item['company_name'] }}", address1: "{{ $item['company_address'] }}", address2: "{{ $item['second_address'] }}", city: "{{ $item['city'] }}", state: "{{ $item['state'] }}", zip: "{{ $item['zip'] }}", phonenumber: "{{ $item['company_telno'] }}", extension: "{{ $item['company_number'] }}"  },
-    // @endforeach
+    var jobPrintStatus = 0;
+
+    var addRequest = false;
+
+    var currentJob = "";
 
     $(document).ready(function () {
         $.ajaxSetup({
@@ -739,12 +752,140 @@
             localStorage.setItem('projectFilterJson', JSON.stringify(filterJson));
         }
 
-        // $('#printmodal').on('hidden.bs.modal', function () {
-        //     $(".selected").removeClass("selected");
-        // })
+        $('#printmodal').on('hidden.bs.modal', function () {
+            hasChanges = false;
+        })
 
         $('#reportmodal').on('hidden.bs.modal', function () {
             $('#printmodal').modal('toggle');
+        })
+
+        $('#currentPrintRequest').on('change', function() {
+            addRequest = false;
+            let index = $(this).val();
+            $("input:radio").prop("checked", false);
+
+            $.post("togglePrintCheck", {id: $("#id").val()}, function(result){
+                var jobStatus;
+                if(result.data[index]){
+                    jobPrintStatus = result.data[index].print_status;
+                    if(result.data[index].print_status == 1) {
+                        jobStatus = "SAVED";
+                    } else if (result.data[index].print_status == 2) {
+                        jobStatus = "SUBMITTED";
+                    } else if (result.data[index].print_status == 3) {
+                        jobStatus = "PRINTED";
+                    } else if (result.data[index].print_status == 4) {
+                        jobStatus = "COMPLETED";
+                    }else if (result.data[index].print_status == 0) {
+                        jobStatus = "NOT SAVED";
+                    }
+                    $("#projectName").val(result.job.clientProjectNumber + ". " + result.job.clientProjectName + " " + result.job.state + " (" + jobStatus +")" );
+
+                    if(result.data[index].print_status > 1) {
+                        $("#username").val(result.users[index].username);
+                        $("#useremail").val(result.users[index].email);
+                    } else {
+                        $("#username").val("<?php echo Auth::user()->username?>");
+                        $("#useremail").val("<?php echo Auth::user()->email?>");
+                    }
+    
+                    $("#company").val(result.data[index].address_id);
+                    if(result.address[index]) {
+                        $("#company-name").val(result.address[index].company_name);
+                        $("#contact-name").val(result.address[index].contact_name);
+                        $("#address1").val(result.address[index].address1);
+                        $("#address2").val(result.address[index].address2);
+                        $("#zip").val(result.address[index].zip);
+                        $("#city").val(result.address[index].city);
+                        $("#state").val(result.address[index].state);
+                        $("#phonenumber").val(result.address[index].telno);
+                        $("#extension").val(result.address[index].extension);
+                    } else {
+                        $("#company-name").val("");
+                        $("#contact-name").val("");
+                        $("#address1").val("");
+                        $("#address2").val("");
+                        $("#zip").val("");
+                        $("#city").val("");
+                        $("#state").val("");
+                        $("#phonenumber").val("");
+                        $("#extension").val("");
+                    }
+        
+                    $("#request_id").val(result.data[index].id);
+                    $("#copies").val(result.data[index].copies);
+                    $("#plan-set").val(result.data[index].plan_sheets);
+                    $("#report").val(result.data[index].report_sheets);
+                    if(result.data[index].seal_type == 0) {
+                        $("#rubber-stamp").prop('checked', true);
+                    } else if(result.data[index].seal_type == 1) {
+                        $("#embossed").prop('checked', true);
+                    }
+                    
+                    if(result.data[index].signature == true) {
+                        $("#yes").prop('checked', true);
+                    } else if(result.data[index].signature == false) {
+                        $("#no").prop('checked', true);
+                    }
+                    
+                    if(result.data[index].delivery_method == 2) {
+                        $("#2nd-day").prop('checked', true);
+                    } else if (result.data[index].delivery_method == 1) {
+                        $("#overnight").prop('checked', true);
+                    } else if (result.data[index].delivery_method == 0) {
+                        $("#mail").prop('checked', true);
+                    }
+                            
+                    $("#user-textarea-input").val(result.data[index].user_notes);
+                    $("#printer-textarea-input").val(result.data[index].printer_notes);
+                    $("#sent-date").val(result.data[index].sent);
+                    $("#printed-date").val(result.data[index].printed);
+                    $("#tracking").val(result.data[index].tracking);
+                    $("#fedex").val(result.data[index].third_party_fedex);
+                    if(result.data[index].selected_files != "null") {
+                        let file_names = [];
+                        file_names = result.data[index].selected_files.slice(1, result.data[index].selected_files.length - 1).split("\\n");
+                        $('#filePrint').val(file_names.join("\n"));
+                    }
+                } else {
+                    jobStatus = "NOT SAVED";
+                    $("#projectName").val(result.job.clientProjectNumber + ". " + result.job.clientProjectName + " " + result.job.state + " (" + jobStatus +")" );
+
+                    $("#company").val(0);
+                    $("#company-name").val("");
+                    $("#contact-name").val("");
+                    $("#address1").val("");
+                    $("#address2").val("");
+                    $("#zip").val("");
+                    $("#city").val("");
+                    $("#state").val("");
+                    $("#phonenumber").val("");
+                    $("#extension").val("");
+
+                    $("#request_id").val('');
+                    $("#copies").val(1);
+                    $("#plan-set").val("");
+                    $("#report").val("");
+                    $("#user-textarea-input").val("");
+                    $("#printer-textarea-input").val("");
+                    $("#printed-date").val("");
+                    $("#sent-date").val("");
+                    $("#tracking").val("");
+                    $("#fedex").val("");
+                    $("#filePrint").val("");
+                    $("#username").val("<?php echo Auth::user()->username?>");
+                    $("#useremail").val("<?php echo Auth::user()->email?>");
+                    $("input:radio").attr("checked", false);
+                    $("input:radio").prop("checked", false);
+                    $("#printed-date").val("");
+                    $("#sent-date").val("");
+                    $("#tracking").val("");
+                    $('#currentPrintRequest').val($('#currentPrintRequest option').length-1);
+                    addRequest = true;
+                }
+            hasChanges = false;
+            })
         })
 
         changeStateFilterLabel = function(status){
@@ -840,7 +981,7 @@
             filterJson.statusFilter = status;
             localStorage.setItem('projectFilterJson', JSON.stringify(filterJson));
 
-            @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4)
+            @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->userrole == 5)
             table.column('10:visible').search(status).draw();
             @else
             table.column('7:visible').search(status).draw();
@@ -854,7 +995,7 @@
             filterJson.stateFilter = status;
             localStorage.setItem('projectFilterJson', JSON.stringify(filterJson));
 
-            @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4)
+            @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->userrole == 5)
             table.column('11:visible').search(status).draw();
             @else
             table.column('8:visible').search(status).draw();
@@ -867,7 +1008,7 @@
             filterJson.chatFilter = id;
             localStorage.setItem('projectFilterJson', JSON.stringify(filterJson));
 
-            @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4)
+            @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->userrole == 5)
             table.column('12:visible').search(id).draw();
             @else
             table.column('9:visible').search(id).draw();
@@ -909,7 +1050,7 @@
                     }
                 },
             "columns": [
-                @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4)
+                @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->userrole == 5)
                 { "data": "idx", "orderable": false },
                 { "data": "id" },
                 { "data": "companyname" },
@@ -943,7 +1084,7 @@
             @endif
         });
 
-        @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4)
+        @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->userrole == 5)
         $("#companyFilter").on('keyup change', function() {
             table.column($(this).parent().index() + ':visible').search(this.value).draw();
         });
@@ -1117,12 +1258,14 @@
     }
 
     async function togglePrintCheck(obj, jobId){
-
+        addRequest = false;
         if($(obj)[0].checked == true && ($(obj).parents('tr').find(".plancheck")[0].checked == true || $(obj).parents('tr').find(".asbuilt")[0].checked == true || ($(obj).parents('tr').find(".pilcheck").length > 0 && $(obj).parents('tr').find(".pilcheck")[0].checked == true))){
             swal.fire({ title: "Warning", text: "Only one type of review checkbox at a time please.", icon: "warning", confirmButtonText: `OK` });
             $(obj)[0].checked = false;
             return;
         }
+        $('#currentPrintRequest').empty();
+        $("input:radio").prop("checked", false);
         
         $(".sealtype-form").css("color","#636b6f");
         $(".signature-form").css("color","#636b6f");
@@ -1132,6 +1275,8 @@
         $(".printFile-form").find("textarea").css("border-color","#f1dfd2");
         $(".company-info input").css("border-color","#f1dfd2");
         $(".company-info label").css("color","#636b6f");
+        $(".state-form").css("color","#636b6f");
+        $(".state-form").find("select").css("border-color","#f1dfd2");
 
 
         $("#projects .selected").removeClass("selected");
@@ -1159,123 +1304,141 @@
         $.post("togglePrintCheck", {id: jobId}, function(result){
             console.log('here: ', result);
             if(result.job.eSeal.toString() == "0" && result.job.eSeal_asbuilt.toString() == "0" && result.job.eSeal_PIL.toString() == "0" && result.job.eSeal_Print.toString() == "0"){
-                console.log('block');
                 return;
             } else {
                 $('#printmodal').modal('toggle');
+                $("#printmodal .block-content").scrollTop(0)
                 $(".reportmodal-name").html(result.job.clientProjectNumber + ". " + result.job.clientProjectName + " " + result.job.state)
+                currentJob = result.job.clientProjectNumber + ". " + result.job.clientProjectName + " " + result.job.state;
+                
                 if (result.success && result.job){
+                    let length = result.data.length;
+                    jobPrintStatus = result.data[length-1].print_request;
+                    // if(result.data[length-1].print_status > 1) {
+                    //     $(".addRequest-form").css('display', 'flex');
+                    //     $(".currentRequest-form").css('display', 'flex');
+                    // } else {
+                    //     $(".addRequest-form").css('display', 'none');
+                    //     $(".currentRequest-form").css('display', 'none');
+                    // }
+                    result.data.forEach(data => {
+                        let flag = 0;
+                        if(data.print_status > 1 ) {
+                            $(".addRequest-form").css('display', 'flex');
+                            $(".currentRequest-form").css('display', 'flex');
+                        } else {
+                            flag ++;
+                        }
+                        if(flag == length) {
+                            $(".addRequest-form").css('display', 'none');
+                            $(".currentRequest-form").css('display', 'none');
+                        }
+                    })
+                    result.users.forEach((onedata, index) => {
+                        $("#currentPrintRequest").append(`<option value=${index}>${index+1}</option>`)
+                    })
+                    $("#currentPrintRequest").val(length-1);
                     var jobStatus;
-                    if(result.job.eSeal_Print == 1) {
+                    if(result.data[length-1].print_status == 1) {
                         jobStatus = "SAVED";
-                    } else if (result.job.eSeal_Print == 2) {
+                    } else if (result.data[length-1].print_status == 2) {
                         jobStatus = "SUBMITTED";
-                    } else if (result.job.eSeal_Print == 3) {
+                    } else if (result.data[length-1].print_status == 3) {
                         jobStatus = "PRINTED";
-                    } else if (result.job.eSeal_Print == 4) {
+                    } else if (result.data[length-1].print_status == 4) {
                         jobStatus = "COMPLETED";
+                    }else if (result.data[length-1].print_status == 0) {
+                        jobStatus = "NOT SAVED";
                     }
                     $("#projectName").val(result.job.clientProjectNumber + ". " + result.job.clientProjectName + " " + result.job.state + " (" + jobStatus +")" );
                     $("#id").val(result.job.id);
-                    $("#company").val(result.data.address_id);
-                    if(result.job.eSeal_Print > 1) {
-                        $("#username").val(result.user.username);
-                        $("#useremail").val(result.user.email);
+                    
+                    $("#company").val(result.data[length-1].address_id);
+                    if(result.address[length-1]) {
+                        $("#company-name").val(result.address[length-1].company_name);
+                        $("#contact-name").val(result.address[length-1].contact_name);
+                        $("#address1").val(result.address[length-1].address1);
+                        $("#address2").val(result.address[length-1].address2);
+                        $("#zip").val(result.address[length-1].zip);
+                        $("#city").val(result.address[length-1].city);
+                        $("#state").val(result.address[length-1].state);
+                        $("#phonenumber").val(result.address[length-1].telno);
+                        $("#extension").val(result.address[length-1].extension);
+                    } else {
+                        $("#company-name").val("");
+                        $("#contact-name").val("");
+                        $("#address1").val("");
+                        $("#address2").val("");
+                        $("#zip").val("");
+                        $("#city").val("");
+                        $("#state").val("");
+                        $("#phonenumber").val("");
+                        $("#extension").val("");
+                    }
+
+                    if(result.data[length-1].print_status > 1) {
+                        $("#username").val(result.users[length-1].username);
+                        $("#useremail").val(result.users[length-1].email);
                     } else {
                         $("#username").val("<?php echo Auth::user()->username?>");
                         $("#useremail").val("<?php echo Auth::user()->email?>");
                     }
-                    if(result.address) {
-                        $("#company-name").val(result.address.company_name);
-                        $("#contact-name").val(result.address.contact_name);
-                        $("#address1").val(result.address.address1);
-                        $("#address2").val(result.address.address2);
-                        $("#zip").val(result.address.zip);
-                        $("#city").val(result.address.city);
-                        $("#state").val(result.address.state);
-                        $("#phonenumber").val(result.address.telno);
-                        $("#extension").val(result.address.extension);
-                    } else {
-                        $("#company-name").val("");
-                            $("#contact-name").val("");
-                            $("#address1").val("");
-                            $("#address2").val("");
-                            $("#zip").val("");
-                            $("#city").val("");
-                            $("#state").val("");
-                            $("#phonenumber").val("");
-                            $("#extension").val("");
-                    }
-                    // $("#company option[value='" + result.data.client_id + "']").attr('selected', 'selected');
-                    // companyList.map((item, index) => {
-                    //     if(result.data.companyId == item.id){
-                    //         $("#company-name").val(item.company_name);
-                    //         $("#address1").val(item.address1);
-                    //         $("#address2").val(item.address2);
-                    //         $("#zip").val(item.zip);
-                    //         $("#city").val(item.city);
-                    //         $("#state").val(item.state);
-                    //         $("#phonenumber").val(item.phonenumber);
-                    //         $("#extension").val(item.extension);
-                    //     }
-                    // })
     
-                    $("#copies").val(result.data.copies);
-                    $("#plan-set").val(result.data.plan_sheets);
-                    $("#report").val(result.data.report_sheets);
-                    if(result.data.seal_type == 0) {
-                        $("#rubber-stamp").attr('checked', 'checked');
-                    } else if(result.data.seal_type == 1) {
-                        $("#embossed").attr('checked', 'checked');
+                    $("#request_id").val(result.data[length-1].id);
+                    $("#copies").val(result.data[length-1].copies);
+                    $("#plan-set").val(result.data[length-1].plan_sheets);
+                    $("#report").val(result.data[length-1].report_sheets);
+                    if(result.data[length-1].seal_type == 0) {
+                        $("#rubber-stamp").prop('checked', true);
+                    } else if(result.data[length-1].seal_type == 1) {
+                        $("#embossed").prop('checked', true);
                     }
     
-                    if(result.data.signature == true) {
-                        $("#yes").attr('checked', 'checked');
-                    } else {
-                        $("#no").attr('checked', 'checked');
+                    if(result.data[length-1].signature == true) {
+                        $("#yes").prop('checked', true);
+                    } else if (result.data[length-1].signature == false){
+                        $("#no").prop('checked', true);
                     }
-    
-                    if(result.data.delivery_method == 2) {
-                        $("#2nd-day").attr('checked', 'checked');
-                    } else if (result.data.delivery_method == 1) {
-                        $("#overnight").attr('checked', 'checked');
-                    } else if (result.data.delivery_method == 0) {
-                        $("#mail").attr('checked', 'checked');
+
+                    if(result.data[length-1].delivery_method == 2) {
+                        $("#2nd-day").prop('checked', true);
+                    } else if (result.data[length-1].delivery_method == 1) {
+                        $("#overnight").prop('checked', true);
+                    } else if (result.data[length-1].delivery_method == 0) {
+                        $("#mail").prop('checked', true);
                     }
-    
-                    $("#user-textarea-input").val(result.data.user_notes);
-                    $("#printer-textarea-input").val(result.data.printer_notes);
-                    $("#sent-date").val(result.data.sent);
-                    $("#printed-date").val(result.data.printed);
-                    $("#tracking").val(result.data.tracking);
-                    $("#fedex").val(result.data.third_party_fedex);
-                    if(result.data.selected_files != "null") {
+
+                    $("#user-textarea-input").val(result.data[length-1].user_notes);
+                    $("#printer-textarea-input").val(result.data[length-1].printer_notes);
+                    $("#sent-date").val(result.data[length-1].sent);
+                    $("#printed-date").val(result.data[length-1].printed);
+                    $("#tracking").val(result.data[length-1].tracking);
+                    $("#fedex").val(result.data[length-1].third_party_fedex);
+                    if(result.data[length-1].selected_files != "null") {
                         let file_names = [];
-                        file_names = result.data.selected_files.slice(1, result.data.selected_files.length - 1).split("\\n");
+                        file_names = result.data[length-1].selected_files.slice(1, result.data[length-1].selected_files.length - 1).split("\\n");
                         $('#filePrint').val(file_names.join("\n"));
                     }
                 } else {
+                    $(".addRequest-form").css('display', 'none');
+                    $(".currentRequest-form").css('display', 'none');
                     $("#id").val(result.job.id);
                     $("#projectName").val(result.job.clientProjectNumber + ". " + result.job.clientProjectName + " " + result.job.state +  " (NOT SAVED)" );
+
                     $("#company option[value='0']").attr('selected', 'selected');
-                            $("#company-name").val("");
-                            $("#contact-name").val("");
-                            $("#address1").val("");
-                            $("#address2").val("");
-                            $("#zip").val("");
-                            $("#city").val("");
-                            $("#state").val("");
-                            $("#phonenumber").val("");
-                            $("#extension").val("");
-                    // $("#company option[value='" + result.data.companyId + "']").attr('selected', 'selected');
-                    //         $("#company-name").val(item.company_name);
-                    //         $("#address1").val(item.address1);
-                    //         $("#address2").val(item.address2);
-                    //         $("#zip").val(item.zip);
-                    //         $("#city").val(item.city);
-                    //         $("#state").val(item.state);
-                    //         $("#phonenumber").val(item.phonenumber);
-                    //         $("#extension").val(item.extension);
+                    $("#company-name").val("");
+                    $("#contact-name").val("");
+                    $("#address1").val("");
+                    $("#address2").val("");
+                    $("#zip").val("");
+                    $("#city").val("");
+                    $("#state").val("");
+                    $("#phonenumber").val("");
+                    $("#extension").val("");
+
+                    $("#request_id").val("");
+                    $("#username").val("<?php echo Auth::user()->username?>");
+                    $("#useremail").val("<?php echo Auth::user()->email?>");
                     $("#copies").val(1);
                     $("#plan-set").val("");
                     $("#report").val("");
@@ -1286,8 +1449,6 @@
                     $("#tracking").val("");
                     $("#fedex").val("");
                     $("#filePrint").val("");
-                    $("#username").val("<?php echo Auth::user()->username?>");
-                    $("#useremail").val("<?php echo Auth::user()->email?>");
                     $("input:radio").attr("checked", false);
                     $("input:radio").prop("checked", false);
                 }
@@ -1343,7 +1504,7 @@
         };
     }
     
-    function callPrint(){
+    function callPrint(){ 
         if(parseInt($("#print-from").val()) > parseInt($("#print-to").val()))
         {
             swal.fire({ title: "Warning", text: "Please input correct numbers!", icon: "info", confirmButtonText: `OK` });
@@ -1367,7 +1528,7 @@
                 if(response && response.data && response.data.length > 0){
                     let html = '';
                     
-                    @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4)
+                    @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->userrole == 5)
                     html += "<table id='projects' class='table table-bordered table-striped table-vcenter text-center' style='width:100%;'>\
                     <thead>\
                         <tr>\
@@ -1564,6 +1725,7 @@
         });
         
         let data = {};
+        data.requestId = $("#request_id").val();
         data.jobid = $("#id").val();
         data.copies = $("#copies").val();
         // data.companyId = $("#company").val();
@@ -1579,15 +1741,13 @@
         data.userEmail = $("#useremail").val();
         data.delivery_method = $('input[name="delivery-method"]:checked').val();
         data.fedex = $("#fedex").val();
-        // var today = new Date();
-        // var dd = String(today.getDate()).padStart(2, '0');
-        // var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-        // var yyyy = today.getFullYear();
-        // data.sent = mm + '/' + dd + '/' + yyyy;
         data.tracking = $("#tracking").val();
         data.user_notes = $("#user-textarea-input").val();
         data.printer_notes = $("#printer-textarea-input").val();
         data.print_file = $("#filePrint").val();
+
+        data.printed = $("#printed-date").val();
+        data.sent = $("#sent-date").val();
 
         data.company_name=$("#company-name").val();
         data.contact_name = $("#contact-name").val();
@@ -1598,6 +1758,7 @@
         data.state = $("#state").val();
         data.telno = $("#phonenumber").val();
         data.extension = $("#extension").val();
+        data.addRequest = addRequest;
 
         console.log('data: ', data);
 
@@ -1611,12 +1772,32 @@
         $.post("savePrint", data, function(result){
             swal.close();
             if (result.success){
-                // $("#infos").DataTable().draw(false);
+                data.requestId = $("#request_id").val(result.printInfo.id);
                 toast.fire('Success', 'The print data is saved.', 'success');
-                if(!$(".selected").find(".printcheck").prop("checked")) {
+                if(result.newRequest){
                     $(".selected").find(".eseal_print").css('background-color', '#e4d800');
-                };
+                } else {
+                    if(result.printInfo.printStatus < 2) {
+                        $(".selected").find(".eseal_print").css('background-color', '#e4d800');
+                    }
+                }
+
+                var jobStatus;
+                    if(result.printInfo.print_status == 1) {
+                        jobStatus = "SAVED";
+                    } else if (result.printInfo.print_status == 2) {
+                        jobStatus = "SUBMITTED";
+                    } else if (result.printInfo.print_status == 3) {
+                        jobStatus = "PRINTED";
+                    } else if (result.printInfo.print_status == 4) {
+                        jobStatus = "COMPLETED";
+                    }else if (result.printInfo.print_status == 0) {
+                        jobStatus = "NOT SAVED";
+                    }
+                    $("#projectName").val(result.job.clientProjectNumber + ". " + result.job.clientProjectName + " " + result.job.state + " (" + jobStatus +")" );
+                
                 hasChanges = false;
+                addRequest = false;
                 if(result.created) {
                     $('#company').append(`<option value="${result.updatedAddress.id}">
                                        ${result.updatedAddress.company_name}
@@ -1647,7 +1828,6 @@
                         }
                     })
                 }
-                // location.reload(true);
             } else {
                 toast.fire('Error', result.message, 'error');
             }
@@ -1663,6 +1843,8 @@
         $(".printFile-form").find("textarea").css("border-color","#f1dfd2");
         $(".company-info input").css("border-color","#f1dfd2");
         $(".company-info label").css("color","#636b6f");
+        $(".state-form").css("color","#636b6f");
+        $(".state-form").find("select").css("border-color","#f1dfd2");
 
         var blankField = 0;
         let toast = Swal.mixin({
@@ -1675,6 +1857,7 @@
         });
         
         let data = {};
+        data.requestId = $("#request_id").val();
         data.jobid = $("#id").val();
         data.copies = $("#copies").val();
         // data.companyId = $("#company").val();
@@ -1715,19 +1898,16 @@
         }
 
         data.fedex = $("#fedex").val();
-        // var today = new Date();
-        // var dd = String(today.getDate()).padStart(2, '0');
-        // var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-        // var yyyy = today.getFullYear();
-        // data.sent = mm + '/' + dd + '/' + yyyy;
         data.tracking = $("#tracking").val();
         data.user_notes = $("#user-textarea-input").val();
         data.printer_notes = $("#printer-textarea-input").val();
+
         if($("#filePrint").val() == "") {
             blankField++;
             $(".printFile-form").css("color","#e04f1a");
             $(".printFile-form").find("textarea").css("border-color","#e04f1a");
         }
+
         data.print_file = $("#filePrint").val();
         data.printed = $("#printed-date").val();
         data.sent = $("#sent-date").val();
@@ -1741,6 +1921,7 @@
         data.state = $("#state").val();
         data.telno = $("#phonenumber").val();
         data.extension = $("#extension").val();
+        data.addRequest = addRequest;
 
         console.log('data: ', data);
 
@@ -1789,21 +1970,24 @@
         $.post("submitPrint", data, function(result){
             swal.close();
             if (result.success){
-                // $("#infos").DataTable().draw(false);
-                toast.fire('Success', 'The print data is submitted.', 'success');
+                // toast.fire('Success', 'The print data is submitted.', 'success');
                 if(result.status == 2) {
                     $(".selected").find(".eseal_print").css('background-color', '#ff9999');
-                    $(".selected").find(".printcheck").prop("checked", true);
                 } else if(result.status == 3) {
                     $(".selected").find(".eseal_print").css('background-color', '#7cb9e8');
-                    $(".selected").find(".printcheck").prop("checked", true);
                 } else if(result.status == 4) {
                     $(".selected").find(".eseal_print").css('background-color', '#00ff00');
+                }
+
+                if(result.available) {
+                    $(".selected").find(".printcheck").prop("checked", true);
+                } else {
                     $(".selected").find(".printcheck").prop("checked", false);
                 }
                 $(".selected").removeClass("selected");
                 $('#printmodal').modal('toggle');
                 hasChanges = false;
+                addRequest = false;
                 if(result.created) {
                     $('#company').append(`<option value="${result.updatedAddress.id}">
                                        ${result.updatedAddress.company_name}
@@ -1834,7 +2018,6 @@
                         }
                     })
                 }
-                // location.reload(true);
             } else {
                 toast.fire('Error', result.message, 'error');
             }
@@ -1843,52 +2026,74 @@
 
     function deletePrint () {
         let toast = Swal.mixin({
-        buttonsStyling: false,
-        customClass: {
-            confirmButton: 'btn btn-success m-1',
-            cancelButton: 'btn btn-danger m-1',
-            input: 'form-control'
-            }
-        });
-        toast.fire({
-            title: 'Are you sure?',
-            text: 'You will not be able to recover this print data!',
-            icon: 'warning',
-            showCancelButton: true,
+            buttonsStyling: false,
             customClass: {
-                confirmButton: 'btn btn-danger m-1',
-                cancelButton: 'btn btn-secondary m-1'
-            },
-            confirmButtonText: 'DELETE PRINT REQUEST',
-            cancelButtonText: 'CANCEL',
-            html: false,
-            preConfirm: e => {
-                return new Promise(resolve => {
-                    setTimeout(() => {
-                        resolve();
-                    }, 50);
-                });
+                confirmButton: 'btn btn-success m-1',
+                cancelButton: 'btn btn-danger m-1',
+                input: 'form-control'
+                }
+            });
+        
+        @if(Auth::user()->userrole == 0 || Auth::user()->userrole == 1)
+            if(jobPrintStatus > 2){
+                return;
             }
-        }).then(result => {
-            if (result.value) {
-                swal.fire({ title: "Please wait...", showConfirmButton: false });
-                swal.showLoading();
-                $.post("deletePrint", {jobId: $('#id').val()}, function(result){
-                    swal.close();
-                    if(result == 1) {
-                        toast.fire('Success', "", 'success');
-                        $(".selected").find(".eseal_print").css('background-color', '#000');
-                        $(".selected").find(".printcheck").prop("checked", false);
-                        $(".selected").removeClass("selected");
-                        $('#printmodal').modal('toggle');
-                    } else {
-                        toast.fire('Error',"This data is not deleted", 'error');
+        @endif
+
+        toast.fire({
+                title: 'Are you sure?',
+                text: 'You will not be able to recover this print data!',
+                icon: 'warning',
+                showCancelButton: true,
+                customClass: {
+                    confirmButton: 'btn btn-danger m-1',
+                    cancelButton: 'btn btn-secondary m-1'
+                },
+                confirmButtonText: 'DELETE PRINT REQUEST',
+                cancelButtonText: 'CANCEL',
+                html: false,
+                preConfirm: e => {
+                    return new Promise(resolve => {
+                        setTimeout(() => {
+                            resolve();
+                        }, 50);
+                    });
+                }
+                }).then(result => {
+                    if (result.value) {
+                        swal.fire({ title: "Please wait...", showConfirmButton: false });
+                        swal.showLoading();
+                        $.post("deletePrint", {requestId: $('#request_id').val(), jobId: $('#id').val()}, function(result){
+                            swal.close();
+                            if(result.success == true) {
+                                toast.fire('Success', "", 'success');
+                                if(result.status == 2) {
+                                    $(".selected").find(".eseal_print").css('background-color', '#ff9999');
+                                } else if(result.status == 3) {
+                                    $(".selected").find(".eseal_print").css('background-color', '#7cb9e8');
+                                } else if(result.status == 4) {
+                                    $(".selected").find(".eseal_print").css('background-color', '#00ff00');
+                                } else if(result.status == 1) {
+                                    $(".selected").find(".eseal_print").css('background-color', '#e4d800');
+                                } else {
+                                    $(".selected").find(".eseal_print").css('background-color', '#000000');
+                                }
+
+                                if(result.available) {
+                                    $(".selected").find(".printcheck").prop("checked", true);
+                                } else {
+                                    $(".selected").find(".printcheck").prop("checked", false);
+                                }
+
+                                $('#printmodal').modal('toggle');
+                            } else {
+                                toast.fire('Error',"This data is not deleted", 'error');
+                            }
+                        })
+                    } else if (result.dismiss === 'cancel') {
+                        toast.fire('Cancelled', 'Data is safe', 'info');
                     }
-                })
-            } else if (result.dismiss === 'cancel') {
-                toast.fire('Cancelled', 'Data is safe', 'info');
-            }
-        });
+                });
     }
 
     function exit () {
@@ -1900,7 +2105,6 @@
             input: 'form-control'
             }
         });
-        console.log(hasChanges);
         if(hasChanges) {
             toast.fire({
                 title: 'Save changes?',
@@ -1924,12 +2128,49 @@
                 if (result.value) {
 
                 } else if (result.dismiss === 'cancel') {
+                    hasChanges = false;
                     $("#printmodal").modal('toggle');
                 }
             });
         } else  {
             $("#printmodal").modal('toggle');
         }
+    }
+
+    function addPrintRequest () {
+        $("#projectName").val(currentJob + " (NOT SAVED)");
+        $("#company option[value='0']").attr('selected', 'selected');
+        $("#company-name").val("");
+        $("#contact-name").val("");
+        $("#address1").val("");
+        $("#address2").val("");
+        $("#zip").val("");
+        $("#city").val("");
+        $("#state").val("");
+        $("#phonenumber").val("");
+        $("#extension").val("");
+
+        $("#request_id").val('');
+        $("#copies").val(1);
+        $("#plan-set").val("");
+        $("#report").val("");
+        $("#user-textarea-input").val("");
+        $("#printer-textarea-input").val("");
+        $("#printed-date").val("");
+        $("#sent-date").val("");
+        $("#tracking").val("");
+        $("#fedex").val("");
+        $("#filePrint").val("");
+        $("#username").val("<?php echo Auth::user()->username?>");
+        $("#useremail").val("<?php echo Auth::user()->email?>");
+        $("input:radio").attr("checked", false);
+        $("input:radio").prop("checked", false);
+        $("#printed-date").val("");
+        $("#sent-date").val("");
+        $("#tracking").val("");
+        $('#currentPrintRequest').append(`<option value="${$('#currentPrintRequest option').length}">${$('#currentPrintRequest option').length+1}</option>`);
+        $('#currentPrintRequest').val($('#currentPrintRequest option').length-1);
+        addRequest = true;
     }
 
 </script>
