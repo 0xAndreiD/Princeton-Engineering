@@ -1669,6 +1669,7 @@
         $.post("getPrintFiles", {projectId: $('#id').val()}, function(result){
             swal.close();
             if(result.success && result.files){
+                console.log('result.files: ', result.files);
                 result.files.forEach(file => {
                     const elem = $(`<tr class='file' style="cursor:pointer;">
                             <td style="width: 5%; text-align:center">
