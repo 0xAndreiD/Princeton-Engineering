@@ -741,7 +741,7 @@
         <td><div style="overflow:hidden"></div></td>
         <td class="iw400-right-bdr">Min OCPD rating</td>
         <td class="w400-bdr" rowspan="" id="OCPDRating">30</input></td>
-        <td class="w400-bdr" style="text-align: left;">w</td>
+        <td class="w400-bdr" style="text-align: left;">A</td>
     </tr>
     <tr class="h13">
         <td><div style="overflow:hidden"></div></td>
