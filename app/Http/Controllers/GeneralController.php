@@ -3876,7 +3876,9 @@ class GeneralController extends Controller
                         $files = $listFolderContents->getItems()->all();
                         foreach($files as $file){
                             if($file->getDataProperty('.tag') === 'file'){
-                                array_push($reportfiles, array('filename' => $file->getName(), 'size' => $file->getSize(), 'modifiedDate' => $file->getServerModified(), 'link' => env('APP_URL') . 'in/' . $request['projectId'] . '/' . $file->getName()));
+                                if(str_contains($file->getName(), '.pdf')){
+                                    array_push($reportfiles, array('filename' => $file->getName(), 'size' => $file->getSize(), 'modifiedDate' => $file->getServerModified(), 'link' => env('APP_URL') . 'in/' . $request['projectId'] . '/' . $file->getName()));
+                                }
                             }
                         }
                     } catch (DropboxClientException $e) { 
