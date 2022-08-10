@@ -3871,22 +3871,18 @@ class GeneralController extends Controller
                     $filepath = $folderPrefix . $job['clientProjectNumber'] . '. ' . $job['clientProjectName'] . ' ' . $job['state'];
                         
                     $infile = array();
-                    $bigsize = 0;
                     try{
                         $listFolderContents = $dropbox->listFolder(env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_IN') . $filepath . '/');
                         $files = $listFolderContents->getItems()->all();
                         foreach($files as $file){
                             if($file->getDataProperty('.tag') === 'file'){
-                                if($file->getSize() > $bigsize){
-                                    $bigsize = $file->getSize();
-                                    $infile = array('filename' => $file->getName(), 'size' => $file->getSize(), 'modifiedDate' => $file->getServerModified(), 'link' => env('APP_URL') . 'in/' . $request['projectId'] . '/' . $file->getName());
-                                }
+                                array_push($reportfiles, array('filename' => $file->getName(), 'size' => $file->getSize(), 'modifiedDate' => $file->getServerModified(), 'link' => env('APP_URL') . 'in/' . $request['projectId'] . '/' . $file->getName()));
                             }
                         }
                     } catch (DropboxClientException $e) { 
                         $infile = array();
                     }
-                    array_push($reportfiles, $infile);
+                    // array_push($reportfiles, $infile);
 
                     try{
                         $listFolderContents = $dropbox->listFolder(env('DROPBOX_PROJECTS_PATH') . env('DROPBOX_PREFIX_INCOPY') . $filepath . '/');
