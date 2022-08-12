@@ -2027,8 +2027,6 @@ var getData = function(caseCount = 10) {
     alldata['wind-speed-override'] = $('#wind-speed-override')[0].checked;
     alldata['ground-snow'] = $('#ground-snow').val();
     alldata['ground-snow-override'] = $('#ground-snow-override')[0].checked;
-    alldata['roof-snow'] = $('#roof-snow').val();
-    alldata['roof-snow-override'] = $('#roof-snow-override')[0].checked;
     alldata['ibc-year'] = $('#ibc-year').val();
     alldata['asce-year'] = $('#asce-year').val();
     alldata['nec-year'] = $('#nec-year').val();
@@ -5258,8 +5256,6 @@ var loadPreloadedData = function() {
                             $(`#wind-speed-override`).prop('checked', preloaded_data['WindCheckbox']);
                             $(`#ground-snow`).val(preloaded_data['Snow']);
                             $(`#ground-snow-override`).prop('checked', preloaded_data['SnowCheckbox']);
-                            $(`#roof-snow`).val(preloaded_data['snowRoofMin']);
-                            $(`#roof-snow-override`).prop('checked', preloaded_data['SnowRoofMinCheckbox']);
                             $(`#ibc-year`).val(preloaded_data['IBC']);
                             $(`#asce-year`).val(preloaded_data['ASCE']);
                             $(`#nec-year`).val(preloaded_data['NEC']);
