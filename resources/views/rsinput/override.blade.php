@@ -42,6 +42,13 @@
         </tr>
         <tr class="h13">
             <td><div style="overflow:hidden"></td>
+            <td class="iw400-right-bdr">Roof Snow Load</td>
+            <td class="w400-yellow-bdr"><input type="text" class="txt-center-align" id="roof-snow" value="0.0"></input></td>
+            <td class="w400-bdr">psf</td>
+            <td class="w400-yellow-bdr"><input type="checkbox" id="roof-snow-override"></input></td>
+        </tr>
+        <tr class="h13">
+            <td><div style="overflow:hidden"></td>
             <td><div style="overflow:hidden"></td>
             <td><div style="overflow:hidden"></td>
             <td><div style="overflow:hidden"></td>
