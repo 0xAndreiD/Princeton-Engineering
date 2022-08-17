@@ -45,11 +45,16 @@
 <!-- Project information table section -->
 <table id="project-info-table" cellspacing="0" cellpadding="0" style="border-spacing:0;" >    
     <colgroup>
+        <!-- <col width="80">
+        <col width="160">
+        <col width="200">
+        <col width="300">
+        <col width="800"> -->
         <col width="80">
         <col width="160">
         <col width="200">
         <col width="300">
-        <col width="800">
+        <col width="100">
     </colgroup>
 <tbody>
     <tr class="h13">
@@ -141,11 +146,16 @@
 <!-- Number Conditions table section -->
 <table id="number-conditions-info-table" cellspacing="0" cellpadding="0" style="border-spacing:0;" >    
     <colgroup>
+        <!-- <col width="80">
+        <col width="160">
+        <col width="160">
+        <col width="160">
+        <col width="800"> -->
         <col width="80">
         <col width="160">
-        <col width="160">
-        <col width="160">
-        <col width="1000">
+        <col width="200">
+        <col width="300">
+        <col width="100">
     </colgroup>
 <tbody>
     <tr class="h13">
@@ -193,11 +203,16 @@
 <!-- Personal Information table section -->
 <table id="personal-info-table" cellspacing="0" cellpadding="0" style="border-spacing:0;" >    
     <colgroup>
+        <!-- <col width="80">
+        <col width="160">
+        <col width="200">
+        <col width="300">
+        <col width="720"> -->
         <col width="80">
         <col width="160">
         <col width="200">
         <col width="300">
-        <col width="720">
+        <col width="100">
     </colgroup>
 <tbody>
     <tr class="h13">
@@ -238,11 +253,16 @@
 <!-- Build Age table section -->
 <table id="build-age-info-table" cellspacing="0" cellpadding="0" style="border-spacing:0;" >    
     <colgroup>
-        <col width="80">
+        <!-- <col width="80">
         <col width="160">
         <col width="70">
         <col width="300">
-        <col width="960">
+        <col width="960"> -->
+        <col width="80">
+        <col width="160">
+        <col width="200">
+        <col width="300">
+        <col width="100">
     </colgroup>
 <tbody>
     <tr class="h13">
