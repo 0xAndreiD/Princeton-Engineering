@@ -5258,7 +5258,8 @@ var loadPreloadedData = function() {
                             $(`#wind-speed-override`).prop('checked', preloaded_data['WindCheckbox']);
                             $(`#ground-snow`).val(preloaded_data['Snow']);
                             $(`#ground-snow-override`).prop('checked', preloaded_data['SnowCheckbox']);
-                            $(`#roof-snow`).val(preloaded_data['snowRoofMin']);
+                            if(preloaded_data['SnowRoofMin'])
+                                $(`#roof-snow`).val(preloaded_data['SnowRoofMin']);
                             $(`#roof-snow-override`).prop('checked', preloaded_data['SnowRoofMinCheckbox']);
                             $(`#ibc-year`).val(preloaded_data['IBC']);
                             $(`#asce-year`).val(preloaded_data['ASCE']);
