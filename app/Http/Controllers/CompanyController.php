@@ -899,7 +899,7 @@ class CompanyController extends Controller
      * @return JSON
      */
     function getBillingInfo(Request $request){
-        if(Auth::user()->userrole == 1){
+        if(Auth::user()->userrole == 1 || Auth::user()->userrole == 6){
             $info = BillingInfo::select('billing_name', 'billing_mail', 'billing_address', 'billing_city', 'billing_state', 'billing_zip', 'billing_same_info', 'shipping_name', 'shipping_mail', 'shipping_address', 'shipping_city', 'shipping_state', 'shipping_zip', 'shipping_same_info', 'card_name', 'card_number', 'expiration_date', 'security_code')->where('clientId', Auth::user()->companyid)->first();
             if($info)
                 return response()->json(["data" => $info, "success" => true]);
@@ -927,7 +927,7 @@ class CompanyController extends Controller
      * @return JSON
      */
     function saveBillingInfo(Request $request){
-        if(Auth::user()->userrole == 1 || Auth::user()->userrole == 2){
+        if(Auth::user()->userrole == 1 || Auth::user()->userrole == 2 || Auth::user()->userrole == 6){
             if(Auth::user()->userrole == 2 && !empty($request['clientId']))
                 $clientId = $request['clientId'];
             else

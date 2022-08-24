@@ -67,6 +67,9 @@
                                     <option value="4">Reviewer</option>
                                     <option value="1">Client</option>
                                     <option value="0">User</option>
+                                    <option value="5">Printer</option>
+                                    <option value="6">Consultant Admin</option>
+                                    <option value="7">Consultant User</option>
                                 </select>
                             </th>
                             <th class="searchHead"> <input type="text" placeholder="Search Number" class="searchBox" id="userNumFilter"> </th>

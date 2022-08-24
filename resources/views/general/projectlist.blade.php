@@ -277,7 +277,7 @@
                                 </div>
                             </th>
                             <th style="display: flex; align-items: center; justify-content: center;">
-                                <span class="ml-1" style='writing-mode: vertical-lr;width: 22px;transform: rotateZ(180deg);'>Edit</span>
+                                <span class="ml-1" style='writing-mode: vertical-lr;width: 22px;height: 61px;transform: rotateZ(180deg);'>Edit</span>
                                 <span class="ml-2" style='writing-mode: tb-rl;width: 28px;transform: rotateZ(180deg);cursor: pointer;' class="badge dropdown-toggle job-dropdown" id="chatFilter" data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>Chat</span>
                                 <div class="dropdown-menu"  aria-labelledby="chatFilter">
                                     <a class="dropdown-item chat-dropdown" id="chat-dropdown-" href="javascript:changeChatFilter('')">All</a>
@@ -285,6 +285,7 @@
                                         <a class="dropdown-item chat-dropdown" id="chat-dropdown-{{ $user['id'] }}" href="javascript:changeChatFilter({{ $user['id'] }})">{{ $user['username'] }}</a>
                                     @endforeach
                                 </div>
+                                @if(Auth::user()->userrole != 6 && Auth::user()->userrole != 7)
                                 <div style="display:flex">
                                     <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 17px;'><input type='checkbox' id="planCheckFilter" style="transform: rotateZ(180deg);"> Review</span>
                                     <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 17px;'><input type='checkbox' id="asBuiltFilter" style="transform: rotateZ(180deg);"> As-built</span>
@@ -294,6 +295,7 @@
                                     <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 17px;'><input type='checkbox' id="printFilter" style="transform: rotateZ(180deg);">Print</span>
                                 </div>
                                 <span class="mx-2" style='writing-mode: tb-rl;width: 28px;transform: rotateZ(180deg); line-height: 1;'>Check Box <br />/ Status</span>
+                                @endif
                             </th>
                             @endif
                         </tr>
@@ -1043,10 +1045,12 @@
                         data.created_to = $("#created_to").val();
                         data.submitted_from = $("#submitted_from").val();
                         data.submitted_to = $("#submitted_to").val();
+                        @if(Auth::user()->userrole != 6 && Auth::user()->userrole != 7)
                         data.plancheck = $("#planCheckFilter")[0].checked ? 1 : 0;
                         data.asbuilt = $("#asBuiltFilter")[0].checked ? 1 : 0;
                         data.pil = $("#pilFilter").length > 0 && $("#pilFilter")[0].checked ? 1 : 0;
                         data.print = $("#printFilter")[0].checked ? 1 : 0;
+                        @endif
                     }
                 },
             "columns": [

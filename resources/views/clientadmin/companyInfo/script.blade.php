@@ -205,7 +205,7 @@ function pullPermit(){
         }
     });
 }
-
+@endif
 var cardnumber_mask;
 window.onload = function () {
 
@@ -614,5 +614,4 @@ function shippingCopy(){
         $("#szip").val($("#bzip").val());
     }
 }
-@endif
 </script>

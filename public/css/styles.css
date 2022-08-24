@@ -571,7 +571,7 @@ html, body {
     padding: 5px 10px;
 }
 
-#reportmodal td, th {
+#reportmodal td, #reportmodal th {
     text-align: left;
 }
 

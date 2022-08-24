@@ -33,10 +33,10 @@
                 <li class="nav-item">
                     <a class="nav-link" href="#permit-info"><i class="fa fa-university"></i> Permit Info</a>
                 </li>
+                @endif
                 <li class="nav-item">
                     <a class="nav-link" href="#billing-info"><i class="fa fa-money-bill"></i> Billing Info</a>
                 </li>
-                @endif
             </ul>
             <div class="block-content tab-content">
                 <div class="tab-pane fade show active" id="company-info" role="tabpanel">
@@ -245,6 +245,7 @@
                         </div>
                     </div>
                 </div>
+                @endif
                 <div class="tab-pane fade" id="billing-info" role="tabpanel">
                     <div class="row">
                         <div class="col-md-4">
@@ -443,7 +444,6 @@
                         </div>
                     </div>
                 </div>
-                @endif
             </div>
         </div>
     </div>

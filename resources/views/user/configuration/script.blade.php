@@ -45,7 +45,7 @@ function updateSetting(){
             'inputFontSize': $("#font-size").val(),
             'inputCellHeight': $("#cell-height").val(),
             'inputFontFamily': $("#cell-font").val(),
-            'includeFolderName': $("#include-folder")[0].checked ? 1 : 0,
+            'includeFolderName': $("#include-folder")[0] && $("#include-folder")[0].checked ? 1 : 0,
         },
         success: function(res){
             if(!res.success)
