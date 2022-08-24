@@ -1452,7 +1452,7 @@ class GeneralController extends Controller
                     "<a href='jobchat?projectId={$nestedData['id']}' class='mr-2 btn btn-" . $chatbadge . "' style='padding: 3px 4px;'>
                         <i class='fab fa-rocketchat'></i>
                     </a>". 
-                    "<input class='mr-1 plancheck' type='checkbox' " . (Auth::user()->userrole == 4 || Auth::user()->userrole == 5 ? "style='pointer-events: none;'" : "onchange='togglePlanCheck(this, {$job['id']})'") . ($job['plancheck'] == 1 ? " checked" : "") . ">" . 
+                    (Auth::user()->userrole == 6 || Auth::user()->userrole == 7 ? "" : "<input class='mr-1 plancheck' type='checkbox' " . (Auth::user()->userrole == 4 || Auth::user()->userrole == 5 ? "style='pointer-events: none;'" : "onchange='togglePlanCheck(this, {$job['id']})'") . ($job['plancheck'] == 1 ? " checked" : "") . ">" . 
                     "<input class='mr-1 asbuilt' type='checkbox' " . (Auth::user()->userrole == 4 || Auth::user()->userrole == 5 ? "style='pointer-events: none;'" : "onchange='toggleAsBuilt(this, {$job['id']})'") . ($job['asbuilt'] == 1 ? " checked" : "") . ">" . 
                     (Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->userrole == 5 || Auth::user()->allow_permit > 0 ? "<input class='mr-1 pilcheck' type='checkbox'" . (Auth::user()->userrole == 4 || Auth::user()->userrole == 5 ? "style='pointer-events: none;'" : "onchange='togglePilStatus(this, {$job['id']})'") . ($job['PIL_status'] == 1 ? " checked" : "") . ">" : "") .
 
@@ -1466,7 +1466,7 @@ class GeneralController extends Controller
                             "<div class='asbuilt'" . " style='margin:1.5px; width: 30px; height: 30px; background-color:#{$asbuiltCol};'></div>".
                             "<div class='pil'" . " style='margin:1.5px; width: 30px; height: 30px; background-color:#{$pilCol};'></div>".
                         "</div>".
-                    "</div>".
+                    "</div>") . 
                     // (Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4? "<button onclick='openReviewTab({$job['id']})' class='mr-1 btn' style='padding: 7px 4px; background-image: -webkit-linear-gradient(-90deg, #{$sealCol} 0%, #{$sealCol} 30%, #FFFFFF 31%, #FFFFFF 35%, #{$asbuiltCol} 36%, #{$asbuiltCol} 65%, #FFFFFF 66%, #FFFFFF 72%, #{$pilCol} 71%, #{$pilCol} 100%); border: 1px solid white;'>
                     //     <div style='width:16px; height: 16px;'></div>
                     // </a>" : "") . 

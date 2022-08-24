@@ -71,12 +71,13 @@
                     <option value="Comic Sans MS">Comic Sans MS</option>
                 </select>
             </div>
-
+            @if(Auth::user()->userrole != 6 && Auth::user()->userrole != 7)
             <h2 class="content-heading pt-0">Backup Zip Settings</h2>
             <div class="custom-control custom-checkbox custom-control-danger mb-1">
                 <input type="checkbox" class="custom-control-input" id="include-folder" name="include-folder" onchange="updateSetting()">
                 <label class="custom-control-label" for="include-folder">Include Folder Name on Zip</label>
             </div>
+            @endif
         </div>
         <div class="col-md-9">
             <h2 class="content-heading ml-5 pt-0">Input Element Preview</h2>
