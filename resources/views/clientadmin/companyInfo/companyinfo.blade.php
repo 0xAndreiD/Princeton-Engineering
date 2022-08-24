@@ -1,4 +1,4 @@
-@extends('clientadmin.layout')
+@extends((Auth::user()->userrole == 1) ? 'clientadmin.layout' : 'consultant.layout')
 
 @section('css_after')
 <link rel="stylesheet" href="{{ asset('css/account.css') }}">
@@ -29,12 +29,14 @@
                 <li class="nav-item">
                     <a class="nav-link active" href="#company-info"><i class="fa fa-users"></i> Company Info</a>
                 </li>
+                @if(Auth::user()->userrole != 6)
                 <li class="nav-item">
                     <a class="nav-link" href="#permit-info"><i class="fa fa-university"></i> Permit Info</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#billing-info"><i class="fa fa-money-bill"></i> Billing Info</a>
                 </li>
+                @endif
             </ul>
             <div class="block-content tab-content">
                 <div class="tab-pane fade show active" id="company-info" role="tabpanel">
@@ -129,6 +131,7 @@
                         </div>
                     </div>
                 </div>
+                @if(Auth::user()->userrole != 6)
                 <div class="tab-pane fade" id="permit-info" role="tabpanel">
                     <div class="row">
                         <div class="col-12">
@@ -440,6 +443,7 @@
                         </div>
                     </div>
                 </div>
+                @endif
             </div>
         </div>
     </div>

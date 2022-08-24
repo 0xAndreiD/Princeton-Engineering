@@ -1,4 +1,4 @@
-@extends((Auth::user()->userrole == 2)? 'admin.layout' : 'clientadmin.layout')
+@extends((Auth::user()->userrole == 2)? 'admin.layout' : ((Auth::user()->userrole == 1) ? 'clientadmin.layout' : 'consultant.layout'))
 
 @section('content')
 <!-- Hero -->
