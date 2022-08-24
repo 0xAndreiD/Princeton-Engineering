@@ -35,7 +35,7 @@ class UserController extends Controller
         $companyList = Company::orderBy('company_name', 'asc')->get();
         if(Auth::user()->userrole == 2)
             return view('admin.user.userlist')->with('companyList', $companyList);
-        else if(Auth::user()->userrole == 1 || Auth::user()->userrole == 3)
+        else if(Auth::user()->userrole == 1 || Auth::user()->userrole == 3 || Auth::user()->userrole == 6)
             return view('clientadmin.user.userlist')->with('companyList', $companyList);
         else
             return redirect('home');
@@ -73,6 +73,15 @@ class UserController extends Controller
                 5 => 'allow_permit'
             );
             $handler = User::where('companyid', Auth::user()->companyid)->where('userrole', '<', 2);
+        } else if(Auth::user()->userrole == 6) {
+            $columns = array( 
+                0 =>'id', 
+                1 =>'username',
+                2 =>'email',
+                3 =>'userrole',
+                4 =>'usernumber'
+            );
+            $handler = User::where('companyid', Auth::user()->companyid)->where('userrole', '>', 5);
         }
         $totalData = $handler->count();
         $totalFiltered = $totalData; 
@@ -106,7 +115,7 @@ class UserController extends Controller
             $handler = $handler->where('users.userrole', 'LIKE', "%{$request->input("columns.3.search.value")}%");
             if(!empty($request->input("columns.4.search.value")))
                 $handler = $handler->where('users.usernumber', 'LIKE', "%{$request->input("columns.4.search.value")}%");
-            if(isset($request["columns.5.search.value"]))
+            if(Auth::user()->userrole != 6 && isset($request["columns.5.search.value"]))
                 $handler = $handler->where('users.allow_permit', 'LIKE', "%{$request->input("columns.5.search.value")}%");
         }
 
@@ -195,18 +204,26 @@ class UserController extends Controller
                     case 5:
                         $nestedData['userrole'] = "<span class='badge badge-dark'> Printer </span>";
                         break;
+                    case 6:
+                        $nestedData['userrole'] = "<span class='badge badge-primary'> Consultant Admin </span>";
+                        break;
+                    case 7:
+                        $nestedData['userrole'] = "<span class='badge badge-info'> Consultant User </span>";
+                        break;
                 }
                 if($user->ask_two_factor == 1)
                     $nestedData['ask_two_factor'] = "<span class='badge badge-primary'> Yes </span>";
                 else 
                     $nestedData['ask_two_factor'] = "<span class='badge badge-danger'> No </span>";
 
-                if($user->allow_permit == 0)
-                    $nestedData['allow_permit'] = "<span class='badge badge-danger'> No </span>";
-                else if($user->allow_permit == 1) 
-                    $nestedData['allow_permit'] = "<span class='badge badge-primary'> Regular User </span>";
-                else if($user->allow_permit == 2) 
-                    $nestedData['allow_permit'] = "<span class='badge badge-warning'> Only Permit </span>";
+                if(Auth::user()->userrole != 6) {
+                    if($user->allow_permit == 0)
+                        $nestedData['allow_permit'] = "<span class='badge badge-danger'> No </span>";
+                    else if($user->allow_permit == 1) 
+                        $nestedData['allow_permit'] = "<span class='badge badge-primary'> Regular User </span>";
+                    else if($user->allow_permit == 2) 
+                        $nestedData['allow_permit'] = "<span class='badge badge-warning'> Only Permit </span>";
+                }
 
                 $nestedData['actions'] = "
                 <div class='text-center'>
@@ -240,7 +257,7 @@ class UserController extends Controller
     function updateUser(Request $request){
         $data = $request->input('data');
         if ($data['id'] == 0){
-            if(Auth::user()->userrole == 1 || Auth::user()->userrole == 2 || Auth::user()->userrole == 3){
+            if(Auth::user()->userrole == 1 || Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 6){
                 $isExist = User::where('username', $data['name'])->get()->first();
                 if ($isExist) {
                     echo "exist";
@@ -256,9 +273,12 @@ class UserController extends Controller
                 $res->username = $data['name'];
                 $res->email = $data['email'];
                 $res->password = $data['password'];
-                $res->userrole = 0;
+                if(Auth::user()->userrole == 6)
+                    $res->userrole = 7;
+                else
+                    $res->userrole = 0;
                 $res->companyid = isset($data['companyid']) ? $data['companyid'] : Auth::user()->companyid;
-                if(Auth::user()->userrole == 2 || $data['userrole'] < 2)
+                if(Auth::user()->userrole == 2 || $data['userrole'] < 2 || $data['userrole'] > 5)
                     $res->userrole = $data['userrole'];
                 else
                     $res->userrole = 0;
@@ -268,7 +288,7 @@ class UserController extends Controller
                 $res->created_at = date('Y-m-d h:i:s',strtotime(now()));
                 if (isset($data['distance_limit'])) $res->distance_limit = $data['distance_limit']; 
                 if (isset($data['ask_two_factor'])) $res->ask_two_factor = $data['ask_two_factor'];
-                $res->allow_permit = $data['allow_permit'];
+                if (isset($data['allow_permit'])) $res->allow_permit = $data['allow_permit'];
                 $res->save();
                 echo true;
             } else
@@ -286,7 +306,7 @@ class UserController extends Controller
             }
             
             $res = User::where('id', $data['id'])->get()->first();
-            if(Auth::user()->userrole == 2 || ((Auth::user()->userrole == 1 || Auth::user()->userrole == 3) && Auth::user()->companyid == $res['companyid']) || Auth::user()->id == $res['id']){
+            if(Auth::user()->userrole == 2 || ((Auth::user()->userrole == 1 || Auth::user()->userrole == 3 || Auth::user()->userrole == 6) && Auth::user()->companyid == $res['companyid']) || Auth::user()->id == $res['id']){
                 if (isset($data['name'])) $res->username = $data['name'];
                 if (isset($data['email'])) $res->email = $data['email'];
                 if (isset($data['password'])){
@@ -295,7 +315,7 @@ class UserController extends Controller
                 } 
                 if (isset($data['companyid'])) $res->companyid = $data['companyid'];
                 if (isset($data['userrole'])){
-                    if(Auth::user()->userrole == 2 || ($res->userrole < 2 && $data['userrole'] < 2))
+                    if(Auth::user()->userrole == 2 || (Auth::user()->userrole == 1 && $res->userrole < 2 && $data['userrole'] < 2) || (Auth::user()->userrole == 6 && $res->userrole >= 6 && $data['userrole'] >= 6))
                         $res->userrole = $data['userrole']; 
                 } 
                 if (isset($data['usernumber'])) $res->usernumber = $data['usernumber'];
@@ -319,7 +339,7 @@ class UserController extends Controller
         $id = $request->input('data');
         $user = User::where('id', $id)->first();
         if($user){
-            if(Auth::user()->userrole == 2 || ((Auth::user()->userrole == 1 || Auth::user()->userrole == 3) && Auth::user()->companyid == $user['companyid']) || Auth::user()->id == $user['id']){
+            if(Auth::user()->userrole == 2 || ((Auth::user()->userrole == 1 || Auth::user()->userrole == 3 || Auth::user()->userrole == 6) && Auth::user()->companyid == $user['companyid']) || Auth::user()->id == $user['id']){
                 $user->delete();
                 echo true;
             } else
@@ -337,7 +357,7 @@ class UserController extends Controller
         $id = $request->input('data');
         $user = User::where('id', $id)->first();
         if($user){
-            if(Auth::user()->userrole == 2 || ((Auth::user()->userrole == 1 || Auth::user()->userrole == 3) && Auth::user()->companyid == $user['companyid']) || Auth::user()->id == $user['id']){
+            if(Auth::user()->userrole == 2 || ((Auth::user()->userrole == 1 || Auth::user()->userrole == 3 || Auth::user()->userrole == 6) && Auth::user()->companyid == $user['companyid']) || Auth::user()->id == $user['id']){
                 return response()->json($user);
             } else
                 return 'nopermission';
@@ -447,7 +467,7 @@ class UserController extends Controller
             $me->password = $request['password'];
             if($me->userrole == 2 || $me->userrole == 3 || $me->userrole == 4)
                 $me->auto_report_open = $request['autoOpen'];
-            if($me->userrole == 1 || $me->userrole == 2 || $me->userrole == 3 || $me->userrole == 4)
+            if($me->userrole == 1 || $me->userrole == 2 || $me->userrole == 3 || $me->userrole == 4 || $me->userrole == 6)
                 $me->allow_cc = $request['allowCC'];
             $me->save();
             return response()->json(['success' => true]);

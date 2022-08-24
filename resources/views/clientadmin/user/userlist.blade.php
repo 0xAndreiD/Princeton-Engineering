@@ -1,4 +1,4 @@
-@extends('clientadmin.layout')
+@extends((Auth::user()->userrole == 1) ? 'clientadmin.layout' : 'consultant.layout')
 
 @section('content')
 
@@ -37,11 +37,13 @@
                     <thead>
                         <tr>
                             <th class="text-center" style="width: 10%;">ID</th>
-                            <th style="width:20%">Name</th>
-                            <th style="width:20%;">Email</th>
-                            <th style="width:10%;">UserRole</th>
-                            <th style="width:10%;">UserNumber</th>
+                            <th class="text-center" style="width:20%;">Name</th>
+                            <th class="text-center" style="width:20%;">Email</th>
+                            <th class="text-center" style="width:20%;">UserRole</th>
+                            <th class="text-center" style="width:20%;">UserNumber</th>
+                            @if(Auth::user()->userrole != 6)
                             <th style="width:20%;">Allow Permit</th>
+                            @endif
                             <th style="min-width: 150px;">Action</th>
                         </tr>
                         <tr>
@@ -56,6 +58,7 @@
                                 </select>
                             </th>
                             <th class="searchHead"> <input type="text" placeholder="Search Number" class="searchBox" id="userNumFilter"> </th>
+                            @if(Auth::user()->userrole != 6)
                             <th class="searchHead">
                                 <select placeholder="Search Role" class="searchBox" id="permitFilter">
                                     <option value="">All</option>
@@ -64,6 +67,7 @@
                                     <option value="2">Only Permit</option>
                                 </select>
                             </th>
+                            @endif
                             <th></th>
                         </tr>
                     </thead>
@@ -108,14 +112,20 @@
                                 <div class="form-group">
                                     <label for="userrole">User Role <span class="text-danger">*</span></label><br/>
                                     <select class="js-select2 form-control" id="userrole" name="userrole" style="width:100%;">
+                                        @if(Auth::user()->userrole == 1)
                                         <option value="1"><span class='badge badge-primary'> Company Admin </span></option>
                                         <option value="0"><span class='badge badge-info'> User </span></option>
+                                        @else
+                                        <option value="6"><span class='badge badge-primary'> Consultant Admin </span></option>
+                                        <option value="7"><span class='badge badge-info'> Consultant User </span></option>
+                                        @endif
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="userrole">User Number (1: Administrator) <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="usernumber" name="usernumber" placeholder="Type Your User Number">
                                 </div>
+                                @if(Auth::user()->userrole != 6)
                                 <div class="form-group">
                                     <label for="userrole">Allow Permit Submit <span class="text-danger">*</span></label><br/>
                                     <select class="form-control" id="allow_permit" name="allow_permit">
@@ -124,6 +134,7 @@
                                         <option value="2"><span class='badge badge-danger'> Only Permit Accessible </span></option>
                                     </select>
                                 </div>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -159,7 +170,9 @@
                 { "data": "email" },
                 { "data": "userrole" },
                 { "data": "usernumber" },
+                @if(Auth::user()->userrole != 6)
                 { "data": "allow_permit" },
+                @endif
                 { "data": "actions", "orderable": false }
             ]	 
         });

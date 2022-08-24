@@ -47,6 +47,7 @@ $(document).ready(function(){
     }
     });
 
+    @if(Auth::user()->userrole != 6)
     $('#permitForm').validate({rules: {
         'state': {
             required: true,
@@ -90,6 +91,7 @@ $(document).ready(function(){
         updatePermitInfo();
     }
     });
+    @endif
 
     $("#logofile").on('change', function(){
         $("#logolink").val($(this).val().split('\\').pop());
@@ -134,7 +136,7 @@ function updateCompany() {
 function onUploadOpen(){
     $("#logofile").trigger('click');
 }
-
+@if(Auth::user()->userrole != 6)
 function updatePermitInfo(){
     let toast = Swal.mixin({
         buttonsStyling: false,
@@ -612,5 +614,5 @@ function shippingCopy(){
         $("#szip").val($("#bzip").val());
     }
 }
-
+@endif
 </script>

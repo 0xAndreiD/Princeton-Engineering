@@ -333,10 +333,8 @@ ul.social li{
 					<tr>
 						<td>
 							<div class="text" style="padding: 0 2.5em; text-align: left;">
-								<h3 style="margin: 0; color: black;">User: {{ $company }}</h3>
 								<h3 style="margin: 0; color: black;">Message:</h3>
-								<?php ?>
-								<h3 style="margin: 0px 0px 0px 0px; color: black;"><?php echo nl2br( $msg ) ?></h3>
+								<h3 style="margin: 0px 0px 0px 0px; color: black;">{{ $msg }}</h3>
 							</div>
 						</td>
 					</tr>

@@ -142,6 +142,8 @@
                                         <option value="2"><span class='badge badge-danger'> Super Admin </span></option>
                                         <option value="4"><span class='badge badge-secondary'> Reviewer </span></option>
                                         <option value="5"><span class='badge badge-secondary'> Printer </span></option>
+                                        <option value="6"><span class='badge badge-secondary'> Consultant Admin </span></option>
+                                        <option value="7"><span class='badge badge-secondary'> Consultant User </span></option>
                                     </select>
                                 </div>
                                 <div class="form-group">

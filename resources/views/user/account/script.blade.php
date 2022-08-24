@@ -21,7 +21,7 @@ function saveAccount(){
             'password': $("#password").val(),
             @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4)
             'autoOpen': $("#automatic-open")[0].checked ? 1 : 0,
-            @elseif(Auth::user()->userrole == 1)
+            @elseif(Auth::user()->userrole == 1 || Auth::user()->userrole == 6)
             'allowCC': $("#allow-cc")[0].checked ? 1 : 0,
             @endif
         },

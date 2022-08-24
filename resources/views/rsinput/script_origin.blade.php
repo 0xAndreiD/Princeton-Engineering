@@ -3963,7 +3963,8 @@ $(document).ready(function() {
     });
 
     $("#filetree").jstree('create_node', null, {"text":"Root", "id": "root", "type": "folder", "state": {"opened": true} }, 'last');
-    $("#filetree").jstree('create_node', '#root', {"text":"IN", "id": "IN", "type": "folder"}, 'last');
+    if($("#disableIN").val() != "1")
+        $("#filetree").jstree('create_node', '#root', {"text":"IN", "id": "IN", "type": "folder"}, 'last');
     $("#filetree").jstree('create_node', '#root', {"text":"OUT", "id": "OUT", "type": "folder"}, 'last');
 
     $('#filetree').on('select_node.jstree', function () {
@@ -4006,7 +4007,7 @@ $(document).ready(function() {
                         if(res.directory){
                             $("#filetree").jstree('rename_node', '#root', 'Root(' + res.directory + ')');
                         }
-                        if(res.data["IN"] && res.data["IN"].childs){
+                        if($("#disableIN").val() != "1" && res.data["IN"] && res.data["IN"].childs){
                             res.data["IN"].childs.forEach(child => {
                                 addFileNode("IN", child, true);
                             });
@@ -5437,7 +5438,7 @@ var loadPreloadedData = function() {
                             comment += $("#txt-project-number").val() + ' is duplicated. ';
                             $("#project-id-comment").css('color', '#FF0000');
                         } else if(res.biggerthanmax){
-                            comment += ($("#txt-project-number").val() + " is " + ($("#txt-project-number").val() - res.maxId) + " more than the last job number used. Consider using a job number of " + (parseInt(res.maxId) + 1) + ". ");
+                            comment += ($("#txt-project-number").val() + " is " + ($("#txt-project-number").val() - res.maxId) + " more than the last job number used. Consider using a job number of " + (res.maxId ? parseInt(res.maxId) + 1 : 1) + ". ");
                             $("#project-id-comment").css('color', '#FF0000');
                         }
                         else

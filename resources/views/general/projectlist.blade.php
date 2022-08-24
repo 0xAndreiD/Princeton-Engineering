@@ -1,4 +1,4 @@
-@extends((Auth::user()->userrole == 2)? 'admin.layout': ((Auth::user()->userrole == 1 || Auth::user()->userrole == 3) ? 'clientadmin.layout' : (Auth::user()->userrole == 4 ? 'reviewer.layout' : (Auth::user()->userrole == 5 ? 'printer.layout' : 'user.layout'))))
+@extends((Auth::user()->userrole == 2)? 'admin.layout': ((Auth::user()->userrole == 1 || Auth::user()->userrole == 3) ? 'clientadmin.layout' : (Auth::user()->userrole == 4 ? 'reviewer.layout' : (Auth::user()->userrole == 5 ? 'printer.layout' : ((Auth::user()->userrole == 6) ? 'consultant.layout' : 'user.layout')))))
 
 @section('css_after')
 <style>
@@ -1260,7 +1260,7 @@
     async function togglePrintCheck(obj, jobId){
         addRequest = false;
         if($(obj)[0].checked == true && ($(obj).parents('tr').find(".plancheck")[0].checked == true || $(obj).parents('tr').find(".asbuilt")[0].checked == true || ($(obj).parents('tr').find(".pilcheck").length > 0 && $(obj).parents('tr').find(".pilcheck")[0].checked == true))){
-            swal.fire({ title: "Warning", text: "Only one type of review checkbox at a time please.", icon: "warning", confirmButtonText: `OK` });
+            swal.fire({ title: "Warning", text: "All review should be finished before printing.", icon: "warning", confirmButtonText: `OK` });
             $(obj)[0].checked = false;
             return;
         }
@@ -1903,11 +1903,11 @@
         data.user_notes = $("#user-textarea-input").val();
         data.printer_notes = $("#printer-textarea-input").val();
 
-        if($("#filePrint").val() == "") {
-            blankField++;
-            $(".printFile-form").css("color","#e04f1a");
-            $(".printFile-form").find("textarea").css("border-color","#e04f1a");
-        }
+        // if($("#filePrint").val() == "") {
+        //     blankField++;
+        //     $(".printFile-form").css("color","#e04f1a");
+        //     $(".printFile-form").find("textarea").css("border-color","#e04f1a");
+        // }
 
         data.print_file = $("#filePrint").val();
         data.printed = $("#printed-date").val();
@@ -2172,6 +2172,29 @@
         $('#currentPrintRequest').append(`<option value="${$('#currentPrintRequest option').length}">${$('#currentPrintRequest option').length+1}</option>`);
         $('#currentPrintRequest').val($('#currentPrintRequest option').length-1);
         addRequest = true;
+    }
+
+    function openActionWnd(obj, jobId) {
+        $.ajax({
+            url:"getActionType",
+            type:'post',
+            data:{jobId: jobId},
+            success: function(res){
+                if(res.success && res.type == 1){
+                    openReviewTab(jobId);
+                }else if(res.success && res.type == 2){
+                    togglePrintCheck(obj, jobId);
+                }
+            },
+            error: function(xhr, status, error) {
+                res = JSON.parse(xhr.responseText);
+                message = res.message;
+                swal.fire({ title: "Error",
+                    text: message == "" ? "Error happened while processing. Please try again later." : message,
+                    icon: "error",
+                    confirmButtonText: `OK` });
+            }
+        });
     }
 
 </script>

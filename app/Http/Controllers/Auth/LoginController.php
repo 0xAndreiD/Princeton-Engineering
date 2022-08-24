@@ -152,7 +152,7 @@ class LoginController extends Controller
                         'identity' => $request['identity'],
                         'allowed' => 0
                     ]);
-                    if($user->userrole == 1) // Client Admin company update
+                    if($user->userrole == 1 || $user->userrole == 6) // Client Admin company update
                     {
                         // $company = Company::where('id', $user->companyid)->first();
                         if($company){

@@ -336,7 +336,7 @@ class CompanyController extends Controller
      */
     function updateCompany(Request $request){
         $data = $request;
-        if(Auth::user()->userrole == 1)
+        if(Auth::user()->userrole == 1 || Auth::user()->userrole == 6)
             $data['id'] = Auth::user()->companyid;
         
         if ($data['id'] == 0){

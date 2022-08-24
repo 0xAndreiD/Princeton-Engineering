@@ -117,6 +117,7 @@ Route::post('/jobSubClientAllowed', 'GeneralController@jobSubClientAllowed')->na
 Route::post('/savePrint', 'GeneralController@savePrint')->name('savePrint');
 Route::post('/deletePrint', 'GeneralController@deletePrint')->name('deletePrint');
 Route::post('/submitPrint', 'GeneralController@submitPrint')->name('submitPrint');
+Route::post('/getActionType', 'GeneralController@getActionType')->name('getActionType');
 
 // APIs for list, update, download, db backup, bill request
 Route::get('/getJobList', 'APIController@getJobList')->name('getJobList');

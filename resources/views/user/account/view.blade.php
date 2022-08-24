@@ -1,4 +1,4 @@
-@extends((Auth::user()->userrole == 2)? 'admin.layout': ((Auth::user()->userrole == 1 || Auth::user()->userrole == 3) ? 'clientadmin.layout' : (Auth::user()->userrole == 4 ? 'reviewer.layout' : (Auth::user()->userrole == 5 ? 'printer.layout' : 'user.layout'))))
+@extends((Auth::user()->userrole == 2)? 'admin.layout': ((Auth::user()->userrole == 1 || Auth::user()->userrole == 3) ? 'clientadmin.layout' : (Auth::user()->userrole == 4 ? 'reviewer.layout' : (Auth::user()->userrole == 5 ? 'printer.layout' : ((Auth::user()->userrole == 6) ? 'consultant.layout' : 'user.layout')))))
 
 @section('css_after')
 <link rel="stylesheet" href="{{ asset('css/account.css') }}">
@@ -24,7 +24,7 @@
 
 <!-- Content -->
 <div class="content" style="text-align:left">
-    <div class="row" <?php echo Auth::user()->userrole == 1 || Auth::user()->userrole == 2 ? '' : 'style="justify-content: space-around;"'; ?>>
+    <div class="row" <?php echo Auth::user()->userrole == 1 || Auth::user()->userrole == 2 || Auth::user()->userrole == 6 ? '' : 'style="justify-content: space-around;"'; ?>>
         <div class="col-md-3">
             <h2 class="content-heading pt-0 text-center">Account Settings</h2>
             <div class="form-group mb-4">
@@ -52,7 +52,7 @@
             </div>
             @endif
 
-            @if(Auth::user()->userrole == 1)
+            @if(Auth::user()->userrole == 1 || Auth::user()->userrole == 6)
             <h2 class="content-heading pt-0">Administrative Settings</h2>
             <div class="custom-control custom-checkbox custom-control-danger mb-4">
                 <input type="checkbox" class="custom-control-input" id="allow-cc" name="allow-cc" <?php echo Auth::user()->allow_cc ? 'checked' : ''; ?>>

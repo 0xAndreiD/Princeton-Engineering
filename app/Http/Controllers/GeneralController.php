@@ -87,10 +87,12 @@ class GeneralController extends Controller
             return view('clientadmin.home')->with('notify', $notify);
         else if( Auth::user()->userrole == 4 )
             return view('reviewer.home')->with('notify', $notify);
-        else if( Auth::user()->userrole == 0 )
+        else if( Auth::user()->userrole == 0 || Auth::user()->userrole == 7)
             return view('user.home')->with('notify', $notify);
         else if( Auth::user()->userrole == 5 )
             return view('printer.home')->with('notify', $notify);
+        else if( Auth::user()->userrole == 6 )
+            return view('consultant.home')->with('notify', $notify);
     }
 
     /**
@@ -105,7 +107,7 @@ class GeneralController extends Controller
             if($user){
                 if( Auth::user()->userrole == 2 || Auth::user()->userrole == 3)
                     return view('clientadmin.statistics.user')->with('user', $user);
-                else if(Auth::user()->userrole == 1 && $user->companyid == Auth::user()->companyid)
+                else if((Auth::user()->userrole == 1 || Auth::user()->userrole == 6) && $user->companyid == Auth::user()->companyid)
                     return view('clientadmin.statistics.user')->with('user', $user);
                 else
                     return redirect('home');
@@ -116,8 +118,8 @@ class GeneralController extends Controller
 
             if( Auth::user()->userrole == 2 )
                 return view('admin.statistics.users')->with('companyList', $companyList);
-            else if( Auth::user()->userrole == 1 || Auth::user()->userrole == 3)
-                return view('clientadmin.statistics.users')->with('companyList', $companyList);
+            else if( (Auth::user()->userrole == 1 || Auth::user()->userrole == 6 ) || Auth::user()->userrole == 3)
+                return view('clientadmin.statistics.users');
             else
                 return redirect('home');
         }
@@ -154,7 +156,7 @@ class GeneralController extends Controller
                     $summaryData['maxchat']['companyName'] = $maxchatcompany ? $maxchatcompany->company_name : "";
                 }
             }
-        } else if( Auth::user()->userrole == 1 ){
+        } else if( Auth::user()->userrole == 1 || Auth::user()->userrole == 6 ){
             $summaryData['opened'] = JobRequest::where('companyId', Auth::user()->companyid)->where('projectState', '!=', 9)->count();
             $summaryData['completed'] = JobRequest::where('companyId', Auth::user()->companyid)->where('projectState', 9)->count();
             $summaryData['chatstotal'] = JobChat::leftjoin('users', "users.id", "=", "job_chat.userId")->where('users.companyId', Auth::user()->companyid)->count();
@@ -175,7 +177,7 @@ class GeneralController extends Controller
      * @return JSON
      */
     public function getUserMetrics(Request $request){
-        if(Auth::user()->userrole == 1){
+        if(Auth::user()->userrole == 1 || Auth::user()->userrole == 6){
             $columns = array( 
                 0 =>'id', 
                 1 =>'username',
@@ -1415,8 +1417,6 @@ class GeneralController extends Controller
                 else
                     $pilCol = '000000';
 
-                
-
                 $printinfo = PrintInfo::where('job_id', $job->id)->get();
                 $printStatus = 4;
                 $printAvailable = false;
@@ -1459,7 +1459,7 @@ class GeneralController extends Controller
                     "<input class='mr-2 printcheck' type='checkbox' " . "onchange='togglePrintCheck(this, {$job['id']})'" . ($printAvailable ? " checked" : "") . ">" . 
                     // ($job['asbuilt'] == 0 && $job['eSeal'] == 0 && $job['eSeal_PIL'] == 0 ? " disabled" : "") .
 
-                    "<div class='four-check mr-2'".(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->userrole == 5 ?  "onclick=". (($job->eSeal == 1 || $job->eSeal_asbuilt == 1) ? "'openReviewTab({$job['id']})'" : ($printAvailable ? "'togglePrintCheck(this, {$job['id']})'" : "'openReviewTab({$job['id']})'"))  : "" ). " style='overflow: hidden; width: 30px; height: 30px; border-radius: 6px;'>".
+                    "<div class='four-check mr-2'".(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->userrole == 5 ? "onclick='openActionWnd(this, {$job['id']})'" : ""). "style='overflow: hidden; width: 30px; height: 30px; border-radius: 6px; cursor: pointer;'>".
                         "<div style='width: 66px; height: 66px; display: flex; justify-content: start; flex-wrap: wrap; transform: translate(-18px, -18px) rotate(45deg);'>".
                             "<div class='eseal'"  . " style='margin:1.5px; width: 30px; height: 30px; background-color:#{$sealCol};'></div>".
                             "<div class='eseal_print'" . " style='margin:1.5px; width: 30px; height: 30px; background-color:#{$printCol};'></div>" .
@@ -3717,8 +3717,6 @@ class GeneralController extends Controller
                         $project->eSeal_Print = $printStatus;
                         if($printAvailable) {
                             $project->eSeal_Print_available = 1;
-                        } else {
-                            $project->eSeal_Print_available = 0;
                         }
                         $project->save();
                             
@@ -3817,8 +3815,6 @@ class GeneralController extends Controller
                             $project->eSeal_Print = $printStatus;
                             if($printAvailable) {
                                 $project->eSeal_Print_available = 1;
-                            } else {
-                                $project->eSeal_Print_available = 0;
                             }
                             $project->save();
                             
@@ -3950,5 +3946,41 @@ class GeneralController extends Controller
         $client_id = Auth::user()->companyid;
         $printAddress = PrintAddress::where('client_id', Auth::user()->companyid)->get();
         return response()->json(["printAddress" => $printAddress, "success" => true]);
+    }
+
+    /**
+     * Return Review button action type.
+     *
+     * @return JSON
+     */
+    public function getActionType(Request $request) {
+        if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->userrole == 5) {
+            if(!empty($request['jobId'])){
+                $job = JobRequest::where('id', '=', $request['jobId'])->first();
+                if($job){
+                    if($job->planCheck == 1 || $job->asBuilt == 1 || $job->PIL_status == 1)
+                        return response()->json(['success' => true, 'type' => 1]);
+
+                    $printinfo = PrintInfo::where('job_id', $request['jobId'])->get();
+                    $printAvailable = false;
+                    if(count($printinfo) > 0){
+                        for($i = 0; $i < count($printinfo); $i++) {
+                            if($printinfo[$i]->print_status == 2 || $printinfo[$i]->print_status == 3) {
+                                $printAvailable = true;
+                            }
+                        }
+                    }
+
+                    if($printAvailable)
+                        return response()->json(['success' => true, 'type' => 2]);
+
+                    return response()->json(['success' => true, 'type' => 0]);
+                } else
+                    return response()->json(['success' => false, 'message' => 'Cannot find the project.']);
+            } else 
+                return response()->json(['success' => false, 'message' => 'Empty projectId.']);
+        } else {
+            return response()->json(['success' => false, 'message' => 'No permission.']);
+        }
     }
 }
