@@ -1459,7 +1459,7 @@ class GeneralController extends Controller
                     "<input class='mr-2 printcheck' type='checkbox' " . "onchange='togglePrintCheck(this, {$job['id']})'" . ($printAvailable ? " checked" : "") . ">" . 
                     // ($job['asbuilt'] == 0 && $job['eSeal'] == 0 && $job['eSeal_PIL'] == 0 ? " disabled" : "") .
 
-                    "<div class='four-check mr-2'".(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->userrole == 5 ?  "onclick=". ($printAvailable ? "'togglePrintCheck(this, {$job['id']})'" : "'openReviewTab({$job['id']})'")  : "" ). " style='overflow: hidden; width: 30px; height: 30px; border-radius: 6px;'>".
+                    "<div class='four-check mr-2'".(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->userrole == 5 ?  "onclick=". (($job->eSeal == 1 || $job->eSeal_asbuilt == 1) ? "'openReviewTab({$job['id']})'" : ($printAvailable ? "'togglePrintCheck(this, {$job['id']})'" : "'openReviewTab({$job['id']})'"))  : "" ). " style='overflow: hidden; width: 30px; height: 30px; border-radius: 6px;'>".
                         "<div style='width: 66px; height: 66px; display: flex; justify-content: start; flex-wrap: wrap; transform: translate(-18px, -18px) rotate(45deg);'>".
                             "<div class='eseal'"  . " style='margin:1.5px; width: 30px; height: 30px; background-color:#{$sealCol};'></div>".
                             "<div class='eseal_print'" . " style='margin:1.5px; width: 30px; height: 30px; background-color:#{$printCol};'></div>" .
