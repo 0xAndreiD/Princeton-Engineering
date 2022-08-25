@@ -1306,7 +1306,6 @@
         })
 
         $.post("togglePrintCheck", {id: jobId}, function(result){
-            console.log('here: ', result);
             if(result.job.eSeal.toString() == "0" && result.job.eSeal_asbuilt.toString() == "0" && result.job.eSeal_PIL.toString() == "0" && result.job.eSeal_Print.toString() == "0"){
                 return;
             } else {
@@ -1418,7 +1417,8 @@
                     $("#printed-date").val(result.data[length-1].printed);
                     $("#tracking").val(result.data[length-1].tracking);
                     $("#fedex").val(result.data[length-1].third_party_fedex);
-                    if(result.data[length-1].selected_files != "null") {
+                    
+                    if(result.data[length-1].selected_files) {
                         let file_names = [];
                         file_names = result.data[length-1].selected_files.slice(1, result.data[length-1].selected_files.length - 1).split("\\n");
                         $('#filePrint').val(file_names.join("\n"));
@@ -1673,7 +1673,6 @@
         $.post("getPrintFiles", {projectId: $('#id').val()}, function(result){
             swal.close();
             if(result.success && result.files){
-                console.log('result.files: ', result.files);
                 result.files.forEach(file => {
                     const elem = $(`<tr class='file' style="cursor:pointer;">
                             <td style="width: 5%; text-align:center">
@@ -1907,11 +1906,11 @@
         data.user_notes = $("#user-textarea-input").val();
         data.printer_notes = $("#printer-textarea-input").val();
 
-        // if($("#filePrint").val() == "") {
-        //     blankField++;
-        //     $(".printFile-form").css("color","#e04f1a");
-        //     $(".printFile-form").find("textarea").css("border-color","#e04f1a");
-        // }
+        if($("#filePrint").val() == "") {
+            blankField++;
+            $(".printFile-form").css("color","#e04f1a");
+            $(".printFile-form").find("textarea").css("border-color","#e04f1a");
+        }
 
         data.print_file = $("#filePrint").val();
         data.printed = $("#printed-date").val();
@@ -2091,6 +2090,7 @@
                                 }
 
                                 $('#printmodal').modal('toggle');
+                                $('#projects').DataTable().draw();
                             } else {
                                 toast.fire('Error',"This data is not deleted", 'error');
                             }
