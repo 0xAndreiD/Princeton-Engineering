@@ -3717,6 +3717,8 @@ class GeneralController extends Controller
                         $project->eSeal_Print = $printStatus;
                         if($printAvailable) {
                             $project->eSeal_Print_available = 1;
+                        } else {
+                            $project->eSeal_Print_available = 0;
                         }
                         $project->save();
                             
@@ -3815,6 +3817,8 @@ class GeneralController extends Controller
                             $project->eSeal_Print = $printStatus;
                             if($printAvailable) {
                                 $project->eSeal_Print_available = 1;
+                            } else {
+                                $project->eSeal_Print_available = 0;
                             }
                             $project->save();
                             
@@ -3933,6 +3937,11 @@ class GeneralController extends Controller
         }
                             
         $project->eSeal_Print = $printStatus;
+        if($printAvailable) {
+            $project->eSeal_Print_available = 1;
+        } else {
+            $project->eSeal_Print_available = 0;
+        }
         $project->save();
 
         return response()->json(["success" => true, "status" => $printStatus, "available" => $printAvailable]);
