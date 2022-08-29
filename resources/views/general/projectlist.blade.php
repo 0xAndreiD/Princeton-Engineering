@@ -1216,6 +1216,8 @@
             $("#usStateFilter").val('');
             changeStatusFilter('');
             changeStateFilter('');
+            $(".chat-dropdown").removeClass('active');
+            $(".icon-dropdown").removeClass('active');
             filterJson = {};
             localStorage.setItem('projectFilterJson', JSON.stringify({}));
             table.search('').columns().search('').draw();
