@@ -1186,6 +1186,29 @@ class GeneralController extends Controller
         if(!empty($request->input("print")) && $request["print"] == 1){
             $handler = $handler->where('job_request.eSeal_Print_available', 1);
         }
+        // filter ICON
+        if(!empty($request->input("icon")) && $request["icon"] > 0){
+            if($request["icon"] == 1)
+                $handler = $handler->where('job_request.eSeal', 1);
+            else if($request["icon"] == 2)
+                $handler = $handler->where('job_request.eSeal', 2);
+            else if($request["icon"] == 3)
+                $handler = $handler->where('job_request.eSeal_asbuilt', 1);
+            else if($request["icon"] == 4)
+                $handler = $handler->where('job_request.eSeal_asbuilt', 2);
+            else if($request["icon"] == 5)
+                $handler = $handler->where('job_request.eSeal_PIL', 1);
+            else if($request["icon"] == 6)
+                $handler = $handler->where('job_request.eSeal_PIL', 2);
+            else if($request["icon"] == 7)
+                $handler = $handler->whereRaw('(select MIN(printing.print_status) FROM printing where printing.job_id = job_request.id) = 1');
+            else if($request["icon"] == 8)
+                $handler = $handler->whereRaw('(select MIN(printing.print_status) FROM printing where printing.job_id = job_request.id) = 2');
+            else if($request["icon"] == 9)
+                $handler = $handler->whereRaw('(select MIN(printing.print_status) FROM printing where printing.job_id = job_request.id) = 3');
+            else if($request["icon"] == 10)
+                $handler = $handler->whereRaw('(select MIN(printing.print_status) FROM printing where printing.job_id = job_request.id) = 4');
+        }
         
         // admin filter company name, user, project name, project number, project state, plan status
         if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->userrole == 5){

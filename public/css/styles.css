@@ -579,3 +579,18 @@ html, body {
     color: #663300;
     padding: 5px 10px;
 }
+
+#projects .dropdown-menu .dropdown-submenu {
+    display: none;
+    position: absolute;
+    left: -110%;
+    top: 0px;
+}
+
+#projects .dropdown-item {
+    position: relative;
+}
+
+#projects .dropdown-menu>.dropdown-item:hover>.dropdown-submenu {
+    display: block;
+}
