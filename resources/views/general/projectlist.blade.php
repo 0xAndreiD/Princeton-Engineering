@@ -171,12 +171,14 @@
                             </th>
                             <th style="display: flex; align-items: center; justify-content: center;">
                                 <span class="ml-1" style='writing-mode: vertical-lr;width: 18px;transform: rotateZ(180deg);'>Edit</span>
-                                <span class="ml-2" style='writing-mode: tb-rl;width: 28px;transform: rotateZ(180deg);cursor: pointer;' class="badge dropdown-toggle job-dropdown" id="chatFilter" data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'><i class='fa fa-angle-up'></i>Chat</span>
-                                <div class="dropdown-menu"  aria-labelledby="chatFilter">
-                                    <a class="dropdown-item chat-dropdown" id="chat-dropdown-" href="javascript:changeChatFilter('')">All</a>
-                                    @foreach($companyList as $company)
-                                        <a class="dropdown-item chat-dropdown" id="chat-dropdown-{{ $company['id'] }}" href="javascript:changeChatFilter({{ $company['id'] }})">{{ $company['company_name'] }}</a>
-                                    @endforeach
+                                <div class="dropdown">
+                                    <span class="ml-2" style='writing-mode: tb-rl;width: 28px;transform: rotateZ(180deg);cursor: pointer;' class="badge dropdown-toggle job-dropdown" id="chatFilter" data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'><i class='fa fa-angle-up'></i>Chat</span>
+                                    <div class="dropdown-menu"  aria-labelledby="chatFilter">
+                                        <a class="dropdown-item chat-dropdown" id="chat-dropdown-" href="javascript:changeChatFilter('')">All</a>
+                                        @foreach($companyList as $company)
+                                            <a class="dropdown-item chat-dropdown" id="chat-dropdown-{{ $company['id'] }}" href="javascript:changeChatFilter({{ $company['id'] }})">{{ $company['company_name'] }}</a>
+                                        @endforeach
+                                    </div>
                                 </div>
                                 <div style="display:flex">
                                     <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 17px;'><input type='checkbox' id="planCheckFilter" style="transform: rotateZ(180deg);"> Review</span>
@@ -186,7 +188,43 @@
                                     @endif
                                     <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 17px;'><input type='checkbox' id="printFilter" style="transform: rotateZ(180deg);">Print</span>
                                 </div>
-                                <span class="mx-2" style='writing-mode: tb-rl;width: 28px;transform: rotateZ(180deg); line-height: 1;'>Check Box <br />/ Status</span>
+                                {{-- <span class="mx-2" style='writing-mode: tb-rl;width: 28px;transform: rotateZ(180deg); line-height: 1;'>Check Box <br />/ Status</span> --}}
+                                <div>
+                                    <span id="iconFilter" class="mx-2 d-flex align-items-center" style='writing-mode: tb-rl;width: 24px;transform: rotateZ(180deg);cursor: pointer;line-height: 1; text-align:center;' class="badge dropdown-toggle job-dropdown dropdown-toggle-split" data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' data-reference="parent"><i class='fa fa-angle-up'></i>Check Box <br />/ Status</span>
+                                    <div class="dropdown-menu"  aria-labelledby="iconFilter">
+                                        <a class="dropdown-item icon-dropdown" id="icon-dropdown-all" href="javascript:changeIconFilter(0)">All</a>
+                                        <div class="dropdown-item icon-dropdown" id="icon-review">
+                                            <span class="d-flex justify-content-between dropdown-toggle job-dropdown">Review</span>
+                                            <ul class="dropdown-submenu dropdown-menu">
+                                                <li><a class="dropdown-item icon-dropdown" id="icon-dropdown-1" href="javascript:changeIconFilter(1)">Requested</a></li>
+                                                <li><a class="dropdown-item icon-dropdown" id="icon-dropdown-2" href="javascript:changeIconFilter(2)">Completed</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="dropdown-item icon-dropdown" id="icon-asbuilt">
+                                            <span class="d-flex justify-content-between dropdown-toggle job-dropdown">As-built</span>
+                                            <ul class="dropdown-submenu dropdown-menu">
+                                                <li><a class="dropdown-item icon-dropdown" id="icon-dropdown-3" href="javascript:changeIconFilter(3)">Requested</a></li>
+                                                <li><a class="dropdown-item icon-dropdown" id="icon-dropdown-4" href="javascript:changeIconFilter(4)">Completed</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="dropdown-item icon-dropdown" id="icon-pil">
+                                            <span class="d-flex justify-content-between dropdown-toggle job-dropdown">PIL</span>
+                                            <ul class="dropdown-submenu dropdown-menu">
+                                                <li><a class="dropdown-item icon-dropdown" id="icon-dropdown-5" href="javascript:changeIconFilter(5)">Requested</a></li>
+                                                <li><a class="dropdown-item icon-dropdown" id="icon-dropdown-6" href="javascript:changeIconFilter(6)">Completed</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="dropdown-item icon-dropdown" id="icon-print">
+                                            <span class="d-flex justify-content-between dropdown-toggle job-dropdown">Print</span>
+                                            <ul class="dropdown-submenu dropdown-menu">
+                                                <li><a class="dropdown-item icon-dropdown" id="icon-dropdown-7" href="javascript:changeIconFilter(7)">Saved</a></li>
+                                                <li><a class="dropdown-item icon-dropdown" id="icon-dropdown-8" href="javascript:changeIconFilter(8)">Submitted</a></li>
+                                                <li><a class="dropdown-item icon-dropdown" id="icon-dropdown-9" href="javascript:changeIconFilter(9)">Printed</a></li>
+                                                <li><a class="dropdown-item icon-dropdown" id="icon-dropdown-10" href="javascript:changeIconFilter(10)">Completed</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
                                 @if(Auth::user()->userrole == 2)
                                 <span class="" style='writing-mode: tb-rl;width: 24px;transform: rotateZ(180deg);'>Delete</span>
                                 @endif
@@ -294,7 +332,42 @@
                                     @endif
                                     <span style='writing-mode: vertical-lr;display:flex;align-items:center;transform: rotateZ(180deg);width: 17px;'><input type='checkbox' id="printFilter" style="transform: rotateZ(180deg);">Print</span>
                                 </div>
-                                <span class="mx-2" style='writing-mode: tb-rl;width: 28px;transform: rotateZ(180deg); line-height: 1;'>Check Box <br />/ Status</span>
+                                <div>
+                                    <span id="iconFilter" class="mx-2 d-flex align-items-center" style='writing-mode: tb-rl;width: 24px;transform: rotateZ(180deg);cursor: pointer;line-height: 1; text-align:center;' class="badge dropdown-toggle job-dropdown dropdown-toggle-split" data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' data-reference="parent"><i class='fa fa-angle-up'></i>Check Box <br />/ Status</span>
+                                    <div class="dropdown-menu"  aria-labelledby="iconFilter">
+                                        <a class="dropdown-item icon-dropdown" id="icon-dropdown-all" href="javascript:changeIconFilter(0)">All</a>
+                                        <div class="dropdown-item icon-dropdown" id="icon-review">
+                                            <span class="d-flex justify-content-between dropdown-toggle job-dropdown">Review</span>
+                                            <ul class="dropdown-submenu dropdown-menu">
+                                                <li><a class="dropdown-item icon-dropdown" id="icon-dropdown-1" href="javascript:changeIconFilter(1)">Requested</a></li>
+                                                <li><a class="dropdown-item icon-dropdown" id="icon-dropdown-2" href="javascript:changeIconFilter(2)">Completed</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="dropdown-item icon-dropdown" id="icon-asbuilt">
+                                            <span class="d-flex justify-content-between dropdown-toggle job-dropdown">As-built</span>
+                                            <ul class="dropdown-submenu dropdown-menu">
+                                                <li><a class="dropdown-item icon-dropdown" id="icon-dropdown-3" href="javascript:changeIconFilter(3)">Requested</a></li>
+                                                <li><a class="dropdown-item icon-dropdown" id="icon-dropdown-4" href="javascript:changeIconFilter(4)">Completed</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="dropdown-item icon-dropdown" id="icon-pil">
+                                            <span class="d-flex justify-content-between dropdown-toggle job-dropdown">PIL</span>
+                                            <ul class="dropdown-submenu dropdown-menu">
+                                                <li><a class="dropdown-item icon-dropdown" id="icon-dropdown-5" href="javascript:changeIconFilter(5)">Requested</a></li>
+                                                <li><a class="dropdown-item icon-dropdown" id="icon-dropdown-6" href="javascript:changeIconFilter(6)">Completed</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="dropdown-item icon-dropdown" id="icon-print">
+                                            <span class="d-flex justify-content-between dropdown-toggle job-dropdown">Print</span>
+                                            <ul class="dropdown-submenu dropdown-menu">
+                                                <li><a class="dropdown-item icon-dropdown" id="icon-dropdown-7" href="javascript:changeIconFilter(7)">Saved</a></li>
+                                                <li><a class="dropdown-item icon-dropdown" id="icon-dropdown-8" href="javascript:changeIconFilter(8)">Submitted</a></li>
+                                                <li><a class="dropdown-item icon-dropdown" id="icon-dropdown-9" href="javascript:changeIconFilter(9)">Printed</a></li>
+                                                <li><a class="dropdown-item icon-dropdown" id="icon-dropdown-10" href="javascript:changeIconFilter(10)">Completed</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
                                 @endif
                             </th>
                             @endif
@@ -938,9 +1011,20 @@
                     else $("#printFilter").prop("checked", false);
                     break;
                 case 'chatFilter':
-                    console.log(filterJson[k]);
                     if (filterJson[k] != '')
                         $(`#chat-dropdown-${filterJson[k]}`).addClass('active');
+                    break;
+                case 'iconFilter':
+                    if(filterJson[k] == 1 || filterJson[k] == 2)
+                        $("#icon-review").addClass('active');
+                    else if(filterJson[k] == 3 || filterJson[k] == 4)
+                        $("#icon-asbuilt").addClass('active');
+                    else if(filterJson[k] == 5 || filterJson[k] == 6)
+                        $("#icon-pil").addClass('active');
+                    else if(filterJson[k] == 7 || filterJson[k] == 8 || filterJson[k] == 9 || filterJson[k] == 10)
+                        $("#icon-print").addClass('active');
+                    if (filterJson[k] != '')
+                        $(`#icon-dropdown-${filterJson[k]}`).addClass('active');
                     break;
             }
         });
@@ -1021,6 +1105,23 @@
             $(`#chat-dropdown-${id}`).addClass('active');
         }
 
+        changeIconFilter = function(id){
+            filterJson.iconFilter = id;
+            localStorage.setItem('projectFilterJson', JSON.stringify(filterJson));
+
+            table.draw();
+            $(".icon-dropdown").removeClass('active');
+            $(`#icon-dropdown-${id}`).addClass('active');
+            if(id == 1 || id == 2)
+                $("#icon-review").addClass('active');
+            else if(id == 3 || id == 4)
+                $("#icon-asbuilt").addClass('active');
+            else if(id == 5 || id == 6)
+                $("#icon-pil").addClass('active');
+            else if(id == 7 || id == 8 || id == 9 || id == 10)
+                $("#icon-print").addClass('active');
+        }
+
         var table = $('#projects').DataTable({
             "processing": true,
             "serverSide": true,
@@ -1050,6 +1151,7 @@
                         data.asbuilt = $("#asBuiltFilter")[0].checked ? 1 : 0;
                         data.pil = $("#pilFilter").length > 0 && $("#pilFilter")[0].checked ? 1 : 0;
                         data.print = $("#printFilter")[0].checked ? 1 : 0;
+                        data.icon = filterJson ? filterJson.iconFilter : 0;
                         @endif
                     }
                 },
@@ -1114,6 +1216,7 @@
             $("#usStateFilter").val('');
             changeStatusFilter('');
             changeStateFilter('');
+            filterJson = {};
             localStorage.setItem('projectFilterJson', JSON.stringify({}));
             table.search('').columns().search('').draw();
         }
