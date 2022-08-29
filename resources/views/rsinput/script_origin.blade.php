@@ -175,6 +175,7 @@ function fcChangeType( conditionId, type ){
         $(`#label-B-1-${conditionId}`).attr('rowspan', 3);
         $(`#label-B-1-${conditionId}`)[0].style.display = "table-cell";
         $(`#title-B-3-${conditionId}`)[0].style.display = "none";
+        console.log('here');
         $(`#label-G-1-${conditionId}`).attr('rowspan', 4);
         
         var elements = $(`#inputform-${conditionId} .class-truss-hide`); // show all Truss
