@@ -1867,6 +1867,7 @@
                     <option value="125">125</option>
                     <option value="150">150</option>
                     <option value="200" selected="">200</option>
+                    <option value="225">225</option>
                     <option value="250">250</option>
                     <option value="300">300</option>
                     <option value="350">350</option>
@@ -1916,6 +1917,7 @@
                     <option value="125">125</option>
                     <option value="150">150</option>
                     <option value="200">200</option>
+                    <option value="225">225</option>
                     <option value="250">250</option>
                     <option value="300">300</option>
                     <option value="350">350</option>
@@ -1935,6 +1937,7 @@
                     <option value="125">125</option>
                     <option value="150">150</option>
                     <option value="200">200</option>
+                    <option value="225">225</option>
                     <option value="250">250</option>
                     <option value="300">300</option>
                     <option value="350">350</option>
