@@ -46,6 +46,9 @@
                     <thead>
                         <tr>
                             @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->userrole == 5 )
+                            @if(Auth::user()->userrole == 2)
+                            <th style="width: 5%;"></th>
+                            @endif
                             <th class="text-center" style="width: 5%;">No</th>
                             <th class="text-center" style="width: 5%;">Job ID</th>
                             <th style="width:8%">Company Name</th>
@@ -74,6 +77,11 @@
                         </tr>
                         <tr>
                             @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->userrole == 5)
+                            @if(Auth::user()->userrole == 2)
+                            <th class="searchHead"> 
+                                <input type="checkbox" class="selectAllProject" />
+                            </th>
+                            @endif
                             <th class="searchHead"> </th>
                             <th class="searchHead"> </th>
                             <th class="searchHead">
@@ -389,6 +397,13 @@
                         <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
                             <i class="fa fa-fw fa-times"></i>
                         </button>
+                    </div>
+                </div>
+                <div class="block-content">
+                    <div class="form-group">
+                        <label for="forPrint">Print Selected Items</label>
+                        <input type="text" class="form-control" id="forPrint" name="forPrint" disabled>
+                        </select>
                     </div>
                 </div>
                 <div class="block-content">
@@ -814,7 +829,7 @@
 
     var currentJob = "";
 
-    $(document).ready(function () {
+    $(document).ready(function() {
         $.ajaxSetup({
             headers:
             { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
@@ -833,6 +848,14 @@
 
         $('#reportmodal').on('hidden.bs.modal', function () {
             $('#printmodal').modal('toggle');
+        })
+
+        $('.selectAllProject').on('change', function() {
+            if($('.selectAllProject').prop('checked')){
+                $('.projectSelect').prop('checked', true);
+            } else {
+                $('.projectSelect').prop('checked', false);
+            }
         })
 
         $('#currentPrintRequest').on('change', function() {
@@ -1068,7 +1091,7 @@
             localStorage.setItem('projectFilterJson', JSON.stringify(filterJson));
 
             @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->userrole == 5)
-            table.column('10:visible').search(status).draw();
+            table.column('11:visible').search(status).draw();
             @else
             table.column('7:visible').search(status).draw();
             @endif
@@ -1082,7 +1105,7 @@
             localStorage.setItem('projectFilterJson', JSON.stringify(filterJson));
 
             @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->userrole == 5)
-            table.column('11:visible').search(status).draw();
+            table.column('12:visible').search(status).draw();
             @else
             table.column('8:visible').search(status).draw();
             @endif
@@ -1136,6 +1159,9 @@
             "fnInitComplete": function(){
                 $('div#projects_filter').append("<input type='button' class='btn btn-hero-primary' value='Clear Filter' style='line-height:0.8' onclick='clearFilter()'/>");
                 $('div#projects_length').append("<input type='button' class='btn btn-hero-primary ml-3' value='Print' style='line-height:0.8' onclick='printDlgShow()'/>");
+                @if(Auth::user()->userrole == 2)
+                    $('div#projects_length').append("<input type='button' class='btn btn-hero-danger ml-3' value='DELETE' style='line-height:0.8' onclick='multiDelete()'/>");
+                @endif
             },
             "ajax":{
                     "url": "{{ url('getProjectList') }}",
@@ -1157,6 +1183,9 @@
                 },
             "columns": [
                 @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->userrole == 5)
+                @if(Auth::user()->userrole == 2)
+                { "data": "checkbox", "orderable": false },
+                @endif
                 { "data": "idx", "orderable": false },
                 { "data": "id" },
                 { "data": "companyname" },
@@ -1190,6 +1219,34 @@
             @endif
         });
 
+        
+        table.on( 'draw', function () {
+            var $chkboxes = $('.projectSelect');
+            var lastChecked = null;
+            var shiftChecked = null;
+
+            $chkboxes.click(function(e) {
+                if (!lastChecked) {
+                    lastChecked = this;
+                    return;
+                }
+
+                if (e.shiftKey) {
+                    var start = $chkboxes.index(this);
+                    var end = $chkboxes.index(lastChecked);
+                    var shiftIndex = $chkboxes.index(shiftChecked);
+
+                    $chkboxes.slice(Math.min(start,shiftIndex), Math.max(start,shiftIndex)+ 1).prop('checked', !lastChecked.checked);
+                    $chkboxes.slice(Math.min(start,end), Math.max(start,end)+ 1).prop('checked', lastChecked.checked);
+                    shiftChecked = this;
+                } else {
+                    lastChecked = this;
+                }
+
+                // lastChecked = this;
+            });
+        });
+
         @if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->userrole == 5)
         $("#companyFilter").on('keyup change', function() {
             table.column($(this).parent().index() + ':visible').search(this.value).draw();
@@ -1200,6 +1257,8 @@
         @endif
 
         clearFilter = function (){
+            $('.projectSelect').prop('checked', false);
+            $('.selectAllProject').prop('checked', false);
             $("#created_from").val('');
             $("#created_to").val('');
             $("#submitted_from").val('');
@@ -1595,6 +1654,72 @@
 
     function printDlgShow(){
         jQuery('#modal-print').modal('show');
+        let CheckboxLength = $('.projectSelect:checkbox:checked').length;
+        if(CheckboxLength > 0) {
+            $("#print-from").val($('.projectSelect:checkbox:checked').first().attr("number"));
+            $("#print-to").val($('.projectSelect:checkbox:checked').last().attr("number"));
+            $('#forPrint').parents(".block-content").css("display", "block");
+            let selectedItems = [];
+            $('.projectSelect:checkbox:checked').map((index, item) => {
+                selectedItems.push($(item).attr("number"));
+            })
+            $('#forPrint').val(selectedItems);
+            $('#modal-print').find(".row").parent().css("display", "none");
+        } else {
+            $('#modal-print').find(".row").parent().css("display", "block");
+            $('#forPrint').parents(".block-content").css("display", "none");
+            $("#forPrint").val("");
+        }
+    }
+
+    function multiDelete(){
+        var selectedProjects = [];
+        $('.projectSelect:checkbox:checked').map(function() {
+            selectedProjects.push ($(this).attr("jobid"));    
+        });
+
+        let toast = Swal.mixin({
+            buttonsStyling: false,
+            customClass: {
+                confirmButton: 'btn btn-success m-1',
+                cancelButton: 'btn btn-danger m-1',
+                input: 'form-control'
+            }
+        });
+        toast.fire({
+            title: 'Are you sure?',
+            text: 'You will not be able to recover these projects!',
+            icon: 'warning',
+            showCancelButton: true,
+            customClass: {
+                confirmButton: 'btn btn-danger m-1',
+                cancelButton: 'btn btn-secondary m-1'
+            },
+            confirmButtonText: 'Yes, delete it!',
+            html: false,
+            preConfirm: e => {
+                return new Promise(resolve => {
+                    setTimeout(() => {
+                        resolve();
+                    }, 50);
+                });
+            }
+        }).then(result => {
+            if (result.value) {
+                $.post("delMultiProjects", {data: selectedProjects}, function(result){
+                    if (result){
+                        // $(obj).parents("tr").remove().draw;
+                        // $('.projectSelect:checkbox:checked').map(function() {
+                        //     $(this).parents("tr").remove().draw;    
+                        // });
+                        $('#projects').DataTable().draw();
+                        toast.fire('Deleted!', 'Projects have been deleted.', 'success');
+                    }
+                });
+            } else if (result.dismiss === 'cancel') {
+                toast.fire('Cancelled', 'Projects are safe :)', 'error');
+            }
+        });
     }
 
     function Printer($c){
@@ -1627,6 +1752,11 @@
         var params = $('#projects').DataTable().ajax.params();
         params['start'] = parseInt($("#print-from").val()) - 1;
         params['length'] = parseInt($("#print-to").val()) - parseInt($("#print-from").val()) + 1;
+        if($("#forPrint").val()) {
+            params['selectedProjects'] = $("#forPrint").val().split(',');
+        } else {
+            params['selectedProjects'] = "";
+        }
         $.ajax({
             url:"getProjectList",
             type:'post',
@@ -2305,6 +2435,29 @@
             }
         });
     }
+
+    // var $chkboxes = $('.projectSelect');
+    // var lastChecked = null;
+
+    // function selectJobs (e) {
+
+    //         console.log('clicking', this, event);
+    //         if (!lastChecked) {
+    //             lastChecked = this;
+    //             return;
+    //         }
+
+    //         if (e.shiftKey) {
+    //             console.log('shift');
+    //             var start = $chkboxes.index(this);
+    //             var end = $chkboxes.index(lastChecked);
+
+    //             $chkboxes.slice(Math.min(start,end), Math.max(start,end)+ 1).prop('checked', lastChecked.checked);
+    //         }
+
+    //         lastChecked = this;
+
+    // }
 
 </script>
 
