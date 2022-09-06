@@ -41,6 +41,7 @@ use App\SubClients;
 use App\Overrides;
 use App\PrintInfo;
 use App\PrintAddress;
+use App\ReportFileNames;
 use Kunnu\Dropbox\DropboxApp;
 use Kunnu\Dropbox\Dropbox;
 use Kunnu\Dropbox\DropboxFile;
@@ -1086,17 +1087,18 @@ class GeneralController extends Controller
             $handler = new JobRequest;
             $columns = array( 
                 0 =>'idx',
-                1 =>'id', 
-                2 =>'job_request.companyId',
-                3 =>'userId',
-                4 =>'clientProjectNumber',
-                5 =>'clientProjectName',
-                6 => 'state',
-                7 =>'requestFile',
-                8 =>'createdTime',
-                9 =>'submittedTime',
-                10 =>'projectState',
-                11 =>'planStatus',
+                1 =>'idx',
+                2 =>'id', 
+                3 =>'job_request.companyId',
+                4 =>'userId',
+                5 =>'clientProjectNumber',
+                6 =>'clientProjectName',
+                7 => 'state',
+                8 =>'requestFile',
+                9 =>'createdTime',
+                10 =>'submittedTime',
+                11 =>'projectState',
+                12 =>'planStatus',
             );
         }
         else
@@ -1123,6 +1125,8 @@ class GeneralController extends Controller
 
         $limit = $request->input('length');
         $start = $request->input('start');
+        $selectedProjects = $request->input('selectedProjects');
+
         $order = $columns[$request->input('order.0.column')];
         $dir = $request->input('order.0.dir');
 
@@ -1212,27 +1216,27 @@ class GeneralController extends Controller
         
         // admin filter company name, user, project name, project number, project state, plan status
         if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->userrole == 5){
-            if(!empty($request->input("columns.2.search.value")))
-                $handler = $handler->where('company_info.company_name', 'LIKE', "%{$request->input("columns.2.search.value")}%");
             if(!empty($request->input("columns.3.search.value")))
-                $handler = $handler->where('users.username', 'LIKE', "%{$request->input('columns.3.search.value')}%");
+                $handler = $handler->where('company_info.company_name', 'LIKE', "%{$request->input("columns.3.search.value")}%");
             if(!empty($request->input("columns.4.search.value")))
-                $handler = $handler->where('job_request.clientProjectNumber', 'LIKE', "%{$request->input('columns.4.search.value')}%");
+                $handler = $handler->where('users.username', 'LIKE', "%{$request->input('columns.4.search.value')}%");
             if(!empty($request->input("columns.5.search.value")))
-                $handler = $handler->where('job_request.clientProjectName', 'LIKE', "%{$request->input('columns.5.search.value')}%");
-            if(isset($request["columns.6.search.value"]))
-                $handler = $handler->where('job_request.state', 'LIKE', "%{$request->input('columns.6.search.value')}%");
-            if(isset($request["columns.10.search.value"]))
-                $handler = $handler->where('job_request.projectState', 'LIKE', "%{$request->input('columns.10.search.value')}%");
+                $handler = $handler->where('job_request.clientProjectNumber', 'LIKE', "%{$request->input('columns.5.search.value')}%");
+            if(!empty($request->input("columns.6.search.value")))
+                $handler = $handler->where('job_request.clientProjectName', 'LIKE', "%{$request->input('columns.6.search.value')}%");
+            if(isset($request["columns.7.search.value"]))
+                $handler = $handler->where('job_request.state', 'LIKE', "%{$request->input('columns.7.search.value')}%");
             if(isset($request["columns.11.search.value"]))
-                $handler = $handler->where('job_request.planStatus', 'LIKE', "%{$request->input('columns.11.search.value')}%");
+                $handler = $handler->where('job_request.projectState', 'LIKE', "%{$request->input('columns.11.search.value')}%");
+            if(isset($request["columns.12.search.value"]))
+                $handler = $handler->where('job_request.planStatus', 'LIKE', "%{$request->input('columns.12.search.value')}%");
             // filter chatIcon
-            if(!empty($request["columns.12.search.value"]) && $request["columns.12.search.value"] != "")
+            if(!empty($request["columns.13.search.value"]) && $request["columns.13.search.value"] != "")
             {
                 $handler = $handler->leftjoin('job_chat', function($join){
                     $join->on('job_request.id', '=', 'job_chat.jobId')->whereRaw('job_chat.id IN (select MAX(job_chat.id) from job_chat join job_request on job_request.id = job_chat.jobId group by job_request.id )');
                 });
-                $userIds = User::where('companyid', $request["columns.12.search.value"])->get('id')->toArray();
+                $userIds = User::where('companyid', $request["columns.13.search.value"])->get('id')->toArray();
                 $handler = $handler->whereIn('job_chat.userId', $userIds);
             }
         }
@@ -1260,35 +1264,71 @@ class GeneralController extends Controller
 
         if(empty($request->input('search.value')))
         {            
-            $totalFiltered = $handler->count();
-            $jobs = $handler->offset($start)->limit($limit)
-                ->orderBy($order,$dir)
-                ->get(
-                    array(
-                        'job_request.id as id',
-                        'company_info.company_name as companyname',
-                        'users.username as username',
-                        'job_request.clientProjectName as projectname',
-                        'job_request.clientProjectNumber as projectnumber',
-                        'job_request.requestFile as requestfile',
-                        'job_request.createdTime as createdtime',
-                        'job_request.submittedTime as submittedtime',
-                        'job_request.projectState as projectstate',
-                        'job_request.planStatus as planstatus',
-                        'job_request.state as state',
-                        'job_request.planCheck as plancheck',
-                        'job_request.chatIcon as chatIcon',
-                        'job_request.asBuilt as asbuilt',
-                        'job_planstatus.color as statuscolor',
-                        'job_pstatus.color as statecolor',
-                        'job_request.eSeal as eSeal',
-                        'job_request.eSeal_asbuilt as eSeal_asbuilt',
-                        'job_request.PIL_status as PIL_status',
-                        'job_request.eSeal_PIL as eSeal_PIL',
-                        'job_request.eSeal_Print as eSeal_Print',
-                        'job_request.eSeal_Print_available as eSeal_Print_available'
-                    )
-                );
+            if(!$selectedProjects || count($selectedProjects) == 0) {
+                $totalFiltered = $handler->count();
+                $jobs = $handler->offset($start)->limit($limit)
+                    ->orderBy($order,$dir)
+                    ->get(
+                        array(
+                            'job_request.id as id',
+                            'company_info.company_name as companyname',
+                            'users.username as username',
+                            'job_request.clientProjectName as projectname',
+                            'job_request.clientProjectNumber as projectnumber',
+                            'job_request.requestFile as requestfile',
+                            'job_request.createdTime as createdtime',
+                            'job_request.submittedTime as submittedtime',
+                            'job_request.projectState as projectstate',
+                            'job_request.planStatus as planstatus',
+                            'job_request.state as state',
+                            'job_request.planCheck as plancheck',
+                            'job_request.chatIcon as chatIcon',
+                            'job_request.asBuilt as asbuilt',
+                            'job_planstatus.color as statuscolor',
+                            'job_pstatus.color as statecolor',
+                            'job_request.eSeal as eSeal',
+                            'job_request.eSeal_asbuilt as eSeal_asbuilt',
+                            'job_request.PIL_status as PIL_status',
+                            'job_request.eSeal_PIL as eSeal_PIL',
+                            'job_request.eSeal_Print as eSeal_Print',
+                            'job_request.eSeal_Print_available as eSeal_Print_available'
+                        )
+                    );
+            } else {
+                $jobs = [];
+                foreach($selectedProjects as $selectedProject) {
+                    $selectedJob = $handler->offset($selectedProject-1)->limit(1)
+                    ->orderBy($order,$dir)
+                    ->get(
+                        array(
+                            'job_request.id as id',
+                            'company_info.company_name as companyname',
+                            'users.username as username',
+                            'job_request.clientProjectName as projectname',
+                            'job_request.clientProjectNumber as projectnumber',
+                            'job_request.requestFile as requestfile',
+                            'job_request.createdTime as createdtime',
+                            'job_request.submittedTime as submittedtime',
+                            'job_request.projectState as projectstate',
+                            'job_request.planStatus as planstatus',
+                            'job_request.state as state',
+                            'job_request.planCheck as plancheck',
+                            'job_request.chatIcon as chatIcon',
+                            'job_request.asBuilt as asbuilt',
+                            'job_planstatus.color as statuscolor',
+                            'job_pstatus.color as statecolor',
+                            'job_request.eSeal as eSeal',
+                            'job_request.eSeal_asbuilt as eSeal_asbuilt',
+                            'job_request.PIL_status as PIL_status',
+                            'job_request.eSeal_PIL as eSeal_PIL',
+                            'job_request.eSeal_Print as eSeal_Print',
+                            'job_request.eSeal_Print_available as eSeal_Print_available'
+                        )
+                    );
+                    array_push($jobs, $selectedJob[0]);
+                }
+                // print_r($jobs); exit;
+            }
             //if($handler->offset($start)->count() > 0)
                 
         }
@@ -1351,6 +1391,7 @@ class GeneralController extends Controller
             $idx = 1;
             foreach ($jobs as $job)
             {
+                $nestedData['checkbox'] = "<input type='checkbox' class='projectSelect' jobid='{$job->id}' number='{$idx}'> </input>";
                 $nestedData['idx'] = $idx; $idx ++;
                 $nestedData['id'] = $job->id;
                 if(Auth::user()->userrole == 2 || Auth::user()->userrole == 3 || Auth::user()->userrole == 4 || Auth::user()->userrole == 5)
@@ -1836,6 +1877,19 @@ class GeneralController extends Controller
     function delProject(Request $request){
         $id = $request->input('data');
         $res = JobRequest::where('id', $id)->delete();
+        return $res;
+    }
+
+    /**
+     * Delete Project
+     *
+     * @return JSON
+     */
+    function delMultiProjects(Request $request){
+        $ids = $request->input('data');
+        foreach($ids as $id) {
+            $res = JobRequest::where('id', $id)->delete();
+        }
         return $res;
     }
 
@@ -2558,6 +2612,7 @@ class GeneralController extends Controller
                 {
                     $jsonname = 'iRoofTM by Princeton Engineering ' . str_replace(".json", "", $job['requestFile']) . "-";
                     $filename = $jsonname . $job['clientProjectNumber'] . '.' . $job['clientProjectName'] . ' ' . $job['state'];
+                    $specialname = ReportFileNames::where('job_id', '=', $request['projectId'] )->first();
 
                     $reportfiles = array();
                     $app = new DropboxApp(env('DROPBOX_KEY'), env('DROPBOX_SECRET'), env('DROPBOX_TOKEN'));
@@ -2596,6 +2651,15 @@ class GeneralController extends Controller
                                 $dropbox->download(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $filename . " Data Check.pdf", storage_path('report') . '/' . $filename . " Data Check.pdf");
                             }
                             array_push($reportfiles, array("filename" => $filename . " Data Check.pdf", "size" => $meta->getSize(), "modifiedDate" => $meta->getServerModified(), "link" => env('APP_URL') . "report/" . $filename . " Data Check.pdf"));
+                        }
+                    } catch (DropboxClientException $e) { }
+                    try {
+                        $meta = $dropbox->getMetaData(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $specialname['file_name']);
+                        if($meta){
+                            if(!Storage::disk('report')->exists($specialname['file_name']) || Storage::disk('report')->size($specialname['file_name']) != $meta->getSize()){
+                                $dropbox->download(env('DROPBOX_PROJECTS_PATH') . '/Reports/' . $specialname['file_name'], storage_path('report') . '/' . $specialname['file_name']);
+                            }
+                            array_push($reportfiles, array("filename" => $specialname['file_name'], "size" => $meta->getSize(), "modifiedDate" => $meta->getServerModified(), "link" => env('APP_URL') . "report/" . $specialname['file_name']));
                         }
                     } catch (DropboxClientException $e) { }
 
